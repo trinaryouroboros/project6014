@@ -53,9 +53,9 @@ static RACE_DESC zoqfotpik_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		320 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			3761, 5333,
+			0,0,
 		},
 	},
 	{

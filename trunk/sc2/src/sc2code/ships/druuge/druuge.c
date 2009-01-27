@@ -50,9 +50,9 @@ static RACE_DESC druuge_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		1400 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			9500, 2792,
+			0,0,
 		},
 	},
 	{

@@ -53,9 +53,9 @@ static RACE_DESC shofixti_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial sphere of influence radius */
+		250 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
-			0, 0,
+			7908,6269,
 		},
 	},
 	{

@@ -52,7 +52,7 @@ static RACE_DESC spathi_desc =
 	{ /* FLEET_STUFF */
 		1000 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			2549, 3600,
+			7549, 9600,
 		},
 	},
 	{

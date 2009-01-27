@@ -53,9 +53,9 @@ static RACE_DESC pkunk_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		666 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			502, 401,
+			0, 0,
 		},
 	},
 	{

@@ -54,7 +54,7 @@ static RACE_DESC yehat_desc =
 	{ /* FLEET_STUFF */
 		750 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			4970, 40,
+			9970, 6040,
 		},
 	},
 	{

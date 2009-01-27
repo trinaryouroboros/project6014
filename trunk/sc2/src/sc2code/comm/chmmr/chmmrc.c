@@ -550,9 +550,9 @@ Intro (void)
 		NumVisits = GET_GAME_STATE (CHMMR_HOME_VISITS);
 		if (!GET_GAME_STATE (CHMMR_EMERGING))
 		{
-			CommData.AlienColorMap = SetAbsColorMapIndex (
+			/*CommData.AlienColorMap = SetAbsColorMapIndex (
 					CommData.AlienColorMap, 1
-					);
+					); */
 			switch (NumVisits++)
 			{
 				case 0:

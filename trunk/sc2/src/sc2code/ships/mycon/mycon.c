@@ -53,9 +53,9 @@ static RACE_DESC mycon_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		1070 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			6392, 2200,
+			0,0,
 		},
 	},
 	{

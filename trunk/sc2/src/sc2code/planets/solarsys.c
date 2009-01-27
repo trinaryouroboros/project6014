@@ -240,8 +240,8 @@ LoadSolarSys (void)
 // LoadIPData ();
 	}
 
-	old_seed = TFB_SeedRandom (MAKE_DWORD (CurStarDescPtr->star_pt.x,
-			CurStarDescPtr->star_pt.y));
+	old_seed = TFB_SeedRandom (MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000,
+			CurStarDescPtr->star_pt.y - 6000));
 
 	SunFrame = SetAbsFrameIndex (SunFrame, STAR_TYPE (CurStarDescPtr->Type));
 
@@ -1788,8 +1788,8 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 	ClearDrawable ();
 
 	old_seed = TFB_SeedRandom (
-			MAKE_DWORD (CurStarDescPtr->star_pt.x,
-			CurStarDescPtr->star_pt.y));
+			MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000,
+			CurStarDescPtr->star_pt.y - 6000));
 
 #define NUM_DIM_PIECES 8
 	s.frame = SpaceJunkFrame;
