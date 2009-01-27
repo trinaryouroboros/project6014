@@ -401,7 +401,7 @@ enum
 #define RACE_COMMUNICATION \
 		ARILOU_CONVERSATION,       /* ARILOU_SHIP */ \
 		CHMMR_CONVERSATION,        /* CHMMR_SHIP */ \
-		INVALID_CONVERSATION,      /* HUMAN_SHIP */ \
+		COMMANDER_CONVERSATION,      /* HUMAN_SHIP */ \
 		ORZ_CONVERSATION,          /* ORZ_SHIP */ \
 		PKUNK_CONVERSATION,        /* PKUNK_SHIP */ \
 		SHOFIXTI_CONVERSATION,     /* SHOFIXTI_SHIP */ \
@@ -533,11 +533,11 @@ enum
 
 #define RACE_HYPERSPACE_PERCENT \
 		20,  /* ARILOU_SHIP */ \
-		 0,  /* CHMMR_SHIP */ \
-		 0,  /* HUMAN_SHIP */ \
+		60,  /* CHMMR_SHIP */ \
+		30,  /* HUMAN_SHIP */ \
 		20,  /* ORZ_SHIP */ \
 		40,  /* PKUNK_SHIP */ \
-		 0,  /* SHOFIXTI_SHIP */ \
+		20,  /* SHOFIXTI_SHIP */ \
 		20,  /* SPATHI_SHIP */ \
 		40,  /* SUPOX_SHIP */ \
 		60,  /* THRADDASH_SHIP */ \
@@ -552,18 +552,18 @@ enum
 		30,  /* UMGAH_SHIP */ \
 		70,  /* URQUAN_SHIP */ \
 		 0,  /* ZOQFOTPIK_SHIP */ \
-		 0,  /* SYREEN_SHIP */ \
+		30,  /* SYREEN_SHIP */ \
 		70,  /* BLACK_URQUAN_SHIP */ \
 		60,  /* YEHAT_REBEL_SHIP */ \
 		 0,  /* URQUAN_PROBE_SHIP */
 
 #define RACE_INTERPLANETARY_PERCENT \
 		 0,  /* ARILOU_SHIP */ \
-		 0,  /* CHMMR_SHIP */ \
-		 0,  /* HUMAN_SHIP */ \
+		60,  /* CHMMR_SHIP */ \
+		30,  /* HUMAN_SHIP */ \
 		20,  /* ORZ_SHIP */ \
 		20,  /* PKUNK_SHIP */ \
-		 0,  /* SHOFIXTI_SHIP */ \
+		40,  /* SHOFIXTI_SHIP */ \
 		10,  /* SPATHI_SHIP */ \
 		20,  /* SUPOX_SHIP */ \
 		20,  /* THRADDASH_SHIP */ \
@@ -578,7 +578,7 @@ enum
 		20,  /* UMGAH_SHIP */ \
 		40,  /* URQUAN_SHIP */ \
 		 0,  /* ZOQFOTPIK_SHIP */ \
-		 0,  /* SYREEN_SHIP */ \
+	    20,  /* SYREEN_SHIP */ \
 		40,  /* BLACK_URQUAN_SHIP */ \
 		40,  /* YEHAT_REBEL_SHIP */ \
 		 0,  /* URQUAN_PROBE_SHIP */
@@ -588,11 +588,11 @@ enum
 // The chance is 50% for each ship past the minimum to be present.
 #define RACE_ENCOUNTER_MAKEUP \
 		MAKE_BYTE (1, 5),  /* ARILOU_SHIP */ \
-		0,                 /* CHMMR_SHIP */ \
-		0,                 /* HUMAN_SHIP */ \
+		MAKE_BYTE (1, 5),  /* CHMMR_SHIP */ \
+		MAKE_BYTE (1, 5),  /* HUMAN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* ORZ_SHIP */ \
 		MAKE_BYTE (1, 5),  /* PKUNK_SHIP */ \
-		0,                 /* SHOFIXTI_SHIP */ \
+		MAKE_BYTE (1, 5),  /* SHOFIXTI_SHIP */ \
 		MAKE_BYTE (1, 5),  /* SPATHI_SHIP */ \
 		MAKE_BYTE (1, 5),  /* SUPOX_SHIP */ \
 		MAKE_BYTE (1, 5),  /* THRADDASH_SHIP */ \
@@ -607,17 +607,17 @@ enum
 		MAKE_BYTE (1, 5),  /* UMGAH_SHIP */ \
 		MAKE_BYTE (1, 5),  /* URQUAN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* ZOQFOTPIK_SHIP */ \
-		0,                 /* SYREEN_SHIP */ \
+		MAKE_BYTE (1, 5),  /* SYREEN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* BLACK_URQUAN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* YEHAT_REBEL_SHIP */
 
 #define RACE_COLORS \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x10), 0x53),  /* ARILOU_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00),  /* CHMMR_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x0F, 0x0F, 0x0F), 0x00),  /* CHMMR_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x01, 0x1f), 0x4D),  /* HUMAN_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x0E, 0x00, 0x0E), 0x36),  /* ORZ_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x06, 0x08), 0x62),  /* PKUNK_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00),  /* SHOFIXTI_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x0A, 0x06, 0x00), 0x00),  /* SHOFIXTI_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x0C, 0x05, 0x00), 0x76),  /* SPATHI_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x0C, 0x05, 0x00), 0x76),  /* SUPOX_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x06, 0x08), 0x62),  /* THRADDASH_SHIP */ \
@@ -632,7 +632,7 @@ enum
 		BUILD_COLOR (MAKE_RGB15 (0x0A, 0x00, 0x11), 0x3D),  /* UMGAH_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x6E),  /* URQUAN_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x00), 0x2D),  /* ZOQFOTPIK_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00),  /* SYREEN_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x14, 0x14, 0x00), 0x00),  /* SYREEN_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x06, 0x06, 0x06), 0x20),  /* BLACK_URQUAN_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x14, 0x07, 0x1F), 0x39),  /* YEHAT_REBEL_SHIP */
 
@@ -653,8 +653,8 @@ enum
 
 // Hyperspace coordinates of the Sol system
 // Should be the same as in plandata.c
-#define SOL_X  1752
-#define SOL_Y  1450
+#define SOL_X  6752
+#define SOL_Y  7450
 
 extern BOOLEAN InitKernel (void);
 

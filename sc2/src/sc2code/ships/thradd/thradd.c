@@ -53,9 +53,9 @@ static RACE_DESC thraddash_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		833 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			2535, 8358,
+			0,0,
 		},
 	},
 	{

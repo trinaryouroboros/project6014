@@ -623,7 +623,7 @@ starRecurse (STAR_DESC *star, void *arg)
 	SOLARSYS_STATE SolarSysState;
 	SOLARSYS_STATE *oldPSolarSysState = pSolarSysState;
 	DWORD oldSeed =
-			TFB_SeedRandom (MAKE_DWORD (star->star_pt.x, star->star_pt.y));
+			TFB_SeedRandom (MAKE_DWORD (star->star_pt.x - 5000, star->star_pt.y - 6000));
 
 	STAR_DESC *oldStarDescPtr = CurStarDescPtr;
 	CurStarDescPtr = star;

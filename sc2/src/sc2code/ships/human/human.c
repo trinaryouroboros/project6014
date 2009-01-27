@@ -54,9 +54,9 @@ static RACE_DESC human_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial sphere of influence radius */
+		350 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
-			1752, 1450,
+			6752, 7450,
 		},
 	},
 	{

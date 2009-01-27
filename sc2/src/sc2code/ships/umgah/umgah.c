@@ -52,9 +52,9 @@ static RACE_DESC umgah_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		833 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			1798, 6000,
+			0,0,
 		},
 	},
 	{

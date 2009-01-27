@@ -54,9 +54,9 @@ static RACE_DESC urquan_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		2666 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			5750, 6000,
+			0,0,
 		},
 	},
 	{

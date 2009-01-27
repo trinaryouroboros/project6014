@@ -55,9 +55,9 @@ static RACE_DESC vux_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		900 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			4412, 1558,
+			0,0,
 		},
 	},
 	{

@@ -19,6 +19,8 @@
 #ifndef _WSPIAPIWRAP_H
 #define _WSPIAPIWRAP_H
 
+#include <WSPiApi.h>
+
 // HACK. See wspiapiwrap.c
 #	define getaddrinfo WspiapiGetAddrInfo
 #	define getnameinfo WspiapiGetNameInfo

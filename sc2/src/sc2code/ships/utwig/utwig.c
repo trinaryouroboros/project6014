@@ -54,9 +54,9 @@ static RACE_DESC utwig_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		666 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			8534, 8797,
+			0,0,
 		},
 	},
 	{
