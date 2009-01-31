@@ -131,7 +131,7 @@ enum
 extern STAR_DESC *CurStarDescPtr;
 extern STAR_DESC *star_array;
 
-#define NUM_SOLAR_SYSTEMS 168
+#define NUM_SOLAR_SYSTEMS 502
 
 extern STAR_DESC* FindStar (STAR_DESC *pLastStar, POINT *puniverse,
 		SIZE xbounds, SIZE ybounds);

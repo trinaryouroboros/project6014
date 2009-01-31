@@ -25,12 +25,12 @@
 
 #include "libs/strlib.h"
 
-#define STAR_STRING_COUNT       133
+#define STAR_STRING_COUNT       131
 #define DEVICE_STRING_COUNT      29
 #define CARGO_STRING_COUNT       10
 #define ELEMENTS_STRING_COUNT   133
 #define SCAN_STRING_COUNT        56
-#define STAR_NUMBER_COUNT        14
+#define STAR_NUMBER_COUNT        15
 #define PLANET_NUMBER_COUNT      32
 #define MONTHS_STRING_COUNT      12
 #define FEEDBACK_STRING_COUNT     2
