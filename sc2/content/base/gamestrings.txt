@@ -518,8 +518,12 @@ Sirius
 Sol
 
 
-#(UNKNOWN)
-UNKNOWN
+#(Coronae)
+Coronae
+
+
+#(Denebola )
+Denebola 
 
 
 #(devices)
