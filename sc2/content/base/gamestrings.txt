@@ -1,297 +1,297 @@
-#(Vega)
-Vega
+#(Unassigned1)
+Unassigned
 
 
-#(Antliae)
-Antliae
+#(Acamar)
+Acamar
 
 
-#(Apodis)
-Apodis
+#(Acoreus)
+Acoreus
 
 
-#(Aquarii)
-Aquarii
+#(Adrastus)
+Adrastus
 
 
-#(Aquilae)
-Aquilae
+#(Aeolus)
+Aeolus
 
 
-#(Arae)
-Arae
+#(Alcyone)
+Alcyone
 
 
-#(Arietis)
-Arietis
+#(Angstrom)
+Angstrom
 
 
-#(Aurigae)
-Aurigae
+#(Apollonius)
+Apollonius
 
 
-#(Trianguli)
-Trianguli
+#(Arachne)
+Arachne
 
 
 #(Caeli)
 Caeli
 
 
-#(Camelopardalis)
-Camelopardalis
+#(Archimedes)
+Archimedes
 
 
-#(Cancri)
-Cancri
+#(Archytas)
+Archytas
 
 
-#(Brahe)
-Brahe
+#(Ares)
+Ares
 
 
-#(Kepler)
-Kepler
+#(Aristillus)
+Aristillus
 
 
-#(Copernicus)
-Copernicus
+#(Artemis)
+Artemis
 
 
-#(Capricorni)
-Capricorni
+#(Ascella)
+Ascella
 
 
-#(Carinae)
-Carinae
+#(Auster)
+Auster
 
 
-#(Cassiopeiae)
-Cassiopeiae
+#(Bellona)
+Bellona
 
 
-#(Tucanae)
-Tucanae
+#(Bessel)
+Bessel
 
 
-#(Cephei)
-Cephei
+#(Canis Majoris)
+Canis Majoris
 
 
-#(Ceti)
-Ceti
+#(Canis Minoris)
+Canis Minoris
 
 
-#(Crateris)
-Crateris
+#(Cassini)
+Cassini
 
 
-#(Circini)
-Circini
+#(Celaeno)
+Celaeno
 
 
-#(Columbae)
-Columbae
+#(Conon)
+Conon
 
 
-#(Chandrasekhar)
-Chandrasekhar
+#(Demeter)
+Demeter
 
 
-#(Sagittae)
-Sagittae
+#(Electra)
+Electra
 
 
-#(Cygnus)
-Cygnus
+#(Eltanin)
+Eltanin
 
 
-#(Corvi)
-Corvi
+#(Eurus)
+Eurus
 
 
-#(Chamaeleonis)
-Chamaeleonis
+#(Faunus)
+Faunus
 
 
-#(Equulei)
-Equulei
+#(Favonius)
+Favonius
 
 
-#(Delphini)
-Delphini
+#(Fortuna)
+Fortuna
 
 
-#(Doradus)
-Doradus
+#(Fraunhofer)
+Fraunhofer
 
 
-#(Monocerotis)
-Monocerotis
+#(Gacrux )
+Gacrux 
 
 
-#(Crucis)
-Crucis
+#(Galilei)
+Galilei
 
 
-#(Eridani)
-Eridani
+#(Halley)
+Halley
 
 
-#(Fornacis)
-Fornacis
+#(Hecate)
+Hecate
 
 
-#(Geminorum)
-Geminorum
+#(Heraclides)
+Heraclides
 
 
-#(Altair)
-Altair
+#(Hespera)
+Hespera
 
 
-#(Antares)
-Antares
+#(Hestia)
+Hestia
 
 
-#(Horologii)
-Horologii
+#(Hicetas)
+Hicetas
 
 
-#(Hydrae)
-Hydrae
+#(Hulse)
+Hulse
 
 
-#(Andromedae)
-Andromedae
+#(Huygens)
+Huygens
 
 
-#(Groombridge)
-Groombridge
+#(Hydri)
+Hydri
 
 
-#(Lacertae)
-Lacertae
-
-
-#(Leonis)
-Leonis
-
-
-#(Hyades)
-Hyades
-
-
-#(Leporis)
-Leporis
-
-
-#(Librae)
-Librae
-
-
-#(Lipi)
-Lipi
-
-
-#(Lyncis)
-Lyncis
-
-
-#(Fomalhaut)
-Fomalhaut
-
-
-#(Menkar)
-Menkar
-
-
-#(Microscopii)
-Microscopii
-
-
-#(Draconis)
-Draconis
-
-
-#(Orionis)
-Orionis
-
-
-#(Normae)
-Normae
-
-
-#(Octantis)
-Octantis
-
-
-#(Ophiuchi)
-Ophiuchi
-
-
-#(Muscae)
-Muscae
-
-
-#(Pavonis)
-Pavonis
-
-
-#(Pegasi)
-Pegasi
-
-
-#(Persei)
-Persei
-
-
-#(Phoenicis)
-Phoenicis
-
-
-#(Pictoris)
-Pictoris
-
-
-#(Piscium)
-Piscium
+#(Hygea)
+Hygea
 
 
 #(Hyginus)
 Hyginus
 
 
-#(Puppis)
-Puppis
+#(Hymen)
+Hymen
 
 
-#(Pyxidis)
-Pyxidis
+#(Hypnos)
+Hypnos
 
 
-#(Reticuli)
-Reticuli
+#(Janus)
+Janus
 
 
-#(Arianni)
-Arianni
+#(Juno)
+Juno
 
 
-#(Sagittarii)
-Sagittarii
+#(Juturna)
+Juturna
 
 
-#(Scorpii)
-Scorpii
+#(Juventus)
+Juventus
 
 
-#(Sculptoris)
-Sculptoris
+#(Kapteyn)
+Kapteyn
 
 
-#(Scuti)
-Scuti
+#(Kornephoros)
+Kornephoros
+
+
+#(Lemaitre)
+Lemaitre
+
+
+#(Eris)
+Eris
+
+
+#(Libitina)
+Libitina
+
+
+#(Lupi)
+Lupi
+
+
+#(Lycaeus)
+Lycaeus
+
+
+#(Macrobius)
+Macrobius
+
+
+#(Menelaus)
+Menelaus
+
+
+#(Menkent)
+Menkent
+
+
+#(Messier)
+Messier
+
+
+#(Meton)
+Meton
+
+
+#(Minerva)
+Minerva
+
+
+#(Naos)
+Naos
+
+
+#(Notus)
+Notus
+
+
+#(Pales)
+Pales
+
+
+#(Morpheus)
+Morpheus
+
+
+#(Poena)
+Poena
+
+
+#(Priapus)
+Priapus
+
+
+#(Proclus)
+Proclus
+
+
+#(Riccioli)
+Riccioli
+
+
+#(Sylvanus)
+Sylvanus
+
+
+#(Syrma)
+Syrma
 
 
 #(Serpentis)
@@ -306,8 +306,8 @@ Sextantis
 Tauri
 
 
-#(Telescopii)
-Telescopii
+#(Ursae Minoris)
+Ursae Minoris
 
 
 #(Bootis)
@@ -402,20 +402,20 @@ Mira
 Cerenkov
 
 
-#(Mersenne)
-Mersenne
+#(Parmenides)
+Parmenides
 
 
-#(Maksutov)
-Maksutov
+#(Penzias)
+Penzias
 
 
-#(Klystron)
-Klystron
+#(Persipina)
+Persipina
 
 
-#(Metis)
-Metis
+#(Phosphor)
+Phosphor
 
 
 #(Mensae)
@@ -442,28 +442,28 @@ Gruis
 Squidi
 
 
-#(Almagest)
-Almagest
+#(Pleione)
+Pleione
 
 
-#(Alcor)
-Alcor
+#(Ursae Majoris)
+Ursae Majoris
 
 
-#(Algol)
-Algol
+#(Polydectes)
+Polydectes
 
 
 #(Betelgeuse)
 Betelgeuse
 
 
-#(Aldebaran)
-Aldebaran
+#(Vertumnus)
+Vertumnus
 
 
-#(Achernar)
-Achernar
+#(Nereus)
+Nereus
 
 
 #(Procyon)
@@ -474,28 +474,28 @@ Procyon
 Rigel
 
 
-#(Bellatrix)
-Bellatrix
+#(Unassigned2)
+Unassigned2
 
 
 #(Mizar)
 Mizar
 
 
-#(Hyperion)
-Hyperion
+#(Pythagoras)
+Pythagoras
 
 
 #(Regulus)
 Regulus
 
 
-#(Organon)
-Organon
+#(Vindemiatrix)
+Vindemiatrix
 
 
-#(Pollux)
-Pollux
+#(Somnus)
+Somnus
 
 
 #(Capella)
@@ -516,14 +516,6 @@ Sirius
 
 #(Sol)
 Sol
-
-
-#(Arcturus)
-Arcturus
-
-
-#(Lentilis)
-Lentilis
 
 
 #(UNKNOWN)
@@ -1496,6 +1488,9 @@ Nu
 
 #(Xi)
 Xi
+
+#(Omicron)
+Omicron
 
 
 #(Mercury)
