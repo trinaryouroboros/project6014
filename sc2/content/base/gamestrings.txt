@@ -1,5 +1,5 @@
-#(Unassigned1)
-Unassigned
+#(Denebola )
+Denebola
 
 
 #(Acamar)
@@ -522,8 +522,8 @@ Sol
 Coronae
 
 
-#(Denebola )
-Denebola 
+#(UNKNOWN)
+UNKNOWN
 
 
 #(devices)
