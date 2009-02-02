@@ -916,7 +916,8 @@ END_GAME_STATE
 #define NUM_COMBAT_SPEEDS 4
 #define MUSIC_DISABLED (1 << 3)
 #define SOUND_DISABLED (1 << 4)
-#define CYBORG_ENABLED (1 << 5)
+#define VOICE_DISABLED (1 << 5)
+#define CYBORG_ENABLED (1 << 6)
 
 enum
 {

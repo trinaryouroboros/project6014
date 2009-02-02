@@ -112,6 +112,8 @@ NPCPhrase_cb (int index,  TFB_TrackCB cb)
 			break;
 	}
 
+	if (GLOBAL (glob_flags) & VOICE_DISABLED)
+		pClip = "noname.ogg";
 	SpliceTrack (pClip, pStr, pTimeStamp, cb);
 }
 

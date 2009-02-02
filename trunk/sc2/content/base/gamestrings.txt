@@ -1493,6 +1493,7 @@ Nu
 #(Xi)
 Xi
 
+
 #(Omicron)
 Omicron
 
@@ -1837,6 +1838,10 @@ Sound
 Music
 
 
+#(Voice)
+Voice
+
+
 #(Cyborg)
 Cyborg
 
@@ -2141,6 +2146,10 @@ sound
 music
 
 
+#(voice)
+voice
+
+
 #(cyborg)
 cyborg
 
@@ -2155,6 +2164,10 @@ flagship
 
 #(exit menu)
 exit menu
+
+
+#()
+
 
 
 #()
@@ -2243,6 +2256,7 @@ dispatch
 
 #(exit menu)
 exit menu
+
 
 #(mouse_err)
 Mouse input is not supported in UQM.
