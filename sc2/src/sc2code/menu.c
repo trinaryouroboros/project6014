@@ -189,6 +189,11 @@ FixMenuState (BYTE BadState)
 				return (PM_MUSIC_OFF);
 			else
 				return (PM_MUSIC_ON);
+		case PM_VOICE_ON:
+			if (GLOBAL (glob_flags) & VOICE_DISABLED)
+				return (PM_VOICE_OFF);
+			else
+				return (PM_VOICE_ON);
 		case PM_CYBORG_OFF:
 			return (PM_CYBORG_OFF + 
 				((BYTE)(GLOBAL (glob_flags) & COMBAT_SPEED_MASK) >> COMBAT_SPEED_SHIFT));
@@ -214,6 +219,10 @@ NextMenuState (BYTE BaseState, BYTE CurState)
 			break;
 		case PM_MUSIC_ON:
 		case PM_MUSIC_OFF:
+			NextState = PM_VOICE_ON;
+			break;
+		case PM_VOICE_ON:
+		case PM_VOICE_OFF:
 			NextState = PM_CYBORG_OFF;
 			break;
 		case PM_CYBORG_OFF:
@@ -249,11 +258,15 @@ PreviousMenuState (BYTE BaseState, BYTE CurState)
 		case PM_MUSIC_OFF:
 			NextState = PM_SOUND_ON;
 			break;
+		case PM_VOICE_ON:
+		case PM_VOICE_OFF:
+			NextState = PM_MUSIC_ON;
+			break;
 		case PM_CYBORG_OFF:
 		case PM_CYBORG_NORMAL:
 		case PM_CYBORG_DOUBLE:
 		case PM_CYBORG_SUPER:
-			NextState = PM_MUSIC_ON;
+			NextState = PM_VOICE_ON;
 			break;
 		case PM_CHANGE_CAPTAIN:
 			NextState = PM_CYBORG_OFF;
@@ -504,7 +517,7 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 					 GLOBAL (FuelCost));
 		if (beg_index == PM_SOUND_ON)
 		{
-			end_index = beg_index + 5;
+			end_index = beg_index + 6;
 			switch (beg_index + NewState)
 			{
 				case PM_SOUND_ON:
@@ -515,20 +528,24 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 				case PM_MUSIC_OFF:
 					NewState = 1;
 					break;
+				case PM_VOICE_ON:
+				case PM_VOICE_OFF:
+					NewState = 2;
+					break;
 				case PM_CYBORG_OFF:
 				case PM_CYBORG_NORMAL:
 				case PM_CYBORG_DOUBLE:
 				case PM_CYBORG_SUPER:
-					NewState = 2;
-					break;
-				case PM_CHANGE_CAPTAIN:
 					NewState = 3;
 					break;
-				case PM_CHANGE_SHIP:
+				case PM_CHANGE_CAPTAIN:
 					NewState = 4;
 					break;
-				case PM_EXIT_MENU4:
+				case PM_CHANGE_SHIP:
 					NewState = 5;
+					break;
+				case PM_EXIT_MENU4:
+					NewState = 6;
 					break;
 			}
 		}

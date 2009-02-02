@@ -114,6 +114,8 @@ enum
 	SOUND_OFF_SETTING,
 	MUSIC_ON_SETTING,
 	MUSIC_OFF_SETTING,
+	VOICE_ON_SETTING,
+	VOICE_OFF_SETTING,
 	CYBORG_OFF_SETTING,
 	CYBORG_NORMAL_SETTING,
 	CYBORG_DOUBLE_SETTING,
@@ -146,16 +148,24 @@ FeedbackSetting (BYTE which_setting)
 			snprintf (buf, sizeof (buf) - 1, "%s %s",
 					GAME_STRING (OPTION_STRING_BASE + 0),
 					GLOBAL (glob_flags) & SOUND_DISABLED
-					? GAME_STRING (OPTION_STRING_BASE + 3) :
-					GAME_STRING (OPTION_STRING_BASE + 4));
+					? GAME_STRING (OPTION_STRING_BASE + 4) :
+					GAME_STRING (OPTION_STRING_BASE + 5));
 			break;
 		case MUSIC_ON_SETTING:
 		case MUSIC_OFF_SETTING:
 			snprintf (buf, sizeof (buf) - 1, "%s %s",
 					GAME_STRING (OPTION_STRING_BASE + 1),
 					GLOBAL (glob_flags) & MUSIC_DISABLED
-					? GAME_STRING (OPTION_STRING_BASE + 3) :
-					GAME_STRING (OPTION_STRING_BASE + 4));
+					? GAME_STRING (OPTION_STRING_BASE + 4) :
+					GAME_STRING (OPTION_STRING_BASE + 5));
+			break;
+		case VOICE_ON_SETTING:
+		case VOICE_OFF_SETTING:
+			snprintf (buf, sizeof (buf) - 1, "%s %s",
+					GAME_STRING (OPTION_STRING_BASE + 2),
+					GLOBAL (glob_flags) & VOICE_DISABLED
+					? GAME_STRING (OPTION_STRING_BASE + 4) :
+					GAME_STRING (OPTION_STRING_BASE + 5));
 			break;
 		case CYBORG_OFF_SETTING:
 		case CYBORG_NORMAL_SETTING:
@@ -172,10 +182,10 @@ FeedbackSetting (BYTE which_setting)
 			else
 				tmpstr = "";
 			snprintf (buf, sizeof (buf) - 1, "%s %s%s",
-					GAME_STRING (OPTION_STRING_BASE + 2),
+					GAME_STRING (OPTION_STRING_BASE + 3),
 					!(GLOBAL (glob_flags) & CYBORG_ENABLED)
-					? GAME_STRING (OPTION_STRING_BASE + 3) :
-					GAME_STRING (OPTION_STRING_BASE + 4),
+					? GAME_STRING (OPTION_STRING_BASE + 4) :
+					GAME_STRING (OPTION_STRING_BASE + 5),
 					tmpstr);
 			break;
 		case CHANGE_CAPTAIN_SETTING:
@@ -468,6 +478,12 @@ DoSettings (MENU_STATE *pMS)
 			case MUSIC_ON_SETTING:
 			case MUSIC_OFF_SETTING:
 				ToggleMusic ();
+				pMS->CurState ^= 1;
+				DrawMenuStateStrings (PM_SOUND_ON, pMS->CurState);
+				break;
+			case VOICE_ON_SETTING:
+			case VOICE_OFF_SETTING:
+				ToggleVoice ();
 				pMS->CurState ^= 1;
 				DrawMenuStateStrings (PM_SOUND_ON, pMS->CurState);
 				break;
