@@ -54,7 +54,7 @@ static RACE_DESC chmmr_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		900 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
+		1000 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
 			5742, 8268,
 		},

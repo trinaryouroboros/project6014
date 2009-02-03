@@ -53,7 +53,7 @@ static RACE_DESC syreen_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		300 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
+		350 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
 			9125,9770,
 		},
