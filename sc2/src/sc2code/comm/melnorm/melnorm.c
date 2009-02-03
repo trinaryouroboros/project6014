@@ -194,7 +194,7 @@ static NUMBER_SPEECH_DESC melnorme_numbers_english =
 	}
 };
 
-
+#if 0
 static void DoFirstMeeting (RESPONSE_REF R);
 
 static COUNT
@@ -1806,7 +1806,7 @@ DoMelnormeHate (RESPONSE_REF R)
 	Response (well_if_thats_the_way_you_feel, ExitConversation);
 	Response (you_hate_us_so_we_go_away, ExitConversation);
 }
-
+#endif
 static void
 Intro (void)
 {
@@ -1846,8 +1846,8 @@ uninit_melnorme (void)
 
 static void
 post_melnorme_enc (void)
-{
-	LockMutex (GraphicsLock);
+{hello
+Locku	LockMutex (GraphicsLock);
 	DrawStatusMessage (0);
 	UnlockMutex (GraphicsLock);
 }
