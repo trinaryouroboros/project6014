@@ -23,7 +23,7 @@ enum
 {
 	NULL_PHRASE,
 	HELLO_NOW_DOWN_TO_BUSINESS_1,
-	hi_doing great,
+	hi_doing_great,
 	DOING_GOOD_RESPONSE,
 	doing_average,
 	DOING_AVERAGE_RESPONSE,
@@ -34,9 +34,9 @@ enum
 	i_remember,
 	make_purchases,
 	items_to_sell,
-	END_COMMNICATION
+	END_COMMNICATION,
 	only_joke,
-	TRADING_INFO1,
+	TRADING_INFO2,
 	spank_ass2,
 	BATTLE_MELNORME,
 	HELLO_NOW_DOWN_TO_BUSINESS_2,
