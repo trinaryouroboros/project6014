@@ -459,10 +459,14 @@ StripShip (COUNT fuel_required)
 
 	return (TRUE);
 }
+#endif
 
 static void
 ExitConversation (RESPONSE_REF R)
 {
+	NPCPhrase (OK_NO_TRADE_NOW_BYE);
+
+#if 0
 	if (PLAYER_SAID (R, no_trade_now))
 		NPCPhrase (OK_NO_TRADE_NOW_BYE);
 	else if (PLAYER_SAID (R, youre_on))
@@ -535,8 +539,10 @@ ExitConversation (RESPONSE_REF R)
 	{
 		NPCPhrase (FRIENDLY_GOODBYE);
 	}
+#endif
 }
 
+#if 0
 static void
 DoRescue (RESPONSE_REF R)
 {
@@ -733,9 +739,11 @@ History (void)
 }
 
 static void NatureOfConversation (RESPONSE_REF R);
+#endif
 
 static BYTE AskedToBuy;
 
+#if 0
 static void
 DoBuy (RESPONSE_REF R)
 {
@@ -1420,9 +1428,11 @@ NatureOfConversation (RESPONSE_REF R)
 		}
 	}
 }
+#endif
 
 static BYTE local_stack0, local_stack1;
 
+#if 0
 static void
 DoBluster (RESPONSE_REF R)
 {
@@ -1550,10 +1560,20 @@ yack2_respond (void)
 			break;
 	}
 }
+#endif
+
+static void HowAreYou (RESPONSE_REF R);
 
 static void
 DoFirstMeeting (RESPONSE_REF R)
 {
+	NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS_1);
+
+	Response (hi_doing_great, HowAreYou);
+	Response (doing_average, HowAreYou);
+	Response (not_good, HowAreYou);
+
+#if 0
 	BYTE last_stack = 0;
 	PVOIDFUNC temp_func, stack_func[] =
 	{
@@ -1647,8 +1667,30 @@ DoFirstMeeting (RESPONSE_REF R)
 	(*stack_func[1]) ();
 	(*stack_func[2]) ();
 	Response (no_trade_now, ExitConversation);
+#endif
 }
 
+static void
+HowAreYou (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, hi_doing_great))
+	{
+		NPCPhrase (DOING_GOOD_RESPONSE);
+	}
+	else if (PLAYER_SAID (R, doing_average))
+	{
+		NPCPhrase (DOING_AVERAGE_RESPONSE);
+	}
+	else if (PLAYER_SAID (R, not_good))
+	{
+		NPCPhrase (NOT_GOOD_RESPONSE);
+	}
+
+	ExitConversation(0);
+}
+
+
+#if 0
 static void
 DoMelnormeMiffed (RESPONSE_REF R)
 {
@@ -1817,6 +1859,12 @@ Intro (void)
 	}
 	else
 	{
+		ExitConversation(0);
+	}
+
+#if 0
+	else
+	{
 		switch (GET_GAME_STATE (MELNORME_ANGER))
 		{
 			case 0:
@@ -1836,6 +1884,7 @@ Intro (void)
 				break;
 		}
 	}
+#endif
 }
 
 static COUNT
@@ -1846,8 +1895,8 @@ uninit_melnorme (void)
 
 static void
 post_melnorme_enc (void)
-{hello
-Locku	LockMutex (GraphicsLock);
+{
+	LockMutex (GraphicsLock);
 	DrawStatusMessage (0);
 	UnlockMutex (GraphicsLock);
 }

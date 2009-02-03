@@ -1,15 +1,15 @@
-#(HELLO_NOW_DOWN_TO_BUSINESS_1)	melno000.ogg
+#(HELLO_NOW_DOWN_TO_BUSINESS_1)
 Attention alien vessel, this is Trademaster Greenish of the starship 
-“Inevitably Successful In All circumstances”. 
-We offer trade to enhance your species’ way of life…
+`Inevitably Successful In All circumstances'. 
+We offer trade to enhance your species' way of life…
 Captain?  Is that you?
 I must say what a pleasure it is to run into you after all this time. How are all the Earthlings?
 
-#(hi_doing great)
+#(hi_doing_great)
 Hi Mr Melnorme! The Earthlings are doing just great. But now I have to sort out some business with a precursor artefact. As you do…
 
 #(DOING_GOOD_RESPONSE)
-Ah if it’s precursor artefacts that interest you, I have some very valuable information. 
+Ah if it's precursor artefacts that interest you, I have some very valuable information. 
 In accordance with our protocols and code of ethics this information can be given to you in exchange for credits. 
 So, like old times, would you like to resume your trading account?
 
@@ -17,7 +17,7 @@ So, like old times, would you like to resume your trading account?
 Just about average. How about yourselves?
 
 #(DOING_AVERAGE_RESPONSE)
-We’ll with the Ur-Quan and Kohr-Ah removed (mostly) from this region of space 
+Well, with the Ur-Quan and Kohr-Ah removed (mostly) from this region of space 
 we are doing quite nicely. 
 Its inhabitants require our goods and services to rebuild their civilisations. 
 So, like old times, would you like to resume your trading account?
@@ -26,9 +26,9 @@ So, like old times, would you like to resume your trading account?
 Could be better to be honest.
 
 #(NOT_GOOD_RESPONSE)
-I’m sorry to hear that Captain. 
+I'm sorry to hear that Captain. 
 Perhaps a shiny new bauble will raise your spirits. 
-I have cunning acquired two remarkable items from the Druuge which I am willing to pass on to you 
+I have cunningly acquired two remarkable items from the Druuge which I am willing to pass on to you 
 for an astonishly low price. 
 So, like old times, would you like to resume your trading account? 
 Of course we still sell fuel and information.
@@ -51,7 +51,7 @@ with which you may make purchases.
 If you have any questions, don't hesitate to ask.
 
 #(i_remember)
-I remember EXACTLY how this works. Let’s get down to business.
+I remember EXACTLY how this works. Let's get down to business.
 
 #(make_purchases)
 I would like to make some purchases
@@ -61,15 +61,15 @@ I would like to make some purchases
 I have some items I would like to sell
 
 #(spank_ass1)
-Actually I never really liked the way you made me collect all that bio stuff just so I could save the galaxy. I’m gonna spank yo ass!
+Actually I never really liked the way you made me collect all that bio stuff just so I could save the galaxy. I'm gonna spank yo ass!
 
-#(END_COMMNICATION_
+#(END_COMMNICATION)
 That would be unwise Captain.  Our vessels are very well equipped to deal with pirates.  You surprise me with your aggression. I think I will end this communication
 
 #(only_joke)
-Only joke. Let’s trade!
+Only joke. Let's trade!
 
-#(TRADING_INFO1)
+#(TRADING_INFO2)
 ...very well.
 We are interested in purchasing certain items, specifically
 biological data on alien life forms
@@ -84,10 +84,10 @@ with which you may make purchases.
 If you have any questions, don't hesitate to ask.
  
 #(spank_ass2)
-I think I’m gonna spank yo ass!
+I think I'm gonna spank yo ass!
 
 #(BATTLE_MELNORME)
-You were one of my favourite clients. I’m sure I will find more though.
+You were one of my favourite clients. I'm sure I will find more though.
 {battle screen}
 
 #(HELLO_NOW_DOWN_TO_BUSINESS_2)	melno001.ogg
