@@ -213,6 +213,10 @@ ExitConversation (RESPONSE_REF R)
 
 
 static void
+SellMenu (RESPONSE_REF R);
+
+
+static void
 PurchaseMenu (RESPONSE_REF R)
 {
 	if (PLAYER_SAID (R, make_purchases))
