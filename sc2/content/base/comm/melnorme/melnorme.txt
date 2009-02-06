@@ -1,4 +1,98 @@
-#(HELLO_NOW_DOWN_TO_BUSINESS_1)
+#(ENUMERATE_ONE)	melno172.ogg
+one
+
+#(ENUMERATE_TWO)	melno173.ogg
+two
+
+#(ENUMERATE_THREE)	melno174.ogg
+three
+
+#(ENUMERATE_FOUR)	melno175.ogg
+four
+
+#(ENUMERATE_FIVE)	melno176.ogg
+five
+
+#(ENUMERATE_SIX)	melno177.ogg
+six
+
+#(ENUMERATE_SEVEN)	melno178.ogg
+seven
+
+#(ENUMERATE_EIGHT)	melno179.ogg
+eight
+
+#(ENUMERATE_NINE)	melno180.ogg
+nine
+
+#(ENUMERATE_TEN)	melno181.ogg
+ten
+
+#(ENUMERATE_ELEVEN)	melno182.ogg
+eleven
+
+#(ENUMERATE_TWELVE)	melno183.ogg
+twelve
+
+#(ENUMERATE_THIRTEEN)	melno184.ogg
+thirteen
+
+#(ENUMERATE_FOURTEEN)	melno185.ogg
+fourteen
+
+#(ENUMERATE_FIFTEEN)	melno186.ogg
+fifteen
+
+#(ENUMERATE_SIXTEEN)	melno187.ogg
+sixteen
+
+#(END_LIST_WITH_AND)	melno188.ogg
+and
+
+#(ENUMERATE_ZERO)
+zero
+
+#(ENUMERATE_SEVENTEEN)	melno190.ogg
+seventeen
+
+#(ENUMERATE_EIGHTEEN)	melno191.ogg
+eighteen
+
+#(ENUMERATE_NINETEEN)	melno192.ogg
+nineteen
+
+#(ENUMERATE_TWENTY)	melno193.ogg
+twenty
+
+#(ENUMERATE_THIRTY)	melno194.ogg
+thirty
+
+#(ENUMERATE_FOURTY)	melno195.ogg
+fourty
+
+#(ENUMERATE_FIFTY)	melno196.ogg
+fifty
+
+#(ENUMERATE_SIXTY)	melno197.ogg
+sixty
+
+#(ENUMERATE_SEVENTY)	melno198.ogg
+seventy
+
+#(ENUMERATE_EIGHTY)	melno199.ogg
+eighty
+
+#(ENUMERATE_NINETY)	melno200.ogg
+ninety
+
+#(ENUMERATE_HUNDRED)	melno201.ogg
+hundred
+
+#(ENUMERATE_THOUSAND)	melno202.ogg
+thousand
+
+
+#(HELLO_NOW_DOWN_TO_BUSINESS1)
 Attention alien vessel, this is Trademaster Greenish of the starship 
 `Inevitably Successful In All circumstances'. 
 We offer trade to enhance your species' way of life…
@@ -11,7 +105,6 @@ Hi Mr Melnorme! The Earthlings are doing just great. But now I have to sort out 
 #(DOING_GOOD_RESPONSE)
 Ah if it's precursor artefacts that interest you, I have some very valuable information. 
 In accordance with our protocols and code of ethics this information can be given to you in exchange for credits. 
-So, like old times, would you like to resume your trading account?
 
 #(doing_average)
 Just about average. How about yourselves?
@@ -20,7 +113,6 @@ Just about average. How about yourselves?
 Well, with the Ur-Quan and Kohr-Ah removed (mostly) from this region of space 
 we are doing quite nicely. 
 Its inhabitants require our goods and services to rebuild their civilisations. 
-So, like old times, would you like to resume your trading account?
 
 #(not_good)
 Could be better to be honest.
@@ -30,6 +122,8 @@ I'm sorry to hear that Captain.
 Perhaps a shiny new bauble will raise your spirits. 
 I have cunningly acquired two remarkable items from the Druuge which I am willing to pass on to you 
 for an astonishly low price. 
+
+#(WANT_TO_TRADE)
 So, like old times, would you like to resume your trading account? 
 Of course we still sell fuel and information.
 
@@ -53,9 +147,11 @@ If you have any questions, don't hesitate to ask.
 #(i_remember)
 I remember EXACTLY how this works. Let's get down to business.
 
+#(RIGHT_YOU_ARE)
+Excellent Captain, of course you do
+
 #(make_purchases)
 I would like to make some purchases
-
 
 #(items_to_sell)
 I have some items I would like to sell
@@ -63,7 +159,10 @@ I have some items I would like to sell
 #(spank_ass1)
 Actually I never really liked the way you made me collect all that bio stuff just so I could save the galaxy. I'm gonna spank yo ass!
 
-#(END_COMMNICATION)
+#(spank_ass2)
+I think I'm gonna spank yo ass!
+
+#(UNWISE_CAPTAIN)
 That would be unwise Captain.  Our vessels are very well equipped to deal with pirates.  You surprise me with your aggression. I think I will end this communication
 
 #(only_joke)
@@ -83,20 +182,18 @@ To facilitate trade, we translate all your sales into Interstar Credits
 with which you may make purchases.
 If you have any questions, don't hesitate to ask.
  
-#(spank_ass2)
-I think I'm gonna spank yo ass!
 
 #(BATTLE_MELNORME)
 You were one of my favourite clients. I'm sure I will find more though.
 {battle screen}
 
-#(HELLO_NOW_DOWN_TO_BUSINESS_2)	melno001.ogg
+#(HELLO_NOW_DOWN_TO_BUSINESS2)	melno001.ogg
 As a master trader in the Melnorme merchant fleet, I greet you, Captain.
 News of your species and your unusual vessel has travelled quickly.
 I need not say how eager we are to trade with you and your kind! 
 Now, how can I be of service to you?
 
-#(HELLO_NOW_DOWN_TO_BUSINESS_3)	melno002.ogg
+#(HELLO_NOW_DOWN_TO_BUSINESS3)	melno002.ogg
 Hello again, human space captain. 
 Perhaps during this encounter, we will be able to establish a successful, businesslike relationship.
 
@@ -110,42 +207,42 @@ We cannot continue this conversation. Goodbye.
 When you wish to trade with us, seek any supergiant star system.
 We shall be there.
 
-#(HELLO_AND_DOWN_TO_BUSINESS_1)	melno012.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS1)	melno012.ogg
 Yes, let us get down to business.
 
-#(HELLO_AND_DOWN_TO_BUSINESS_2)	melno013.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS2)	melno013.ogg
 How nice to see you again, Captain.
 
-#(HELLO_AND_DOWN_TO_BUSINESS_3)	melno014.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS3)	melno014.ogg
 I had itchy pods this morning, Captain, and here you are!
 
-#(HELLO_AND_DOWN_TO_BUSINESS_4)	melno015.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS4)	melno015.ogg
 What a coincidence! I was just talking about you with a Keel-Verezy captain. 
 They expressed great interest in your explorations and struggles against the Ur-Quan
 but, like all Verezy, I'm afraid they were hesitant to introduce themselves for fear of
 well, frightening you. 
 In any event, it is our pleasure to meet you once again.
 
-#(HELLO_AND_DOWN_TO_BUSINESS_5)	melno016.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS5)	melno016.ogg
 Once again we meet to exchange valuable tangibles.
 Isn't this fun?!
 
-#(HELLO_AND_DOWN_TO_BUSINESS_6)	melno017.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS6)	melno017.ogg
 Your arrival was predicted by our Tzo crystal's vibrations.
 We already know why you are here and what you need from us; however
 etiquette requires that we act as though we are ignorant of your desires.
 
-#(HELLO_AND_DOWN_TO_BUSINESS_7)	melno018.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS7)	melno018.ogg
 This very morning, I was just saying to subordinate Ochre
 `Fe-Fi-Fo-Fum! I smell the feet of a Hu-Hu-Man!'
 We laughed and laughed. What a synchronicity!
 
-#(HELLO_AND_DOWN_TO_BUSINESS_8)	melno019.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS8)	melno019.ogg
 I must warn you, Captain
 this is the time of the month we Melnorme drive exceptionally hard bargains.
 Beware!
 
-#(HELLO_AND_DOWN_TO_BUSINESS_9)	melno020.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS9)	melno020.ogg
 LOOK OUT!
 Hoy! What a close call!
 Captain, why did you try to run down that Keel-Verezy vessel!?
@@ -153,7 +250,7 @@ You almost smashed it into flinders!
 What!? You didn't see it? Surely you -- oh
 Never mind.
 
-#(HELLO_AND_DOWN_TO_BUSINESS_10) melno021.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS10) melno021.ogg
 Welcome back, Captain! You are our favorite customer.
 
 #(whats_my_credit)
@@ -587,95 +684,3 @@ We will take
 #(DEFENSES)	melno171.ogg
  of your Point-Defense Lasers
 
-#(ENUMERATE_ONE)	melno172.ogg
-one
-
-#(ENUMERATE_TWO)	melno173.ogg
-two
-
-#(ENUMERATE_THREE)	melno174.ogg
-three
-
-#(ENUMERATE_FOUR)	melno175.ogg
-four
-
-#(ENUMERATE_FIVE)	melno176.ogg
-five
-
-#(ENUMERATE_SIX)	melno177.ogg
-six
-
-#(ENUMERATE_SEVEN)	melno178.ogg
-seven
-
-#(ENUMERATE_EIGHT)	melno179.ogg
-eight
-
-#(ENUMERATE_NINE)	melno180.ogg
-nine
-
-#(ENUMERATE_TEN)	melno181.ogg
-ten
-
-#(ENUMERATE_ELEVEN)	melno182.ogg
-eleven
-
-#(ENUMERATE_TWELVE)	melno183.ogg
-twelve
-
-#(ENUMERATE_THIRTEEN)	melno184.ogg
-thirteen
-
-#(ENUMERATE_FOURTEEN)	melno185.ogg
-fourteen
-
-#(ENUMERATE_FIFTEEN)	melno186.ogg
-fifteen
-
-#(ENUMERATE_SIXTEEN)	melno187.ogg
-sixteen
-
-#(END_LIST_WITH_AND)	melno188.ogg
-and
-
-#(ENUMERATE_ZERO)
-zero
-
-#(ENUMERATE_SEVENTEEN)	melno190.ogg
-seventeen
-
-#(ENUMERATE_EIGHTEEN)	melno191.ogg
-eighteen
-
-#(ENUMERATE_NINETEEN)	melno192.ogg
-nineteen
-
-#(ENUMERATE_TWENTY)	melno193.ogg
-twenty
-
-#(ENUMERATE_THIRTY)	melno194.ogg
-thirty
-
-#(ENUMERATE_FOURTY)	melno195.ogg
-fourty
-
-#(ENUMERATE_FIFTY)	melno196.ogg
-fifty
-
-#(ENUMERATE_SIXTY)	melno197.ogg
-sixty
-
-#(ENUMERATE_SEVENTY)	melno198.ogg
-seventy
-
-#(ENUMERATE_EIGHTY)	melno199.ogg
-eighty
-
-#(ENUMERATE_NINETY)	melno200.ogg
-ninety
-
-#(ENUMERATE_HUNDRED)	melno201.ogg
-hundred
-
-#(ENUMERATE_THOUSAND)	melno202.ogg
-thousand
