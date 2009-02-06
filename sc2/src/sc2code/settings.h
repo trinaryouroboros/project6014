@@ -24,6 +24,7 @@ extern void StopMusic (void);
 extern void ResumeMusic (void);
 extern void PauseMusic (void);
 extern void ToggleSoundEffect (void);
+extern void ToggleVoice (void);
 
 extern void PlayMusic (MUSIC_REF MusicRef, BOOLEAN Continuous, BYTE Priority);
 extern void PlaySoundEffect (SOUND S, COUNT Channel, SoundPosition Pos,
