@@ -1,7 +1,7 @@
 #(YEHAT_GREETING1)
-Braaaaarrrrrkkkk! What a delightful surprise 
+Braaaaarrrrrkkkk! What a delightful surprise
 to see our old human captain friend again.
-We often think of you and how ye aided the clans 
+We often think of you and how ye aided the clans
 in their revolution to over throw the veep-eep dynasty.
 Stories are told to hatchlings
 
@@ -15,11 +15,11 @@ Hey hey! What up droogs?
 Actually, we need to scoot now
 
 #(WHY_ARE_YOU_HERE1)
-Droogs? We know nothing of this. It's been too long. 
-We thought ye had settled for the quiet life on Vega. 
+Droogs? We know nothing of this. It's been too long.
+We thought ye had settled for the quiet life on Vega.
 
 #(WHY_ARE_YOU_HERE2)
-It's been too long. We thought ye had settled for the quiet life on Vega. 
+It's been too long. We thought ye had settled for the quiet life on Vega.
 
 #(WHY_CHMMR_STARSHIP)
 What brings you here in a Chmmr starship?
@@ -28,49 +28,49 @@ What brings you here in a Chmmr starship?
 We're investigating Precursor artefacts. We thought we'd stop by and say hi.
 
 #(PLEASED_TO_SEE_ALLY)
-We're pleased to see our old friend. Precursor Artefacts you say. 
-A Terminator scout group reported something interesting in Gamma YYY 
-while chasing a lone Kohr-Ah vessel. 
-You might consider checking it out. 
-Apparently it bore the hall-marks of a Precursor item. 
+We're pleased to see our old friend. Precursor Artefacts you say.
+A Terminator scout group reported something interesting in Gamma YYY
+while chasing a lone Kohr-Ah vessel.
+You might consider checking it out.
+Apparently it bore the hall-marks of a Precursor item.
 The group was in hot pursuit and had no change to investigate.
 
-#(reinstate veepeep)
-We've decided that the veep-eep were okay after-all. 
+#(reinstate_veepeep)
+We've decided that the veep-eep were okay after-all.
 We've come to demand you reinstate them as Yehat royalty!
 
 #(BAD_HUMOUR)
-If that is earthling humour then I suggest you keep it to yourselves. 
+If that is earthling humour then I suggest you keep it to yourselves.
 The Veep-eep were a toxic influence on the clan culture of the Yehat.
 
 #(how_are_you)
 So how's the New Alliance of Free Stars going for you guys?
 
 #(YEHAT_DOING_GOOD)
-The Yehat prosper. 
-We have expanded out sphere of influence back to where it was 
-before the great wars. 
-Since we were battle thralls, we were less scathed by Ur-Quan domination than other races. 
-While others rebuild their home worlds, 
-We've been able to put our energies into helping the Chmmr eliminate 
+The Yehat prosper.
+We have expanded out sphere of influence back to where it was
+before the great wars.
+Since we were battle thralls, we were less scathed by Ur-Quan domination than other races.
+While others rebuild their home worlds,
+We've been able to put our energies into helping the Chmmr eliminate
 remaining Kohr-Ah Marauders from this region of space.
 
 #(how_are_shofixti)
 How are the Shofixti?
 #(SHOFIXTI_INFO)
-Arrrrrrrk it saddens me to see them struggle so. 
-The Shofixti are eking out a meagre existence in the Gorno constellation. 
-With their old home-world destroyed they are trying to create a new one at Beta Gorno II. 
-They refuse to go elsewhere to more fertile grounds. 
-Also, the Chmmr won't permit the Alliance to direct too much aid into their struggle 
+Arrrrrrrk it saddens me to see them struggle so.
+The Shofixti are eking out a meagre existence in the Gorno constellation.
+With their old home-world destroyed they are trying to create a new one at Beta Gorno II.
+They refuse to go elsewhere to more fertile grounds.
+Also, the Chmmr won't permit the Alliance to direct too much aid into their struggle
 ...as our resources are needed to eliminate the Kohr-Ah threat.
 
 #(how_are_pkunk)
 So what happened to the Pkunk in the end?
 
-#(PKUNK_INFO)
-Our Pkunk brethren have integrated back into our society 
-and have had a profound influence on our outlook on life. 
+#(PKUNK_INFORMATION)
+Our Pkunk brethren have integrated back into our society
+and have had a profound influence on our outlook on life.
 Though I am not sure how they expect to re-integrate biologically
 in fact the thought disturbs me somewhat.
 
@@ -78,13 +78,13 @@ in fact the thought disturbs me somewhat.
 I've been out of the loop. Any more interesting news about the New Alliance of Free Stars
 
 #(CHMMR_INFO)
-Just between ye and me human, 
-the Chmmr haven't turned out exactly what we thought they'd be. 
-We expected a supremely benevolent and wise race, much like the Chenjesu. 
-Well, they are wise, but I'm not sure about benevolent. 
-They showed little latitude to the Mycon and VUX, not that either race deserved much. 
-Also I've noticed that they show no mercy to Kohr-Ah. 
-They take no surrender and just destroy on sight. 
+Just between ye and me human,
+the Chmmr haven't turned out exactly what we thought they'd be.
+We expected a supremely benevolent and wise race, much like the Chenjesu.
+Well, they are wise, but I'm not sure about benevolent.
+They showed little latitude to the Mycon and VUX, not that either race deserved much.
+Also I've noticed that they show no mercy to Kohr-Ah.
+They take no surrender and just destroy on sight.
 Better to be on their side than not to be sure.
 
 #(GOODBYE_EARTHLING)

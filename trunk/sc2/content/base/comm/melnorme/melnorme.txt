@@ -93,8 +93,8 @@ thousand
 
 
 #(HELLO_NOW_DOWN_TO_BUSINESS1)
-Attention alien vessel, this is Trademaster Greenish of the starship 
-`Inevitably Successful In All circumstances'. 
+Attention alien vessel, this is Trademaster Greenish of the starship
+`Inevitably Successful In All circumstances'.
 We offer trade to enhance your species' way of life…
 Captain?  Is that you?
 I must say what a pleasure it is to run into you after all this time. How are all the Earthlings?
@@ -103,28 +103,28 @@ I must say what a pleasure it is to run into you after all this time. How are al
 Hi Mr Melnorme! The Earthlings are doing just great. But now I have to sort out some business with a precursor artefact. As you do…
 
 #(DOING_GOOD_RESPONSE)
-Ah if it's precursor artefacts that interest you, I have some very valuable information. 
-In accordance with our protocols and code of ethics this information can be given to you in exchange for credits. 
+Ah if it's precursor artefacts that interest you, I have some very valuable information.
+In accordance with our protocols and code of ethics this information can be given to you in exchange for credits.
 
 #(doing_average)
 Just about average. How about yourselves?
 
 #(DOING_AVERAGE_RESPONSE)
-Well, with the Ur-Quan and Kohr-Ah removed (mostly) from this region of space 
-we are doing quite nicely. 
-Its inhabitants require our goods and services to rebuild their civilisations. 
+Well, with the Ur-Quan and Kohr-Ah removed (mostly) from this region of space
+we are doing quite nicely.
+Its inhabitants require our goods and services to rebuild their civilisations.
 
 #(not_good)
 Could be better to be honest.
 
 #(NOT_GOOD_RESPONSE)
-I'm sorry to hear that Captain. 
-Perhaps a shiny new bauble will raise your spirits. 
-I have cunningly acquired two remarkable items from the Druuge which I am willing to pass on to you 
-for an astonishly low price. 
+I'm sorry to hear that Captain.
+Perhaps a shiny new bauble will raise your spirits.
+I have cunningly acquired two remarkable items from the Druuge which I am willing to pass on to you
+for an astonishly low price.
 
 #(WANT_TO_TRADE)
-So, like old times, would you like to resume your trading account? 
+So, like old times, would you like to resume your trading account?
 Of course we still sell fuel and information.
 
 #(how_to_trade)
@@ -181,7 +181,7 @@ and many important secrets which may help you in your travels.
 To facilitate trade, we translate all your sales into Interstar Credits
 with which you may make purchases.
 If you have any questions, don't hesitate to ask.
- 
+
 
 #(BATTLE_MELNORME)
 You were one of my favourite clients. I'm sure I will find more though.
@@ -190,11 +190,11 @@ You were one of my favourite clients. I'm sure I will find more though.
 #(HELLO_NOW_DOWN_TO_BUSINESS2)	melno001.ogg
 As a master trader in the Melnorme merchant fleet, I greet you, Captain.
 News of your species and your unusual vessel has travelled quickly.
-I need not say how eager we are to trade with you and your kind! 
+I need not say how eager we are to trade with you and your kind!
 Now, how can I be of service to you?
 
 #(HELLO_NOW_DOWN_TO_BUSINESS3)	melno002.ogg
-Hello again, human space captain. 
+Hello again, human space captain.
 Perhaps during this encounter, we will be able to establish a successful, businesslike relationship.
 
 #(get_on_with_business)
@@ -217,10 +217,10 @@ How nice to see you again, Captain.
 I had itchy pods this morning, Captain, and here you are!
 
 #(HELLO_AND_DOWN_TO_BUSINESS4)	melno015.ogg
-What a coincidence! I was just talking about you with a Keel-Verezy captain. 
+What a coincidence! I was just talking about you with a Keel-Verezy captain.
 They expressed great interest in your explorations and struggles against the Ur-Quan
 but, like all Verezy, I'm afraid they were hesitant to introduce themselves for fear of
-well, frightening you. 
+well, frightening you.
 In any event, it is our pleasure to meet you once again.
 
 #(HELLO_AND_DOWN_TO_BUSINESS5)	melno016.ogg
@@ -371,10 +371,10 @@ As you wish.
 I have some data on alien lifeforms.
 
 #(SOLD_LIFE_DATA1)	melno074.ogg
-The 
+The
 
 #(SOLD_LIFE_DATA2)	melno203.ogg
- units of biological data we downloaded from your ship earn you 
+ units of biological data we downloaded from your ship earn you
 
 #(SOLD_LIFE_DATA3)	melno204.ogg
  Credits.
@@ -383,11 +383,11 @@ The
 I wish to sell you Rainbow world locations.
 
 #(SOLD_RAINBOW_LOCATIONS1)	melno075.ogg
-Your ship's log indicates that you discovered the whereabouts of 
+Your ship's log indicates that you discovered the whereabouts of
 
 #(SOLD_RAINBOW_LOCATIONS2)	melno205.ogg
  of the Rainbow worlds which so fascinate us.
-In exchange, we will give you 
+In exchange, we will give you
 
 #(SOLD_RAINBOW_LOCATIONS3)	melno204.ogg
  Credits.
@@ -457,12 +457,12 @@ It has been a pleasure dealing with you, Captain.
 We look forward to your next visit.
 
 #(CREDIT_IS0)
-Your present balance is 
+Your present balance is
 #(CREDIT_IS1)
  Credits.
 
 #(NEED_MORE_CREDIT0)	melno084.ogg
-Unfortunately this purchase requires 
+Unfortunately this purchase requires
 #(NEED_MORE_CREDIT1)	melno206.ogg
  additional Credits.
 
@@ -646,7 +646,7 @@ We are certain that in the long run, this will prove to be a most profitable inv
 
 
 #(STRIP_HEAD)	melno159.ogg
-We will take 
+We will take
 
 #(LANDERS)	melno160.ogg
  of your Planet Landers

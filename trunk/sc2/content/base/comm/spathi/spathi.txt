@@ -1,5 +1,3 @@
-SPATHI
-
 #(WHAT_IS_CYPHER)
 What is the secret Spathi Cypher?
 
