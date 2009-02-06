@@ -553,6 +553,8 @@ START_GAME_STATE
 	ADD_GAME_STATE (CHMMR_EMERGING, 1)
 	ADD_GAME_STATE (CHMMR_UNLEASHED, 1)
 	ADD_GAME_STATE (CHMMR_BOMB_STATE, 2)
+	ADD_GAME_STATE (CHMMR_MET, 2)
+
 			/* 0 - Nothing is known about the Precursor Bomb.
 			 * 1 - The captain knows from the Chmmr that some extremely
 			 *     powerful weapon is needed to destroy the Sa-Matra.
@@ -570,6 +572,7 @@ START_GAME_STATE
 	ADD_GAME_STATE (YEHAT_SHIP_MONTH, 4)
 	ADD_GAME_STATE (YEHAT_SHIP_DAY, 5)
 	ADD_GAME_STATE (YEHAT_SHIP_YEAR, 5)
+	ADD_GAME_STATE (YEHAT_MET, 2)
 
 	ADD_GAME_STATE (CLEAR_SPINDLE, 1)
 	ADD_GAME_STATE (PKUNK_VISITS, 3)
