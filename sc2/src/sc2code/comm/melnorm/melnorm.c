@@ -228,14 +228,17 @@ BuyInfoMenu (RESPONSE_REF R)
 	if (PLAYER_SAID (R, buy_current_events))
 	{
 		NPCPhrase (OK_BUY_EVENT_1);
+		NPCPhrase (OK_NO_TRADE_NOW_BYE);
 	}
 	else if (PLAYER_SAID (R, buy_alien_races))
 	{
 		NPCPhrase (OK_BUY_ALIEN_RACE_1);
+		NPCPhrase (OK_NO_TRADE_NOW_BYE);
 	}
 	else if (PLAYER_SAID (R, buy_history))
 	{
 		NPCPhrase (OK_BUY_HISTORY_1);
+		NPCPhrase (OK_NO_TRADE_NOW_BYE);
 	}
 
 	Response (buy_current_events, BuyInfoMenu);
@@ -246,16 +249,14 @@ BuyInfoMenu (RESPONSE_REF R)
 
 
 static void
-BuyTechMenu (RESPONSE_REF R)
+BuyFuelMenu (RESPONSE_REF R) //TODO
 {
-	//TODO
-}
-
-
-static void
-BuyFuelMenu (RESPONSE_REF R)
-{
-	//TODO
+	if (PLAYER_SAID (R, buy_fuel))
+	{	
+		NPCPhrase (OK_BUY_ALIEN_RACE_1);
+		NPCPhrase (OK_NO_TRADE_NOW_BYE);
+	}
+		
 }
 
 
@@ -266,8 +267,11 @@ PurchaseMenu (RESPONSE_REF R)
 	{
 		NPCPhrase (WHAT_TO_BUY);
 	}
+	if (PLAYER_SAID (R, done_buying_info))
+	{
+		NPCPhrase (WHAT_TO_BUY);
+	}
 	Response (buy_info, BuyInfoMenu);
-	Response (buy_technology, BuyTechMenu);
 	Response (buy_fuel, BuyFuelMenu);
 	Response (done_buying, TradeMenu);
 }
@@ -347,14 +351,17 @@ HowAreYou (RESPONSE_REF R)
 	if (PLAYER_SAID (R, hi_doing_great))
 	{
 		NPCPhrase (DOING_GOOD_RESPONSE);
+		NPCPhrase (WANT_TO_TRADE);
 	}
 	else if (PLAYER_SAID (R, doing_average))
 	{
 		NPCPhrase (DOING_AVERAGE_RESPONSE);
+		NPCPhrase (WANT_TO_TRADE);
 	}
 	else if (PLAYER_SAID (R, not_good))
 	{
 		NPCPhrase (NOT_GOOD_RESPONSE);
+		NPCPhrase (WANT_TO_TRADE);
 	}
 
 	Response (how_to_trade, TradeMenu);
