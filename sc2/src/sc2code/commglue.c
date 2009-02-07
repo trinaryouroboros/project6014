@@ -329,10 +329,7 @@ init_race (CONVERSATION comm_id)
 		case SLYLANDRO_HOME_CONVERSATION:
 			return init_slylandro_comm ();
 		case SPATHI_CONVERSATION:
-			if (!(GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7)))
-				return init_spathi_comm ();
-			else
-				return init_spahome_comm ();
+			return init_spahome_comm ();
 		case SUPOX_CONVERSATION:
 			return init_supox_comm ();
 		case SYREEN_CONVERSATION:

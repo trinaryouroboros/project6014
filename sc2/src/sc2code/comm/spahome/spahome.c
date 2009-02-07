@@ -258,14 +258,7 @@ init_spahome_comm ()
 	spahome_desc.AlienAltSongRes = SPAHOME_MUSIC;
 	spahome_desc.AlienSongFlags |= LDASF_USE_ALTERNATE;
 
-	if (GET_GAME_STATE (SPATHI_MANNER) == 3)
-	{
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-	}
-	else
-	{
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	}
+	SET_GAME_STATE (BATTLE_SEGUE, 0);
 
 	retval = &spahome_desc;
 
