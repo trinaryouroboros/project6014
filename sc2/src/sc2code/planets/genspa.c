@@ -35,7 +35,6 @@ GenerateSpathi (BYTE control)
 
 	switch (control)
 	{
-		
 		case GENERATE_MOONS:
 			GenerateRandomIP (GENERATE_MOONS);
 			if (pSolarSysState->pBaseDesc == &pSolarSysState->PlanetDesc[0])
@@ -46,20 +45,20 @@ GenerateSpathi (BYTE control)
 
 				pSolarSysState->MoonDesc[0].data_index = PELLUCID_WORLD;
 				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS + MOON_DELTA;
-				angle = NORMALIZE_ANGLE (LOWORD (TFB_Random ()));
+				angle = 58;
 				pSolarSysState->MoonDesc[0].location.x =
 						COSINE (angle, pSolarSysState->MoonDesc[0].radius);
 				pSolarSysState->MoonDesc[0].location.y =
 						SINE (angle, pSolarSysState->MoonDesc[0].radius);
 			
 /*Spathi Starbase*/
-				pSolarSysState->MoonDesc[0].data_index = (BYTE)~0;
-				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS;
+				pSolarSysState->MoonDesc[1].data_index = (BYTE)~0;
+				pSolarSysState->MoonDesc[1].radius = MIN_MOON_RADIUS;
 				angle = HALF_CIRCLE + QUADRANT;
-				pSolarSysState->MoonDesc[0].location.x =
-						COSINE (angle, pSolarSysState->MoonDesc[0].radius);
-				pSolarSysState->MoonDesc[0].location.y =
-						SINE (angle, pSolarSysState->MoonDesc[0].radius);
+				pSolarSysState->MoonDesc[1].location.x =
+						COSINE (angle, pSolarSysState->MoonDesc[1].radius);
+				pSolarSysState->MoonDesc[1].location.y =
+						SINE (angle, pSolarSysState->MoonDesc[1].radius);
 
 			}
 			break;
@@ -78,9 +77,8 @@ GenerateSpathi (BYTE control)
 					COSINE (angle, pMinPlanet->radius);
 			pMinPlanet->location.y =
 					SINE (angle, pMinPlanet->radius);
-			pMinPlanet->data_index = WATER_WORLD;
-				pMinPlanet->data_index |= PLANET_SHIELDED;
-			pMinPlanet->NumPlanets = 1;
+			pMinPlanet->data_index = WATER_WORLD | PLANET_SHIELDED;
+			pMinPlanet->NumPlanets = 2;
 			break;
 		}
 		case GENERATE_LIFE:
@@ -205,6 +203,14 @@ GenerateSpathi (BYTE control)
 				pSolarSysState->SysInfo.PlanetInfo.SurfaceTemperature = 31;
 
 				LoadPlanet (NULL);
+				break;
+			}
+			else if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[0]
+					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[1])
+			{
+				pSolarSysState->MenuState.Initialized += 2;
+				InitCommunication (SPATHI_CONVERSATION);
+				pSolarSysState->MenuState.Initialized -= 2;
 				break;
 			}
 		default:
