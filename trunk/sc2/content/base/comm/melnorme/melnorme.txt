@@ -484,7 +484,7 @@ I am done buying information.
 #(no_buy_info)
 I do not wish to buy information at this time.
 
-#(BUY_INFO_INTRO)	melno087.ogg
+#(BUY_INFO_INTRO)
 As you know, in our many centuries of star-trading
 we Melnorme have come to learn much about what happens in our galaxy
 both now and in the ancient past.
@@ -501,8 +501,9 @@ What else would you like to buy?
 #(OK_DONE_BUYING_INFO)	melno090.ogg
 What else would you like to buy?
 
-#(OK_BUY_EVENT_1)	melno091.ogg
-
+#(OK_BUY_EVENT_1)
+Captain, I recommend you consider contributing to this game. 
+I'm sure it will be worthwhile
 
 #(OK_BUY_EVENT_2)	melno092.ogg
 
@@ -525,8 +526,9 @@ What else would you like to buy?
 #(OK_BUY_EVENT_8)	melno098.ogg
 
 
-#(OK_BUY_ALIEN_RACE_1)	melno099.ogg
-
+#(OK_BUY_ALIEN_RACE_1)	
+Captain, I recommend you consider contributing to this game. 
+I'm sure it will be worthwhile
 
 #(OK_BUY_ALIEN_RACE_2)	melno100.ogg
 
@@ -575,8 +577,9 @@ What else would you like to buy?
 Captain, you have heard all that we have to say about aliens indigenous to this region.
 Should we learn more in the near future, we shall be certain to sell it to you.
 
-#(OK_BUY_HISTORY_1)	melno115.ogg
-
+#(OK_BUY_HISTORY_1)	
+Captain, I recommend you consider contributing to this game. 
+I'm sure it will be worthwhile
 
 #(OK_BUY_HISTORY_2)	melno116.ogg
 
