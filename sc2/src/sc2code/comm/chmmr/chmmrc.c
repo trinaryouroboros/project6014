@@ -216,12 +216,10 @@ HaveYouFoundArtefact (RESPONSE_REF R)
 	{
 		NPCPhrase (SEARCH_FOR_IT);
 	}
-	Response (can_we_ask, AskMenu);
 
+	Response (can_we_ask, AskMenu);
 	Response (on_our_way, ExitConversation);
 }
-
-
 
 
 
@@ -242,70 +240,6 @@ Intro (void)
 }
 
 	
-
-#if 0
-{
-	NPCPhrase (BRING_HERE);
-	
-	if (PLAYER_SAID (R, can_we_ask))
-	{
-		NPCPhrase (YOU_CAN_ASK);
-	}
-	else if (PLAYER_SAID (R, on_our_way))
-	}
-	
-	ExitConversation(0);
-}
-
-{
-	NPCPhrase (YOU_CAN_ASK);
-	
-	if (PLAYER_SAID (R, where_kohrah))
-	{
-		NPCPhrase (KOHRAH_ARE);
-		if (PLAYER_SAID (R, why_kohrah_here))
-		{
-			NPCPhrase (KOHRAH_HERE_BECAUSE);
-		}
-	}
-	else if (PLAYER_SAID (R, where_urquan))
-	}
-		NPCPhrase (URQUAN_ARE);
-	{
-	else if (PLAYER_SAID (R, better_starship))
-	}
-		NPCPhrase (NO_BETTER_STARSHIP);
-	{
-	else if (PLAYER_SAID (R, yehat_not_impressed))
-	}
-		NPCPhrase (CHMMR_ARE_AWESOME);
-}
-
-{
-	NPCPhrase (CHMMR_ARE_AWESOME);
-	
-	if (PLAYER_SAID (R, chenjesu_guiding_light))
-	{
-		NPCPhrase (CHMMR_PROTECT);
-	}
-	else if (PLAYER_SAID (R, pterodactyls_know_nothing))
-	}
-		NPCPhrase (SPEAK_TO_YEHAT);
-	{
-	else if (PLAYER_SAID (R, im_not_impressed))
-	}
-		NPCPhrase (CHMMR_LECTURE);
-	{
-
-	
-}
-
-#endif
-
-
-
-
-
 
 
 static COUNT
