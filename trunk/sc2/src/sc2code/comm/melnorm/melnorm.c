@@ -293,6 +293,7 @@ TradeMenu (RESPONSE_REF R)
 	if (PLAYER_SAID (R, only_joke))
 	{
 		NPCPhrase (TRADING_INFO2);
+		NPCPhrase (MORE_TRADING_INFO);
 	}
 	else if (PLAYER_SAID (R, i_remember))
 	{
@@ -301,7 +302,10 @@ TradeMenu (RESPONSE_REF R)
 	else if (PLAYER_SAID (R, how_to_trade))
 	{
 		NPCPhrase (TRADING_INFO1);
+		NPCPhrase (MORE_TRADING_INFO);
 	}
+	//TODO HELLO_NOW_DOWN_TO_BUSINESS2 if normal,
+	//HELLO_NOW_DOWN_TO_BUSINESS3 if attack last time
 	else if (GET_GAME_STATE (MET_MELNORME) == 0)
 	{
 		SET_GAME_STATE (MET_MELNORME, 1);
@@ -321,7 +325,6 @@ TradeMenu (RESPONSE_REF R)
 	Response (items_to_sell, SellMenu);
 	Response (no_trade_now, ExitConversation);
 }
-
 
 
 static void

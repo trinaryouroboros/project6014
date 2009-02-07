@@ -132,6 +132,8 @@ Sounds good, can you remind me how this works again?
 
 #(TRADING_INFO1)
 Certainly captain.
+
+#(MORE_TRADING_INFO)
 We are interested in purchasing certain items, specifically
 biological data on alien life forms
 and the coordinates of certain strange worlds whose radiant energies defy all scanners
@@ -170,18 +172,6 @@ Only joke. Let's trade!
 
 #(TRADING_INFO2)
 ...very well.
-We are interested in purchasing certain items, specifically
-biological data on alien life forms
-and the coordinates of certain strange worlds whose radiant energies defy all scanners
-producing a rainbow-like image.
-In exchange, we have many interesting and valuable commodities, such as
-fuel compatible with your starship's HyperDrive thrusters,
-technological specifications, allowing you to build new devices for your ship
-and many important secrets which may help you in your travels.
-To facilitate trade, we translate all your sales into Interstar Credits
-with which you may make purchases.
-If you have any questions, don't hesitate to ask.
-
 
 #(BATTLE_MELNORME)
 You were one of my favourite clients. I'm sure I will find more though.

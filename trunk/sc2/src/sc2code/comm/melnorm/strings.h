@@ -63,6 +63,7 @@ enum
 	WANT_TO_TRADE,
 	how_to_trade,
 	TRADING_INFO1,
+	MORE_TRADING_INFO,
 	i_remember,
 	RIGHT_YOU_ARE,
 	make_purchases,
