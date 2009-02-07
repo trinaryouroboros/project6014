@@ -212,29 +212,11 @@ ExitConversation (RESPONSE_REF R)
 }
 
 
-static void 
-BuyInfoMenu (R);
+static void
+PurchaseMenu (RESPONSE_REF R);
 
 static void
-PurchaseMenu (R); 
-	{BuyInfoMenu (R)};
-
-static void
-BuyInfoMenu (R);
-	{PurchaseMenu (R)};
-
-
-static void
-PurchaseMenu (RESPONSE_REF R)
-{
-	if (PLAYER_SAID (R, buy_technology))
-	{
-		NPCPhrase (WHAT_TO_BUY);
-	}
-	Response (buy_info, BuyInfoMenu);
-	Response (done_buying, SellMenu);
-	Response (no_trade_now, ExitConversation);
-}
+TradeMenu (RESPONSE_REF R);
 
 static void
 BuyInfoMenu (RESPONSE_REF R)
@@ -253,17 +235,28 @@ BuyInfoMenu (RESPONSE_REF R)
 	}
 	else if (PLAYER_SAID (R, buy_history))
 	{
-			NPCPhrase (OK_BUY_HISTORY_1);
+		NPCPhrase (OK_BUY_HISTORY_1);
 	}
 
 	Response (buy_current_events, BuyInfoMenu);
 	Response (buy_alien_races, BuyInfoMenu);
 	Response (buy_history, BuyInfoMenu);
 	Response (done_buying_info, PurchaseMenu);
-	Response (no_trade_now, ExitConversation);
-
 }
 
+
+static void
+BuyTechMenu (RESPONSE_REF R)
+{
+	//TODO
+}
+
+
+static void
+BuyFuelMenu (RESPONSE_REF R)
+{
+	//TODO
+}
 
 
 static void
@@ -274,14 +267,10 @@ PurchaseMenu (RESPONSE_REF R)
 		NPCPhrase (WHAT_TO_BUY);
 	}
 	Response (buy_info, BuyInfoMenu);
+	Response (buy_technology, BuyTechMenu);
 	Response (buy_fuel, BuyFuelMenu);
-	Response (done_buying, SellMenu);
-	Response (no_trade_now, ExitConversation);
-
+	Response (done_buying, TradeMenu);
 }
-
-
-
 
 
 static void
@@ -304,31 +293,29 @@ TradeMenu (RESPONSE_REF R)
 	if (PLAYER_SAID (R, only_joke))
 	{
 		NPCPhrase (TRADING_INFO2);
-		NPCPhrase (BUY_OR_SELL);
 	}
 	else if (PLAYER_SAID (R, i_remember))
 	{
 		NPCPhrase (RIGHT_YOU_ARE);
-		NPCPhrase (BUY_OR_SELL);
 	}
 	else if (PLAYER_SAID (R, how_to_trade))
 	{
 		NPCPhrase (TRADING_INFO1);
-		NPCPhrase (BUY_OR_SELL);
 	}
 	else if (GET_GAME_STATE (MET_MELNORME) == 0)
 	{
 		SET_GAME_STATE (MET_MELNORME, 1);
 		NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS2);
-		NPCPhrase (BUY_OR_SELL);
 	}
-
 	else if (GET_GAME_STATE (MET_MELNORME) == 1)
 	{
 		SET_GAME_STATE (MET_MELNORME, 2);
 		NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS3);
-		NPCPhrase (BUY_OR_SELL);
+		
 	}
+
+	NPCPhrase (BUY_OR_SELL);
+	
 
 	Response (make_purchases, PurchaseMenu);
 	Response (items_to_sell, SellMenu);
@@ -358,28 +345,25 @@ HowAreYou (RESPONSE_REF R)
 	{
 		NPCPhrase (DOING_GOOD_RESPONSE);
 	}
-	
-	if (PLAYER_SAID (R, doing_average))
+	else if (PLAYER_SAID (R, doing_average))
 	{
 		NPCPhrase (DOING_AVERAGE_RESPONSE);
 	}
-
-	if (PLAYER_SAID (R, not_good))
+	else if (PLAYER_SAID (R, not_good))
 	{
 		NPCPhrase (NOT_GOOD_RESPONSE);
 	}
 
-	Response (spank_ass2, ExitConversation);
-	Response (only_joke, TradeMenu);
-		
+	Response (how_to_trade, TradeMenu);
+	Response (i_remember, TradeMenu);
+	Response (spank_ass1, Threaten);
 }
 
 static void
 DoFirstMeeting (RESPONSE_REF R)
 {
-	{
-		NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS1);
-	}
+	NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS1);
+
 	Response (hi_doing_great, HowAreYou);
 	Response (doing_average, HowAreYou);
 	Response (not_good, HowAreYou);
@@ -395,7 +379,7 @@ Intro (void) {
 	}
 	else
 	{
-		ExitConversation(0);
+		TradeMenu(0);
 	}
 }
 
