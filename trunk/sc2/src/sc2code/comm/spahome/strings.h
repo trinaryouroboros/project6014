@@ -23,7 +23,7 @@ enum
 {
 	NULL_PHRASE,
 	WHAT_IS_CYPHER,
-	huffy_muffy_guffy,
+	huffi_muffi_guffi,
 	gods_work,
 	left_at_home,
 	CYPHER_OBSOLETE,

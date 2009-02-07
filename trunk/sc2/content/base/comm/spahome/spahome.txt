@@ -5,18 +5,18 @@ What is the secret Spathi Cypher?
 Huffi Muffi Guffi?
 
 #(gods_work)
-I don’t need a Cypher, I’m doing God’s work
+I don't need a Cypher, I'm doing God's work
 
 #(left_at_home)
 Dammit, I left it at home!
 
 #(CYPHER_OBSOLETE)
-I’m afraid that cypher is obsolete. You clearly have nefarious intent. 
+I'm afraid that cypher is obsolete. You clearly have nefarious intent. 
 The safest course of action is to eliminate you.
 
 #(GOD_KNOWS)
 God would know the cypher, go ask Him or Her.
 
 #(GO_GET_CYPHER)
-You’d better go back and get it. Return when you have it
+You had better go back and get it. Return when you have it
 
