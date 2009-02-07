@@ -35,52 +35,14 @@ GenerateSpathi (BYTE control)
 
 	switch (control)
 	{
-		case GENERATE_ENERGY:
-			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0]
-					&& !GET_GAME_STATE (UMGAH_BROADCASTERS))
-			{
-				DWORD rand_val, old_rand;
-
-				old_rand = TFB_SeedRandom (
-						pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]
-						);
-
-				rand_val = TFB_Random ();
-				pSolarSysState->SysInfo.PlanetInfo.CurPt.x =
-						(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
-				pSolarSysState->SysInfo.PlanetInfo.CurPt.y =
-						(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
-				pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
-				pSolarSysState->SysInfo.PlanetInfo.CurType = 0;
-				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-						& (1L << 0))
-						&& pSolarSysState->CurNode == (COUNT)~0)
-					pSolarSysState->CurNode = 1;
-				else
-				{
-					pSolarSysState->CurNode = 0;
-					if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-							& (1L << 0))
-					{
-						SET_GAME_STATE (UMGAH_BROADCASTERS, 1);
-						SET_GAME_STATE (UMGAH_BROADCASTERS_ON_SHIP, 1);
-					}
-				}
-
-				TFB_SeedRandom (old_rand);
-				break;
-			}
-			pSolarSysState->CurNode = 0;
-			break;
+		
 		case GENERATE_MOONS:
 			GenerateRandomIP (GENERATE_MOONS);
 			if (pSolarSysState->pBaseDesc == &pSolarSysState->PlanetDesc[0])
 			{
-#ifdef NOTYET
-				utf8StringCopy (GLOBAL_SIS (PlanetName),
-						sizeof (GLOBAL_SIS (PlanetName)),
-						"Spathiwa");
-#endif /* NOTYET */
+
+
+/*Spathi moon*/
 
 				pSolarSysState->MoonDesc[0].data_index = PELLUCID_WORLD;
 				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS + MOON_DELTA;
@@ -89,6 +51,16 @@ GenerateSpathi (BYTE control)
 						COSINE (angle, pSolarSysState->MoonDesc[0].radius);
 				pSolarSysState->MoonDesc[0].location.y =
 						SINE (angle, pSolarSysState->MoonDesc[0].radius);
+			
+/*Spathi Starbase*/
+				pSolarSysState->MoonDesc[0].data_index = (BYTE)~0;
+				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS;
+				angle = HALF_CIRCLE + QUADRANT;
+				pSolarSysState->MoonDesc[0].location.x =
+						COSINE (angle, pSolarSysState->MoonDesc[0].radius);
+				pSolarSysState->MoonDesc[0].location.y =
+						SINE (angle, pSolarSysState->MoonDesc[0].radius);
+
 			}
 			break;
 		case GENERATE_PLANETS:
@@ -107,7 +79,6 @@ GenerateSpathi (BYTE control)
 			pMinPlanet->location.y =
 					SINE (angle, pMinPlanet->radius);
 			pMinPlanet->data_index = WATER_WORLD;
-			if (GET_GAME_STATE (SPATHI_SHIELDED_SELVES))
 				pMinPlanet->data_index |= PLANET_SHIELDED;
 			pMinPlanet->NumPlanets = 1;
 			break;
