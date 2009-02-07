@@ -1,4 +1,3 @@
-
 digraph G {
     node [shape=none]
     entry [label="(entry)"]
@@ -46,10 +45,10 @@ digraph G {
         MORE_TRADING_INFO
         HELLO_NOW_DOWN_TO_BUSINESS_2
         HELLO_NOW_DOWN_TO_BUSINESS_3
-        menu [label=""]
-        menu -> make_purchases
-        menu -> items_to_sell
-        menu -> no_trade_now
+        BUY_OR_SELL
+        BUY_OR_SELL -> make_purchases
+        BUY_OR_SELL -> items_to_sell
+        BUY_OR_SELL -> no_trade_now
         
         label="TradeMenu"
     }
@@ -67,24 +66,24 @@ digraph G {
         label="SellMenu"
     }
     
-    entry -> HELLO_NOW_DOWN_TO_BUSINESS_1 [label="MET_MELNORME = 0"]
-    entry -> HELLO_NOW_DOWN_TO_BUSINESS_2 [label="MET_MELNORME = 1"]
-    entry -> HELLO_NOW_DOWN_TO_BUSINESS_3 [label="MET_MELNORME >= 2"]
+    entry -> HELLO_NOW_DOWN_TO_BUSINESS_1 [label="not met?"]
+    entry -> HELLO_NOW_DOWN_TO_BUSINESS_3 [label="attacked?"]
+    entry -> HELLO_NOW_DOWN_TO_BUSINESS_2 [label="otherwise"]
+
+    HELLO_NOW_DOWN_TO_BUSINESS_3 -> MORE_TRADING_INFO
     
     HELLO_NOW_DOWN_TO_BUSINESS_1 -> hi_doing_great -> DOING_GOOD_RESPONSE -> WANT_TO_TRADE
     HELLO_NOW_DOWN_TO_BUSINESS_1 -> doing_average -> DOING_AVERAGE_RESPONSE -> WANT_TO_TRADE
     HELLO_NOW_DOWN_TO_BUSINESS_1 -> not_good -> NOT_GOOD_RESPONSE -> WANT_TO_TRADE
     
-    WANT_TO_TRADE [label="WANT_TO_TRADE\n(suggested)"]
-    MORE_TRADING_INFO [label="MORE_TRADING_INFO\n(suggested)"]
+    MORE_TRADING_INFO
     
     WANT_TO_TRADE -> how_to_trade -> TRADING_INFO1 -> MORE_TRADING_INFO
-    WANT_TO_TRADE -> i_remember -> RIGHT_YOU_ARE -> menu
+    WANT_TO_TRADE -> i_remember -> RIGHT_YOU_ARE -> BUY_OR_SELL
     WANT_TO_TRADE -> spank_ass1 -> END_COMMNICATION -> only_joke -> TRADING_INFO2 -> MORE_TRADING_INFO
     END_COMMNICATION -> spank_ass2 -> BATTLE_MELNORME -> exit
-    MORE_TRADING_INFO -> menu
-    HELLO_NOW_DOWN_TO_BUSINESS_2 -> menu
-    HELLO_NOW_DOWN_TO_BUSINESS_3 -> menu
+    MORE_TRADING_INFO -> BUY_OR_SELL
+    HELLO_NOW_DOWN_TO_BUSINESS_2 -> BUY_OR_SELL
     
     make_purchases -> WHAT_TO_BUY
     items_to_sell -> NOTHING_TO_SELL
