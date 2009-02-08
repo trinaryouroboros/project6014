@@ -383,7 +383,7 @@ LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 	DWORD tmpd;
 
 	cread_8   (fh, &dummy8); /* obsolete */
-	cread_8   (fh, &GSPtr->glob_flags);
+	cread_16   (fh, &GSPtr->glob_flags);
 	cread_8   (fh, &GSPtr->CrewCost);
 	cread_8   (fh, &GSPtr->FuelCost);
 	cread_a8  (fh, GSPtr->ModuleCost, NUM_MODULES);
