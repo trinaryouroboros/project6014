@@ -444,7 +444,7 @@ DoSettings (MENU_STATE *pMS)
 	if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 		return (FALSE);
 
-	cur_speed = (BYTE)(GLOBAL (glob_flags) & COMBAT_SPEED_MASK) >> COMBAT_SPEED_SHIFT;
+	cur_speed = (GLOBAL (glob_flags) & COMBAT_SPEED_MASK) >> COMBAT_SPEED_SHIFT;
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 	if (!pMS->Initialized)
 	{
@@ -501,7 +501,7 @@ DoSettings (MENU_STATE *pMS)
 					GLOBAL (glob_flags) &= ~CYBORG_ENABLED;
 				}
 				GLOBAL (glob_flags) =
-						(BYTE)((GLOBAL (glob_flags) & ~COMBAT_SPEED_MASK)
+						(UWORD)((GLOBAL (glob_flags) & ~COMBAT_SPEED_MASK)
 						| (cur_speed << COMBAT_SPEED_SHIFT));
 				pMS->CurState = CYBORG_OFF_SETTING + cur_speed;
 				DrawMenuStateStrings (PM_SOUND_ON, pMS->CurState);

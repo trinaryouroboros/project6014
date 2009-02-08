@@ -349,7 +349,7 @@ static void
 SaveGameState (const GAME_STATE *GSPtr, DECODE_REF fh)
 {
 	cwrite_8   (fh, 0); /* obsolete; BYTE cur_state */
-	cwrite_8   (fh, GSPtr->glob_flags);
+	cwrite_16   (fh, GSPtr->glob_flags);
 	cwrite_8   (fh, GSPtr->CrewCost);
 	cwrite_8   (fh, GSPtr->FuelCost);
 	cwrite_a8  (fh, GSPtr->ModuleCost, NUM_MODULES);

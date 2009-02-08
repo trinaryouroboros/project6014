@@ -916,7 +916,7 @@ START_GAME_STATE
 END_GAME_STATE
 
 // Values for GAME_STATE.glob_flags:
-#define COMBAT_SPEED_SHIFT 6
+#define COMBAT_SPEED_SHIFT 7
 #define COMBAT_SPEED_MASK (((1 << 2) - 1) << COMBAT_SPEED_SHIFT)
 #define NUM_COMBAT_SPEEDS 4
 #define MUSIC_DISABLED (1 << 3)
@@ -951,7 +951,7 @@ typedef UWORD ACTIVITY;
 
 typedef struct
 {
-	BYTE glob_flags;
+	UWORD glob_flags;
 			// See above for the meaning of the bits.
 
 	BYTE CrewCost, FuelCost;
