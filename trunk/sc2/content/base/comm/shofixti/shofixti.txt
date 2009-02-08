@@ -1,3 +1,71 @@
+#(SHOFIXTI_GREETING1)
+Greetings Captain! Welcome back to Shofixti Space
+It's been too long. What news from the New Alliance of Free Stars?
+
+#(chmmr_hunt_kohrah)
+The Chmmr continue to hunt the Kohr-Ah. They also slave-shielded the VUX and Mycon
+
+#(SLAVE_SHIELD_BEST_PLACE)
+We heard of the VUX and Mycon. A slave shield is the best place for them.
+
+#(no_idea)
+Seems to be all under control... Actually I have no idea!
+
+#(SHARE_NEWS)
+Well should you find out more, please stop by and share news if convenient. We have had little contact with the other races in this new Alliance.
+
+#(pearshaped)
+Oooh actually it all turned pear-shaped. The Ur-Quan are back in charge and we're here to conquer you!
+
+#(KYAIEE)
+Traitor! It is for occasions like this that we developed our extra-powerful Glory Annihilators. Kyaiee!
+
+#(how_goes_reconstruction)
+How goes the reconstruction of your society, culture, population, civilisation and everything else?
+
+#(NOT_GOOD_RECONSTRUCTION)
+Oh captain not well. As you know when the Ur-Quan hordes approached our homeworld we 'novaed our sun 
+aUnfortunately that wiped life from the planet's surface and turned it into an infertile wasteland. 
+We have attempted to rebuild a home at Delta Gorno but none of the planets are fetile enough.  
+But we are determined to stay with our roots. 
+We know the technology exists to regenerate life on planets. 
+We hope the the Chmmr can help us with this but they seem to be occupied elsewhere.
+
+#(sorry_to_hear)
+We're sorry to hear that. We will remind the Chmmr of your Struggle. I am sure they will assist you.
+
+#(THANK_YOU)
+Thank you Earthling, your assistance is greatly appreciated once again.
+
+#(any_news)
+Any news or interesting tit-bits of information you'd like to share?
+
+#(NOT_MUCH_NEWS)
+Not really other than our own reconnosance scouts going missing in Beta xxx. It sounds like they stumbled across something dangerous.
+
+#(fairwell_shofixti)
+Fairwell Shofixti, see you next time
+
+#(GOODBYE_EARHTLING)
+Goodbye Earthling, come back soon!
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #(name_1)
 The New Alliance of Free Stars
 
