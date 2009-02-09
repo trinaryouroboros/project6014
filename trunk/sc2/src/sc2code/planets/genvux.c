@@ -151,15 +151,21 @@ GenerateVUX (BYTE control)
 			break;
 		}
 		case GENERATE_MOONS:
-			GenerateRandomIP (control);
 			if (CurStarDescPtr->Index == VUX_DEFINED && pSolarSysState->pBaseDesc == &pSolarSysState->PlanetDesc[0])
 			{
-				pSolarSysState->MoonDesc[1].data_index = (BYTE)~0;
-				pSolarSysState->MoonDesc[1].radius = MIN_MOON_RADIUS*0.75;
-				pSolarSysState->MoonDesc[1].location.x =
-						COSINE (QUADRANT, pSolarSysState->MoonDesc[1].radius);
-				pSolarSysState->MoonDesc[1].location.y =
-						SINE (QUADRANT, pSolarSysState->MoonDesc[1].radius);
+				TFB_SeedRandom(10026855);
+				GenerateRandomIP (control);
+
+				pSolarSysState->MoonDesc[0].data_index = (BYTE)~0;
+				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS;
+				pSolarSysState->MoonDesc[0].location.x =
+						COSINE (QUADRANT, pSolarSysState->MoonDesc[0].radius);
+				pSolarSysState->MoonDesc[0].location.y =
+						SINE (QUADRANT, pSolarSysState->MoonDesc[0].radius);
+			}
+			else
+			{
+				GenerateRandomIP (control);
 			}
 			break;
 		case GENERATE_ORBITAL:
@@ -167,7 +173,7 @@ GenerateVUX (BYTE control)
 
 			if (CurStarDescPtr->Index == VUX_DEFINED
 					&& pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[0]
-					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[1])
+					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 			{
 				pSolarSysState->MenuState.Initialized += 2;
 				InitCommunication (VUX_CONVERSATION);
