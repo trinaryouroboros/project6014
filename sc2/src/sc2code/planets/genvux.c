@@ -122,7 +122,7 @@ GenerateVUX (BYTE control)
 				if (CurStarDescPtr->Index == VUX_DEFINED)
 				{
 					pSolarSysState->PlanetDesc[0].data_index = REDUX_WORLD;
-					pSolarSysState->PlanetDesc[0].NumPlanets = 1;
+					pSolarSysState->PlanetDesc[0].NumPlanets = 2;
 					pSolarSysState->PlanetDesc[0].radius = EARTH_RADIUS * 42L / 100;
 					angle = HALF_CIRCLE + OCTANT;
 				}
@@ -150,8 +150,32 @@ GenerateVUX (BYTE control)
 			}
 			break;
 		}
+		case GENERATE_MOONS:
+			GenerateRandomIP (control);
+			if (CurStarDescPtr->Index == VUX_DEFINED && pSolarSysState->pBaseDesc == &pSolarSysState->PlanetDesc[0])
+			{
+				pSolarSysState->MoonDesc[1].data_index = (BYTE)~0;
+				pSolarSysState->MoonDesc[1].radius = MIN_MOON_RADIUS*0.75;
+				pSolarSysState->MoonDesc[1].location.x =
+						COSINE (QUADRANT, pSolarSysState->MoonDesc[1].radius);
+				pSolarSysState->MoonDesc[1].location.y =
+						SINE (QUADRANT, pSolarSysState->MoonDesc[1].radius);
+			}
+			break;
 		case GENERATE_ORBITAL:
 		{
+
+			if (CurStarDescPtr->Index == VUX_DEFINED
+					&& pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[0]
+					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[1])
+			{
+				pSolarSysState->MenuState.Initialized += 2;
+				InitCommunication (VUX_CONVERSATION);
+				pSolarSysState->MenuState.Initialized -= 2;
+				break;
+			}
+
+			//TODO clean out old stuff
 			if ((pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0]
 					&& (CurStarDescPtr->Index == VUX_DEFINED
 					|| (CurStarDescPtr->Index == MAIDENS_DEFINED
