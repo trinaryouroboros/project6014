@@ -87,7 +87,7 @@ GenerateSyreen (BYTE control)
 		{
 			GenerateRandomIP (GENERATE_PLANETS);
 			pSolarSysState->PlanetDesc[0].data_index =
-					WATER_WORLD | PLANET_SHIELDED;
+					WATER_WORLD;
 			pSolarSysState->PlanetDesc[0].NumPlanets = 1;
 			break;
 		}
