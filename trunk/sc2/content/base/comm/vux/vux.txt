@@ -1,3 +1,15 @@
+#(VUX_GREETING)
+UGH get AWAY from me human. Just because you are free to roam the galaxy while we are imprisoned does not mean you get to impose your hideous presence on us.
+
+
+
+
+
+
+
+
+
+
 #(ZEX_HELLO_1)	vux000.ogg
 Ah! Human visitors! What a treat!
 I am Admiral ZEX. Please do not be frightened. Unlike the rest of my species, I... enjoy humans.
