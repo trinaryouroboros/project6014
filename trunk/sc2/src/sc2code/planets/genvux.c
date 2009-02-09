@@ -169,8 +169,6 @@ GenerateVUX (BYTE control)
 			}
 			break;
 		case GENERATE_ORBITAL:
-		{
-
 			if (CurStarDescPtr->Index == VUX_DEFINED
 					&& pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[0]
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
@@ -180,103 +178,11 @@ GenerateVUX (BYTE control)
 				pSolarSysState->MenuState.Initialized -= 2;
 				break;
 			}
-
-			//TODO clean out old stuff
-			if ((pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0]
-					&& (CurStarDescPtr->Index == VUX_DEFINED
-					|| (CurStarDescPtr->Index == MAIDENS_DEFINED
-					&& !GET_GAME_STATE (ZEX_IS_DEAD))))
-					&& ActivateStarShip (VUX_SHIP, SPHERE_TRACKING))
+			else
 			{
-				NotifyOthers (VUX_SHIP, (BYTE)~0);
-				PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);
-				ReinitQueue (&GLOBAL (ip_group_q));
-				assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
-
-				CloneShipFragment (VUX_SHIP,
-						&GLOBAL (npc_built_ship_q), INFINITE_FLEET);
-				if (CurStarDescPtr->Index == VUX_DEFINED)
-				{
-					SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 7);
-				}
-				else
-				{
-					SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 6);
-				}
-
-				pSolarSysState->MenuState.Initialized += 2;
-				GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
-				InitCommunication (VUX_CONVERSATION);
-				pSolarSysState->MenuState.Initialized -= 2;
-
-				if (GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))
-					break;
-				else
-				{
-					GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
-					ReinitQueue (&GLOBAL (npc_built_ship_q));
-					GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
-
-					if (CurStarDescPtr->Index == VUX_DEFINED
-							|| !GET_GAME_STATE (ZEX_IS_DEAD))
-						break;
-
-					LockMutex (GraphicsLock);
-					RepairSISBorder ();
-					UnlockMutex (GraphicsLock);
-				}
-			}
-
-			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
-			{
-				if (CurStarDescPtr->Index == MAIDENS_DEFINED)
-				{
-					if (!GET_GAME_STATE (SHOFIXTI_MAIDENS))
-					{
-						LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-						pSolarSysState->PlanetSideFrame[1] =
-								CaptureDrawable (
-										LoadGraphic (MAIDENS_MASK_PMAP_ANIM)
-										);
-						pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-								CaptureStringTable (
-										LoadStringTable (MAIDENS_STRTAB)
-										);
-					}
-				}
-				else if (CurStarDescPtr->Index == VUX_BEAST_DEFINED)
-				{
-					if (!GET_GAME_STATE (VUX_BEAST))
-					{
-						LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-						pSolarSysState->PlanetSideFrame[1] = 0;
-						pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-								CaptureStringTable (
-										LoadStringTable (BEAST_STRTAB)
-										);
-					}
-				}
-				else
-				{
-					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-					pSolarSysState->PlanetSideFrame[1] =
-							CaptureDrawable (
-							LoadGraphic (RUINS_MASK_PMAP_ANIM)
-							);
-					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-							CaptureStringTable (
-									LoadStringTable (RUINS_STRTAB)
-									);
-				}
-			}
-			GenerateRandomIP (GENERATE_ORBITAL);
-			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
-			{
-				pSolarSysState->SysInfo.PlanetInfo.Weather = 2;
-				pSolarSysState->SysInfo.PlanetInfo.Tectonics = 0;
+				GenerateRandomIP (GENERATE_ORBITAL);
 			}
 			break;
-		}
 		case GENERATE_LIFE:
 			if (CurStarDescPtr->Index == MAIDENS_DEFINED
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])

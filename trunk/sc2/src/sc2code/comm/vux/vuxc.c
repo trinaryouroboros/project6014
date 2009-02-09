@@ -781,15 +781,7 @@ init_vux_comm (void)
 	vux_desc.AlienTextBaseline.y = 0;
 	vux_desc.AlienTextWidth = (SIS_TEXT_WIDTH - 16) >> 1;
 
-	if ((GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 6))
-			|| LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
-	{
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-	}
-	else
-	{
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	}
+	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	retval = &vux_desc;
 
 	return (retval);
