@@ -581,7 +581,7 @@ CreateShieldMask (void)
 		{
 			int rad_2 = x * x + y * y;
 			// This is a non-transparent red for the halo
-			int red = SHIELD_HALO_GLOW;
+			int blue = SHIELD_HALO_GLOW;
 			int alpha = 255;
 			double rad;
 			
@@ -603,18 +603,18 @@ CreateShieldMask (void)
 			if (rad <= RADIUS + 0.8)
 			{	// pixels common between the shield and planet
 				// do antialiasing using alpha
-				alpha = (int) (red * (rad - RADIUS));
-				red = 255;
+				alpha = (int) (blue * (rad - RADIUS));
+				blue = 255;
 			}
 			else
 			{	// shield pixels
-				red -= (int) ((red - SHIELD_HALO_GLOW_MIN) * (rad - RADIUS)
+				blue -= (int) ((blue - SHIELD_HALO_GLOW_MIN) * (rad - RADIUS)
 						/ SHIELD_HALO);
-				if (red < 0)
-					red = 0;
+				if (blue < 0)
+					blue = 0;
 			}
 			
-			*p_rgba = frame_mapRGBA (ShieldFrame, red, 0, 0, alpha);
+			*p_rgba = frame_mapRGBA (ShieldFrame, 0, 0, blue, alpha);
 		}
 	}
 	
@@ -710,7 +710,7 @@ ApplyShieldTint (void)
 	a = 255;
 	blit_type = -1;
 #endif
-	p = frame_mapRGBA (tintFrame, 255, 0, 0, a);
+	p = frame_mapRGBA (tintFrame, 0, 0, 255, a);
 	fill_frame_rgb (tintFrame, p, 0, 0, 0, 0);
 	arith_frame_blit (tintFrame, NULL, pSolarSysState->TopoFrame, NULL,
 			0, blit_type);
@@ -855,7 +855,7 @@ RenderLevelMasks (FRAME MaskFrame, int offset, BOOLEAN doThrob)
 				c[0] = calc_map_light (c[0], diffus, lvf);
 			}
 
-			*p_rgba = frame_mapRGBA (MaskFrame, c[2], c[1], c[0], 255);
+			*p_rgba = frame_mapRGBA (MaskFrame, c[0], c[1], c[2], 255);
 		}
 	}
 	

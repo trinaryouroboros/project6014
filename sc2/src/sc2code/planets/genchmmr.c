@@ -55,7 +55,7 @@ GenerateChmmr (BYTE control)
 			GenerateRandomIP (GENERATE_PLANETS);
 			pSolarSysState->PlanetDesc[1].data_index = SAPPHIRE_WORLD;
 			if (!GET_GAME_STATE (CHMMR_UNLEASHED))
-				pSolarSysState->PlanetDesc[1].data_index |= PLANET_SHIELDED;
+				pSolarSysState->PlanetDesc[1].data_index;
 			pSolarSysState->PlanetDesc[1].NumPlanets = 1;
 			break;
 		case GENERATE_ORBITAL:
@@ -74,31 +74,7 @@ GenerateChmmr (BYTE control)
 					}
 					break;
 				}
-				else if (GET_GAME_STATE (SUN_DEVICE_ON_SHIP)
-						&& !GET_GAME_STATE (ILWRATH_DECEIVED)
-						&& ActivateStarShip (ILWRATH_SHIP, SPHERE_TRACKING))
-				{
-					PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);
-					ReinitQueue (&GLOBAL (ip_group_q));
-					assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
-
-					CloneShipFragment (ILWRATH_SHIP,
-							&GLOBAL (npc_built_ship_q), INFINITE_FLEET);
-
-					pSolarSysState->MenuState.Initialized += 2;
-					SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 6);
-					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
-					InitCommunication (ILWRATH_CONVERSATION);
-					pSolarSysState->MenuState.Initialized -= 2;
-
-					if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
-					{
-						GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
-						ReinitQueue (&GLOBAL (npc_built_ship_q));
-						GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
-					}
-					break;
-				}
+				
 			}
 				/* Starbase */
 			else if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[1]

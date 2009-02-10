@@ -2,7 +2,7 @@
 Braaaaarrrrrkkkk! What a delightful surprise
 to see our old human captain friend again.
 We often think of you and how ye aided the clans
-in their revolution to over throw the veep-eep dynasty.
+in their revolution to over throw the Zeep-Reep dynasty.
 Stories are told to hatchlings
 
 #(hail_yehat)
@@ -35,13 +35,12 @@ You might consider checking it out.
 Apparently it bore the hall-marks of a Precursor item.
 The group was in hot pursuit and had no change to investigate.
 
-#(reinstate_veepeep)
-We've decided that the veep-eep were okay after-all.
-We've come to demand you reinstate them as Yehat royalty!
+#(reinstate_veepneep)
+We've decided that the Veep-Neep were okay after-all. We've come to demand you reinstate them, Queen and all, as Yehat royalty!
 
 #(BAD_HUMOUR)
-If that is earthling humour then I suggest you keep it to yourselves.
-The Veep-eep were a toxic influence on the clan culture of the Yehat.
+If that is earthling humour then I suggest you kit to yourselves.
+The Veep-Neep were a toxic influence on the clan culture of the Yehat.
 
 #(how_are_you)
 So how's the New Alliance of Free Stars going for you guys?

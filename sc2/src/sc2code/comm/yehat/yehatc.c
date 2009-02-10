@@ -211,7 +211,7 @@ AskMenu (RESPONSE_REF R)
 	{
 		NPCPhrase (PLEASED_TO_SEE_ALLY);
 	}
-	else if (PLAYER_SAID (R, reinstate_veepeep))
+	else if (PLAYER_SAID (R, reinstate_veepneep))
 	{
 		NPCPhrase (BAD_HUMOUR);
 	}
@@ -283,7 +283,7 @@ WhyHere (RESPONSE_REF R)
 	NPCPhrase (WHY_CHMMR_STARSHIP);
 
 	Response (investigating_precursors, AskMenu);
-	Response (reinstate_veepeep, AskMenu);
+	Response (reinstate_veepneep, AskMenu);
 	Response (must_scoot, ExitConversation);
 }
 

@@ -31,7 +31,7 @@ enum
 	WHY_CHMMR_STARSHIP,
 	investigating_precursors,
 	PLEASED_TO_SEE_ALLY,
-	reinstate_veepeep,
+	reinstate_veepneep,
 	BAD_HUMOUR,
 	how_are_you,
 	YEHAT_DOING_GOOD,
