@@ -559,7 +559,7 @@ init_zoom_array (COUNT *zoom_arr)
 #define SHIELD_HALO_GLOW_MIN (SHIELD_HALO_GLOW >> 2)
 
 static FRAME
-CreateShieldMask (void)
+CreateShieldMask (BYTE flags)
 {
 	DWORD clear, *rgba, *p_rgba;
 	int x, y;
@@ -581,7 +581,7 @@ CreateShieldMask (void)
 		{
 			int rad_2 = x * x + y * y;
 			// This is a non-transparent red for the halo
-			int blue = SHIELD_HALO_GLOW;
+			int red = SHIELD_HALO_GLOW;
 			int alpha = 255;
 			double rad;
 			
@@ -603,18 +603,21 @@ CreateShieldMask (void)
 			if (rad <= RADIUS + 0.8)
 			{	// pixels common between the shield and planet
 				// do antialiasing using alpha
-				alpha = (int) (blue * (rad - RADIUS));
-				blue = 255;
+				alpha = (int) (red * (rad - RADIUS));
+				red = 255;
 			}
 			else
 			{	// shield pixels
-				blue -= (int) ((blue - SHIELD_HALO_GLOW_MIN) * (rad - RADIUS)
+				red -= (int) ((red - SHIELD_HALO_GLOW_MIN) * (rad - RADIUS)
 						/ SHIELD_HALO);
-				if (blue < 0)
-					blue = 0;
+				if (red < 0)
+					red = 0;
 			}
 			
-			*p_rgba = frame_mapRGBA (ShieldFrame, 0, 0, blue, alpha);
+			if (flags & BLUE_SHIELD)
+				*p_rgba = frame_mapRGBA (ShieldFrame, 0, 0, red, alpha);
+			else
+				*p_rgba = frame_mapRGBA (ShieldFrame, red, 0, 0, alpha);
 		}
 	}
 	
@@ -695,7 +698,7 @@ SetShieldThrobEffect (FRAME ShieldFrame, int offset, FRAME ThrobFrame)
 
 // Apply the shield to the topo image
 static void
-ApplyShieldTint (void)
+ApplyShieldTint (BYTE flags)
 {
 	UBYTE a;
 	int blit_type;
@@ -710,7 +713,10 @@ ApplyShieldTint (void)
 	a = 255;
 	blit_type = -1;
 #endif
-	p = frame_mapRGBA (tintFrame, 0, 0, 255, a);
+	if (flags & BLUE_SHIELD)
+		p = frame_mapRGBA (tintFrame, 0, 0, 255, a);
+	else
+		p = frame_mapRGBA (tintFrame, 255, 0, 0, a);
 	fill_frame_rgb (tintFrame, p, 0, 0, 0, 0);
 	arith_frame_blit (tintFrame, NULL, pSolarSysState->TopoFrame, NULL,
 			0, blit_type);
@@ -827,8 +833,12 @@ RenderLevelMasks (FRAME MaskFrame, int offset, BOOLEAN doThrob)
 				int r;
 				
 				// add lite red filter (3/4) component
+				if (pSolarSysState->pOrbitalDesc->flags & BLUE_SHIELD)
+					c[2] = (c[2] >> 1) + (c[2] >> 2);
+				else
+					c[0] = (c[0] >> 1) + (c[0] >> 2);
 				c[1] = (c[1] >> 1) + (c[1] >> 2);
-				c[0] = (c[0] >> 1) + (c[0] >> 2);
+				
 
 				c[2] = calc_map_light (c[2], diffus, lvf);
 				c[1] = calc_map_light (c[1], diffus, lvf);
@@ -843,10 +853,20 @@ RenderLevelMasks (FRAME MaskFrame, int offset, BOOLEAN doThrob)
 					r = r * shLevel / THROB_MAX_LEVEL;
 				}
 
-				r += c[2];
-				if (r > 255)
-					r = 255;
-				c[2] = r;
+				if (pSolarSysState->pOrbitalDesc->flags & BLUE_SHIELD)
+				{
+					r += c[0];
+					if (r > 255)
+						r = 255;
+					c[0] = r;
+				}
+				else
+				{
+					r += c[2];
+					if (r > 255)
+						r = 255;
+					c[2] = r;
+				}
 			} 
 			else
 			{
@@ -855,7 +875,7 @@ RenderLevelMasks (FRAME MaskFrame, int offset, BOOLEAN doThrob)
 				c[0] = calc_map_light (c[0], diffus, lvf);
 			}
 
-			*p_rgba = frame_mapRGBA (MaskFrame, c[0], c[1], c[2], 255);
+			*p_rgba = frame_mapRGBA (MaskFrame, c[2], c[1], c[0], 255);
 		}
 	}
 	
@@ -2000,8 +2020,8 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 
 	if (pPlanetDesc->data_index & PLANET_SHIELDED)
 	{
-		Orbit->ObjectFrame = CreateShieldMask ();
-		ApplyShieldTint ();
+		Orbit->ObjectFrame = CreateShieldMask (pPlanetDesc->flags);
+		ApplyShieldTint (pPlanetDesc->flags);
 	}
 
 	SetContext (OldContext);

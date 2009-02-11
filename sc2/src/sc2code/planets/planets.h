@@ -115,11 +115,14 @@ enum
 
 #define PLANET_SHIELDED (1 << 7)
 
+#define BLUE_SHIELD (1 << 0)
+
 typedef struct planet_desc
 {
 	DWORD rand_seed;
 
 	BYTE data_index;
+	BYTE flags;
 	BYTE NumPlanets;
 	SIZE radius;
 	POINT location;

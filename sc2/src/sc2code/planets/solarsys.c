@@ -688,7 +688,10 @@ if (!(draw_sys_flags & DRAW_PLANETS))
 		if (index < NUMBER_OF_PLANET_TYPES
 				&& (pPlanetDesc->data_index & PLANET_SHIELDED))
 		{
-			s.frame = SetAbsFrameIndex (SpaceJunkFrame, 17);
+			if (pPlanetDesc->flags & BLUE_SHIELD)
+				s.frame = SetAbsFrameIndex (SpaceJunkFrame, 22);
+			else
+				s.frame = SetAbsFrameIndex (SpaceJunkFrame, 17);
 			DrawStamp (&s);
 		}
 	}
