@@ -122,6 +122,7 @@ GenerateVUX (BYTE control)
 				if (CurStarDescPtr->Index == VUX_DEFINED)
 				{
 					pSolarSysState->PlanetDesc[0].data_index = REDUX_WORLD | PLANET_SHIELDED;
+					pSolarSysState->PlanetDesc[0].flags = BLUE_SHIELD;
 					pSolarSysState->PlanetDesc[0].NumPlanets = 2;
 					pSolarSysState->PlanetDesc[0].radius = EARTH_RADIUS * 42L / 100;
 					angle = HALF_CIRCLE + OCTANT;
