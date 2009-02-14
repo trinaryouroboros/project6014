@@ -277,8 +277,7 @@ BuildGroups (void)
 		0,                /* BLACK_URQUAN_SHIP */
 		0,                /* YEHAT_REBEL_SHIP */
 
-		MASTERRACE_DEFINED,	/* MASTERRACE_SHIP */
-		SLAVERACE_DEFINED, 	/* MASTERRACE_SHIP */
+		SLAVERACE_DEFINED, 	/* SLAVERACE_SHIP */
 	};
 	BYTE EncounterPercent[] =
 	{
