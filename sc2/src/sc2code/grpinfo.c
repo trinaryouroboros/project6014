@@ -273,9 +273,12 @@ BuildGroups (void)
 		0,                /* URQUAN_SHIP */
 		ZOQFOT_DEFINED,   /* ZOQFOTPIK_SHIP */
 
-		0,                /* SYREEN_SHIP */
+		SYREEN_DEFINED,   /* SYREEN_SHIP */
 		0,                /* BLACK_URQUAN_SHIP */
 		0,                /* YEHAT_REBEL_SHIP */
+
+		MASTERRACE_DEFINED,	/* MASTERRACE_SHIP */
+		SLAVERACE_DEFINED, 	/* MASTERRACE_SHIP */
 	};
 	BYTE EncounterPercent[] =
 	{

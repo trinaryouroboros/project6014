@@ -120,6 +120,13 @@ GenerateIP (BYTE Index)
 		case ILWRATH_DEFINED:
 			GenFunc = GenerateIlwrath;
 			break;
+		case MASTERRACE_DEFINED:
+			GenFunc = GenerateMasterRace;
+			break;
+		case SLAVERACE_DEFINED:
+			GenFunc = GenerateSlaveRace;
+			break;
+		case SLAVE_REBEL_DEFINED:
 		default:
 			GenFunc = GenerateRandomIP;
 			break;
