@@ -120,9 +120,7 @@ enum
 	ILWRATH_DEFINED,
 	ANDROSYNTH_DEFINED,
 	MYCON_TRAP_DEFINED,
-	SLAVERACE_DEFINED,
-	MASTERRACE_DEFINED,
-	SLAVE_REBEL_DEFINED
+	SLAVERACE_DEFINED
 };
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED
@@ -180,6 +178,7 @@ extern void GeneratePkunk (BYTE control);
 extern void GenerateSupox (BYTE control);
 extern void GenerateRainbow (BYTE control);
 extern void GenerateIlwrath (BYTE control);
+extern void GenerateSlaveRace (BYTE control);
 
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;
