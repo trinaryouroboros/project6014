@@ -44,6 +44,7 @@ typedef enum {
 	UMGAH_CONVERSATION,
 	URQUAN_CONVERSATION,
 	ZOQFOTPIK_CONVERSATION,
+	SLAVERACE_CONVERSATION,
 	SYREEN_CONVERSATION,
 	BLACKURQ_CONVERSATION,
 	TALKING_PET_CONVERSATION,
@@ -123,6 +124,8 @@ extern LOCDATA* init_pkunk_comm (void);
 extern LOCDATA* init_rebel_yehat_comm (void);
 
 extern LOCDATA* init_shofixti_comm (void);
+
+extern LOCDATA* init_slaverace_comm (void);
 
 extern LOCDATA* init_slyland_comm (void);
 

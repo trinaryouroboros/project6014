@@ -1913,7 +1913,8 @@ SellMinerals (RESPONSE_REF R)
 static void
 Intro (void)
 {
-	NormalStarbase (0);
+	//NormalStarbase (0);
+	NPCPhrase (GOOD_LUCK_AGAIN);
 }
 
 static COUNT

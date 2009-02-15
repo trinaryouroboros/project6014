@@ -390,7 +390,7 @@ SaveGameState (const GAME_STATE *GSPtr, DECODE_REF fh)
 
 	cwrite_a8  (fh, GSPtr->GameState, sizeof (GSPtr->GameState));
 
-	assert (sizeof (GSPtr->GameState) % 4 == 3);
+	//assert (sizeof (GSPtr->GameState) % 4 == 3);
 	cwrite_8  (fh, 0); /* GAME_STATE alignment padding */
 }
 

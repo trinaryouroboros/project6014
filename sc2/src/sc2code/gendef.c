@@ -123,7 +123,7 @@ GenerateIP (BYTE Index)
 		case SLAVERACE_DEFINED:
 			GenFunc = GenerateSlaveRace;
 			break;
-			default:
+		default:
 			GenFunc = GenerateRandomIP;
 			break;
 	}

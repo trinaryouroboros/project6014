@@ -426,7 +426,7 @@ LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 
 	cread_a8  (fh, GSPtr->GameState, sizeof (GSPtr->GameState));
 
-	assert (sizeof (GSPtr->GameState) % 4 == 3);
+	//assert (sizeof (GSPtr->GameState) % 4 == 3);
 	cread_8  (fh, NULL); /* GAME_STATE alignment padding */
 }
 

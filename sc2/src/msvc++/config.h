@@ -15,7 +15,7 @@
 
 /* Directory where game data will be stored */
 //#define USERDIR "../userdata/"
-#define USERDIR "%APPDATA%/uqm/"
+#define USERDIR "%APPDATA%/uqmmod/"
 
 /* Directory where config files will be stored */
 #define CONFIGDIR USERDIR
