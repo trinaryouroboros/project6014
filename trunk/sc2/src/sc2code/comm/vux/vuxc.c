@@ -240,8 +240,10 @@ AskMenu1 (RESPONSE_REF R)
 	{
 		NPCPhrase (SPITEFUL_VUX);
 		DISABLE_PHRASE (how_is_slave_shield);
+
+	Response (safe_under_shield, HumanSubversion);
 	}
-	Response (safe_undershield, HumanSubversion);
+	
 	
 	
 
@@ -256,8 +258,7 @@ AskMenu1 (RESPONSE_REF R)
 	{
 		Response (how_is_slave_shield, AskMenu1);
 	}
-	Response (safe_under_shield, HumanSubversion);
-
+	
 	if (PHRASE_ENABLED (goodbye_vux))
 	{
 		Response (goodbye_vux, ExitConversation);
