@@ -324,6 +324,8 @@ init_race (CONVERSATION comm_id)
 			return init_pkunk_comm ();
 		case SHOFIXTI_CONVERSATION:
 			return init_shofixti_comm ();
+		case SLAVERACE_CONVERSATION:
+			return init_slaverace_comm ();
 		case SLYLANDRO_CONVERSATION:
 			return init_slyland_comm ();
 		case SLYLANDRO_HOME_CONVERSATION:

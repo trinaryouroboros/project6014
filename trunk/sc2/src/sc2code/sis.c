@@ -1231,15 +1231,36 @@ GetFTankCapacity (POINT *ppt)
 					BUILD_COLOR (MAKE_RGB15 (0x1F, 0x18, 0x00), 0x79),
 				};
 
-				which_row = (COUNT)(
-						(GLOBAL_SIS (FuelOnBoard) - capacity)
-						* MAX_FUEL_BARS / HEFUEL_TANK_CAPACITY
-						);
-				ppt->x = x + 1;
-				if (volume == FUEL_TANK_CAPACITY)
-					ppt->y = 27 - which_row;
+				if (1) // TODO switch on flagship
+				{
+					which_row = (COUNT)(
+							(GLOBAL_SIS (FuelOnBoard))
+							* 20 / (HEFUEL_TANK_CAPACITY*2)
+							);
+
+					ppt->x = 29+which_row;
+					ppt->y = 22;
+
+					which_row = (COUNT)(
+							(GLOBAL_SIS (FuelOnBoard))
+							* MAX_FUEL_BARS / (HEFUEL_TANK_CAPACITY*2)
+							);
+
+					volume = HEFUEL_TANK_CAPACITY*2;
+				}
 				else
-					ppt->y = 30 - which_row;
+				{
+					which_row = (COUNT)(
+							(GLOBAL_SIS (FuelOnBoard) - capacity)
+							* MAX_FUEL_BARS / HEFUEL_TANK_CAPACITY
+							);
+
+					ppt->x = x + 1;
+					if (volume == FUEL_TANK_CAPACITY)
+						ppt->y = 27 - which_row;
+					else
+						ppt->y = 30 - which_row;
+				}
 
 				SetContextForeGroundColor (fuel_colors[which_row]);
 				SetContextBackGroundColor (fuel_colors[which_row + 1]);
