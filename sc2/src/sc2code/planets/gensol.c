@@ -532,7 +532,7 @@ GenerateSOL (BYTE control)
 						angle = NORMALIZE_ANGLE (FULL_CIRCLE - angle);
 						break;
 					case 2: /* EARTH */
-						pCurDesc->data_index = WATER_WORLD | PLANET_SHIELDED;
+						pCurDesc->data_index = WATER_WORLD;
 						pCurDesc->radius = EARTH_RADIUS;
 						pCurDesc->NumPlanets = 2;
 						break;
