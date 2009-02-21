@@ -12,7 +12,7 @@ The Chmmr are picking off the remaining Kohr-Ah one at a time...
 ...actually you might be intrigued to know that ZEX's deviant subordinate DAX... 
 ...managed to escape VUX space with a squadron of Intruders before the Chmmr closed in.  
 Why am I telling you this? The VUX are much better off without depraved individuals like DAX. 
-At Least with ZEX we had an ace commander. DAX just gives me the willies. 
+At least with ZEX we had an ace commander. DAX just gives me the willies. 
 Should you stumble across him in your travels, please do the right thing and dispose of him and his weirdo henchmen 
 
 #(how_is_slave_shield)
@@ -21,7 +21,7 @@ Hey so how's this slave shield working out for you people?
 #(SPITEFUL_VUX)
 You humans must know from experience how humiliating this is. 
 VUX were intergalactic masters while your species were still twigging on to the industrial revolution. 
-You’ll excuse me if I sound a little spiteful...it's because I am.
+You'll excuse me if I sound a little spiteful ... it's because I am.
 
 #(safe_under_shield)
 You'll be safe under there. And at least it's blue and not red!
