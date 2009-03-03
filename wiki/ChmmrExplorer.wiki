@@ -1,6 +1,6 @@
 = Introduction =
 
-http://project6014.googlecode.com/files/ChmmrExplorer.png
+http://project6014.googlecode.com/svn/trunk/sc2/doc/mod/ChmmrExplorer.jpg
 
  Your ship is an Explorer vessel, ideally suited to the task required of it.
 
