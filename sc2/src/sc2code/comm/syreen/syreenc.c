@@ -194,7 +194,7 @@ static LOCDATA syreen_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	NPCPhrase (GOODBYE_EARTHLING);
+	NPCPhrase (COME_BACK_ANYTIME);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }
 
@@ -278,6 +278,14 @@ AnyAssistance (RESPONSE_REF R)
 	{
 		NPCPhrase (ANY_ASSISTANCE);
 	}
+
+	else if (PLAYER_SAID (R, because_we_can))
+	{
+		NPCPhrase (ANY_ASSISTANCE);
+	}
+
+	Response (roam_stars, AskMenu1);
+	Response (any_news, AskMenu1);
 	Response (spot_you_later, ExitConversation);
 }
 
@@ -292,7 +300,7 @@ Intro (void)
 
 	NPCPhrase (SYREEN_GREETING1);
 
-	Response (because_we_can, SyreenResponse1);
+	Response (because_we_can, AnyAssistance);
 	Response (looking_for_artefacts, AnyAssistance);
 	Response (spacebabes, NiceComplement);
 }

@@ -31,13 +31,13 @@ enum
 	not_fooled,
 	DOUBLE_WHATNOW, 
 	SURE_I_WAS,
+	ANY_ASSISTANCE,
 	roam_stars,
 	WE_DONT_STRAY,
 	any_news,
 	NO_NEWS,
-	ANY_ASSISTANCE,
 	spot_you_later,
-	GOODBYE_EARTHLING,
+	COME_BACK_ANYTIME,
 
 };
 

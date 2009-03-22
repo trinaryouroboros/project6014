@@ -6,7 +6,7 @@ As always we are very pleased to welcome you. What brings you here?
 We're here because we can be. Had the opportunity to visit so here we are!
 
 #(looking_for_artefacts)
-The Chmmr have sent us on a mission to find a precursor artefect. Which, come to think of it, is nowhere near here!
+The Chmmr have sent us on a mission to find a precursor artefect. Which, come to think of it, is nowhere near here.
 
 #(spacebabes)
 We're cruisin' for space-babes!
@@ -49,16 +49,11 @@ Right now we don't get out much, and most of the real activity
 seems to be happening west of of Chmmr space where the Kohr-Ah are being pursued. 
 We're now at the periphery of current events it seems.
 
-#(ANY_ASSISTANCE)
-If there is any assistance you or your crew require, 
-...of a practical nature...
-you should stop by the starbase at our homeworld Betelgeuse I
-
 #(spot_you_later)
 We'll spot you later
 
-#(GOODBYE_EARTHLING)
-Goodbye Earthling
+#(COME_BACK_ANYTIME)
+Come back anytime
 
 
 
