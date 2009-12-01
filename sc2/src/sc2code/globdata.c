@@ -297,11 +297,11 @@ InitSIS (void)
 			GLOBAL_SIS (JetSlots[6]) = TURNING_JETS;
 	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 		GLOBAL_SIS (ModuleSlots[i]) = EMPTY_SLOT + 2;
-	GLOBAL_SIS (ModuleSlots[15]) = GUN_WEAPON;
+	/*GLOBAL_SIS (ModuleSlots[15]) = GUN_WEAPON;
 	GLOBAL_SIS (ModuleSlots[2]) = CREW_POD;
 	GLOBAL_SIS (CrewEnlisted) = CREW_POD_CAPACITY;
 	GLOBAL_SIS (ModuleSlots[8]) = STORAGE_BAY;
-	GLOBAL_SIS (ModuleSlots[1]) = FUEL_TANK;
+	GLOBAL_SIS (ModuleSlots[1]) = FUEL_TANK;*/
 	GLOBAL_SIS (FuelOnBoard) = 10 * FUEL_TANK_SCALE;
 
 	InitQueue (&GLOBAL (built_ship_q),
