@@ -258,7 +258,7 @@
 #define SHIELDED_SML_MASK_PMAP_ANIM "planet.slaveshield.small"
 #define SHIPYARD_PMAP_ANIM "graphics.shipyard"
 #define SISBLU_MASK_ANIM "graphics.sisblu"
-#define SISIP_MASK_PMAP_ANIM "graphics.sis_ip"
+#define SISIP_MASK_PMAP_ANIM "graphics.explorer_ip"
 #define SISMODS_MASK_PMAP_ANIM "graphics.sismods"
 #define SISSKEL_MASK_PMAP_ANIM "graphics.sisskeleton"
 #define SPAPLUTO_MASK_PMAP_ANIM "graphics.spapluto"
