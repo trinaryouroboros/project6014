@@ -85,13 +85,15 @@ debugKeyPressed (void)
 	ActivateStarShip (YEHAT_SHIP, 1);
 	ActivateStarShip (MELNORME_SHIP, 1);
 	ActivateStarShip (DRUUGE_SHIP, 1);
+	/*** No more than 6 escorts for the Explorer
 	ActivateStarShip (ILWRATH_SHIP, 1);
 	ActivateStarShip (MYCON_SHIP, 1);
 	ActivateStarShip (SLYLANDRO_SHIP, 1);
 	ActivateStarShip (UMGAH_SHIP, 1);
 	ActivateStarShip (URQUAN_SHIP, 1);
 	ActivateStarShip (BLACK_URQUAN_SHIP, 1);
-
+	****/
+	
 	resetCrewBattle ();
 	resetEnergyBattle ();
 	instantMove = !instantMove;
@@ -278,6 +280,7 @@ equipShip (void)
 			(1 << LAVASPOT_DISASTER));
 
 	// Modules:
+	/********  NO MODULES TO EQUIP ON EXPLORER
 	if (GET_GAME_STATE (CHMMR_BOMB_STATE) < 2)
 	{
 		// The Precursor bomb has not been installed.
@@ -316,7 +319,8 @@ equipShip (void)
 	}
 
 	assert (i <= NUM_MODULE_SLOTS);
-
+	****/
+	
 	// Fill the fuel and crew compartments to the maximum.
 	GLOBAL_SIS (FuelOnBoard) = FUEL_RESERVE;
 	GLOBAL_SIS (CrewEnlisted) = 0;
