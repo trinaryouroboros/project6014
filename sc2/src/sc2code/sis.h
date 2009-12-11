@@ -92,7 +92,7 @@ enum
 
 #define NUM_DRIVE_SLOTS 11
 #define NUM_JET_SLOTS 8
-#define NUM_MODULE_SLOTS 16
+#define NUM_MODULE_SLOTS 0 // 16 - Explorer can't be modded
 
 #define CREW_POD_CAPACITY 50
 #define STORAGE_BAY_CAPACITY 500 /* km cubed */
@@ -100,6 +100,8 @@ enum
 #define FUEL_TANK_CAPACITY (50 * FUEL_TANK_SCALE)
 #define HEFUEL_TANK_CAPACITY (100 * FUEL_TANK_SCALE)
 #define MODULE_COST_SCALE 50
+/** Capacities for Explorer **/
+#define EXPLORER_CREW_CAPACITY 50
 
 #define CREW_EXPENSE_THRESHOLD 1000
 
@@ -110,7 +112,7 @@ enum
 #define FUEL_VOLUME_PER_ROW (1 ? (HEFUEL_TANK_CAPACITY*2 / 20) : (HEFUEL_TANK_CAPACITY / MAX_FUEL_BARS))
 #define FUEL_RESERVE FUEL_VOLUME_PER_ROW
 
-#define MAX_COMBAT_SHIPS 12
+#define MAX_COMBAT_SHIPS 6 // No more than 6 companion ships for the Explorer
 #define MAX_BATTLE_GROUPS 32
 
 // XXX: Needed to maintain savegame compatibility
@@ -176,23 +178,18 @@ enum
 
 #define SHIP_PIECE_OFFSET 12
 
-#define MAX_BUILT_SHIPS 12
+#define MAX_BUILT_SHIPS 6 // No more than 6 companion ships for the Explorer
 		/* Maximum number of ships escorting the SIS */
-#define MAX_LANDERS 10
+#define MAX_LANDERS 3 // No more than 3 landers
 
 #define SUPPORT_SHIP_PTS \
-	{3 +  0, 30 + (2 * 16)}, \
-	{3 + 42, 30 + (2 * 16)}, \
-	{3 +  0, 30 + (3 * 16)}, \
-	{3 + 42, 30 + (3 * 16)}, \
 	{3 +  0, 30 + (1 * 16)}, \
 	{3 + 42, 30 + (1 * 16)}, \
-	{3 +  0, 30 + (4 * 16)}, \
-	{3 + 42, 30 + (4 * 16)}, \
 	{3 +  0, 30 + (0 * 16)}, \
 	{3 + 42, 30 + (0 * 16)}, \
 	{3 +  0, 30 + (5 * 16)}, \
 	{3 + 42, 30 + (5 * 16)},
+// Only authorized positions according to graphics (chflagstat.0.png)
 
 #define SIS_MESSAGE_WIDTH (SIS_SCREEN_WIDTH - 69 - 2)
 #define SIS_MESSAGE_HEIGHT 8

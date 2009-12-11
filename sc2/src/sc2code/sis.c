@@ -30,6 +30,22 @@
 
 #include <stdio.h>
 
+
+static const COUNT crew_lines_sizes[16] =
+{
+  4,4,3,3,2,1,1,1,2,2,8,7,7,1,2,2
+};
+
+static const COORD crew_lines_x_coords[16] = 
+{
+  93,92,91,90,90,89,90,89,86,85,72,73,73,68,67,67
+};
+
+static const COORD crew_lines_y_coords[16] = 
+{
+  29,27,25,23,21,19,31,29,27,25,23,21,19,23,21,19
+};
+
 static const UNICODE *describeWeapon (BYTE moduleType);
 
 void
@@ -1083,6 +1099,58 @@ GetCrewCount (void)
 	return (GLOBAL_SIS (CrewEnlisted));
 }
 
+
+
+COUNT
+GetCPodCapacity (POINT *ppt)
+{
+  int i;
+  COUNT line_remainder;
+  COORD x,y;
+
+  line_remainder = GLOBAL_SIS (CrewEnlisted) + 1;
+  i=0;
+  
+  while (line_remainder > crew_lines_sizes[i])
+    {
+      line_remainder -= crew_lines_sizes[i];
+      i++;
+    }
+
+  x = crew_lines_x_coords[i];
+  y = crew_lines_y_coords[i];
+  
+  if (ppt)
+    {
+      static const COLOR crew_rows[] =
+	{
+	  BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x65),
+	  BUILD_COLOR (MAKE_RGB15 (0x00, 0x0C, 0x00), 0x65),
+	  BUILD_COLOR (MAKE_RGB15 (0x00, 0x10, 0x00), 0x65),
+	  BUILD_COLOR (MAKE_RGB15 (0x00, 0x15, 0x00), 0x65),
+	  BUILD_COLOR (MAKE_RGB15 (0x00, 0x19, 0x00), 0x65),
+	  BUILD_COLOR (MAKE_RGB15 (0x00, 0x1D, 0x00), 0x65),
+	  BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1E, 0x09), 0x65),
+	  //      BUILD_COLOR (MAKE_RGB15 (0x00, 0x10, 0x00), 0x65),
+	  //      BUILD_COLOR (MAKE_RGB15 (0x00, 0x0D, 0x00), 0x65),
+	  //      BUILD_COLOR (MAKE_RGB15 (0x00, 0x0A, 0x00), 0x65),
+	  //      BUILD_COLOR (MAKE_RGB15 (0x00, 0x07, 0x00), 0x65),
+	};
+      
+      ppt->x = x + 2*line_remainder - 1;
+      ppt->y = y;
+      
+      if (optWhichFonts == OPT_PC)
+	SetContextForeGroundColor (crew_rows[(y-19)/2]);
+      else
+	SetContextForeGroundColor (
+				   BUILD_COLOR (MAKE_RGB15 (0x05, 0x10, 0x05), 0x65)
+				   );
+    }
+  return (EXPLORER_CREW_CAPACITY);
+}
+
+/***
 COUNT
 GetCPodCapacity (POINT *ppt)
 {
@@ -1138,6 +1206,7 @@ GetCPodCapacity (POINT *ppt)
 
 	return (capacity);
 }
+***/
 
 COUNT
 GetSBayCapacity (POINT *ppt)

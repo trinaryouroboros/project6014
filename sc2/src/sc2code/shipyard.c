@@ -54,7 +54,7 @@ static const COORD hangar_x_coords[HANGAR_SHIPS_ROW] =
 #else // use PC hangar
 // modified PC 6x2 hangar layout
 #	define HANGAR_SHIPS_ROW  6
-#	define HANGAR_Y          88
+#	define HANGAR_Y          116
 #	define HANGAR_DY         84
 
 static const COORD hangar_x_coords[HANGAR_SHIPS_ROW] =
@@ -65,7 +65,7 @@ static const COORD hangar_x_coords[HANGAR_SHIPS_ROW] =
 #	define WANT_HANGAR_ANIMATION
 #endif // USE_3DO_HANGAR
 
-#define HANGAR_SHIPS      12
+#define HANGAR_SHIPS      6
 #define HANGAR_ROWS       (HANGAR_SHIPS / HANGAR_SHIPS_ROW)
 #define HANGAR_ANIM_RATE  15 // fps
 
