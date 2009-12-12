@@ -212,7 +212,7 @@ typedef struct
 			// Set to (COUNT) ~0 to indicate game over.
 	COUNT TotalElementMass, TotalBioMass;
 
-	BYTE ModuleSlots[NUM_MODULE_SLOTS];
+	BYTE ModuleSlots[NUM_MODULE_SLOTS+1];  /* FIXME: NUM_MODULE_SLOTS is zero, but that won't compile. */
 	BYTE DriveSlots[NUM_DRIVE_SLOTS];
 	BYTE JetSlots[NUM_JET_SLOTS];
 
