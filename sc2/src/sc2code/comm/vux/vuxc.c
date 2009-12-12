@@ -217,10 +217,10 @@ HumanSubversion (RESPONSE_REF R)
 {	
 	if (PLAYER_SAID (R, safe_under_shield))
 	{
-		NPCPhrase (HUMAN_SUBVERSION);
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
+		NPCPhrase (VALUE_FREEDOM);
+		DISABLE_PHRASE (safe_under_shield);
 	}
-
+	
 
 }
 
