@@ -1161,17 +1161,19 @@ DrawBluePrint (MENU_STATE *pMS)
 		FuelVolume = GLOBAL_SIS (FuelOnBoard) - FUEL_RESERVE;
 		GLOBAL_SIS (FuelOnBoard) = FUEL_RESERVE;
 
-		r.extent.width = 3;
+		r.extent.width = 1;
 		r.extent.height = 1;
 		while (FuelVolume)
 		{
 			COUNT m;
 
 			GetFTankCapacity (&r.corner);
+			r.corner.x += 36;
+			r.corner.y += 18;
 			DrawPoint (&r.corner);
-			r.corner.x += r.extent.width + 1;
+			r.corner.y += r.extent.height + 1;
 			DrawPoint (&r.corner);
-			r.corner.x -= r.extent.width;
+			r.corner.y -= r.extent.height;
 			SetContextForeGroundColor (
 					SetContextBackGroundColor (BLACK_COLOR));
 			DrawFilledRectangle (&r);

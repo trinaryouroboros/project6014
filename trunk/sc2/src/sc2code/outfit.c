@@ -122,7 +122,7 @@ RedistributeFuel (void)
 
 	FuelVolume = GLOBAL_SIS (FuelOnBoard) + m;
 
-	r.extent.height = 5;
+	r.extent.height = 7;
 	while ((GLOBAL_SIS (FuelOnBoard) += FUEL_VOLUME_PER_ROW) <
 			GetFTankCapacity (&r.corner))
 	{

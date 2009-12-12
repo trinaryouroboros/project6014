@@ -30,7 +30,7 @@
 
 #include <stdio.h>
 
-
+/**** 1/1-Scale blueprint
 static const COUNT crew_lines_sizes[16] =
 {
   4,4,3,3,2,1,1,1,2,2,8,7,7,1,2,2
@@ -44,6 +44,23 @@ static const COORD crew_lines_x_coords[16] =
 static const COORD crew_lines_y_coords[16] = 
 {
   29,27,25,23,21,19,31,29,27,25,23,21,19,23,21,19
+};
+****/
+
+/**** Enlarged blueprint ****/
+static const COUNT crew_lines_sizes[16] =
+{
+  4,3,3,2,2,2,1,1,1,2,9,8,7,2,2,1
+};
+
+static const COORD crew_lines_x_coords[16] = 
+{
+  90,89,88,87,86,85,84,84,83,81,66,67,68,60,61,63
+};
+
+static const COORD crew_lines_y_coords[16] = 
+{
+  20,18,16,14,12,10,8,18,16,14,12,10,8,12,10,8
 };
 
 static const UNICODE *describeWeapon (BYTE moduleType);
@@ -1131,17 +1148,13 @@ GetCPodCapacity (POINT *ppt)
 	  BUILD_COLOR (MAKE_RGB15 (0x00, 0x19, 0x00), 0x65),
 	  BUILD_COLOR (MAKE_RGB15 (0x00, 0x1D, 0x00), 0x65),
 	  BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1E, 0x09), 0x65),
-	  //      BUILD_COLOR (MAKE_RGB15 (0x00, 0x10, 0x00), 0x65),
-	  //      BUILD_COLOR (MAKE_RGB15 (0x00, 0x0D, 0x00), 0x65),
-	  //      BUILD_COLOR (MAKE_RGB15 (0x00, 0x0A, 0x00), 0x65),
-	  //      BUILD_COLOR (MAKE_RGB15 (0x00, 0x07, 0x00), 0x65),
 	};
       
       ppt->x = x + 2*line_remainder - 1;
-      ppt->y = y;
+      ppt->y = y + 6;
       
       if (optWhichFonts == OPT_PC)
-	SetContextForeGroundColor (crew_rows[(y-19)/2]);
+	SetContextForeGroundColor (crew_rows[(y-8)/2]);
       else
 	SetContextForeGroundColor (
 				   BUILD_COLOR (MAKE_RGB15 (0x05, 0x10, 0x05), 0x65)
@@ -1264,6 +1277,76 @@ DWORD
 GetFTankCapacity (POINT *ppt)
 {
 	COORD x;
+	DWORD capacity;
+	DWORD volume;
+    
+	x = 200;
+	//	capacity = FUEL_RESERVE;
+	capacity = 0;
+	
+	if (ppt)
+	  {
+	    COUNT which_row;
+	    static const COLOR fuel_colors[] =
+	      {
+		BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x00), 0x2D),
+		BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2C),
+		BUILD_COLOR (MAKE_RGB15 (0x17, 0x00, 0x00), 0x2B),
+		BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x00), 0x2A),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7F),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x07, 0x00), 0x7E),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0E, 0x00), 0x7C),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7B),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x15, 0x00), 0x7A),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x18, 0x00), 0x79),
+	      };
+	  
+	    if (1) // TODO switch on flagship
+	      {
+		which_row = (COUNT)(
+				    (GLOBAL_SIS (FuelOnBoard))
+				    * 20 / (HEFUEL_TANK_CAPACITY*2)
+				    );
+		
+		ppt->x = 31+which_row;
+		ppt->y = 22;
+		
+		which_row = (COUNT)(
+				    (GLOBAL_SIS (FuelOnBoard))
+				    * MAX_FUEL_BARS / (HEFUEL_TANK_CAPACITY*2)
+				    );
+		
+		volume = HEFUEL_TANK_CAPACITY*2;
+	      }
+	    else
+	      {
+		which_row = (COUNT)(
+				    (GLOBAL_SIS (FuelOnBoard) - capacity)
+				    * MAX_FUEL_BARS / HEFUEL_TANK_CAPACITY
+				    );
+		
+		ppt->x = x + 1;
+		if (volume == FUEL_TANK_CAPACITY)
+		  ppt->y = 27 - which_row;
+		else
+		  ppt->y = 30 - which_row;
+	      }
+	    
+	    SetContextForeGroundColor (fuel_colors[which_row]);
+	    SetContextBackGroundColor (fuel_colors[which_row + 1]);
+	  }
+	
+	capacity += volume;
+	
+	return (capacity);
+}
+
+/***
+DWORD
+GetFTankCapacity (POINT *ppt)
+{
+	COORD x;
 	COUNT slot;
 	DWORD capacity;
 
@@ -1343,6 +1426,7 @@ GetFTankCapacity (POINT *ppt)
 
 	return (capacity);
 }
+***/
 
 COUNT
 CountSISPieces (BYTE piece_type)
