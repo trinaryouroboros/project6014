@@ -1278,7 +1278,7 @@ GetFTankCapacity (POINT *ppt)
 {
 	COORD x;
 	DWORD capacity;
-	DWORD volume;
+	DWORD volume = HEFUEL_TANK_CAPACITY*2;
     
 	x = 200;
 	//	capacity = FUEL_RESERVE;
@@ -1317,7 +1317,6 @@ GetFTankCapacity (POINT *ppt)
 				    * MAX_FUEL_BARS / (HEFUEL_TANK_CAPACITY*2)
 				    );
 		
-		volume = HEFUEL_TANK_CAPACITY*2;
 	      }
 	    else
 	      {

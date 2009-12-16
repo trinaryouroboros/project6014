@@ -182,7 +182,7 @@ ExitConversation (RESPONSE_REF R)
 }
 
 static void
-AOhFjorn (RESPONSE_REF R)
+OhFjorn (RESPONSE_REF R)
 {	
 	if (PLAYER_SAID (R, you_have_met_fjorn))
 	{
@@ -203,7 +203,7 @@ AllianceMatters2 (RESPONSE_REF R)
 	}
 	else if (PLAYER_SAID (R, alliance_question_2))
 	{
-		NPCPhrase (ALLIANCE_ANSWER_2);
+		NPCPhrase (ALLIANCE_ANSWER_1);  //TODO 2
 		DISABLE_PHRASE (alliance_question_2);
 	}
 	else if (PLAYER_SAID (R, ask_know_fjorn))
@@ -221,7 +221,7 @@ AllianceMatters2 (RESPONSE_REF R)
 
 
 static void
-AllianceMatters1 (RESPONSE_REF R)
+AllianceMatters (RESPONSE_REF R)
 {	
 	if (PLAYER_SAID (R, discuss_alliance_matters))
 	{
@@ -234,6 +234,7 @@ AllianceMatters1 (RESPONSE_REF R)
 	Response (goodbye_orz, ExitConversation);
 }
 
+static void SmallTalk1 (RESPONSE_REF R);
 
 static void
 AnnoyOrz (RESPONSE_REF R)
@@ -245,13 +246,12 @@ AnnoyOrz (RESPONSE_REF R)
 
 	Response (how_are_things, SmallTalk1);
 	Response (any_news, SmallTalk1);
-	Response (discuss_alliance_matters, AllianceMatters1);
+	Response (discuss_alliance_matters, AllianceMatters);
 	Response (goodbye_orz, ExitConversation);
 }
 
 
-
-static void
+void
 SmallTalk1 (RESPONSE_REF R)
 {	
 	if (PLAYER_SAID (R, how_are_things))
@@ -303,7 +303,13 @@ Intro (void)
 	Response (discuss_alliance_matters, SmallTalk1);
 	Response (tell_of_nature, SmallTalk1);
 	Response (goodbye_orz, ExitConversation);
-	
+}
+
+static void
+post_orz_enc (void)
+{
+}
+
 static COUNT
 uninit_orz (void)
 {
