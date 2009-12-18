@@ -41,7 +41,7 @@ static LOCDATA shofixti_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SHOFIXTI_CONVERSATION_PHRASES, /* PlayerPhrases */
-	11, /* NumAnimations */
+	12, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{
 			5, /* StartIndex */
@@ -132,6 +132,15 @@ static LOCDATA shofixti_desc =
 			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
 			(1 << 9), /* BlockMask */
 		},
+		{
+			69, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, 0, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
@@ -174,9 +183,14 @@ ExitConversation (RESPONSE_REF R)
 }
 
 static void
-SmallTalk2 (RESPONSE_REF R);
+ThankYou (RESPONSE_REF R)
+{	
+	NPCPhrase (THANK_YOU);
+	DISABLE_PHRASE (sorry_to_hear);	
 
+	Response (fairwell_shofixti, ExitConversation);
 
+}
 
 static void
 HowReconstruction (RESPONSE_REF R)
@@ -184,7 +198,9 @@ HowReconstruction (RESPONSE_REF R)
 	NPCPhrase (NOT_GOOD_RECONSTRUCTION);
 	DISABLE_PHRASE (how_goes_reconstruction);	
 
-	Response (sorry_to_hear, SmallTalk2);
+	Response (sorry_to_hear, ThankYou);
+	Response (fairwell_shofixti, ExitConversation);
+
 }
 
 
