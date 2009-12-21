@@ -29,200 +29,22 @@
 #include "libs/mathlib.h"
 
 
-
 void
-GenerateOrz (BYTE control)
+GenerateMasterrace (BYTE control)
 {
-	if (CurStarDescPtr->Index == ANDROSYNTH_DEFINED)
-	{
-		GenerateAndrosynth (control);
-		return;
-	}
-
 	switch (control)
 	{
-		case GENERATE_ENERGY:
-		{
-			DWORD rand_val, old_rand;
-
-			if (CurStarDescPtr->Index != ORZ_DEFINED
-					&& pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[1]
-					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[2]
-					&& !GET_GAME_STATE (TAALO_PROTECTOR))
-			{
-				old_rand = TFB_SeedRandom (
-						pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]
-						);
-
-				rand_val = TFB_Random ();
-				pSolarSysState->SysInfo.PlanetInfo.CurPt.x =
-						(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
-				pSolarSysState->SysInfo.PlanetInfo.CurPt.y =
-						(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
-				pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
-				pSolarSysState->SysInfo.PlanetInfo.CurType = 0;
-				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-						& (1L << 0))
-						&& pSolarSysState->CurNode == (COUNT)~0)
-					pSolarSysState->CurNode = 1;
-				else
-				{
-					pSolarSysState->CurNode = 0;
-					if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-							& (1L << 0))
-					{
-						SET_GAME_STATE (TAALO_PROTECTOR, 1);
-						SET_GAME_STATE (TAALO_PROTECTOR_ON_SHIP, 1);
-					}
-				}
-
-				TFB_SeedRandom (old_rand);
-				break;
-			}
-			else if (CurStarDescPtr->Index == ORZ_DEFINED
-					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
-			{
-				COUNT i, which_node;
-
-				old_rand = TFB_SeedRandom (
-						pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]
-						);
-
-				which_node = i = 0;
-				do
-				{
-					rand_val = TFB_Random ();
-					pSolarSysState->SysInfo.PlanetInfo.CurPt.x =
-							(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
-					pSolarSysState->SysInfo.PlanetInfo.CurPt.y =
-							(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
-					pSolarSysState->SysInfo.PlanetInfo.CurType = 1;
-					pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
-					if (which_node >= pSolarSysState->CurNode
-							&& !(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-							& (1L << i)))
-						break;
-					++which_node;
-				} while (++i < 16);
-				pSolarSysState->CurNode = which_node;
-
-				TFB_SeedRandom (old_rand);
-				break;
-			}
-			pSolarSysState->CurNode = 0;
+		case GENERATE_MOONS:
+			GenerateRandomIP (GENERATE_MOONS);
 			break;
-		}
 		case GENERATE_PLANETS:
-		{
-			COUNT angle;
-
 			GenerateRandomIP (GENERATE_PLANETS);
-			if (CurStarDescPtr->Index == ORZ_DEFINED)
-			{
-				pSolarSysState->PlanetDesc[0].data_index = WATER_WORLD;
-				pSolarSysState->PlanetDesc[0].radius = EARTH_RADIUS * 156L / 100;
-				pSolarSysState->PlanetDesc[0].NumPlanets = 0;
-				angle = ARCTAN (
-						pSolarSysState->PlanetDesc[0].location.x,
-						pSolarSysState->PlanetDesc[0].location.y
-						);
-				pSolarSysState->PlanetDesc[0].location.x =
-						COSINE (angle, pSolarSysState->PlanetDesc[0].radius);
-				pSolarSysState->PlanetDesc[0].location.y =
-						SINE (angle, pSolarSysState->PlanetDesc[0].radius);
-			}
 			break;
-		}
 		case GENERATE_ORBITAL:
-			if ((CurStarDescPtr->Index == ORZ_DEFINED
-					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
-					|| (CurStarDescPtr->Index == TAALO_PROTECTOR_DEFINED
-					&& pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[1]
-					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[2]
-					&& !GET_GAME_STATE (TAALO_PROTECTOR)))
-			{
-				COUNT i;
-
-				if ((CurStarDescPtr->Index == ORZ_DEFINED
-						|| !GET_GAME_STATE (TAALO_UNPROTECTED))
-						&& ActivateStarShip (ORZ_SHIP, SPHERE_TRACKING))
-				{
-					NotifyOthers (ORZ_SHIP, (BYTE)~0);
-					PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);
-					ReinitQueue (&GLOBAL (ip_group_q));
-					assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
-
-					if (CurStarDescPtr->Index == ORZ_DEFINED)
-					{
-						CloneShipFragment (ORZ_SHIP,
-								&GLOBAL (npc_built_ship_q), INFINITE_FLEET);
-						SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 7);
-					}
-					else
-					{
-						for (i = 0; i < 14; ++i)
-							CloneShipFragment (ORZ_SHIP,
-									&GLOBAL (npc_built_ship_q), 0);
-						SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 6);
-					}
-					pSolarSysState->MenuState.Initialized += 2;
-					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
-					InitCommunication (ORZ_CONVERSATION);
-					pSolarSysState->MenuState.Initialized -= 2;
-
-					if (GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))
-						break;
-					else
-					{
-						BOOLEAN OrzSurvivors;
-
-						OrzSurvivors = GetHeadLink (&GLOBAL (npc_built_ship_q))
-								&& (CurStarDescPtr->Index == ORZ_DEFINED
-								|| !GET_GAME_STATE (TAALO_UNPROTECTED));
-
-						GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
-						ReinitQueue (&GLOBAL (npc_built_ship_q));
-						GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
-
-						if (OrzSurvivors)
-							break;
-
-						LockMutex (GraphicsLock);
-						RepairSISBorder ();
-						UnlockMutex (GraphicsLock);
-					}
-				}
-
-				SET_GAME_STATE (TAALO_UNPROTECTED, 1);
-				if (CurStarDescPtr->Index == TAALO_PROTECTOR_DEFINED)
-				{
-					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-					pSolarSysState->PlanetSideFrame[1] =
-							CaptureDrawable (
-									LoadGraphic (TAALO_DEVICE_MASK_PMAP_ANIM)
-									);
-					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-							CaptureStringTable (
-									LoadStringTable (TAALO_DEVICE_STRTAB)
-									);
-				}
-				else
-				{
-					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-					pSolarSysState->PlanetSideFrame[1] =
-							CaptureDrawable (
-							LoadGraphic (RUINS_MASK_PMAP_ANIM)
-							);
-					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-							CaptureStringTable (
-									LoadStringTable (RUINS_STRTAB)
-									);
-				}
-			}
+			GenerateRandomIP (GENERATE_ORBITAL);
+			break;
 		default:
 			GenerateRandomIP (control);
 			break;
 	}
 }
-
-
