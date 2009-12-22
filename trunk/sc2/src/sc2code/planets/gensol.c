@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Don't create Ur-quan probe.
+
 #include "build.h"
 #include "gamestr.h"
 #include "globdata.h"
@@ -409,6 +411,9 @@ GenerateSOL (BYTE control)
 	switch (control)
 	{
 		case INIT_NPCS:
+			
+			// JMS: Don't create Ur-quan probe
+			/*
 			GLOBAL (BattleGroupRef) =
 					GET_GAME_STATE_32 (URQUAN_PROBE_GRPOFFS0);
 			if (GLOBAL (BattleGroupRef) == 0)
@@ -421,7 +426,8 @@ GenerateSOL (BYTE control)
 						GLOBAL (BattleGroupRef));
 			}
 			if (!init_probe ())
-				GenerateRandomIP (INIT_NPCS);
+			*/
+			GenerateRandomIP (INIT_NPCS);
 			break;
 		case REINIT_NPCS:
 			if (GET_GAME_STATE (CHMMR_BOMB_STATE) != 3)

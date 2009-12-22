@@ -1,3 +1,5 @@
+// JMS 2009: Check Orz space in DoInstantMove
+
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -475,8 +477,8 @@ doInstantMove (void)
 		GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY((GLOBAL (autopilot)).y);
 	}
 
-	// Check for a solar systems at the destination.
-	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
+	// Check for a solar systems at the destination. JMS: Orz space side check.
+	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1 && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1)
 	{
 		// If there's a solar system at the destination, enter it.
 		CurStarDescPtr = FindStar (0, &(GLOBAL (autopilot)), 0, 0);

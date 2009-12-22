@@ -239,6 +239,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 #define GRID_DELTA 500
 	SIZE i;
 	COUNT which_space;
+	COUNT orz_space;	// JMS
 	long diameter;
 	RECT r, old_r;
 	STAMP s;
@@ -277,6 +278,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	BatchGraphics ();
 	
 	which_space = GET_GAME_STATE (ARILOU_SPACE_SIDE);
+	orz_space= GET_GAME_STATE (ORZ_SPACE_SIDE);	// JMS
 
 	if (which_space <= 1)
 	{
@@ -293,10 +295,19 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		SetContextBackGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x6E));
 	}
+	if(orz_space > 1)// JMS: ORZ space starmap BG color
+	{
+		SDPtr = &star_array[NUM_SOLAR_SYSTEMS + 15 + 2 + 1]; // JMS: ORZ space starsystems, 15 = number of 
+		SetContextForeGroundColor (						     // quasispace vortices, 2 = Two space size definitions, 1 = arilou world  
+								   BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x0B), 0x6D));
+		SetContextBackGroundColor (
+								   BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x08), 0x6E));
+	}
 	ClearDrawable ();
 
 	if (race_update == 0
 			&& which_space < 2
+			&& orz_space < 2 // JMS: Orz space check
 			&& (diameter = (long)GLOBAL_SIS (FuelOnBoard) << 1))
 	{
 		COLOR OldColor;
@@ -350,7 +361,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	}
 
 	star_frame = SetRelFrameIndex (pMenuState->CurFrame, 2);
-	if (which_space <= 1)
+	if (which_space <= 1 && orz_space <= 1) // JMS: Orz space check
 	{
 		COUNT index;
 		HFLEETINFO hStarShip, hNextShip;
@@ -761,7 +772,7 @@ UpdateFuelRequirement (MENU_STATE *pMS)
 	pt.y -= pMS->first_item.y;
 
 	f = (DWORD)((long)pt.x * pt.x + (long)pt.y * pt.y);
-	if (f == 0 || GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1)
+	if (f == 0 || GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1 || GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) // JMS: ORZ space check
 		fuel_required = 0;
 	else
 		fuel_required = square_root (f) + (FUEL_TANK_SCALE / 20);

@@ -1,0 +1,29 @@
+#(NEUTRAL_SPACE_HELLO_1)	chmmr-000.ogg
+Friend human. You are hereby cordially invited
+to a bloody duel to the death via an impromptu
+exchange of nuclear missiles and SDI laser blasts.
+...Interested?
+
+#(NEUTRAL_SPACE_HELLO_2)	chmmr-000.ogg
+Greetings, traveler. I present thee two options:
+You may cowardly back out of my sight this instant, or
+you can be a man and pick a fight with me.
+What it'll be?
+
+#(HOSTILE_SPACE_HELLO_1)	chmmr-000.ogg
+Yo, bitch! Wanna fight?
+
+#(HOSTILE_SPACE_HELLO_2)	chmmr-000.ogg
+Yo, yo, yo, wanna exchange a few nukes?
+
+#(yessiree)
+Yessiree! Lemme at you!
+
+#(nonono)
+No thanks, matey, some other time.
+
+#(MADE_MY_DAY)			chmmr-000.ogg
+You really made my day, pal!
+
+#(MADE_WOOD)			chmmr-000.ogg
+Ah. I guess some captains are made of wood these days.

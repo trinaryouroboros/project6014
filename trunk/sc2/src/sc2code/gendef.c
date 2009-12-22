@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Function call for initing orz space portal when encountering its enum label
+
 #include "encount.h"
 
 PLAN_GEN_FUNC
@@ -122,6 +124,9 @@ GenerateIP (BYTE Index)
 			break;
 		case SLAVERACE_DEFINED:
 			GenFunc = GenerateSlaveRace;
+			break;
+		case ORZ_SPACE_PORTAL_DEFINED: // JMS - hook to genertaing the contents of portal star system 
+			GenFunc = GenerateOrzSpacePortal;
 			break;
 		default:
 			GenFunc = GenerateRandomIP;

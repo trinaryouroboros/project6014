@@ -50,10 +50,9 @@ static RACE_DESC androsynth_desc =
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		INFINITE_RADIUS, /* Initial sphere of influence radius */
-				// XXX: Why infinite radius? Bug?
+		200 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
-			MAX_X_UNIVERSE >> 1, MAX_Y_UNIVERSE >> 1,
+			6816, 4970,
 		},
 	},
 	{

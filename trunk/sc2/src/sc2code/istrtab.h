@@ -88,6 +88,7 @@
 #define ORBPLAN_COLOR_MAP "colortable.orbplan"
 #define ORGANIC_COLOR_TAB "planet.organic.colortable"
 #define ORGANIC_XLAT_TAB "planet.organic.translatetable"
+#define ORZSPACE_COLOR_TAB "colortable.orzspace"
 #define PELLUCID_COLOR_TAB "planet.pellucid.colortable"
 #define PELLUCID_XLAT_TAB "planet.pellucid.translatetable"
 #define PKUNK_RUINS_STRTAB "text.spindle"

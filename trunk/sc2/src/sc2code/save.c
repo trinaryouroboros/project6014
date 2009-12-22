@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: - Added IN_ORZSPACE condition check to PrepareSummary
+
 #include <assert.h>
 
 #include "save.h"
@@ -467,6 +469,8 @@ PrepareSummary (SUMMARY_DESC *SummPtr)
 	switch (SummPtr->Activity = LOBYTE (GLOBAL (CurrentActivity)))
 	{
 		case IN_HYPERSPACE:
+			if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) // JMS: this condition stores that we're in ORZ space
+				SummPtr->Activity = IN_ORZSPACE;
 			if (GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1)
 				SummPtr->Activity = IN_QUASISPACE;
 			break;

@@ -640,15 +640,28 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 			GroupPtr->orbit_pos = NORMALIZE_FACING (
 					LOBYTE (HIWORD (rand_val)));
 
-			group_loc = pSolarSysState->SunDesc[0].NumPlanets;
+			if (pSolarSysState->SunDesc[0].NumPlanets==0)			// JMS:
+				group_loc = 1;										// Originally
+			else													// Only
+				group_loc = pSolarSysState->SunDesc[0].NumPlanets;	// THIS line existed. Modified to enable 0 planet systems.
 			if (group_loc == 1 && task == EXPLORE)
 				task = IN_ORBIT;
 			else
 				group_loc = (BYTE)((HIBYTE (LOWORD (rand_val)) % group_loc) + 1);
 			GroupPtr->dest_loc = group_loc;
 			rand_val = TFB_Random ();
-			GroupPtr->loc.x = (LOWORD (rand_val) % 10000) - 5000;
-			GroupPtr->loc.y = (HIWORD (rand_val) % 10000) - 5000;
+			
+			if (pSolarSysState->SunDesc[0].NumPlanets==0)			// JMS:
+			{														// Modified to enable 0 planet star systems.
+				GroupPtr->loc.x = (LOWORD (rand_val) % 1000) + 5000;//
+				GroupPtr->loc.y = (HIWORD (rand_val) % 1000) + 5000;//
+			}														//
+			else													// Originally only lines within this else existed.
+			{														
+				GroupPtr->loc.x = (LOWORD (rand_val) % 10000) - 5000;
+				GroupPtr->loc.y = (HIWORD (rand_val) % 10000) - 5000;
+			}
+			
 			GroupPtr->group_counter = 0;
 			if (task == EXPLORE)
 			{
@@ -663,8 +676,20 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 				XFormIPLoc (&pSolarSysState->PlanetDesc[group_loc - 1]
 						.image.origin, &org, FALSE);
 				angle = FACING_TO_ANGLE (GroupPtr->orbit_pos + 1);
-				GroupPtr->loc.x = org.x + COSINE (angle, STATION_RADIUS);
-				GroupPtr->loc.y = org.y + SINE (angle, STATION_RADIUS);
+				
+				if (pSolarSysState->SunDesc[0].NumPlanets==0)			// JMS:
+				{														// Modified to enable 0 planet star systems.
+					XFormIPLoc (&pSolarSysState->SunDesc[0]				//
+								.image.origin, &org, FALSE);			//
+					GroupPtr->loc.x = (LOWORD (rand_val) % 1000)+1000;	//
+					GroupPtr->loc.y = (LOWORD (rand_val) % 1000)+1000;	//
+				}														//
+				else													// Originally only lines within this else existed.
+				{
+					GroupPtr->loc.x = org.x + COSINE (angle, STATION_RADIUS);
+					GroupPtr->loc.y = org.y + SINE (angle, STATION_RADIUS);
+				}
+				
 				group_loc = 0;
 			}
 

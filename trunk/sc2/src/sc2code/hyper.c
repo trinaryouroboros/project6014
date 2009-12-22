@@ -16,6 +16,15 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: -ORZ space has its own colors
+//			 -Entering a star/npcship/portal in ORZ space (unhypertransition function)
+//			 -ORZ space check in allochyperelement. -> Do we draw a star or a hyperspace portal
+//			 -ORZ space checks to portal spawner shit
+//			 -ORZ space element graphics in AllocHyperElement
+//			 -Androsynth ship meeting percent in ORZ space in Checkhyperspaceencounter
+//			 -Can't meet melnorme/slylando in orz space, in Checkhyperspaceencounter
+//			 -Ship doesn't consume fuel in Orz space
+
 #include "hyper.h"
 
 #include "build.h"
@@ -37,8 +46,8 @@
 #define XOFFS ((RADAR_SCAN_WIDTH + (UNIT_SCREEN_WIDTH << 2)) >> 1)
 #define YOFFS ((RADAR_SCAN_HEIGHT + (UNIT_SCREEN_HEIGHT << 2)) >> 1)
 
-static FRAME hyperstars[3];
-static COLORMAP hypercmaps[2];
+static FRAME hyperstars[4];			// JMS: Extra slot for ORZ space star gfx
+static COLORMAP hypercmaps[3];		// JMS: Extra slot for ORZ space color map
 static BYTE fuel_ticks;
 static COUNT hyper_dx, hyper_dy, hyper_extra;
 
@@ -99,7 +108,7 @@ MoveSIS (SIZE *pdx, SIZE *pdy)
 	}
 
 	if (GLOBAL_SIS (FuelOnBoard)
-			&& GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
+			&& GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1 && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1) // JMS: Orz space check
 	{
 		COUNT cur_fuel_ticks;
 		COUNT hyper_dist;
@@ -173,10 +182,17 @@ check_hyperspace_encounter (void)
 			encounter_flags = 0;
 			percent = EncounterPercent[Type];
 			
+			// JMS: Exception: Can meet ORZ in ORZ space of course, Androsynth too...
+			if( (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1 ) && (Type == ORZ_SHIP || Type == ANDROSYNTH_SHIP) )
+				encounter_radius = INFINITE_RADIUS;
+			
 			if (encounter_radius != INFINITE_RADIUS)
 			{
-				encounter_radius =
-						(encounter_radius * SPHERE_RADIUS_INCREMENT) >> 1;
+				// JMS: Can't encounter ships with non-infinite sphere of influence in ORZ space.
+				if( GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1 )
+					encounter_radius = (encounter_radius * SPHERE_RADIUS_INCREMENT) >> 1;
+				else
+					encounter_radius = 0;
 			}
 			else /* encounter_radius == infinity */
 			{
@@ -186,15 +202,22 @@ check_hyperspace_encounter (void)
 				if (Type == SLYLANDRO_SHIP)
 				{
 					encounter_flags = ONE_SHOT_ENCOUNTER;
-					if (!GET_GAME_STATE (STARBASE_AVAILABLE))
-						percent = 100;
+					if(GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1)  // JMS: ORZ space check
+					{
+						if (!GET_GAME_STATE (STARBASE_AVAILABLE))
+							percent = 100;
+						else
+							percent *= GET_GAME_STATE (SLYLANDRO_MULTIPLIER);
+					}
 					else
-						percent *= GET_GAME_STATE (SLYLANDRO_MULTIPLIER);
+						percent = 0;
 				}
+				
 				else if (Type == MELNORME_SHIP
 						&& (GLOBAL_SIS (FuelOnBoard) == 0
 						|| GET_GAME_STATE (USED_BROADCASTER))
-						&& GET_GAME_STATE (MELNORME_ANGER) < 3)
+						&& GET_GAME_STATE (MELNORME_ANGER) < 3
+						&& GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1)  // JMS: ORZ space check
 				{
 					if (!GET_GAME_STATE (USED_BROADCASTER))
 						percent = 30;
@@ -268,11 +291,15 @@ FreeHyperData (void)
 	hyperstars[1] = 0;
 	DestroyDrawable (ReleaseDrawable (hyperstars[2]));
 	hyperstars[2] = 0;
+	DestroyDrawable (ReleaseDrawable (hyperstars[3])); // JMS: Release Orz space star and npcship gfx
+	hyperstars[3] = 0;
 
 	DestroyColorMap (ReleaseColorMap (hypercmaps[0]));
 	hypercmaps[0] = 0;
 	DestroyColorMap (ReleaseColorMap (hypercmaps[1]));
 	hypercmaps[1] = 0;
+	DestroyColorMap (ReleaseColorMap (hypercmaps[2])); // JMS: Release Orz space color map
+	hypercmaps[2] = 0;
 }
 
 static void
@@ -289,6 +316,9 @@ LoadHyperData (void)
 		hyperstars[2] = CaptureDrawable (
 				LoadGraphic (ARISPACE_MASK_PMAP_ANIM));
 		hypercmaps[1] = CaptureColorMap (LoadColorMap (ARISPACE_COLOR_TAB));
+		hyperstars[3] = CaptureDrawable (
+				LoadGraphic (ORZSPACE_MASK_PMAP_ANIM));							// JMS: Read Orz space star and npcship gfx
+		hypercmaps[2] = CaptureColorMap (LoadColorMap (ORZSPACE_COLOR_TAB));	// JMS: Read Orz space color map
 	}
 }
 
@@ -327,18 +357,29 @@ LoadHyperspace (void)
 	DrawSISMessage (NULL);
 
 	SetContext (RadarContext);
-	SetContextBackGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x6C));
+	if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)		// JMS: In ORZ space, radar has its own colors
+		SetContextBackGroundColor (					// Radar foreground (grid) color defined in DrawHyperGrid
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x0, 0x0E), 0x6C));
+	else
+		SetContextBackGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x6C));
 
 	SetContext (SpaceContext);
-	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
+	if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1 && GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
+	{// JMS: To Orzspace. ORZ space has its own colors
+		SetContextBackGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x13), 0x2F));
+		SetColorMap (GetColorMapAddress (hypercmaps[2]));
+	}
+	else if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
 	{
+		// To hyperspace
 		SetContextBackGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x07, 0x00, 0x00), 0x2F));
 		SetColorMap (GetColorMapAddress (hypercmaps[0]));
 	}
 	else
 	{
+		// To Quasispace
 		SetContextBackGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x1A, 0x00), 0x2F));
 		SetColorMap (GetColorMapAddress (hypercmaps[1]));
@@ -448,11 +489,53 @@ unhyper_transition (ELEMENT *ElementPtr)
 			case INTERPLANETARY_TRANSITION:
 				GLOBAL (ShipStamp.frame) = 0;
 				SET_GAME_STATE (USED_BROADCASTER, 0);
+				
+				// JMS: These three lines were in UQM ver 0.7... Are they necessary?
+				//GLOBAL (ip_planet) = 0;
+				//GLOBAL (in_orbit) = 0;
+				//GLOBAL (ShipFacing) = 0; /* Not reentering the system */
+				
+				// JMS: Entering something in ORZ space
+				if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+				{
+					POINT orz_pt;
+					
+					GLOBAL (autopilot.x) = ~0;
+					GLOBAL (autopilot.y) = ~0;
+					
+					ElementToUniverse (ElementPtr, &orz_pt);
+					CurStarDescPtr = FindStar (NULL, &orz_pt, 5, 5);
+					
+					COUNT orz_index;
+					POINT orz_portal_pt[] =
+					{
+						{8654, 8587}, // Exit from Orz space birngs ship to hyperspace coords 100.0x 100.0y
+					};
+					
+					orz_index = CurStarDescPtr
+					- &star_array[NUM_SOLAR_SYSTEMS + 15 + 2 +1]; // JMS: Number of solar systems + 1 + number of vortices + 1  
+					GLOBAL_SIS (log_x) =							  // + arilou home world
+					UNIVERSE_TO_LOGX (orz_portal_pt[orz_index].x);
+					GLOBAL_SIS (log_y) =
+					UNIVERSE_TO_LOGY (orz_portal_pt[orz_index].y);
+					
+					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;  // JMS: Returns inside portal star system interplanetary
+					SET_GAME_STATE (ESCAPE_COUNTER, 0);			
+					SET_GAME_STATE (LEAVING_ORZ_SPACE, 1);			// JMS: Added this so returning to interplanetary instead of hyperspace works
+					// (Check ExploreSolarSys  in solarsys.c for more info)
+					SET_GAME_STATE (ORZ_SPACE_SIDE, 0);
+					SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
+					
+				} // JMS ENDS
+				
+				// Entering interplanetary from Hyperspace
 				if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
 				{
 					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
 					SET_GAME_STATE (ESCAPE_COUNTER, 0);
 				}
+				
+				// Entering something in Quasispace
 				else
 				{
 					POINT pt;
@@ -511,18 +594,20 @@ unhyper_transition (ELEMENT *ElementPtr)
 				GLOBAL (autopilot.y) = ~0;
 				if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
 				{
-					// From HyperSpace to QuasiSpace.
+					// From Orz space or HyperSpace to QuasiSpace.
 					GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (QUASI_SPACE_X);
 					GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (QUASI_SPACE_Y);
 					if (GET_GAME_STATE (PORTAL_COUNTER) == 0)
 					{
 						// Periodically appearing portal.
+						SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Don't think this is necessary, but won't hurt either.
 						SET_GAME_STATE (ARILOU_SPACE_SIDE, 3);
 					}
 					else
 					{
 						// Player-induced portal.
 						SET_GAME_STATE (PORTAL_COUNTER, 0);
+						SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Well, this is necessary.
 						SET_GAME_STATE (ARILOU_SPACE_SIDE, 3);
 					}
 				}
@@ -533,6 +618,7 @@ unhyper_transition (ELEMENT *ElementPtr)
 					GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (ARILOU_SPACE_X);
 					GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (ARILOU_SPACE_Y);
 					SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
+					SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Don't think this is necessary, but won't hurt either.
 				}
 				break;
 		}
@@ -768,7 +854,13 @@ AllocHyperElement (STAR_DESC *SDPtr)
 		SetPrimType (&DisplayArray[HyperSpaceElementPtr->PrimIndex], STAMP_PRIM);
 		HyperSpaceElementPtr->current.image.farray =
 				&hyperstars[1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1)];
-
+		
+		if( GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) // JMS: Load ORZ space style graphics for stars and npcships
+		{
+			HyperSpaceElementPtr->current.image.farray =
+			&hyperstars[3];
+		}
+		
 		UnlockElement (hHyperSpaceElement);
 	}
 
@@ -1001,7 +1093,9 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 
 		LockElement (hElement, &ElementPtr);
 		
-		if ((i = EncounterPtr->transition_state) || NewEncounter)
+		// JMS: Force Orz fingers in Orz space to use other than normal npcship graphics.
+		if (((i = EncounterPtr->transition_state) || NewEncounter) 
+			&& !( (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) && (EncounterPtr->SD.Type== ORZ_SHIP) ) )
 		{
 			if (i < 0)
 			{
@@ -1017,8 +1111,18 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 		}
 		else
 		{
-			ElementPtr->current.image.frame =
-					DecFrameIndex (ElementPtr->current.image.farray[0]);
+			// JMS: Orz fingers use the big black hole gfx. But now there's no animation for the
+			// "birth" of the finger!
+			if ( (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) && (EncounterPtr->SD.Type== ORZ_SHIP) )
+			{
+				ElementPtr->current.image.frame =
+				SetAbsFrameIndex (hyperstars[3],5);
+			}
+			else
+			{
+				ElementPtr->current.image.frame =
+				DecFrameIndex (ElementPtr->current.image.farray[0]);
+			}
 		}
 
 		ElementPtr->turn_wait = VORTEX_WAIT;
@@ -1051,8 +1155,12 @@ DrawHyperGrid (COORD ux, COORD uy, COORD ox,
 	RECT r;
 
 	ClearDrawable ();
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x00, 0x10, 0x00), 0x6B));
+	if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)	// JMS: Different color radar for Orz space just for the heck of it.
+		SetContextForeGroundColor (
+					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x10), 0x6B));
+	else
+		SetContextForeGroundColor (
+					BUILD_COLOR (MAKE_RGB15 (0x00, 0x10, 0x00), 0x6B));
 
 	if ((sx = ux - (RADAR_SCAN_WIDTH >> 1)) < 0)
 		sx = 0;
@@ -1439,10 +1547,19 @@ SeedUniverse (void)
 						AllocHyperElement (&SD[i])) != 0)
 				{
 					LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+					
+					// JMS: Orzspace element graphics
+					int which_spaces_star_gfx;
+					if (GET_GAME_STATE (ORZ_SPACE_SIDE))
+						which_spaces_star_gfx = 3;
+					else 
+						which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
+					
 					HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
-							hyperstars[1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1)],
+							hyperstars[which_spaces_star_gfx],	// JMS: was "hyperstars[1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1)],"
 							SD[i].Index
 							);
+					
 					HyperSpaceElementPtr->preprocess_func =
 							HyperSpaceElementPtr->postprocess_func = NULL;
 					HyperSpaceElementPtr->collision_func = arilou_space_collision;
@@ -1485,12 +1602,21 @@ SeedUniverse (void)
 				star_type = SDPtr->Type;
 
 				LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+				
+				// DEBUG BY JMS: ORZ space element gfx
+				int which_spaces_star_gfx;
+				if (GET_GAME_STATE (ORZ_SPACE_SIDE))
+					which_spaces_star_gfx = 3;
+				else 
+					which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
+				
 				HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
-						hyperstars[1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1)],
+						hyperstars[which_spaces_star_gfx],
 						STAR_TYPE (star_type)
 						* NUM_STAR_COLORS
 						+ STAR_COLOR (star_type)
 						);
+				
 				HyperSpaceElementPtr->preprocess_func =
 						HyperSpaceElementPtr->postprocess_func = NULL;
 				HyperSpaceElementPtr->collision_func = hyper_collision;

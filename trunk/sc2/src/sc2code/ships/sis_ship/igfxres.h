@@ -7,7 +7,7 @@
 #define BLASTER_SML_MASK_PMAP_ANIM "ship.sis_ship.graphics.blas.small"
 #define SIS_BIG_MASK_PMAP_ANIM "ship.sis_ship.graphics.sis.large"
 #define SIS_CAPTAIN_MASK_PMAP_ANIM "ship.sis_ship.graphics.captain"
-#define SIS_HYPER_MASK_PMAP_ANIM "ship.sis_ship.graphics.sishyper"
+#define SIS_HYPER_MASK_PMAP_ANIM "ship.sis_ship.graphics.exphyper"
 #define SIS_ICON_MASK_PMAP_ANIM "ship.sis_ship.icons"
 #define SIS_MED_MASK_PMAP_ANIM "ship.sis_ship.graphics.sis.medium"
 #define SIS_SML_MASK_PMAP_ANIM "ship.sis_ship.graphics.sis.small"

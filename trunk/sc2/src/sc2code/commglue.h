@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: -Added earthling ship conversation enum and extern locdata
+//			 -Added Androsynth conversation enum and extern locdata
+
 #ifndef _COMMGLUE_H
 #define _COMMGLUE_H
 
@@ -44,13 +47,15 @@ typedef enum {
 	UMGAH_CONVERSATION,
 	URQUAN_CONVERSATION,
 	ZOQFOTPIK_CONVERSATION,
-	SLAVERACE_CONVERSATION,
 	SYREEN_CONVERSATION,
 	BLACKURQ_CONVERSATION,
 	TALKING_PET_CONVERSATION,
 	SLYLANDRO_HOME_CONVERSATION,
 	URQUAN_PROBE_CONVERSATION,
 	YEHAT_REBEL_CONVERSATION,
+	HUMAN_CONVERSATION,			// BY JMS
+	ANDROSYNTH_CONVERSATION,	// BY JMS
+	SLAVERACE_CONVERSATION,		// JMS: Re-located this baby
 	INVALID_CONVERSATION,
 } CONVERSATION;
 
@@ -101,6 +106,8 @@ extern void construct_response (UNICODE *buf, int R /* promoted from
 
 extern LOCDATA* init_race (CONVERSATION comm_id);
 
+extern LOCDATA* init_androsynth_comm (void);	// BY JMS
+
 extern LOCDATA* init_arilou_comm (void);
 
 extern LOCDATA* init_blackurq_comm (void);
@@ -112,6 +119,8 @@ extern LOCDATA* init_commander_comm (void);
 extern LOCDATA* init_druuge_comm (void);
 
 extern LOCDATA* init_ilwrath_comm (void);
+
+extern LOCDATA* init_human_comm (void);			// BY JMS
 
 extern LOCDATA* init_melnorme_comm (void);
 

@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: -Made Alpha Vulpeculae Orz space portal
+//			 -Added a system into Orz space starmap_array
+
 #include "encount.h"
 #include "resinst.h"
 #include "planets/elemdata.h"
@@ -453,7 +456,7 @@ STAR_DESC starmap_array[] =
 {{3962,8535}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 4, 102},
 {{8713,8537}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), ORZ_DEFINED, 3, 86},
 {{8587,8566}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), ANDROSYNTH_DEFINED, 7, 86},
-{{8654,8587}, MAKE_STAR (SUPER_GIANT_STAR, GREEN_BODY, -1), MELNORME6_DEFINED, 1, 86},
+{{8654,8587}, MAKE_STAR (SUPER_GIANT_STAR, BLUE_BODY, -1), ORZ_SPACE_PORTAL_DEFINED, 1, 86}, // JMS: Orz space portal is in here!
 {{8721,8619}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), TAALO_PROTECTOR_DEFINED, 4, 86},
 {{8608,8637}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 6, 86},
 {{8499,8648}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 1, 87},
@@ -569,6 +572,11 @@ STAR_DESC starmap_array[] =
 
 	{{6134, 5900}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 0, 131},
 
+	{{MAX_X_UNIVERSE << 1, MAX_Y_UNIVERSE << 1}, 0, 0, 0, 0},
+	
+	// JMS: ORZ space locations
+	{{6000, 6000}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 0, 132},
+	
 	{{MAX_X_UNIVERSE << 1, MAX_Y_UNIVERSE << 1}, 0, 0, 0, 0},
 };
 

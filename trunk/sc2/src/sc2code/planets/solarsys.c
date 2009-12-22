@@ -445,9 +445,12 @@ CheckIntersect (BOOLEAN just_checking)
 
 	NewWaitPlanet = 0;
 
-	if (pCurDesc != pSolarSysState->SunDesc /* can't intersect with sun */
-			&& DrawablesIntersect (&ShipIntersect,
-			&PlanetIntersect, MAX_TIME_VALUE))
+	if ( (pCurDesc != pSolarSysState->SunDesc /* JMS: can't intersect with sun... */
+		  && DrawablesIntersect (&ShipIntersect, &PlanetIntersect, MAX_TIME_VALUE)) 
+		  ||									//
+		(pCurDesc == pSolarSysState->SunDesc /* ...except in systems with 0 planets. JMS */
+		 && DrawablesIntersect (&ShipIntersect, &PlanetIntersect, MAX_TIME_VALUE) //
+		 && pSolarSysState->SunDesc[0].NumPlanets == 0) )//
 	{
 		PlanetOffset = pCurDesc - pSolarSysState->PlanetDesc + 1;
 		MoonOffset = 1;
@@ -663,11 +666,18 @@ if (!(draw_sys_flags & DRAW_PLANETS))
 		else
 		{
 			--Size;
-			pPlanetDesc->image.frame = SetAbsFrameIndex (OrbitalFrame,
-					(Size << FACING_SHIFT) + NORMALIZE_FACING (
-					ANGLE_TO_FACING (ARCTAN (
-					pPlanetDesc->pPrevDesc->location.x,
-					pPlanetDesc->pPrevDesc->location.y))));
+			if(pSolarSysState->SunDesc[0].NumPlanets!=0)					// JMS:
+			{																// Originally there was no if statement and brackets.
+				pPlanetDesc->image.frame = SetAbsFrameIndex (OrbitalFrame,	// This is to make 0 planet star systems work.
+						(Size << FACING_SHIFT) + NORMALIZE_FACING (
+						ANGLE_TO_FACING (ARCTAN (
+						pPlanetDesc->pPrevDesc->location.x,
+						pPlanetDesc->pPrevDesc->location.y))));
+			}
+			else // JMS: This is the case for 0 planet system
+			{
+				pPlanetDesc->image.frame = SetAbsFrameIndex (SunFrame, (Size << FACING_SHIFT)+2);
+			}
 		}
 	}
 
@@ -1446,7 +1456,12 @@ InitSolarSys (void)
 
 		GLOBAL (ShipStamp.origin.x) = SIS_SCREEN_WIDTH >> 1;
 		GLOBAL (ShipStamp.origin.y) = SIS_SCREEN_HEIGHT >> 1;
-		GLOBAL (ShipStamp.origin.y) += (SIS_SCREEN_HEIGHT >> 1) - 1;
+		
+		// JMS: When exiting Orz space, exit to middle of star
+		if (GET_GAME_STATE(LEAVING_ORZ_SPACE)==1)
+			SET_GAME_STATE(LEAVING_ORZ_SPACE,0);
+		else
+			GLOBAL (ShipStamp.origin.y) += (SIS_SCREEN_HEIGHT >> 1) - 1;
 
 		pSolarSysState->SunDesc[0].radius = MAX_ZOOM_RADIUS;
 		XFormIPLoc (&GLOBAL (ShipStamp.origin), &GLOBAL (ip_location), FALSE);
@@ -1909,13 +1924,14 @@ ExploreSolarSys (void)
 {
 	SOLARSYS_STATE SolarSysState;
 	
-	if (CurStarDescPtr == 0)
+	if (CurStarDescPtr == 0 || GET_GAME_STATE (LEAVING_ORZ_SPACE) >= 1) // JMS: Added Leaving Orz space check
 	{
 		POINT universe;
-
 		universe.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
 		universe.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
+		
 		CurStarDescPtr = FindStar (0, &universe, 1, 1);
+		
 		/*
 		// The following code used to be there, but the test is
 		// pointless.  Maybe we should panic here?
@@ -1923,6 +1939,7 @@ ExploreSolarSys (void)
 			;
 		*/
 	}
+	
 	GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (CurStarDescPtr->star_pt.x);
 	GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (CurStarDescPtr->star_pt.y);
 

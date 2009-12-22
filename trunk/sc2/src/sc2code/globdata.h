@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: -Added new game states for "new" race - humans
+//			 -Added IN_ORZSPACE flage for saved game summaries
+
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
 
@@ -916,6 +919,24 @@ START_GAME_STATE
 
 	ADD_GAME_STATE (ORZ_STACK0, 1)
 	ADD_GAME_STATE (ORZ_STACK1, 1)
+
+	// JMS: Human states
+	ADD_GAME_STATE (HUMAN_VISITS, 3)
+	ADD_GAME_STATE (HUMAN_HOSTILE, 1)
+	ADD_GAME_STATE (HUMAN_MET, 1)
+
+	// JMS: Androsynth states
+	ADD_GAME_STATE (ANDROSYNTH_VISITS, 3)
+	ADD_GAME_STATE (ANDROSYNTH_HOSTILE, 1)
+	ADD_GAME_STATE (ANDROSYNTH_MET, 1)
+	ADD_GAME_STATE (KNOW_ANDROSYNTH_STATE, 1)
+	ADD_GAME_STATE (ANDROSYNTH_STACK_1, 3)
+	ADD_GAME_STATE (ANDROSYNTH_STACK_2, 1)
+
+	// JMS: ORZ space states
+	ADD_GAME_STATE (ORZ_SPACE_SIDE, 2)
+	ADD_GAME_STATE (LEAVING_ORZ_SPACE, 1)
+
 END_GAME_STATE
 
 // Values for GAME_STATE.glob_flags:
@@ -949,6 +970,8 @@ enum
 	CHECK_LOAD = MAKE_WORD (0, (1 << 4)),
 	CHECK_RESTART = MAKE_WORD (0, (1 << 5)),
 	CHECK_ABORT = MAKE_WORD (0, (1 << 6)),
+	
+	IN_ORZSPACE,	// JMS: In *below* or not
 };
 typedef UWORD ACTIVITY;
 
