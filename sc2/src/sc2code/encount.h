@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009 - Portal to Orz space enum
+
 #ifndef _ENCOUNT_H
 #define _ENCOUNT_H
 
@@ -120,7 +122,8 @@ enum
 	ILWRATH_DEFINED,
 	ANDROSYNTH_DEFINED,
 	MYCON_TRAP_DEFINED,
-	SLAVERACE_DEFINED
+	SLAVERACE_DEFINED,
+	ORZ_SPACE_PORTAL_DEFINED		// BY JMS - Portal to ORZ space
 };
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED
@@ -179,6 +182,7 @@ extern void GenerateSupox (BYTE control);
 extern void GenerateRainbow (BYTE control);
 extern void GenerateIlwrath (BYTE control);
 extern void GenerateSlaveRace (BYTE control);
+extern void GenerateOrzSpacePortal (BYTE control);		// BY JMS
 
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;

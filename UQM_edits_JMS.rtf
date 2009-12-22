@@ -1,0 +1,91 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf250
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww18040\viewh8440\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+
+\f0\fs24 \cf0 UQM edits by JMS 22.12.2009\
+\
+IN A NUTSHELL:\
+-Alpha Vulpeculae (865.4:858.7) with 0 planets and portal to orz space in the sun (ORZ_SPACE_PORTAL_DEFINED).\
+-Orz space. Blue gfx. "Pretty" star gfx therein.\
+-Added Androsynths to Orz space. Infinite sphere of influence there. Also added very basic Androsynth in truespace.\
+-Added Orz to Orz space. Infinite sphere of influence there and different npcship gfx.\
+-Some dialogue for Androsynth.\
+-Primitive dialogue for earthlings.\
+-Fixed some bugs with slaverace definitions\
+\
+***************************************************************************************************************************************\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 EDITED FILES:\
+\
+/battle.c					-Play Orzspace music in orz space\
+/commglue.c 				-Added hooks for Earhtling ship and Androsynth dialogue screens\
+/commglue.h				-Added earthling ship and Androsynth dialogue enum and extern locdata\
+/encount.c				-"Encounter in *Below*" text, if encounter ship group in Orz space\
+/encount.h				-Enum to special star systems: Portal to orz space\
+/galaxy.c					-Bluish color for Orz space\
+/gameopt.c				-Loading game state shows "*Below*" text, instead of "hyper/quasispace" when saved in Orz space\
+/gamestr.h				-Edited game string table dimensions to facilitate additional entry (for orz space string)\
+/gendef.c					-Function call for initing orz space portal star system\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 /globdata.c				-Increased max number of races to facilitate adding Androsynth and slaverace to the game (IMPORTANT!  At function InitSis)\
+/globdata.h				-Added new game states for "new" race - humans\
+						-Added new game states for "new" race - Androsynth\
+						-Added new game state fo Orz space\
+						-Added IN_ORZSPACE flag for saved game summaries\
+/grpinfo.c					-Changes to make 0 planet star systems work\
+/hyper.c					-Orz space colors\
+						-Function for entering a portal/system in Orz space\
+						-Orz space check for portal/star graphics when drawing elements\
+						-Orz space check when activating portal spawner\
+						-Orz space npcship and star gfx\
+						-Androsynth sphere of influence infinite in Orz space\
+						-Can't meet melnorme/slylandro in Orz space\
+						-Don't consume fuel in Orz space\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 /plandata.c				-Placed the Orz space portal into Alpha Vulpeculae\
+/races.h					-Defined Androsyn conversation, Ip and hyperspace encounter percents and encounter ship makeups\
+						-Moved slaverace enums and defines to better places in the lists\
+/save.c					-Stores the information we're in ORZ space\
+/sis.c						-Shows *Below* in SIS info screen when in Orz space\
+/sis.h					-Modified saved game summary to store the information of whether we are in orz space\
+/starmap.c				-Star finding business in Orz space\
+/uqmdebug.c				-Some Orz space checks\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 \
+/planets/devices.c			-Casters cannot be used in Orz space\
+/planets/gensol.c			-Don't create Ur-quan probe at sol\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 /planets/ solarsys.c			-Changes to make 0 planet star systems possible and the star in those accessible as "planet"\
+/planets/pstarmap.c			-Added Orz space check to fuel requirement showing in starmap (0 fuel needed in orz space)\
+\
+/ships/sis_ship/sis_ship.c		-Some Orz space checks\
+\
+/content/base/gamestrings.txt	- Added * below * string\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 \
+\
+\
+\
+***************************************************************************************************************************************\
+ADDED FILES:\
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+sc2code/comm/human/humanc.c			-New file:Earthling communications\
+sc2code/comm/androsynth/androsynthc.c		-New file:Androsynth communications\
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 sc2code/planets/genorzspaceportal.c		-New file: Orz space portal definition (0 planet system, star accessible like planets)\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+content/base/comm/androsynth/androsynth.txt\
+content/base/comm/human/human.txt\
+content/base/nav/orzstars-000...031c\
+content/base/nav/orzspace.ct\
+content/base/nav/orzspace.ani\
+\
+\
+\
+\
+\
+}

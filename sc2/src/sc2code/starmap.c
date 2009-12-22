@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Star finding business in Orz space (findstar function)
+
 #include "encount.h"
 #include "gamestr.h"
 #include "globdata.h"
@@ -34,7 +36,16 @@ FindStar (STAR_DESC *LastSDPtr, POINT *puniverse, SIZE xbounds,
 	SIZE lo, hi;
 	STAR_DESC *BaseSDPtr;
 
-	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
+	// DEBUG BY JMS: Too many magic numbers here and in other places. Should define that number of systems, vortices and other shit
+	if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+	{
+#define NUM_HYPER_VORTICES 15
+#define NUM_ORZ_VORTICES 1
+		BaseSDPtr = &star_array[NUM_SOLAR_SYSTEMS + 1 + NUM_HYPER_VORTICES + 1 + 1];
+		hi = (NUM_ORZ_VORTICES + 1) - 1;
+	} // JMS ENDS
+	
+	else if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
 	{
 		BaseSDPtr = star_array;
 		hi = NUM_SOLAR_SYSTEMS - 1;

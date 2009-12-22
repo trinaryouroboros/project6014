@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009 - Text for Orz space ship group encounter "encounter in *Below*
+
 #include "encount.h"
 
 #include "battle.h"
@@ -231,7 +233,11 @@ InitEncounter (void)
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
 		t.baseline.y += 12;
-		t.pStr = GAME_STRING (ENCOUNTER_STRING_BASE + 1);
+		if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+			t.pStr = GAME_STRING (NAVIGATION_STRING_BASE + 6);
+		// Debug by JMS: * Below *
+		else
+			t.pStr = GAME_STRING (ENCOUNTER_STRING_BASE + 1);
 				// "DEEP SPACE"
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);

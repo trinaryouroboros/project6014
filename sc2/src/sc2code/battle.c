@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009 - Play Orz space music in Orz space
+
 #include "battle.h"
 
 #include "battlecontrols.h"
@@ -235,6 +237,8 @@ BattleSong (BOOLEAN DoPlay)
 	{
 		if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
 			BattleRef = LoadMusic (BATTLE_MUSIC);
+		else if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)		// BY JMS - this condition activates Orz space music
+			BattleRef = LoadMusic (ORZSPACE_MUSIC);
 		else if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
 			BattleRef = LoadMusic (HYPERSPACE_MUSIC);
 		else

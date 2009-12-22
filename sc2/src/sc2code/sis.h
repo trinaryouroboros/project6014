@@ -1,3 +1,5 @@
+// JMS 2009: Added byte OrzSpace in SummaryDesc to notify if in orz space or not
+
 #ifndef _SIS_H
 #define _SIS_H
 
@@ -238,6 +240,7 @@ typedef struct
 	BYTE NumShips, NumDevices;
 	BYTE ShipList[MAX_BUILT_SHIPS];
 	BYTE DeviceList[MAX_EXCLUSIVE_DEVICES];
+	BYTE OrzSpace;	// JMS: Shows in saved game summaries if we are in Orz space
 } SUMMARY_DESC;
 
 #define OVERRIDE_LANDER_FLAGS (1 << 7)

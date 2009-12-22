@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Added Orz space state check to Sis_hyper_preprocess
+
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
 
@@ -214,7 +216,7 @@ LeaveAutoPilot:
 
 		GetCurrentVelocityComponents (&ElementPtr->velocity, &dx, &dy);
 		if ((GLOBAL_SIS (FuelOnBoard)
-				|| GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1)
+				|| GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1 || GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) // JMS: Orz space check.
 				&& (int)facing == (int)StarShipPtr->ShipFacing)
 		{
 			StarShipPtr->cur_status_flags |= SHIP_AT_MAX_SPEED;

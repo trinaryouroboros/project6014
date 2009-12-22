@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009 -In Orz space no one can hear your 'caster...
+
 #include "build.h"
 #include "encount.h"
 #include "gamestr.h"
@@ -195,7 +197,8 @@ UseCaster (void)
 {
 	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
 	{
-		if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
+		// BY JMS: ORZ space condition added - can't use caster in ORZ space.
+		if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1 && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1)
 		{
 			SET_GAME_STATE (USED_BROADCASTER, 1);
 			return TRUE;

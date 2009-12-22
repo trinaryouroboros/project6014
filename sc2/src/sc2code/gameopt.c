@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Added case IN_ORZSPACE to showsummary so it displays "* Below *" when checking out a saved game summary
+
 #include "gameopt.h"
 
 #include "build.h"
@@ -884,6 +886,10 @@ ShowSummary (SUMMARY_DESC *pSD)
 			case IN_QUASISPACE:
 				utf8StringCopy (buf, sizeof (buf),
 						GAME_STRING (NAVIGATION_STRING_BASE + 1));
+				break;
+			case IN_ORZSPACE:	// JMS: This displays " * Below * " instead of "hyper/quasispace" when savegame is in Orz space
+				utf8StringCopy (buf, sizeof (buf),
+								GAME_STRING (NAVIGATION_STRING_BASE + 6));
 				break;
 		}
 

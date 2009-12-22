@@ -18,6 +18,8 @@
 
 /* background starfield - used to generate agalaxy.asm */
 
+// JMS 2009: Added some blue color thingy for ORZ space, but not sure what it actually does...
+
 #include "element.h"
 #include "globdata.h"
 #include "init.h"
@@ -270,6 +272,9 @@ InitGalaxy (void)
 			if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
 				SetPrimColor (&DisplayArray[p],
 						BUILD_COLOR (MAKE_RGB15 (0x15, 0x15, 0x15), 0x07));
+			else if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)					// BY JMS - Should check what color this actually changes...
+				SetPrimColor (&DisplayArray[p],
+							  BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x15), 0x8C));
 			else if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
 				SetPrimColor (&DisplayArray[p],
 						BUILD_COLOR (MAKE_RGB15 (0x14, 0x00, 0x00), 0x8C));

@@ -1,5 +1,6 @@
 HYPERSPACE_MUSIC,music.hyper,sc2code/imusicre.h,MUSICRES,base/nav/hyper.mod
 QUASISPACE_MUSIC,music.arispace,sc2code/imusicre.h,MUSICRES,base/nav/quasispace.mod
+ORZSPACE_MUSIC,music.orzspace,sc2code/imusicre.h,MUSICRES,base/ui/starbase.mod
 IP_MUSIC,music.space,sc2code/imusicre.h,MUSICRES,base/nav/space.mod
 ORBIT1_MUSIC,music.orbit1,sc2code/imusicre.h,MUSICRES,base/nav/orbit.mod
 ORBIT2_MUSIC,music.orbit2,sc2code/imusicre.h,MUSICRES,base/nav/orbit.mod
@@ -26,6 +27,7 @@ STARCON_COLOR_MAP,colortable.scclrtab,sc2code/istrtab.h,BINTAB,base/uqm.ct
 STARCON_GAME_STRINGS,text.starcon,sc2code/istrtab.h,STRTAB,base/gamestrings.txt
 HYPER_COLOR_TAB,colortable.hyperpal,sc2code/istrtab.h,BINTAB,base/nav/hyperspace.ct
 ARISPACE_COLOR_TAB,colortable.arispace,sc2code/istrtab.h,BINTAB,base/nav/quasispace.ct
+ORZSPACE_COLOR_TAB,colortable.orzspace,sc2code/istrtab.h,BINTAB,base/nav/orzspace.ct
 ORBPLAN_COLOR_MAP,colortable.orbplan,sc2code/istrtab.h,BINTAB,base/lander/orbit.ct
 OOLITE_COLOR_TAB,planet.oolite.colortable,sc2code/istrtab.h,BINTAB,base/planets/oolite.ct
 OOLITE_XLAT_TAB,planet.oolite.translatetable,sc2code/istrtab.h,BINTAB,base/planets/oolite.xlt
@@ -193,8 +195,9 @@ BOOM_SML_MASK_PMAP_ANIM,graphics.boosml,sc2code/igfxres.h,GFXRES,base/battle/boo
 AMBIENT_MASK_PMAP_ANIM,graphics.ambanim,sc2code/igfxres.h,GFXRES,base/nav/ambientanim.ani
 HYPERSTARS_MASK_PMAP_ANIM,graphics.hyperstr,sc2code/igfxres.h,GFXRES,base/nav/hyperstr.ani
 ARISPACE_MASK_PMAP_ANIM,graphics.arispace,sc2code/igfxres.h,GFXRES,base/nav/quasispace.ani
+ORZSPACE_MASK_PMAP_ANIM,graphics.orzspace,sc2code/igfxres.h,GFXRES,base/nav/orzspace.ani
 IPBKGND_MASK_PMAP_ANIM,graphics.obbkgnd,sc2code/igfxres.h,GFXRES,base/nav/obbkgnd.ani
-SISIP_MASK_PMAP_ANIM,graphics.sis_ip,sc2code/igfxres.h,GFXRES,base/nav/sis_ip.ani
+SISIP_MASK_PMAP_ANIM,graphics.sis_ip,sc2code/igfxres.h,GFXRES,base/nav/explorer_ip.ani
 ORBPLAN_MASK_PMAP_ANIM,graphics.orbplan,sc2code/igfxres.h,GFXRES,base/nav/orbplan.ani
 SUN_MASK_PMAP_ANIM,graphics.ip_sun,sc2code/igfxres.h,GFXRES,base/nav/ip_sun.ani
 LANDER_MASK_PMAP_ANIM,graphics.lander,sc2code/igfxres.h,GFXRES,base/lander/lander.ani
@@ -565,6 +568,16 @@ SUPOX_FONT,comm.supox.font,sc2code/comm/supox/ifontres.h,FONTRES,base/fonts/supo
 SUPOX_CONVERSATION_PHRASES,comm.supox.dialogue,sc2code/comm/supox/istrtab.h,CONVERSATION,base/comm/supox/supox.txt
 SUPOX_COLOR_MAP,comm.supox.colortable,sc2code/comm/supox/istrtab.h,BINTAB,base/comm/supox/supox.ct
 SUPOX_PMAP_ANIM,comm.supox.graphics,sc2code/comm/supox/igfxres.h,GFXRES,base/comm/supox/supox.ani
+HUMAN_CONVERSATION_PHRASES,comm.human.dialogue,sc2code/comm/human/istrtab.h,CONVERSATION,base/comm/human/human.txt
+HUMAN_MUSIC,comm.human.music,sc2code/comm/human/imusicre.h,MUSICRES,base/comm/thraddash/thraddash.mod
+HUMAN_FONT,comm.human.font,sc2code/comm/human/ifontres.h,FONTRES,base/fonts/player.fon
+HUMAN_COLOR_MAP,comm.human.colortable,sc2code/comm/human/istrtab.h,BINTAB,base/comm/commander/commander.ct
+HUMAN_PMAP_ANIM,comm.human.graphics,sc2code/comm/human/igfxres.h,GFXRES,base/comm/commander/commander.ani
+ANDROSYNTH_CONVERSATION_PHRASES,comm.androsyn.dialogue,sc2code/comm/androsynth/istrtab.h,CONVERSATION,base/comm/androsyn/androsyn.txt
+ANDROSYNTH_MUSIC,comm.androsyn.music,sc2code/comm/androsynth/imusicre.h,MUSICRES,base/comm/yehat/yehat.mod
+ANDROSYNTH_FONT,comm.androsyn.font,sc2code/comm/androsynth/ifontres.h,FONTRES,base/fonts/player.fon
+ANDROSYNTH_COLOR_MAP,comm.androsyn.colortable,sc2code/comm/androsynth/istrtab.h,BINTAB,base/comm/commander/commander.ct
+ANDROSYNTH_PMAP_ANIM,comm.androsyn.graphics,sc2code/comm/androsynth/igfxres.h,GFXRES,base/comm/commander/commander.ani
 THRADD_MUSIC,comm.thraddash.music,sc2code/comm/thradd/imusicre.h,MUSICRES,base/comm/thraddash/thraddash.mod
 THRADD_FONT,comm.thraddash.font,sc2code/comm/thradd/ifontres.h,FONTRES,base/fonts/thraddash.fon
 THRADD_CONVERSATION_PHRASES,comm.thraddash.dialogue,sc2code/comm/thradd/istrtab.h,CONVERSATION,base/comm/thraddash/thraddash.txt
@@ -834,7 +847,7 @@ BLASTER_BIG_MASK_PMAP_ANIM,ship.sis_ship.graphics.blas.large,sc2code/ships/sis_s
 BLASTER_MED_MASK_PMAP_ANIM,ship.sis_ship.graphics.blas.medium,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/blasmed.ani
 BLASTER_SML_MASK_PMAP_ANIM,ship.sis_ship.graphics.blas.small,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/blassml.ani
 SIS_CAPTAIN_MASK_PMAP_ANIM,ship.sis_ship.graphics.captain,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/siscap.ani
-SIS_HYPER_MASK_PMAP_ANIM,ship.sis_ship.graphics.sishyper,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/sishyper.ani
+SIS_HYPER_MASK_PMAP_ANIM,ship.sis_ship.graphics.exphyper,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpHyper.ani
 ILWRATH_CODE,ship.ilwrath.code,sc2code/ships/ilwrath/icode.h,SHIP,7
 ILWRATH_VICTORY_SONG,ship.ilwrath.ditty,sc2code/ships/ilwrath/imusicre.h,MUSICRES,base/ships/ilwrath/ilwditty.mod
 ILWRATH_RACE_STRINGS,ship.ilwrath.text,sc2code/ships/ilwrath/istrtab.h,STRTAB,base/ships/ilwrath/ilwtext.txt

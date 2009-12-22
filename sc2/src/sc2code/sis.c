@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Shows *Below* in orz space in the SIS info screen
+
 #include "colors.h"
 #include "commglue.h"
 #include "encount.h"
@@ -240,10 +242,19 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 					GetClusterName (CurStarDescPtr, buf);
 					break;
 				case IN_HYPERSPACE:
-					utf8StringCopy (buf, sizeof (buf),
+					if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+					{
+						utf8StringCopy (buf, sizeof (buf), 
+								GAME_STRING (NAVIGATION_STRING_BASE + 6));
+						// JMS: "ORZ Space = * Below *"
+					}
+					else 
+					{
+						utf8StringCopy (buf, sizeof (buf),
 							GAME_STRING (NAVIGATION_STRING_BASE
 								+ (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1
 									? 0 : 1)));
+					}
 					break;
 			}
 

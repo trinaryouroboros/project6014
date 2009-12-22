@@ -17,7 +17,7 @@ I’m afraid that cypher is obsolete. You are clearly not a Spathi. Goodbye
 God would know the cypher, go ask Him or Her
 
 #(GO_GET_CYPHER)
-You’d better go back and get it.
+You'd better go back and get it.
 
 #(umma_gumma_humma)
 Umma Gumma Humma
@@ -27,9 +27,3 @@ Uh Oh...
 
 #(what_is_going_on)
 And WHAT is going on here
-
-
-
-
-
-

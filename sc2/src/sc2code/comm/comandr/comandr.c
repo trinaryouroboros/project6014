@@ -58,14 +58,6 @@ static LOCDATA commander_desc =
 			ONE_SECOND * 2, 0, /* RestartRate */
 			0, /* BlockMask */
 		},
-		{
-			1, /* StartIndex */
-			3, /* NumFrames */
-			RANDOM_ANIM | COLORXFORM_ANIM,/* AnimFlags */
-			0, ONE_SECOND / 30, /* FrameRate */
-			0, ONE_SECOND / 15, /* RestartRate */
-			0, /* BlockMask */
-		},
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */

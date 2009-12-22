@@ -19,6 +19,8 @@
  * the game. libs/strlib.h is for the string library.
  */
 
+// JMS 2009: Added label for ORZ space = "*below*"
+
 #ifndef _GAMESTR_H
 #define _GAMESTR_H
 
@@ -36,7 +38,7 @@
 #define FEEDBACK_STRING_COUNT     2
 #define STARBASE_STRING_COUNT     5
 #define ENCOUNTER_STRING_COUNT    8
-#define NAVIGATION_STRING_COUNT   6
+#define NAVIGATION_STRING_COUNT   7 // JMS: Original value was 6. This facilitates the text "*below*".
 #define NAMING_STRING_COUNT       4
 #define MELEE_STRING_COUNT        9
 #define SAVEGAME_STRING_COUNT     5

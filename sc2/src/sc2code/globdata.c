@@ -16,6 +16,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Added maximum number of races into initSIS function to facilitate Androsynth into the game.
+// It is very important to remember to update this number of races here when adding races to the game, otherwise
+// the races won't show up in the game AND the defines and enums in races.h will have quirky side-effects.
+//
+// Originally the max number of races was defined by KOHR_AH_ID and some constant numbers.
+// Max num of races is now defined by CHENJESU_ID plus the constant numbers since it is
+// KOHR_AH_ID + 2 and there are currently 2 new races.
+
 #include "globdata.h"
 
 #include "coderes.h"
@@ -196,8 +204,8 @@ InitSIS (void)
 		COUNT num_ships;
 		SPECIES_ID s_id = ARILOU_ID;
 
-		num_ships = KOHR_AH_ID - s_id + 1
-				+ 2; /* Yehat Rebels and Ur-Quan probe */
+		num_ships = CHENJESU_ID - s_id + 1	// JMS: CHENJESU_ID now replaces KOHR_AH_ID here
+		+ 2; /* Yehat Rebels and Ur-Quan probe */
 
 		InitQueue (&GLOBAL (avail_race_q), num_ships, sizeof (FLEET_INFO));
 		for (i = 0; i < num_ships; ++i)

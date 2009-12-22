@@ -1757,6 +1757,8 @@ Fuel:
 #(Fuel Use:)
 Fuel Use:
 
+#(*Below*)
+* Below *
 
 #(Enter name)
 Enter name
