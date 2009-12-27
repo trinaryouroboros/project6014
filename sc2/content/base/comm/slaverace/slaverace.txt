@@ -3,7 +3,7 @@ Attention, we cannot identify your race or your vessel.
 We are the SlaveRace. Who are you and where have you come from
 
 #(we_are)
-I am Earthling Captain Zelnick of the Starship xxx. I represent the New Alliance of Free Stars. We have travelled from Sol
+I am Earthling Captain Zelnick of the Starship xxx. I represent the New Alliance of Free Stars. We have travelled from Sol.
 
 #(ARE_YOU_ALLIANCE)	
 Is this the Alliance of the Chenjesu? We have heard of this. 
@@ -14,20 +14,20 @@ It appears that they never considered us threatened as they did not sustain comm
 I'm your worst nightmare! Let's fight!
 
 #(BRING_IT_ON)
-Bring it on bitch
+Bring it on, bitch!
 
 #(sort_of)
 Sort of, this is the NEW Alliance of Free Stars. 
 Most of the same guys, but no more Chenjesu, they have become the Chmmr.
 
 #(master_of_the_galaxy)
-We are the new masters of the galaxy don't you know! Submit to our will or be destroyed
+We are the new masters of the galaxy, don't you know! Submit to our will or be destroyed!
 
 #(SOVEREIGNTY)
 If it is our sovereignty that interests you I suggest you speak to our masters the MasterRace. They might have something to say about your claims on this sector.
 
 #(WHY_ARE_YOU_HERE)
-What brings you to our space Earthling
+What brings you to our space Earthling?
 
 #(looking_for_assistance)
 We are searching this region of space for assistance in our struggle to fight a new alien menace. Can you help?
@@ -36,21 +36,21 @@ We are searching this region of space for assistance in our struggle to fight a 
 We're lost. Can we use your phone?
 
 #(looking_for_artefacts)
-We are searching for Precursor Artefacts. Have you noticed any strange phenomenon or energy readings on the planets ib this area?
+We are searching for Precursor Artefacts. Have you noticed any strange phenomenon or energy readings on the planets in this area?
 
 
 #(CANNOT_ASSIST)	
 We cannot assist you. 
-Our foreign diplomacy is controlled by the MasterRace
+Our foreign diplomacy is controlled by the MasterRace.
 
 #(where_is_masterrace)
 Okay then, so where do I find those people?
 
 #(MASTERRACE_AT)
-Their homeworld is at Beta Apollonius. They will be very interested in making contact I'm sure
+Their homeworld is at Beta Apollonius. They will be very interested in making contact I'm sure.
 
 #(goodbye_slaverace)
-We will leave you now
+We will leave you now.
 
 #(GOODBYE_EARTHLING)
-Until next time Earthing
+Until next time Earthling.

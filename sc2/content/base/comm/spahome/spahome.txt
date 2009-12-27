@@ -5,7 +5,7 @@ What is the secret Spathi Cypher?
 Huffi Muffi Guffi?
 
 #(gods_work)
-I don't need a Cypher, I'm doing God's work
+I don't need a Cypher, I'm doing God's work.
 
 #(left_at_home)
 Dammit, I left it at home!
@@ -18,5 +18,5 @@ The safest course of action is to eliminate you.
 God would know the cypher, go ask Him or Her.
 
 #(GO_GET_CYPHER)
-You had better go back and get it. Return when you have it
+You had better go back and get it. Return when you have it.
 
