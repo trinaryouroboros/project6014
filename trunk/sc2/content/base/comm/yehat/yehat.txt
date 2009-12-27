@@ -2,8 +2,8 @@
 Braaaaarrrrrkkkk! What a delightful surprise
 to see our old human captain friend again.
 We often think of you and how ye aided the clans
-in their revolution to over throw the Zeep-Reep dynasty.
-Stories are told to hatchlings
+in their revolution to overthrow the Zeep-Reep dynasty.
+Stories are told to hatchlings.
 
 #(hail_yehat)
 Hail Yehat friends, the pleasure is mutual!
@@ -12,7 +12,7 @@ Hail Yehat friends, the pleasure is mutual!
 Hey hey! What up droogs?
 
 #(must_scoot)
-Actually, we need to scoot now
+Actually, we need to scoot now.
 
 #(WHY_ARE_YOU_HERE1)
 Droogs? We know nothing of this. It's been too long.
@@ -31,7 +31,7 @@ We're investigating Precursor artefacts. We thought we'd stop by and say hi.
 We're pleased to see our old friend. Precursor Artefacts you say.
 A Terminator scout group reported something interesting in Gamma YYY
 while chasing a lone Kohr-Ah vessel.
-You might consider checking it out.
+Ye might consider checking it out.
 Apparently it bore the hall-marks of a Precursor item.
 The group was in hot pursuit and had no chance to investigate.
 
@@ -39,7 +39,7 @@ The group was in hot pursuit and had no chance to investigate.
 We've decided that the Veep-Neep were okay after-all. We've come to demand you reinstate them, Queen and all, as Yehat royalty!
 
 #(BAD_HUMOUR)
-If that is earthling humour then I suggest you kit to yourselves.
+If that is earthling humour then I suggest ye kit to yourselves.
 The Veep-Neep were a toxic influence on the clan culture of the Yehat.
 
 #(how_are_you)
@@ -50,7 +50,7 @@ The Yehat prosper.
 We have expanded out sphere of influence back to where it was
 before the great wars.
 Since we were battle thralls, we were less scathed by Ur-Quan domination than other races.
-While others rebuild their home worlds,
+While others rebuild their homeworlds,
 We've been able to put our energies into helping the Chmmr eliminate
 remaining Kohr-Ah Marauders from this region of space.
 
@@ -58,12 +58,12 @@ remaining Kohr-Ah Marauders from this region of space.
 How are the Shofixti?
 
 #(SHOFIXTI_INFO)
-Arrrrrrrk it saddens me to see them struggle so.
+Arrrrrrrk... it saddens me to see them struggle so.
 The Shofixti are eking out a meagre existence in the Gorno constellation.
-With their old home-world destroyed they are trying to create a new one at Beta Gorno II.
+With their old homeworld destroyed they are trying to create a new one at Beta Gorno II.
 They refuse to go elsewhere to more fertile grounds.
 Also, the Chmmr won't permit the Alliance to direct too much aid into their struggle
-...as our resources are needed to eliminate the Kohr-Ah threat.
+as our resources are needed to eliminate the Kohr-Ah threat.
 
 #(how_are_pkunk)
 So what happened to the Pkunk in the end?
@@ -75,7 +75,7 @@ Though I am not sure how they expect to re-integrate biologically
 in fact the thought disturbs me somewhat.
 
 #(more_news)
-I've been out of the loop. Any more interesting news about the New Alliance of Free Stars
+I've been out of the loop. Any more interesting news about the New Alliance of Free Stars?
 
 #(CHMMR_INFO)
 Just between ye and me human,
@@ -89,5 +89,3 @@ Better to be on their side than not to be sure.
 
 #(GOODBYE_EARTHLING)
 Goodbye Earthling friend, you are always welcome in Yehat space.
-
-

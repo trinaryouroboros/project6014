@@ -103,7 +103,7 @@ I must say what a pleasure it is to run into you after all this time. How are al
 Hi Mr Melnorme! The Earthlings are doing just great. But now I have to sort out some business with a precursor artefact. As you do...
 
 #(DOING_GOOD_RESPONSE)
-Ah if it's precursor artefacts that interest you, I have some very valuable information.
+Ah, if it's precursor artefacts that interest you, I have some very valuable information.
 In accordance with our protocols and code of ethics this information can be given to you in exchange for credits.
 
 #(doing_average)
@@ -150,23 +150,23 @@ If you have any questions, don't hesitate to ask.
 I remember EXACTLY how this works. Let's get down to business.
 
 #(RIGHT_YOU_ARE)
-Excellent Captain, of course you do
+Excellent Captain, of course you do.
 
 #(make_purchases)
-I would like to make some purchases
+I would like to make some purchases.
 
 #(items_to_sell)
-I have some items I would like to sell
+I have some items I would like to sell.
 
 #(spank_ass1)
 Actually I never really liked the way you made me collect all that bio stuff just so I could save the galaxy. I'm gonna spank yo ass!
 
 #(spank_ass2)
-I think I'm gonna spank yo ass!
+And I think I'm gonna spank yo ass!
 
 #(UNWISE_CAPTAIN)
 That would be unwise Captain.  Our vessels are very well equipped to deal with pirates.  
-You surprise me with your aggression. I think I will end this communication
+You surprise me with your aggression. I think I will end this communication.
 
 #(only_joke)
 Only joke. Let's trade!

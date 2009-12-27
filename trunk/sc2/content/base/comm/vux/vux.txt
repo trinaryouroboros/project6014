@@ -1,6 +1,6 @@
 #(VUX_GREETING1)
-UGH get AWAY from me human. 
-Just because you are free to roam the galaxy while we are imprisoned 
+UGH, get AWAY from me human. 
+Just because you are free to roam the galaxy while we are imprisoned
 does not mean you get to impose your hideous presence on us.
 
 #(whats_news)
@@ -8,12 +8,13 @@ What's news?
 
 #(DAX_INFORMATION)
 Nothing you'd be interested in. 
-The Chmmr are picking off the remaining Kohr-Ah one at a time... 
-...actually you might be intrigued to know that ZEX's deviant subordinate DAX... 
-...managed to escape VUX space with a squadron of Intruders before the Chmmr closed in.  
+The Chmmr are picking off the remaining Kohr-Ah one at a time
+actually you might be intrigued to know that ZEX's deviant subordinate DAX
+managed to escape VUX space with a squadron of Intruders before the Chmmr closed in.  
 Why am I telling you this? The VUX are much better off without depraved individuals like DAX. 
 At least with ZEX we had an ace commander. DAX just gives me the willies. 
-Should you stumble across him in your travels, please do the right thing and dispose of him and his weirdo henchmen 
+Should you stumble across him in your travels, please do the right thing
+and dispose of him and his weirdo henchmen.
 
 #(how_is_slave_shield)
 Hey so how's this slave shield working out for you people?
@@ -27,21 +28,18 @@ You'll excuse me if I sound a little spiteful ... it's because I am.
 You'll be safe under there. And at least it's blue and not red!
 
 #(VALUE_FREEDOM)
-I think we value freedom more than safety. Human, no offence intended, but you revolt me. 
-We gain nothing from this disgusting conversation. Urp
+I think we value freedom more than safety. Human, no offense intended, but you revolt me. 
+We gain nothing from this disgusting conversation... Urp.
 
 #(slave_shield_no_problem)
-A slave shield didn't stop us from doing our thing if you can remember
+A slave shield didn't stop us from doing our thing if you can remember.
 
 #(HUMAN_SUBVERSION)
 Thanks for suggesting we look for ways to break free from our imprisonment. 
-Maybe the Chmmr will be interested to know of this subversion. GOODBYE
+Maybe the Chmmr will be interested to know of this subversion. GOODBYE!
 
 #(goodbye_vux)
-Goodbye VUX
+Goodbye, VUX.
 
 #(GOODBYE_EARTHLING)
-Goodbye Earthling
-
-
-
+Will you be on your way already...

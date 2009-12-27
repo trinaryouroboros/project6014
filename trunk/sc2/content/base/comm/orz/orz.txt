@@ -32,7 +32,7 @@ VUX are *Sad Animals* are always say to know the Orz or be *dissolving*.
 VUX are always *dancing* the Orz but not better than small, so not so *frumple* any sooner.
 
 #(tell_of_nature)
-Please, tell me of your true nature
+Please, tell me of your true nature.
 
 #(ORZ_TELL_1)
 I am say so much, and then less more:
@@ -55,7 +55,7 @@ Now you understand, we can *hammer* the *tulips* together.
 No more ask the true nature.
 
 #(discuss_alliance_matters)
-We need to discuss Alliance matters.--
+We need to discuss Alliance matters...
 
 #(HAPPY_TO_DISCUSS)
 If *campers* need to converse on the Alliance, that is okay.
@@ -108,15 +108,3 @@ Thank you Orz, we must be off!
 
 #(GOODBYE_EARTHLING)
 Orz must be *on*. Only joke!
-
-
-
-
-
-
-
-
-
-
-
-

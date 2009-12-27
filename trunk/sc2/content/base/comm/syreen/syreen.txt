@@ -16,7 +16,8 @@ If it's space-babes you're after it's space-babes you'll get I'm sure.
 Nice tug by the way.
 
 #(thanks_tug_complement)
-Thanks! The Chmmr gave me this one, it's OKAY but not as cool as my old one *sniff*....you are talking about the vessel right?
+Thanks! The Chmmr gave me this one, it's OKAY but not as cool as my old one *sniff*
+you are talking about the vessel right?
 
 #(not_fooled)
 I'm not fooled by your dirty Syreen double entendres. Naughty!
@@ -28,33 +29,29 @@ Double what now? Anyway...
 Sure I was...
 
 #(ANY_ASSISTANCE)
-If there is any assistance you or your crew require, 
-...of a practical nature...
-you should stop by the starbase at our homeworld Betelgeuse I
+If there is any assistance you or your crew require
+of a practical nature
+you should stop by the starbase at our homeworld Betelgeuse I.
 
 #(roam_stars)
-It must be good to roam the stars once more
+It must be good to roam the stars once more.
 
 #(WE_DONT_STRAY)
 Well to be honest, we don't stray far from our homeworld. 
-Our fleet is still rebuilding and there is the risk of running in to rogue Kohr-Ah... 
-...who still plague this part of space. 
+Our fleet is still rebuilding and there is the risk of running in to rogue Kohr-Ah
+who still plague this part of space. 
 We are grateful to the Chmmr who are diligent in their duty to eradicate these monsters. 
 
 #(any_news)
 Anything exciting going on around here?
 
 #(NO_NEWS)
-Right now we don't get out much, and most of the real activity 
+Right now we don't get out much, and most of the real activity
 seems to be happening rim-ward of of Chmmr space where the Kohr-Ah are being pursued. 
 We're now at the periphery of current events it seems.
 
 #(spot_you_later)
-We'll spot you later
+We'll spot you later.
 
 #(COME_BACK_ANYTIME)
-Come back anytime
-
-
-
-
+Come back anytime.
