@@ -139,6 +139,7 @@
 #define UREA_COLOR_TAB "planet.urea.colortable"
 #define UREA_XLAT_TAB "planet.urea.translatetable"
 #define VAULT_STRTAB "text.syrvault"
+#define VELA_FACTORY_STRTAB "text.velafactory"
 #define VINYLOGOUS_COLOR_TAB "planet.vinylogous.colortable"
 #define VINYLOGOUS_XLAT_TAB "planet.vinylogous.translatetable"
 #define VIO_GAS_COLOR_TAB "planet.violetgas.colortable"
