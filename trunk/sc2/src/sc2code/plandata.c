@@ -26,11 +26,11 @@
 
 STAR_DESC starmap_array[] =
 {
-	//                           postfix name index (like 'Normae')
-	//                         prefix name index (like 'Alpha')   |
-	//                                        alien presence  |   |
-	//                                     owner (unused)  |  |   |
-	//   x,    y              star type   colour       |   |  |   |
+//                           postfix name index (like 'Normae')
+//                         prefix name index (like 'Alpha')   |
+//                                        alien presence  |   |
+//                                     owner (unused)  |  |   |
+//   x,    y              star type   colour       |   |  |   |
 {{5207,  83}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 3, 29},
 {{4256, 122}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 0, 25},
 {{7703, 145}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 1, 115},
@@ -40,7 +40,6 @@ STAR_DESC starmap_array[] =
 {{9044, 228}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 1, 49},
 {{1325, 230}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 104},
 {{6886, 317}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 2, 36},
-{{5482, 480}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 1, 29},
 {{1877, 355}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 1, 104},
 {{3254, 357}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 4, 17},
 {{9246, 368}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 2, 56},
@@ -48,6 +47,7 @@ STAR_DESC starmap_array[] =
 {{6749, 429}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 1, 36},
 {{2379, 458}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 4, 104},
 {{9862, 467}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 0, 32},
+{{5482, 480}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 1, 29},
 {{5184, 485}, MAKE_STAR (GIANT_STAR, BLUE_BODY, -1), 0, 6, 29},
 {{5386, 520}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 5, 29},
 {{4817, 501}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 7, 29},
@@ -265,29 +265,29 @@ STAR_DESC starmap_array[] =
 {{ 569,5314}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 3, 73},
 {{1253,5342}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 3, 51},
 {{6270,5479}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 3, 21},
-{{8066,5653}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 3, 72},
 {{2351,5516}, MAKE_STAR (SUPER_GIANT_STAR, RED_BODY, -1), 0, 1, 11},
 {{4688,5537}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 3, 64},
-{{7862,5691}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 4, 72},
 {{1105,5575}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 4, 51},
 {{7266,5623}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 1, 33},
 {{2881,5630}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 8, 18},
 {{6014,5632}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 2, 21},
-{{8123,5784}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 2, 72},
-{{7704,5794}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 5, 72},
 {{3537,5652}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 5, 18},
+{{8066,5653}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 3, 72},
 {{ 822,5659}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 2, 73},
 {{9420,5664}, MAKE_STAR (GIANT_STAR, ORANGE_BODY, -1), 0, 2, 47},
 {{5479,5686}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 1, 55},
+{{7862,5691}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 4, 72},
 {{4416,5710}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 64},
 {{7467,5714}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 1, 72},
-{{2382,5717}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 2, 11},
+{{2382,5718}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 2, 11},
 {{9510,5758}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 1, 47},
 {{3872,5761}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 2, 18},
 {{ 385,5774}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 1, 73},
 {{4699,5780}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 1, 64},
+{{8123,5784}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 2, 72},
 {{6107,5785}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 1, 21},
 {{9645,5791}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 4, 47},
+{{7704,5794}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 5, 72},
 {{5316,5817}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 2, 55},
 {{3398,5840}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 6, 18},
 {{7312,5841}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 3, 33},
