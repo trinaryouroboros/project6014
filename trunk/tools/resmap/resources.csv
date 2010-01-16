@@ -152,6 +152,7 @@ MAIDENS_STRTAB,text.maidens,sc2code/istrtab.h,STRTAB,base/lander/energy/maidens.
 CHMMR_BASE_STRTAB,text.chmmrbas,sc2code/istrtab.h,STRTAB,base/lander/energy/chmmrbase.txt
 AQUA_STRTAB,text.aquhelix,sc2code/istrtab.h,STRTAB,base/lander/energy/aquahelix.txt
 BURV_BCS_STRTAB,text.drutrans,sc2code/istrtab.h,STRTAB,base/lander/energy/burvixcaster.txt
+VELA_FACTORY_STRTAB,text.velafactory,sc2code/istrtab.h,STRTAB,base/lander/energy/velafactory.txt
 TAALO_DEVICE_STRTAB,text.taadevic,sc2code/istrtab.h,STRTAB,base/lander/energy/taalodevice.txt
 SUN_DEVICE_STRTAB,text.sundevic,sc2code/istrtab.h,STRTAB,base/lander/energy/sundevice.txt
 VAULT_STRTAB,text.syrvault,sc2code/istrtab.h,STRTAB,base/lander/energy/syreenvault.txt
