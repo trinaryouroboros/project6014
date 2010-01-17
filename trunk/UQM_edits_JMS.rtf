@@ -45,6 +45,7 @@ IN A NUTSHELL:\
 						-Don't consume fuel in Orz space\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 /plandata.c				-Placed the Orz space portal into Alpha Vulpeculae\
+						-Moved some stars around in the list of stars to make them work. All stars must be sorted by their y-coordinate!!\
 /races.h					-Defined Androsyn conversation, Ip and hyperspace encounter percents and encounter ship makeups\
 						-Moved slaverace enums and defines to better places in the lists\
 /save.c					-Stores the information we're in ORZ space\
@@ -52,12 +53,17 @@ IN A NUTSHELL:\
 /sis.h					-Modified saved game summary to store the information of whether we are in orz space\
 /starmap.c				-Star finding business in Orz space\
 /uqmdebug.c				-Some Orz space checks\
+						-Add 10 crew upon pressing debug button. (To make it possible to use lander)\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 \
 /planets/devices.c			-Casters cannot be used in Orz space\
+/planets/gencol.c			-Don't create Ur-quan probe at Vela\
+						-Planet is not slave-shielded anymore\
+						-Create Precursor factory ruins and little background story therein\
 /planets/gensol.c			-Don't create Ur-quan probe at sol\
+						-Removed Fwiffo from Pluto\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-\cf0 /planets/ solarsys.c			-Changes to make 0 planet star systems possible and the star in those accessible as "planet"\
+\cf0 /planets/solarsys.c			-Changes to make 0 planet star systems possible and the star in those accessible as "planet"\
 /planets/pstarmap.c			-Added Orz space check to fuel requirement showing in starmap (0 fuel needed in orz space)\
 \
 /ships/sis_ship/sis_ship.c		-Some Orz space checks\

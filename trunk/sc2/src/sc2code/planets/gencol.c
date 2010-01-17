@@ -69,7 +69,7 @@ GenerateColony (BYTE control)
 			}
 			break;
 		}
-		// JMS: The whole GENERATE_ENERGY case is new here. It's purpose is to create energy blip of the Precursor factory remnants.
+		// JMS: The whole GENERATE_ENERGY case is new here. Its purpose is to create energy blip of the Precursor factory remnants.
 		case GENERATE_ENERGY:
 		{	
 			DWORD rand_val, old_rand;
@@ -130,7 +130,7 @@ GenerateColony (BYTE control)
 						&pSolarSysState->SysInfo, pSolarSysState->pOrbitalDesc
 						);
 				// JMS: This displays the graphics of the Precursor factory remnants
-				// and gives the landing team message upon finding
+				// and gives the landing team message upon finding it.
 				LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
 				pSolarSysState->PlanetSideFrame[1] =
 					CaptureDrawable (LoadGraphic (RUINS_MASK_PMAP_ANIM));
