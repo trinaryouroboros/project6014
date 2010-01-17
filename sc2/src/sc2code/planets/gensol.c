@@ -17,6 +17,7 @@
  */
 
 // JMS 2009: Don't create Ur-quan probe.
+// JMS 2010: Removed Fwiffo from Pluto
 
 #include "build.h"
 #include "gamestr.h"
@@ -63,29 +64,10 @@ static void
 generate_energy_nodes (void)
 {
 				/* Pluto */
-	if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[8])
-	{
-		if (!GET_GAME_STATE (FOUND_PLUTO_SPATHI))
-		{
-			pSolarSysState->SysInfo.PlanetInfo.CurPt.x = 20;
-			pSolarSysState->SysInfo.PlanetInfo.CurPt.y = MAP_HEIGHT - 8;
-			pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
-			pSolarSysState->SysInfo.PlanetInfo.CurType = 2;
-			if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-					& (1L << 0))
-			{
-				SET_GAME_STATE (FOUND_PLUTO_SPATHI, 1);
-				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-						&= ~(1L << 0);
-				((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
-			}
-			else if (pSolarSysState->CurNode == (COUNT)~0)
-				pSolarSysState->CurNode = 1;
-			return;
-		}
-	}
+	// JMS: Removed Fwiffo energy blip from Pluto.
+	
 				/* Earth Moon */
-	else if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
+	if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
 			&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[1]
 			&& !GET_GAME_STATE (MOONBASE_DESTROYED))
 	{
@@ -277,17 +259,7 @@ generate_orbital (void)
 						EARTH_RADIUS * 2999L / 100;
 				break;
 			case 8: /* PLUTO */
-				if (!GET_GAME_STATE (FOUND_PLUTO_SPATHI))
-				{
-					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-					pSolarSysState->PlanetSideFrame[1] =
-							CaptureDrawable (
-							LoadGraphic (SPAPLUTO_MASK_PMAP_ANIM));
-					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-							CaptureStringTable (
-							LoadStringTable (SPAPLUTO_STRTAB));
-				}
-
+				// JMS: Removed Fwiffo stuff.
 				pSolarSysState->SysInfo.PlanetInfo.AtmoDensity = 0;
 				pSolarSysState->SysInfo.PlanetInfo.PlanetDensity = 33;
 				pSolarSysState->SysInfo.PlanetInfo.PlanetRadius = 18;

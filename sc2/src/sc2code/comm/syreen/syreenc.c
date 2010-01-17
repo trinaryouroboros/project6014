@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Cleaned up the comm logic a bit...
+
 #include "comm/commall.h"
 #include "comm/syreen/resinst.h"
 #include "comm/syreen/strings.h"
@@ -215,11 +217,7 @@ AskMenu1 (RESPONSE_REF R)
 		NPCPhrase (WE_DONT_STRAY);
 		DISABLE_PHRASE (roam_stars);
 	}
-
-	Response (spot_you_later, ExitConversation);
-	
-		
-
+			
 	/* Human speech options */
 	
 	if (PHRASE_ENABLED (any_news))
