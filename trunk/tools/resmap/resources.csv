@@ -201,6 +201,7 @@ IPBKGND_MASK_PMAP_ANIM,graphics.obbkgnd,sc2code/igfxres.h,GFXRES,base/nav/obbkgn
 SISIP_MASK_PMAP_ANIM,graphics.sis_ip,sc2code/igfxres.h,GFXRES,base/nav/explorer_ip.ani
 ORBPLAN_MASK_PMAP_ANIM,graphics.orbplan,sc2code/igfxres.h,GFXRES,base/nav/orbplan.ani
 SUN_MASK_PMAP_ANIM,graphics.ip_sun,sc2code/igfxres.h,GFXRES,base/nav/ip_sun.ani
+ORZSPACEPORTAL_MASK_PMAP_ANIM,graphics.ip_orzspaceportal,sc2code/igfxres.h,GFXRES,base/nav/ip_orzspaceportal.ani
 LANDER_MASK_PMAP_ANIM,graphics.lander,sc2code/igfxres.h,GFXRES,base/lander/lander.ani
 QUAKE_MASK_PMAP_ANIM,graphics.quake,sc2code/igfxres.h,GFXRES,base/lander/hazard/quake.ani
 LIGHTNING_MASK_ANIM,graphics.lightnin,sc2code/igfxres.h,GFXRES,base/lander/lightning.ani

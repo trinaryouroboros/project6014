@@ -46,7 +46,7 @@ GenerateOrzSpacePortal (BYTE control)
 				//InitCommunication (SYREEN_CONVERSATION);
 				//pSolarSysState->MenuState.Initialized -= 2;
 				
-				// Thru the rift to other space
+				// Thru the portal to ORZ space
 				GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (QUASI_SPACE_X);
 				GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (QUASI_SPACE_Y);
 				SET_GAME_STATE (ORZ_SPACE_SIDE, 3);

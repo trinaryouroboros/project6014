@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Implemented changes to make 0 planet star systems work
+
 #include "build.h"
 #include "encount.h"
 #include "file.h"

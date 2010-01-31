@@ -15,6 +15,9 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
+// JMS 2009: -Can intersect with suns in 0 planet star systems (e.g. ORZ space portal)
+//			 -Some other shit related to ORZ space portal / 0 planet star systems
+// JMS 2010: -Different gfx for ORZ space portal/sun in interplanetary
 
 #include "colors.h"
 #include "controls.h"
@@ -192,7 +195,18 @@ FreeIPData (void)
 
 void
 LoadIPData (void)
-{
+{	
+	// JMS: ORZ space portal gfx replaces normal sun gfx. 
+	// Originally there was only the statement within else block and it was within the if (SpaceJunkFrame == 0) block.
+	if (CurStarDescPtr->Index==ORZ_SPACE_PORTAL_DEFINED) 
+	{
+		SunFrame = CaptureDrawable (LoadGraphic (ORZSPACEPORTAL_MASK_PMAP_ANIM));
+	}
+	else
+	{
+		SunFrame = CaptureDrawable (LoadGraphic (SUN_MASK_PMAP_ANIM));
+	}
+	
 	if (SpaceJunkFrame == 0)
 	{
 		SpaceJunkFrame = CaptureDrawable (
@@ -203,7 +217,6 @@ LoadIPData (void)
 		OrbitalFrame = CaptureDrawable (
 				LoadGraphic (ORBPLAN_MASK_PMAP_ANIM));
 		SunCMap = CaptureColorMap (LoadColorMap (IPSUN_COLOR_MAP));
-		SunFrame = CaptureDrawable (LoadGraphic (SUN_MASK_PMAP_ANIM));
 
 		SpaceMusic = LoadMusic (IP_MUSIC);
 	}
