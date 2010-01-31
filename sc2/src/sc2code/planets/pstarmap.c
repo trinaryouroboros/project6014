@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Orz space starmap colors and star locations
+
 #include "colors.h"
 #include "controls.h"
 #include "encount.h"

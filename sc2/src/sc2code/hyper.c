@@ -359,7 +359,7 @@ LoadHyperspace (void)
 	SetContext (RadarContext);
 	if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)		// JMS: In ORZ space, radar has its own colors
 		SetContextBackGroundColor (					// Radar foreground (grid) color defined in DrawHyperGrid
-				BUILD_COLOR (MAKE_RGB15 (0x00, 0x0, 0x0E), 0x6C));
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x0E), 0x6C));
 	else
 		SetContextBackGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x6C));
