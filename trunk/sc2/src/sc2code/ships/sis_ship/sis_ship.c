@@ -17,6 +17,7 @@
  */
 
 // JMS 2009: Added Orz space state check to Sis_hyper_preprocess
+// JMS 2010: Red ship gfx in hyperspace, blue in Orz space
 
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
@@ -845,7 +846,13 @@ init_sis (void)
 		new_sis_desc.ship_data.victory_ditty_rsc = NULL_RESOURCE;
 		new_sis_desc.ship_data.ship_sounds_rsc = NULL_RESOURCE;
 
-		new_sis_desc.ship_data.ship_rsc[0] = SIS_HYPER_MASK_PMAP_ANIM;
+		// JMS: Hack: Blue ship in Orz space, red in hyperspace...
+		// Need to use separate set of frames for different colors since
+		// frames PNGs are in RGB instead of indexed color.
+		if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+			new_sis_desc.ship_data.ship_rsc[0] = SIS_ORZ_MASK_PMAP_ANIM;
+		else
+			new_sis_desc.ship_data.ship_rsc[0] = SIS_HYPER_MASK_PMAP_ANIM;
 
 		new_sis_desc.preprocess_func = sis_hyper_preprocess;
 		new_sis_desc.postprocess_func = sis_hyper_postprocess;

@@ -785,6 +785,7 @@ ship.sis_ship.graphics.blas.medium = GFXRES:base/ships/sis_ship/blasmed.ani
 ship.sis_ship.graphics.blas.small = GFXRES:base/ships/sis_ship/blassml.ani
 ship.sis_ship.graphics.captain = GFXRES:base/ships/sis_ship/siscap.ani
 ship.sis_ship.graphics.exphyper = GFXRES:base/ships/explorer/ExpHyper.ani
+ship.sis_ship.graphics.exporz = GFXRES:base/ships/explorer/ExpOrz.ani
 ship.sis_ship.graphics.sis.large = GFXRES:base/ships/sis_ship/sis.big
 ship.sis_ship.graphics.sis.medium = GFXRES:base/ships/sis_ship/sis.med
 ship.sis_ship.graphics.sis.small = GFXRES:base/ships/sis_ship/sis.sml
