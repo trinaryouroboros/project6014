@@ -850,6 +850,7 @@ BLASTER_MED_MASK_PMAP_ANIM,ship.sis_ship.graphics.blas.medium,sc2code/ships/sis_
 BLASTER_SML_MASK_PMAP_ANIM,ship.sis_ship.graphics.blas.small,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/blassml.ani
 SIS_CAPTAIN_MASK_PMAP_ANIM,ship.sis_ship.graphics.captain,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/siscap.ani
 SIS_HYPER_MASK_PMAP_ANIM,ship.sis_ship.graphics.exphyper,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpHyper.ani
+SIS_ORZ_MASK_PMAP_ANIM,ship.sis_ship.graphics.exporz,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpOrz.ani
 ILWRATH_CODE,ship.ilwrath.code,sc2code/ships/ilwrath/icode.h,SHIP,7
 ILWRATH_VICTORY_SONG,ship.ilwrath.ditty,sc2code/ships/ilwrath/imusicre.h,MUSICRES,base/ships/ilwrath/ilwditty.mod
 ILWRATH_RACE_STRINGS,ship.ilwrath.text,sc2code/ships/ilwrath/istrtab.h,STRTAB,base/ships/ilwrath/ilwtext.txt
