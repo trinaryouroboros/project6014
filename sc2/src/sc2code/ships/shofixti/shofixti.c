@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Disabled Tanaka/Katana from the game.
+//			 (Left the code there for reference though.)
+
 #include "ships/ship.h"
 #include "ships/shofixti/resinst.h"
 
@@ -386,8 +389,11 @@ init_shofixti (void)
 	shofixti_desc.cyborg_control.intelligence_func = shofixti_intelligence;
 
 	new_shofixti_desc = shofixti_desc;
-	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_ENCOUNTER
-			&& !GET_GAME_STATE (SHOFIXTI_RECRUITED))
+	
+	// JMS: No more Tanaka/Katana!!
+	//if (LOBYTE (GLOBAL (CurrentActivity)) == IN_ENCOUNTER
+	//		&& !GET_GAME_STATE (SHOFIXTI_RECRUITED))
+	if(0)
 	{
 		// Tanaka/Katana flies in a damaged ship.
 #define NUM_LIMPETS 3

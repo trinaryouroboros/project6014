@@ -11,4 +11,5 @@
 #define SIS_ICON_MASK_PMAP_ANIM "ship.sis_ship.icons"
 #define SIS_MED_MASK_PMAP_ANIM "ship.sis_ship.graphics.sis.medium"
 #define SIS_ORZ_MASK_PMAP_ANIM "ship.sis_ship.graphics.exporz"
+#define SIS_QUASI_MASK_PMAP_ANIM "ship.sis_ship.graphics.expquasi"
 #define SIS_SML_MASK_PMAP_ANIM "ship.sis_ship.graphics.sis.small"
