@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Added viewscreen animu
+
 #include "comm/commall.h"
 #include "comm/shofixt/resinst.h"
 #include "comm/shofixt/strings.h"
@@ -41,7 +43,7 @@ static LOCDATA shofixti_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SHOFIXTI_CONVERSATION_PHRASES, /* PlayerPhrases */
-	12, /* NumAnimations */
+	13, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{
 			5, /* StartIndex */
@@ -138,6 +140,14 @@ static LOCDATA shofixti_desc =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{	// JMS: Viewscreen animation is this one.
+			72, /* StartIndex */
+			14, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, 0, /* FrameRate */
+			ONE_SECOND * 2, ONE_SECOND * 4, /* RestartRate */
 			0, /* BlockMask */
 		},
 
