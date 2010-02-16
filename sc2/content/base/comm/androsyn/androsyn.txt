@@ -191,18 +191,3 @@ I wish it hadn't gone like this for you. Goodbye.
 
 #(GIVE_BLAZER)	chmmr-000.ogg
 We thank you for your kind words, human.
-You cannot rescue us, but we might be able to help you stop the Orz.
-ROR-724224 here used to oversee data storage in our homeworld
-and is in possession of passwords and codes to access the databases.
-Providing you are still able to return and
-find your way to a functioning data terminal
-on our ravaged homeworld you can use these passwords to access a wealth of information
-including the designs of our Blazer starship.
-Since your designers modeled us very accurately after your
-imperfect, yet functioning physiology
-even human pilots should actually be able to operate Blazers after some practice.
-There ARE some nasty, lethal and painful booby-traps
-in the default ship design specifically
-aimed at preventing humans from ever invading a Blazer.
-Be sure to remove these from the designs
-and everything should be peachy.
