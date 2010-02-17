@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Yeaht no longer are hostile upon encountering.
+
 #include "comm/commall.h"
 #include "comm/yehat/resinst.h"
 #include "comm/yehat/strings.h"
@@ -333,14 +335,9 @@ init_yehat_comm (void)
 	yehat_desc.AlienTextBaseline.y = 60;
 	yehat_desc.AlienTextWidth = (SIS_TEXT_WIDTH - 16) * 2 / 3;
 
-	if (LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE)
-	{
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	}
-	else
-	{
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-	}
+	// JMS: Yehat are no longer hostile upon the encountering
+	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	
 	retval = &yehat_desc;
 
 	return (retval);
