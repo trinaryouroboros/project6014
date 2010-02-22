@@ -40,7 +40,7 @@ static LOCDATA commander_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	COMMANDER_CONVERSATION_PHRASES, /* PlayerPhrases */
-	3, /* NumAnimations */
+	2, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{ /* Blink */
 			1, /* StartIndex */

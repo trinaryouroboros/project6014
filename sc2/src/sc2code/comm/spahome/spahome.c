@@ -210,7 +210,7 @@ Intro (void)
 {
 	if (GET_GAME_STATE (SPATHIHOME_MET) == 0)
 	{
-		SET_GAME_STATE (SPATHIHOME_MET, 1);
+		//SET_GAME_STATE (SPATHIHOME_MET, 1);
 		NPCPhrase (WHAT_IS_CYPHER);
 	}
 	Response (huffi_muffi_guffi, ExitConversation);
