@@ -17,7 +17,9 @@
  */
 
 // JMS 2009: -Added new game states for "new" race - humans
-//			 -Added IN_ORZSPACE flage for saved game summaries
+//			 -Added IN_ORZSPACE flag for saved game summaries
+//			 -Added new game state for Vela factory visit
+// JMS 2010: -Added new game state for which ship is the flagship
 
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
@@ -939,6 +941,13 @@ START_GAME_STATE
 
 	// JMS: Vela Precursor factory
 	ADD_GAME_STATE (VELA_FACTORY_VISITED, 1)
+
+	// JMS: Which ship is the flagship
+	ADD_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2)
+			// 0 - Chmmr Explorer
+			// 1 - Precursor tug
+			// 2 - UNUSED
+			// 3 - UNUSED
 
 END_GAME_STATE
 

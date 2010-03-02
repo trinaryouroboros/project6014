@@ -18,6 +18,7 @@
 
 // JMS 2009:- Added Androsynth ship enum 
 //			- Defined Androsynth conversation, Interplanetary and hyperspace encounter percents and encounter ship number limits
+// JMS 2010:- Added ship damage flags to SHIP_INFO structure and the damage definitions 
 
 
 #ifndef _RACES_H
@@ -58,6 +59,18 @@ typedef HLINK HSTARSHIP;
 #define DONT_CHASE        (1 << 12)
 #define PLAYER_CAPTAIN    (1 << 13)
 		/* The protagonist himself is on board. He gets a different color. */
+
+// JMS: Damage flags for a ship
+#define DAMAGE_GAUGE_ENERGY		(1 << 0)
+#define DAMAGE_GAUGE_CREW		(1 << 1)
+#define DAMAGE_GAUGE_CAPTAIN	(1 << 2)
+#define DAMAGE_THRUST			(1 << 3)
+#define DAMAGE_TEMP_WEAPON		(1 << 4)
+#define DAMAGE_TEMP_SPECIAL		(1 << 5)
+#define DAMAGE_TEMP_TURN		(1 << 6)
+#define DAMAGE_7				(1 << 7)
+#define DAMAGE_8				(1 << 8)
+#define DAMAGE_9				(1 << 9)
 
 /* These track the old resource package orderings for the ship resource indices */
 typedef enum
@@ -162,6 +175,10 @@ typedef struct
 	STRING race_strings;
 	FRAME icons;
 	FRAME melee_icon;
+	
+	// JMS: Damage Flags
+	UWORD damage_flags;
+	
 } SHIP_INFO;
 
 typedef struct
@@ -260,7 +277,7 @@ struct STARSHIP
 	BYTE ship_input_state;
 	STATUS_FLAGS cur_status_flags;
 	STATUS_FLAGS old_status_flags;
-
+	
 	HELEMENT hShip;
 	COUNT ShipFacing;
 };

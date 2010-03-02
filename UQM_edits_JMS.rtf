@@ -14,6 +14,7 @@ IN A NUTSHELL:\
 -Some dialogue for Androsynth.\
 -Primitive dialogue for earthlings.\
 -Fixed some bugs with slaverace definitions\
+-Instrument damage. Ships can suffer damage to engines, gauges, etc. from ships.\
 \
 ***************************************************************************************************************************************\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
@@ -43,16 +44,21 @@ IN A NUTSHELL:\
 						-Androsynth sphere of influence infinite in Orz space\
 						-Can't meet melnorme/slylandro in Orz space\
 						-Don't consume fuel in Orz space\
+/misc.c					-Added instrument damage (engine etc. can be damaged by hits)\
+						-Added engine damage function (one of the instrument damages)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 /plandata.c				-Placed the Orz space portal into Alpha Vulpeculae\
 						-Moved some stars around in the list of stars to make them work. All stars must be sorted by their y-coordinate!!\
 						-Made the biggest stars of new star systems "Alphas" as should be.\
 /races.h					-Defined Androsyn conversation, Ip and hyperspace encounter percents and encounter ship makeups\
 						-Moved slaverace enums and defines to better places in the lists\
+						-Instrument damage: Added instrument damage flags. Ship may sustain 10 different damage types\
 /save.c					-Stores the information we're in ORZ space\
+/shipstat.c					-Instrument damage functions: Crew and Energy gauges can be damaged\
 /sis.c						-Shows *Below* in SIS info screen when in Orz space\
 /sis.h					-Modified saved game summary to store the information of whether we are in orz space\
 /starmap.c				-Star finding business in Orz space\
+/tactrans.c					-Instrument damage: Damaged engines emit different colored ion particles\
 /uqmdebug.c				-Some Orz space checks\
 						-Add 10 crew upon pressing debug button. (To make it possible to use lander)\
 \

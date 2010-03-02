@@ -255,6 +255,7 @@ MELEE_SCREEN_PMAP_ANIM,graphics.melebkgd,sc2code/igfxres.h,GFXRES,base/ui/meleeb
 MELEE_PICK_MASK_PMAP_ANIM,graphics.melee,sc2code/igfxres.h,GFXRES,base/ui/melee.ani
 SEGUE_PMAP_ANIM,graphics.segue,sc2code/igfxres.h,GFXRES,base/ui/segue.ani
 SC2_PICK_PMAP_ANIM,graphics.pickship,sc2code/igfxres.h,GFXRES,base/ui/pickship.ani
+BULLETHOLES_PMAP_ANIM,graphics.bulletholes,sc2code/igfxres.h,GFXRES,base/ui/bullet.ani
 RESTART_PMAP_ANIM,graphics.newgame,sc2code/igfxres.h,GFXRES,base/ui/newgame.ani
 MODULES_PMAP_ANIM,graphics.modules,sc2code/igfxres.h,GFXRES,base/ui/modules.ani
 SISMODS_MASK_PMAP_ANIM,graphics.sismods,sc2code/igfxres.h,GFXRES,base/ui/sismodules.ani
@@ -852,6 +853,10 @@ SIS_CAPTAIN_MASK_PMAP_ANIM,ship.sis_ship.graphics.captain,sc2code/ships/sis_ship
 SIS_HYPER_MASK_PMAP_ANIM,ship.sis_ship.graphics.exphyper,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpHyper.ani
 SIS_QUASI_MASK_PMAP_ANIM,ship.sis_ship.graphics.expquasi,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpQuasi.ani
 SIS_ORZ_MASK_PMAP_ANIM,ship.sis_ship.graphics.exporz,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpOrz.ani
+EXP_ICON_MASK_PMAP_ANIM,ship.explorer.icons,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Expicons.ani
+EXP_BIG_MASK_PMAP_ANIM,ship.explorer.graphics.sis.large,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.big
+EXP_MED_MASK_PMAP_ANIM,ship.explorer.graphics.sis.medium,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.med
+EXP_SML_MASK_PMAP_ANIM,ship.explorer.graphics.sis.small,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.sml
 ILWRATH_CODE,ship.ilwrath.code,sc2code/ships/ilwrath/icode.h,SHIP,7
 ILWRATH_VICTORY_SONG,ship.ilwrath.ditty,sc2code/ships/ilwrath/imusicre.h,MUSICRES,base/ships/ilwrath/ilwditty.mod
 ILWRATH_RACE_STRINGS,ship.ilwrath.text,sc2code/ships/ilwrath/istrtab.h,STRTAB,base/ships/ilwrath/ilwtext.txt

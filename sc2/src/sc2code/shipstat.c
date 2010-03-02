@@ -16,12 +16,17 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -If ship's energy gauge is damaged, don't update its graphics
+//			 -If ship's crew gauge is damaged, don't update its graphics
+
 #include "colors.h"
 #include "globdata.h"
 #include "options.h"
 #include "build.h"
 #include "setup.h"
 #include "libs/gfxlib.h"
+
+#include "intel.h"
 
 
 void
@@ -346,7 +351,12 @@ DeltaStatistics (SHIP_INFO *ShipInfoPtr, SIZE crew_delta, SIZE energy_delta)
 					r.corner.x += UNIT_WIDTH + 1;
 					r.corner.y -= UNIT_HEIGHT + 1;
 				}
-				DrawFilledRectangle (&r);
+				// JMS: Don't update human player's crew gauge graphics if gauge is damaged.
+				// Always update computer player's gauges (otherwise computer's damage would only hinder the human player!!)
+				if (PlayerControl[1] & COMPUTER_CONTROL && ShipInfoPtr->ship_flags & BAD_GUY)
+					DrawFilledRectangle (&r);
+				else
+					ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW ? : DrawFilledRectangle (&r);
 			}
 		}
 		else  /* crew_delta < 0 */
@@ -362,7 +372,28 @@ DeltaStatistics (SHIP_INFO *ShipInfoPtr, SIZE crew_delta, SIZE energy_delta)
 					r.corner.x -= UNIT_WIDTH + 1;
 					r.corner.y += UNIT_HEIGHT + 1;
 				}
-				DrawFilledRectangle (&r);
+				// JMS: Don't update human player's crew gauge graphics if gauge is damaged.
+				// Always update computer player's gauges (otherwise computer's damage would only hinder the human player!!)
+				if (PlayerControl[1] & COMPUTER_CONTROL && ShipInfoPtr->ship_flags & BAD_GUY)
+					DrawFilledRectangle (&r);
+				else
+					// Draw bullet hole to signify critical damage
+					if (ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW)
+					{
+						STAMP Stamp;
+						COORD temp_y;
+						
+						temp_y = GAUGE_YOFFS + ((ShipInfoPtr->ship_flags & GOOD_GUY) ?
+										   GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
+			
+						Stamp.origin.y = temp_y - 6;
+						Stamp.origin.x = ENERGY_XOFFS + (STAT_WIDTH >> 1);
+						Stamp.frame = SetAbsFrameIndex (BulletFrame, 1);
+						
+						DrawStamp (&Stamp);
+					}
+					else
+						DrawFilledRectangle (&r);
 			}
 		}
 	
@@ -408,7 +439,13 @@ DeltaStatistics (SHIP_INFO *ShipInfoPtr, SIZE crew_delta, SIZE energy_delta)
 					r.corner.x += UNIT_WIDTH + 1;
 					r.corner.y -= UNIT_HEIGHT + 1;
 				}
-				DrawFilledRectangle (&r);
+				// JMS: Don't update human player's crew gauge graphics if gauge is damaged.
+				// Always update computer player's gauges (otherwise computer's damage would only hinder the human player!!)
+				if (PlayerControl[1] & COMPUTER_CONTROL && ShipInfoPtr->ship_flags & BAD_GUY)
+					DrawFilledRectangle (&r);
+				else
+					ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW ? : DrawFilledRectangle (&r);
+				
 				++ShipInfoPtr->energy_level;
 			} while (--energy_delta);
 		}
@@ -425,7 +462,14 @@ DeltaStatistics (SHIP_INFO *ShipInfoPtr, SIZE crew_delta, SIZE energy_delta)
 					r.corner.x -= UNIT_WIDTH + 1;
 					r.corner.y += UNIT_HEIGHT + 1;
 				}
-				DrawFilledRectangle (&r);
+				
+				// JMS: Don't update human player's crew gauge graphics if gauge is damaged.
+				// Always update computer player's gauges (otherwise computer's damage would only hinder the human player!!)
+				if (PlayerControl[1] & COMPUTER_CONTROL && ShipInfoPtr->ship_flags & BAD_GUY)
+					DrawFilledRectangle (&r);
+				else
+					ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW ? : DrawFilledRectangle (&r);
+				
 				--ShipInfoPtr->energy_level;
 			} while (++energy_delta);
 		}

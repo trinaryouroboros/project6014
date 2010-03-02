@@ -119,6 +119,78 @@ static RACE_DESC sis_desc =
 	0,
 };
 
+// JMS: Explorer ship has its own description here.
+static RACE_DESC exp_desc =
+{
+	{ /* SHIP_INFO */
+		0,
+		30, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		NULL_RESOURCE,
+		EXP_ICON_MASK_PMAP_ANIM,	// JMS: Explorer icon
+		NULL_RESOURCE,
+		NULL, NULL, NULL
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial sphere of influence radius */
+		{ /* Known location (center of SoI) */
+			0, 0,
+		},
+	},
+	{
+		MAX_THRUST,
+		THRUST_INCREMENT,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			EXP_BIG_MASK_PMAP_ANIM,
+			EXP_MED_MASK_PMAP_ANIM,
+			EXP_SML_MASK_PMAP_ANIM,
+		},
+		{
+			BLASTER_BIG_MASK_PMAP_ANIM,
+			BLASTER_MED_MASK_PMAP_ANIM,
+			BLASTER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			SIS_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SIS_VICTORY_SONG,
+		SIS_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		BLASTER_SPEED * BLASTER_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+};
+
+
 static void InitModuleSlots (RACE_DESC *RaceDescPtr,
 		const BYTE *ModuleSlots);
 static void InitDriveSlots (RACE_DESC *RaceDescPtr,
@@ -725,8 +797,13 @@ static void
 InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots)
 {
 	COUNT i;
+	
+	// JMS: Chmmr Explorer has 50 men max crew complement without modules, precursor tug 0 as usual
+	if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0))
+			RaceDescPtr->ship_info.max_crew = EXPLORER_CREW_CAPACITY;
+	else 
+			RaceDescPtr->ship_info.max_crew = 0;
 
-	RaceDescPtr->ship_info.max_crew = 0;
 	num_trackers = 0;
 	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 	{
@@ -829,7 +906,11 @@ init_sis (void)
 	static RACE_DESC new_sis_desc;
 
 	/* copy initial ship settings to new_sis_desc */
-	new_sis_desc = sis_desc;
+	// JMS: Ship selection. If player has Explorer, copy Explorer description to new_sis_desc.
+	if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0))
+		new_sis_desc = exp_desc;
+	else
+		new_sis_desc = sis_desc;
 	
 	new_sis_desc.uninit_func = uninit_sis;
 

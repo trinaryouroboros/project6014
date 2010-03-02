@@ -16,6 +16,7 @@
 #define BOOM_BIG_MASK_PMAP_ANIM "graphics.boobig"
 #define BOOM_MED_MASK_PMAP_ANIM "graphics.boomed"
 #define BOOM_SML_MASK_PMAP_ANIM "graphics.boosml"
+#define BULLETHOLES_PMAP_ANIM "graphics.bulletholes"
 #define BURV_BCS_MASK_PMAP_ANIM "graphics.drutrans"
 #define CANNISTER_MASK_PMAP_ANIM "graphics.lifecan"
 #define CREDITS_BACK_ANIM "credits.background"
