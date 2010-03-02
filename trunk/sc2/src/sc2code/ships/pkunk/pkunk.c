@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Remove instrument damage upon rebirth
+
 #include "ships/ship.h"
 #include "ships/pkunk/resinst.h"
 
@@ -212,6 +214,7 @@ static void
 new_pkunk (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
+	SHIP_INFO *ShipInfoPtr;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	if (!(ElementPtr->state_flags & PLAYER_SHIP))
@@ -255,6 +258,10 @@ new_pkunk (ELEMENT *ElementPtr)
 		ElementPtr->turn_wait = 0;
 		ElementPtr->thrust_wait = 0;
 		ElementPtr->life_span = NORMAL_LIFE;
+		
+		// JMS: Fix instrument damage
+		ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
+		ShipInfoPtr->damage_flags = 0;
 
 		StarShipPtr->ShipFacing = NORMALIZE_FACING (TFB_Random ());
 		ElementPtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.ship;

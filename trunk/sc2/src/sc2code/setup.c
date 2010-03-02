@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Bullet hole gfx frames for melee.
+
 #include "setup.h"
 
 #include "coderes.h"
@@ -60,6 +62,7 @@ FONT TinyFont;
 QUEUE race_q[NUM_PLAYERS];
 FRAME ActivityFrame;
 FRAME StatusFrame;
+FRAME BulletFrame;	// JMS
 FRAME FlagStatFrame;
 FRAME MiscDataFrame;
 FRAME FontGradFrame;
@@ -195,6 +198,11 @@ InitKernel (void)
 
 	StatusFrame = CaptureDrawable (LoadGraphic (STATUS_MASK_PMAP_ANIM));
 	if (StatusFrame == NULL)
+		return FALSE;
+
+	// JMS: Bullet hole gfx for melee
+	BulletFrame = CaptureDrawable (LoadGraphic (BULLETHOLES_PMAP_ANIM));
+	if (BulletFrame == NULL)
 		return FALSE;
 
 	GameStrings = CaptureStringTable (LoadStringTable (STARCON_GAME_STRINGS));

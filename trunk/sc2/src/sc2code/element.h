@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Added extern declaration of do_instrument_damage
+
 #ifndef _ELEMENT_H
 #define _ELEMENT_H
 
@@ -211,6 +213,8 @@ extern void spawn_planet (void);
 extern void spawn_asteroid (ELEMENT *ElementPtr);
 extern void animation_preprocess (ELEMENT *ElementPtr);
 extern void do_damage (ELEMENT *ElementPtr, SIZE damage);
+extern void do_instrument_damage (ELEMENT *ElementPtr, SIZE damage); // JMS
+extern void do_engine_damage (ELEMENT *ElementPtr); // JMS
 extern void collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ELEMENT *ElementPtr1, POINT *pPt1);
 extern void crew_preprocess (ELEMENT *ElementPtr);
@@ -257,7 +261,6 @@ typedef UWORD STATUS_FLAGS;
 #define PLAY_VICTORY_DITTY     (1 << 9)
 
 extern STATUS_FLAGS inertial_thrust (ELEMENT *ElementPtr);
-
 
 #endif /* _ELEMENT_H */
 

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Chmmr Explorer and precursor vessel now have different graphics for ship picking before fight in full game.
+
 #include "build.h"
 #include "colors.h"
 #include "controls.h"
@@ -39,6 +41,9 @@
 #define FLAGSHIP_Y_OFFS 4
 #define FLAGSHIP_WIDTH 22
 #define FLAGSHIP_HEIGHT 48
+#define FLAGSHIP_EXPLORER_WIDTH 22
+#define FLAGSHIP_EXPLORER_HEIGHT 36
+#define FLAGSHIP_EXPLORER_Y_OFFS 16
 
 static BOOLEAN
 DoPickBattleShip (MENU_STATE *pMS)
@@ -116,10 +121,19 @@ ChangeSelection:
 			{
 				pMS->flash_rect0.corner.x =
 						pMS->flash_rect1.corner.x - 2 + FLAGSHIP_X_OFFS;
-				pMS->flash_rect0.corner.y =
-						pMS->flash_rect1.corner.y - 2 + FLAGSHIP_Y_OFFS;
-				pMS->flash_rect0.extent.width = FLAGSHIP_WIDTH + 4;
-				pMS->flash_rect0.extent.height = FLAGSHIP_HEIGHT + 4;
+				
+				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0) {
+					pMS->flash_rect0.corner.y =
+					pMS->flash_rect1.corner.y - 2 + FLAGSHIP_EXPLORER_Y_OFFS;
+					pMS->flash_rect0.extent.width = FLAGSHIP_EXPLORER_WIDTH + 4;
+					pMS->flash_rect0.extent.height = FLAGSHIP_EXPLORER_HEIGHT + 4;
+				}
+				else {
+					pMS->flash_rect0.corner.y =
+					pMS->flash_rect1.corner.y - 2 + FLAGSHIP_Y_OFFS;
+					pMS->flash_rect0.extent.width = FLAGSHIP_WIDTH + 4;
+					pMS->flash_rect0.extent.height = FLAGSHIP_HEIGHT + 4;
+				}
 
 				hBattleShip = GetTailLink (&race_q[0]); /* Flagship */
 			}
@@ -460,6 +474,11 @@ DrawArmadaPickShip (BOOLEAN draw_salvage_frame, RECT *pPickRect)
 	BatchGraphics ();
 
 	s.frame = PickFrame;
+	
+	// JMS: Correct graphics for ship picking in full game before fight
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+		s.frame = IncFrameIndex (s.frame);
+	
 	SetFrameHot (s.frame, MAKE_HOT_SPOT (0, 0));
 	GetFrameRect (s.frame, &pick_r);
 	GetContextClipRect (&r);
@@ -477,6 +496,11 @@ DrawArmadaPickShip (BOOLEAN draw_salvage_frame, RECT *pPickRect)
 		s.origin.x -= r.extent.width >> 1;
 		s.origin.y = pick_r.corner.y - (r.extent.height >> 1);
 		DrawStamp (&s);
+		
+		// JMS: Correct graphics for ship picking in full game before fight
+		if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==1)
+			s.frame = DecFrameIndex (s.frame);
+		
 		s.frame = DecFrameIndex (s.frame);
 		pick_r.corner.y = s.origin.y + r.extent.height;
 
