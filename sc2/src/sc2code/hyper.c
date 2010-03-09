@@ -499,18 +499,18 @@ unhyper_transition (ELEMENT *ElementPtr)
 				if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
 				{
 					POINT orz_pt;
-					
+					COUNT orz_index;
+
+					POINT orz_portal_pt[] =
+					{
+						{8654, 8587}, // Exit from Orz space birngs ship to hyperspace coords 100.0x 100.0y
+					};
+
 					GLOBAL (autopilot.x) = ~0;
 					GLOBAL (autopilot.y) = ~0;
 					
 					ElementToUniverse (ElementPtr, &orz_pt);
 					CurStarDescPtr = FindStar (NULL, &orz_pt, 5, 5);
-					
-					COUNT orz_index;
-					POINT orz_portal_pt[] =
-					{
-						{8654, 8587}, // Exit from Orz space birngs ship to hyperspace coords 100.0x 100.0y
-					};
 					
 					orz_index = CurStarDescPtr
 					- &star_array[NUM_SOLAR_SYSTEMS + 15 + 2 +1]; // JMS: Number of solar systems + 1 + number of vortices + 1  
@@ -1546,10 +1546,12 @@ SeedUniverse (void)
 						&& (hHyperSpaceElement =
 						AllocHyperElement (&SD[i])) != 0)
 				{
+					int which_spaces_star_gfx;
+					
 					LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
 					
 					// JMS: Orzspace element graphics
-					int which_spaces_star_gfx;
+					
 					if (GET_GAME_STATE (ORZ_SPACE_SIDE))
 						which_spaces_star_gfx = 3;
 					else 
@@ -1598,13 +1600,14 @@ SeedUniverse (void)
 					&& (hHyperSpaceElement = AllocHyperElement (SDPtr)) != 0)
 			{
 				BYTE star_type;
-
+				int which_spaces_star_gfx;
+				
 				star_type = SDPtr->Type;
 
 				LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
 				
 				// DEBUG BY JMS: ORZ space element gfx
-				int which_spaces_star_gfx;
+				
 				if (GET_GAME_STATE (ORZ_SPACE_SIDE))
 					which_spaces_star_gfx = 3;
 				else 
