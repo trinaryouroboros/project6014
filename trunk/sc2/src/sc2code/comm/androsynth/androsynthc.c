@@ -256,7 +256,7 @@ init_androsynth_comm (void)
 	androsynth_desc.AlienTextBaseline.y = 0;
 	androsynth_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
-	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	SET_GAME_STATE (BATTLE_SEGUE, 1);
 	
 	retval = &androsynth_desc;
 
