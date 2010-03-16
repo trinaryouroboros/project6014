@@ -59,7 +59,7 @@ static RACE_DESC sis_desc =
 		NULL_RESOURCE,
 		SIS_ICON_MASK_PMAP_ANIM,
 		NULL_RESOURCE,
-		NULL, NULL, NULL
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial sphere of influence radius */

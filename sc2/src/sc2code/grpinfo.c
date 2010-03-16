@@ -255,7 +255,7 @@ BuildGroups (void)
 	BYTE HomeWorld[] =
 	{
 		0,                /* ARILOU_SHIP */
-		0,                /* CHMMR_SHIP */
+		CHMMR_DEFINED,    /* CHMMR_SHIP */
 		0,                /* HUMAN_SHIP */
 		ORZ_DEFINED,      /* ORZ_SHIP */
 		PKUNK_DEFINED,    /* PKUNK_SHIP */

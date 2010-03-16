@@ -51,7 +51,7 @@ static RACE_DESC chmmr_desc =
 		CHMMR_RACE_STRINGS,
 		CHMMR_ICON_MASK_PMAP_ANIM,
 		CHMMR_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
 		1000 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */

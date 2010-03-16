@@ -54,7 +54,7 @@ static RACE_DESC chenjesu_desc =
 		CHENJESU_RACE_STRINGS,
 		CHENJESU_ICON_MASK_PMAP_ANIM,
 		CHENJESU_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial sphere of influence radius */

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Added Chmmr to starbase
+
 #include "build.h"
 #include "encount.h"
 #include "globdata.h"
@@ -80,7 +82,12 @@ GenerateChmmr (BYTE control)
 			else if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[1]
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 			{
-				RECT r;
+				// JMS: The Chmmr reside in starbase
+				pSolarSysState->MenuState.Initialized += 2;
+				InitCommunication (CHMMR_CONVERSATION);
+				pSolarSysState->MenuState.Initialized -= 2;
+				break;
+				/*RECT r;
 
 				LockMutex (GraphicsLock);
 
@@ -111,7 +118,7 @@ GenerateChmmr (BYTE control)
 				FreeLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
 
 				UnlockMutex (GraphicsLock);
-				break;
+				break;*/
 			}
 		default:
 			GenerateRandomIP (control);

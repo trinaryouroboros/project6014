@@ -52,7 +52,7 @@ static RACE_DESC vux_desc =
 		VUX_RACE_STRINGS,
 		VUX_ICON_MASK_PMAP_ANIM,
 		VUX_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial SoI radius */

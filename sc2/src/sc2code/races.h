@@ -61,16 +61,17 @@ typedef HLINK HSTARSHIP;
 		/* The protagonist himself is on board. He gets a different color. */
 
 // JMS: Damage flags for a ship
-#define DAMAGE_GAUGE_ENERGY		(1 << 0)
-#define DAMAGE_GAUGE_CREW		(1 << 1)
-#define DAMAGE_GAUGE_CAPTAIN	(1 << 2)
-#define DAMAGE_THRUST			(1 << 3)
-#define DAMAGE_TEMP_WEAPON		(1 << 4)
-#define DAMAGE_TEMP_SPECIAL		(1 << 5)
-#define DAMAGE_TEMP_TURN		(1 << 6)
-#define DAMAGE_7				(1 << 7)
+#define SHIP_IS_NOT_DAMAGED		(1 << 0)
+#define DAMAGE_GAUGE_ENERGY		(1 << 1)
+#define DAMAGE_GAUGE_CREW		(1 << 2)
+#define DAMAGE_GAUGE_CAPTAIN	(1 << 3)
+#define DAMAGE_THRUST			(1 << 4)
+#define DAMAGE_TEMP_WEAPON		(1 << 5)
+#define DAMAGE_TEMP_SPECIAL		(1 << 6)
+#define DAMAGE_TEMP_TURN		(1 << 7)
 #define DAMAGE_8				(1 << 8)
 #define DAMAGE_9				(1 << 9)
+
 
 /* These track the old resource package orderings for the ship resource indices */
 typedef enum

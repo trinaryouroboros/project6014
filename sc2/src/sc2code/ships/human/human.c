@@ -51,7 +51,7 @@ static RACE_DESC human_desc =
 		HUMAN_RACE_STRINGS,
 		HUMAN_ICON_MASK_PMAP_ANIM,
 		HUMAN_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
 		400 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */

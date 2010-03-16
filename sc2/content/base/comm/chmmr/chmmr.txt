@@ -9,7 +9,7 @@ Yes, I just don't have it on me right now.
 YOU MUST BRING IT HERE. THE CHMMR HAVE THE CAPACITY TO ANALYSE ITS MEANING.
 
 #(not_yet)
-Er not yet actually, where is it again?
+Err, not yet actually, where is it again?
 
 #(SEARCH_FOR_IT)
 BETA XXX. WE SUGGEST YOU RETURN THERE AND SEARCH THE STAR SYSTEM THOROUGHLY FOR IT.
@@ -97,10 +97,10 @@ EARTHLING, YOU KNOW LITTLE ABOUT WHAT IS NECESSARY TO PROTECT YOUSELF FROM THE T
 THE MYCON AND VUX WOULD NOT THINK TWICE ABOUT WIPING OUT HUMANITY AND THE OTHER ALLIANCE RACES.
 THEIR PAST ACTIONS PROVE THIS. IT IS BECAUSE THEY ARE UNDER A SLAVE SHIELD THAT THEY CANNOT HARM YOU.
 THE CHMMR DRAW ON THE ACCUMULATED WISDOM OF CHENJESU AND MMRHRMRMR.
-THERE IS LITTLE REASON FOR YOU TO QUESTION
+THERE IS LITTLE REASON FOR YOU TO QUESTION.
 
 #(you_know_best)
-We'll you know best!
+Well, you know best!
 
 #(no_race_evil)
 No race is purely evil, their actions are a consequence of their environment. Perhaps The Alliance should do more for the VUX and Mycon. Now that the Ur-Quan are defeated they are no longer a threat.
@@ -114,4 +114,4 @@ THIS CONVERSATION SERVES NO PURPOSE. YOU DO NOT SPEAK ON BEHALF OF EARTH.
 DO YOU HAVE FURTHER QUESTIONS EARTHLING?
 
 #(no_more_questions)
-No, that's all
+No, that's all.
