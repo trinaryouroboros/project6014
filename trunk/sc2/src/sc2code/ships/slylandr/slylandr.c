@@ -49,7 +49,7 @@ static RACE_DESC slylandro_desc =
 		SLYLANDRO_RACE_STRINGS,
 		SLYLANDRO_ICON_MASK_PMAP_ANIM,
 		SLYLANDRO_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial sphere of influence radius */

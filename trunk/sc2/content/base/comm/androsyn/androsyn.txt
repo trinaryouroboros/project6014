@@ -1,8 +1,8 @@
 #(NOT_DONE_YET)		chmmr-000.ogg
 We are the truespace Androsynth and
 we are not programmed yet!
-Go visit our cousins in ORZ space
-you'll love them for sure!
+You know, you too can help and
+contribute to this game!
 
 #(INIT_SPACE_HELLO)	chmmr-000.ogg
 So, it got you too.
@@ -22,12 +22,12 @@ We will. Forever.
 Huh, got us? What are you talking about?
 
 #(HUH_RESPONSE)	chmmr-000.ogg
-I once thought there was no hatred as passionate as ours
+We once thought there was no hatred as passionate as ours
 towards you - our creators, our subduers. Our slavers.
-Ever since our *assimilation* I dreamed of the satisfaction
+Ever since our *assimilation* we dreamed of the satisfaction
 that one day, perhaps, you too might share our fate.
-But now that you're here I am perplexed by my reaction.
-I find it a comfort in wretchedness to have companions in woe.
+But now that you're here we are perplexed by our reaction.
+We find it a comfort in wretchedness to have companions in woe.
 
 #(angry_at_hello)
 Androsynth! I don't know what you're doing here, but you better watch it. We've got some heavy guns pointing at you.
@@ -66,13 +66,13 @@ Whatever you're babbling of, I know this much: Your ilk can't be trusted. Prepar
 That's eerie. We will remain peaceful as long as you will. What IS this place exactly?
 
 #(WILL_COME_TO_YOU)	chmmr-000.ogg
-The damage is done. It will come to you.
+The damage is done. It will come to you
 Real soon.
 
 #(IN_ORZ)	chmmr-000.ogg
 A place we should have never found.
 Memories of the past are getting scarce to us,
-but I'll try to recollect what once was.
+but we'll try to recollect what once was.
 After our flight from your oppression and
 joining the hierarchy, we invested heavily
 in technological research with a single ambition: 
@@ -86,7 +86,7 @@ we were at our pinnacle.
 We succeeded, opening a portal to another dimension.
 We assume similar experiments lead you here.
 But, instead of finding something,
-something found you.
+something found us.
 To be exact, this "dimension" is not where the Orz live.
 This dimension IS the Orz.
 
@@ -101,7 +101,6 @@ It could well exist there in a
 less tangible form if it chose to.
 But what we understand of it, that is one of its *time jokes*,
 masquerading to resemble its environment.
-An inter-dimensional chameleon dressing into the skin of its prey.
 What you perceive as Orz in your dimension
 are made of the atoms and molecules that
 used to compose the bodies of Androsynth.
@@ -131,7 +130,7 @@ resemble nautical lifeforms we are not sure of.
 Perhaps their appearance is a reflection of
 what Orz looked like in early stages of its evolution.
 Perhaps it is an echo of one of the species it has *assimilated*.
-From time to time we can hear those beings,
+From time to time we can hear those other beings,
 but most of them are too alien for us to even try to understand.
 They are locked in their own sections,
 trapped like us.
@@ -162,7 +161,7 @@ I'd rather not tell you. It might hear us, you know.
 We have a protective device that allows us to travel here.
 
 #(KICKASS_RESPONSE)	chmmr-000.ogg
-I see in some ways your species has changed surprisingly little.
+We see in some ways your species has changed surprisingly little.
 Still trying to mask your self-doubt and fears.
 
 #(RATHER_NOT_TELL_RESPONSE)	chmmr-000.ogg
@@ -178,12 +177,12 @@ you should be very cautious while in it.
 Even if it is now ignoring you, it can
 and will catch you if it *smells* you.
 It strokes its realm with its fingers.
-I believe these fingers will look different from us to your eyes. 
+We believe these fingers will look different from us to your eyes. 
 If you notice one, escape it if you value your life as it is! 
 If it catches you, you will become like us, and perhaps
 the rest of your humankind as well
 once it *smells* how you are built, mentally and physically.
-I do not know what you hope to find from here
+We do not know what you hope to find from here
 but you really should leave, and fast.
 
 #(i_wish_goodbye)

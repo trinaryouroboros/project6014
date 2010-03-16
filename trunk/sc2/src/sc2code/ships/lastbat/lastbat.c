@@ -54,7 +54,7 @@ static RACE_DESC samatra_desc =
 		NULL_RESOURCE,
 		NULL_RESOURCE,
 		NULL_RESOURCE,
-		NULL, NULL, NULL
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial sphere of influence radius */

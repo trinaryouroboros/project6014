@@ -51,7 +51,7 @@ static RACE_DESC black_urquan_desc =
 		KOHR_AH_RACE_STRINGS,
 		KOHR_AH_ICON_MASK_PMAP_ANIM,
 		KOHR_AH_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial SoI radius */

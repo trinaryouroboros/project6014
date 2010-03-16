@@ -355,7 +355,7 @@ DeltaStatistics (SHIP_INFO *ShipInfoPtr, SIZE crew_delta, SIZE energy_delta)
 				// Always update computer player's gauges (otherwise computer's damage would only hinder the human player!!)
 				if (PlayerControl[1] & COMPUTER_CONTROL && ShipInfoPtr->ship_flags & BAD_GUY)
 					DrawFilledRectangle (&r);
-				else if (ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW)
+				else if (!(ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW))
 					DrawFilledRectangle (&r);
 			}
 		}
@@ -443,7 +443,7 @@ DeltaStatistics (SHIP_INFO *ShipInfoPtr, SIZE crew_delta, SIZE energy_delta)
 				// Always update computer player's gauges (otherwise computer's damage would only hinder the human player!!)
 				if (PlayerControl[1] & COMPUTER_CONTROL && ShipInfoPtr->ship_flags & BAD_GUY)
 					DrawFilledRectangle (&r);
-				else if (ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW)
+				else if (!(ShipInfoPtr->damage_flags & DAMAGE_GAUGE_ENERGY))
 					DrawFilledRectangle (&r);
 				
 				++ShipInfoPtr->energy_level;
@@ -467,7 +467,7 @@ DeltaStatistics (SHIP_INFO *ShipInfoPtr, SIZE crew_delta, SIZE energy_delta)
 				// Always update computer player's gauges (otherwise computer's damage would only hinder the human player!!)
 				if (PlayerControl[1] & COMPUTER_CONTROL && ShipInfoPtr->ship_flags & BAD_GUY)
 					DrawFilledRectangle (&r);
-				else if (ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW)
+				else if (!(ShipInfoPtr->damage_flags & DAMAGE_GAUGE_ENERGY))
 					DrawFilledRectangle (&r);
 				
 				--ShipInfoPtr->energy_level;
