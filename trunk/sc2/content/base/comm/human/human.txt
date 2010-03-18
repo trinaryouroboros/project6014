@@ -1,3 +1,98 @@
+#(SPACE_HELLO_1)		chmmr-000.ogg
+Greetings. This is captain Duncan of SC-37 Vanguard.
+How can we be of assistance?
+
+#(SPACE_HELLO_2)		chmmr-000.ogg
+Hello, captain. Welcome back to home turf.
+Anything we can assist you with?
+
+#(SPACE_HELLO_3)		chmmr-000.ogg
+Yes, captain, how can we help you?
+
+#(ask_news)
+Got any hot news from this side of the galaxy?
+
+#(keep_up_goodbye)
+Keep up the good work, guys. See you later!
+
+#(short_on_fuel)
+You wouldn't happen to have any extra fuel with you? We're running pretty lean.
+
+#(spare_nukes)
+Would you have some old nukes to spare?
+
+#(NEWS_1)			chmmr-000.ogg
+Not much, mainly patrolling the quadrant and escorting trade ships
+in case some Kohr-Ah showed up.
+Personally, I wish UN allocated more resources for the fleet
+The long range of our missiles complements the devastating capabilities of
+Avatar ships pretty nicely!
+
+#(NEWS_2)			chmmr-000.ogg
+There's some buzz in the air, captain.
+Last week we lost contact with a cruiser returning
+from an escort expedition to Corvi. The last we heard of her
+was routine radio traffic near Tauri constellation.
+After that, she just vanished. No distress signal, no nothing.
+Maybe it's just a malfunction, but I don't know...
+The HQ has sent a patrol to investigate, it's still enroute.
+
+#(NEWS_3)			chmmr-000.ogg
+The patrol that was sent after the missing cruiser
+found no signs of the ship.
+Some say the Kohr-Ah jumped them, but I'm not sure
+Usually those black bastards have given us plenty of time to call for back-up.
+You see, they still act like they had
+the same power as in the bad old days.
+If you ask me, I think it was someone else
+like someone with a cloaking device.
+
+#(NEWS_4)			chmmr-000.ogg
+Things have quieted down quite a bit.
+Lately we've just been sitting idle,
+waiting for an assignment to Betelgeuse.
+
+#(NEWS_5)			chmmr-000.ogg
+Twiddling thumbs, babysitting cargo ships. Not much has happened in the past few days.
+
+#(FUEL_1)			chmmr-000.ogg
+I'm sorry, captain, but the sheer volume of your Explorer ship
+makes it pretty pointless to transfer from our limited reserves.
+
+#(FUEL_2)			chmmr-000.ogg
+Regrettably your vessel is way too big for our fuel to be of any real help.
+
+#(FUEL_3)			chmmr-000.ogg
+Oh, come on! The whole tank of this cruiser
+wouldn't move that barge of yours an inch.
+
+#(NUKES_QUESTION)		chmmr-000.ogg
+...Are you serious?
+
+#(serious)
+Dead serious.
+
+#(joking)
+Just horsing around! Lighten up, buddy!
+
+#(NUKES_SERIOUS)	chmmr-000.ogg
+Hmm... Yeah. Why not?
+Why not give you some military-grade nuclear missiles,
+face a court martial, get demoted, lose my job,
+and die in a gutter somewhere in eastern Kansas!
+
+#(NUKES_JOKING)		chmmr-000.ogg
+Hmm. These are no laughing matters. We're still in a state of war, you know.
+
+#(GOODBYE_CAPTAIN_1)
+Until next time.
+
+#(GOODBYE_CAPTAIN_2)
+You better watch your back, it's still pretty hostile out there.
+
+#(GOODBYE_CAPTAIN_3)
+Take care, captain.
+
 #(NEUTRAL_SPACE_HELLO_1)	chmmr-000.ogg
 Friend human. You are hereby cordially invited
 to a bloody duel to the death via an impromptu

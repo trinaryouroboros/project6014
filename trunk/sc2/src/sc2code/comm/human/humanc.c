@@ -84,21 +84,126 @@ static LOCDATA human_desc =
 };
 
 static void
+NukesConversation (RESPONSE_REF R);
+
+static void
 ExitConversation (RESPONSE_REF R)
 {
+	BYTE NumVisits;
+	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
-
-	if (PLAYER_SAID (R, yessiree))
+	
+	NumVisits= GET_GAME_STATE (HUMAN_VISITS);
+	
+	switch (NumVisits++)
 	{
-		SET_GAME_STATE (HUMAN_HOSTILE, 1);
-		NPCPhrase (MADE_MY_DAY);
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
+		case 0:
+			NPCPhrase (GOODBYE_CAPTAIN_1);
+			break;
+		case 1:
+			NPCPhrase (GOODBYE_CAPTAIN_2);
+			break;
+		case 2:
+			NPCPhrase (GOODBYE_CAPTAIN_3);
+			--NumVisits;
+			--NumVisits;
+			break;
 	}
-	else if (PLAYER_SAID (R, nonono))
+	
+	SET_GAME_STATE (HUMAN_VISITS, NumVisits);
+}
+
+static void
+HumanConversationMain (RESPONSE_REF R)
+{
+	BYTE NumVisits;
+	
+	if (PLAYER_SAID (R, ask_news))
 	{
-		NPCPhrase (MADE_WOOD);
-		SET_GAME_STATE (HUMAN_HOSTILE, 0);
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
+		NumVisits = GET_GAME_STATE (HUMAN_NEWS);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (NEWS_1);
+				break;
+			case 1:
+				NPCPhrase (NEWS_2);
+				break;
+			case 2:
+				NPCPhrase (NEWS_3);
+				break;
+			case 3:
+				NPCPhrase (NEWS_4);
+				break;
+			case 4:
+				NPCPhrase (NEWS_5);
+				NumVisits--;
+				break;
+		}
+		
+		SET_GAME_STATE (HUMAN_NEWS, NumVisits);
+		DISABLE_PHRASE (ask_news);
+	}
+	
+	if (PLAYER_SAID (R, short_on_fuel))
+	{
+		NumVisits = GET_GAME_STATE (HUMAN_FUEL_INFO);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (FUEL_1);
+				break;
+			case 1:
+				NPCPhrase (FUEL_2);
+				break;
+			case 2:
+				NPCPhrase (FUEL_3);
+				NumVisits=0;
+				break;
+		}
+		
+		SET_GAME_STATE (HUMAN_FUEL_INFO, NumVisits);
+		DISABLE_PHRASE (short_on_fuel);
+	}
+	
+	if (PLAYER_SAID (R, serious) || PLAYER_SAID (R, joking))
+	{
+		if (PLAYER_SAID (R, serious))
+			NPCPhrase (NUKES_SERIOUS);
+		if (PLAYER_SAID (R, joking))
+			NPCPhrase (NUKES_JOKING);
+		
+		SET_GAME_STATE (HUMAN_NUKES_DONE, 1);
+	}
+	
+	if (PHRASE_ENABLED (ask_news))
+	{
+		Response (ask_news, HumanConversationMain);
+	}
+	
+	if (PHRASE_ENABLED (short_on_fuel))
+	{
+		Response (short_on_fuel, HumanConversationMain);
+	}
+	
+	if (PHRASE_ENABLED (spare_nukes) && !GET_GAME_STATE (HUMAN_NUKES_DONE))
+	{
+		Response (spare_nukes, NukesConversation);
+	}
+	
+	Response (keep_up_goodbye, ExitConversation);
+}
+
+static void
+NukesConversation (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, spare_nukes))
+	{
+		NPCPhrase (NUKES_QUESTION);
+		Response (serious, HumanConversationMain);
+		Response (joking, HumanConversationMain);
+		
+		DISABLE_PHRASE (spare_nukes);
 	}
 }
 
@@ -107,46 +212,22 @@ Intro (void)
 {
 	BYTE NumVisits;
 	
-	if (!GET_GAME_STATE(HUMAN_MET))
+	NumVisits = GET_GAME_STATE (HUMAN_VISITS);
+	switch (NumVisits)
 	{
-		SET_GAME_STATE(HUMAN_MET,1);
+		case 0:
+			NPCPhrase (SPACE_HELLO_1);
+			break;
+		case 1:
+			NPCPhrase (SPACE_HELLO_2);
+			break;
+		case 2:
+			NPCPhrase (SPACE_HELLO_3);
+			break;
 	}
 	
-	if (GET_GAME_STATE (HUMAN_HOSTILE))
-	{
-		NumVisits = GET_GAME_STATE (HUMAN_VISITS);
-		switch (NumVisits++)
-		{
-			case 0:
-				NPCPhrase (HOSTILE_SPACE_HELLO_1);
-				break;
-			case 1:
-				NPCPhrase (HOSTILE_SPACE_HELLO_2);
-				NumVisits=0;
-				break;
-		}
-		SET_GAME_STATE (HUMAN_VISITS, NumVisits);
-		Response (yessiree, ExitConversation);
-		Response (nonono, ExitConversation);
-	}
-	
-	else
-	{
-		NumVisits = GET_GAME_STATE (HUMAN_VISITS);
-		switch (NumVisits++)
-		{
-			case 0:
-				NPCPhrase (NEUTRAL_SPACE_HELLO_1);
-				break;
-			case 1:
-				NPCPhrase (NEUTRAL_SPACE_HELLO_2);
-				NumVisits=0;
-				break;
-		}
-		SET_GAME_STATE (HUMAN_VISITS, NumVisits);
-		Response (yessiree, ExitConversation);
-		Response (nonono, ExitConversation);
-	}
+	HumanConversationMain ((RESPONSE_REF)0);
+
 }
 
 static COUNT

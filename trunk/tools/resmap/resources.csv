@@ -263,6 +263,7 @@ OUTFIT_PMAP_ANIM,graphics.outfit,sc2code/igfxres.h,GFXRES,base/ui/outfit.ani
 SISBLU_MASK_ANIM,graphics.sisblu,sc2code/igfxres.h,GFXRES,base/ui/sisblueprint.ani
 SHIPYARD_PMAP_ANIM,graphics.shipyard,sc2code/igfxres.h,GFXRES,base/ui/shipyard.ani
 STARBASE_ANIM,graphics.starbase,sc2code/igfxres.h,GFXRES,base/ui/starbase.ani
+STARBASE_PROCYON_ANIM,graphics.starbase_procyon,sc2code/igfxres.h,GFXRES,base/ui/starbase_procyon.ani
 SAMATRA_BIG_MASK_PMAP_ANIM,planet.samatra.large,sc2code/igfxres.h,GFXRES,base/planets/sam__big.ani
 SHIELDED_BIG_MASK_PMAP_ANIM,planet.slaveshield.large,sc2code/igfxres.h,GFXRES,base/planets/shie_big.ani
 SHIELDED_MED_MASK_PMAP_ANIM,planet.slaveshield.medium,sc2code/igfxres.h,GFXRES,base/planets/shie_med.ani
@@ -577,10 +578,10 @@ HUMAN_FONT,comm.human.font,sc2code/comm/human/ifontres.h,FONTRES,base/fonts/play
 HUMAN_COLOR_MAP,comm.human.colortable,sc2code/comm/human/istrtab.h,BINTAB,base/comm/commander/commander.ct
 HUMAN_PMAP_ANIM,comm.human.graphics,sc2code/comm/human/igfxres.h,GFXRES,base/comm/commander/commander.ani
 ANDROSYNTH_CONVERSATION_PHRASES,comm.androsyn.dialogue,sc2code/comm/androsynth/istrtab.h,CONVERSATION,base/comm/androsyn/androsyn.txt
-ANDROSYNTH_MUSIC,comm.androsyn.music,sc2code/comm/androsynth/imusicre.h,MUSICRES,base/comm/yehat/yehat.mod
+ANDROSYNTH_MUSIC,comm.androsyn.music,sc2code/comm/androsynth/imusicre.h,MUSICRES,base/comm/androsyn/androsyn.ogg
 ANDROSYNTH_FONT,comm.androsyn.font,sc2code/comm/androsynth/ifontres.h,FONTRES,base/fonts/player.fon
 ANDROSYNTH_COLOR_MAP,comm.androsyn.colortable,sc2code/comm/androsynth/istrtab.h,BINTAB,base/comm/commander/commander.ct
-ANDROSYNTH_PMAP_ANIM,comm.androsyn.graphics,sc2code/comm/androsynth/igfxres.h,GFXRES,base/comm/commander/commander.ani
+ANDROSYNTH_PMAP_ANIM,comm.androsyn.graphics,sc2code/comm/androsynth/igfxres.h,GFXRES,base/comm/androsyn/androsyn.ani
 THRADD_MUSIC,comm.thraddash.music,sc2code/comm/thradd/imusicre.h,MUSICRES,base/comm/thraddash/thraddash.mod
 THRADD_FONT,comm.thraddash.font,sc2code/comm/thradd/ifontres.h,FONTRES,base/fonts/thraddash.fon
 THRADD_CONVERSATION_PHRASES,comm.thraddash.dialogue,sc2code/comm/thradd/istrtab.h,CONVERSATION,base/comm/thraddash/thraddash.txt

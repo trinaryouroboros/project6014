@@ -4,23 +4,27 @@
 \paperw11900\paperh16840\margl1440\margr1440\vieww18480\viewh12640\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 
-\f0\fs24 \cf0 UQM edits by JMS 15.2.2010\
+\f0\fs24 \cf0 UQM edits by JMS 17.3.2010\
 \
 IN A NUTSHELL:\
 -Alpha Vulpeculae (865.4:858.7) with 0 planets and portal to orz space in the sun (ORZ_SPACE_PORTAL_DEFINED).\
 -Orz space. Blue gfx. Some new gfx therein.\
--Added Androsynths to Orz space. Infinite sphere of influence there. Also added very basic Androsynth in truespace.\
+-Added Androsynth to Orz space. Infinite sphere of influence there. Also added very basic Androsynth in truespace.\
 -Added Orz to Orz space. Infinite sphere of influence there and different npcship spoor gfx.\
 -Some dialogue for Androsynth.\
 -Primitive dialogue for earthlings.\
 -Fixed some bugs with slaverace definitions\
 -Instrument damage. Ships can suffer damage to engines, gauges, etc. from ships.\
+-Chmmr now reside on their starbase also. Starbase fully functional, just like at Sol.\
+-Chmmr Explorer ship usable in melee.\
 \
 ***************************************************************************************************************************************\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 EDITED FILES:\
 \
 /battle.c					-Play Orzspace music in orz space\
+/comm.c					-Commented out a line related to chmmrs in RaceCommunication to avoid vanishing avatars after encounter in interplanetary.\
+						-Some changes to InitCommunication to remove bugs from fighting against Chmmr\
 /commglue.c 				-Added hooks for Earhtling ship and Androsynth dialogue screens\
 /commglue.h				-Added earthling ship and Androsynth dialogue enum and extern locdata\
 /encount.c				-"Encounter in *Below*" text, if encounter ship group in Orz space\
