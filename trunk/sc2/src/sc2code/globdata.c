@@ -16,13 +16,16 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: Added maximum number of races into initSIS function to facilitate Androsynth into the game.
+// JMS 2009: Added maximum number of races into InitSIS function to facilitate Androsynth into the game.
 // It is very important to remember to update this number of races here when adding races to the game, otherwise
 // the races won't show up in the game AND the defines and enums in races.h will have quirky side-effects.
 //
 // Originally the max number of races was defined by KOHR_AH_ID and some constant numbers.
 // Max num of races is now defined by CHENJESU_ID plus the constant numbers since it is
 // KOHR_AH_ID + 2 and there are currently 2 new races.
+//
+// JMS 2010: Added SET_GAME_STATE (STARBASE_AVAILABLE, 1); to InitSIS so starbase is available right
+// from the start of the game. Kind of hack, maybe we should just remove the whole starbase_available variable...
 
 #include "globdata.h"
 
@@ -320,6 +323,9 @@ InitSIS (void)
 			sizeof (IP_GROUP));
 	InitQueue (&GLOBAL (encounter_q), MAX_ENCOUNTERS, sizeof (ENCOUNTER));
 
+	// JMS: Starbase is available right from the start!
+	SET_GAME_STATE (STARBASE_AVAILABLE, 1);
+	
 	GLOBAL (CurrentActivity) = IN_INTERPLANETARY | START_INTERPLANETARY;
 
 	GLOBAL_SIS (ResUnits) = 0;

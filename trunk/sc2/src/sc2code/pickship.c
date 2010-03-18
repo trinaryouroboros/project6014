@@ -30,6 +30,7 @@
 #include "sounds.h"
 #include "libs/mathlib.h"
 
+#include "libs/log.h"
 
 #define NUM_PICK_SHIP_ROWS 2
 #define NUM_PICK_SHIP_COLUMNS 6
@@ -346,7 +347,7 @@ GetEncounterStarShip (STARSHIP *LastStarShipPtr, COUNT which_player)
 		// Full game.
 		HSHIPFRAG hStarShip;
 		SHIP_FRAGMENT *FragPtr;
-
+		
 		if (LastStarShipPtr == 0)
 		{
 			// First time picking a ship.
@@ -393,7 +394,7 @@ GetEncounterStarShip (STARSHIP *LastStarShipPtr, COUNT which_player)
 				hNextShip = _GetSuccLink (SPtr);
 				UnlockStarShip (&race_q[which_player], hBattleShip);
 				hBattleShip = hNextShip;
-
+				
 				FragPtr = LockShipFrag (pQueue, hStarShip);
 				if (SPtr == LastStarShipPtr)
 				{

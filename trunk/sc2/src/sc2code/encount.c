@@ -40,6 +40,8 @@
 #include "libs/mathlib.h"
 #include "libs/inplib.h"
 
+#include "libs/log.h"
+
 
 static void DrawFadeText (const UNICODE *str1, const UNICODE *str2,
 		BOOLEAN fade_in, RECT *pRect);
@@ -90,13 +92,14 @@ DoSelectAction (MENU_STATE *pMS)
 void
 BuildBattle (COUNT which_player)
 {
+
 	QUEUE *pQueue;
 	HSHIPFRAG hStarShip, hNextShip;
 	HSTARSHIP hBuiltShip;
 	STARSHIP *BuiltShipPtr;
-
+	
 	EncounterRace = -1;
-
+	
 	if (GetHeadLink (&GLOBAL (npc_built_ship_q)) == 0)
 	{
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
@@ -136,6 +139,7 @@ BuildBattle (COUNT which_player)
 		hBuiltShip = Build (&race_q[which_player],
 				FragPtr->race_id == SAMATRA_SHIP ?
 					SA_MATRA_ID : FragPtr->SpeciesID);
+
 		if (hBuiltShip)
 		{
 			BuiltShipPtr = LockStarShip (&race_q[which_player], hBuiltShip);
@@ -235,7 +239,7 @@ InitEncounter (void)
 		t.baseline.y += 12;
 		if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
 			t.pStr = GAME_STRING (NAVIGATION_STRING_BASE + 6);
-		// Debug by JMS: * Below *
+				// JMS: * Below *
 		else
 			t.pStr = GAME_STRING (ENCOUNTER_STRING_BASE + 1);
 				// "DEEP SPACE"
@@ -723,7 +727,7 @@ ExitUninitEncounter:
 
 void
 EncounterBattle (void)
-{
+{ 
 	ACTIVITY OldActivity;
 	extern UWORD nth_frame;
 	InputContext *savedPlayerInput;

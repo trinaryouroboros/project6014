@@ -83,9 +83,27 @@ GenerateChmmr (BYTE control)
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 			{
 				// JMS: The Chmmr reside in starbase
-				pSolarSysState->MenuState.Initialized += 2;
-				InitCommunication (CHMMR_CONVERSATION);
-				pSolarSysState->MenuState.Initialized -= 2;
+				CloneShipFragment (CHMMR_SHIP,
+								   &GLOBAL (npc_built_ship_q), INFINITE_FLEET);
+				
+				//pSolarSysState->MenuState.Initialized += 2;
+				//InitCommunication (CHMMR_CONVERSATION);
+				//pSolarSysState->MenuState.Initialized -= 2;
+				
+				// JMS: This code summons starbase subroutine. (The global_flags_and_data = 0
+				// is checked in Starcon2Main function in starcon.c)
+				GLOBAL (CurrentActivity) |= START_ENCOUNTER;
+				SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
+				
+				// JMS: Necessary to empty the NPC ship queue after visit.
+				// Otherwise next encounter with a ship crashes the game.
+				if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
+				{
+					GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
+					ReinitQueue (&GLOBAL (npc_built_ship_q));
+					GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
+				}
+				
 				break;
 				/*RECT r;
 

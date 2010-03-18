@@ -119,8 +119,8 @@ static LOCDATA chmmr_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {	
-	NPCPhrase (GOODBYE_HUMAN1);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	NPCPhrase (GOODBYE_HUMAN1);
 }
 
 

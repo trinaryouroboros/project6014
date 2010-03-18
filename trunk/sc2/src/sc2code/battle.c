@@ -376,6 +376,7 @@ static BOOLEAN
 selectAllShips (SIZE num_ships)
 {
 	if (num_ships == 1) {
+
 		// HyperSpace in full game.
 		return GetNextStarShip (NULL, 0);
 	}
@@ -389,7 +390,7 @@ selectAllShips (SIZE num_ships)
 		return FALSE;
 	}
 #endif
-
+	log_add (log_Debug, "to GetInitialStarShips, numShips = %d", num_ships);
 	return GetInitialStarShips ();
 }
 
@@ -431,7 +432,7 @@ Battle (void)
 		GLOBAL (CurrentActivity) |= IN_BATTLE;
 		battle_counter[0] = CountLinks (&race_q[0]);
 		battle_counter[1] = CountLinks (&race_q[1]);
-
+		
 		if (optMeleeScale != TFB_SCALE_STEP)
 			SetGraphicScaleMode (optMeleeScale);
 
@@ -448,6 +449,7 @@ Battle (void)
 
 		if (!selectAllShips (num_ships)) {
 			GLOBAL (CurrentActivity) |= CHECK_ABORT;
+
 			goto AbortBattle;
 		}
 

@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Commented out a line related to chmmrs in RaceCommunication to avoid vanishing avatars
+//			 after encounter in interplanetary.
+//			 -Some changes to InitCommunication to remove bugs from fighting against Chmmr
+
 #define COMM_INTERNAL
 #include "comm.h"
 
@@ -1469,14 +1473,16 @@ InitCommunication (CONVERSATION which_comm)
 		}
 		ActivateStarShip (status, SPHERE_TRACKING);
 
-		if (which_comm == ORZ_CONVERSATION
+		// JMS: Initializes computer controlled battle group for melee.
+		// JMS: Removed the if condition so battle groups are inited for every race.
+		//
+		/*if (which_comm == ORZ_CONVERSATION
 				|| (which_comm == TALKING_PET_CONVERSATION
 				&& (!GET_GAME_STATE (TALKING_PET_ON_SHIP)
 				|| LOBYTE (GLOBAL (CurrentActivity)) == IN_LAST_BATTLE))
-				|| (which_comm != CHMMR_CONVERSATION
-				&& which_comm != SYREEN_CONVERSATION
-				))//&& (ActivateStarShip (status, CHECK_ALLIANCE) & BAD_GUY)))
-			BuildBattle (1);
+				|| (which_comm != SYREEN_CONVERSATION
+				))//&& (ActivateStarShip (status, CHECK_ALLIANCE) & BAD_GUY)))*/
+		BuildBattle (1);
 	}
 
 	LocDataPtr = init_race (
@@ -1521,7 +1527,7 @@ InitCommunication (CONVERSATION which_comm)
 	}
 
 	UnlockMutex (GraphicsLock);
-
+	
 	status = 0;
 	if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
 	{
@@ -1647,8 +1653,13 @@ RaceCommunication (void)
 	if (GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))
 		return;
 
-	if (i == CHMMR_SHIP)
-		ReinitQueue (&GLOBAL (npc_built_ship_q));
+	// JMS: What the heck is this supposed to do???
+	// Commented this one out so the chmmr battlegroups don't vanish after encounter in interplanetary.
+	// ...I think this has something to do with the fact that when sun device is used, the communication
+	// routine creates a "Chmmr ship" which the player is actually talking to. I'm not sure though.
+	//
+	//if (i == CHMMR_SHIP)
+	//	ReinitQueue (&GLOBAL (npc_built_ship_q));
 
 	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY)
 	{

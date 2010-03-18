@@ -52,9 +52,9 @@ static RACE_DESC ilwrath_desc =
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
-		140 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			5229,9666,
+			0,0,
 		},
 	},
 	{
