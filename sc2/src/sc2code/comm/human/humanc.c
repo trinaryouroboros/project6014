@@ -174,10 +174,7 @@ init_human_comm (void)
 	human_desc.AlienTextBaseline.y = 0;
 	human_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
-	if (!GET_GAME_STATE (HUMAN_HOSTILE) && GET_GAME_STATE(HUMAN_MET))
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-	else
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
+	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	
 	retval = &human_desc;
 

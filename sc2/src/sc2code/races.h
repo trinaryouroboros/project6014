@@ -512,7 +512,7 @@ enum
 #define LOG_TO_IP(s) ((s) << 1)
 #define RACE_IP_SPEED \
 		LOG_TO_IP (40),  /* ARILOU_SHIP */ \
-		LOG_TO_IP (27),  /* CHMMR_SHIP */ \
+		LOG_TO_IP (30),  /* CHMMR_SHIP */ \
 		LOG_TO_IP (24),  /* HUMAN_SHIP */ \
 		LOG_TO_IP (40),  /* ORZ_SHIP */ \
 		LOG_TO_IP (40),  /* PKUNK_SHIP */ \
@@ -541,7 +541,7 @@ enum
 #define LOG_TO_HYPER(s) (WORLD_TO_VELOCITY (s) >> 1)
 #define RACE_HYPER_SPEED \
 		LOG_TO_HYPER (40),  /* ARILOU_SHIP */ \
-		LOG_TO_HYPER (27),  /* CHMMR_SHIP */ \
+		LOG_TO_HYPER (30),  /* CHMMR_SHIP */ \
 		LOG_TO_HYPER (24),  /* HUMAN_SHIP */ \
 		LOG_TO_HYPER (40),  /* ORZ_SHIP */ \
 		LOG_TO_HYPER (40),  /* PKUNK_SHIP */ \
@@ -581,11 +581,11 @@ enum
 		60,  /* YEHAT_SHIP */ \
 		 0,  /* MELNORME_SHIP */ \
 		30,  /* DRUUGE_SHIP */ \
-		60,  /* ILWRATH_SHIP */ \
+		10,  /* ILWRATH_SHIP */ \
 		40,  /* MYCON_SHIP */ \
 		 2,  /* SLYLANDRO_SHIP */ \
 		30,  /* UMGAH_SHIP */ \
-		70,  /* URQUAN_SHIP */ \
+		 0,  /* URQUAN_SHIP */ \
 		 0,  /* ZOQFOTPIK_SHIP */ \
 		30,  /* SYREEN_SHIP */ \
 		70,  /* BLACK_URQUAN_SHIP */ \
@@ -609,11 +609,11 @@ enum
 		40,  /* YEHAT_SHIP */ \
 		 0,  /* MELNORME_SHIP */ \
 		20,  /* DRUUGE_SHIP */ \
-		60,  /* ILWRATH_SHIP */ \
+		10,  /* ILWRATH_SHIP */ \
 		20,  /* MYCON_SHIP */ \
 		 5,  /* SLYLANDRO_SHIP */ \
 		20,  /* UMGAH_SHIP */ \
-		40,  /* URQUAN_SHIP */ \
+		 0,  /* URQUAN_SHIP */ \
 		 0,  /* ZOQFOTPIK_SHIP */ \
 	    20,  /* SYREEN_SHIP */ \
 		40,  /* BLACK_URQUAN_SHIP */ \

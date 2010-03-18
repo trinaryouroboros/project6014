@@ -43,7 +43,7 @@ GenerateOrzSpacePortal (BYTE control)
 			{
 				// Communication
 				//pSolarSysState->MenuState.Initialized += 2;
-				//InitCommunication (SYREEN_CONVERSATION);
+				//InitCommunication (ARILOU_CONVERSATION);
 				//pSolarSysState->MenuState.Initialized -= 2;
 				
 				// Thru the portal to ORZ space

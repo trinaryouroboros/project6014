@@ -983,7 +983,7 @@ enum
 	CHECK_RESTART = MAKE_WORD (0, (1 << 5)),
 	CHECK_ABORT = MAKE_WORD (0, (1 << 6)),
 	
-	IN_ORZSPACE,	// JMS: In *below* or not
+	IN_ORZSPACE,	// JMS: In *below* (Orz space) or not
 };
 typedef UWORD ACTIVITY;
 

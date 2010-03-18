@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Removed unnecessary chmmr_bomb condition related to starbase visiting.
+//			 -Procyon starbase now has different gfx from Sol starbase
+
 #include "build.h"
 #include "colors.h"
 #include "controls.h"
@@ -327,7 +330,13 @@ DoStarBase (MENU_STATE *pMS)
 		//s.origin.x = s.origin.y = 0;
 		s.origin.x = SAFE_X;
 		s.origin.y = SAFE_Y + 4;
-		s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
+		
+		// JMS: Different graphics for Sol and Procyon starbases. 
+		if (CurStarDescPtr->Index == SOL_DEFINED)
+			s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
+		else
+			s.frame = CaptureDrawable (LoadGraphic (STARBASE_PROCYON_ANIM));
+		
 		pMS->CurFrame = s.frame;
 		pMS->hMusic = LoadMusic (STARBASE_MUSIC);
 
@@ -353,9 +362,11 @@ DoStarBase (MENU_STATE *pMS)
 				"rotate starbase");
 		UnlockMutex (GraphicsLock);
 	}
+	// JMS: These lines that are commented out are unnecessary also...
 	else if (PulsedInputState.menu[KEY_MENU_SELECT]
-			|| GET_GAME_STATE (MOONBASE_ON_SHIP)
-			|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
+			//|| GET_GAME_STATE (MOONBASE_ON_SHIP)
+			//|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2
+			)
 	{
 ExitStarBase:
 		if (pMS->flash_task)
@@ -385,7 +396,13 @@ ExitStarBase:
 		if (pMS->CurState == TALK_COMMANDER)
 		{
 			FlushInput ();
-			InitCommunication (COMMANDER_CONVERSATION);
+			
+			// JMS: Procyon starbase has Chmmr, Sol naturally humans.
+			if (CurStarDescPtr->Index == SOL_DEFINED)
+				InitCommunication (COMMANDER_CONVERSATION);
+			else
+				InitCommunication (CHMMR_CONVERSATION);
+			
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
 		}
 		else
@@ -514,12 +531,14 @@ TimePassage:
 	memset (&MenuState, 0, sizeof (MenuState));
 
 	MenuState.InputFunc = DoStarBase;
-	if (GET_GAME_STATE (MOONBASE_ON_SHIP)
+	
+	// JMS: This is unnecessary for our little sequel...
+	/*if (GET_GAME_STATE (MOONBASE_ON_SHIP)
 			|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 	{
 		MenuState.Initialized = TRUE;
 		MenuState.CurState = TALK_COMMANDER;
-	}
+	}*/
 
 	OldContext = SetContext (ScreenContext);
 	DoInput (pMenuState, TRUE);

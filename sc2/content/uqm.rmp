@@ -233,6 +233,7 @@ graphics.sismods = GFXRES:base/ui/sismodules.ani
 graphics.sisskeleton = GFXRES:base/cutscene/ending/sis_skel.ani
 graphics.spapluto = GFXRES:base/lander/energy/fwiffo.ani
 graphics.starbase = GFXRES:base/ui/starbase.ani
+graphics.starbase_procyon = GFXRES:base/ui/starbase_procyon.ani
 graphics.stars = GFXRES:base/battle/stars.ani
 graphics.status = GFXRES:base/ui/status.ani
 graphics.sundevic = GFXRES:base/lander/energy/sundevice.ani

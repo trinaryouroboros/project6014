@@ -34,6 +34,8 @@
 #include <unistd.h>
 #endif
 
+#include "libs/log.h"
+
 static BYTE LastEncGroup;
 		// Last encountered group, saved into state files
 
@@ -560,14 +562,14 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 		fp = OpenStateFile (DEFGRPINFO_FILE, "r+b");
 	else
 		fp = OpenStateFile (RANDGRPINFO_FILE, "r+b");
-
+			
 	if (!fp)
-		return FALSE;
+			return FALSE;
 
 	SeekStateFile (fp, offset, SEEK_SET);
 	ReadGroupHeader (fp, &GH);
 #ifdef DEBUG_GROUPS
-	log_add (log_Debug, "GetGroupInfo(%lu): %u(%lu) out of %u", offset,
+	log_add (log_Debug, "******GetGroupInfo(%lu): %u(%lu) out of %u", offset,
 			which_group, GH.GroupOffset[which_group], GH.NumGroups);
 #endif /* DEBUG_GROUPS */
 
@@ -625,6 +627,7 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 			SeekStateFile (fp, GH.GroupOffset[which_group], SEEK_SET);
 			sread_8 (fp, &RaceType);
 			sread_8 (fp, &NumShips);
+
 			if (!NumShips)
 				continue; /* group is dead */
 
@@ -812,7 +815,7 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 	{
 		/* Read 'which_group' group into npc_built_ship_q */
 		BYTE NumShips;
-
+		
 		// XXX: Hack: The assumption here is that we only read the makeup
 		//   of a particular group when initializing an encounter, which
 		//   makes this group 'last encountered'. Also the state of all
