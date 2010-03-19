@@ -35,6 +35,8 @@
 #define NUM_PICK_SHIP_ROWS 2
 #define NUM_PICK_SHIP_COLUMNS 6
 
+#define NUM_PICK_SHIP_EXPLORER_COLUMNS 4
+
 #define ICON_WIDTH 16
 #define ICON_HEIGHT 16
 
@@ -42,8 +44,9 @@
 #define FLAGSHIP_Y_OFFS 4
 #define FLAGSHIP_WIDTH 22
 #define FLAGSHIP_HEIGHT 48
-#define FLAGSHIP_EXPLORER_WIDTH 22
+#define FLAGSHIP_EXPLORER_WIDTH 36
 #define FLAGSHIP_EXPLORER_HEIGHT 36
+#define FLAGSHIP_EXPLORER_X_OFFS 58
 #define FLAGSHIP_EXPLORER_Y_OFFS 16
 
 static BOOLEAN
@@ -94,16 +97,48 @@ DoPickBattleShip (MENU_STATE *pMS)
 			COUNT ship_index;
 			HSTARSHIP hBattleShip, hNextShip;
 			STARSHIP *StarShipPtr;
+			
+			COUNT helper;
+			
+			// JMS: Chmmr Explorer gfx
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+			{
+				if (new_row==0 && new_col < 0)
+					new_col = NUM_PICK_SHIP_EXPLORER_COLUMNS;
+				else if (new_row>0 && new_col <0)
+					new_col = 1;
+				else if (new_row==0 && new_col > NUM_PICK_SHIP_EXPLORER_COLUMNS 
+						 || (new_row>0 && (new_col > 1) ))
+					new_col = 0;
+				
+				if (new_row==0 && pMS->first_item.x == 1  && pMS->first_item.y == 1)
+					new_col = 3;
+				else if (new_row==0 && pMS->first_item.x == 0  && pMS->first_item.y == 1)
+					new_col = 1;
+				
+				if ((new_row==1 || new_row<0) && pMS->first_item.x < 2  && pMS->first_item.y == 0)
+					new_col = 0;
+				else if ((new_row==1 || new_row<0) && pMS->first_item.x > 2  && pMS->first_item.y == 0)
+					new_col = 1;
+	
+				if (new_row < 0)
+					new_row = NUM_PICK_SHIP_ROWS - 1;
+				else if (new_row == NUM_PICK_SHIP_ROWS)
+					new_row = 0;
+			}
+			// JMS: Precursor vessel gfx
+			else
+			{
+				if (new_col < 0)
+					new_col = NUM_PICK_SHIP_COLUMNS;
+				else if (new_col > NUM_PICK_SHIP_COLUMNS)
+					new_col = 0;
 
-			if (new_col < 0)
-				new_col = NUM_PICK_SHIP_COLUMNS;
-			else if (new_col > NUM_PICK_SHIP_COLUMNS)
-				new_col = 0;
-
-			if (new_row < 0)
-				new_row = NUM_PICK_SHIP_ROWS - 1;
-			else if (new_row == NUM_PICK_SHIP_ROWS)
-				new_row = 0;
+				if (new_row < 0)
+					new_row = NUM_PICK_SHIP_ROWS - 1;
+				else if (new_row == NUM_PICK_SHIP_ROWS)
+					new_row = 0;
+			}
 
 			PlayMenuSound (MENU_SOUND_MOVE);
 
@@ -117,19 +152,30 @@ DoPickBattleShip (MENU_STATE *pMS)
 			pMS->first_item.y = new_row;
 			pMS->first_item.x = new_col;
 
+			// JMS
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+				helper=NUM_PICK_SHIP_EXPLORER_COLUMNS;
+			else
+				helper=NUM_PICK_SHIP_COLUMNS;
+			
 ChangeSelection:
-			if (pMS->first_item.x == (NUM_PICK_SHIP_COLUMNS >> 1))
+			if (pMS->first_item.x == (helper >> 1))
 			{
-				pMS->flash_rect0.corner.x =
-						pMS->flash_rect1.corner.x - 2 + FLAGSHIP_X_OFFS;
-				
-				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0) {
+				// JMS: Chmmr Explorer graphics
+				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+				{
+					pMS->flash_rect0.corner.x =
+					pMS->flash_rect1.corner.x - 2 + FLAGSHIP_EXPLORER_X_OFFS;
 					pMS->flash_rect0.corner.y =
 					pMS->flash_rect1.corner.y - 2 + FLAGSHIP_EXPLORER_Y_OFFS;
 					pMS->flash_rect0.extent.width = FLAGSHIP_EXPLORER_WIDTH + 4;
 					pMS->flash_rect0.extent.height = FLAGSHIP_EXPLORER_HEIGHT + 4;
 				}
-				else {
+				// JMS: Precursor vessel graphics
+				else
+				{
+					pMS->flash_rect0.corner.x =
+					pMS->flash_rect1.corner.x - 2 + FLAGSHIP_X_OFFS;
 					pMS->flash_rect0.corner.y =
 					pMS->flash_rect1.corner.y - 2 + FLAGSHIP_Y_OFFS;
 					pMS->flash_rect0.extent.width = FLAGSHIP_WIDTH + 4;
@@ -138,24 +184,58 @@ ChangeSelection:
 
 				hBattleShip = GetTailLink (&race_q[0]); /* Flagship */
 			}
+			// Escort ships
 			else
 			{
-				new_col = pMS->first_item.x;
-				pMS->flash_rect0.corner.x = 5 + pMS->flash_rect1.corner.x - 2
-						+ ((ICON_WIDTH + 4) * new_col);
-				if (new_col > (NUM_PICK_SHIP_COLUMNS >> 1))
+				// Chmmr Explorer
+				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 				{
-					--new_col;
-					pMS->flash_rect0.corner.x += FLAGSHIP_WIDTH - ICON_WIDTH;
+					new_col = pMS->first_item.x;
+					pMS->flash_rect0.corner.x = 9 + pMS->flash_rect1.corner.x - 2
+					+ ((ICON_WIDTH + 8) * new_col);
+					
+					if (new_col > (NUM_PICK_SHIP_EXPLORER_COLUMNS >> 1))
+					{
+						--new_col;
+						pMS->flash_rect0.corner.x += FLAGSHIP_EXPLORER_WIDTH - ICON_WIDTH + 2;
+					}
+					if (new_row > 0)
+					{
+						pMS->flash_rect0.corner.x += (ICON_WIDTH +8);
+						pMS->flash_rect0.corner.x += (FLAGSHIP_EXPLORER_WIDTH + 10) * new_col;
+					}
+					
+					pMS->flash_rect0.corner.y = 16 + pMS->flash_rect1.corner.y - 2
+					+ ((ICON_HEIGHT + 4) * pMS->first_item.y);
+					pMS->flash_rect0.extent.width = ICON_WIDTH + 4;
+					pMS->flash_rect0.extent.height = ICON_HEIGHT + 4;
+					
+					ship_index = (pMS->first_item.y * NUM_PICK_SHIP_EXPLORER_COLUMNS)
+					+ new_col;
 				}
-				pMS->flash_rect0.corner.y = 16 + pMS->flash_rect1.corner.y - 2
+				
+				// Precursor vessel
+				else
+				{
+					new_col = pMS->first_item.x;
+					pMS->flash_rect0.corner.x = 5 + pMS->flash_rect1.corner.x - 2
+						+ ((ICON_WIDTH + 4) * new_col);
+					
+					if (new_col > (NUM_PICK_SHIP_COLUMNS >> 1))
+					{
+						--new_col;
+						pMS->flash_rect0.corner.x += FLAGSHIP_WIDTH - ICON_WIDTH;
+					}
+					
+					pMS->flash_rect0.corner.y = 16 + pMS->flash_rect1.corner.y - 2
 						+ ((ICON_HEIGHT + 4) * pMS->first_item.y);
-				pMS->flash_rect0.extent.width = ICON_WIDTH + 4;
-				pMS->flash_rect0.extent.height = ICON_HEIGHT + 4;
+					pMS->flash_rect0.extent.width = ICON_WIDTH + 4;
+					pMS->flash_rect0.extent.height = ICON_HEIGHT + 4;
 
-				ship_index = (pMS->first_item.y * NUM_PICK_SHIP_COLUMNS)
+					ship_index = (pMS->first_item.y * NUM_PICK_SHIP_COLUMNS)
 						+ new_col;
-
+				}
+				
 				for (hBattleShip = GetHeadLink (&race_q[0]);
 						hBattleShip != GetTailLink (&race_q[0]);
 						hBattleShip = hNextShip)
@@ -535,19 +615,48 @@ DrawArmadaPickShip (BOOLEAN draw_salvage_frame, RECT *pPickRect)
 
 			ship_index = StarShipPtr->index;
 
-			s.origin.x = pick_r.corner.x
-					+ (5 + ((ICON_WIDTH + 4)
-					* (ship_index % NUM_PICK_SHIP_COLUMNS)));
-			if ((ship_index % NUM_PICK_SHIP_COLUMNS) >=
+			// JMS: Chmmr explorer graphics
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+			{
+				s.origin.x = pick_r.corner.x
+				+ (9 + ((ICON_WIDTH + 8)
+						* (ship_index % NUM_PICK_SHIP_EXPLORER_COLUMNS)));
+				
+				s.origin.y = pick_r.corner.y
+				+ (16 + ((ICON_HEIGHT + 4)
+						 * (ship_index / NUM_PICK_SHIP_EXPLORER_COLUMNS)));
+				
+				if ((ship_index / NUM_PICK_SHIP_EXPLORER_COLUMNS)>0)
+				{
+					s.origin.x += ICON_WIDTH + 8;
+					
+					if((ship_index % NUM_PICK_SHIP_EXPLORER_COLUMNS)>0)
+						s.origin.x += FLAGSHIP_EXPLORER_WIDTH + 10;
+				}
+				
+				if ((ship_index % NUM_PICK_SHIP_EXPLORER_COLUMNS) >=
+					(NUM_PICK_SHIP_EXPLORER_COLUMNS >> 1))
+					s.origin.x += FLAGSHIP_EXPLORER_WIDTH + 10;
+			}
+			// JMS: Precursor vessel graphics
+			else
+			{
+				s.origin.x = pick_r.corner.x
+				+ (5 + ((ICON_WIDTH + 4)
+						* (ship_index % NUM_PICK_SHIP_COLUMNS)));
+				if ((ship_index % NUM_PICK_SHIP_COLUMNS) >=
 					(NUM_PICK_SHIP_COLUMNS >> 1))
-				s.origin.x += FLAGSHIP_WIDTH + 4;
-			s.origin.y = pick_r.corner.y
-					+ (16 + ((ICON_HEIGHT + 4)
-					* (ship_index / NUM_PICK_SHIP_COLUMNS)));
+					s.origin.x += FLAGSHIP_WIDTH + 4;
+				s.origin.y = pick_r.corner.y
+				+ (16 + ((ICON_HEIGHT + 4)
+						 * (ship_index / NUM_PICK_SHIP_COLUMNS)));
+			}
+ 
 			s.frame = StarShipPtr->icons;
 			r.corner = s.origin;
 			SetContextForeGroundColor (BLACK_COLOR);
 			DrawFilledRectangle (&r);
+			
 			if ((StarShipPtr->SpeciesID != NO_ID) || (StarShipPtr->crew_level == 0))
 			{
 				DrawStamp (&s);
