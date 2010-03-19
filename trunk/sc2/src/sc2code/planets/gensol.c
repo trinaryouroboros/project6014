@@ -16,8 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: Don't create Ur-quan probe.
-// JMS 2010: Removed Fwiffo from Pluto
+// JMS 2009: -Don't create Ur-quan probe.
+// JMS 2010: -Removed Fwiffo from Pluto
+//			 -REmoved tractors and base from moon
 
 #include "build.h"
 #include "gamestr.h"
@@ -67,7 +68,9 @@ generate_energy_nodes (void)
 	// JMS: Removed Fwiffo energy blip from Pluto.
 	
 				/* Earth Moon */
-	if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
+	
+	// JMS: Removed moonbase.
+	/*if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
 			&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[1]
 			&& !GET_GAME_STATE (MOONBASE_DESTROYED))
 	{
@@ -90,7 +93,7 @@ generate_energy_nodes (void)
 			}
 		}
 		return;
-	}
+	}*/
 	pSolarSysState->CurNode = 0;
 }
 
@@ -291,8 +294,9 @@ generate_orbital (void)
 			case 2: /* moons of EARTH */
 				pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] =
 						rand_val;
-
-				if (!GET_GAME_STATE (MOONBASE_DESTROYED))
+				
+				// JMS: Removed the moonbase gfx and text upon finding it.
+				/*if (!GET_GAME_STATE (MOONBASE_DESTROYED))
 				{
 					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
 					pSolarSysState->PlanetSideFrame[1] =
@@ -301,7 +305,8 @@ generate_orbital (void)
 					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
 							CaptureStringTable (
 							LoadStringTable (MOONBASE_STRTAB));
-				}
+				}*/
+				
 				pSolarSysState->SysInfo.PlanetInfo.PlanetDensity = 60;
 				pSolarSysState->SysInfo.PlanetInfo.PlanetRadius = 25;
 				pSolarSysState->SysInfo.PlanetInfo.AxialTilt = 0;
@@ -410,12 +415,6 @@ GenerateSOL (BYTE control)
 				ReinitQueue (&GLOBAL (ip_group_q));
 				assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
 			}
-			break;
-		case GENERATE_ENERGY:
-			generate_energy_nodes ();
-			break;
-		case GENERATE_LIFE:
-			generate_tractors ();
 			break;
 		case GENERATE_ORBITAL:
 			generate_orbital ();
