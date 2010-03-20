@@ -1824,7 +1824,7 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 		// elevation data is supplied in Surface Definition frame
 		BOOLEAN DeleteDef = FALSE;
 		FRAME ElevFrame;
-
+		
 		// surface pixmap
 		SurfDefFrame = SetAbsFrameIndex (SurfDefFrame, 0);
 		if (GetFrameWidth (SurfDefFrame) != MAP_WIDTH

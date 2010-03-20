@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Changed START_YEAR from 2155 to 2165
+
 #ifndef _CLOCK_H
 #define _CLOCK_H
 
@@ -23,7 +25,7 @@
 #include "displist.h"
 
 
-#define START_YEAR 2155
+#define START_YEAR 2165
 
 #define UPDATE_DAY (1 << 0)
 #define UPDATE_MONTH (1 << 1)

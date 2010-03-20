@@ -579,7 +579,7 @@ HUMAN_COLOR_MAP,comm.human.colortable,sc2code/comm/human/istrtab.h,BINTAB,base/c
 HUMAN_PMAP_ANIM,comm.human.graphics,sc2code/comm/human/igfxres.h,GFXRES,base/comm/commander/commander.ani
 ANDROSYNTH_CONVERSATION_PHRASES,comm.androsyn.dialogue,sc2code/comm/androsynth/istrtab.h,CONVERSATION,base/comm/androsyn/androsyn.txt
 ANDROSYNTH_MUSIC,comm.androsyn.music,sc2code/comm/androsynth/imusicre.h,MUSICRES,base/comm/androsyn/androsyn.ogg
-ANDROSYNTH_FONT,comm.androsyn.font,sc2code/comm/androsynth/ifontres.h,FONTRES,base/fonts/player.fon
+ANDROSYNTH_FONT,comm.androsyn.font,sc2code/comm/androsynth/ifontres.h,FONTRES,base/fonts/commander.fon
 ANDROSYNTH_COLOR_MAP,comm.androsyn.colortable,sc2code/comm/androsynth/istrtab.h,BINTAB,base/comm/commander/commander.ct
 ANDROSYNTH_PMAP_ANIM,comm.androsyn.graphics,sc2code/comm/androsynth/igfxres.h,GFXRES,base/comm/androsyn/androsyn.ani
 THRADD_MUSIC,comm.thraddash.music,sc2code/comm/thradd/imusicre.h,MUSICRES,base/comm/thraddash/thraddash.mod

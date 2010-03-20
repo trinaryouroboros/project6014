@@ -18,6 +18,7 @@
 // JMS 2009: -Can intersect with suns in 0 planet star systems (e.g. ORZ space portal)
 //			 -Some other shit related to ORZ space portal / 0 planet star systems
 // JMS 2010: -Different gfx for ORZ space portal/sun in interplanetary
+//			 -Option to add randomness to interplanetary background stars
 
 #include "colors.h"
 #include "controls.h"
@@ -845,9 +846,9 @@ ProcessShipControls (void)
 {
 	COUNT index;
 	SIZE delta_x, delta_y;
-
+	
 	ClockTick ();
-
+	
 	if (CurrentInputState.key[PlayerControls[0]][KEY_UP])
 		delta_y = -1;
 	else
@@ -1702,6 +1703,7 @@ DrawSystem (SIZE radius, BOOLEAN IsInnerSystem)
 	PLANET_DESC *pBaseDesc;
 
 	BatchGraphics ();
+	
 	if (draw_sys_flags & DRAW_STARS)
 		DrawStarBackGround (FALSE);
 
@@ -1818,9 +1820,10 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 
 	ClearDrawable ();
 
+	// JMS: You can add randomness to background stars by uncommenting the Global tick_counts
 	old_seed = TFB_SeedRandom (
-			MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000,
-			CurStarDescPtr->star_pt.y - 6000));
+			MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000/*+(GLOBAL (GameClock).tick_count)*/,
+			CurStarDescPtr->star_pt.y - 6000/*+(GLOBAL (GameClock).tick_count <= 0)*/ ));
 
 #define NUM_DIM_PIECES 8
 	s.frame = SpaceJunkFrame;
