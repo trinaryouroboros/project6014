@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Removed shofixti maidens
+
 #include "build.h"
 #include "encount.h"
 #include "globdata.h"
@@ -41,7 +43,7 @@ GenerateVUX (BYTE control)
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0]
 					&& CurStarDescPtr->Index != VUX_BEAST_DEFINED)
 			{
-				if (CurStarDescPtr->Index == MAIDENS_DEFINED
+				/*if (CurStarDescPtr->Index == MAIDENS_DEFINED
 						&& !GET_GAME_STATE (SHOFIXTI_MAIDENS))
 				{
 					pSolarSysState->SysInfo.PlanetInfo.CurPt.x = MAP_WIDTH / 3;
@@ -64,7 +66,7 @@ GenerateVUX (BYTE control)
 					}
 					break;
 				}
-				else if (CurStarDescPtr->Index == VUX_DEFINED)
+				else*/ if (CurStarDescPtr->Index == VUX_DEFINED)
 				{
 					COUNT i, which_node;
 					DWORD rand_val, old_rand;
