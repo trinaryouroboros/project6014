@@ -4,7 +4,7 @@
 \paperw11900\paperh16840\margl1440\margr1440\vieww18480\viewh12640\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 
-\f0\fs24 \cf0 UQM edits by JMS 17.3.2010\
+\f0\fs24 \cf0 UQM edits by JMS 21.3.2010\
 \
 IN A NUTSHELL:\
 -Alpha Vulpeculae (865.4:858.7) with 0 planets and portal to orz space in the sun (ORZ_SPACE_PORTAL_DEFINED).\
@@ -17,12 +17,15 @@ IN A NUTSHELL:\
 -Instrument damage. Ships can suffer damage to engines, gauges, etc. from ships.\
 -Chmmr now reside on their starbase also. Starbase fully functional, just like at Sol.\
 -Chmmr Explorer ship usable in melee.\
+-Some planets are restricted meaning they cannot be landed on. Like Earth, Procyon and Syreen Homeworld. (Mostly to hide non-working earth graphics.)\
 \
 ***************************************************************************************************************************************\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 EDITED FILES:\
 \
 /battle.c					-Play Orzspace music in orz space\
+/clock.c					-Changed the starting date\
+/clock.h					-Changed the starting year\
 /comm.c					-Commented out a line related to chmmrs in RaceCommunication to avoid vanishing avatars after encounter in interplanetary.\
 						-Some changes to InitCommunication to remove bugs from fighting against Chmmr\
 /commglue.c 				-Added hooks for Earhtling ship and Androsynth dialogue screens\
@@ -35,10 +38,13 @@ IN A NUTSHELL:\
 /gendef.c					-Function call for initing orz space portal star system\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 /globdata.c				-Increased max number of races to facilitate adding Androsynth and slaverace to the game (IMPORTANT!  At function InitSis)\
+						- STARBASE_AVAILABLE variable is set to be 1 right from the beginning of the game.\
 /globdata.h				-Added new game states for "new" race - humans\
 						-Added new game states for "new" race - Androsynth\
 						-Added new game state fo Orz space\
 						-Added IN_ORZSPACE flag for saved game summaries\
+						-Added Vela factory visited game state\
+						-Added game state for which ship player has as the flagship (Explorer/Precursor vessel)\
 /grpinfo.c					-Changes to make 0 planet star systems work\
 /hyper.c					-Orz space colors\
 						-Function for entering a portal/system in Orz space\
@@ -50,10 +56,13 @@ IN A NUTSHELL:\
 						-Don't consume fuel in Orz space\
 /misc.c					-Added instrument damage (engine etc. can be damaged by hits)\
 						-Added engine damage function (one of the instrument damages)\
+/pickship.c				-Different ship picking graphics in full game before melee\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 /plandata.c				-Placed the Orz space portal into Alpha Vulpeculae\
 						-Moved some stars around in the list of stars to make them work. All stars must be sorted by their y-coordinate!!\
 						-Made the biggest stars of new star systems "Alphas" as should be.\
+/plangen.c				-Don't create 4x scaled image of planet surface at restricted planets since they cannot be landed on.\
+/planets.h					-Added PLANET_RESTRICTED flag definition. Restricted planets cannot be landed on.\
 /races.h					-Defined Androsyn conversation, Ip and hyperspace encounter percents and encounter ship makeups\
 						-Moved slaverace enums and defines to better places in the lists\
 						-Instrument damage: Added instrument damage flags. Ship may sustain 10 different damage types\
@@ -65,6 +74,7 @@ IN A NUTSHELL:\
 /tactrans.c					-Instrument damage: Damaged engines emit different colored ion particles\
 /uqmdebug.c				-Some Orz space checks\
 						-Add 10 crew upon pressing debug button. (To make it possible to use lander)\
+						-No more moon base on ship upon hitting debug key. (moonbase onboard screws up starbase transition gfx)\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 /comm/shofixt/shofixt.c		-Viewscreen animation for shofixti\
@@ -78,6 +88,7 @@ IN A NUTSHELL:\
 /planets/genshof.c			-Removed Tanaka/Katana from shofixti home system\
 /planets/gensol.c			-Don't create Ur-quan probe at sol\
 						-Removed Fwiffo from Pluto\
+						-Earth is now a restricted planet. It cannot be landed on anymore.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 /planets/solarsys.c			-Changes to make 0 planet star systems possible and the star in those accessible as "planets"\
 						-Different gfx for ORZ space portal/sun in interplanetary\

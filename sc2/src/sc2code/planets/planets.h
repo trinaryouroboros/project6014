@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Added definition of PLANET_RESTRICTED. Restricted planets cannot be landed on.
+
 #ifndef _PLANETS_H
 #define _PLANETS_H
 
@@ -116,6 +118,14 @@ enum
 #define PLANET_SHIELDED (1 << 7)
 
 #define BLUE_SHIELD (1 << 0)
+
+// JMS: Restricted planets are not allowed to land on. For example race homeworlds
+// Earth, Procyon, Syreen homeworld. Plotwise this is because you wouldn't want aliens
+// landing on your backyard, stealing your minerals, would you?
+//
+// Actually this is implemented just to hide the fact that Earth surface graphics
+// don't load properly upon landing... 
+#define PLANET_RESTRICTED (1 << 1)
 
 typedef struct planet_desc
 {

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Don't draw 4x image of restricted planets since they cannot be landed on anyway.
+
 #include "nameref.h"
 #include "resinst.h"
 #include "setup.h"
@@ -1965,7 +1967,9 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 		RenderTopography (FALSE);
 	}
 
+	// JMS Don't create 4x image for restricted planets since they cannot be landed on anyway.
 	if (!(pPlanetDesc->data_index & PLANET_SHIELDED)
+			&& !(pPlanetDesc->flags & PLANET_RESTRICTED)
 			&& pSolarSysState->SysInfo.PlanetInfo.AtmoDensity
 				!= GAS_GIANT_ATMOSPHERE)
 	{	// produce 4x scaled topo image for IP

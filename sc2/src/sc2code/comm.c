@@ -839,8 +839,10 @@ AlienTalkSegue (COUNT wait_track)
 			BYTE clut_buf[] = {FadeAllToColor};
 			
 			UnbatchGraphics ();
-			if (GET_GAME_STATE (MOONBASE_ON_SHIP)
-					|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
+				// JMS: We don't want these conditions messing up with our graphics...
+			if (//GET_GAME_STATE (MOONBASE_ON_SHIP)
+					//||
+				GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 				XFormColorMap ((COLORMAPPTR)clut_buf, ONE_SECOND * 2);
 			else if (GET_GAME_STATE (CHMMR_EMERGING))
 				XFormColorMap ((COLORMAPPTR)clut_buf, ONE_SECOND * 2);

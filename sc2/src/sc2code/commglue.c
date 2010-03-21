@@ -310,10 +310,11 @@ init_race (CONVERSATION comm_id)
 		case CHMMR_CONVERSATION:
 			return init_chmmr_comm ();
 		case COMMANDER_CONVERSATION:
-			if (!GET_GAME_STATE (STARBASE_AVAILABLE))
-				return init_commander_comm ();
-			else
-				return init_starbase_comm ();
+			// JMS: Commented out the unnecessary init_commander_comm
+			//if (!GET_GAME_STATE (STARBASE_AVAILABLE))
+			//	return init_commander_comm ();
+			//else
+			return init_starbase_comm ();
 		case DRUUGE_CONVERSATION:
 			return init_druuge_comm ();
 		case HUMAN_CONVERSATION:			// BY JMS - Hook to earthling ship dialogue screen

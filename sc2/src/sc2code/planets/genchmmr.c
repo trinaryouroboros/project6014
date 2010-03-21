@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added Chmmr to starbase
+// JMS 2010: -Added Chmmr to starbase
+//			 -Chmmr home planet is now restricted from landing
 
 #include "build.h"
 #include "encount.h"
@@ -56,8 +57,7 @@ GenerateChmmr (BYTE control)
 		case GENERATE_PLANETS:
 			GenerateRandomIP (GENERATE_PLANETS);
 			pSolarSysState->PlanetDesc[1].data_index = SAPPHIRE_WORLD;
-			if (!GET_GAME_STATE (CHMMR_UNLEASHED))
-				pSolarSysState->PlanetDesc[1].data_index;
+			pSolarSysState->PlanetDesc[1].flags = PLANET_RESTRICTED; // JMS: Can't land on Chmmr homeworld
 			pSolarSysState->PlanetDesc[1].NumPlanets = 1;
 			break;
 		case GENERATE_ORBITAL:
