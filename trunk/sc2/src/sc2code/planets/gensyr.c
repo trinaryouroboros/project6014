@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Syreen home planet is now restricted from landing
+
 #include "encount.h"
 #include "resinst.h"
 #include "planets/genall.h"
@@ -86,8 +88,8 @@ GenerateSyreen (BYTE control)
 		case GENERATE_PLANETS:
 		{
 			GenerateRandomIP (GENERATE_PLANETS);
-			pSolarSysState->PlanetDesc[0].data_index =
-					WATER_WORLD;
+			pSolarSysState->PlanetDesc[0].data_index = WATER_WORLD;
+			pSolarSysState->PlanetDesc[0].flags = PLANET_RESTRICTED; // JMS: Can't land on syreen turf
 			pSolarSysState->PlanetDesc[0].NumPlanets = 1;
 			break;
 		}

@@ -18,7 +18,8 @@
 
 // JMS 2009: -Don't create Ur-quan probe.
 // JMS 2010: -Removed Fwiffo from Pluto
-//			 -REmoved tractors and base from moon
+//			 -Removed tractors and base from moon
+//			 -Earth is now restricted planet meaning it cannot be landed on.
 
 #include "build.h"
 #include "gamestr.h"
@@ -510,6 +511,7 @@ GenerateSOL (BYTE control)
 						break;
 					case 2: /* EARTH */
 						pCurDesc->data_index = WATER_WORLD;
+						pCurDesc->flags = PLANET_RESTRICTED; // JMS: Earth cannot be landed on.
 						pCurDesc->radius = EARTH_RADIUS;
 						pCurDesc->NumPlanets = 2;
 						break;

@@ -34,7 +34,7 @@
 #include "libs/graphics/gfx_common.h"
 #include "libs/tasklib.h"
 #include "libs/inplib.h"
-
+#include "libs/log.h"
 
 MENU_STATE *pMenuState;
 
@@ -323,8 +323,6 @@ DoStarBase (MENU_STATE *pMS)
 		}
 
 		pMS->Initialized = TRUE;
-		SetContext (ScreenContext);
-
 		UnlockMutex (GraphicsLock);
 
 		//s.origin.x = s.origin.y = 0;
@@ -341,6 +339,7 @@ DoStarBase (MENU_STATE *pMS)
 		pMS->hMusic = LoadMusic (STARBASE_MUSIC);
 
 		LockMutex (GraphicsLock);
+		SetContext (ScreenContext);
 		SetTransitionSource (NULL);
 		BatchGraphics ();
 		SetContextBackGroundColor (BLACK_COLOR);
@@ -492,7 +491,7 @@ VisitStarBase (void)
 		SHIP_FRAGMENT *FragPtr;
 
 		pMenuState = 0;
-
+		
 		InitCommunication (COMMANDER_CONVERSATION);
 		if (!GET_GAME_STATE (PROBE_ILWRATH_ENCOUNTER)
 				|| (GLOBAL (CurrentActivity) & CHECK_ABORT))

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Cannot dispatch landers on restricted planets
+
 #include "build.h"
 #include "cons_res.h"
 #include "controls.h"
@@ -987,9 +989,10 @@ DoScan (MENU_STATE *pMS)
 			UNICODE buf[100];
 
 			if ((pSolarSysState->pOrbitalDesc->data_index & PLANET_SHIELDED)
+					||	pSolarSysState->pOrbitalDesc->flags & PLANET_RESTRICTED
 					|| (pSolarSysState->SysInfo.PlanetInfo.AtmoDensity ==
 						GAS_GIANT_ATMOSPHERE))
-			{	// cannot dispatch to shielded planets or gas giants
+			{	// JMS: cannot dispatch to shielded planets, restricted planets, or gas giants
 				PlayMenuSound (MENU_SOUND_FAILURE);
 				return (TRUE);
 			}

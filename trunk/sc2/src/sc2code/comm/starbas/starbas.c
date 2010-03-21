@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Removed the arc welder anims that created black spots on top of earth graphics.
+
 #include "comm/commall.h"
 #include "comm/comandr/resinst.h"
 #include "comm/starbas/strings.h"
@@ -52,7 +54,7 @@ static LOCDATA commander_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	STARBASE_CONVERSATION_PHRASES, /* PlayerPhrases */
-	10, /* NumAnimations */
+	3, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{ /* Blink */
 			1, /* StartIndex */
@@ -68,62 +70,6 @@ static LOCDATA commander_desc =
 			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 40, 0, /* FrameRate */
 			ONE_SECOND * 2, 0, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{ /* Arc welder 0 */
-			40, /* StartIndex */
-			7, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 40, 0, /* FrameRate */
-			0, ONE_SECOND * 8, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{ /* Arc welder 1 */
-			47, /* StartIndex */
-			8, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 40, 0, /* FrameRate */
-			0, ONE_SECOND * 8, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{ /* Arc welder 2 */
-			55, /* StartIndex */
-			6, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 40, 0, /* FrameRate */
-			0, ONE_SECOND * 8, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{ /* Arc welder 3 */
-			61, /* StartIndex */
-			6, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 40, 0, /* FrameRate */
-			0, ONE_SECOND * 8, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{ /* Arc welder 4 */
-			67, /* StartIndex */
-			7, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 40, 0, /* FrameRate */
-			0, ONE_SECOND * 8, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{ /* Arc welder 5 */
-			74, /* StartIndex */
-			11, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 40, 0, /* FrameRate */
-			0, ONE_SECOND * 8, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{ /* Arc welder 6 */
-			85, /* StartIndex */
-			10, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 40, 0, /* FrameRate */
-			0, ONE_SECOND * 8, /* RestartRate */
 			0, /* BlockMask */
 		},
 		{ /* Flagship picture */
@@ -1926,11 +1872,12 @@ uninit_starbase (void)
 static void
 post_starbase_enc (void)
 {
-	SET_GAME_STATE (MOONBASE_ON_SHIP, 0);
-	if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
-	{
-		SET_GAME_STATE (CHMMR_BOMB_STATE, 3);
-	}
+	// JMS: Don't need these anymore, do we?
+	//SET_GAME_STATE (MOONBASE_ON_SHIP, 0);
+	//if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
+	//{
+	//	SET_GAME_STATE (CHMMR_BOMB_STATE, 3);
+	//}
 }
 
 LOCDATA*
