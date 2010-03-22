@@ -3,3 +3,4 @@
    instead and regenerate. */
 
 #define HUMAN_PMAP_ANIM "comm.human.graphics"
+#define HUMAN_PMAP_ANIM2 "comm.human.graphics2"

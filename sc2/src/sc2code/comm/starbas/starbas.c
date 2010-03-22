@@ -986,14 +986,6 @@ DiscussDevices (BOOLEAN TalkAbout)
 		pStr = 0;
 		switch (i)
 		{
-			case ROSY_SPHERE_DEVICE:
-				if (GET_GAME_STATE (ROSY_SPHERE_ON_SHIP)
-						&& !GET_GAME_STATE (DISCUSSED_ROSY_SPHERE))
-				{
-					pStr = ABOUT_SPHERE;
-					SET_GAME_STATE (DISCUSSED_ROSY_SPHERE, TalkAbout);
-				}
-				break;
 			case ARTIFACT_2_DEVICE:
 				if (GET_GAME_STATE (ARTIFACT_2_ON_SHIP)
 						&& !GET_GAME_STATE (DISCUSSED_ARTIFACT_2))

@@ -371,7 +371,6 @@ equipShip (void)
 
 void
 giveDevices (void) {
-	SET_GAME_STATE (ROSY_SPHERE_ON_SHIP, 1);
 	SET_GAME_STATE (ARTIFACT_2_ON_SHIP, 1);
 	SET_GAME_STATE (ARTIFACT_3_ON_SHIP, 1);
 	SET_GAME_STATE (SUN_DEVICE_ON_SHIP, 1);
@@ -398,6 +397,9 @@ giveDevices (void) {
 	
 	// Not strictly a device (although it originally was one).
 	SET_GAME_STATE (DESTRUCT_CODE_ON_SHIP, 1);
+	
+	// JMS
+	SET_GAME_STATE (BLACK_ORB_ON_SHIP, 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////
