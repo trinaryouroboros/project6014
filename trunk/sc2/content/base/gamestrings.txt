@@ -546,8 +546,8 @@ Utwig Bomb
 Sun Device
 
 
-#(Rosy Sphere)
-Rosy Sphere
+#(Black Orb)
+Black Orb
 
 
 #(Aqua Helix)

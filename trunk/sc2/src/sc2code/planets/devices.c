@@ -17,6 +17,7 @@
  */
 
 // JMS 2009 -In Orz space no one can hear your 'caster...
+// JMS 2010 -Black orb replaces rosy sphere
 
 #include "build.h"
 #include "encount.h"
@@ -284,16 +285,8 @@ DeviceFailed (BYTE which_device)
 
 	switch (which_device)
 	{
-		case ROSY_SPHERE_DEVICE:
-			val = GET_GAME_STATE (ULTRON_CONDITION);
-			if (val)
-			{
-				SET_GAME_STATE (ULTRON_CONDITION, val + 1);
-				SET_GAME_STATE (ROSY_SPHERE_ON_SHIP, 0);
-				SET_GAME_STATE (DISCUSSED_ULTRON, 0);
-				SET_GAME_STATE (SUPOX_ULTRON_HELP, 0);
-				return (FALSE);
-			}
+		// JMS: Added Black orb device
+		case BLACK_ORB_DEVICE:
 			break;
 		case ARTIFACT_2_DEVICE:
 			break;
@@ -544,8 +537,9 @@ InventoryDevices (BYTE *pDeviceMap)
 		DeviceState = 0;
 		switch (i)
 		{
-			case ROSY_SPHERE_DEVICE:
-				DeviceState = GET_GAME_STATE (ROSY_SPHERE_ON_SHIP);
+			// JMS: Black orb device
+			case BLACK_ORB_DEVICE:
+				DeviceState = GET_GAME_STATE (BLACK_ORB_ON_SHIP);
 				break;
 			case ARTIFACT_2_DEVICE:
 				DeviceState = GET_GAME_STATE (ARTIFACT_2_ON_SHIP);

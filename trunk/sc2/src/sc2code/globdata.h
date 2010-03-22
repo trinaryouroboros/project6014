@@ -20,6 +20,7 @@
 //			 -Added IN_ORZSPACE flag for saved game summaries
 //			 -Added new game state for Vela factory visit
 // JMS 2010: -Added new game state for which ship is the flagship
+//			 -Added new device: Black orb
 
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
@@ -184,7 +185,7 @@ enum
 	TALKING_PET_DEVICE,
 	UTWIG_BOMB_DEVICE,
 	SUN_EFFICIENCY_DEVICE,
-	ROSY_SPHERE_DEVICE,
+	BLACK_ORB_DEVICE,	// JMS: Replaces ROSY_SPHERE_DEVICE
 	AQUA_HELIX_DEVICE,
 	CLEAR_SPINDLE_DEVICE,
 	ULTRON_0_DEVICE,
@@ -949,6 +950,10 @@ START_GAME_STATE
 			// 1 - Precursor tug
 			// 2 - UNUSED
 			// 3 - UNUSED
+
+	// JMS: Black orb device
+	ADD_GAME_STATE (BLACK_ORB_ON_SHIP, 1)
+	ADD_GAME_STATE (BLACK_ORB, 1)
 
 END_GAME_STATE
 

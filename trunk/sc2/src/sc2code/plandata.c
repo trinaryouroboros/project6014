@@ -573,7 +573,7 @@ STAR_DESC starmap_array[] =
 	{{MAX_X_UNIVERSE << 1, MAX_Y_UNIVERSE << 1}, 0, 0, 0, 0},
 	
 	// JMS: ORZ space locations
-	{{5000, 5000}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 0, 132},
+	{{5000, 5000}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 0, 131},
 	{{MAX_X_UNIVERSE << 1, MAX_Y_UNIVERSE << 1}, 0, 0, 0, 0},
 };
 
