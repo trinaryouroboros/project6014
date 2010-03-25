@@ -21,6 +21,7 @@
 //			 -Added new game state for Vela factory visit
 // JMS 2010: -Added new game state for which ship is the flagship
 //			 -Added new device: Black orb
+//			 -Added new device: Temporal wrapper
 
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
@@ -192,7 +193,7 @@ enum
 	ULTRON_1_DEVICE,
 	ULTRON_2_DEVICE,
 	ULTRON_3_DEVICE,
-	MAIDENS_DEVICE,
+	TEMPORAL_WRAPPER_DEVICE,	// JMS: Replaces MAIDENS_DEVICE
 	UMGAH_HYPERWAVE_DEVICE,
 	BURVIX_HYPERWAVE_DEVICE,
 	DATA_PLATE_1_DEVICE,
@@ -954,6 +955,9 @@ START_GAME_STATE
 	// JMS: Black orb device
 	ADD_GAME_STATE (BLACK_ORB_ON_SHIP, 1)
 	ADD_GAME_STATE (BLACK_ORB, 1)
+	
+	// JMS: Temporal wrapper device
+	ADD_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP, 1)
 
 END_GAME_STATE
 

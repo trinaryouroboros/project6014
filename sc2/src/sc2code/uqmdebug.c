@@ -379,7 +379,6 @@ giveDevices (void) {
 	//SET_GAME_STATE (ULTRON_CONDITION, 2);
 	//SET_GAME_STATE (ULTRON_CONDITION, 3);
 	//SET_GAME_STATE (ULTRON_CONDITION, 4);
-	SET_GAME_STATE (MAIDENS_ON_SHIP, 1);
 	SET_GAME_STATE (TALKING_PET_ON_SHIP, 1);
 	SET_GAME_STATE (AQUA_HELIX_ON_SHIP, 1);
 	SET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP, 1);
@@ -400,6 +399,7 @@ giveDevices (void) {
 	
 	// JMS
 	SET_GAME_STATE (BLACK_ORB_ON_SHIP, 1);
+	SET_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP, 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////
