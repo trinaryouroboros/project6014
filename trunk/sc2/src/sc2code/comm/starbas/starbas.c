@@ -1050,14 +1050,6 @@ DiscussDevices (BOOLEAN TalkAbout)
 					SET_GAME_STATE (DISCUSSED_ULTRON, TalkAbout);
 				}
 				break;
-			case MAIDENS_DEVICE:
-				if (GET_GAME_STATE (MAIDENS_ON_SHIP)
-						&& !GET_GAME_STATE (DISCUSSED_MAIDENS))
-				{
-					pStr = ABOUT_MAIDENS;
-					SET_GAME_STATE (DISCUSSED_MAIDENS, TalkAbout);
-				}
-				break;
 			case TALKING_PET_DEVICE:
 				if (GET_GAME_STATE (TALKING_PET_ON_SHIP)
 						&& !GET_GAME_STATE (DISCUSSED_TALKING_PET))

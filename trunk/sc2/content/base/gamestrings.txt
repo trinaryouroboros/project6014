@@ -574,8 +574,8 @@ Broken Ultron
 Perfect Ultron
 
 
-#(Shofixti Maidens)
-Shofixti Maidens
+#(Temporal Wrapper)
+Temporal Wrapper
 
 
 #(Umgah Caster)

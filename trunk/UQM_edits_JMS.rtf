@@ -18,6 +18,7 @@ IN A NUTSHELL:\
 -Chmmr now reside on their starbase also. Starbase fully functional, just like at Sol.\
 -Chmmr Explorer ship usable in melee.\
 -Some planets are restricted meaning they cannot be landed on. Like Earth, Procyon and Syreen Homeworld. (Mostly to hide non-working earth graphics.)\
+-New device: Black Orb\
 \
 ***************************************************************************************************************************************\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
@@ -45,6 +46,7 @@ IN A NUTSHELL:\
 						-Added IN_ORZSPACE flag for saved game summaries\
 						-Added Vela factory visited game state\
 						-Added game state for which ship player has as the flagship (Explorer/Precursor vessel)\
+						-Added Black orb game states\
 /grpinfo.c					-Changes to make 0 planet star systems work\
 /hyper.c					-Orz space colors\
 						-Function for entering a portal/system in Orz space\
@@ -75,11 +77,13 @@ IN A NUTSHELL:\
 /uqmdebug.c				-Some Orz space checks\
 						-Add 10 crew upon pressing debug button. (To make it possible to use lander)\
 						-No more moon base on ship upon hitting debug key. (moonbase onboard screws up starbase transition gfx)\
+						-Debug key gives black orb instead of rosy sphere\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 /comm/shofixt/shofixt.c		-Viewscreen animation for shofixti\
 \
 /planets/devices.c			-Casters cannot be used in Orz space\
+						-Replaced rosy sphere with black orb\
 /planets/genilw.c			-No ships orbiting Ilwrath homeworld anymore\
 /planets/genpku.c			-No ships orbiting Ilwrath homeworld anymore\
 /planets/gencol.c			-Don't create Ur-quan probe at Vela\

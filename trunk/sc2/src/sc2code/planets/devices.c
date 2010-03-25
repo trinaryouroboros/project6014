@@ -18,6 +18,7 @@
 
 // JMS 2009 -In Orz space no one can hear your 'caster...
 // JMS 2010 -Black orb replaces rosy sphere
+//			-Temporal wrapper replaces shofixti maidens
 
 #include "build.h"
 #include "encount.h"
@@ -342,7 +343,8 @@ DeviceFailed (BYTE which_device)
 			break;
 		case ULTRON_3_DEVICE:
 			break;
-		case MAIDENS_DEVICE:
+		// JMS: Temporal Wrapper replaces Maidens device
+		case TEMPORAL_WRAPPER_DEVICE:
 			break;
 		case TALKING_PET_DEVICE:
 			NextActivity |= CHECK_LOAD; /* fake a load game */
@@ -565,8 +567,8 @@ InventoryDevices (BYTE *pDeviceMap)
 			case ULTRON_3_DEVICE:
 				DeviceState = (GET_GAME_STATE (ULTRON_CONDITION) == 4);
 				break;
-			case MAIDENS_DEVICE:
-				DeviceState = GET_GAME_STATE (MAIDENS_ON_SHIP);
+			case TEMPORAL_WRAPPER_DEVICE:
+				DeviceState = GET_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP);
 				break;
 			case TALKING_PET_DEVICE:
 				DeviceState = GET_GAME_STATE (TALKING_PET_ON_SHIP);
