@@ -502,6 +502,27 @@ G'bye.
 #(GOODBYE_ANGRY_SPACE)	arilo059.ogg
 When you have resolved your conflict, we shall speak again.
 
+#(BEWARE_MY_CHILD_HELLO) arilo059.ogg
+Beware, my child!
+Beyond this point lies danger.
+You are not prepared to face it.
+
+#(palefaced_babysitters)
+Come on, you pale-faced babysitters! What's so dangerous in there?
+
+#(PREVENT_ACTIONS)	arilo059.ogg
+Not knowing is your best protection for now.
+We are sorry to prevent your actions,
+but we value your well-being too much to allow you to venture any further. 
+
+#(i_understand_goodbye)
+Oh man! Well, I think I'll just be going now... Goodbye, Arilou. 
+
+#(SEE_YOU_IN_FULL_GAME)	arilo059.ogg
+Do not feel bad, my child.
+In the fullness of time you might be ready for more knowledge
+like in the full version of this game!
+
 #(OUT_TAKES) arilo060.ogg
 Do you really believe Project Bluebook revealed EVERYTHING the Army Air Corps knew?
 Do you know what REALLY happened at Roswell, New Mexico in the late 1940's?

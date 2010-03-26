@@ -118,6 +118,11 @@ enum
 	APOLOGIZE_AT_HOMEWORLD,
 	bye_angry_space,
 	GOODBYE_ANGRY_SPACE,
+	BEWARE_MY_CHILD_HELLO,
+	palefaced_babysitters,
+	PREVENT_ACTIONS,
+	i_understand_goodbye,
+	SEE_YOU_IN_FULL_GAME,
 	OUT_TAKES,
 };
 

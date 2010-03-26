@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Arilou guard the Orz space portal and won't let the player through
+//			  if he doesn't have the Temporal Wrapper device.
+
 #include "comm/commall.h"
 #include "comm/arilou/resinst.h"
 #include "comm/arilou/strings.h"
@@ -252,6 +255,18 @@ ExitConversation (RESPONSE_REF R)
 
 		SET_GAME_STATE (ARILOU_MANNER, 2);
 	}
+	// JMS: New conversation options for Arilou at Orz space portal
+	else if (PLAYER_SAID (R, palefaced_babysitters))
+	{
+		NPCPhrase (PREVENT_ACTIONS);
+		Response (i_understand_goodbye, ExitConversation);
+	}
+	else if (PLAYER_SAID (R, i_understand_goodbye))
+	{
+		NPCPhrase (SEE_YOU_IN_FULL_GAME);
+	}
+		
+	
 }
 
 static void
@@ -647,6 +662,20 @@ Intro (void)
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
 		return;
 	}
+	// JMS: Arilou act as guardians at Orz space portal
+	else if(LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
+	{
+		if(CurStarDescPtr->Index == ORZ_SPACE_PORTAL_DEFINED)
+		{
+			RESPONSE_FUNC  RespFunc;
+			NPCPhrase (BEWARE_MY_CHILD_HELLO);
+			RespFunc = (ExitConversation);
+			Response (palefaced_babysitters, RespFunc);
+			Response (i_understand_goodbye, RespFunc);
+			return;
+		}
+	}
+	
 	else if (!GET_GAME_STATE (MET_ARILOU))
 	{
 		RESPONSE_FUNC  RespFunc;
@@ -655,6 +684,7 @@ Intro (void)
 		{
 			NPCPhrase (INIT_HELLO);
 			RespFunc = (RESPONSE_FUNC)FriendlySpaceArilou;
+			
 		}
 		else
 		{
@@ -662,10 +692,12 @@ Intro (void)
 			RespFunc = (RESPONSE_FUNC)ArilouHome;
 			SET_GAME_STATE (ARILOU_HOME_VISITS, 1);
 		}
+		
 		Response (confused_by_hello, RespFunc);
 		Response (happy_by_hello, RespFunc);
 		Response (miffed_by_hello, RespFunc);
 		SET_GAME_STATE (MET_ARILOU, 1);
+		
 		return;
 	}
 
@@ -840,15 +872,25 @@ init_arilou_comm (void)
 	arilou_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1
-			|| GET_GAME_STATE (ARILOU_MANNER) == 3
-			|| LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
+		|| GET_GAME_STATE (ARILOU_MANNER) == 3
+		|| LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
 	{
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
 	}
+	// JMS: No fighting with Orz space portal guard arilous.
+	//
+	// Star Description pointer will only be checked if we're not in Hyperspace
+	// ... If we're in hyperspace the pointer doesn't exist and all hell breaks loose!
+	else if(LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
+	{
+		if (CurStarDescPtr->Index == ORZ_SPACE_PORTAL_DEFINED)
+			SET_GAME_STATE (BATTLE_SEGUE, 0);
+	}
 	else
 	{
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
 	}
+	
 	retval = &arilou_desc;
 
 	return (retval);

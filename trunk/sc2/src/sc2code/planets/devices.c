@@ -19,6 +19,7 @@
 // JMS 2009 -In Orz space no one can hear your 'caster...
 // JMS 2010 -Black orb replaces rosy sphere
 //			-Temporal wrapper replaces shofixti maidens
+//			-Slaveshield buster replaces Clear spindle
 
 #include "build.h"
 #include "encount.h"
@@ -390,16 +391,8 @@ DeviceFailed (BYTE which_device)
 				return (FALSE);
 			}
 			break;
-		case CLEAR_SPINDLE_DEVICE:
-			val = GET_GAME_STATE (ULTRON_CONDITION);
-			if (val)
-			{
-				SET_GAME_STATE (ULTRON_CONDITION, val + 1);
-				SET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP, 0);
-				SET_GAME_STATE (DISCUSSED_ULTRON, 0);
-				SET_GAME_STATE (SUPOX_ULTRON_HELP, 0);
-				return (FALSE);
-			}
+			// JMS: Slaveshield buster replaces Clear Spindle
+		case SHIELD_BUSTER_DEVICE:
 			break;
 		case UMGAH_HYPERWAVE_DEVICE:
 		case BURVIX_HYPERWAVE_DEVICE:
@@ -567,6 +560,7 @@ InventoryDevices (BYTE *pDeviceMap)
 			case ULTRON_3_DEVICE:
 				DeviceState = (GET_GAME_STATE (ULTRON_CONDITION) == 4);
 				break;
+			// JMS: Temporal Wrapper device
 			case TEMPORAL_WRAPPER_DEVICE:
 				DeviceState = GET_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP);
 				break;
@@ -576,8 +570,9 @@ InventoryDevices (BYTE *pDeviceMap)
 			case AQUA_HELIX_DEVICE:
 				DeviceState = GET_GAME_STATE (AQUA_HELIX_ON_SHIP);
 				break;
-			case CLEAR_SPINDLE_DEVICE:
-				DeviceState = GET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP);
+			// JMS: Slaveshield buster device
+			case SHIELD_BUSTER_DEVICE:
+				DeviceState = GET_GAME_STATE (SHIELD_BUSTER_ON_SHIP);
 				break;
 			case UMGAH_HYPERWAVE_DEVICE:
 				DeviceState = GET_GAME_STATE (UMGAH_BROADCASTERS_ON_SHIP);
