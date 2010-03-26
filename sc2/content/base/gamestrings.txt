@@ -554,8 +554,8 @@ Black Orb
 Aqua Helix
 
 
-#(Clear Spindle)
-Clear Spindle
+#(Shield Buster)
+Shield Buster
 
 
 #(Broken Ultron)

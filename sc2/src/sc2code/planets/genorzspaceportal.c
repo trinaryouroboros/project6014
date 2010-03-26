@@ -41,16 +41,19 @@ GenerateOrzSpacePortal (BYTE control)
 			/* The PORTAL */
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->SunDesc[0])
 			{
-				// Communication
-				//pSolarSysState->MenuState.Initialized += 2;
-				//InitCommunication (ARILOU_CONVERSATION);
-				//pSolarSysState->MenuState.Initialized -= 2;
-				
-				// Thru the portal to ORZ space
-				GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (QUASI_SPACE_X);
-				GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (QUASI_SPACE_Y);
-				SET_GAME_STATE (ORZ_SPACE_SIDE, 3);
-				GLOBAL (CurrentActivity) |= END_INTERPLANETARY;
+				if(!(GET_GAME_STATE(TEMPORAL_WRAPPER_ON_SHIP)))
+				{  // Arilou Communication if one doesn't have proper protective device along
+				   pSolarSysState->MenuState.Initialized += 2;
+				   InitCommunication (ARILOU_CONVERSATION);
+				   pSolarSysState->MenuState.Initialized -= 2;
+				}
+				else   
+				{	// Thru the portal to ORZ space
+					GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (QUASI_SPACE_X);
+					GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (QUASI_SPACE_Y);
+					SET_GAME_STATE (ORZ_SPACE_SIDE, 3);
+					GLOBAL (CurrentActivity) |= END_INTERPLANETARY;
+				}
 			}
 				break;
 		default:
