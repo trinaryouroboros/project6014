@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009 - Text for Orz space ship group encounter "encounter in *Below*
+// JMS 2009		-Text for Orz space ship group encounter segue screen "encounter in *Below*
+// JMS 2010		-Also name "Unknown" instead of planet name and portal graphics for the segue screen.
 
 #include "encount.h"
 
@@ -260,14 +261,32 @@ InitEncounter (void)
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
 		t.baseline.y += 12;
-		t.pStr = GLOBAL_SIS (PlanetName);
+		
+		// JMS: Orz space portal shenanigans. Don't display planet name.
+		if(CurStarDescPtr->Index == ORZ_SPACE_PORTAL_DEFINED)
+			t.pStr = "";
+		else
+			t.pStr = GLOBAL_SIS (PlanetName);
+		
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
+		
 	}
 
 	s.origin.x = SIS_SCREEN_WIDTH >> 1;
 	s.origin.y = SIS_SCREEN_HEIGHT >> 1;
 	s.frame = planet[0];
+	
+	// JMS: Orz space portal gfx shenanigans.
+	// Let's replace the planet graphics with portal graphics when encountering
+	// ships in Orz space portal "star system". This doesn't do anything to the actual
+	// battle graphics, just for the pre-batlle communicate/attack! screen.
+	if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
+	{
+		if(CurStarDescPtr->Index == ORZ_SPACE_PORTAL_DEFINED)
+			s.frame = CaptureDrawable (LoadGraphic (SEGUE_ORZSPACEPORTAL_ANIM));
+	}
+	
 	DrawStamp (&s);
 
 	if (LOBYTE (GLOBAL (CurrentActivity)) != IN_LAST_BATTLE)
