@@ -17,7 +17,7 @@
  */
 
 // JMS 2009		-Text for Orz space ship group encounter segue screen "encounter in *Below*
-// JMS 2010		-Also name "Unknown" instead of planet name and portal graphics for the segue screen.
+// JMS 2010		-Also no planet name for the segue screen. Portal gfx instead of planet.
 
 #include "encount.h"
 
@@ -280,7 +280,7 @@ InitEncounter (void)
 	// JMS: Orz space portal gfx shenanigans.
 	// Let's replace the planet graphics with portal graphics when encountering
 	// ships in Orz space portal "star system". This doesn't do anything to the actual
-	// battle graphics, just for the pre-batlle communicate/attack! screen.
+	// battle graphics, just for the pre-battle communicate/attack! screen.
 	if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
 	{
 		if(CurStarDescPtr->Index == ORZ_SPACE_PORTAL_DEFINED)

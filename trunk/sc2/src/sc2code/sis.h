@@ -102,6 +102,7 @@ enum
 #define FUEL_TANK_CAPACITY (50 * FUEL_TANK_SCALE)
 #define HEFUEL_TANK_CAPACITY (100 * FUEL_TANK_SCALE)
 #define MODULE_COST_SCALE 50
+
 /** Capacities for Explorer **/
 #define EXPLORER_CREW_CAPACITY 50
 
@@ -114,8 +115,10 @@ enum
 #define FUEL_VOLUME_PER_ROW (1 ? (HEFUEL_TANK_CAPACITY*2 / 20) : (HEFUEL_TANK_CAPACITY / MAX_FUEL_BARS))
 #define FUEL_RESERVE FUEL_VOLUME_PER_ROW
 
-#define MAX_COMBAT_SHIPS 6 // No more than 6 companion ships for the Explorer
-#define MAX_BATTLE_GROUPS 32
+#define MAX_COMBAT_SHIPS 6		// No more than 6 companion ships for the Explorer
+
+
+#define MAX_BATTLE_GROUPS 32	// Max number of battlegroups in a solar system
 
 // XXX: Needed to maintain savegame compatibility
 #define NUM_SAVED_BATTLE_GROUPS 64

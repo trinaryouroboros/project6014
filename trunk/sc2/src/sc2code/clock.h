@@ -24,7 +24,7 @@
 #include "libs/tasklib.h"
 #include "displist.h"
 
-
+// JMS: Changed the starting year.
 #define START_YEAR 2165
 
 #define UPDATE_DAY (1 << 0)

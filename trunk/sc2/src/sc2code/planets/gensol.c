@@ -34,6 +34,7 @@
 #include "encount.h"
 #include "planets/genall.h"
 #include "libs/mathlib.h"
+#include "libs/log.h"
 
 
 static int
@@ -416,6 +417,7 @@ GenerateSOL (BYTE control)
 				ReinitQueue (&GLOBAL (ip_group_q));
 				assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
 			}
+			
 			break;
 		case GENERATE_ORBITAL:
 			generate_orbital ();

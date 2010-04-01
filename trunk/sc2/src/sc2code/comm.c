@@ -1450,10 +1450,10 @@ InitCommunication (CONVERSATION which_comm)
 		}
 	}
 
-	if (which_comm == URQUAN_PROBE_CONVERSATION)
+	if (which_comm == TRANSPORT_CONVERSATION)
 	{
-		status = URQUAN_PROBE_SHIP;
-		which_comm = URQUAN_CONVERSATION;
+		status = TRANSPORT_SHIP;
+		which_comm = HUMAN_CONVERSATION;
 	}
 	else
 	{

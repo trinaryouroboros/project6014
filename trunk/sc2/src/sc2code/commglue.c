@@ -17,6 +17,7 @@
  */
 
 // JMS 2009: -Added earthling ship and Androsynth dialogue screen hooks
+// JMS 2010: -Removed unnecessary init_commander_comm
 
 #include "commglue.h"
 
