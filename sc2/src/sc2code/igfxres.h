@@ -255,6 +255,7 @@
 #define RUINS_MASK_PMAP_ANIM "graphics.ruins"
 #define SAMATRA_BIG_MASK_PMAP_ANIM "planet.samatra.large"
 #define SC2_PICK_PMAP_ANIM "graphics.pickship"
+#define SEGUE_ORZSPACEPORTAL_ANIM "graphics.segue_orzspaceportal"
 #define SEGUE_PMAP_ANIM "graphics.segue"
 #define SHIELDED_BIG_MASK_PMAP_ANIM "planet.slaveshield.large"
 #define SHIELDED_MED_MASK_PMAP_ANIM "planet.slaveshield.medium"

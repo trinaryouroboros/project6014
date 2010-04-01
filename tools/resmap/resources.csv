@@ -254,6 +254,7 @@ UMGAH_BCS_MASK_PMAP_ANIM,graphics.umgtrans,sc2code/igfxres.h,GFXRES,base/lander/
 MELEE_SCREEN_PMAP_ANIM,graphics.melebkgd,sc2code/igfxres.h,GFXRES,base/ui/meleebackground.ani
 MELEE_PICK_MASK_PMAP_ANIM,graphics.melee,sc2code/igfxres.h,GFXRES,base/ui/melee.ani
 SEGUE_PMAP_ANIM,graphics.segue,sc2code/igfxres.h,GFXRES,base/ui/segue.ani
+SEGUE_ORZSPACEPORTAL_ANIM,graphics.segue_orzspaceportal,sc2code/igfxres.h,GFXRES,base/nav/segue_orzspaceportal.ani
 SC2_PICK_PMAP_ANIM,graphics.pickship,sc2code/igfxres.h,GFXRES,base/ui/pickship.ani
 BULLETHOLES_PMAP_ANIM,graphics.bulletholes,sc2code/igfxres.h,GFXRES,base/ui/bullet.ani
 RESTART_PMAP_ANIM,graphics.newgame,sc2code/igfxres.h,GFXRES,base/ui/newgame.ani

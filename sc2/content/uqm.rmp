@@ -227,6 +227,7 @@ graphics.quake = GFXRES:base/lander/hazard/quake.ani
 graphics.return = GFXRES:base/lander/return.ani
 graphics.ruins = GFXRES:base/lander/energy/ruins.ani
 graphics.segue = GFXRES:base/ui/segue.ani
+graphics.segue_orzspaceportal = GFXRES:base/nav/segue_orzspaceportal.ani
 graphics.setupmenu = GFXRES:base/ui/setupmenu.ani
 graphics.shipyard = GFXRES:base/ui/shipyard.ani
 graphics.sis_ip = GFXRES:base/nav/explorer_ip.ani

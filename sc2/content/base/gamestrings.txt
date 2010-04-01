@@ -1769,7 +1769,7 @@ FLAGSHIP
 
 
 #(Vindicator)
-Vindicator
+Discovery
 
 
 #(Zelnick)
