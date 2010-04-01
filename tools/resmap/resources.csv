@@ -889,6 +889,8 @@ DAGGER_SML_MASK_PMAP_ANIM,ship.syreen.graphics.dagger.small,sc2code/ships/syreen
 SYREEN_CAPTAIN_MASK_PMAP_ANIM,ship.syreen.graphics.captain,sc2code/ships/syreen/igfxres.h,GFXRES,base/ships/syreen/syrcap.ani
 PROBE_CODE,ship.probe.code,sc2code/ships/probe/icode.h,SHIP,27
 PROBE_MICON_MASK_PMAP_ANIM,ship.probe.meleeicons,sc2code/ships/probe/igfxres.h,GFXRES,base/ships/probe/promicon.ani
+TRANSPORT_CODE,ship.transport.code,sc2code/ships/transport/icode.h,SHIP,27
+TRANSPORT_MICON_MASK_PMAP_ANIM,ship.transport.meleeicons,sc2code/ships/transport/igfxres.h,GFXRES,base/ships/transport/tramicon.ani
 MMRNMHRM_CODE,ship.mmrnmhrm.code,sc2code/ships/mmrnmhrm/icode.h,SHIP,9
 MMRNMHRM_VICTORY_SONG,ship.mmrnmhrm.ditty,sc2code/ships/mmrnmhrm/imusicre.h,MUSICRES,base/ships/mmrnmhrm/mmrditty.mod
 MMRNMHRM_RACE_STRINGS,ship.mmrnmhrm.text,sc2code/ships/mmrnmhrm/istrtab.h,STRTAB,base/ships/mmrnmhrm/mmrtext.txt

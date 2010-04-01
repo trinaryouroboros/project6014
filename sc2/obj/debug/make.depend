@@ -313,6 +313,7 @@
 ./obj/debug/src/sc2code/ships/supox/supox.c
 ./obj/debug/src/sc2code/ships/syreen/syreen.c
 ./obj/debug/src/sc2code/ships/thradd/thradd.c
+./obj/debug/src/sc2code/ships/transport/transport.c
 ./obj/debug/src/sc2code/ships/umgah/umgah.c
 ./obj/debug/src/sc2code/ships/urquan/urquan.c
 ./obj/debug/src/sc2code/ships/utwig/utwig.c

@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: Implemented changes to make 0 planet star systems work
+// JMS 2009: -Implemented changes to make 0 planet star systems work
+// JMS 2010: -Some systems now have a freight transport ship in interplanetary.
 
 #include "build.h"
 #include "encount.h"
@@ -258,10 +259,10 @@ BuildGroups (void)
 	{
 		0,                /* ARILOU_SHIP */
 		CHMMR_DEFINED,    /* CHMMR_SHIP */
-		0,                /* HUMAN_SHIP */
+		SOL_DEFINED,	  /* JMS: HUMAN_SHIP */
 		ORZ_DEFINED,      /* ORZ_SHIP */
 		PKUNK_DEFINED,    /* PKUNK_SHIP */
-		0,                /* SHOFIXTI_SHIP */
+		SHOFIXTI_DEFINED, /* JMS: SHOFIXTI_SHIP */
 		SPATHI_DEFINED,   /* SPATHI_SHIP */
 		SUPOX_DEFINED,    /* SUPOX_SHIP */
 		THRADD_DEFINED,   /* THRADDASH_SHIP */
@@ -404,10 +405,20 @@ FoundHome:
 			for (Index = HINIBBLE (EncounterMakeup[BestIndex]); Index;
 					--Index)
 			{
-				if (Index <= LONIBBLE (EncounterMakeup[BestIndex])
-						|| (COUNT)TFB_Random () % 100 < 50)
-					CloneShipFragment (BestIndex,
-							&GLOBAL (npc_built_ship_q), 0);
+				if (Index <= LONIBBLE (EncounterMakeup[BestIndex]) || (COUNT)TFB_Random () % 100 < 50)
+				{
+					// JMS: Generate transport ship in specific systems.
+					if(which_group == 0 && (
+					     CurStarDescPtr->Index==SOL_DEFINED
+					  || CurStarDescPtr->Index==CHMMR_DEFINED
+					  || CurStarDescPtr->Index==SYREEN_DEFINED
+					  || CurStarDescPtr->Index==YEHAT_DEFINED						
+							)
+					   )
+						CloneShipFragment (TRANSPORT_SHIP, &GLOBAL (npc_built_ship_q), 0);
+					else
+						CloneShipFragment (BestIndex, &GLOBAL (npc_built_ship_q), 0);
+				}
 			}
 
 			PutGroupInfo (GROUPS_RANDOM, ++which_group);
@@ -697,9 +708,28 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 				
 				group_loc = 0;
 			}
-
-			GroupPtr->task = task;
-			GroupPtr->sys_loc = group_loc;
+			
+			// JMS: Transport ship resides near starbase / home planet
+			if (GroupPtr->race_id==TRANSPORT_SHIP) {
+				GroupPtr->task = IN_ORBIT | IGNORE_FLAGSHIP;
+				COUNT startposition = 1;
+				if(CurStarDescPtr->Index==SOL_DEFINED)
+					startposition=3; /* orbitting earth */
+				if(CurStarDescPtr->Index==CHMMR_DEFINED)
+					startposition=2; /* orbitting Procyon II */
+				if(CurStarDescPtr->Index==SYREEN_DEFINED)					
+					startposition=1; /* orbitting Betelgeuse I */
+				if(CurStarDescPtr->Index==YEHAT_DEFINED)
+					startposition=1; /* orbitting Gamma Serpentis I */
+				
+				GroupPtr->sys_loc = startposition;
+				GroupPtr->dest_loc = startposition;
+			}
+			else
+			{
+				GroupPtr->task = task;
+				GroupPtr->sys_loc = group_loc;
+			}
 
 #ifdef DEBUG_GROUPS
 			log_add (log_Debug, "battle group %u(0x%04x) strength "

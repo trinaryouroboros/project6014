@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Certain systems have freight transport ships. These ships leave the system for their 
+//			  supposed freight run on first day of the month + every date divisible with seven thereafter.
+//			 -Removed some Ur-Quan probe conditions.
+
 #include "collide.h"
 #include "globdata.h"
 #include "init.h"
@@ -147,6 +151,12 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 					% MAX_REVOLUTIONS) << FACING_SHIFT;
 	}
 
+	// JMS: A transport ship leaves star system on the first day of the month and on every seventh day thereafter.
+	if (GroupPtr->race_id==TRANSPORT_SHIP && (GLOBAL (GameClock).day_index % 7 == 0 || GLOBAL (GameClock).day_index == 1)) {
+		GroupPtr->task = FLEE;
+		GroupPtr->dest_loc = 0;
+	}
+	
 	if (!(task & REFORM_GROUP))
 	{
 		if ((task & ~(IGNORE_FLAGSHIP | REFORM_GROUP)) != FLEE)
@@ -184,8 +194,9 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 			if (group_loc != 0) /* if in planetary views */
 			{
 				detect_dist *= (MAX_ZOOM_RADIUS / MIN_ZOOM_RADIUS);
-				if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
-					detect_dist <<= 1;
+				// JMS: Bye bye, Ur-Quan probe.
+				//if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
+				//	detect_dist <<= 1;
 			}
 			vdx = GLOBAL (ip_location.x) - GroupPtr->loc.x;
 			vdy = GLOBAL (ip_location.y) - GroupPtr->loc.y;
@@ -545,7 +556,9 @@ ip_group_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 	{
 		EncounterGroup = GroupPtr->group_id;
 
-		if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
+		// JMS: So long, Ur-Quan probe.
+		//if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
+		if(0)
 		{
 			GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
 			GroupPtr->dest_loc = 0;

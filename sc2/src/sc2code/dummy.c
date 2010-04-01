@@ -21,6 +21,8 @@
  * much.
  */
 
+// JMS 2010: -Transport ship resource pointer replaces that of the Ur-Quan Probe.
+
 #include "coderes.h"
 #include "globdata.h"
 #include "races.h"
@@ -70,7 +72,7 @@ enum
 
 	SAMATRA_CODE_RES,
 	SIS_CODE_RES,
-	PROBE_CODE_RES
+	TRANSPORT_CODE_RES
 };
 
 	BYTE which_res;
@@ -277,11 +279,12 @@ enum
 				RDPtr = init_sis ();
 				break;
 			}
-			case PROBE_CODE_RES:
+			// JMS: Transport code_res replaces ur-quan probe
+			case TRANSPORT_CODE_RES:
 			{
-				extern RACE_DESC* init_probe (void);
-
-				RDPtr = init_probe ();
+				extern RACE_DESC* init_transport (void);
+				
+				RDPtr = init_transport ();
 				break;
 			}
 			default:
