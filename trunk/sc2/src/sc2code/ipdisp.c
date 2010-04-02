@@ -18,6 +18,10 @@
 
 // JMS 2010: -Certain systems have freight transport ships. These ships leave the system for their 
 //			  supposed freight run on first day of the month + every date divisible with seven thereafter.
+//			 
+//			 -More Transport ship mechanics: The ship's status flag is 0 when orbiting a planet, 1 when
+//			  leaving for hyperspace and 2 when arriving from hyperspace.
+//
 //			 -Removed some Ur-Quan probe conditions.
 
 #include "collide.h"
@@ -27,6 +31,7 @@
 #include "grpinfo.h"
 #include "encount.h"
 #include "libs/mathlib.h"
+#include "libs/log.h"
 
 
 void
@@ -96,6 +101,7 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 	SIZE radius;
 	POINT dest_pt;
 	SIZE vdx, vdy;
+	SIZE tdx, tdy;
 	ELEMENT *EPtr;
 	IP_GROUP *GroupPtr;
 
@@ -152,9 +158,27 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 	}
 
 	// JMS: A transport ship leaves star system on the first day of the month and on every seventh day thereafter.
-	if (GroupPtr->race_id==TRANSPORT_SHIP && (GLOBAL (GameClock).day_index % 7 == 0 || GLOBAL (GameClock).day_index == 1)) {
+	if (GroupPtr->race_id==TRANSPORT_SHIP 
+		&& (GLOBAL (GameClock).day_index % 7 == 0 || GLOBAL (GameClock).day_index == 1))
+	{
 		GroupPtr->task = FLEE;
 		GroupPtr->dest_loc = 0;
+		SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 1);
+	}
+
+	// JMS: If a transport ship is arriving its destination, zero its status flag once it reaches destination planet.
+	if (GroupPtr->race_id==TRANSPORT_SHIP 
+		&& GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 4
+		&& group_loc == GroupPtr->dest_loc)
+	{
+		tdx = GroupPtr->loc.x;
+		tdy = GroupPtr->loc.y;
+
+		if ((long)tdx * tdx + (long)tdy * tdy <= (long)ORBIT_RADIUS * ORBIT_RADIUS)
+		{
+			log_add(log_Debug, "********************** Transport ship STATUS zeroed.");
+			SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,0);
+		}
 	}
 	
 	if (!(task & REFORM_GROUP))
@@ -241,6 +265,8 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		{
 			if (GroupPtr->dest_loc == 0)
 				dest_pt = GLOBAL (ip_location);
+			
+			// ship is circling around a planet.
 			else
 			{
 				COUNT orbit_dist;
@@ -423,6 +449,10 @@ CheckGetAway:
 					EPtr->life_span = 0;
 					EPtr->state_flags |= DISAPPEARING | NONSOLID;
 					GroupPtr->in_system = 0;
+					
+					// JMS: Freight Transport ship has left the system.
+					if (GroupPtr->race_id==TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
+						SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,2);
 					return;
 				}
 				else

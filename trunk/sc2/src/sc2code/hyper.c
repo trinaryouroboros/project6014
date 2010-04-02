@@ -24,6 +24,8 @@
 //			 -Androsynth ship meeting percent in ORZ space in Checkhyperspaceencounter
 //			 -Can't meet melnorme/slylando in orz space, in Checkhyperspaceencounter
 //			 -Ship doesn't consume fuel in Orz space
+//
+//			 -Helluva lot of things regarding Freight Transport ships in hyperspace.
 
 #include "hyper.h"
 
@@ -40,6 +42,7 @@
 #include "sounds.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
+#include "libs/log.h"
 
 
 
@@ -225,6 +228,17 @@ check_hyperspace_encounter (void)
 						percent = 100;
 					encounter_flags = ONE_SHOT_ENCOUNTER;
 				}
+				
+				// JMS: Transport ship test...
+				if (Type == TRANSPORT_SHIP
+						 && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1
+						 && (GET_GAME_STATE (TRANSPORT_SHIP_0_STATUS)==2 
+							 || GET_GAME_STATE (USED_BUSTER) ))  // JMS: ORZ space check
+				{
+					percent = 100;
+					encounter_flags = ONE_SHOT_ENCOUNTER;
+					SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,3);
+				}
 
 
 				for (hEncounter = GetHeadEncounter ();
@@ -269,8 +283,15 @@ check_hyperspace_encounter (void)
 					EncounterPtr->radius = encounter_radius;
 					EncounterPtr->SD.Index = encounter_flags;
 					EncounterPtr->SD.Type = Type;
+					
+					if (Type == TRANSPORT_SHIP)
+					{
+						EncounterPtr->home_pt.x=6752;
+						EncounterPtr->home_pt.y=7450;
+						EncounterPtr->destination_pt.x=5742;
+						EncounterPtr->destination_pt.y=8268;
+					}	
 					UnlockEncounter (hEncounter);
-
 					PutEncounter (hEncounter);
 				}
 			}
@@ -437,6 +458,7 @@ cleanup_hyperspace (void)
 
 		LockEncounter (hEncounter, &EncounterPtr);
 		hNextEncounter = GetSuccEncounter (EncounterPtr);
+		
 		if (EncounterPtr->hElement)
 		{
 			ELEMENT *ElementPtr;
@@ -451,6 +473,7 @@ cleanup_hyperspace (void)
 
 			UnlockElement (EncounterPtr->hElement);
 		}
+		
 		EncounterPtr->hElement = 0;
 		UnlockEncounter (hEncounter);
 	}
@@ -490,12 +513,7 @@ unhyper_transition (ELEMENT *ElementPtr)
 				GLOBAL (ShipStamp.frame) = 0;
 				SET_GAME_STATE (USED_BROADCASTER, 0);
 				
-				// JMS: These three lines were in UQM ver 0.7... Are they necessary?
-				//GLOBAL (ip_planet) = 0;
-				//GLOBAL (in_orbit) = 0;
-				//GLOBAL (ShipFacing) = 0; /* Not reentering the system */
-				
-				// JMS: Entering something in ORZ space
+				// JMS: Entering star or portal in ORZ space
 				if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
 				{
 					POINT orz_pt;
@@ -503,7 +521,7 @@ unhyper_transition (ELEMENT *ElementPtr)
 
 					POINT orz_portal_pt[] =
 					{
-						{8654, 8587}, // Exit from Orz space birngs ship to hyperspace coords 100.0x 100.0y
+						{8654, 8587}, // Exit from Orz space brings ship to these hyperspace coordinates.
 					};
 
 					GLOBAL (autopilot.x) = ~0;
@@ -521,8 +539,8 @@ unhyper_transition (ELEMENT *ElementPtr)
 					
 					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;  // JMS: Returns inside portal star system interplanetary
 					SET_GAME_STATE (ESCAPE_COUNTER, 0);			
-					SET_GAME_STATE (LEAVING_ORZ_SPACE, 1);			// JMS: Added this so returning to interplanetary instead of hyperspace works
-					// (Check ExploreSolarSys  in solarsys.c for more info)
+					SET_GAME_STATE (LEAVING_ORZ_SPACE, 1);			// JMS: Added this so returning to interplanetary instead of hyperspace works.
+																	// (Check ExploreSolarSys  in solarsys.c for more info)
 					SET_GAME_STATE (ORZ_SPACE_SIDE, 0);
 					SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
 					
@@ -959,11 +977,11 @@ encounter_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 
 		init_transition (ElementPtr0, ElementPtr1, RANDOM_ENCOUNTER_TRANSITION);
 
+		ENCOUNTER *EncounterPtr;
+		
 		for (hEncounter = GetHeadEncounter ();
 				hEncounter != 0; hEncounter = hNextEncounter)
 		{
-			ENCOUNTER *EncounterPtr;
-
 			LockEncounter (hEncounter, &EncounterPtr);
 			hNextEncounter = GetSuccEncounter (EncounterPtr);
 			if (EncounterPtr->hElement)
@@ -978,7 +996,7 @@ encounter_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 			}
 			UnlockEncounter (hEncounter);
 		}
-
+		
 		ElementPtr0->state_flags |= BAD_GUY;
 		ZeroVelocityComponents (&ElementPtr0->velocity);
 	}
@@ -993,14 +1011,12 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 	HELEMENT hElement;
 	STAR_DESC SD;
 	
-
 	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) >= 2)
 		return (0);
-
+	
 	if (EncounterPtr->SD.Index & ENCOUNTER_REFORMING)
 	{
 		EncounterPtr->SD.Index &= ~ENCOUNTER_REFORMING;
-
 		EncounterPtr->transition_state = 100;
 		if ((EncounterPtr->SD.Index & ONE_SHOT_ENCOUNTER)
 				|| LONIBBLE (EncounterPtr->SD.Index) == 0)
@@ -1056,7 +1072,6 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 			UnlockFleetInfo (&GLOBAL (avail_race_q), hStarShip);
 		}
 
-
 		do
 		{
 			DWORD rand_val;
@@ -1074,11 +1089,18 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 			if (SD.star_pt.y < 0)
 				SD.star_pt.y = 0;
 			else if (SD.star_pt.y > MAX_Y_UNIVERSE)
-				SD.star_pt.y = MAX_Y_UNIVERSE;
+					SD.star_pt.y = MAX_Y_UNIVERSE;
 
 			dx = SD.star_pt.x - EncounterPtr->origin.x;
 			dy = SD.star_pt.y - EncounterPtr->origin.y;
 		} while ((DWORD)((long)dx * dx + (long)dy * dy) > radius_squared);
+		
+		// JMS: Spawn Transport ship always at its home system's location in hyperspace.
+		if(EncounterPtr->SD.Type == TRANSPORT_SHIP)
+		{
+			SD.star_pt.x=EncounterPtr->home_pt.x;
+			SD.star_pt.y=EncounterPtr->home_pt.y;
+		}
 
 		EncounterPtr->SD.star_pt = SD.star_pt;
 		EncounterPtr->log_x = UNIVERSE_TO_LOGX (SD.star_pt.x);
@@ -1086,6 +1108,7 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 	}
 
 	hElement = AllocHyperElement (&SD);
+	
 	if (hElement)
 	{
 		SIZE i;
@@ -1223,7 +1246,6 @@ ProcessEncounters (POINT *puniverse, COORD ox, COORD oy)
 		{
 DeleteEncounter:
 			UnlockEncounter (hEncounter);
-
 			RemoveEncounter (hEncounter);
 			FreeEncounter (hEncounter);
 			continue;
@@ -1268,12 +1290,25 @@ DeleteEncounter:
 				{
 					COUNT cur_facing, delta_facing;
 
-					cur_facing = ANGLE_TO_FACING (
-							GetVelocityTravelAngle (&ElementPtr->velocity));
-					delta_facing = NORMALIZE_FACING (cur_facing
+					cur_facing = ANGLE_TO_FACING (GetVelocityTravelAngle (&ElementPtr->velocity));
+					
+					// JMS: Transport ship doesn't chase player, heads for target system instead.
+					if (EncounterPtr->SD.Type == TRANSPORT_SHIP) 
+					{
+						delta_facing = NORMALIZE_FACING (cur_facing
+							- ANGLE_TO_FACING (ARCTAN (
+							EncounterPtr->destination_pt.x - EncounterPtr->SD.star_pt.x,
+							EncounterPtr->destination_pt.y - EncounterPtr->SD.star_pt.y)));
+					}
+					// Normal ships chase player.
+					else
+					{
+						delta_facing = NORMALIZE_FACING (cur_facing
 							- ANGLE_TO_FACING (ARCTAN (
 							puniverse->x - EncounterPtr->SD.star_pt.x,
 							puniverse->y - EncounterPtr->SD.star_pt.y)));
+					}
+					
 					if (delta_facing || (delta_x == 0 && delta_y == 0))
 					{
 						SIZE s, RaceHyperSpeed[] =
@@ -1347,6 +1382,19 @@ DeleteEncounter:
 
 			ex = EncounterPtr->SD.star_pt.x;
 			ey = EncounterPtr->SD.star_pt.y;
+			
+			// JMS: Transport ship reaches target. Transport ship disappears ("into target").
+			if ((ex == EncounterPtr->destination_pt.x && ey == EncounterPtr->destination_pt.y)
+				&& (EncounterPtr->SD.Type == TRANSPORT_SHIP) )
+			{
+				SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,4);
+				ElementPtr->life_span = 0;
+				ElementPtr->death_func = NULL;
+				UnlockElement (EncounterPtr->hElement);
+				
+				goto DeleteEncounter;
+			}
+			
 			if (ex - puniverse->x >= -UNIT_SCREEN_WIDTH
 					&& ex - puniverse->x <= UNIT_SCREEN_WIDTH
 					&& ey - puniverse->y >= -UNIT_SCREEN_HEIGHT
@@ -1374,10 +1422,13 @@ DeleteEncounter:
 			else
 			{
 				ElementPtr->state_flags |= NONSOLID;
-				if (ex - puniverse->x < -XOFFS
+				
+				// JMS: Never delete transport ship spoors, no matter how far from player's ship they are...
+				if ((ex - puniverse->x < -XOFFS
 						|| ex - puniverse->x > XOFFS
 						|| ey - puniverse->y < -YOFFS
 						|| ey - puniverse->y > YOFFS)
+						&& (EncounterPtr->SD.Type != TRANSPORT_SHIP) )
 				{
 					ElementPtr->life_span = 0;
 					ElementPtr->death_func = NULL;
@@ -1640,6 +1691,12 @@ SeedUniverse (void)
 				InsertElement (hHyperSpaceElement, GetHeadElement ());
 			}
 		}
+		
+		// JMS: If player left system before transport ship and the transport ship was on its way to leaving system,
+		// force the transport ship out of the system.
+		if (GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
+			SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,2);
+		
 		ProcessEncounters (&universe, ox, oy);
 	}
 

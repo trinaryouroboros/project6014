@@ -407,12 +407,12 @@ FoundHome:
 			{
 				if (Index <= LONIBBLE (EncounterMakeup[BestIndex]) || (COUNT)TFB_Random () % 100 < 50)
 				{
-					// JMS: Generate transport ship in specific systems.
+					// JMS: Generate freight transport ship in specific systems.
 					if(which_group == 0 && (
-					     CurStarDescPtr->Index==SOL_DEFINED
-					  || CurStarDescPtr->Index==CHMMR_DEFINED
-					  || CurStarDescPtr->Index==SYREEN_DEFINED
-					  || CurStarDescPtr->Index==YEHAT_DEFINED						
+					     (CurStarDescPtr->Index==SOL_DEFINED && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS)<2 )
+					  || (CurStarDescPtr->Index==CHMMR_DEFINED && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS)>3 )
+					  //|| CurStarDescPtr->Index==SYREEN_DEFINED
+					  //|| CurStarDescPtr->Index==YEHAT_DEFINED			
 							)
 					   )
 						CloneShipFragment (TRANSPORT_SHIP, &GLOBAL (npc_built_ship_q), 0);
@@ -717,12 +717,20 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 					startposition=3; /* orbitting earth */
 				if(CurStarDescPtr->Index==CHMMR_DEFINED)
 					startposition=2; /* orbitting Procyon II */
-				if(CurStarDescPtr->Index==SYREEN_DEFINED)					
-					startposition=1; /* orbitting Betelgeuse I */
-				if(CurStarDescPtr->Index==YEHAT_DEFINED)
-					startposition=1; /* orbitting Gamma Serpentis I */
+				//if(CurStarDescPtr->Index==SYREEN_DEFINED)					
+				//	startposition=1; /* orbitting Betelgeuse I */
+				//if(CurStarDescPtr->Index==YEHAT_DEFINED)
+				//	startposition=1; /* orbitting Gamma Serpentis I */
 				
-				GroupPtr->sys_loc = startposition;
+				// JMS: Transport ship is arriving from hyperspace
+				if(GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 4)
+				{
+					GroupPtr->loc.x = 18000;
+					GroupPtr->loc.y = 6000;
+				}
+				else
+					GroupPtr->sys_loc = startposition;
+				
 				GroupPtr->dest_loc = startposition;
 			}
 			else

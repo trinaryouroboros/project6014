@@ -393,6 +393,17 @@ DeviceFailed (BYTE which_device)
 			break;
 			// JMS: Slaveshield buster replaces Clear Spindle
 		case SHIELD_BUSTER_DEVICE:
+			if (LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
+			{
+				if(!GET_GAME_STATE(USED_BUSTER))
+					SET_GAME_STATE (USED_BUSTER, 1);
+				else
+					SET_GAME_STATE (USED_BUSTER, 0);
+				return(FALSE);
+			}
+			else
+				return(TRUE);
+
 			break;
 		case UMGAH_HYPERWAVE_DEVICE:
 		case BURVIX_HYPERWAVE_DEVICE:
