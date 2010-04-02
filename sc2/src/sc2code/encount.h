@@ -55,6 +55,9 @@ typedef struct
 	POINT origin;
 	COUNT radius;
 
+	POINT destination_pt;	// JMS: This one helps when we want to designate a target destination to a Hyperspace spoor.
+	POINT home_pt;			// JMS: This one helps when we want to designate a starting point to a Hyperspace spoor.
+	
 	STAR_DESC SD;
 	BRIEF_SHIP_INFO ShipList[MAX_HYPER_SHIPS];
 

@@ -952,11 +952,23 @@ START_GAME_STATE
 			// 2 - UNUSED
 			// 3 - UNUSED
 
-	// JMS: New devices
+	// JMS: New devices. They either are or aren't on ship.
 	ADD_GAME_STATE (BLACK_ORB_ON_SHIP, 1)
 	ADD_GAME_STATE (BLACK_ORB, 1)
 	ADD_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP, 1)
 	ADD_GAME_STATE (SHIELD_BUSTER_ON_SHIP, 1)
+
+	// JMS: Transport ship states
+	ADD_GAME_STATE (TRANSPORT_SHIP_0_STATUS, 3)
+		// 0 - Waiting for leaving in orbit.
+		// 1 - Leaving for mission, still in home system.
+		// 2 - Left home system, ready to enter hyperspace. "Between truespace and hyperspace"
+		// 3 - Now in hyperspace.
+		// 4 - Arriving destination.
+		// 5 - UNUSED
+		// 6 - UNUSED
+		// 7 - UNUSED
+	ADD_GAME_STATE (USED_BUSTER, 1)
 
 END_GAME_STATE
 

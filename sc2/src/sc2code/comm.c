@@ -18,7 +18,10 @@
 
 // JMS 2010: -Commented out a line related to chmmrs in RaceCommunication to avoid vanishing avatars
 //			 after encounter in interplanetary.
+//
 //			 -Some changes to InitCommunication to remove bugs from fighting against Chmmr
+//
+//			 -Freight transport ships do not disappear after encountering in hyperspace.
 
 #define COMM_INTERNAL
 #include "comm.h"
@@ -1680,7 +1683,11 @@ RaceCommunication (void)
 		NumShips = (BYTE)CountLinks (&GLOBAL (npc_built_ship_q));
 		EncounterPtr->SD.Index = MAKE_BYTE (NumShips,
 				HINIBBLE (EncounterPtr->SD.Index));
-		EncounterPtr->SD.Index |= ENCOUNTER_REFORMING;
+		
+		// JMS: This condition makes it so that freight transport ships do not disappear upon encountering in hyperspace.
+		if(FragPtr->race_id != TRANSPORT_SHIP)
+			EncounterPtr->SD.Index |= ENCOUNTER_REFORMING;
+		
 		if (status == 0)
 			EncounterPtr->SD.Index |= ONE_SHOT_ENCOUNTER;
 

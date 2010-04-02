@@ -47,9 +47,9 @@ static RACE_DESC transport_desc =
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial sphere of influence radius */
+		INFINITE_RADIUS, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
-			0, 0,
+			MAX_X_UNIVERSE >> 1, MAX_Y_UNIVERSE >> 1,
 		},
 	},
 	{
