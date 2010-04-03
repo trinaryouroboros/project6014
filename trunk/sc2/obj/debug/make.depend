@@ -94,6 +94,7 @@
 ./obj/debug/src/sc2code/comm/syreen/syreenc.c
 ./obj/debug/src/sc2code/comm/talkpet/talkpet.c
 ./obj/debug/src/sc2code/comm/thradd/thraddc.c
+./obj/debug/src/sc2code/comm/transport/transportc.c
 ./obj/debug/src/sc2code/comm/umgah/umgahc.c
 ./obj/debug/src/sc2code/comm/urquan/urquanc.c
 ./obj/debug/src/sc2code/comm/utwig/utwigc.c

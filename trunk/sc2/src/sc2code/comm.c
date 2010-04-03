@@ -1456,7 +1456,7 @@ InitCommunication (CONVERSATION which_comm)
 	if (which_comm == TRANSPORT_CONVERSATION)
 	{
 		status = TRANSPORT_SHIP;
-		which_comm = HUMAN_CONVERSATION;
+		which_comm = TRANSPORT_CONVERSATION;
 	}
 	else
 	{

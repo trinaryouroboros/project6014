@@ -1,0 +1,155 @@
+#(GREETINGS_1)
+Howdy, partner! This is your generic,
+friendly neighborhood transport freighter.
+
+#(GREETINGS_2)
+How nice of you to drop by
+the life of a freighter captain sure can use some surprises. 
+
+#(GREETINGS_3)
+Well, hola! Anything a poor, humble freighter can do for you?
+
+#(GREETINGS_4)
+Hello, captain. A slow, tardy, disinteresting, disintegrating,
+rusty, musty and dusty transport ship salutes you.
+
+#(whats_up)
+What's up right now, freightmaster?
+
+#(WAITING_FOR_LEAVE_1)
+Loading cargo for the next run. You wouldn't happen to have
+any splatter holo-vids to spare? It's gonna be a loooong trip.
+
+#(WAITING_FOR_LEAVE_2)
+Still packing up the shipment.
+The containers would be coming up quite nicely
+if it just wasn't for those darn cargo cyborgs that
+'are supposed replace human workforce any time now'. 
+Man, I hate those cyborgs!
+
+#(WAITING_FOR_LEAVE_3)
+Waiting for departure. 
+Did you know that you can actually see the
+New Great Wall when the Earth is in just the right angle
+and if you squint real hard?
+
+#(what_cargo)
+Got something interesting in those containers?
+
+#(CARGO_INIT)
+Among others...
+
+#(CARGO_1)
+Finely refined petro-chemical products.
+
+#(CARGO_2)
+Flintlocks, Ovaltine, rubber overalls and cryogenized mutton
+don't ask.
+
+#(CARGO_3)
+Assorted anti-matter weaponry, a selection of mass-drivers, 
+containerful of shockwhips, fine-tuned electruncheons,
+subrepeating blasters, pulse rifles,
+fifty crates of gamma-ray mines, and one phase transit cannon.
+...Wanna try?
+
+#(CARGO_4)
+Earthen silicon and crystal materials for
+egg-headed researchers to spend their nights on.
+
+#(CARGO_5)
+Vaporware, baby. Vaporware from TreeDeRelms!
+
+#(CARGO_6)
+Fuel supplies of various flavors.
+
+#(CARGO_7)
+Cultural artefacts and specialties from Earth. Pine trees and
+20th century land-based sport cars are selling in numbers!
+
+#(CARGO_8)
+Precious and not-so precious metals by the ton.
+
+#(CARGO_9)
+Fusion lanterns, exotic fruits, electrobinoculars
+and adhesives. Most importantly, adhesives!
+
+#(CARGO_10)
+A large arboreal herd animal.
+(Chopped up)
+
+#(CARGO_11)
+Vacuum-packed insurance salesmen
+prepared to take over the world.
+
+#(CARGO_12)
+Computers, holocorders, AI chips.
+
+#(LEAVING_1)
+Great news! 
+The writing's on the wall!
+The world is holding it's breath in awe!
+Pkunk droppings are hitting the fan in heaps!
+The freight run has started! We are leaving for hyperspace!
+
+#(LEAVING_2)
+All aboard! This freight train has started!
+For the next couple of weeks hang tight to your underwear
+it's going to be the slowest trip in the history!
+
+#(HYPERSPACE_1)
+We're making a good headway. The freight is safe and sound.
+
+#(HYPERSPACE_2)
+This hyperspace crap always makes me nauseous.
+But dogs bark and caravan goes on.
+
+#(ARRIVING_1)
+We're getting close to our port of call.
+
+#(ARRIVING_2)
+Oh man, don't keep us waiting! Can't you see
+how close we are to our destination, vacation and elation?
+
+#(ARRIVED_1)
+Wow-whee. It's time for some R&R when the boys have unloaded the cargo.
+
+#(ARRIVED_2)
+Unloading the containers and chilling.
+We've been planet-hopping for kicks...
+
+#(AT_PROCYON_1)
+Too bad the R&R at Procyon means staring at endless flats of crystalline dust
+and reading the highly entertaining Philosophic Book of Bzzbezzu Kzaaz.
+
+#(AT_PROCYON_2)
+One thing I tell you, it's pretty hard to find souvenirs down there.
+
+#(whats_your_schedule)
+Tell me about your schedule in general.
+
+#(SCHEDULE_1)
+We follow the standardized alliance freight schedule:
+Freight convoys start from Sol to Procyon on
+1st, 7th, 14th, 21st and 28th days of the month,
+unless, of course, there already is a convoy underway.
+As the Pkunk say
+Don't put all your eggs in the same astral basket and so on. 
+
+#(SCHEDULE_2)
+The exciting life of a freighter captain consists of
+five important dates: The 1st, 7th, 14th, 21st and 28th.
+Every month, year after year, millennia after millennia
+we start from Sol and end up in Procyon.
+Yessir, we're as regular as Arcturian mega-clockwork!
+There's a catch though: We have to hear the 
+last convoy has arrived safely before we start a new one.
+Who knows, there might be some
+grand master planet eaters lurking just around the corner
+waiting for some convoys to feed on.
+
+#(good_bye_safe_trip)
+Have a safe trip. You guys are the backbone of our fleet!
+
+#(GOOD_BYE)
+Yeah, right, mr. Shiny Precursor Vessel...

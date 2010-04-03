@@ -208,7 +208,7 @@ InitSIS (void)
 		SPECIES_ID s_id = ARILOU_ID;
 
 		num_ships = CHENJESU_ID - s_id + 1	// JMS: CHENJESU_ID now replaces KOHR_AH_ID here
-		+ 2; /* Yehat Rebels and Ur-Quan probe */
+		+ 2; /* Yehat Rebels and Transport ship */
 
 		InitQueue (&GLOBAL (avail_race_q), num_ships, sizeof (FLEET_INFO));
 		for (i = 0; i < num_ships; ++i)
@@ -244,7 +244,7 @@ InitSIS (void)
 			}
 			else
 			{
-				// Ur-Quan probe.
+				// Transport ship.
 				RACE_DESC *RDPtr = load_ship (FleetPtr->SpeciesID,
 						FALSE);
 				if (RDPtr)
