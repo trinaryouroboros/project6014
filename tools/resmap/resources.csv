@@ -573,6 +573,11 @@ SUPOX_FONT,comm.supox.font,sc2code/comm/supox/ifontres.h,FONTRES,base/fonts/supo
 SUPOX_CONVERSATION_PHRASES,comm.supox.dialogue,sc2code/comm/supox/istrtab.h,CONVERSATION,base/comm/supox/supox.txt
 SUPOX_COLOR_MAP,comm.supox.colortable,sc2code/comm/supox/istrtab.h,BINTAB,base/comm/supox/supox.ct
 SUPOX_PMAP_ANIM,comm.supox.graphics,sc2code/comm/supox/igfxres.h,GFXRES,base/comm/supox/supox.ani
+TRANSPORT_CONVERSATION_PHRASES,comm.transport.dialogue,sc2code/comm/transport/istrtab.h,CONVERSATION,base/comm/transport/transport.txt
+TRANSPORT_MUSIC,comm.transport.music,sc2code/comm/transport/imusicre.h,MUSICRES,base/comm/kohrah/kohrah.mod
+TRANSPORT_FONT,comm.transport.font,sc2code/comm/transport/ifontres.h,FONTRES,base/fonts/player.fon
+TRANSPORT_COLOR_MAP,comm.transport.colortable,sc2code/comm/transport/istrtab.h,BINTAB,base/comm/commander/commander.ct
+TRANSPORT_PMAP_ANIM,comm.transport.graphics,sc2code/comm/transport/igfxres.h,GFXRES,base/comm/commander/commander.ani
 HUMAN_CONVERSATION_PHRASES,comm.human.dialogue,sc2code/comm/human/istrtab.h,CONVERSATION,base/comm/human/human.txt
 HUMAN_MUSIC,comm.human.music,sc2code/comm/human/imusicre.h,MUSICRES,base/comm/thraddash/thraddash.mod
 HUMAN_FONT,comm.human.font,sc2code/comm/human/ifontres.h,FONTRES,base/fonts/player.fon

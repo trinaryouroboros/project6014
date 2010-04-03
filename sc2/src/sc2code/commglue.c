@@ -18,6 +18,7 @@
 
 // JMS 2009: -Added earthling ship and Androsynth dialogue screen hooks
 // JMS 2010: -Removed unnecessary init_commander_comm
+//			 -Added transport ship dialogue screen hook
 
 #include "commglue.h"
 
@@ -348,6 +349,8 @@ init_race (CONVERSATION comm_id)
 			return init_talkpet_comm ();
 		case THRADD_CONVERSATION:
 			return init_thradd_comm ();
+		case TRANSPORT_CONVERSATION:			// BY JMS - Hook to transport ship dialogue screen
+			return init_transport_comm ();
 		case UMGAH_CONVERSATION:
 			return init_umgah_comm ();
 		case URQUAN_CONVERSATION:
