@@ -284,13 +284,15 @@ check_hyperspace_encounter (void)
 					EncounterPtr->SD.Index = encounter_flags;
 					EncounterPtr->SD.Type = Type;
 					
+					//JMS: Set source and destination for freight transport ship
 					if (Type == TRANSPORT_SHIP)
 					{
 						EncounterPtr->home_pt.x=6752;
 						EncounterPtr->home_pt.y=7450;
 						EncounterPtr->destination_pt.x=5742;
 						EncounterPtr->destination_pt.y=8268;
-					}	
+					}
+					
 					UnlockEncounter (hEncounter);
 					PutEncounter (hEncounter);
 				}

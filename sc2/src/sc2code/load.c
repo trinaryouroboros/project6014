@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: - Added Encounter pointer's home and destination pt's to house transport ships to LoadEncounter
+
 #include <assert.h>
 
 #include "load.h"
@@ -290,6 +292,10 @@ LoadEncounter (ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	cread_16  (fh, &EncounterPtr->origin.x);
 	cread_16  (fh, &EncounterPtr->origin.y);
 	cread_16  (fh, &EncounterPtr->radius);
+	cread_16  (fh, &EncounterPtr->destination_pt.x);	//JMS
+	cread_16  (fh, &EncounterPtr->destination_pt.y);	//JMS
+	cread_16  (fh, &EncounterPtr->home_pt.x);		//JMS
+	cread_16  (fh, &EncounterPtr->home_pt.y);		//JMS
 	// STAR_DESC fields
 	cread_16  (fh, &EncounterPtr->SD.star_pt.x);
 	cread_16  (fh, &EncounterPtr->SD.star_pt.y);

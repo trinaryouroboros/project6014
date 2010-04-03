@@ -17,6 +17,7 @@
  */
 
 // JMS 2009: - Added IN_ORZSPACE condition check to PrepareSummary
+// JMS 2010: - Added Encounter pointer's home and destination pt's to house transport ships to SaveEncounter
 
 #include <assert.h>
 
@@ -266,6 +267,10 @@ SaveEncounter (const ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	cwrite_16  (fh, EncounterPtr->origin.x);
 	cwrite_16  (fh, EncounterPtr->origin.y);
 	cwrite_16  (fh, EncounterPtr->radius);
+	cwrite_16  (fh, EncounterPtr->destination_pt.x);//JMS
+	cwrite_16  (fh, EncounterPtr->destination_pt.y);//JMS
+	cwrite_16  (fh, EncounterPtr->home_pt.x);		//JMS
+	cwrite_16  (fh, EncounterPtr->home_pt.y);		//JMS
 	// STAR_DESC fields
 	cwrite_16  (fh, EncounterPtr->SD.star_pt.x);
 	cwrite_16  (fh, EncounterPtr->SD.star_pt.y);
