@@ -4,7 +4,7 @@
 \paperw11900\paperh16840\margl1440\margr1440\vieww18480\viewh12640\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 
-\f0\fs24 \cf0 UQM edits by JMS 1.4.2010\
+\f0\fs24 \cf0 UQM edits by JMS 2.4.2010\
 \
 IN A NUTSHELL:\
 -Alpha Vulpeculae (865.4:858.7) with 0 planets and portal to orz space in the sun (ORZ_SPACE_PORTAL_DEFINED).\
@@ -14,12 +14,12 @@ IN A NUTSHELL:\
 -Some dialogue for Androsynth.\
 -Primitive dialogue for earthlings.\
 -Fixed some bugs with slaverace definitions\
--Instrument damage. Ships can suffer damage to engines, gauges, etc. from ships.\
+-Instrument damage. Ships can suffer damage to engines, gauges, etc. from ships. Currently turned off.\
 -Chmmr now reside on their starbase also. Starbase fully functional, just like at Sol.\
 -Chmmr Explorer ship usable in melee.\
 -Some planets are restricted meaning they cannot be landed on. Like Earth, Procyon and Syreen Homeworld. (Mostly to hide non-working earth graphics.)\
--New devices: Black Orb, Temporal Wrapper, Slaveshield Buster (Don't do anything yet)\
--New "ship": Freight transporter. These babies are in several races home system and leave on specific dates. Have no melee graphics, sounds or ai though.\
+-New devices: Black Orb, Temporal Wrapper (Don't do anything yet), Slaveshield Buster (Can be used to summon Transport Ship near Sol in HS, for debugging.)\
+-New "ship": Freight transporter. These guys leave from Sol to Procyon on specific dates. Transports have no melee graphics, sounds or ai though.\
 \
 ***************************************************************************************************************************************\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
@@ -30,6 +30,7 @@ IN A NUTSHELL:\
 /clock.h					-Changed the starting year\
 /comm.c					-Commented out a line related to chmmrs in RaceCommunication to avoid vanishing avatars after encounter in interplanetary.\
 						-Some changes to InitCommunication to remove bugs from fighting against Chmmr\
+						-Freight transporters don't vanish after talking them up in hyperspace\
 /commglue.c 				-Added hooks for Earhtling ship and Androsynth dialogue screens\
 /commglue.h				-Added earthling ship and Androsynth dialogue enum and extern locdata\
 /encount.c				-"Encounter in *Below*" text, if encounter ship group in Orz space\
@@ -47,8 +48,9 @@ IN A NUTSHELL:\
 						-Added IN_ORZSPACE flag for saved game summaries\
 						-Added Vela factory visited game state\
 						-Added game state for which ship player has as the flagship (Explorer/Precursor vessel)\
-						-Added Black orb game states\
+						-Added Black orb, Slaveshield buster and temporal wrapper game states\
 /grpinfo.c					-Changes to make 0 planet star systems work\
+						-Generate Freight Transport ship to Sol and Procyon\
 /hyper.c					-Orz space colors\
 						-Function for entering a portal/system in Orz space\
 						-Orz space check for portal/star graphics when drawing elements\
@@ -57,6 +59,9 @@ IN A NUTSHELL:\
 						-Androsynth sphere of influence infinite in Orz space\
 						-Can't meet melnorme/slylandro in Orz space\
 						-Don't consume fuel in Orz space\
+						-A lot of Freight transport ship thingies\
+/load.c					-Reads the information we're in ORZ space\
+						-Reads info for HS spoor home and destination (mainly for transport ships)\
 /misc.c					-Added instrument damage (engine etc. can be damaged by hits)\
 						-Added engine damage function (one of the instrument damages)\
 /pickship.c				-Different ship picking graphics in full game before melee\
@@ -70,6 +75,7 @@ IN A NUTSHELL:\
 						-Moved slaverace enums and defines to better places in the lists\
 						-Instrument damage: Added instrument damage flags. Ship may sustain 10 different damage types\
 /save.c					-Stores the information we're in ORZ space\
+						-Stores info for HS spoor home and destination (mainly for transport ships)\
 /shipstat.c					-Instrument damage functions: Crew and Energy gauges can be damaged\
 /sis.c						-Shows *Below* in SIS info screen when in Orz space\
 /sis.h					-Modified saved game summary to store the information of whether we are in orz space\
@@ -78,15 +84,17 @@ IN A NUTSHELL:\
 /uqmdebug.c				-Some Orz space checks\
 						-Add 10 crew upon pressing debug button. (To make it possible to use lander)\
 						-No more moon base on ship upon hitting debug key. (moonbase onboard screws up starbase transition gfx)\
-						-Debug key gives black orb instead of rosy sphere\
+						-Debug key gives black orb instead of rosy sphere, temporal wrapper instead of clear spindle and slaveshield buster instead of maidens\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 /comm/shofixt/shofixt.c		-Viewscreen animation for shofixti\
 \
 /planets/devices.c			-Casters cannot be used in Orz space\
 						-Replaced rosy sphere with black orb\
+						-Replaced clear spindle with Temporal Wrapper\
+						-Replaced shofixti maidens with Slaveshield buster\
 /planets/genilw.c			-No ships orbiting Ilwrath homeworld anymore\
-/planets/genpku.c			-No ships orbiting Ilwrath homeworld anymore\
+/planets/genpku.c			-No ships orbiting Pkunk homeworld anymore\
 /planets/gencol.c			-Don't create Ur-quan probe at Vela\
 						-Planet is not slave-shielded anymore\
 						-Create Precursor factory ruins and little background story therein\
@@ -129,6 +137,7 @@ content/base/ships/explorer/ExpOrz.0...31.png\
 content/base/ships/explorer/ExpOrz.ani\
 content/base/ships/explorer/ExpQuasi.0...31.png\
 content/base/ships/explorer/ExpQuasi.ani\
+content/base/ships/transport\
 \
 \
 \

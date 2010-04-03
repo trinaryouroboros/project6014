@@ -28,7 +28,6 @@
 //			 -Helluva lot of things regarding Freight Transport ships in hyperspace.
 
 #include "hyper.h"
-
 #include "build.h"
 #include "collide.h"
 #include "colors.h"
@@ -43,8 +42,6 @@
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
 #include "libs/log.h"
-
-
 
 #define XOFFS ((RADAR_SCAN_WIDTH + (UNIT_SCREEN_WIDTH << 2)) >> 1)
 #define YOFFS ((RADAR_SCAN_HEIGHT + (UNIT_SCREEN_HEIGHT << 2)) >> 1)
@@ -1380,22 +1377,33 @@ DeleteEncounter:
 						goto DeleteEncounter;
 					}
 				}
+				
+				// JMS: Transport ship reaches target. Transport ship disappears ("into target").
+				if ((EncounterPtr->SD.star_pt.x == EncounterPtr->destination_pt.x && EncounterPtr->SD.star_pt.y == EncounterPtr->destination_pt.y)
+					&& (EncounterPtr->SD.Type == TRANSPORT_SHIP) )
+				{
+					SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,4);
+					ElementPtr->state_flags |= NONSOLID;
+					ElementPtr->life_span = 0;
+					
+					if (EncounterPtr->transition_state == 0)
+					{
+						ElementPtr->death_func = encounter_transition;
+						EncounterPtr->transition_state = -1;
+						ElementPtr->hit_points = 1;
+					}
+					else
+					{
+						ElementPtr->death_func = NULL;
+						UnlockElement (EncounterPtr->hElement);
+						goto DeleteEncounter;
+					}
+				}
+				
 			}
 
 			ex = EncounterPtr->SD.star_pt.x;
 			ey = EncounterPtr->SD.star_pt.y;
-			
-			// JMS: Transport ship reaches target. Transport ship disappears ("into target").
-			if ((ex == EncounterPtr->destination_pt.x && ey == EncounterPtr->destination_pt.y)
-				&& (EncounterPtr->SD.Type == TRANSPORT_SHIP) )
-			{
-				SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,4);
-				ElementPtr->life_span = 0;
-				ElementPtr->death_func = NULL;
-				UnlockElement (EncounterPtr->hElement);
-				
-				goto DeleteEncounter;
-			}
 			
 			if (ex - puniverse->x >= -UNIT_SCREEN_WIDTH
 					&& ex - puniverse->x <= UNIT_SCREEN_WIDTH
