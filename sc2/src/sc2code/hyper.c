@@ -43,6 +43,8 @@
 #include "libs/mathlib.h"
 #include "libs/log.h"
 
+#include "gameev.h"
+
 #define XOFFS ((RADAR_SCAN_WIDTH + (UNIT_SCREEN_WIDTH << 2)) >> 1)
 #define YOFFS ((RADAR_SCAN_HEIGHT + (UNIT_SCREEN_HEIGHT << 2)) >> 1)
 
@@ -1384,10 +1386,11 @@ DeleteEncounter:
 				SIZE desty=EncounterPtr->destination_pt.y;
 				
 				// JMS: Transport ship reaches target. Transport ship disappears ("into target").
-				if (( (destx-shx)*(destx-shx)<20 && (desty-shy)*(desty-shy)<20)
+				if (( (destx-shx)*(destx-shx)<5 && (desty-shy)*(desty-shy)<5)
 					&& (EncounterPtr->SD.Type == TRANSPORT_SHIP) )
 				{
 					SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 4);
+					AddEvent (RELATIVE_EVENT, 0, 3, 0, TRANSPORT_HAS_ARRIVED_AT_DESTINATION_EVENT);
 					ElementPtr->state_flags |= NONSOLID;
 					ElementPtr->life_span = 0;
 					
