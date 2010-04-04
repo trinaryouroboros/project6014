@@ -40,7 +40,9 @@ Got something interesting in those containers?
 Among others...
 
 #(CARGO_1)
-Finely refined petro-chemical products.
+Highly refined petro-chemical products.
+Did you know we're going to run out of this stuff
+in, like, 50 years or so?
 
 #(CARGO_2)
 Flintlocks, Ovaltine, rubber overalls and cryogenized mutton
@@ -48,42 +50,44 @@ don't ask.
 
 #(CARGO_3)
 Assorted anti-matter weaponry, a selection of mass-drivers, 
-containerful of shockwhips, fine-tuned electruncheons,
-subrepeating blasters, pulse rifles,
+containerful of pulse rifles, finest subrepeating blasters, 
 fifty crates of gamma-ray mines, and one phase transit cannon.
 ...Wanna try?
 
 #(CARGO_4)
 Earthen silicon and crystal materials for
-egg-headed researchers to spend their nights on.
+some egg-head researchers to spend their nights on.
 
 #(CARGO_5)
-Vaporware, baby. Vaporware from TreeDeRelms!
+Vaporware, baby.
+Vaporware from the factories of Treedirelms!
 
 #(CARGO_6)
 Fuel supplies of various flavors.
 
 #(CARGO_7)
-Cultural artefacts and specialties from Earth. Pine trees and
-20th century land-based sport cars are selling in numbers!
+Cultural artefacts and rarities from Earth.
+20th century land-based sport cars and
+pine trees have been fetching top prices of late!
 
 #(CARGO_8)
-Precious and not-so precious metals by the ton.
+Tons of precious and not-so precious metals.
 
 #(CARGO_9)
 Fusion lanterns, exotic fruits, electrobinoculars
 and adhesives. Most importantly, adhesives!
 
 #(CARGO_10)
-A large arboreal herd animal.
-(Chopped up)
+A very large arboreal herd animal.
+(Chopped up.)
 
 #(CARGO_11)
 Vacuum-packed insurance salesmen
 prepared to take over the world.
 
 #(CARGO_12)
-Computers, holocorders, AI chips.
+Weather computers, holocorders, artificial intelligences
+all that cheap, mass-produced Sino-Japanese crap.
 
 #(LEAVING_1)
 Great news! 
