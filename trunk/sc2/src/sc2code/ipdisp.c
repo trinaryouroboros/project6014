@@ -158,12 +158,10 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 	}
 
 	// JMS: A transport ship leaves star system on the first day of the month and on every seventh day thereafter.
-	if (GroupPtr->race_id==TRANSPORT_SHIP 
-		&& (GLOBAL (GameClock).day_index % 7 == 0 || GLOBAL (GameClock).day_index == 1))
+	if (GroupPtr->race_id==TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
 	{
 		GroupPtr->task = FLEE;
 		GroupPtr->dest_loc = 0;
-		SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 1);
 	}
 
 	// JMS: If a transport ship is arriving its destination, zero its status flag once it reaches destination planet.
@@ -177,7 +175,7 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		if ((long)tdx * tdx + (long)tdy * tdy <= (long)ORBIT_RADIUS * ORBIT_RADIUS)
 		{
 			log_add(log_Debug, "********************** Transport ship STATUS zeroed.");
-			SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,0);
+			SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 0);
 		}
 	}
 	
@@ -452,7 +450,7 @@ CheckGetAway:
 					
 					// JMS: Freight Transport ship has left the system.
 					if (GroupPtr->race_id==TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
-						SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,2);
+						SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 2);
 					return;
 				}
 				else

@@ -961,8 +961,8 @@ START_GAME_STATE
 	// JMS: Transport ship states
 	ADD_GAME_STATE (TRANSPORT_SHIP_0_STATUS, 3)
 		// 0 - Waiting for leaving in orbit.
-		// 1 - Leaving for mission, still in home system.
-		// 2 - Left home system, ready to enter hyperspace. "Between truespace and hyperspace"
+		// 1 - Leaving for hyperspace, still in home system.
+		// 2 - "Left truespace, not yeat appeared in hyperspace.
 		// 3 - Now in hyperspace.
 		// 4 - Arriving destination.
 		// 5 - UNUSED

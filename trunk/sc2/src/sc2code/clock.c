@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Changed the start date from Feb 17 to Mar 29
+// JMS 2010: Changed the start date from Feb 17 to Mar 26
 
 #include <stdlib.h>
 #include "gameev.h"
@@ -206,8 +206,8 @@ InitGameClock (void)
 	
 	// JMS: Changed the start date
 	GLOBAL (GameClock.month_index) = 3;
-	GLOBAL (GameClock.day_index) = 29;
-	GLOBAL (GameClock.year_index) = START_YEAR; /* Mar 29, START_YEAR */
+	GLOBAL (GameClock.day_index) = 26;
+	GLOBAL (GameClock.year_index) = START_YEAR; /* Mar 26, START_YEAR */
 	GLOBAL (GameClock).tick_count = GLOBAL (GameClock).day_in_ticks = 0;
 	SuspendGameClock ();
 	if ((GLOBAL (GameClock.clock_task) =
