@@ -135,14 +135,14 @@ Tell me about your schedule in general.
 #(SCHEDULE_1)
 We follow the standardized alliance freight schedule:
 Freight convoys start from Sol to Procyon on
-1st, 7th, 14th, 21st and 28th days of the month,
+7th, 14th, 21st and 28th days of the month,
 unless, of course, there already is a convoy underway.
 As the Pkunk say
 Don't put all your eggs in the same astral basket and so on. 
 
 #(SCHEDULE_2)
 The exciting life of a freighter captain consists of
-five important dates: The 1st, 7th, 14th, 21st and 28th.
+four important dates: The 7th, 14th, 21st and 28th.
 Every month, year after year, millennia after millennia
 we start from Sol and end up in Procyon.
 Yessir, we're as regular as Arcturian mega-clockwork!

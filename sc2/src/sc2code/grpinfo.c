@@ -711,7 +711,14 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 			
 			// JMS: Transport ship resides near starbase / home planet
 			if (GroupPtr->race_id==TRANSPORT_SHIP) {
-				GroupPtr->task = IN_ORBIT | IGNORE_FLAGSHIP;
+				
+				// Transport ship is leaving system with status 1, otherwise it sits tight in planet orbit
+				if (GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1) {
+					GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
+				}
+				else
+					GroupPtr->task = IN_ORBIT | IGNORE_FLAGSHIP;
+				
 				COUNT startposition = 1;
 				if(CurStarDescPtr->Index==SOL_DEFINED)
 					startposition=3; /* orbitting earth */

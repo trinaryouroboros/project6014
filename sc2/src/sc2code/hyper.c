@@ -226,7 +226,7 @@ check_hyperspace_encounter (void)
 					encounter_flags = ONE_SHOT_ENCOUNTER;
 				}
 				
-				// JMS: Transport ship test...
+				// JMS: If transport ship has left truespace and player is in hyperspace, transport ship appears there too.
 				if (Type == TRANSPORT_SHIP
 						 && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1
 						 && (GET_GAME_STATE (TRANSPORT_SHIP_0_STATUS)==2 
@@ -234,7 +234,7 @@ check_hyperspace_encounter (void)
 				{
 					percent = 100;
 					encounter_flags = ONE_SHOT_ENCOUNTER;
-					SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,3);
+					SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 3);
 				}
 
 
@@ -1378,11 +1378,16 @@ DeleteEncounter:
 					}
 				}
 				
+				SIZE shx=EncounterPtr->SD.star_pt.x;
+				SIZE shy=EncounterPtr->SD.star_pt.y;
+				SIZE destx=EncounterPtr->destination_pt.x;
+				SIZE desty=EncounterPtr->destination_pt.y;
+				
 				// JMS: Transport ship reaches target. Transport ship disappears ("into target").
-				if ((EncounterPtr->SD.star_pt.x == EncounterPtr->destination_pt.x && EncounterPtr->SD.star_pt.y == EncounterPtr->destination_pt.y)
+				if (( (destx-shx)*(destx-shx)<20 && (desty-shy)*(desty-shy)<20)
 					&& (EncounterPtr->SD.Type == TRANSPORT_SHIP) )
 				{
-					SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,4);
+					SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 4);
 					ElementPtr->state_flags |= NONSOLID;
 					ElementPtr->life_span = 0;
 					
@@ -1705,7 +1710,7 @@ SeedUniverse (void)
 		// JMS: If player left system before transport ship and the transport ship was on its way to leaving system,
 		// force the transport ship out of the system.
 		if (GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
-			SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS,2);
+			SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 2);
 		
 		ProcessEncounters (&universe, ox, oy);
 	}
