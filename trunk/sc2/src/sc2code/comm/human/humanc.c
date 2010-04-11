@@ -22,6 +22,7 @@
 #include "../commall.h"
 #include "resinst.h"
 #include "strings.h"
+#include "libs/mathlib.h"
 
 #include "build.h"
 

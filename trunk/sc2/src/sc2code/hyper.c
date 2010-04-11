@@ -975,11 +975,10 @@ encounter_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 			&& (GLOBAL (CurrentActivity) & IN_BATTLE))
 	{
 		HENCOUNTER hEncounter, hNextEncounter;
-
-		init_transition (ElementPtr0, ElementPtr1, RANDOM_ENCOUNTER_TRANSITION);
-
 		ENCOUNTER *EncounterPtr;
 		
+		init_transition (ElementPtr0, ElementPtr1, RANDOM_ENCOUNTER_TRANSITION);
+
 		for (hEncounter = GetHeadEncounter ();
 				hEncounter != 0; hEncounter = hNextEncounter)
 		{
@@ -1282,6 +1281,9 @@ DeleteEncounter:
 				SIZE delta_x, delta_y;
 				COUNT encounter_radius;
 
+				SIZE shx, shy;
+				SIZE destx, desty;
+				
 				ElementPtr->life_span = 1;
 				GetNextVelocityComponents (&ElementPtr->velocity,
 						&delta_x, &delta_y, 1);
@@ -1380,10 +1382,10 @@ DeleteEncounter:
 					}
 				}
 				
-				SIZE shx=EncounterPtr->SD.star_pt.x;
-				SIZE shy=EncounterPtr->SD.star_pt.y;
-				SIZE destx=EncounterPtr->destination_pt.x;
-				SIZE desty=EncounterPtr->destination_pt.y;
+				shx=EncounterPtr->SD.star_pt.x;
+				shy=EncounterPtr->SD.star_pt.y;
+				destx=EncounterPtr->destination_pt.x;
+				desty=EncounterPtr->destination_pt.y;
 				
 				// JMS: Transport ship reaches target. Transport ship disappears ("into target").
 				if (( (destx-shx)*(destx-shx)<5 && (desty-shy)*(desty-shy)<5)
