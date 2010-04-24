@@ -1,6 +1,6 @@
 HYPERSPACE_MUSIC,music.hyper,sc2code/imusicre.h,MUSICRES,base/nav/hyper.mod
 QUASISPACE_MUSIC,music.arispace,sc2code/imusicre.h,MUSICRES,base/nav/quasispace.mod
-ORZSPACE_MUSIC,music.orzspace,sc2code/imusicre.h,MUSICRES,base/ui/starbase.mod
+ORZSPACE_MUSIC,music.orzspace,sc2code/imusicre.h,MUSICRES,base/nav/below.ogg
 IP_MUSIC,music.space,sc2code/imusicre.h,MUSICRES,base/nav/space.mod
 ORBIT1_MUSIC,music.orbit1,sc2code/imusicre.h,MUSICRES,base/nav/orbit.mod
 ORBIT2_MUSIC,music.orbit2,sc2code/imusicre.h,MUSICRES,base/nav/orbit.mod
@@ -579,7 +579,7 @@ TRANSPORT_FONT,comm.transport.font,sc2code/comm/transport/ifontres.h,FONTRES,bas
 TRANSPORT_COLOR_MAP,comm.transport.colortable,sc2code/comm/transport/istrtab.h,BINTAB,base/comm/commander/commander.ct
 TRANSPORT_PMAP_ANIM,comm.transport.graphics,sc2code/comm/transport/igfxres.h,GFXRES,base/comm/commander/commander.ani
 HUMAN_CONVERSATION_PHRASES,comm.human.dialogue,sc2code/comm/human/istrtab.h,CONVERSATION,base/comm/human/human.txt
-HUMAN_MUSIC,comm.human.music,sc2code/comm/human/imusicre.h,MUSICRES,base/comm/thraddash/thraddash.mod
+HUMAN_MUSIC,comm.human.music,sc2code/comm/human/imusicre.h,MUSICRES,base/comm/human/human.ogg
 HUMAN_FONT,comm.human.font,sc2code/comm/human/ifontres.h,FONTRES,base/fonts/player.fon
 HUMAN_COLOR_MAP,comm.human.colortable,sc2code/comm/human/istrtab.h,BINTAB,base/comm/commander/commander.ct
 HUMAN_COLOR_MAP2,comm.human.colortable2,sc2code/comm/human/istrtab.h,BINTAB,base/comm/druuge/druuge.ct

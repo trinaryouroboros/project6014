@@ -16,8 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: Added Orz space state check to Sis_hyper_preprocess
-// JMS 2010: Red ship gfx in hyperspace, blue in Orz space, green in quasispace
+// JMS 2009: -Added Orz space state check to Sis_hyper_preprocess
+// JMS 2010: -Red ship gfx in hyperspace, blue in Orz space, green in quasispace
+//			 -Added separate weaponry function for Chmmr Explorer
+//			 -Added some nuts and bolts to make Chmmr Explorer weapons work
 
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
@@ -27,6 +29,7 @@
 #include "globdata.h"
 #include "libs/mathlib.h"
 
+#include "libs/log.h"
 
 #define MAX_TRACKING 3
 #define MAX_DEFENSE 8
@@ -629,7 +632,7 @@ initialize_blasters (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock[6];
 	MISSILE_BLOCK *lpMB;
-
+	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 
 	num_blasters = 0;
@@ -656,6 +659,7 @@ initialize_blasters (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 			lpMB->life = BLASTER_LIFE
 					+ ((BLASTER_LIFE >> 2) * (which_gun - 1));
 
+			// Which weapon graphics to use
 			if (which_gun == 1)
 				lpMB->index = 0;
 			else if (which_gun == 2)
@@ -719,6 +723,124 @@ initialize_blasters (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 
 	return (num_blasters);
 }
+
+// JMS: Chmmr Explorer weapons initing function be here.
+static COUNT
+initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
+{
+#define SIS_VERT_OFFSET 28
+#define SIS_HORZ_OFFSET 20
+#define BLASTER_HITS 2
+#define BLASTER_OFFSET 8
+	COUNT num_blasters;
+	
+	BYTE nt;
+	COUNT i;
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock[6];
+	MISSILE_BLOCK *lpMB;
+	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	
+	num_blasters = 0;
+	
+	log_add(log_Debug, "Nyt alkaa initialize explorer weaponry");
+	
+	for (i = 0, lpMB = &MissileBlock[0]; i < 1; ++i)
+	{
+		BYTE which_gun;
+
+		log_add(log_Debug, "meni luuppiin");
+
+		// JMS: Chmmr Explorer always has weapon in nose weapon slot.
+		if(i == 0)
+			which_gun = GUN_WEAPON;
+		else
+			which_gun = 0;
+		
+		log_add(log_Debug, "gun on %d", which_gun);
+		
+		if (which_gun >= GUN_WEAPON && which_gun <= CANNON_WEAPON)
+		{
+			which_gun -= GUN_WEAPON - 1;
+			lpMB->cx = ShipPtr->next.location.x;
+			lpMB->cy = ShipPtr->next.location.y;
+			lpMB->farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+			lpMB->sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
+			| IGNORE_SIMILAR;
+			lpMB->blast_offs = BLASTER_OFFSET;
+			lpMB->speed = BLASTER_SPEED;
+			lpMB->preprocess_func = blaster_preprocess;
+			lpMB->hit_points = BLASTER_HITS * which_gun;
+			lpMB->damage = BLASTER_DAMAGE * which_gun;
+			lpMB->life = BLASTER_LIFE
+			+ ((BLASTER_LIFE >> 2) * (which_gun - 1));
+
+			// Which weapon graphics to use
+			if (which_gun == 1)
+				lpMB->index = 0;
+			else if (which_gun == 2)
+				lpMB->index = 9;
+			else
+				lpMB->index = 16;
+			
+			switch (i)
+			{
+				case 0: /* NOSE WEAPON */
+					lpMB->pixoffs = SIS_VERT_OFFSET;
+					lpMB->face = StarShipPtr->ShipFacing;
+					break;
+				case 1: /* SPREAD WEAPON */
+					lpMB->pixoffs = SIS_VERT_OFFSET;
+					lpMB->face = NORMALIZE_FACING (
+												   StarShipPtr->ShipFacing + 1);
+					lpMB[1] = lpMB[0];
+					++lpMB;
+					lpMB->face = NORMALIZE_FACING (
+												   StarShipPtr->ShipFacing - 1);
+					break;
+				case 2: /* SIDE WEAPON */
+					lpMB->pixoffs = SIS_HORZ_OFFSET;
+					lpMB->face = NORMALIZE_FACING (
+												   StarShipPtr->ShipFacing
+												   + ANGLE_TO_FACING (QUADRANT));
+					lpMB[1] = lpMB[0];
+					++lpMB;
+					lpMB->face = NORMALIZE_FACING (
+												   StarShipPtr->ShipFacing
+												   - ANGLE_TO_FACING (QUADRANT));
+					break;
+				case NUM_MODULE_SLOTS - 1: /* TAIL WEAPON */
+					lpMB->pixoffs = SIS_VERT_OFFSET;
+					lpMB->face = NORMALIZE_FACING (
+												   StarShipPtr->ShipFacing
+												   + ANGLE_TO_FACING (HALF_CIRCLE));
+					break;
+			}
+			
+			++lpMB;
+		}
+	}
+	
+	
+	nt = (BYTE)((4 - num_trackers) & 3);
+	num_blasters = lpMB - &MissileBlock[0];
+	for (i = 0, lpMB = &MissileBlock[0]; i < num_blasters; ++i, ++lpMB)
+	{
+		if ((BlasterArray[i] = initialize_missile (lpMB)))
+		{
+			ELEMENT *BlasterPtr;
+			
+			LockElement (BlasterArray[i], &BlasterPtr);
+			BlasterPtr->collision_func = blaster_collision;
+			BlasterPtr->turn_wait = MAKE_BYTE (nt, nt);
+			UnlockElement (BlasterArray[i]);
+		}
+	}
+		log_add(log_Debug, "Returnaan num_blastersin, joka on %d", num_blasters);
+	return (num_blasters);
+}
+
 
 static void
 sis_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
@@ -798,11 +920,18 @@ InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots)
 {
 	COUNT i;
 	
-	// JMS: Chmmr Explorer has 50 men max crew complement without modules, precursor tug 0 as usual
+	// JMS: Chmmr Explorer has 50 men max crew complement without modules, precursor vessel 0 as usual
+	//		Also: Chmmr Explorer has one front firing gun equipped as default.
 	if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0))
-			RaceDescPtr->ship_info.max_crew = EXPLORER_CREW_CAPACITY;
-	else 
-			RaceDescPtr->ship_info.max_crew = 0;
+	{
+		RaceDescPtr->ship_info.max_crew = EXPLORER_CREW_CAPACITY;
+		RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
+		RaceDescPtr->characteristics.weapon_energy_cost += 2;
+	}
+	else if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
+	{
+		RaceDescPtr->ship_info.max_crew = 0;
+	}
 
 	num_trackers = 0;
 	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
@@ -909,7 +1038,7 @@ init_sis (void)
 	// JMS: Ship selection. If player has Explorer, copy Explorer description to new_sis_desc.
 	if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0))
 		new_sis_desc = exp_desc;
-	else
+	else if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
 		new_sis_desc = sis_desc;
 	
 	new_sis_desc.uninit_func = uninit_sis;
@@ -946,7 +1075,17 @@ init_sis (void)
 	{
 		new_sis_desc.preprocess_func = sis_battle_preprocess;
 		new_sis_desc.postprocess_func = sis_battle_postprocess;
-		new_sis_desc.init_weapon_func = initialize_blasters;
+		
+		
+		log_add(log_Debug, "Initit nyt alkaa %d", GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS));
+		
+		// JMS: Chmmr Explorer uses different function for its weapons than Precursor vessel.
+		if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0))
+			new_sis_desc.init_weapon_func = initialize_explorer_weaponry;
+		else if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
+			new_sis_desc.init_weapon_func = initialize_blasters;
+		
+		log_add(log_Debug, "Initit nyt loppu");
 		new_sis_desc.cyborg_control.intelligence_func = sis_intelligence;
 
 		if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 3)

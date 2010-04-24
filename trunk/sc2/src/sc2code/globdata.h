@@ -948,7 +948,7 @@ START_GAME_STATE
 	// JMS: Which ship is the flagship
 	ADD_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2)
 			// 0 - Chmmr Explorer
-			// 1 - Precursor tug
+			// 1 - Precursor vessel
 			// 2 - UNUSED
 			// 3 - UNUSED
 
