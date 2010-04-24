@@ -88,6 +88,7 @@ DoPickBattleShip (MENU_STATE *pMS)
 
 		new_col = pMS->first_item.x + dx;
 		new_row = pMS->first_item.y + dy;
+
 		if (new_row != pMS->first_item.y
 				|| new_col != pMS->first_item.x)
 		{
@@ -127,7 +128,7 @@ DoPickBattleShip (MENU_STATE *pMS)
 					new_row = 0;
 			}
 			// JMS: Precursor vessel gfx
-			else
+			else if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==1)
 			{
 				if (new_col < 0)
 					new_col = NUM_PICK_SHIP_COLUMNS;
@@ -155,7 +156,7 @@ DoPickBattleShip (MENU_STATE *pMS)
 			// JMS
 			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 				helper=NUM_PICK_SHIP_EXPLORER_COLUMNS;
-			else
+			else if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==1)
 				helper=NUM_PICK_SHIP_COLUMNS;
 			
 ChangeSelection:
@@ -165,19 +166,19 @@ ChangeSelection:
 				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 				{
 					pMS->flash_rect0.corner.x =
-					pMS->flash_rect1.corner.x - 2 + FLAGSHIP_EXPLORER_X_OFFS;
+						pMS->flash_rect1.corner.x - 2 + FLAGSHIP_EXPLORER_X_OFFS;
 					pMS->flash_rect0.corner.y =
-					pMS->flash_rect1.corner.y - 2 + FLAGSHIP_EXPLORER_Y_OFFS;
+						pMS->flash_rect1.corner.y - 2 + FLAGSHIP_EXPLORER_Y_OFFS;
 					pMS->flash_rect0.extent.width = FLAGSHIP_EXPLORER_WIDTH + 4;
 					pMS->flash_rect0.extent.height = FLAGSHIP_EXPLORER_HEIGHT + 4;
 				}
 				// JMS: Precursor vessel graphics
-				else
+				else if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==1)
 				{
 					pMS->flash_rect0.corner.x =
-					pMS->flash_rect1.corner.x - 2 + FLAGSHIP_X_OFFS;
+						pMS->flash_rect1.corner.x - 2 + FLAGSHIP_X_OFFS;
 					pMS->flash_rect0.corner.y =
-					pMS->flash_rect1.corner.y - 2 + FLAGSHIP_Y_OFFS;
+						pMS->flash_rect1.corner.y - 2 + FLAGSHIP_Y_OFFS;
 					pMS->flash_rect0.extent.width = FLAGSHIP_WIDTH + 4;
 					pMS->flash_rect0.extent.height = FLAGSHIP_HEIGHT + 4;
 				}
@@ -215,7 +216,7 @@ ChangeSelection:
 				}
 				
 				// Precursor vessel
-				else
+				else if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==1)
 				{
 					new_col = pMS->first_item.x;
 					pMS->flash_rect0.corner.x = 5 + pMS->flash_rect1.corner.x - 2
@@ -556,7 +557,7 @@ DrawArmadaPickShip (BOOLEAN draw_salvage_frame, RECT *pPickRect)
 
 	s.frame = PickFrame;
 	
-	// JMS: Correct graphics for ship picking in full game before fight
+	// JMS: Correct graphics for Chmmr Explorer (for ship picking in full game before fight.)
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 		s.frame = IncFrameIndex (s.frame);
 	
@@ -578,7 +579,7 @@ DrawArmadaPickShip (BOOLEAN draw_salvage_frame, RECT *pPickRect)
 		s.origin.y = pick_r.corner.y - (r.extent.height >> 1);
 		DrawStamp (&s);
 		
-		// JMS: Correct graphics for ship picking in full game before fight
+		// JMS: Correct graphics for Precursor vessel (for ship picking in full game before fight)
 		if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==1)
 			s.frame = DecFrameIndex (s.frame);
 		
@@ -639,7 +640,7 @@ DrawArmadaPickShip (BOOLEAN draw_salvage_frame, RECT *pPickRect)
 					s.origin.x += FLAGSHIP_EXPLORER_WIDTH + 10;
 			}
 			// JMS: Precursor vessel graphics
-			else
+			else if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==1)
 			{
 				s.origin.x = pick_r.corner.x
 				+ (5 + ((ICON_WIDTH + 4)

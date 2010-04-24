@@ -30,7 +30,7 @@ Unfortunately that wiped life from the planet's surface and turned it into an in
 We have attempted to rebuild a home at Delta Gorno but none of the planets are fertile enough.  
 But we are determined to stay with our roots. 
 We know the technology exists to regenerate life on planets. 
-We hope the the Chmmr can help us with this but they seem to be occupied elsewhere.
+We hope that the Chmmr can help us with this but they seem to be occupied elsewhere.
 
 #(sorry_to_hear)
 We're sorry to hear that. We'll remind the Chmmr of your Struggle. I'm sure they will assist you.

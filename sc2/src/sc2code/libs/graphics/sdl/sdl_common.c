@@ -141,7 +141,7 @@ TFB_InitGraphics (int driver, int flags, int width, int height)
 {
 	int result, i;
 	char caption[200];
-
+	
 	/* Null out screen pointers the first time */
 	for (i = 0; i < TFB_GFX_NUMSCREENS; i++)
 	{
