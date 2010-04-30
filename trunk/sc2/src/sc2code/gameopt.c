@@ -240,7 +240,7 @@ DrawDescriptionString (MENU_STATE *pMS, COUNT which_string, COUNT state)
 	rel_index = (COUNT)(which_string - pMS->first_item.y);
 
 	{
-		r.corner.x = 2;
+		r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX;
 		r.extent.width = SHIP_NAME_WIDTH;
 		r.extent.height = SHIP_NAME_HEIGHT;
 
@@ -248,9 +248,9 @@ DrawDescriptionString (MENU_STATE *pMS, COUNT which_string, COUNT state)
 		if (pMS->CurState == CHANGE_CAPTAIN_SETTING)
 		{
 			Font = TinyFont;
-			r.corner.y = 10;
-			++r.corner.x;
-			r.extent.width -= 2;
+			r.corner.y = 10 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.x += 1 * RESOLUTION_FACTOR; // JMS_GFX;
+			r.extent.width -= 2 * RESOLUTION_FACTOR; // JMS_GFX;
 			lf.baseline.x = r.corner.x + (r.extent.width >> 1) - 1;
 
 			BackGround = BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09);
@@ -259,7 +259,7 @@ DrawDescriptionString (MENU_STATE *pMS, COUNT which_string, COUNT state)
 		else
 		{
 			Font = StarConFont;
-			r.corner.y = 20;
+			r.corner.y = 20 * RESOLUTION_FACTOR; // JMS_GFX;
 			lf.baseline.x = r.corner.x + (r.extent.width >> 1);
 
 			BackGround = BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x00), 0x2D);

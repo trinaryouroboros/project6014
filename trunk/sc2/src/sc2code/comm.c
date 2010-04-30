@@ -94,7 +94,7 @@ FRAME TextCacheFrame;
 
 RECT CommWndRect = {
 	// default values; actually inited by HailAlien()
-	{SIS_ORG_X, SIS_ORG_Y},
+	{0, 0}, //{SIS_ORG_X, SIS_ORG_Y}, // JMS_GFX
 	{0, 0}
 };
 
@@ -1342,6 +1342,8 @@ HailAlien (void)
 		SetContextFGFrame (Screen);
 		GetFrameRect (CommData.AlienFrame, &r);
 		r.extent.width = SIS_SCREEN_WIDTH;
+		CommWndRect.corner.x = SIS_ORG_X; // JMS_GFX
+		CommWndRect.corner.y = SIS_ORG_Y; // JMS_GFX
 		CommWndRect.extent = r.extent;
 		
 		SetTransitionSource (NULL);

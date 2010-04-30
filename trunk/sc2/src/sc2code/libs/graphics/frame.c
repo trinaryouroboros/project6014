@@ -23,6 +23,9 @@
 #include "tfb_prim.h"
 #include "gfxother.h"
 
+#include "../log.h"
+#include "../../units.h"
+
 HOT_SPOT
 MAKE_HOT_SPOT (COORD x, COORD y)
 {
@@ -57,7 +60,6 @@ GetFrameValidRect (RECT *pValidRect, HOT_SPOT *pOldHot)
 {
 	COORD hx, hy;
 	HOT_SPOT OldHot;
-
 	OldHot = _CurFramePtr->HotSpot;
 	hx = OldHot.x;
 	hy = OldHot.y;
@@ -65,12 +67,13 @@ GetFrameValidRect (RECT *pValidRect, HOT_SPOT *pOldHot)
 	pValidRect->corner.y = hy;
 	pValidRect->extent.width = GetFrameWidth (_CurFramePtr);
 	pValidRect->extent.height = GetFrameHeight (_CurFramePtr);
+	
 	if (_pCurContext->ClipRect.extent.width)
 	{
-		if (!BoxIntersect (&_pCurContext->ClipRect,
-				pValidRect, pValidRect))
+		if(!BoxIntersect (&_pCurContext->ClipRect, pValidRect, pValidRect))
+		{
 			return (FALSE);
-
+		}
 		hx -= _pCurContext->ClipRect.corner.x;
 		hy -= _pCurContext->ClipRect.corner.y;
 		pValidRect->corner.x += hx;

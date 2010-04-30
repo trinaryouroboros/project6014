@@ -90,7 +90,7 @@ BOOLEAN
 LoadKernel (int argc, char *argv[])
 {
 #define MIN_K_REQUIRED (580000L / 1024)
-	if (!InitGraphics (argc, argv, MIN_K_REQUIRED))
+	if (!InitGraphics (argc, argv, MIN_K_REQUIRED, resolutionFactor))
 		return FALSE;
 	InitSound (argc, argv);
 	InitVideoPlayer (TRUE);
@@ -126,6 +126,12 @@ LoadKernel (int argc, char *argv[])
 	if (optPrecursorsMusic)
 	{
 		loadAddon ("remix");
+	}
+	
+	// JMS_GFX
+	if (resolutionFactor==2)
+	{
+		loadAddon ("hires");
 	}
 
 	/* Now load the rest of the addons, in order. */

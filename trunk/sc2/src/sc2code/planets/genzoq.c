@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Removed ZoqFot scout ship from Rigel
+
 #include "build.h"
 #include "encount.h"
 #include "globdata.h"
@@ -55,7 +57,8 @@ GenerateScout (BYTE control)
 	switch (control)
 	{
 		case INIT_NPCS:
-			if (!GET_GAME_STATE (MET_ZOQFOT))
+			// JMS: No more scout at Rigel.
+			/*if (!GET_GAME_STATE (MET_ZOQFOT))
 			{
 				GLOBAL (BattleGroupRef) = GET_GAME_STATE_32 (ZOQFOT_GRPOFFS0);
 				if (GLOBAL (BattleGroupRef) == 0)
@@ -67,12 +70,13 @@ GenerateScout (BYTE control)
 					SET_GAME_STATE_32 (ZOQFOT_GRPOFFS0,
 							GLOBAL (BattleGroupRef));
 				}
-			}
+			}*/
 			GenerateRandomIP (INIT_NPCS);
 			break;
 		case REINIT_NPCS:
 			GenerateRandomIP (REINIT_NPCS);
-			check_scout ();
+			// JMS: No more scout at Rigel.
+			//check_scout ();
 			break;
 		default:
 			GenerateRandomIP (control);

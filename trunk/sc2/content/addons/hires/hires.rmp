@@ -1,0 +1,4 @@
+graphics.flagstat = GFXRES:addons/hires/ui/flagstat.ani
+graphics.melee = GFXRES:addons/hires/ui/melee.ani
+graphics.melebkgd = GFXRES:addons/hires/ui/meleebackground.ani
+graphics.segue = GFXRES:addons/hires/ui/segue.ani

@@ -164,7 +164,7 @@ enum
 };
 
 extern BOOLEAN InitGraphics (int argc, char *argv[], COUNT
-		KbytesRequired);
+		KbytesRequired, int res_factor); // JMS_GFX
 extern void UninitGraphics (void);
 
 extern CONTEXT SetContext (CONTEXT Context);

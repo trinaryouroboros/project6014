@@ -95,8 +95,16 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 		videomode_flags = SDL_SWSURFACE;
 		ScreenWidthActual = 640;
 		ScreenHeightActual = 480;
-		graphics_backend = &pure_scaled_backend;
-
+		
+		// JMS_GFX: Scale according to resolution factor. Check sanity of resolution factor.
+		if(resolutionFactor==1)
+			graphics_backend = &pure_scaled_backend;
+		else if(resolutionFactor==2)
+			graphics_backend = &pure_unscaled_backend; //graphics_backend = &pure_scaled_backend;
+		else
+			log_add (log_Error, "Resolution factors 1(320x240) and 2(640x480) only are supported!"
+					 "Terminating...");
+		
 		if (width != 640 || height != 480)
 			log_add (log_Error, "Screen resolution of %dx%d not supported "
 					"under pure SDL, using 640x480", width, height);
@@ -156,13 +164,13 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 		return -1;
 	}
 	
-	
 	for (i = 0; i < TFB_GFX_NUMSCREENS; i++)
 	{
 		if (0 != ReInit_Screen (&SDL_Screens[i], format_conv_surf,
 				ScreenWidth, ScreenHeight))
 			return -1;
 	}
+
 
 	SDL_Screen = SDL_Screens[0];
 	TransitionScreen = SDL_Screens[2];
@@ -189,7 +197,6 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 	{	// no need to scale
 		scaler = NULL;
 	}
-
 	return 0;
 }
 
@@ -209,15 +216,15 @@ TFB_Pure_InitGraphics (int driver, int flags, int width, int height)
 
 	log_add (log_Info, "SDL initialized.");
 	log_add (log_Info, "Initializing Screen.");
-
-	ScreenWidth = 320;
-	ScreenHeight = 240;
+	
+	// JMS_GFX: Resolution is calculated with the help of a Resolution factor.
+	ScreenWidth  = (320 * resolutionFactor); //320
+	ScreenHeight = (240 * resolutionFactor);//240
 
 	if (TFB_Pure_ConfigureVideo (driver, flags, width, height, 0))
 	{
 		log_add (log_Fatal, "Could not initialize video: "
 				"no fallback at start of program!");
-		exit (EXIT_FAILURE);
 	}
 
 	// Initialize scalers (let them precompute whatever)
@@ -322,7 +329,7 @@ TFB_Pure_Scaled_Postprocess (void)
 		
 	SDL_UnlockSurface (backbuffer);
 	SDL_UnlockSurface (scalebuffer);
-
+	
 	updated.x *= 2;
 	updated.y *= 2;
 	updated.w *= 2;
@@ -335,7 +342,7 @@ TFB_Pure_Scaled_Postprocess (void)
 
 static void
 TFB_Pure_Unscaled_Postprocess (void)
-{
+{	
 	SDL_UpdateRect (SDL_Video, updated.x, updated.y,
 			updated.w, updated.h);
 }

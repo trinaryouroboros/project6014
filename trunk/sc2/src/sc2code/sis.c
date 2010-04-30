@@ -157,13 +157,13 @@ DrawSISTitle (UNICODE *pStr)
 	OldContext = SetContext (OffScreenContext);
 {
 RECT r;
-
-r.corner.x = SIS_ORG_X + SIS_SCREEN_WIDTH - 57 + 1;
-r.corner.y = SIS_ORG_Y - SIS_TITLE_HEIGHT;
-r.extent.width = SIS_TITLE_WIDTH;
-r.extent.height = SIS_TITLE_HEIGHT - 1;
+	r.corner.x = SIS_ORG_X + SIS_SCREEN_WIDTH - 57 * RESOLUTION_FACTOR + 1 * (RESOLUTION_FACTOR); // JMS_GFX
+	r.corner.y = SIS_ORG_Y - SIS_TITLE_HEIGHT;
+	r.extent.width = SIS_TITLE_WIDTH;
+	r.extent.height = SIS_TITLE_HEIGHT - 1 * RESOLUTION_FACTOR; // JMS_GFX
 SetContextFGFrame (Screen);
 SetContextClipRect (&r);
+	
 }
 	SetContextFont (TinyFont);
 
@@ -398,8 +398,8 @@ DrawStatusMessage (const UNICODE *pStr)
 	GetContextClipRect (&r);
 	SetContext (OffScreenContext);
 	SetContextFGFrame (Screen);
-	r.corner.x += 2;
-	r.corner.y += 130;
+	r.corner.x += 2 * RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y += 130 * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.width = STATUS_MESSAGE_WIDTH;
 	r.extent.height = STATUS_MESSAGE_HEIGHT;
 	SetContextClipRect (&r);
@@ -469,14 +469,14 @@ DrawCaptainsName (void)
 	OldColor = SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 
-	r.corner.x = 2 + 1;
-	r.corner.y = 10;
-	r.extent.width = SHIP_NAME_WIDTH - 2;
+	r.corner.x = (2 + 1) * RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y = 10 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.width = SHIP_NAME_WIDTH - (2 * RESOLUTION_FACTOR); // JMS_GFX
 	r.extent.height = SHIP_NAME_HEIGHT;
 	DrawFilledRectangle (&r);
 
 	t.baseline.x = (STATUS_WIDTH >> 1) - 1;
-	t.baseline.y = r.corner.y + 6;
+	t.baseline.y = r.corner.y + 6  * RESOLUTION_FACTOR; // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = GLOBAL_SIS (CommanderName);
 	t.CharCount = (COUNT)~0;
@@ -505,9 +505,9 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 		OldContext = SetContext (StatusContext);
 		OldFont = SetContextFont (StarConFont);
 
-		r.corner.x = 2;
-		r.corner.y = 20;
-		r.extent.width = SHIP_NAME_WIDTH;
+		r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
+		r.corner.y = 20 * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width = SHIP_NAME_WIDTH - (1 * RESOLUTION_FACTOR-1); // JMS_GFX
 		r.extent.height = SHIP_NAME_HEIGHT;
 
 		t.pStr = GLOBAL_SIS (ShipName);
@@ -542,7 +542,7 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 	else
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x14, 0x0A, 0x00), 0x0C));
-	
+
 	font_DrawText (&t);
 
 	SetContextFontEffect (OldFontEffect);
@@ -751,7 +751,7 @@ DrawLanders (void)
 	s.origin.x = r.corner.x
 			- (((r.extent.width * i)
 			+ (2 * (i - 1))) >> 1);
-	s.origin.y = 29;
+	s.origin.y = 29 * RESOLUTION_FACTOR; // JMS_GFX;
 
 	width = r.extent.width + 2;
 	r.extent.width = (r.extent.width * MAX_LANDERS)
@@ -843,10 +843,10 @@ DrawStorageBays (BOOLEAN Refresh)
 void
 GetGaugeRect (RECT *pRect, BOOLEAN IsCrewRect)
 {
-	pRect->extent.width = 24;
+	pRect->extent.width = 24 * RESOLUTION_FACTOR; // JMS_GFX;
 	pRect->corner.x = (STATUS_WIDTH >> 1) - (pRect->extent.width >> 1);
-	pRect->extent.height = 5;
-	pRect->corner.y = IsCrewRect ? 117 : 38;
+	pRect->extent.height = 5 * RESOLUTION_FACTOR; // JMS_GFX;
+	pRect->corner.y = IsCrewRect ? 117 * RESOLUTION_FACTOR : 38 * RESOLUTION_FACTOR; // JMS_GFX
 }
 
 static void
@@ -863,8 +863,8 @@ DrawPC_SIS (void)
 	SetContextFont (TinyFont);
 	SetContextForeGroundColor (BLACK_COLOR);
 
-	r.corner.y -= 6;
-	r.corner.x--;
+	r.corner.y -= 6 * RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.x -= 1 * RESOLUTION_FACTOR; // JMS_GFX;
 	r.extent.width += 2;
 	DrawFilledRectangle (&r);
 
@@ -872,8 +872,8 @@ DrawPC_SIS (void)
 	t.pStr = GAME_STRING (STATUS_STRING_BASE + 3); // "FUEL"
 	font_DrawText (&t);
 
-	r.corner.y += 79;
-	t.baseline.y += 79;
+	r.corner.y += 79 * RESOLUTION_FACTOR; // JMS_GFX;
+	t.baseline.y += 79 * RESOLUTION_FACTOR; // JMS_GFX;
 	DrawFilledRectangle (&r);
 
 	SetContextFontEffect (SetAbsFrameIndex (FontGradFrame, 2));
@@ -881,10 +881,10 @@ DrawPC_SIS (void)
 	font_DrawText (&t);
 	SetContextFontEffect (NULL);
 
-	r.corner.x = 2 + 1;
-	r.corner.y = 3;
-	r.extent.width = 58;
-	r.extent.height = 7;
+	r.corner.x = (2 + 1) * RESOLUTION_FACTOR; // JMS_GFX;
+	r.corner.y = 3 * RESOLUTION_FACTOR; // JMS_GFX;
+	r.extent.width = 58 * RESOLUTION_FACTOR; // JMS_GFX;
+	r.extent.height = 7 * RESOLUTION_FACTOR; // JMS_GFX;
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 	DrawFilledRectangle (&r);
@@ -1096,8 +1096,8 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 		}
 		else
 		{
-			r.corner.x = 2;
-			r.corner.y = 130;
+			r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX;
+			r.corner.y = 130 * RESOLUTION_FACTOR; // JMS_GFX;
 			r.extent.width = STATUS_MESSAGE_WIDTH;
 			r.extent.height = STATUS_MESSAGE_HEIGHT;
 			SetContextForeGroundColor (

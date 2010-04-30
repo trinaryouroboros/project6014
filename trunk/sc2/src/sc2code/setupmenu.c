@@ -65,9 +65,9 @@ static void rebind_control (WIDGET_CONTROLENTRY *widget);
 static void clear_control (WIDGET_CONTROLENTRY *widget);
 
 #ifdef HAVE_OPENGL
-#define RES_OPTS 4
+#define RES_OPTS 5
 #else
-#define RES_OPTS 2
+#define RES_OPTS 3
 #endif
 
 #define MENU_COUNT          8
@@ -1134,7 +1134,11 @@ GetGlobalOptions (GLOBALOPTS *opts)
 		}
 		break;
 	case 640:
-		if (GraphicsDriver == TFB_GFXDRIVER_SDL_PURE)
+		if (resolutionFactor == 2) // JMS_GFX
+		{
+			opts->res = OPTVAL_REAL_640_480;
+		}
+		else if (GraphicsDriver == TFB_GFXDRIVER_SDL_PURE)
 		{
 			opts->res = OPTVAL_640_480;
 		}
@@ -1204,9 +1208,12 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	int NewWidth = ScreenWidthActual;
 	int NewHeight = ScreenHeightActual;
 	int NewDriver = GraphicsDriver;
+	
+	// JMS_GFX
+	int oldResFactor = resolutionFactor;
 
 	NewGfxFlags &= ~TFB_GFXFLAGS_SCALE_ANY;
-
+	
 	switch (opts->res) {
 	case OPTVAL_320_240:
 		NewWidth = 320;
@@ -1216,6 +1223,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 #else
 		NewDriver = TFB_GFXDRIVER_SDL_PURE;
 #endif
+		resolutionFactor=1; // JMS_GFX
 		break;
 	case OPTVAL_640_480:
 		NewWidth = 640;
@@ -1225,26 +1233,42 @@ SetGlobalOptions (GLOBALOPTS *opts)
 #else
 		NewDriver = TFB_GFXDRIVER_SDL_PURE;
 #endif
+		resolutionFactor=1; // JMS_GFX
 		break;
 	case OPTVAL_800_600:
 		NewWidth = 800;
 		NewHeight = 600;
 		NewDriver = TFB_GFXDRIVER_SDL_OPENGL;
+		resolutionFactor=1; // JMS_GFX
 		break;
 	case OPTVAL_1024_768:
 		NewWidth = 1024;
 		NewHeight = 768;
 		NewDriver = TFB_GFXDRIVER_SDL_OPENGL;
+		resolutionFactor=1; // JMS_GFX
+		break;
+	case OPTVAL_REAL_640_480: // JMS_GFX
+		NewWidth = 640;
+		NewHeight = 480;
+		NewDriver = TFB_GFXDRIVER_SDL_PURE;
+		resolutionFactor=2;
 		break;
 	default:
 		/* Don't mess with the custom value */
+		resolutionFactor=1; // JMS_GFX
 		break;
 	}
 
+	if (oldResFactor != resolutionFactor)
+		resFactorWasChanged=TRUE;
+	
 	res_PutInteger ("config.reswidth", NewWidth);
 	res_PutInteger ("config.resheight", NewHeight);
 	res_PutBoolean ("config.alwaysgl", opts->driver == OPTVAL_ALWAYS_GL);
 	res_PutBoolean ("config.usegl", NewDriver == TFB_GFXDRIVER_SDL_OPENGL);
+	
+	// JMS_GFX
+	res_PutInteger ("config.resolutionfactor", resolutionFactor);
 
 	switch (opts->scaler) {
 	case OPTVAL_BILINEAR_SCALE:

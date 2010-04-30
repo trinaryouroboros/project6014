@@ -248,6 +248,7 @@ graphics.sundevic = GFXRES:base/lander/energy/sundevice.ani
 graphics.syrvault = GFXRES:base/lander/energy/syreenvault.ani
 graphics.taadevic = GFXRES:base/lander/energy/taalodevice.ani
 graphics.title = GFXRES:base/ui/title.ani
+graphics.title_hires = GFXRES:base/ui/title_hires.ani
 graphics.umgtrans = GFXRES:base/lander/energy/umgahcaster.ani
 graphics.urqwreck = GFXRES:base/lander/energy/urquanwreck.ani
 graphics.utwbomb = GFXRES:base/lander/energy/utwigbomb.ani

@@ -38,6 +38,7 @@ UQM Remixes
 #(CAT_0_OPTS)
 320x240
 640x480
+REAL 640x480
 800x600
 1024x768
 Custom
@@ -51,14 +52,18 @@ Available with SDL framebuffer or OpenGL.
 Available with SDL framebuffer or OpenGL.
 
 #(CAT_0_OPT_2_DESC)
+Experimental hi-res 640x480 mode.
+Always uses SDL framebuffer. (Requires restart!)
+
+#(CAT_0_OPT_3_DESC)
 800x600 resolution.
 Requires OpenGL graphics drivers.
 
-#(CAT_0_OPT_3_DESC)
+#(CAT_0_OPT_4_DESC)
 1024x768 resolution.
 Requires OpenGL graphics drivers.
 
-#(CAT_0_OPT_4_DESC)
+#(CAT_0_OPT_5_DESC)
 Custom resolution set from the commandline.
 Requires OpenGL graphics drivers.
 

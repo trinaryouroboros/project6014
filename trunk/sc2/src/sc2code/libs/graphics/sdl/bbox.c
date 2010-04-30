@@ -18,6 +18,8 @@
 #include SDL_INCLUDE(SDL.h)
 #include "bbox.h"
 
+#include "../../log.h"
+
 TFB_BoundingBox TFB_BBox;
 
 void
@@ -48,7 +50,7 @@ TFB_BBox_RegisterPoint (int x, int y)
 	int y1 = TFB_BBox.clip.corner.y;
 	int x2 = TFB_BBox.clip.corner.x + TFB_BBox.clip.extent.width - 1;
 	int y2 = TFB_BBox.clip.corner.y + TFB_BBox.clip.extent.height - 1;
-
+	
 	/* Make sure the cliprect is sane */
 
 	if (x1 < 0) x1 = TFB_BBox.clip.corner.x = 0;
@@ -63,7 +65,6 @@ TFB_BBox_RegisterPoint (int x, int y)
 		TFB_BBox.clip.extent.height = ScreenHeight - y1;
 		y2 = ScreenHeight - 1;
 	}
-
 
 	/* Constrain coordinates */
 	if (x < x1) x = x1;

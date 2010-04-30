@@ -26,19 +26,21 @@
 #include "graphics/drawcmd.h"
 #include "graphics/tfb_draw.h"
 
+#include "../../log.h"
+
 
 int batch_depth = 0;
 
 
 //Status: Not entirely unimplemented!
 BOOLEAN
-InitGraphics (int argc, char* argv[], COUNT KbytesRequired)
+InitGraphics (int argc, char* argv[], COUNT KbytesRequired, int res_factor) //JMS_GFX
 		// Kbytes should only matter if we wanted to port Starcon2 to the
 		// hand-helds...
 {
 	BOOLEAN ret;
 
-	LoadDisplay (&_pCurDisplay);
+	LoadDisplay (&_pCurDisplay, res_factor);
 	ActivateDisplay ();
 
 	(void) argc;             /* lint */

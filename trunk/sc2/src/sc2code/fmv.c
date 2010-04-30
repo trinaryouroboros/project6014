@@ -112,7 +112,10 @@ SplashScreen (void (* DoProcessing)(DWORD TimeOut))
 	LockMutex (GraphicsLock);
 	SetContext (ScreenContext);
 	s.origin.x = s.origin.y = 0;
-	s.frame = CaptureDrawable (LoadGraphic (TITLE_ANIM));
+	if(resolutionFactor == 2)
+		s.frame = CaptureDrawable (LoadGraphic (TITLE_ANIM_HIRES));
+	else
+		s.frame = CaptureDrawable (LoadGraphic (TITLE_ANIM));
 	DrawStamp (&s);
 	DestroyDrawable (ReleaseDrawable (s.frame));
 	UnlockMutex (GraphicsLock);

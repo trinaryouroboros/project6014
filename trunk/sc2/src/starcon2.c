@@ -92,6 +92,7 @@ struct options_struct {
 	float musicVolumeScale;
 	float sfxVolumeScale;
 	float speechVolumeScale;
+	int resolutionFactor;	// JMS_GFX
 };
 
 static int preParseOptions (int argc, char *argv[],
@@ -143,6 +144,7 @@ main (int argc, char *argv[])
 		/* .musicVolumeScale = */   1.0f,
 		/* .sfxVolumeScale = */     1.0f,
 		/* .speechVolumeScale = */  1.0f,
+		/* .resolutionfactor = */	1, // JMS_GFX
 	};
 	int optionsResult;
 
@@ -390,7 +392,13 @@ main (int argc, char *argv[])
 	{
 		parseVolume (res_GetString ("config.speechvol"), 
 				&options.speechVolumeScale, "speech volume");
-	}		
+	}
+	
+	// JMS_GFX
+	if (res_HasKey ("config.resolutionfactor"))
+	{
+		options.resolutionFactor = res_GetInteger ("config.resolutionfactor");
+	}
 
 	{	/* remove old control template names */
 		int i;
@@ -438,7 +446,11 @@ main (int argc, char *argv[])
 	sfxVolumeScale = options.sfxVolumeScale;
 	speechVolumeScale = options.speechVolumeScale;
 	optAddons = options.addons;
-
+	
+	// JMS_GFX
+	resolutionFactor = options.resolutionFactor;
+	resFactorWasChanged = FALSE;
+	
 	prepareContentDir (options.contentDir, options.addonDir, argv[0]);
 	prepareMeleeDir ();
 	prepareSaveDir ();
