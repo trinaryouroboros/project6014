@@ -26,6 +26,9 @@ DISPLAY_INTERFACE *_pCurDisplay; //Not a function. Probably has to be initialize
 void (*mask_func_array[]) (RECT *pClipRect, PRIMITIVE *PrimPtr)
 		= { 0 };
 
+// JMS_GFX
+int resolutionFactor;
+
 int ScreenWidth;
 int ScreenHeight;
 int ScreenWidthActual;

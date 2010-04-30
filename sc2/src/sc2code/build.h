@@ -23,8 +23,8 @@
 #include "displist.h"
 #include "libs/compiler.h"
 
-#define CREW_XOFFS 4
-#define ENERGY_XOFFS 52
+#define CREW_XOFFS 4 * RESOLUTION_FACTOR // JMS_GFX
+#define ENERGY_XOFFS 52 * RESOLUTION_FACTOR // JMS_GFX
 #define GAUGE_YOFFS (SHIP_INFO_HEIGHT - 10)
 #define UNIT_WIDTH 2
 #define UNIT_HEIGHT 1

@@ -23,17 +23,20 @@
 #include "libs/graphics/drawable.h"
 #include "libs/sound/trackplayer.h"
 
+#include "libs/log.h"
 
 static FRAME scope_frame;
 static int scope_init = 0;
 static TFB_Image *scope_bg = NULL;
 static TFB_Image *scope_surf = NULL;
-static UBYTE scope_data[RADAR_WIDTH - 2];
+static UBYTE scope_data[110];//[RADAR_WIDTH - 2]; // JMS_GFX
 BOOLEAN oscillDisabled = FALSE;
 
 void
 InitOscilloscope (DWORD x, DWORD y, DWORD width, DWORD height, FRAME f)
 {
+	log_add (log_Debug, "******************RADARWIDTH-2= %d", RADAR_WIDTH-2);
+	
 	scope_frame = f;
 	if (!scope_init)
 	{

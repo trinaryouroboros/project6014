@@ -82,19 +82,21 @@ enum
 
 #define UNDEFINED_DELTA 0x7FFF
 
-#define RADAR_X (4 + (SCREEN_WIDTH - STATUS_WIDTH - SAFE_X))
-#define RADAR_WIDTH (STATUS_WIDTH - 8)
-#define RADAR_HEIGHT 53
+// JMS_GFX: Radar drawing now follows resolution factor
+#define RADAR_X (4 * RESOLUTION_FACTOR + (SCREEN_WIDTH - STATUS_WIDTH - SAFE_X)) // JMS_GFX
+#define RADAR_WIDTH (STATUS_WIDTH - 8 * RESOLUTION_FACTOR) // JMS_GFX
+#define RADAR_HEIGHT (53 * RESOLUTION_FACTOR)  // JMS_GFX
 #define RADAR_Y (SIS_ORG_Y + SIS_SCREEN_HEIGHT - RADAR_HEIGHT)
 #define NUM_RADAR_SCREENS 12
 #define MAG_SHIFT 2 /* driving on planet */
 
-#define SHIP_NAME_WIDTH 60
-#define SHIP_NAME_HEIGHT 7
+// JMS_GFX: Ship name drawing now follows resolution factor
+#define SHIP_NAME_WIDTH (60 * RESOLUTION_FACTOR) // JMS_GFX
+#define SHIP_NAME_HEIGHT (7 * RESOLUTION_FACTOR) // JMS_GFX
 
 #define NUM_DRIVE_SLOTS 11
 #define NUM_JET_SLOTS 8
-#define NUM_MODULE_SLOTS 0 // 16 - Explorer can't be modded
+#define NUM_MODULE_SLOTS 0 // 16 - JMS: Explorer can't be modded
 
 #define CREW_POD_CAPACITY 50
 #define STORAGE_BAY_CAPACITY 500 /* km cubed */
@@ -107,7 +109,6 @@ enum
 #define EXPLORER_CREW_CAPACITY 50
 
 #define CREW_EXPENSE_THRESHOLD 1000
-
 #define CREW_PER_ROW 5
 #define SBAY_MASS_PER_ROW 50
 
@@ -116,7 +117,6 @@ enum
 #define FUEL_RESERVE FUEL_VOLUME_PER_ROW
 
 #define MAX_COMBAT_SHIPS 6		// No more than 6 companion ships for the Explorer
-
 
 #define MAX_BATTLE_GROUPS 32	// Max number of battlegroups in a solar system
 
@@ -166,42 +166,44 @@ enum
 #define EMPTY_SLOT NUM_MODULES
 #define NUM_BOMB_MODULES 10
 
-#define DRIVE_SIDE_X 31
-#define DRIVE_SIDE_Y 56
-#define DRIVE_TOP_X 33
-#define DRIVE_TOP_Y (65 + 21)
+// JMS_GFX: Module drawing follows resolution factor
+#define DRIVE_SIDE_X (31 * RESOLUTION_FACTOR)
+#define DRIVE_SIDE_Y (56 * RESOLUTION_FACTOR)
+#define DRIVE_TOP_X (33 * RESOLUTION_FACTOR)
+#define DRIVE_TOP_Y ((65 + 21) * RESOLUTION_FACTOR)
 
-#define JET_SIDE_X 71
-#define JET_SIDE_Y 48
-#define JET_TOP_X 70
-#define JET_TOP_Y (73 + 21)
+#define JET_SIDE_X (71 * RESOLUTION_FACTOR)
+#define JET_SIDE_Y (48 * RESOLUTION_FACTOR)
+#define JET_TOP_X (70 * RESOLUTION_FACTOR)
+#define JET_TOP_Y ((73 + 21) * RESOLUTION_FACTOR)
 
-#define MODULE_SIDE_X 17
-#define MODULE_SIDE_Y 14
-#define MODULE_TOP_X 17
-#define MODULE_TOP_Y (96 + 21)
+#define MODULE_SIDE_X (17 * RESOLUTION_FACTOR)
+#define MODULE_SIDE_Y (14 * RESOLUTION_FACTOR)
+#define MODULE_TOP_X (17 * RESOLUTION_FACTOR)
+#define MODULE_TOP_Y ((96 + 21) * RESOLUTION_FACTOR)
 
-#define SHIP_PIECE_OFFSET 12
+#define SHIP_PIECE_OFFSET (12 * RESOLUTION_FACTOR)
 
 #define MAX_BUILT_SHIPS 6 // No more than 6 companion ships for the Explorer
 		/* Maximum number of ships escorting the SIS */
 #define MAX_LANDERS 3 // No more than 3 landers
 
 #define SUPPORT_SHIP_PTS \
-	{3 +  0, 30 + (1 * 16)}, \
-	{3 + 42, 30 + (1 * 16)}, \
-	{3 +  0, 30 + (0 * 16)}, \
-	{3 + 42, 30 + (0 * 16)}, \
-	{3 +  0, 30 + (5 * 16)}, \
-	{3 + 42, 30 + (5 * 16)},
+	{((3 +  0) * RESOLUTION_FACTOR), ((30 + (1 * 16)) * RESOLUTION_FACTOR)}, \
+	{((3 + 42) * RESOLUTION_FACTOR), ((30 + (1 * 16)) * RESOLUTION_FACTOR)}, \
+	{((3 +  0) * RESOLUTION_FACTOR), ((30 + (0 * 16)) * RESOLUTION_FACTOR)}, \
+	{((3 + 42) * RESOLUTION_FACTOR), ((30 + (0 * 16)) * RESOLUTION_FACTOR)}, \
+	{((3 +  0) * RESOLUTION_FACTOR), ((30 + (5 * 16)) * RESOLUTION_FACTOR)}, \
+	{((3 + 42) * RESOLUTION_FACTOR), ((30 + (5 * 16)) * RESOLUTION_FACTOR)},
 // Only authorized positions according to graphics (chflagstat.0.png)
 
-#define SIS_MESSAGE_WIDTH (SIS_SCREEN_WIDTH - 69 - 2)
-#define SIS_MESSAGE_HEIGHT 8
-#define SIS_TITLE_WIDTH 55
-#define SIS_TITLE_HEIGHT 8
-#define STATUS_MESSAGE_WIDTH 60
-#define STATUS_MESSAGE_HEIGHT 7
+// JMS_GFX: SIS messages now are drawn according to resolution
+#define SIS_MESSAGE_WIDTH (SIS_SCREEN_WIDTH - (69 + 2)* RESOLUTION_FACTOR)
+#define SIS_MESSAGE_HEIGHT (8 * RESOLUTION_FACTOR)
+#define SIS_TITLE_WIDTH (55 * RESOLUTION_FACTOR)
+#define SIS_TITLE_HEIGHT (8 * RESOLUTION_FACTOR)
+#define STATUS_MESSAGE_WIDTH (60 * RESOLUTION_FACTOR)
+#define STATUS_MESSAGE_HEIGHT (7 * RESOLUTION_FACTOR)
 
 #define SIS_NAME_SIZE 16
 

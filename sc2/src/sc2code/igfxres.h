@@ -274,6 +274,7 @@
 #define SUN_MASK_PMAP_ANIM "graphics.ip_sun"
 #define TAALO_DEVICE_MASK_PMAP_ANIM "graphics.taadevic"
 #define TITLE_ANIM "graphics.title"
+#define TITLE_ANIM_HIRES "graphics.title_hires"
 #define UMGAH_BCS_MASK_PMAP_ANIM "graphics.umgtrans"
 #define VAULT_MASK_PMAP_ANIM "graphics.syrvault"
 #define WRECK_MASK_PMAP_ANIM "graphics.urqwreck"

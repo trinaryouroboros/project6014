@@ -51,6 +51,10 @@ int optSmoothScroll;
 int optMeleeScale;
 const char **optAddons;
 
+// JMS_GFX
+int resolutionFactor;
+BOOLEAN resFactorWasChanged;
+
 BOOLEAN opt3doMusic;
 BOOLEAN optPrecursorsMusic;
 BOOLEAN optSubtitles;

@@ -175,15 +175,78 @@ DoRestart (MENU_STATE *pMS)
 		switch (pMS->CurState)
 		{
 			case LOAD_SAVED_GAME:
-				LastActivity = CHECK_LOAD;
-				GLOBAL (CurrentActivity) = IN_INTERPLANETARY;
+				if (resFactorWasChanged)
+				{
+					LockMutex (GraphicsLock);
+					SetFlashRect (NULL, (FRAME)0);
+					UnlockMutex (GraphicsLock);
+					DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 35));
+					// Got to restart -message
+					SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);	
+					SetTransitionSource (NULL);
+					BatchGraphics ();
+					DrawRestartMenuGraphic (pMS);
+					DrawRestartMenu ((BYTE)~0, pMS->CurState, pMS->CurFrame);
+					ScreenTransition (3, NULL);
+					UnbatchGraphics ();
+					fade_buf[0] = FadeAllToBlack;
+					SleepThreadUntil (XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND / 2));
+					GLOBAL (CurrentActivity) = CHECK_ABORT;
+				}
+				else
+				{
+					LastActivity = CHECK_LOAD;
+					GLOBAL (CurrentActivity) = IN_INTERPLANETARY;
+				}
 				break;
 			case START_NEW_GAME:
-				LastActivity = CHECK_LOAD | CHECK_RESTART;
-				GLOBAL (CurrentActivity) = IN_INTERPLANETARY;
+				if (resFactorWasChanged)
+				{
+					LockMutex (GraphicsLock);
+					SetFlashRect (NULL, (FRAME)0);
+					UnlockMutex (GraphicsLock);
+					DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 35));
+					// Got to restart -message
+					SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);	
+					SetTransitionSource (NULL);
+					BatchGraphics ();
+					DrawRestartMenuGraphic (pMS);
+					DrawRestartMenu ((BYTE)~0, pMS->CurState, pMS->CurFrame);
+					ScreenTransition (3, NULL);
+					UnbatchGraphics ();
+					fade_buf[0] = FadeAllToBlack;
+					SleepThreadUntil (XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND / 2));
+					GLOBAL (CurrentActivity) = CHECK_ABORT;
+				}
+				else
+				{
+					LastActivity = CHECK_LOAD | CHECK_RESTART;
+					GLOBAL (CurrentActivity) = IN_INTERPLANETARY;
+				}
 				break;
 			case PLAY_SUPER_MELEE:
-				GLOBAL (CurrentActivity) = SUPER_MELEE;
+				if (resFactorWasChanged)
+				{
+					LockMutex (GraphicsLock);
+					SetFlashRect (NULL, (FRAME)0);
+					UnlockMutex (GraphicsLock);
+					DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 35));
+					// Got to restart -message
+					SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);	
+					SetTransitionSource (NULL);
+					BatchGraphics ();
+					DrawRestartMenuGraphic (pMS);
+					DrawRestartMenu ((BYTE)~0, pMS->CurState, pMS->CurFrame);
+					ScreenTransition (3, NULL);
+					UnbatchGraphics ();
+					fade_buf[0] = FadeAllToBlack;
+					SleepThreadUntil (XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND / 2));
+					GLOBAL (CurrentActivity) = CHECK_ABORT;
+				}
+				else
+				{
+					GLOBAL (CurrentActivity) = SUPER_MELEE;
+				}
 				break;
 			case SETUP_GAME:
 				LockMutex (GraphicsLock);
@@ -244,7 +307,7 @@ DoRestart (MENU_STATE *pMS)
 		LockMutex (GraphicsLock);
 		SetFlashRect (NULL, (FRAME)0);
 		UnlockMutex (GraphicsLock);
-		DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 57));
+		DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 58));
 				// Mouse not supported message
 		SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);	
 		SetTransitionSource (NULL);

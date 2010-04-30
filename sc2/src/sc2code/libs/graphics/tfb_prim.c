@@ -132,7 +132,7 @@ TFB_Prim_Stamp (STAMP *stmp)
 	}
 	img = SrcFramePtr->image;
 	gscale = GetGraphicScale ();
-	
+
 	if (!img)
 	{
 		log_add (log_Warning, "Non-existent image to TFB_Prim_Stamp()");

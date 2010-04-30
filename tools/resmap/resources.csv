@@ -178,6 +178,7 @@ MENU_SOUNDS,sounds.menu,sc2code/isndres.h,SNDRES,base/ui/menu.snd
 GAME_SOUNDS,sounds.game,sc2code/isndres.h,SNDRES,base/battle/gamesnd.snd
 LANDER_SOUNDS,sounds.landsnds,sc2code/isndres.h,SNDRES,base/lander/lander.snd
 TITLE_ANIM,graphics.title,sc2code/igfxres.h,GFXRES,base/ui/title.ani
+TITLE_ANIM_HIRES,graphics.title_hires,sc2code/igfxres.h,GFXRES,base/ui/title_hires.ani
 STATUS_MASK_PMAP_ANIM,graphics.status,sc2code/igfxres.h,GFXRES,base/ui/status.ani
 ACTIVITY_ANIM,graphics.activity,sc2code/igfxres.h,GFXRES,base/ui/activity.ani
 PLAYMENU_ANIM,graphics.playmenu,sc2code/igfxres.h,GFXRES,base/ui/playmenu.ani

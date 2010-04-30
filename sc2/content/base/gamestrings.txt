@@ -2168,8 +2168,12 @@ flagship
 exit menu
 
 
-#()
+#(must restart)
+You have switched from original
+graphic mode to high resolution
+or vice versa.
 
+Please restart the game before proceeding.
 
 
 #()
