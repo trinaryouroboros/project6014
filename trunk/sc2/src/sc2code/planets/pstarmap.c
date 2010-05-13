@@ -17,6 +17,7 @@
  */
 
 // JMS 2009: Orz space starmap colors and star locations
+// JMS 2010: Do not draw Sphere of Influence for Kohr Ah- ship using Slylandros.
 
 #include "colors.h"
 #include "controls.h"
@@ -381,7 +382,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 			FleetPtr = LockFleetInfo (&GLOBAL (avail_race_q), hStarShip);
 			hNextShip = _GetSuccLink (FleetPtr);
 
-			if (FleetPtr->known_strength)
+			if (FleetPtr->known_strength && FleetPtr->SpeciesID!=SLYLANDRO_KOHRAH_ID) // JMS: Don't draw circle for Slylandro-Kohrahs
 			{
 				RECT repair_r;
 

@@ -35,8 +35,6 @@ BOOLEAN oscillDisabled = FALSE;
 void
 InitOscilloscope (DWORD x, DWORD y, DWORD width, DWORD height, FRAME f)
 {
-	log_add (log_Debug, "******************RADARWIDTH-2= %d", RADAR_WIDTH-2);
-	
 	scope_frame = f;
 	if (!scope_init)
 	{

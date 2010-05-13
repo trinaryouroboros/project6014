@@ -310,6 +310,7 @@
 ./obj/debug/src/sc2code/ships/shofixti/shofixti.c
 ./obj/debug/src/sc2code/ships/sis_ship/sis_ship.c
 ./obj/debug/src/sc2code/ships/slylandr/slylandr.c
+./obj/debug/src/sc2code/ships/slykohr/slykohr.c
 ./obj/debug/src/sc2code/ships/spathi/spathi.c
 ./obj/debug/src/sc2code/ships/supox/supox.c
 ./obj/debug/src/sc2code/ships/syreen/syreen.c

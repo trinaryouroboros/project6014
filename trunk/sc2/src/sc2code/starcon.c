@@ -239,6 +239,8 @@ while (--ac > 0)
 							// if died for some reason
 					|| GLOBAL_SIS (CrewEnlisted) == (COUNT)~0))
 			{
+				if(GLOBAL_SIS (CrewEnlisted) == (COUNT)~0)
+				
 				if (GET_GAME_STATE (KOHR_AH_KILLED_ALL))
 					InitCommunication (BLACKURQ_CONVERSATION);
 						// surrendered to Ur-Quan

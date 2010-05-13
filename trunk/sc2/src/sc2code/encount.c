@@ -500,8 +500,9 @@ UninitEncounter (void)
 		VictoryState = (
 				battle_counter[1] || !battle_counter[0]
 				|| GET_GAME_STATE (URQUAN_PROTECTING_SAMATRA)
+				|| GET_GAME_STATE (ENEMY_ESCAPE_OCCURRED) // JMS: If enemy escaped we can't scavenge debris.
 				) ? 0 : 1;
-
+		
 		hStarShip = GetHeadLink (&GLOBAL (npc_built_ship_q));
 		FragPtr = LockShipFrag (&GLOBAL (npc_built_ship_q), hStarShip);
 		EncounterRace = FragPtr->race_id;

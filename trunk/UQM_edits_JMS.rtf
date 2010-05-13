@@ -4,11 +4,11 @@
 \paperw11900\paperh16840\margl1440\margr1440\vieww18480\viewh12640\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 
-\f0\fs24 \cf0 UQM edits by JMS 23.4.2010\
+\f0\fs24 \cf0 UQM edits by JMS 11.5.2010\
 \
-IN A NUTSHELL:\
+CODING:\
 -Alpha Vulpeculae (865.4:858.7) with 0 planets and portal to orz space in the sun (ORZ_SPACE_PORTAL_DEFINED).\
--Orz space. Blue gfx. Some new gfx therein.\
+-Orz space. Like hyperspace and quasispace, but has blue gfx. Some new gfx therein.\
 -Added Androsynth to Orz space. Infinite sphere of influence there. Also added very basic Androsynth in truespace.\
 -Added Orz to Orz space. Infinite sphere of influence there and different npcship spoor gfx.\
 -Some dialogue for Androsynth.\
@@ -20,7 +20,14 @@ IN A NUTSHELL:\
 -Some planets are restricted meaning they cannot be landed on. Like Earth, Procyon and Syreen Homeworld. (Mostly to hide non-working earth graphics.)\
 -New devices: Black Orb, Temporal Wrapper (Don't do anything yet), Slaveshield Buster (Can be used to summon Transport Ship near Sol in HS, for debugging.)\
 -New "ship": Freight transporter. These guys leave from Sol to Procyon on specific dates. Transports have no melee graphics, melee sounds or ai though.\
--New remixes for most of the races + space, hyperspace etc. Basically only Orz and Arilou miss new music\
+-Added Chenjesu and Mmrnmhrm. They have 0 sphere of influence though as no dialogue or comm screen has been implemented.\
+-Added Slylandros that ride Kohr-ah marauder ships. They hang out at the alliance races' neighborhood of the map. Their SoI is invisible to keep the player guessing.\
+\
+AUDIO:\
+-Added new song remixes for most of the races + space, hyperspace etc. Basically only Orz, Melnorme and Slylandro miss new music.\
+\
+GFX:\
+-Started real 640x480 resolution project. Heck of a lot of work there to do though...\
 \
 ***************************************************************************************************************************************\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
@@ -75,6 +82,7 @@ IN A NUTSHELL:\
 /races.h					-Defined Androsyn conversation, Ip and hyperspace encounter percents and encounter ship makeups\
 						-Moved slaverace enums and defines to better places in the lists\
 						-Instrument damage: Added instrument damage flags. Ship may sustain 10 different damage types\
+						-Defined Mmrnmhrm, Chenjesu and Kohrah-vessel-riding-Slylandro information\
 /save.c					-Stores the information we're in ORZ space\
 						-Stores info for HS spoor home and destination (mainly for transport ships)\
 /shipstat.c					-Instrument damage functions: Crew and Energy gauges can be damaged\
@@ -108,6 +116,7 @@ IN A NUTSHELL:\
 						-Different gfx for ORZ space portal/sun in interplanetary\
 /planets/pstarmap.c			-Added Orz space check to fuel requirement showing in starmap (0 fuel needed in orz space)\
 						-Orz space starmap colors and stars\
+						-Do not draw Sphere of Influence for Slylandros that ride Kohr-Ah vessels\
 \
 /ships/sis_ship/sis_ship.c		-Some Orz space checks\
 /ships/shofixti/shofixti.c		-Removed Tanaka/Katana from battle\

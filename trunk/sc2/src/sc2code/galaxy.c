@@ -241,10 +241,6 @@ InitGalaxy (void)
 	POINT *ppt;
 	PRIM_LINKS Links;
 
-	log_add (log_Debug, "InitGalaxy(): transition_width = %d, "
-			"transition_height = %d",
-			TRANSITION_WIDTH, TRANSITION_HEIGHT);
-
 	Links = MakeLinks (END_OF_LIST, END_OF_LIST);
 	factor = ONE_SHIFT + MAX_REDUCTION + (BACKGROUND_SHIFT - 3);
 	for (i = 0, ppt = log_star_array; i < NUM_STARS; ++i, ++ppt)

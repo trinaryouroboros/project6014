@@ -887,6 +887,7 @@ flee_preprocess (ELEMENT *ElementPtr)
 		else
 		{
 			ElementPtr->death_func = new_ship;
+			//if (StarShipPtr->which_side == 0) // JMS: Added this condition so escaping enemy ships are not considered destroyed
 			ElementPtr->crew_level = 0;
 
 			ElementPtr->life_span = HYPERJUMP_LIFE + 1;

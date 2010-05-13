@@ -283,6 +283,7 @@ BuildGroups (void)
 		0,                /* YEHAT_REBEL_SHIP */
 
 		SLAVERACE_DEFINED, 	/* SLAVERACE_SHIP */
+		0,					/* JMS: SLYLANDRO_KOHRAH_SHIP */
 	};
 	BYTE EncounterPercent[] =
 	{

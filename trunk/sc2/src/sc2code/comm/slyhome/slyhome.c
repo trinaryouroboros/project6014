@@ -913,7 +913,12 @@ init_slylandro_comm (void)
 	slylandro_desc.AlienTextBaseline.y = 0;
 	slylandro_desc.AlienTextWidth = SIS_TEXT_WIDTH;
 
-	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	// JMS: Battle segue 'cause its impossible to tell are these guys kohr-ah or slylandros...
+	SET_GAME_STATE (BATTLE_SEGUE, 1);
+	
+	// JMS: Zero the escape flag
+	SET_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 0);
+	
 	retval = &slylandro_desc;
 
 	return (retval);

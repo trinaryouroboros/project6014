@@ -3,3 +3,4 @@
    instead and regenerate. */
 
 #define KOHR_AH_CODE "ship.kohrah.code"
+#define SLY_KOHR_CODE "ship.slykohr.code"
