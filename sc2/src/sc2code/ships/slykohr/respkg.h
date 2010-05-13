@@ -1,0 +1,6 @@
+enum
+{
+	SLYKOHR_CODE_PACKAGE = 1,
+	KOHR_AH_PACKAGE
+};
+

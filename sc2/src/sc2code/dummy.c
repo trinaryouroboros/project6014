@@ -22,6 +22,7 @@
  */
 
 // JMS 2010: -Transport ship resource pointer replaces that of the Ur-Quan Probe.
+//			 -Added resource pointer for Slylandros-riding-kohrah-vessels
 
 #include "coderes.h"
 #include "globdata.h"
@@ -69,10 +70,12 @@ enum
 	VUX_CODE_RES,
 	YEHAT_CODE_RES,
 	ZOQFOT_CODE_RES,
-
-	SAMATRA_CODE_RES,
+	SLYLANDRO_KOHRAH_CODE_RES,	// JMS
+	
 	SIS_CODE_RES,
-	TRANSPORT_CODE_RES
+	TRANSPORT_CODE_RES,			// JMS
+	SAMATRA_CODE_RES,			// JMS: Moved this under SIS_CODE_RES and TRANSPORT_CODE_RES
+	//TRANSPORT_CODE_RES,			// JMS
 };
 
 	BYTE which_res;
@@ -285,6 +288,14 @@ enum
 				extern RACE_DESC* init_transport (void);
 				
 				RDPtr = init_transport ();
+				break;
+			}
+				// JMS: Slylandros in kohr-ah ships code res
+			case SLYLANDRO_KOHRAH_CODE_RES:
+			{
+				extern RACE_DESC* init_sly_kohr (void);
+				
+				RDPtr = init_sly_kohr ();
 				break;
 			}
 			default:

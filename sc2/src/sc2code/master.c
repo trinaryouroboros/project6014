@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Slylandros-in-kohrah-vessels are currently ruled out of the super-melee...
+
 #include "master.h"
 
 #include "build.h"
@@ -72,8 +74,7 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 
 		// Insert the ship in the master queue in the right location
 		// to keep the list sorted on the name of the race.
-		for (hStarShip = GetHeadLink (&master_q);
-				hStarShip; hStarShip = hNextShip)
+		for (hStarShip = GetHeadLink (&master_q); hStarShip; hStarShip = hNextShip)
 		{
 			char ship_buf[30];
 			MASTER_SHIP_INFO *MasterPtr;
@@ -81,14 +82,16 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 			MasterPtr = LockMasterShip (&master_q, hStarShip);
 			hNextShip = _GetSuccLink (MasterPtr);
 			GetStringContents (SetAbsStringTableIndex (
-					MasterPtr->ShipInfo.race_strings, 2
-					), (STRINGPTR)ship_buf, FALSE);
+				MasterPtr->ShipInfo.race_strings, 2), (STRINGPTR)ship_buf, FALSE);
 			UnlockMasterShip (&master_q, hStarShip);
 
 			if (strcmp (built_buf, ship_buf) < 0)
 				break;
 		}
-		InsertQueue (&master_q, hBuiltShip, hStarShip);
+		if(num_entries !=0) // JMS: Let's keep the Slylandro_kohrah_ship as the last one so we won't mess up super-melee...
+				InsertQueue (&master_q, hBuiltShip, hStarShip);
+		else
+				PutQueue (&master_q, hBuiltShip);
 	}
 }
 

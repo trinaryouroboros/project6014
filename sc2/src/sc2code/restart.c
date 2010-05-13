@@ -39,6 +39,7 @@
 #include "uqmversion.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/inplib.h"
+#include "libs/log.h"
 
 
 enum

@@ -56,6 +56,7 @@ parseone "${TOPPC}ships/probe/resinst.h"     probe.sc2.pc
 parseone "${TOPPC}ships/shofixti/resinst.h"  shofixti.shp.pc
 parseone "${TOPPC}ships/sis_ship/resinst.h"  sis.dat.pc
 parseone "${TOPPC}ships/slylandr/resinst.h"  slylandr.shp.pc
+parseone "${TOPPC}ships/slykohr/resinst.h"   slykohr.shp.pc
 parseone "${TOPPC}ships/spathi/resinst.h"    spathi.shp.pc
 parseone "${TOPPC}ships/supox/resinst.h"     supox.shp.pc
 parseone "${TOPPC}ships/syreen/resinst.h"    syreen.shp.pc
@@ -110,6 +111,7 @@ parseone "${TOP3DO}probe/resinst.h"          probe.sc2.3do
 parseone "${TOP3DO}shofixti/resinst.h"       shofixti.shp.3do
 parseone "${TOP3DO}sis_ship/resinst.h"       sis.dat.3do
 parseone "${TOP3DO}slylandr/resinst.h"       slylandr.shp.3do
+parseone "${TOP3DO}slykohr/resinst.h"        slylandr.shp.3do
 parseone "${TOP3DO}spathi/resinst.h"         spathi.shp.3do
 parseone "${TOP3DO}supox/resinst.h"          supox.shp.3do
 parseone "${TOP3DO}syreen/resinst.h"         syreen.shp.3do

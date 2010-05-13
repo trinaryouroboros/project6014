@@ -968,7 +968,12 @@ START_GAME_STATE
 		// 5 - UNUSED
 		// 6 - UNUSED
 		// 7 - UNUSED
+	
+	// JMS: Slaveshield buster crap
 	ADD_GAME_STATE (USED_BUSTER, 1)
+
+	// JMS: Did enemy ship escape from combat
+	ADD_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 1)
 
 END_GAME_STATE
 
