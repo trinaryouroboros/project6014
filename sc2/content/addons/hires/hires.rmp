@@ -3,6 +3,7 @@ graphics.melee = GFXRES:addons/hires/ui/melee.ani
 graphics.melebkgd = GFXRES:addons/hires/ui/meleebackground.ani
 graphics.segue = GFXRES:addons/hires/ui/segue.ani
 graphics.sis_ip = GFXRES:addons/hires/nav/explorer_ip.ani
+graphics.status = GFXRES:addons/hires/ui/status.ani
 ship.arilou.icons = GFXRES:addons/hires/ships/arilou/ariicons.ani
 ship.arilou.meleeicons = GFXRES:addons/hires/ships/arilou/arimicon.ani
 ship.androsynth.icons = GFXRES:addons/hires/ships/androsyn/andicons.ani
