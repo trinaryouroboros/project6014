@@ -72,6 +72,16 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 						(COUNT)TFB_Random ()
 						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
 #endif /* OLD */
+				// JMS
+				if (target_loc==0 && GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP)
+				{
+				task &= ~IGNORE_FLAGSHIP;
+				task = ON_STATION;
+				target_loc = (BYTE)((
+						(COUNT)TFB_Random ()
+						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
+					
+				}
 				if (!(task & REFORM_GROUP))
 				{
 					if ((task & ~IGNORE_FLAGSHIP) != EXPLORE)
@@ -156,21 +166,21 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 	}
 	
 	// JMS: If Slylandro-kohrah battlegroup is fought, all Slylandro battle groups escape from the system
-	if (GroupPtr->race_id==SLYLANDRO_KOHRAH_SHIP && GET_GAME_STATE (ENEMY_ESCAPE_OCCURRED))
+	if (GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP && GET_GAME_STATE (ENEMY_ESCAPE_OCCURRED))
 	{
 		GroupPtr->task = FLEE;
 		GroupPtr->dest_loc = 0;
 	}
 	
 	// JMS: A transport ship leaves star system on the first day of the month and on every seventh day thereafter.
-	if (GroupPtr->race_id==TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
+	if (GroupPtr->race_id == TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
 	{
 		GroupPtr->task = FLEE;
 		GroupPtr->dest_loc = 0;
 	}
 
 	// JMS: If a transport ship is arriving its destination, zero its status flag once it reaches destination planet.
-	if (GroupPtr->race_id==TRANSPORT_SHIP 
+	if (GroupPtr->race_id == TRANSPORT_SHIP 
 		&& GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 4
 		&& group_loc == GroupPtr->dest_loc)
 	{
@@ -247,6 +257,9 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 	{
 		GroupPtr->task = ON_STATION | IGNORE_FLAGSHIP;
 		GroupPtr->dest_loc = (BYTE)(((COUNT)TFB_Random () % pSolarSysState->SunDesc[0].NumPlanets) + 1);
+		
+		if (GroupPtr->dest_loc == 0)
+			GroupPtr->dest_loc = 1;
 	}	
 
 	GetCurrentVelocityComponents (&EPtr->velocity, &vdx, &vdy);

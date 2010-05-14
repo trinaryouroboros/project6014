@@ -9,7 +9,7 @@
 #define GAS_MED_MASK_PMAP_ANIM "ship.slykohr.graphics.gas.medium"
 #define GAS_SML_MASK_PMAP_ANIM "ship.slykohrh.graphics.gas.small"
 #define KOHR_AH_BIG_MASK_PMAP_ANIM "ship.slykohr.graphics.blackurq.large"
-#define KOHR_AH_ICON_MASK_PMAP_ANIM "ship.slykohrh.icons"
+#define KOHR_AH_ICON_MASK_PMAP_ANIM "ship.slykohr.icons"
 #define KOHR_AH_MED_MASK_PMAP_ANIM "ship.slykohr.graphics.blackurq.medium"
 #define KOHR_AH_MICON_MASK_PMAP_ANIM "ship.slykohr.meleeicons"
 #define KOHR_AH_SML_MASK_PMAP_ANIM "ship.slykohr.graphics.blackurq.small"

@@ -25,7 +25,9 @@
 //			 -Can't meet melnorme/slylando in orz space, in Checkhyperspaceencounter
 //			 -Ship doesn't consume fuel in Orz space
 //
-//			 -Helluva lot of things regarding Freight Transport ships in hyperspace.
+// JMS 2010: -Helluva lot of things regarding Freight Transport ships in hyperspace.
+//
+//			 -Can't meet Kohr-ah ships before first meeting Slylandros riding Kohr-ah vessels
 
 #include "hyper.h"
 #include "build.h"
@@ -195,6 +197,15 @@ check_hyperspace_encounter (void)
 					encounter_radius = (encounter_radius * SPHERE_RADIUS_INCREMENT) >> 1;
 				else
 					encounter_radius = 0;
+				
+				// JMS: Can't meet Kohr-ahs ships before talking to Slylandros in kohr-ah ships first.
+				if (Type == BLACK_URQUAN_SHIP)
+				{
+					if(GET_GAME_STATE(SLYLANDRO_KOHRAH_MET_TIMES)>0)
+						encounter_radius = (encounter_radius * SPHERE_RADIUS_INCREMENT) >> 1;
+					else
+						encounter_radius = 0;
+				}
 			}
 			else /* encounter_radius == infinity */
 			{
@@ -283,7 +294,7 @@ check_hyperspace_encounter (void)
 					EncounterPtr->SD.Index = encounter_flags;
 					EncounterPtr->SD.Type = Type;
 					
-					//JMS: Set source and destination for freight transport ship
+					// JMS: Set source and destination for freight transport ship
 					if (Type == TRANSPORT_SHIP)
 					{
 						EncounterPtr->home_pt.x=6752;

@@ -1,10 +1,7 @@
 #(HELLO_1)	slyho000.ogg
-Hello visitor!
-We are the Slylandro. I am Content To Hover
-a Slylandro Speaker.
-Your presence here fills us with excitement!
-We have gotten so few visitors over these many Drahn.
-We hope you can stay to talk with us for a time.
+Oh, this is terribly exciting!
+The human traveller our songs have told so much about
+is actually before us!
 
 #(HELLO_2)	slyho001.ogg
 You return with great speed.

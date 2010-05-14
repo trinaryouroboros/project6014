@@ -443,27 +443,15 @@ Intro (void)
 {
 	DWORD GrpOffs;
 
+	// JMS
+	SET_GAME_STATE (BATTLE_SEGUE, 1);
+	
 	if (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
 	{
 		NPCPhrase (OUT_TAKES);
 
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
 		return;
-	}
-
-	if (GET_GAME_STATE (KOHR_AH_KILLED_ALL))
-	{
-		NPCPhrase (GAME_OVER_DUDE);
-
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-		return;
-	}
-
-	if (!GET_GAME_STATE (KOHR_AH_SENSES_EVIL)
-			&& GET_GAME_STATE (TALKING_PET_ON_SHIP))
-	{
-		NPCPhrase (SENSE_EVIL);
-		SET_GAME_STATE (KOHR_AH_SENSES_EVIL, 1);
 	}
 
 	GrpOffs = GET_GAME_STATE_32 (SAMATRA_GRPOFFS0);
@@ -521,7 +509,8 @@ Intro (void)
 					break;
 			}
 
-			DieHuman ((RESPONSE_REF)0);
+			// JMS: Commented this one away since its gonna be deleted anyways...
+			//DieHuman ((RESPONSE_REF)0);
 		}
 		SET_GAME_STATE (KOHR_AH_VISITS, NumVisits);
 	}
