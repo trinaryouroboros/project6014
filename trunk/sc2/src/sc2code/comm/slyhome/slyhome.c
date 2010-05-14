@@ -865,7 +865,7 @@ Intro (void)
 	}
 	else
 	{
-		NumVisits = GET_GAME_STATE (SLYLANDRO_HOME_VISITS);
+		NumVisits = GET_GAME_STATE (SLYLANDRO_KOHRAH_MET_TIMES);
 		switch (NumVisits++)
 		{
 			case 0:
@@ -882,7 +882,7 @@ Intro (void)
 				--NumVisits;
 				break;
 		}
-		SET_GAME_STATE (SLYLANDRO_HOME_VISITS, NumVisits);
+		SET_GAME_STATE (SLYLANDRO_KOHRAH_MET_TIMES, NumVisits);
 	}
 
 	HomeWorld ((RESPONSE_REF)0);

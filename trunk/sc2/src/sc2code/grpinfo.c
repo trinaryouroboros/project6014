@@ -18,6 +18,8 @@
 
 // JMS 2009: -Implemented changes to make 0 planet star systems work
 // JMS 2010: -Some systems now have a freight transport ship in interplanetary.
+//			 -Can't encounter Kohr-ahs before meeting slylandros riding kohr-ah vessels first at least once
+//			 -Changed the encounter probability calculation for Kohr-Ah and Slylandros riding Kohr-Ah vessels.
 
 #include "build.h"
 #include "encount.h"
@@ -290,6 +292,10 @@ BuildGroups (void)
 		RACE_INTERPLANETARY_PERCENT
 	};
 
+	// JMS: Can't encounter Kohr-ahs before meeting slylandros riding kohr-ah vessels first at least once
+	if (GET_GAME_STATE(SLYLANDRO_KOHRAH_MET_TIMES)==0)
+		EncounterPercent[BLACK_URQUAN_SHIP] = 0;
+	
 	EncounterPercent[SLYLANDRO_SHIP] *= GET_GAME_STATE (SLYLANDRO_MULTIPLIER);
 	Index = GET_GAME_STATE (UTWIG_SUPOX_MISSION);
 	if (Index > 1 && Index < 5)
@@ -356,8 +362,13 @@ BuildGroups (void)
 
 				// EncounterPercent is only used in practice for the Slylandro
 				// Probes, for the rest of races the chance of encounter is
-				// calced directly below from the distance to the Homeworld
-				if (FleetPtr->actual_strength != INFINITE_RADIUS)
+				// calced directly below from the distance to the Homeworld.
+				//
+				// JMS: Also Kohr-Ah ships and Slylandros riding Kohr-Ah vessels
+				// now have EncounterPercent as their probability.
+				if (FleetPtr->actual_strength != INFINITE_RADIUS
+					&& FleetPtr->SpeciesID != SLYLANDRO_KOHRAH_ID
+					&& FleetPtr->SpeciesID != KOHR_AH_ID)
 				{
 					i = 70 - (COUNT)((DWORD)square_root (d_squared)
 							* 60L / encounter_radius);

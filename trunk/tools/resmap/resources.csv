@@ -630,7 +630,7 @@ SLY_KOHR_CODE,ship.slykohr.code,sc2code/ships/slykohr/icode.h,SHIP,25
 SLY_KOHR_CODE,ship.slykohr.code,sc2code/ships/blackurq/icode.h,SHIP,25
 KOHR_AH_VICTORY_SONG,ship.slykohr.ditty,sc2code/ships/slykohr/imusicre.h,MUSICRES,base/ships/kohrah/bladitty.mod
 KOHR_AH_SHIP_SOUNDS,ship.slykohr.sounds,sc2code/ships/slykohr/isndres.h,SNDRES,base/ships/kohrah/blasound.snd
-KOHR_AH_ICON_MASK_PMAP_ANIM,ship.slykohrh.icons,sc2code/ships/slykohr/igfxres.h,GFXRES,base/ships/kohrah/blaicons.ani
+KOHR_AH_ICON_MASK_PMAP_ANIM,ship.slykohr.icons,sc2code/ships/slykohr/igfxres.h,GFXRES,base/ships/kohrah/blaicons.ani
 KOHR_AH_MICON_MASK_PMAP_ANIM,ship.slykohr.meleeicons,sc2code/ships/slykohr/igfxres.h,GFXRES,base/ships/kohrah/blamicon.ani
 KOHR_AH_BIG_MASK_PMAP_ANIM,ship.slykohr.graphics.blackurq.large,sc2code/ships/slykohr/igfxres.h,GFXRES,base/ships/kohrah/blackurq.big
 KOHR_AH_MED_MASK_PMAP_ANIM,ship.slykohr.graphics.blackurq.medium,sc2code/ships/slykohr/igfxres.h,GFXRES,base/ships/kohrah/blackurq.med

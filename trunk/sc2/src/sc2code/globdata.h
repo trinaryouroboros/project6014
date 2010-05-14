@@ -972,6 +972,9 @@ START_GAME_STATE
 	// JMS: Slaveshield buster crap
 	ADD_GAME_STATE (USED_BUSTER, 1)
 
+	// JMS: How many times player has met Slylandros in kohr-ah vessels
+	ADD_GAME_STATE (SLYLANDRO_KOHRAH_MET_TIMES, 2)
+
 	// JMS: Did enemy ship escape from combat
 	ADD_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 1)
 

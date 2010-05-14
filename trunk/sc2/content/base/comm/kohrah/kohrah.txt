@@ -8,23 +8,24 @@ We fear.
 
 #(HELLO_AND_DIE_1)	black001.ogg
 We are the Ur-Quan Kohr-Ah.
-We cleanse our destiny.
-You will soon die.
-Make whatever rituals are necessary for your species.
+With your actions you have
+delayed your destiny momentarily.
+It does not matter.
+Our doctrine will prevail.
+Your death is imminent.
 
 #(HELLO_AND_DIE_2)	black002.ogg
 We are the Ur-Quan Kohr-Ah.
-Your presence here is premature.
-We fight the Kzer-Za for supremacy of Doctrine
-and possession of the Sa-Matra.
-When the battle is won, our task is simple.
-We cleanse. You are the filth.
+You represent a test to our fortitude
+a challenge to make us stronger.
+As nature strengthens life by rooting out the weak
+your actions have served the purpose of strengthening us.
+As for thousands of years now
+our doctrine will prevail.
 
 #(HELLO_AND_DIE_3)	black003.ogg
 We are the Ur-Quan Kohr-Ah.
-You have evaded our attempts to cleanse.
-You are no longer filth. You are a threat.
-Threats deserve greater attention than filth.
+It is time to cleanse your presence.
 
 #(HELLO_AND_DIE_4)	black004.ogg
 We are the Ur-Quan Kohr-Ah.
