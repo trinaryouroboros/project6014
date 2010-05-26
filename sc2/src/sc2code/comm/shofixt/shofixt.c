@@ -182,13 +182,29 @@ ExitConversation (RESPONSE_REF R)
 	if (PLAYER_SAID (R, pearshaped))
 	{
 		NPCPhrase (KYAIEE);
+		SET_GAME_STATE (SHOFIXTI_ANGRY, 2);
 		SET_GAME_STATE (BATTLE_SEGUE, 1);
 	}	
 	else if (PLAYER_SAID (R, fairwell_shofixti))
 	{
-		NPCPhrase (GOODBYE_EARTHLING);
+		if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
+			NPCPhrase (MIFFED_GOODBYE_EARTHLING);
+		else
+			NPCPhrase (GOODBYE_EARTHLING);
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
+	}
+	else if (PLAYER_SAID (R, will_attack))
+	{
+		NPCPhrase (WILL_ATTACK_TOO);
+		SET_GAME_STATE (SHOFIXTI_ANGRY, 3);
+		SET_GAME_STATE (BATTLE_SEGUE, 1);
 	}	
+	else if (PLAYER_SAID (R, sorry))
+	{
+		NPCPhrase (SORRY_ACCEPTED);
+		SET_GAME_STATE (SHOFIXTI_ANGRY, 1);
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+	}
 
 }
 
@@ -210,9 +226,7 @@ HowReconstruction (RESPONSE_REF R)
 
 	Response (sorry_to_hear, ThankYou);
 	Response (fairwell_shofixti, ExitConversation);
-
 }
-
 
 static void
 SmallTalk2 (RESPONSE_REF R)
@@ -263,25 +277,79 @@ SmallTalk1 (RESPONSE_REF R)
 
 
 
+static void
+DoShofixtiAngry (RESPONSE_REF R)
+{
+	NPCPhrase (ANGRY_SHOFIXTI_GREETING_1);
 
+	Response (sorry, ExitConversation);
+	Response (will_attack, ExitConversation);
+}
 
 
 static void
 Intro (void)
 {
+
+	BYTE NumVisits;
 	
-	if (GET_GAME_STATE (SHOFIXTI_MET) == 0)
+	if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 1)
 	{
-		SET_GAME_STATE (SHOFIXTI_MET, 1);
+		NumVisits = GET_GAME_STATE (SHOFIXTI_VISITS);
+		switch (NumVisits++)
+		{
+			case 1:
+				NPCPhrase (MIFFED_SHOFIXTI_GREETING_1);
+				break;
+			case 2:
+				NPCPhrase (MIFFED_SHOFIXTI_GREETING_2);
+				break;
+			case 3:
+				NPCPhrase (MIFFED_SHOFIXTI_GREETING_3);
+				--NumVisits;
+				break;
+		}
+		
+		SmallTalk1 (0);
+		SET_GAME_STATE (SHOFIXTI_VISITS, NumVisits);
 	}
-
-	NPCPhrase (SHOFIXTI_GREETING1);
-
-
-	Response (chmmr_hunt_kohrah, SmallTalk1);
-	Response (no_idea, SmallTalk1);
-	Response (fairwell_shofixti, ExitConversation);
-	Response (pearshaped, ExitConversation);
+	else if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 2)
+		DoShofixtiAngry (0);
+	else if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 3)
+	{
+		SET_GAME_STATE (BATTLE_SEGUE, 1);
+		NPCPhrase (ANGRY_SHOFIXTI_GREETING_2);
+	}
+	else
+	{
+		NumVisits = GET_GAME_STATE (SHOFIXTI_VISITS);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (SHOFIXTI_GREETING_1);
+				break;
+			case 1:
+				NPCPhrase (SHOFIXTI_GREETING_2);
+				break;
+			case 2:
+				NPCPhrase (SHOFIXTI_GREETING_3);
+				--NumVisits;
+				break;
+		}
+		
+		SET_GAME_STATE (SHOFIXTI_VISITS, NumVisits);
+		
+		if (GET_GAME_STATE(SHOFIXTI_MET) == 0)
+		{
+			SET_GAME_STATE(SHOFIXTI_MET, 1);
+			Response (chmmr_hunt_kohrah, SmallTalk1);
+			Response (no_idea, SmallTalk1);
+			Response (fairwell_shofixti, ExitConversation);
+			Response (pearshaped, ExitConversation);
+		}
+		else
+			SmallTalk1 (0);
+	}
 }
 
 static COUNT
@@ -309,7 +377,10 @@ init_shofixti_comm (void)
 	shofixti_desc.AlienTextBaseline.y = 0;
 	shofixti_desc.AlienTextWidth = SIS_TEXT_WIDTH;
 
-	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	if (GET_GAME_STATE (SHOFIXTI_ANGRY) > 1)
+		SET_GAME_STATE (BATTLE_SEGUE, 1);
+	else
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
 
 	retval = &shofixti_desc;
 

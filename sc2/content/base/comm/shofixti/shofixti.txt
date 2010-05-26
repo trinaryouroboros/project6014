@@ -1,6 +1,50 @@
-#(SHOFIXTI_GREETING1)
+#(SHOFIXTI_GREETING_1)
 Greetings Captain! Welcome back to Shofixti Space!
 It's been too long. What news from the New Alliance of Free Stars?
+
+#(SHOFIXTI_GREETING_2)
+Well met, brave captain!
+I trust I greet you in strong health!
+
+#(SHOFIXTI_GREETING_3)
+Hello again, Captain!
+What tidings do you bear?
+
+#(MIFFED_SHOFIXTI_GREETING_1)
+Ah, the Earthling who pulled the funniest prank on us.
+What do you want?
+
+#(MIFFED_SHOFIXTI_GREETING_2)
+Greetings, Earthling.
+What is the reason for your visit?
+
+#(MIFFED_SHOFIXTI_GREETING_3)
+So, the glorious Captain returns.
+Do you need something?
+
+#(ANGRY_SHOFIXTI_GREETING_1)
+Look! The disgusting, shriveled-up pile of dung has returned!
+Any last words, traitor earthling?
+
+#(ANGRY_SHOFIXTI_GREETING_2)
+Prepare to meet your maker! GYAIEE!
+
+#(sorry)
+It was only a joke! A joke! The Quans are gone. I'm so sorry, Let's be friends again.
+
+#(SORRY_ACCEPTED)
+A mighty weird sense of humor you have.
+For the sake of old times
+I will let this one slip.
+But don't do that again. Ever.
+Now leave. We have to consider your behavior for a while
+before we know if you can be trusted.
+
+#(will_attack)
+I will smite you to smithereens, you rabid, puss-oozing centipede!
+
+#(WILL_ATTACK_TOO)
+Not before I rip that tincan open and feast upon your entrails! KYAIEE!
 
 #(chmmr_hunt_kohrah)
 The Chmmr continue to hunt the Kohr-Ah. They also slave-shielded the VUX and Mycon.
@@ -50,6 +94,9 @@ Farewell Shofixti, see you next time!
 
 #(GOODBYE_EARHTLING)
 Goodbye Earthling, come back soon!
+
+#(MIFFED_GOODBYE_EARHTLING)
+Later.
 
 
 
