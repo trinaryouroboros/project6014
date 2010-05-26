@@ -81,12 +81,12 @@ debugKeyPressed (void)
 	// Give the player the ships you can't ally with under normal
 	// conditions.
 	clearEscorts ();
-	ActivateStarShip (ARILOU_SHIP, 1);
+	ActivateStarShip (CHMMR_SHIP, 1);
 	ActivateStarShip (PKUNK_SHIP, 1);
 	ActivateStarShip (VUX_SHIP, 1);
 	ActivateStarShip (YEHAT_SHIP, 1);
 	ActivateStarShip (MELNORME_SHIP, 1);
-	ActivateStarShip (DRUUGE_SHIP, 1);
+	ActivateStarShip (BLACK_URQUAN_SHIP, 1);
 	/*** No more than 6 escorts for the Explorer
 	ActivateStarShip (ILWRATH_SHIP, 1);
 	ActivateStarShip (MYCON_SHIP, 1);

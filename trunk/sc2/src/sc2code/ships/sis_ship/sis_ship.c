@@ -227,7 +227,7 @@ LeaveAutoPilot:
 				(GLOBAL (autopilot)).y = ~0;
 		if (!(StarShipPtr->cur_status_flags & THRUST)
 				|| (GLOBAL_SIS (FuelOnBoard) == 0
-				&& GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1))
+				&& (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1) && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1)) // JMS
 		{
 			AccelerateDirection = -1;
 			GetCurrentVelocityComponents (&ElementPtr->velocity,
@@ -997,7 +997,7 @@ InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots)
 		switch (DriveSlots[i])
 		{
 			case FUSION_THRUSTER:
-				RaceDescPtr->characteristics.max_thrust += 2;
+				RaceDescPtr->characteristics.max_thrust += (2 * RESOLUTION_FACTOR); // JMS_GFX
 				++RaceDescPtr->characteristics.thrust_wait;
 				break;
 		}
@@ -1069,15 +1069,19 @@ init_sis (void)
 		new_sis_desc.preprocess_func = sis_hyper_preprocess;
 		new_sis_desc.postprocess_func = sis_hyper_postprocess;
 
-		new_sis_desc.characteristics.max_thrust -= 4;
+		 // JMS_GFX
+		if (RESOLUTION_FACTOR > 1)
+		{
+			new_sis_desc.characteristics.max_thrust = (10 * RESOLUTION_FACTOR) - (4 * RESOLUTION_FACTOR); // JMS_GFX
+			new_sis_desc.characteristics.thrust_increment *= RESOLUTION_FACTOR;
+		}
+		else
+			new_sis_desc.characteristics.max_thrust -= 4;
 	}
 	else
 	{
 		new_sis_desc.preprocess_func = sis_battle_preprocess;
 		new_sis_desc.postprocess_func = sis_battle_postprocess;
-		
-		
-		log_add(log_Debug, "Initit nyt alkaa %d", GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS));
 		
 		// JMS: Chmmr Explorer uses different function for its weapons than Precursor vessel.
 		if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0))
@@ -1085,7 +1089,6 @@ init_sis (void)
 		else if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
 			new_sis_desc.init_weapon_func = initialize_blasters;
 		
-		log_add(log_Debug, "Initit nyt loppu");
 		new_sis_desc.cyborg_control.intelligence_func = sis_intelligence;
 
 		if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 3)

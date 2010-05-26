@@ -105,15 +105,15 @@ enum
 #define MIN_ZOOM_RADIUS (MAX_ZOOM_RADIUS>>3)
 #define EARTH_RADIUS SCALE_RADIUS(8)
 
-#define MIN_PLANET_RADIUS SCALE_RADIUS (4)
+#define MIN_PLANET_RADIUS SCALE_RADIUS (4 * RESOLUTION_FACTOR) // JMS_GFX
 #define MAX_PLANET_RADIUS SCALE_RADIUS (124)
 
 #define DISPLAY_FACTOR ((SIS_SCREEN_WIDTH >> 1) - 8)
 
 #define NUM_SCANDOT_TRANSITIONS 4
 
-#define MIN_MOON_RADIUS 35
-#define MOON_DELTA 20
+#define MIN_MOON_RADIUS (35 * RESOLUTION_FACTOR) // JMS_GFX
+#define MOON_DELTA (20  * RESOLUTION_FACTOR) // JMS_GFX
 
 #define PLANET_SHIELDED (1 << 7)
 
@@ -122,7 +122,6 @@ enum
 // JMS: Restricted planets are not allowed to land on. For example race homeworlds
 // Earth, Procyon, Syreen homeworld. Plotwise this is because you wouldn't want aliens
 // landing on your backyard, stealing your minerals, would you?
-//
 // Actually this is implemented just to hide the fact that Earth surface graphics
 // don't load properly upon landing... 
 #define PLANET_RESTRICTED (1 << 1)

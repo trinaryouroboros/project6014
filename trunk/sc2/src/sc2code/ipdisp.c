@@ -226,7 +226,8 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		{
 			long detect_dist;
 
-			detect_dist = 1200;
+			// JMS_GFX
+			detect_dist = 1200 * RESOLUTION_FACTOR;
 			if (group_loc != 0) /* if in planetary views */
 			{
 				detect_dist *= (MAX_ZOOM_RADIUS / MIN_ZOOM_RADIUS);
