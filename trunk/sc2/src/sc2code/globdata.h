@@ -230,9 +230,11 @@ START_GAME_STATE
 	ADD_GAME_STATE (SHOFIXTI_BRO_KIA, 1)
 	ADD_GAME_STATE (SHOFIXTI_RECRUITED, 1)
 	ADD_GAME_STATE (SHOFIXTI_MET, 1)
-
+	ADD_GAME_STATE (SHOFIXTI_ANGRY, 2) // JMS: How angry the shofixti are.
+									   // Can be calmed down at 1. At 2 all is lost.
 	ADD_GAME_STATE (SHOFIXTI_MAIDENS, 1) /* Did you find the babes yet? */
 	ADD_GAME_STATE (MAIDENS_ON_SHIP, 1)
+
 	ADD_GAME_STATE (BATTLE_SEGUE, 1)
 			/* Set to 0 in init_xxx_comm() if communications directly
 			 * follows an encounter.

@@ -744,21 +744,15 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 	
 	num_blasters = 0;
 	
-	log_add(log_Debug, "Nyt alkaa initialize explorer weaponry");
-	
 	for (i = 0, lpMB = &MissileBlock[0]; i < 1; ++i)
 	{
 		BYTE which_gun;
-
-		log_add(log_Debug, "meni luuppiin");
 
 		// JMS: Chmmr Explorer always has weapon in nose weapon slot.
 		if(i == 0)
 			which_gun = GUN_WEAPON;
 		else
 			which_gun = 0;
-		
-		log_add(log_Debug, "gun on %d", which_gun);
 		
 		if (which_gun >= GUN_WEAPON && which_gun <= CANNON_WEAPON)
 		{
@@ -837,7 +831,6 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 			UnlockElement (BlasterArray[i]);
 		}
 	}
-		log_add(log_Debug, "Returnaan num_blastersin, joka on %d", num_blasters);
 	return (num_blasters);
 }
 
