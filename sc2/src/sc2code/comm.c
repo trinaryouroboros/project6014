@@ -950,7 +950,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		r.corner.x = 0;
 		r.corner.y = 0;
 		r.extent.width = SIS_SCREEN_WIDTH;
-		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + 2;
+		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - (SLIDER_HEIGHT * RESOLUTION_FACTOR) + (2 * RESOLUTION_FACTOR); // JMS_GFX
 
 		LockMutex (GraphicsLock);
 		SetContextForeGroundColor (COMM_HISTORY_BACKGROUND_COLOR);
@@ -1480,7 +1480,7 @@ InitCommunication (CONVERSATION which_comm)
 		}
 		ActivateStarShip (status, SPHERE_TRACKING);
 
-		// JMS: Initializes computer controlled battle group for melee.
+		// JMS: This initializes computer controlled battle group for melee.
 		// JMS: Removed the if condition so battle groups are inited for every race.
 		//
 		/*if (which_comm == ORZ_CONVERSATION

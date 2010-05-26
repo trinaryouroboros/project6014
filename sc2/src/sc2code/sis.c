@@ -937,7 +937,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 				DrawStamp (&s);
 			}
 
-			s.origin.y -= 3;
+			s.origin.y -= 3 * RESOLUTION_FACTOR; // JMS_GFX
 		}
 		s.origin.y = 0;
 		for (i = 0; i < NUM_JET_SLOTS; ++i)
@@ -955,7 +955,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 				DrawStamp (&s);
 			}
 
-			s.origin.y -= 3;
+			s.origin.y -= 3 * RESOLUTION_FACTOR; // JMS_GFX
 		}
 		s.origin.y = 1;
 		s.origin.x = 1; // This properly centers the modules.
@@ -972,7 +972,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 				DrawStamp (&s);
 			}
 
-			s.origin.y -= 3;
+			s.origin.y -= 3 * RESOLUTION_FACTOR; // JMS_GFX
 		}
 
 		{

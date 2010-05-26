@@ -295,16 +295,16 @@ InitEncounter (void)
 		HSHIPFRAG hStarShip, hNextShip;
 		POINT display_pt[] =
 		{
-			{ 10,  51},
-			{-10,  51},
-			{ 33,  40},
-			{-33,  40},
-			{ 49,  18},
-			{-49,  18},
-			{ 52,  -6},
-			{-52,  -6},
-			{ 44, -27},
-			{-44, -27},
+			{ (10 * RESOLUTION_FACTOR),  (51 * RESOLUTION_FACTOR)},
+			{(-10 * RESOLUTION_FACTOR),  (51 * RESOLUTION_FACTOR)},
+			{ (33 * RESOLUTION_FACTOR),  (40 * RESOLUTION_FACTOR)},
+			{(-33 * RESOLUTION_FACTOR),  (40 * RESOLUTION_FACTOR)},
+			{ (49 * RESOLUTION_FACTOR),  (18 * RESOLUTION_FACTOR)},
+			{(-49 * RESOLUTION_FACTOR),  (18 * RESOLUTION_FACTOR)},
+			{ (52 * RESOLUTION_FACTOR),  (-6 * RESOLUTION_FACTOR)},
+			{(-52 * RESOLUTION_FACTOR),  (-6 * RESOLUTION_FACTOR)},
+			{ (44 * RESOLUTION_FACTOR),  (-27 * RESOLUTION_FACTOR)},
+			{(-44 * RESOLUTION_FACTOR),  (-27 * RESOLUTION_FACTOR)},
 		};
 
 		for (hStarShip = GetHeadLink (&GLOBAL (npc_built_ship_q)), i = 0;

@@ -293,7 +293,9 @@ CalcView (POINT *pNewScrollPt, SIZE next_reduction,
 #define ORG_JUMP_X ((SIZE)DISPLAY_ALIGN(LOG_SPACE_WIDTH / 75))
 #define ORG_JUMP_Y ((SIZE)DISPLAY_ALIGN(LOG_SPACE_HEIGHT / 75))
 		if (dx > ORG_JUMP_X)
+		{
 			dx = ORG_JUMP_X;
+		}
 		else if (dx < -ORG_JUMP_X)
 			dx = -ORG_JUMP_X;
 		if (dy > ORG_JUMP_Y)

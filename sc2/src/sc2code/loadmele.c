@@ -39,9 +39,9 @@
 		BUILD_COLOR (MAKE_RGB15 (0x17, 0x18, 0x1D), 0x00)
 
 
-#define LOAD_MELEE_BOX_WIDTH 34
-#define LOAD_MELEE_BOX_HEIGHT 34
-#define LOAD_MELEE_BOX_SPACE 1
+#define LOAD_MELEE_BOX_WIDTH (34 * RESOLUTION_FACTOR) // JMS_GFX
+#define LOAD_MELEE_BOX_HEIGHT (34 * RESOLUTION_FACTOR) // JMS_GFX
+#define LOAD_MELEE_BOX_SPACE (1 * RESOLUTION_FACTOR) // JMS_GFX
 
 
 static void DrawFileStrings (MELEE_STATE *pMS);
@@ -219,8 +219,8 @@ DrawFileString (TEAM_IMAGE *pTI, POINT *origin, BOOLEAN drawShips,
 		STAMP s;
 		FleetShipIndex index;
 
-		s.origin.x = origin->x + 1;
-		s.origin.y = origin->y + 4;
+		s.origin.x = origin->x + 1*RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.y = origin->y + 4*RESOLUTION_FACTOR; // JMS_GFX
 		for (index = 0; index < MELEE_FLEET_SIZE; index++)
 		{
 			BYTE StarShip;
@@ -230,7 +230,7 @@ DrawFileString (TEAM_IMAGE *pTI, POINT *origin, BOOLEAN drawShips,
 			{
 				s.frame = GetShipIconsFromIndex (StarShip);
 				DrawStamp (&s);
-				s.origin.x += 17;
+				s.origin.x += 17*RESOLUTION_FACTOR; // JMS_GFX
 			}
 		}
 	}
@@ -259,9 +259,9 @@ FillFileView (MELEE_STATE *pMS)
 	return true;
 }
 
-#define FILE_STRING_ORIGIN_X  5
+#define FILE_STRING_ORIGIN_X (5 * RESOLUTION_FACTOR)
 #define FILE_STRING_ORIGIN_Y  34
-#define ENTRY_HEIGHT 32
+#define ENTRY_HEIGHT (32 * RESOLUTION_FACTOR) // JMS_GFX
 
 void
 SelectFileString (MELEE_STATE *pMS, bool hilite)
@@ -830,5 +830,3 @@ UninitMeleeLoadState (MELEE_STATE *pMS)
 	if (pMS->load.entryIndices != NULL)
 		HFree (pMS->load.entryIndices);
 }
-
-

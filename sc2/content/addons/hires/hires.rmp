@@ -1,6 +1,13 @@
+comm.transport.graphics = GFXRES:addons/hires/comm/commander/commander.ani
+graphics.activity = GFXRES:addons/hires/ui/activity.ani
+graphics.ambanimREMOVETHIS = GFXRES:addons/hires/nav/ambientanim.ani
 graphics.flagstat = GFXRES:addons/hires/ui/flagstat.ani
+graphics.hyperstr = GFXRES:addons/hires/nav/hyperstr.ani
+graphics.ip_sun = GFXRES:addons/hires/nav/ip_sun.ani
 graphics.melee = GFXRES:addons/hires/ui/melee.ani
 graphics.melebkgd = GFXRES:addons/hires/ui/meleebackground.ani
+graphics.obbkgnd = GFXRES:addons/hires/nav/obbkgnd.ani
+graphics.orbplan = GFXRES:addons/hires/nav/orbplan.ani
 graphics.segue = GFXRES:addons/hires/ui/segue.ani
 graphics.sis_ip = GFXRES:addons/hires/nav/explorer_ip.ani
 graphics.status = GFXRES:addons/hires/ui/status.ani
