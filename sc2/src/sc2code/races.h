@@ -631,11 +631,11 @@ enum
 		 0,  /* URQUAN_SHIP */ \
 		 0,  /* ZOQFOTPIK_SHIP */ \
 	    20,  /* SYREEN_SHIP */ \
-		20,  /* BLACK_URQUAN_SHIP */ \
+		25,  /* BLACK_URQUAN_SHIP */ \
 		50,  /* JMS: ANDROSYNTH_SHIP */ \
 		40,  /* JMS: CHENJESU_SHIP */ \
 		40,  /* JMS: MMRNMHRM_SHIP */ \
-		20, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
+		25, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		40,  /* YEHAT_REBEL_SHIP */ \
 		 0,  /* TRANSPORT_SHIP */ \
 
@@ -668,7 +668,7 @@ enum
 		MAKE_BYTE (1, 5),  /* JMS: ANDROSYNTH_SHIP*/ \
 		MAKE_BYTE (1, 5),  /* JMS: CHENJESU_SHIP */\
 		MAKE_BYTE (1, 5),  /* JMS: MMRNMHRM_SHIP */\
-		MAKE_BYTE (1, 1),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
+		MAKE_BYTE (1, 5),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		MAKE_BYTE (1, 5),  /* YEHAT_REBEL_SHIP */\
 		MAKE_BYTE (1, 5),  /* JMS:TRANSPORT_SHIP */ \
 

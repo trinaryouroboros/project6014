@@ -353,6 +353,8 @@ sly_kohr_escape (STARSHIP *StarShipPtr)
 {
 	ELEMENT *ElementPtr;
 	
+	SET_GAME_STATE(SLYLANDRO_KOHRAH_PANIC, 1);
+	
 	LockElement (StarShipPtr->hShip, &ElementPtr);
 	if (GetPrimType (&DisplayArray[ElementPtr->PrimIndex]) == STAMP_PRIM
 		&& ElementPtr->life_span == NORMAL_LIFE
