@@ -1,23 +1,169 @@
-#(HELLO_1)	slyho000.ogg
+#(HELLO_1)
+This is Slylandro scout vessel Plurious Giddiness.
+We come in peace and
 Oh, this is terribly exciting!
 The human traveller our songs have told so much about
 is actually before us!
 
-#(HELLO_2)	slyho001.ogg
-You return with great speed.
-In the last five Drahn, we have had only one visitor.
-and now you have come twice in but a single Drahnasa.
-How wonderful!
+#(HELLO_2)
+How quickly we meet again!
+Let us communicate a while,
+ponder the mysterious nature of the universe
+and the exciting vastness of the space.
 
-#(HELLO_3)	slyho002.ogg
-Welcome back human Traveller!
-We hope your journeys have brought you new insights
-that you will share with us.
+#(HELLO_3)
+The human Traveller!
+Quick! Contact the other ships
+so we may begin the festivities of jumbling eruptions!
 
-#(HELLO_4)	slyho003.ogg
-Welcome back human Traveller!
-We hope your journeys have brought you new insights
-that you will share with us.
+#(HELLO_4)
+The human Traveller!
+Quick! Contact the other ships
+so we may begin the festivities of jumbling eruptions.
+
+#(PANIC_HELLO_1)
+Please, hear us out! We are Slylandro, gas folk,
+harmless inhabitants of the Source.
+Don't you recognize us?
+
+#(PANIC_HELLO_2)
+Please stop attacking! We come in peace!
+
+#(not_fooling)
+You are not fooling us by disguising as friends, Kohr-ah. Prepare to die!
+
+#(WHY_ATTACK)
+Please! We mean you no harm.
+Why is everyone attacking us?
+
+#(close_call)
+Slylandro! Boy, I almost blasted you to high heavens. Why and HOW are you in Kohr-Ah ships?
+
+#(WONDERFUL_THING)
+How great! You do remember us!
+Now this is a story you won't believe.
+Only a few hundred rotations after the last time we met at Source
+we got new visitors.
+How eager they were to speak, to tell us about latest events!
+How joyous and laughative they were!
+But the most wonderful thing happened when a while later
+they returned and brought with them these ships.
+Somehow, someway, they had constructed a micro-environment
+within these hulls that match the climate of our gas giant home perfectly.
+They said they wanted to present us the opportunity
+to leave our planet
+explore the vast depths of space
+see attack ships on fire off the shoulder of Orion
+watch the C-beams glitter in the dark near the Tannhauser gate.
+We were sold the very instant.
+"What does it cost, though" asked Sullen Plummet and we were all
+a bit worried. After all we don't have a lot to offer to
+visitors from outside except our ancient knowledge on history (and clouds).
+But the visitors stunned us all with their good-will. They said
+"It's free of charge, har har!"
+
+#(who_were_visitors)
+Uhhuh. So who were these wonderful visitors?
+
+#(THE_VISITORS_WERE)
+They didn't tell us that much about themselves
+referring to what they called ingogneeto or something,
+but this much we know:
+They rode in smallish ships that
+in your visual range you would call green
+and they called themselves
+The Benevolent Helpers.
+
+#(pose_danger)
+You are in great danger. Our enemies, the Ur-Quan Kohr-Ah ride similar ships.
+
+#(GOOD_GUYS)
+But the Ur-Quan were such good guys...
+what?
+Oh, yeah, that was the previous part. The NEW Ur-Quan of course.
+But why would the Benevolent Helpers sell us ships that look
+just like your enemies' ships and then
+give us maps that lead right here?
+They were so friendly to us.
+
+#(up_no_good)
+Those guys are up to no good. Now you better leave while you still can.
+
+#(better_go_back)
+You better leave fast. Our allies will attack those ships of yours at sight.
+
+#(NO_GO_BACK)
+Go back? But we cannot do that!
+Not when we have got the taste of freedom
+for the first time in so many a Drahn.
+Not when we have so many exciting new worlds
+right under our gas bags so to speak.
+On the other hand
+We have already lost many young floaters
+seen our ships being blown to bits
+It's so sad
+but, hey!
+Couldn't you help us out?
+Could you talk to your allies?
+If you informed everyone of our real nature
+so they wouldn't try to blow us up?
+Please. This means a great deal to us.
+
+#(your_funeral)
+Ahh... It's your funeral. But I'll see what I can do.
+
+#(THANK_YOU)
+Once again, we thank you, trustworthy human Traveller!
+
+#(ask_news_1)
+Seen anything interesting in your travels?
+
+#(GIVE_NEWS_1)
+Whilst on the way to this region of space,
+we encountered a large fleet of ships,
+larger than we have seen ever since.
+We were still very new to this kind of thing, so
+we didn't know how to record data on them.
+At least we know they were moving very fast
+to the direction that on your map topology would be west.
+
+#(GIVE_NEWS_2)
+Everything is interesting and new to us!
+But I doubt you would find our latest measurements
+of the ecliptic on local gas planets very useful.
+
+#(sorry_mistake)
+Sorry! I didn't mean to hurt you. It's just so hard to tell you from enemies.
+
+#(MISTAKE_FORGIVEN)
+We know you wouldn't do such a thing on purpose
+You are forgiven.
+
+#(good_bye_confused)
+This is all very confusing. I think we just to go now.
+
+#(good_bye_ok)
+Goodbye, Slylandro gas bags. Be careful out there.
+
+#(good_bye_short)
+I think we have to go now.
+
+#(GOOD_BYE_OK)
+Goodbye, human Traveller!
+
+#(GOOD_BYE_PANIC)
+We go in peace and wish you do the same.
+
+
+
+
+
+
+
+
+
+
+
 
 #(RECALL_PROGRAM_1)	slyho004.ogg
 Ah! human Traveller. We have news.

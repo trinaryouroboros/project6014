@@ -976,6 +976,8 @@ START_GAME_STATE
 
 	// JMS: How many times player has met Slylandros in kohr-ah vessels
 	ADD_GAME_STATE (SLYLANDRO_KOHRAH_MET_TIMES, 2)
+	ADD_GAME_STATE (KNOW_SLYLANDRO_KOHRAH, 1)
+	ADD_GAME_STATE (SLYLANDRO_KOHRAH_PANIC, 1)
 
 	// JMS: Did enemy ship escape from combat
 	ADD_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 1)
