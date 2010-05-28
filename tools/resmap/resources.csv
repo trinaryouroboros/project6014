@@ -876,6 +876,9 @@ SIS_SML_MASK_PMAP_ANIM,ship.sis_ship.graphics.sis.small,sc2code/ships/sis_ship/i
 BLASTER_BIG_MASK_PMAP_ANIM,ship.sis_ship.graphics.blas.large,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/blasbig.ani
 BLASTER_MED_MASK_PMAP_ANIM,ship.sis_ship.graphics.blas.medium,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/blasmed.ani
 BLASTER_SML_MASK_PMAP_ANIM,ship.sis_ship.graphics.blas.small,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/blassml.ani
+SPARK_ONLY_BIG_MASK_PMAP_ANIM,ship.sis_ship.graphics.spark_only.large,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/chenjesu/spark_only.big
+SPARK_ONLY_MED_MASK_PMAP_ANIM,ship.sis_ship.graphics.spark_only.medium,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/chenjesu/spark_only.med
+SPARK_ONLY_SML_MASK_PMAP_ANIM,ship.sis_ship.graphics.spark_only.small,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/chenjesu/spark_only.sml
 SIS_CAPTAIN_MASK_PMAP_ANIM,ship.sis_ship.graphics.captain,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/sis_ship/siscap.ani
 SIS_HYPER_MASK_PMAP_ANIM,ship.sis_ship.graphics.exphyper,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpHyper.ani
 SIS_QUASI_MASK_PMAP_ANIM,ship.sis_ship.graphics.expquasi,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpQuasi.ani
