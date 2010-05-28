@@ -20,6 +20,7 @@
 // JMS 2010: -Red ship gfx in hyperspace, blue in Orz space, green in quasispace
 //			 -Added separate weaponry function for Chmmr Explorer
 //			 -Added some nuts and bolts to make Chmmr Explorer weapons work
+//			 -Modded Chmmr Explorer main weapon as dual alternate side firing ion bolt cannon
 
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
@@ -51,6 +52,10 @@
 
 #define BLASTER_SPEED DISPLAY_TO_WORLD (24)
 #define BLASTER_LIFE 12
+
+// JMS: Chmmr Explorer has smaller weapon delay
+#define EXPLORER_WEAPON_WAIT 2
+#define EXPLORER_SPECIAL_WAIT 9
 
 static RACE_DESC sis_desc =
 {
@@ -150,8 +155,8 @@ static RACE_DESC exp_desc =
 		ENERGY_WAIT,
 		TURN_WAIT,
 		THRUST_WAIT,
-		WEAPON_WAIT,
-		SPECIAL_WAIT,
+		EXPLORER_WEAPON_WAIT,
+		0,  // JMS: Special weapon wait is abused here to keep track of number of mines.
 		SHIP_MASS,
 	},
 	{
@@ -166,9 +171,9 @@ static RACE_DESC exp_desc =
 			BLASTER_SML_MASK_PMAP_ANIM,
 		},
 		{
-			NULL_RESOURCE,
-			NULL_RESOURCE,
-			NULL_RESOURCE,
+			SPARK_ONLY_BIG_MASK_PMAP_ANIM,
+			SPARK_ONLY_MED_MASK_PMAP_ANIM,
+			SPARK_ONLY_SML_MASK_PMAP_ANIM,
 		},
 		{
 			SIS_CAPTAIN_MASK_PMAP_ANIM,
@@ -376,6 +381,7 @@ sis_hyper_postprocess (ELEMENT *ElementPtr)
 	}
 }
 
+// Precursor vessel special
 static void
 spawn_point_defense (ELEMENT *ElementPtr)
 {
@@ -507,13 +513,170 @@ spawn_point_defense (ELEMENT *ElementPtr)
 	}
 }
 
+// JMS: Chmmr Explorer special: animation and limiting the number of mines in arena
+#define MAX_MINES 7
+static void
+spin_preprocess (ELEMENT *ElementPtr)
+{
+	ELEMENT *ShipPtr;
+	STARSHIP *StarShipPtr;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	LockElement (StarShipPtr->hShip, &ShipPtr);
+	
+	if (ShipPtr->crew_level
+		&& ++StarShipPtr->RaceDescPtr->characteristics.special_wait > MAX_MINES)
+	{		
+		ElementPtr->life_span = 1;
+		ElementPtr->state_flags |= DISAPPEARING;
+		//--StarShipPtr->RaceDescPtr->characteristics.special_wait;
+	}
+	else
+	{
+		++ElementPtr->life_span;
+
+// JMS: This number should be be the same as the number of PNGs in the ani file.
+// For chrissakes, don't put too big a number here!
+#define LAST_SPIN_INDEX 15
+		if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_SPIN_INDEX)
+			ElementPtr->next.image.frame =
+			IncFrameIndex (ElementPtr->current.image.frame);
+		else
+			ElementPtr->next.image.frame =
+			SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+		ElementPtr->state_flags |= CHANGING;
+			
+		ElementPtr->turn_wait = 0;
+	}
+	UnlockElement (StarShipPtr->hShip);
+}
+
+// JMS: Chmmr Explorer special: Enemy tracking
+#define DISCRIMINATOR_SPEED 4
+static void
+butt_missile_preprocess (ELEMENT *ElementPtr)
+{
+	if (ElementPtr->turn_wait > 0)
+		--ElementPtr->turn_wait;
+	else
+	{
+		COUNT facing;
+		
+		if (TrackShip (ElementPtr, &facing) > 0)
+		{
+			ElementPtr->state_flags |= CHANGING;
+			
+			SetVelocityVector (&ElementPtr->velocity,
+							   DISCRIMINATOR_SPEED, facing);
+		}
+		
+		ElementPtr->turn_wait = 0;
+	}
+	spin_preprocess (ElementPtr);
+}
+
+// JMS: Chmmr Explorer special: This puts the newest mine on the arena to
+// the last place in the list of mine elements. 
+//
+// -> When new mines are deployed, oldest ones are eradicated from their way.
+static void
+butt_missile_postprocess (ELEMENT *ElementPtr)
+{
+	HELEMENT hElement;
+	
+	ElementPtr->postprocess_func = 0;
+	hElement = AllocElement ();
+	if (hElement)
+	{
+		COUNT primIndex;
+		ELEMENT *ListElementPtr;
+		STARSHIP *StarShipPtr;
+		
+		LockElement (hElement, &ListElementPtr);
+		primIndex = ListElementPtr->PrimIndex;
+		*ListElementPtr = *ElementPtr;
+		ListElementPtr->PrimIndex = primIndex;
+		(GLOBAL (DisplayArray))[primIndex] =
+		(GLOBAL (DisplayArray))[ElementPtr->PrimIndex];
+		ListElementPtr->current = ListElementPtr->next;
+		InitIntersectStartPoint (ListElementPtr);
+		InitIntersectEndPoint (ListElementPtr);
+		ListElementPtr->state_flags = (ListElementPtr->state_flags
+									   & ~(PRE_PROCESS | CHANGING | APPEARING))
+		| POST_PROCESS;
+		UnlockElement (hElement);
+		
+		GetElementStarShip (ElementPtr, &StarShipPtr);
+		LockElement (StarShipPtr->hShip, &ListElementPtr);
+		InsertElement (hElement, GetSuccElement (ListElementPtr));
+		UnlockElement (StarShipPtr->hShip);
+		
+		ElementPtr->life_span = 0;
+	}
+}
+
+// JMS: Chmmr Explorer special: Main function
+static void
+spawn_butt_missile (ELEMENT *ShipPtr)
+{
+#define SPATHI_REAR_OFFSET 20
+#define DISCRIMINATOR_LIFE 40
+#define DISCRIMINATOR_HITS 1
+#define DISCRIMINATOR_DAMAGE 4
+#define DISCRIMINATOR_OFFSET 4
+	HELEMENT ButtMissile;
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK ButtMissileBlock;
+
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	ButtMissileBlock.cx = ShipPtr->next.location.x;
+	ButtMissileBlock.cy = ShipPtr->next.location.y;
+	ButtMissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+	ButtMissileBlock.face = ButtMissileBlock.index =
+	NORMALIZE_FACING (StarShipPtr->ShipFacing
+					  + ANGLE_TO_FACING (HALF_CIRCLE));
+	ButtMissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+	ButtMissileBlock.pixoffs = SPATHI_REAR_OFFSET;
+	ButtMissileBlock.speed = DISCRIMINATOR_SPEED;
+	ButtMissileBlock.hit_points = DISCRIMINATOR_HITS;
+	ButtMissileBlock.damage = DISCRIMINATOR_DAMAGE;
+	ButtMissileBlock.life = DISCRIMINATOR_LIFE;
+	ButtMissileBlock.preprocess_func = butt_missile_preprocess;
+	ButtMissileBlock.blast_offs = DISCRIMINATOR_OFFSET;
+	ButtMissile = initialize_missile (&ButtMissileBlock);
+	if (ButtMissile && (DeltaEnergy (ShipPtr,
+		-(StarShipPtr->RaceDescPtr->characteristics.special_energy_cost))))
+	{
+		ELEMENT *ButtPtr;
+		
+		LockElement (ButtMissile, &ButtPtr);
+		ButtPtr->turn_wait = 0;
+		ButtPtr->postprocess_func=butt_missile_postprocess;
+		SetElementStarShip (ButtPtr, StarShipPtr);
+		
+		ProcessSound (SetAbsSoundIndex (
+			StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ButtPtr);
+		
+		UnlockElement (ButtMissile);
+		PutElement (ButtMissile);
+
+		StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;
+	}
+}
+
 static void
 sis_battle_preprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
-	if (StarShipPtr->RaceDescPtr->characteristics.special_energy_cost == 0)
+	
+	// JMS: This is needed to keep track of the number of mines with Chmmr Explorer
+	if (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0)
+		StarShipPtr->RaceDescPtr->characteristics.special_wait = 0;
+	
+	if (StarShipPtr->RaceDescPtr->characteristics.special_energy_cost == 0
+		&&(GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
 	{
 		StarShipPtr->cur_status_flags &= ~SPECIAL;
 		StarShipPtr->special_counter = 2;
@@ -530,13 +693,20 @@ static void
 sis_battle_postprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
-
+	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
-	if ((StarShipPtr->cur_status_flags & SPECIAL)
+	
+	if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0)
+		&& StarShipPtr->special_counter == 0
+		&& (StarShipPtr->cur_status_flags & SPECIAL))
+		spawn_butt_missile(ElementPtr);
+	
+	else if ((StarShipPtr->cur_status_flags & SPECIAL)
+			&& (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1)
 			&& StarShipPtr->special_counter == 0
 			&& StarShipPtr->RaceDescPtr->characteristics.special_energy_cost)
 	{
-		spawn_point_defense (ElementPtr);
+			spawn_point_defense (ElementPtr);
 	}
 }
 
@@ -730,6 +900,8 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 {
 #define SIS_VERT_OFFSET 28
 #define SIS_HORZ_OFFSET 20
+#define SIS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(10))
+#define SIS_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-10))
 #define BLASTER_HITS 2
 #define BLASTER_OFFSET 8
 	COUNT num_blasters;
@@ -740,10 +912,35 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 	MISSILE_BLOCK MissileBlock[6];
 	MISSILE_BLOCK *lpMB;
 	
+	COORD cx, cy;
+	static COUNT blaster_side;
+	COUNT facing, angle;
+	SIZE offs_x, offs_y;
+	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
 	num_blasters = 0;
 	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	facing = StarShipPtr->ShipFacing;
+	angle = FACING_TO_ANGLE (facing);
+
+	blaster_side = (blaster_side + 1) % 2;
+		
+	cx = ShipPtr->next.location.x;
+	cy = ShipPtr->next.location.y;
+	
+	if(blaster_side)
+	{
+		offs_x = -SINE (angle, SIS_HORZ_OFFSET_2);
+		offs_y = COSINE (angle, SIS_HORZ_OFFSET_2);
+	}
+	else
+	{
+		offs_x = -SINE (angle, SIS_HORZ_OFFSET_3);
+		offs_y = COSINE (angle, SIS_HORZ_OFFSET_3);
+	}
+		
 	for (i = 0, lpMB = &MissileBlock[0]; i < 1; ++i)
 	{
 		BYTE which_gun;
@@ -757,8 +954,8 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 		if (which_gun >= GUN_WEAPON && which_gun <= CANNON_WEAPON)
 		{
 			which_gun -= GUN_WEAPON - 1;
-			lpMB->cx = ShipPtr->next.location.x;
-			lpMB->cy = ShipPtr->next.location.y;
+			lpMB->cx = cx + offs_x;
+			lpMB->cy = cy + offs_y;
 			lpMB->farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 			lpMB->sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
@@ -787,28 +984,28 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 				case 1: /* SPREAD WEAPON */
 					lpMB->pixoffs = SIS_VERT_OFFSET;
 					lpMB->face = NORMALIZE_FACING (
-												   StarShipPtr->ShipFacing + 1);
+						StarShipPtr->ShipFacing + 1);
 					lpMB[1] = lpMB[0];
 					++lpMB;
 					lpMB->face = NORMALIZE_FACING (
-												   StarShipPtr->ShipFacing - 1);
+						StarShipPtr->ShipFacing - 1);
 					break;
 				case 2: /* SIDE WEAPON */
 					lpMB->pixoffs = SIS_HORZ_OFFSET;
 					lpMB->face = NORMALIZE_FACING (
-												   StarShipPtr->ShipFacing
-												   + ANGLE_TO_FACING (QUADRANT));
+						StarShipPtr->ShipFacing
+						+ ANGLE_TO_FACING (QUADRANT));
 					lpMB[1] = lpMB[0];
 					++lpMB;
 					lpMB->face = NORMALIZE_FACING (
-												   StarShipPtr->ShipFacing
-												   - ANGLE_TO_FACING (QUADRANT));
+						StarShipPtr->ShipFacing
+						- ANGLE_TO_FACING (QUADRANT));
 					break;
 				case NUM_MODULE_SLOTS - 1: /* TAIL WEAPON */
 					lpMB->pixoffs = SIS_VERT_OFFSET;
 					lpMB->face = NORMALIZE_FACING (
-												   StarShipPtr->ShipFacing
-												   + ANGLE_TO_FACING (HALF_CIRCLE));
+						StarShipPtr->ShipFacing
+						+ ANGLE_TO_FACING (HALF_CIRCLE));
 					break;
 			}
 			
@@ -920,6 +1117,7 @@ InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots)
 		RaceDescPtr->ship_info.max_crew = EXPLORER_CREW_CAPACITY;
 		RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
 		RaceDescPtr->characteristics.weapon_energy_cost += 2;
+		RaceDescPtr->characteristics.special_energy_cost = 4;
 	}
 	else if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
 	{
