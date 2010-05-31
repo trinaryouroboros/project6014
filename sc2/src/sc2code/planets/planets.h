@@ -50,7 +50,7 @@ enum
 };
 
 #define MAP_WIDTH SIS_SCREEN_WIDTH
-#define MAP_HEIGHT (75 - SAFE_Y)
+#define MAP_HEIGHT (75 * RESOLUTION_FACTOR - SAFE_Y) // JMS_GFX
 
 enum
 {
@@ -59,7 +59,7 @@ enum
 	GENERATE_MOONS,
 			// Layout of moons around a planet.
 	GENERATE_ORBITAL,
-			// Characteristics of words (planets and moons).
+			// Characteristics of worlds (planets and moons).
 
 	INIT_NPCS,
 			// Ships in the solar system, the first time it is accessed.

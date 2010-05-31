@@ -67,10 +67,13 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 			rand_val = TFB_Random ();
 			loword = LOWORD (rand_val);
 			hiword = HIWORD (rand_val);
-			SysInfoPtr->PlanetInfo.CurPt.x =
-					(LOBYTE (loword) % (MAP_WIDTH - (8 << 1))) + 8;
-			SysInfoPtr->PlanetInfo.CurPt.y =
-					(HIBYTE (loword) % (MAP_HEIGHT - (8 << 1))) + 8;
+			
+			if (RESOLUTION_FACTOR == 1)
+				SysInfoPtr->PlanetInfo.CurPt.x = (LOBYTE (loword) % (MAP_WIDTH - (8 << 1))) + 8;
+			else
+				SysInfoPtr->PlanetInfo.CurPt.x = loword % (MAP_WIDTH - (8 << 1)) + 8; // JMS_GFX: Replaced previous line with this line (BYTE was too small for 640x480 maps.)
+			
+			SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (loword) % (MAP_HEIGHT - (8 << 1))) + 8;
 
 			SysInfoPtr->PlanetInfo.CurDensity =
 					MAKE_WORD (
@@ -222,10 +225,13 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 				do
 				{
 					rand_val = (UWORD)TFB_Random ();
-					SysInfoPtr->PlanetInfo.CurPt.x =
-							(LOBYTE (rand_val) % (MAP_WIDTH - (8 << 1))) + 8;
-					SysInfoPtr->PlanetInfo.CurPt.y =
-							(HIBYTE (rand_val) % (MAP_HEIGHT - (8 << 1))) + 8;
+					
+					if (RESOLUTION_FACTOR == 1)
+						SysInfoPtr->PlanetInfo.CurPt.x = (LOBYTE (rand_val) % (MAP_WIDTH - (8 << 1))) + 8;
+					else
+						SysInfoPtr->PlanetInfo.CurPt.x = rand_val % (MAP_WIDTH - (8 << 1)) + 8; // JMS_GFX: Replaced previous line with this line (BYTE was too small for 640x480 maps.)
+					
+					SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (rand_val) % (MAP_HEIGHT - (8 << 1))) + 8; // JMS_GFX
 					SysInfoPtr->PlanetInfo.CurType = index;
 
 					if ((num_life_forms >= which_life
@@ -259,6 +265,3 @@ GenerateLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT *pwhich_life)
 	*pwhich_life = CalcLifeForms (SysInfoPtr, *pwhich_life);
 	return (TFB_SeedRandom (old_rand));
 }
-
-
-

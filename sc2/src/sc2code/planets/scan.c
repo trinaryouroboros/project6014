@@ -69,19 +69,19 @@ static void
 EraseCoarseScan (void)
 {
 	RECT r, tr;
-	const int leftScanWidth   = 80;
-	const int rightScanWidth  = 80;
-	const int leftScanOffset  = 5;
-	const int rightScanOffset = 50;
-	const int nameEraseWidth = SIS_SCREEN_WIDTH - 2;
+	const int leftScanWidth   = 80 * RESOLUTION_FACTOR; // JMS_GFX
+	const int rightScanWidth  = 80 * RESOLUTION_FACTOR; // JMS_GFX
+	const int leftScanOffset  = 5 * RESOLUTION_FACTOR; // JMS_GFX
+	const int rightScanOffset = 50 * RESOLUTION_FACTOR; // JMS_GFX
+	const int nameEraseWidth = SIS_SCREEN_WIDTH - 2 * RESOLUTION_FACTOR; // JMS_GFX
 
 	LockMutex (GraphicsLock);
 	SetContext (SpaceContext);
 
 	r.corner.x = (SIS_SCREEN_WIDTH >> 1) - (nameEraseWidth >> 1);
-	r.corner.y = 13 - 10;
+	r.corner.y = (13 - 10) * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.width = nameEraseWidth;
-	r.extent.height = 14;
+	r.extent.height = 14 * RESOLUTION_FACTOR; // JMS_GFX
 	RepairBackRect (&r);
 
 	GetFrameRect (SetAbsFrameIndex (SpaceJunkFrame, 20), &tr);
@@ -129,7 +129,7 @@ MakeScanValue (UNICODE *buf, long val, const UNICODE *extra)
 static void
 PrintCoarseScanPC (void)
 {
-#define SCAN_LEADING_PC 14
+#define SCAN_LEADING_PC (14 * RESOLUTION_FACTOR) // JMS_GFX
 	SDWORD val;
 	TEXT t;
 	RECT r;
@@ -198,7 +198,7 @@ PrintCoarseScanPC (void)
 
 	t.align = ALIGN_CENTER;
 	t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-	t.baseline.y = 13;
+	t.baseline.y = 13 * RESOLUTION_FACTOR; // JMS_GFX
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
@@ -210,9 +210,9 @@ PrintCoarseScanPC (void)
 	SetContextFont (TinyFont);
 	UnlockMutex (GraphicsLock);
 
-#define LEFT_SIDE_BASELINE_X_PC 5
-#define RIGHT_SIDE_BASELINE_X_PC (SIS_SCREEN_WIDTH - 75)
-#define SCAN_BASELINE_Y_PC 40
+#define LEFT_SIDE_BASELINE_X_PC (5 * RESOLUTION_FACTOR) // JMS_GFX
+#define RIGHT_SIDE_BASELINE_X_PC (SIS_SCREEN_WIDTH - (75 * RESOLUTION_FACTOR)) // JMS_GFX
+#define SCAN_BASELINE_Y_PC (40 * RESOLUTION_FACTOR) // JMS_GFX
 
 	t.baseline.y = SCAN_BASELINE_Y_PC;
 	t.align = ALIGN_LEFT;
@@ -371,7 +371,7 @@ PrintCoarseScanPC (void)
 static void
 PrintCoarseScan3DO (void)
 {
-#define SCAN_LEADING 19
+#define SCAN_LEADING (19 * RESOLUTION_FACTOR) // JMS_GFX
 	SDWORD val;
 	TEXT t;
 	STAMP s;
@@ -439,7 +439,7 @@ PrintCoarseScan3DO (void)
 
 	t.align = ALIGN_CENTER;
 	t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-	t.baseline.y = 13;
+	t.baseline.y = 13 * RESOLUTION_FACTOR; // JMS_GFX
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
@@ -449,15 +449,15 @@ PrintCoarseScan3DO (void)
 	font_DrawText (&t);
 
 	s.origin.x = s.origin.y = 0;
-	s.origin.x = 16 - SAFE_X;
+	s.origin.x = (16 - SAFE_X) * RESOLUTION_FACTOR; // JMS_GFX
 	s.frame = SetAbsFrameIndex (SpaceJunkFrame, 20);
 	DrawStamp (&s);
 
 	UnlockMutex (GraphicsLock);
 
-#define LEFT_SIDE_BASELINE_X (27 + (16 - SAFE_X))
-#define RIGHT_SIDE_BASELINE_X (SIS_SCREEN_WIDTH - LEFT_SIDE_BASELINE_X)
-#define SCAN_BASELINE_Y 25
+#define LEFT_SIDE_BASELINE_X ((27 + (16 - SAFE_X)) * RESOLUTION_FACTOR) // JMS_GFX
+#define RIGHT_SIDE_BASELINE_X ((SIS_SCREEN_WIDTH - LEFT_SIDE_BASELINE_X) * RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_BASELINE_Y (25 * RESOLUTION_FACTOR) // JMS_GFX
 
 	t.baseline.x = LEFT_SIDE_BASELINE_X;
 	t.baseline.y = SCAN_BASELINE_Y;
