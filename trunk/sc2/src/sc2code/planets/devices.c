@@ -20,6 +20,7 @@
 // JMS 2010 -Black orb replaces rosy sphere
 //			-Temporal wrapper replaces shofixti maidens
 //			-Slaveshield buster replaces Clear spindle
+//			-Disabled sun device's and casters' effect on Chmmr at Procyon orbit.
 
 #include "build.h"
 #include "encount.h"
@@ -55,8 +56,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 	SetContext (StatusContext);
 	SetContextFont (TinyFont);
 
-	y = 41;
-	t.baseline.x = 40;
+	y = 41 * RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.x = 40 * RESOLUTION_FACTOR; // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.CharCount = 3;
 
@@ -68,15 +69,15 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 	{
 		STAMP s;
 
-		r.corner.x = 2;
-		r.extent.width = FIELD_WIDTH + 1;
+		r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width = FIELD_WIDTH + (1 * RESOLUTION_FACTOR); // JMS_GFX
 
 		if (!(pMS->Initialized & 1))
 		{
-			++r.corner.x;
-			r.extent.width -= 2;
-			r.corner.y = 33;
-			r.extent.height = 89;
+			r.corner.x += 1 * RESOLUTION_FACTOR; // JMS_GFX
+			r.extent.width -= 2 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.y = 33 * RESOLUTION_FACTOR; // JMS_GFX
+			r.extent.height = 89 * RESOLUTION_FACTOR; // JMS_GFX
 			SetContextForeGroundColor (
 					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 			DrawFilledRectangle (&r);
@@ -85,8 +86,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		{
 			TEXT ct;
 
-			r.corner.y = 20;
-			r.extent.height = 109;
+			r.corner.y = 20 * RESOLUTION_FACTOR; // JMS_GFX
+			r.extent.height = 109 * RESOLUTION_FACTOR; // JMS_GFX
 			DrawStarConBox (&r, 1,
 					BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19),
 					BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F),
@@ -94,8 +95,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 
 			SetContextFont (StarConFont);
-			ct.baseline.x = (STATUS_WIDTH >> 1) - 1;
-			ct.baseline.y = 27;
+			ct.baseline.x = (STATUS_WIDTH >> 1) - (1 * RESOLUTION_FACTOR); // JMS_GFX
+			ct.baseline.y = 27 * RESOLUTION_FACTOR; // JMS_GFX
 			ct.align = ALIGN_CENTER;
 			ct.pStr = GAME_STRING (DEVICE_STRING_BASE);
 			ct.CharCount = (COUNT)~0;
@@ -111,8 +112,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		else if (NewDevice >= (BYTE)(pMS->first_item.y + MAX_VIS_DEVICES))
 			pMS->first_item.y = NewDevice - (MAX_VIS_DEVICES - 1);
 
-		s.origin.x = 4;
-		s.origin.y = 34;
+		s.origin.x = 4 * RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.y = 34 * RESOLUTION_FACTOR; // JMS_GFX
 		cy = y;
 
 		SetContextForeGroundColor (
@@ -133,27 +134,27 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 						DEVICE_STRING_BASE + 1);
 				t.CharCount = utf8StringPos (t.pStr, ' ');
 				font_DrawText (&t);
-				t.baseline.y += 7;
+				t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
 				t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 				t.CharCount = (COUNT)~0;
 				font_DrawText (&t);
 			}
 
-			cy += 18;
-			s.origin.y += 18;
+			cy += 18 * RESOLUTION_FACTOR; // JMS_GFX
+			s.origin.y += 18 * RESOLUTION_FACTOR; // JMS_GFX
 		}
 
 		OldDevice = NewDevice;
 	}
 
-	r.extent.width = 41;
-	r.extent.height = 14;
+	r.extent.width = 41 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.height = 14 * RESOLUTION_FACTOR; // JMS_GFX
 	r.corner.x = t.baseline.x - (r.extent.width >> 1);
 
 	if (OldDevice != NewDevice)
 	{
-		cy = y + ((OldDevice - pMS->first_item.y) * 18);
-		r.corner.y = cy - 6;
+		cy = y + ((OldDevice - pMS->first_item.y) * (18 * RESOLUTION_FACTOR)); // JMS_GFX
+		r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 		DrawFilledRectangle (&r);
@@ -164,7 +165,7 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		t.pStr = GAME_STRING (pDeviceMap[OldDevice] + DEVICE_STRING_BASE + 1);
 		t.CharCount = utf8StringPos (t.pStr, ' ');
 		font_DrawText (&t);
-		t.baseline.y += 7;
+		t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
 		t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
@@ -172,8 +173,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 
 	if (NewDevice < NUM_DEVICES)
 	{
-		cy = y + ((NewDevice - pMS->first_item.y) * 18);
-		r.corner.y = cy - 6;
+		cy = y + ((NewDevice - pMS->first_item.y) * (18 * RESOLUTION_FACTOR)); // JMS_GFX
+		r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
 		DrawFilledRectangle (&r);
@@ -184,7 +185,7 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		t.pStr = GAME_STRING (pDeviceMap[NewDevice] + DEVICE_STRING_BASE + 1);
 		t.CharCount = utf8StringPos (t.pStr, ' ');
 		font_DrawText (&t);
-		t.baseline.y += 7;
+		t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
 		t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
@@ -213,10 +214,12 @@ UseCaster (void)
 			|| pSolarSysState == NULL)
 		return FALSE;
 
-	if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1]
+	/*if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1]
 			&& pSolarSysState->MenuState.Initialized == 3
 			&& CurStarDescPtr->Index == CHMMR_DEFINED
-			&& !GET_GAME_STATE (CHMMR_UNLEASHED))
+			&& !GET_GAME_STATE (CHMMR_UNLEASHED)) */
+	// JMS: Disabled the caster's effect on CHMMR at Procyon.
+	if(0)
 	{
 		// In orbit around the Chenjesu/Mmrnmhrm home planet.
 		NextActivity |= CHECK_LOAD;  /* fake a load game */
@@ -307,9 +310,14 @@ DeviceFailed (BYTE which_device)
 				SleepThreadUntil (
 						XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND * 1)
 						+ (ONE_SECOND * 2));
-				if (CurStarDescPtr->Index != CHMMR_DEFINED
-						|| pSolarSysState->pOrbitalDesc !=
-						&pSolarSysState->PlanetDesc[1])
+				
+				
+				//if (CurStarDescPtr->Index != CHMMR_DEFINED
+				//		|| pSolarSysState->pOrbitalDesc !=
+				//		&pSolarSysState->PlanetDesc[1])
+				// JMS: Although the Sun device won't be in the final game, disabled its
+				// effect on Chmmr at procyon anyways.
+				if(1)
 				{
 					fade_buf[0] = FadeAllToColor;
 					XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND * 2);

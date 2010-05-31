@@ -24,6 +24,8 @@
 
 #include <math.h>
 
+#include "libs/log.h"
+
 
 // define USE_ADDITIVE_SCAN_BLIT to use additive blittting
 // instead of transparency for the planet scans.
@@ -130,6 +132,8 @@ DrawPlanet (int x, int y, int dy, unsigned int rgb)
 	UBYTE a = 128;
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
 
+	log_add(log_Debug,"Drawplanetti");
+	
 	s.origin.x = x;
 	s.origin.y = y;
 	s.frame = pSolarSysState->TopoFrame;

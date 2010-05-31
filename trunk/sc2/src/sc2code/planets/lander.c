@@ -123,7 +123,7 @@ extern PRIM_LINKS DisplayLinks;
 #define SURFACE_X SIS_ORG_X
 #define SURFACE_Y SIS_ORG_Y
 #define SURFACE_WIDTH SIS_SCREEN_WIDTH
-#define SURFACE_HEIGHT (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 5)
+#define SURFACE_HEIGHT (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 5) // JMS_GFX
 
 #define REPAIR_LANDER (1 << 7)
 #define REPAIR_TRANSITION (1 << 6)
@@ -131,7 +131,7 @@ extern PRIM_LINKS DisplayLinks;
 #define ADD_AT_END (1 << 4)
 #define REPAIR_COUNT (0xf)
 
-#define LANDER_SPEED_DENOM 10
+#define LANDER_SPEED_DENOM (10 / RESOLUTION_FACTOR) // JMS_GFX
 
 static BYTE lander_flags;
 
@@ -473,8 +473,8 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 				NotPositional (), NULL, GAME_SOUND_PRIORITY);
 	}
 
-	s.origin.x = 11 + (6 * (crew_delta % NUM_CREW_COLS));
-	s.origin.y = 35 - (6 * (crew_delta / NUM_CREW_COLS));
+	s.origin.x = (11 + (6 * (crew_delta % NUM_CREW_COLS))) * RESOLUTION_FACTOR; // JMS_GFX
+	s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) * RESOLUTION_FACTOR; // JMS_GFX
 
 	OldContext = SetContext (RadarContext);
 	DrawStamp (&s);
