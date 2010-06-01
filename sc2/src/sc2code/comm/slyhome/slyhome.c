@@ -292,11 +292,7 @@ HumanInfo (RESPONSE_REF R)
 static void
 MainTalk (RESPONSE_REF R)
 {
-	BYTE i, LastStack, stack2temp;
-	RESPONSE_REF pStr[3];
-
-	LastStack = 0;
-	pStr[0] = pStr[1] = pStr[2] = 0;
+	BYTE i, stack2temp;
 	
 	if (PLAYER_SAID(R, close_call))
 	{
