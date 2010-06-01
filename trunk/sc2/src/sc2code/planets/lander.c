@@ -473,7 +473,7 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 				NotPositional (), NULL, GAME_SOUND_PRIORITY);
 	}
 
-	s.origin.x = (11 + (6 * (crew_delta % NUM_CREW_COLS))) * RESOLUTION_FACTOR; // JMS_GFX
+	s.origin.x = (11 + (6 * (crew_delta % NUM_CREW_COLS))) * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
 	s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) * RESOLUTION_FACTOR; // JMS_GFX
 
 	OldContext = SetContext (RadarContext);
@@ -493,15 +493,14 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 
 	if (scan == BIOLOGICAL_SCAN)
 	{
-		start_count = pPSD->BiologicalLevel;
-
+		start_count = (pPSD->BiologicalLevel) * RESOLUTION_FACTOR; // JMS_GFX
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 41);
 
 		pPSD->BiologicalLevel += NumRetrieved;
 	}
 	else
 	{
-		start_count = pPSD->ElementLevel;
+		start_count = (pPSD->ElementLevel) * RESOLUTION_FACTOR; // JMS_GFX
 		pPSD->ElementLevel += NumRetrieved;
 		if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
 		{
@@ -512,8 +511,8 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 43);
 	}
 
-	s.origin.x = 0;
-	s.origin.y = -(int)start_count;
+	s.origin.x = RESOLUTION_FACTOR - 1; // JMS_GFX
+	s.origin.y = (RESOLUTION_FACTOR - 1) * 50 - (int)start_count;
 	if (!(start_count & 1))
 		s.frame = IncFrameIndex (s.frame);
 
@@ -525,7 +524,7 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		else
 			s.frame = DecFrameIndex (s.frame);
 		DrawStamp (&s);
-		--s.origin.y;
+		s.origin.y-=1*RESOLUTION_FACTOR; // JMS_GFX
 	}
 	SetContext (OldContext);
 }

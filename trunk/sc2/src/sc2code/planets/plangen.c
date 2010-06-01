@@ -115,8 +115,6 @@ TransformTopography (FRAME DstFrame, BYTE *pTopoData, int w, int h)
 	CONTEXT OldContext;
 	FRAME OldFrame;
 
-	log_add(log_Debug,"Transformtopography");
-	
 	OldContext = SetContext (TaskContext);
 	OldFrame = SetContextFGFrame (DstFrame);
 
@@ -146,12 +144,12 @@ TransformTopography (FRAME DstFrame, BYTE *pTopoData, int w, int h)
 		BYTE *cbase;
 		HOT_SPOT OldHot;
 		RECT ClipRect;
-log_add(log_Debug,"1");
+
 		OldHot = SetFrameHot (DstFrame, MAKE_HOT_SPOT (0, 0));
 		GetContextClipRect (&ClipRect);
 		SetContextClipRect (NULL);
 		SetContextClipping (FALSE);
-log_add(log_Debug,"2");
+
 		pBatch = &BatchArray[0];
 		for (i = 0; i < NUM_BATCH_POINTS; ++i, ++pBatch)
 		{
@@ -159,7 +157,7 @@ log_add(log_Debug,"2");
 			SetPrimType (pBatch, POINT_PRIM);
 		}
 		SetPrimNextLink (&pBatch[-1], END_OF_LIST);
-log_add(log_Debug,"3");
+
 		PlanDataPtr = &PlanData[
 				pSolarSysState->pOrbitalDesc->data_index & ~PLANET_SHIELDED
 				];
@@ -167,11 +165,11 @@ log_add(log_Debug,"3");
 		base = PlanDataPtr->base_elevation;
 		xlat_tab = (BYTE*)((XLAT_DESC*)pSolarSysState->XlatPtr)->xlat_tab;
 		cbase = GetColorMapAddress (pSolarSysState->OrbitalCMap);
-log_add(log_Debug,"4");
+
 		i = NUM_BATCH_POINTS;
 		pBatch = &BatchArray[i];
 		pSrc = pTopoData;
-log_add(log_Debug,"5");
+
 		for (pt.y = 0; pt.y < h; ++pt.y)
 		{
 			for (pt.x = 0; pt.x < w; ++pt.x, ++pSrc)
@@ -212,28 +210,25 @@ log_add(log_Debug,"5");
 				}
 			}
 		}
-log_add(log_Debug,"6");
+
 		if (i < NUM_BATCH_POINTS)
 		{
 			DrawBatch (BatchArray, i, 0);
 		}
-log_add(log_Debug,"7");
+
 		SetContextClipping (TRUE);
 		SetContextClipRect (&ClipRect);
 		SetFrameHot (DstFrame, OldHot);
 	}
-log_add(log_Debug,"8");
+
 	SetContextFGFrame (OldFrame);
 	SetContext (OldContext);
-log_add(log_Debug,"8 1/2");
 }
 
 static void
 RenderTopography (BOOLEAN Reconstruct)
 		// Reconstruct arg was not used on 3DO and is not needed here either
 {
-	log_add(log_Debug,"RenderTopography");
-	
 	TransformTopography (pSolarSysState->TopoFrame,
 			pSolarSysState->Orbit.lpTopoData, MAP_WIDTH, MAP_HEIGHT);
 
@@ -282,8 +277,6 @@ RenderPhongMask (POINT loc)
 
 #define AMBIENT_LIGHT 0.1
 #define LIGHT_Z       1.2
-
-	log_add(log_Debug,"RenderPhongMask");
 	
 	// lrad is the distance from the sun to the planet
 	lrad = sqrt (loc.x * loc.x + loc.y * loc.y);
@@ -479,8 +472,6 @@ SetPlanetTilt (int angle)
 	const double multx = ((double)SPHERE_SPAN_X / M_PI);
 	const double multy = ((double)MAP_HEIGHT / M_PI);
 	const double xadj = ((double)SPHERE_SPAN_X / 2.0);
-
-	log_add(log_Debug,"SetPlanetTilit");
 	
 	for (y = -RADIUS; y <= RADIUS; y++)
 	{
@@ -544,8 +535,6 @@ init_zoom_array (COUNT *zoom_arr)
 	float frames_per_sec;
 	int num_frames, i;
 	int base = GSCALE_IDENTITY;
-
-	log_add(log_Debug,"init_zoom_array");
 	
 	frames_per_sec = (float)MAP_WIDTH / ROTATION_TIME;
 	num_frames = (int)((frames_per_sec * ZOOM_TIME)  + 0.5);
@@ -582,8 +571,6 @@ CreateShieldMask (BYTE flags)
 	int x, y;
 	FRAME ShieldFrame;
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
-
-	log_add(log_Debug,"CreateShieldmask");
 	
 	ShieldFrame = CaptureDrawable (
 			CreateDrawable (WANT_PIXMAP | WANT_ALPHA,
@@ -680,8 +667,6 @@ SetShieldThrobEffect (FRAME ShieldFrame, int offset, FRAME ThrobFrame)
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
 	DWORD *rgba;
 	int level;
-
-	log_add(log_Debug,"SetShieldThrobEffect");
 	
 	level = shield_level (offset);
 
@@ -725,8 +710,6 @@ ApplyShieldTint (BYTE flags)
 	int blit_type;
 	FRAME tintFrame = pSolarSysState->Orbit.TintFrame;
 	DWORD p;
-
-	log_add(log_Debug,"ApplyshieldTint");
 	
 #ifdef USE_ALPHA_SHIELD
 	a = 200;
@@ -931,8 +914,6 @@ DitherMap (SBYTE *DepthArray)
 {
 	COUNT i;
 	SBYTE *lpDst;
-
-	log_add(log_Debug,"Dithermap");
 	
 	i = (MAP_WIDTH * MAP_HEIGHT) >> 2;
 	lpDst = DepthArray;
@@ -966,8 +947,6 @@ MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
 				Bsquared, TwoBsquared;
 	long d, dx, dy;
 	COUNT TopIndex, BotIndex, rim_pixels;
-
-	log_add(log_Debug,"MakeCrater");
 	
 	A = pRect->extent.width >> 1;
 	B = pRect->extent.height >> 1;
@@ -1157,8 +1136,6 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 	COUNT i;
 	RECT storm_r[MAX_STORMS];
 	RECT *pstorm_r;
-
-	log_add(log_Debug,"MakeStorms");
 	
 	pstorm_r = &storm_r[i = storm_count];
 	while (i--)
@@ -1213,8 +1190,6 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 			//pstorm_r->corner.x = HIBYTE (loword) % (MAP_WIDTH - pstorm_r->extent.width);
 			pstorm_r->corner.x = loword % (MAP_WIDTH - pstorm_r->extent.width); // JMS_GFX: changed the previous line to this. BYTE was too small for 640x480 resolution
 			pstorm_r->corner.y = LOBYTE (loword) % (MAP_HEIGHT - pstorm_r->extent.height);
-
-			log_add(log_Debug,"Storm corner x = %d, width %d ja mapwidth %d", pstorm_r->corner.x, pstorm_r->extent.width, MAP_WIDTH);
 			
 			for (j = i + 1; j < storm_count; ++j)
 			{
@@ -1287,8 +1262,6 @@ MakeGasGiant (COUNT num_bands, SBYTE *DepthArray, RECT *pRect, SIZE
 	SBYTE *lpDst;
 	UWORD loword, hiword;
 	DWORD rand_val;
-
-	log_add(log_Debug,"MakeGasGiant");
 	
 	band_height = pRect->extent.height / num_bands;
 	band_bump = pRect->extent.height % num_bands;
@@ -1357,8 +1330,6 @@ ValidateMap (SBYTE *DepthArray)
 	SBYTE last_byte;
 	COUNT i;
 	SBYTE *lpDst;
-
-	log_add(log_Debug,"ValidateMap");
 	
 	i = MAP_WIDTH - 1;
 	lpDst = DepthArray;
@@ -1408,8 +1379,6 @@ void
 planet_orbit_init ()
 {
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
-
-	log_add(log_Debug,"planet_orbit_init");
 	
 	Orbit->PlanetFrameArray = CaptureDrawable (
 			CreateDrawable (WANT_PIXMAP | WANT_ALPHA, DIAMETER, DIAMETER,
@@ -1511,8 +1480,6 @@ TopoScale4x (BYTE *pDstTopo, BYTE *pSrcTopo, int num_faults, int fault_var)
 			{-1, -1, -1, -1,  0,  0}, // term
 		},
 	};
-	
-	log_add(log_Debug,"TopoScale4x");
 	
 	prevrow = (int *) HMalloc ((MAP_WIDTH * 4 + 1) * sizeof(prevrow[0]));
 
@@ -1732,8 +1699,6 @@ GenerateLightMap (SBYTE *pTopo, int w, int h)
 	SBYTE *elev;
 	int min, max, med;
 	int sfact, spread;
-	
-	log_add(log_Debug,"GenerateLightMap");
 
 	// normalize the topo data
 	min = 127;
@@ -1853,8 +1818,6 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	CONTEXT OldContext;
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
 	BYTE *pScaledTopo = 0;
-
-	log_add(log_Debug,"GeneratePlanetMask");
 	
 	old_seed = TFB_SeedRandom (pPlanetDesc->rand_seed);
 
@@ -2023,15 +1986,10 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 					* (PLANALGO (PlanDataPtr->Type) == CRATERED_ALGO ? 2 : 1  ));
 			TransformTopography (Orbit->TopoZoomFrame, pScaledTopo,
 					MAP_WIDTH * 4, MAP_HEIGHT * 4);
-
-			log_add(log_Debug,"9 pre1");
 			
 			HFree (pScaledTopo);
-			log_add(log_Debug,"9 pre2");
 		}
-		log_add(log_Debug,"9 pre3");
 	}
-log_add(log_Debug,"9");
 	// Generate a pixel array from the Topography map.
 	// We use this instead of lpTopoData because it needs to be
 	// WAP_WIDTH+SPHERE_SPAN_X wide and we need this method for Earth anyway.
@@ -2040,16 +1998,13 @@ log_add(log_Debug,"9");
 	getpixelarray (Orbit->lpTopoMap, 4, pSolarSysState->TopoFrame,
 			MAP_WIDTH + SPHERE_SPAN_X, MAP_HEIGHT);
 	
-log_add(log_Debug,"9 1/2");
 	// Extend the width from MAP_WIDTH to MAP_WIDTH+SPHERE_SPAN_X
 	for (y = 0; y < MAP_HEIGHT * (MAP_WIDTH + SPHERE_SPAN_X);
 			y += MAP_WIDTH + SPHERE_SPAN_X)
 	{
-		log_add(log_Debug,"yy on nyt %d, MAPWIDTH %d ja SPHERESPANX %d, DIAMETER %d", y, MAP_WIDTH, SPHERE_SPAN_X, DIAMETER);
 		memcpy (Orbit->lpTopoMap + y + MAP_WIDTH, Orbit->lpTopoMap + y,
 				SPHERE_SPAN_X * sizeof (Orbit->lpTopoMap[0]));
 	}
-log_add(log_Debug,"10");
 	if (PLANALGO (PlanDataPtr->Type) != GAS_GIANT_ALGO)
 	{	// convert topo data to a light map, based on relative
 		// map point elevations
@@ -2059,7 +2014,6 @@ log_add(log_Debug,"10");
 	{	// gas giants are pretty much flat
 		memset (Orbit->lpTopoData, 0, MAP_WIDTH * MAP_HEIGHT);
 	}
-log_add(log_Debug,"11");			
 	if (pSolarSysState->pOrbitalDesc->pPrevDesc ==
 			&pSolarSysState->SunDesc[0])
 	{	// this is a planet -- get its location
@@ -2069,9 +2023,7 @@ log_add(log_Debug,"11");
 	{	// this is a moon -- get its planet's location
 		loc = pSolarSysState->pOrbitalDesc->pPrevDesc->location;
 	}
-log_add(log_Debug,"12");
 	RenderPhongMask (loc);
-log_add(log_Debug,"13");
 	if (pPlanetDesc->data_index & PLANET_SHIELDED)
 	{
 		Orbit->ObjectFrame = CreateShieldMask (pPlanetDesc->flags);
@@ -2192,8 +2144,6 @@ rotate_planet_task (void *data)
 				view_index++;
 
 			UnlockMutex (GraphicsLock);
-			
-			log_add(log_Debug, "x eli offset on %d, viewindex %d",x,view_index);
 			
 			// Generate the next rotation frame
 			altfi ^= 1;
