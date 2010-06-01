@@ -1,12 +1,19 @@
-#(SPACE_HELLO_1)		chmmr-000.ogg
+#(SPACE_HELLO_1a)
+Greetings. This is captain 
+
+#(SPACE_HELLO_1b)
+ of star cruiser Vanguard.
+How can we be of assistance?
+
+#(SPACE_HELLO_1c)
 Greetings. This is captain Duncan of star cruiser Vanguard.
 How can we be of assistance?
 
-#(SPACE_HELLO_2)		chmmr-000.ogg
+#(SPACE_HELLO_2)
 Hello, captain. Welcome back to home turf.
 Anything we can assist you with?
 
-#(SPACE_HELLO_3)		chmmr-000.ogg
+#(SPACE_HELLO_3)
 Yes, captain, how can we help you?
 
 #(ask_news)
@@ -21,14 +28,14 @@ You wouldn't happen to have any extra fuel with you? We're running pretty lean.
 #(spare_nukes)
 Would you have some old nukes to spare?
 
-#(NEWS_1)			chmmr-000.ogg
+#(NEWS_1)
 Not much, mainly patrolling the quadrant
 and escorting trade ships in case some Kohr-Ah show up.
 Personally, I wish the Alliance allocated more tasks for our fleet.
 The long range of our missiles would complement the
 devastating capabilities of Avatar ships nicely!
 
-#(NEWS_2)			chmmr-000.ogg
+#(NEWS_2)
 There's some buzz in the air, captain.
 Last week we lost contact with a cruiser returning
 from an escort expedition to Corvi. The last we heard of her
@@ -37,7 +44,7 @@ After that, she just vanished. No distress signal, no nothing.
 Maybe it's just a malfunction, but I don't know...
 The HQ has sent a patrol to investigate, it's still enroute.
 
-#(NEWS_3)			chmmr-000.ogg
+#(NEWS_3)
 The patrol that was sent after the missing cruiser
 found no signs of the ship.
 Some say the Kohr-Ah jumped them, but I'm not sure
@@ -49,27 +56,27 @@ Full frontal attacks, guns blazing. So full of it.
 If you ask me, I think it was someone else
 like someone with a cloaking device.
 
-#(NEWS_4)			chmmr-000.ogg
+#(NEWS_4)
 Things have quieted down quite a bit.
 Lately we've just been sitting idle,
 waiting for an assignment to Betelgeuse.
 
-#(NEWS_5)			chmmr-000.ogg
+#(NEWS_5)
 Twiddling thumbs, babysitting cargo ships.
 Not much has happened in the past few days.
 
-#(FUEL_1)			chmmr-000.ogg
+#(FUEL_1)
 I'm sorry, captain, but the sheer volume of your Explorer ship
 makes it pretty pointless to transfer from our limited reserves.
 
-#(FUEL_2)			chmmr-000.ogg
+#(FUEL_2)
 Regrettably your vessel is way too big for our fuel to be of any real help.
 
-#(FUEL_3)			chmmr-000.ogg
+#(FUEL_3)
 Oh, come on! The whole tank of this cruiser
 wouldn't move that barge of yours an inch.
 
-#(NUKES_QUESTION)		chmmr-000.ogg
+#(NUKES_QUESTION)
 ...Are you serious?
 
 #(serious)
@@ -78,13 +85,13 @@ Dead serious.
 #(joking)
 Just horsing around! Lighten up, buddy!
 
-#(NUKES_SERIOUS)	chmmr-000.ogg
+#(NUKES_SERIOUS)
 Hmm... Yeah. Why not?
 Why not give you some military-grade nuclear missiles,
 face a court martial, get demoted, lose my job,
 and die in a gutter somewhere in eastern Kansas!
 
-#(NUKES_JOKING)		chmmr-000.ogg
+#(NUKES_JOKING)
 Hmm. These are no laughing matters. We're still in a state of war, you know.
 
 #(GOODBYE_CAPTAIN_1)
@@ -96,22 +103,22 @@ You better watch your back, it's still pretty hostile out there.
 #(GOODBYE_CAPTAIN_3)
 Take care, captain.
 
-#(NEUTRAL_SPACE_HELLO_1)	chmmr-000.ogg
+#(NEUTRAL_SPACE_HELLO_1)
 Friend human. You are hereby cordially invited
 to a bloody duel to the death via an impromptu
 exchange of nuclear missiles and SDI laser blasts.
 ...Interested?
 
-#(NEUTRAL_SPACE_HELLO_2)	chmmr-000.ogg
+#(NEUTRAL_SPACE_HELLO_2)
 Greetings, traveler. I present thee two options:
 You may cowardly back out of my sight this instant, or
 you can be a man and pick a fight with me.
 What it'll be?
 
-#(HOSTILE_SPACE_HELLO_1)	chmmr-000.ogg
+#(HOSTILE_SPACE_HELLO_1)
 Yo, bitch! Wanna fight?
 
-#(HOSTILE_SPACE_HELLO_2)	chmmr-000.ogg
+#(HOSTILE_SPACE_HELLO_2)
 Yo, yo, yo, wanna exchange a few nukes?
 
 #(yessiree)
@@ -120,8 +127,8 @@ Yessiree! Lemme at you!
 #(nonono)
 No thanks, matey, some other time.
 
-#(MADE_MY_DAY)			chmmr-000.ogg
+#(MADE_MY_DAY)
 You really made my day, pal!
 
-#(MADE_WOOD)			chmmr-000.ogg
+#(MADE_WOOD)
 Ah. I guess some captains are made of wood these days.

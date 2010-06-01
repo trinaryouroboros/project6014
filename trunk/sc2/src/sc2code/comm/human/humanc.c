@@ -26,6 +26,8 @@
 
 #include "build.h"
 
+#include "libs/log.h"
+
 
 static LOCDATA human_desc =
 {
@@ -275,12 +277,46 @@ static void
 Intro (void)
 {
 	BYTE NumVisits;
+	UNICODE *pStr, numbuf[400];
+	STRING S;
+	
+	HSHIPFRAG hStarShip;
+	void *pClip;
 	
 	NumVisits = GET_GAME_STATE (HUMAN_VISITS);
 	switch (NumVisits)
 	{
 		case 0:
-			NPCPhrase (SPACE_HELLO_1);
+			// JMS: This tomfoolery extracts the name of the earthling ship captain from the melee ship info 
+			// and appends it to the greeting the earthling says to player. 
+			// All this shit should be put to comm.c or commglue.c some day so other races could use it as well!
+			hStarShip = GetHeadLink (&GLOBAL (npc_built_ship_q));
+			if (hStarShip)
+			{
+				SHIP_FRAGMENT *StarShipPtr;
+				STRING earthling_captains_name;
+				
+				StarShipPtr = LockShipFrag (&GLOBAL (npc_built_ship_q), hStarShip);
+				earthling_captains_name = SetAbsStringTableIndex (StarShipPtr->race_strings, StarShipPtr->captains_name_index);
+				UnlockShipFrag (&GLOBAL (npc_built_ship_q), hStarShip);
+				S = SetAbsStringTableIndex (CommData.ConversationPhrases, (SPACE_HELLO_1a - 1));
+				strcpy (numbuf, (UNICODE *)GetStringAddress (S));
+				strcat (numbuf, (UNICODE *)GetStringAddress (earthling_captains_name));
+				S = SetAbsStringTableIndex (CommData.ConversationPhrases, (SPACE_HELLO_1b - 1));
+				strcat (numbuf, (UNICODE *)GetStringAddress (S));
+				pStr = numbuf;
+			}
+			// JMS: This is a failsafe: If the enemy ship group doesn't have ships for some reason (should not happen) 
+			// Then an alternate greeting string with built-in captain's name is used.
+			else
+			{
+				S = SetAbsStringTableIndex (CommData.ConversationPhrases, (SPACE_HELLO_1c-1));
+				strcpy (numbuf, (UNICODE *)GetStringAddress (S));
+				pStr = numbuf;
+				pStr = 0;
+			}
+			pClip = "noname.ogg";
+			SpliceTrack (pClip, pStr, 0, NULL);
 			break;
 		case 1:
 			NPCPhrase (SPACE_HELLO_2);
