@@ -215,6 +215,9 @@ sis_hyper_preprocess (ELEMENT *ElementPtr)
 	SIZE udx, udy, dx, dy;
 	SIZE AccelerateDirection;
 	STARSHIP *StarShipPtr;
+	
+	// JMS_GFX: These babies help to make the hyperspace speed calculations not overflow in 640x480.
+	SDWORD dtempx, dtempy;
 
 	if (ElementPtr->state_flags & APPEARING)
 		ElementPtr->velocity = GLOBAL (velocity);
@@ -237,8 +240,22 @@ LeaveAutoPilot:
 			AccelerateDirection = -1;
 			GetCurrentVelocityComponents (&ElementPtr->velocity,
 					&dx, &dy);
-			udx = dx << 4;
-			udy = dy << 4;
+			
+			// JMS_GFX: Since the sis_ship max speed with max thrusters in 640x480 mode is 2048, 
+			// SIZE variables dx and dy would overflow when leftshifted by 4. (The speed would
+			// be then 32768 which would wrap around to -32768 instead).
+			// If speed would surpass the wraparound limit, the speed is limited to max of 32767.
+			// This introduces very slight error to the speed, but who cares - it is negligible.
+			dtempx = (SDWORD)dx;
+			dtempy = (SDWORD)dy;
+			if((dtempx<<4)>32767)
+				udx=32767;
+			else
+				udx=dtempx;
+			if((dtempy<<4)>32767)
+				udy=32767;
+			else
+				udy=dtempy;
 
 			StarShipPtr->cur_status_flags &= ~THRUST;
 		}
@@ -315,6 +332,7 @@ LeaveAutoPilot:
 	{
 		COUNT dist;
 		SIZE speed, velocity_increment;
+		SIZE turbotemp;
 
 		velocity_increment = WORLD_TO_VELOCITY (
 				StarShipPtr->RaceDescPtr->characteristics.thrust_increment);
@@ -352,11 +370,16 @@ LeaveAutoPilot:
 				StarShipPtr->cur_status_flags |= SHIP_AT_MAX_SPEED;
 			}
 		}
-
+		
+		turbotemp = WORLD_TO_VELOCITY (
+										  StarShipPtr->RaceDescPtr->characteristics.max_thrust);
+		
 		dx = (SIZE)((long)udx * speed / (long)dist);
 		dy = (SIZE)((long)udy * speed / (long)dist);
 		SetVelocityComponents (&ElementPtr->velocity, dx, dy);
 
+		log_add(log_Debug,"2. dx %d ja dy %d, max_velocity %d, velocity_increment %d", dx, dy, turbotemp, velocity_increment);
+		
 		ElementPtr->thrust_wait =
 				StarShipPtr->RaceDescPtr->characteristics.thrust_wait;
 	}
