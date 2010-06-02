@@ -57,6 +57,7 @@ ship.syreen.icons = GFXRES:addons/hires/ships/syreen/syricons.ani
 ship.syreen.meleeicons = GFXRES:addons/hires/ships/syreen/syrmicon.ani
 ship.thraddash.icons = GFXRES:addons/hires/ships/thradd/thricons.ani
 ship.thraddash.meleeicons = GFXRES:addons/hires/ships/thradd/thrmicon.ani
+ship.transport.meleeicons = GFXRES:addons/hires/ships/transport/tramicon.ani
 ship.umgah.icons = GFXRES:addons/hires/ships/umgah/umgicons.ani
 ship.umgah.meleeicons = GFXRES:addons/hires/ships/umgah/umgmicon.ani
 ship.urquan.icons = GFXRES:addons/hires/ships/urquan/urqicons.ani

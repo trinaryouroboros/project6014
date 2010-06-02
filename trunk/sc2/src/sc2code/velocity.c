@@ -20,6 +20,7 @@
 
 #include "units.h"
 #include "libs/compiler.h"
+#include "libs/log.h"
 
 
 #define VELOCITY_REMAINDER(v) ((v) & (VELOCITY_SCALE - 1))
@@ -52,6 +53,8 @@ GetNextVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy,
 			+ ((SIZE)((SBYTE)LOBYTE (velocityptr->incr.height))
 			* (e >> VELOCITY_SHIFT));
 	velocityptr->error.height = VELOCITY_REMAINDER (e);
+	
+	log_add(log_Debug,"pdx = %d, pdy = %d . ex %d ja ey %d", *pdx, *pdy,velocityptr->error.width,velocityptr->error.height);
 }
 
 void
