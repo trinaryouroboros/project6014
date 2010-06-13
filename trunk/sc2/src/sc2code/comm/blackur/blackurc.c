@@ -177,7 +177,7 @@ CombatIsInevitable (RESPONSE_REF R)
 static void
 DieHuman (RESPONSE_REF R)
 {
-	(void) R;  // ignored
+	//(void) R;  // ignored
 	int temp_info;
 	
 	if (PLAYER_SAID (R, who_is_rath))

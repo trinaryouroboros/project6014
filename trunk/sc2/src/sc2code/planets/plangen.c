@@ -1693,7 +1693,7 @@ GenerateLightMap (SBYTE *pTopo, int w, int h)
 {
 #define LMAP_BLOCKS       (2 * LMAP_MAX_DIST + 1)
 	int x, y;
-	elev_block_t vblocks[LMAP_BLOCKS];
+	elev_block_t vblocks[100];
 			// we use a running block average to reduce the amount of work
 			// where a block is a vertical line of map points
 	SBYTE *elev;
