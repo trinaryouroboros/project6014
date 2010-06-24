@@ -142,6 +142,7 @@ ClearSISRect (BYTE ClearFlags)
 	SetContext (OldContext);
 }
 
+// The small blue box in the upper edge of the screen
 void
 DrawSISTitle (UNICODE *pStr)
 {
@@ -149,7 +150,7 @@ DrawSISTitle (UNICODE *pStr)
 	CONTEXT OldContext;
 
 	t.baseline.x = SIS_TITLE_WIDTH >> 1;
-	t.baseline.y = SIS_TITLE_HEIGHT - 2;
+	t.baseline.y = SIS_TITLE_HEIGHT - 2 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
@@ -193,6 +194,7 @@ DrawHyperCoords (POINT universe)
 	DrawSISTitle (buf);
 }
 
+// The large blue box in the upper edge of the screen
 void
 DrawSISMessage (const UNICODE *pStr)
 {
@@ -265,7 +267,7 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 				BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x1B), 0x33));
 	}
 
-	t.baseline.y = SIS_MESSAGE_HEIGHT - 2;
+	t.baseline.y = SIS_MESSAGE_HEIGHT - 2 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
 	t.pStr = pStr;
 	t.CharCount = utf8StringCount(pStr);
 	SetContextFont (TinyFont);
@@ -386,6 +388,7 @@ DateToString (unsigned char *buf, size_t bufLen,
 			day_index, year_index);
 }
 
+// The green screen which contains date etc.
 void
 DrawStatusMessage (const UNICODE *pStr)
 {
@@ -439,7 +442,7 @@ DrawStatusMessage (const UNICODE *pStr)
 	}
 
 	t.baseline.x = STATUS_MESSAGE_WIDTH >> 1;
-	t.baseline.y = STATUS_MESSAGE_HEIGHT - 1;
+	t.baseline.y = STATUS_MESSAGE_HEIGHT - 1 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
@@ -476,7 +479,7 @@ DrawCaptainsName (void)
 	DrawFilledRectangle (&r);
 
 	t.baseline.x = (STATUS_WIDTH >> 1) - 1;
-	t.baseline.y = r.corner.y + 6  * RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = r.corner.y + 6 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = GLOBAL_SIS (CommanderName);
 	t.CharCount = (COUNT)~0;
@@ -507,7 +510,7 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 
 		r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
 		r.corner.y = 20 * RESOLUTION_FACTOR; // JMS_GFX
-		r.extent.width = SHIP_NAME_WIDTH - (1 * RESOLUTION_FACTOR-1); // JMS_GFX
+		r.extent.width = SHIP_NAME_WIDTH - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
 		r.extent.height = SHIP_NAME_HEIGHT;
 
 		t.pStr = GLOBAL_SIS (ShipName);
@@ -857,7 +860,7 @@ DrawPC_SIS (void)
 
 	GetGaugeRect (&r, FALSE);
 	t.baseline.x = STATUS_WIDTH >> 1;
-	t.baseline.y = r.corner.y - 1;
+	t.baseline.y = r.corner.y - 1 * RESOLUTION_FACTOR; // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.CharCount = (COUNT)~0;
 	SetContextFont (TinyFont);
@@ -890,7 +893,7 @@ DrawPC_SIS (void)
 	DrawFilledRectangle (&r);
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x02, 0x04, 0x1E), 0x38));
-	t.baseline.y = r.corner.y + 6;
+	t.baseline.y = r.corner.y + 6 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR -1) * 2; // JMS_GFX
 	t.pStr = GAME_STRING (STATUS_STRING_BASE + 5); // "CAPTAIN"
 	font_DrawText (&t);
 }

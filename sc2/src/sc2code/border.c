@@ -219,4 +219,3 @@ DrawSISFrame (void)
 
 	UnbatchGraphics ();
 }
-

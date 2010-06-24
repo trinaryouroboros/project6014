@@ -718,8 +718,6 @@ PreProcessQueue (SIZE *pscroll_x, SIZE *pscroll_y)
 						|| reduction < min_reduction)
 					min_reduction = reduction;
 			}
-//			log_add (log_Debug, "dx = %d dy = %d min_red = %d max_red = %d",
-//					dx, dy, min_reduction, max_reduction);
 		}
 
 		UnlockElement (hElement);

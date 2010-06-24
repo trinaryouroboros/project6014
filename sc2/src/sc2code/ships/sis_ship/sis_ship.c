@@ -248,14 +248,14 @@ LeaveAutoPilot:
 			// This introduces very slight error to the speed, but who cares - it is negligible.
 			dtempx = (SDWORD)dx;
 			dtempy = (SDWORD)dy;
-			if((dtempx<<4)>32767)
-				udx=32767;
+			if((dtempx << 4) > 32767)
+				udx = 32767;
 			else
-				udx=dtempx;
-			if((dtempy<<4)>32767)
-				udy=32767;
+				udx = dtempx;
+			if((dtempy << 4) > 32767)
+				udy = 32767;
 			else
-				udy=dtempy;
+				udy = dtempy;
 
 			StarShipPtr->cur_status_flags &= ~THRUST;
 		}
@@ -378,8 +378,6 @@ LeaveAutoPilot:
 		dy = (SIZE)((long)udy * speed / (long)dist);
 		SetVelocityComponents (&ElementPtr->velocity, dx, dy);
 
-		log_add(log_Debug,"2. dx %d ja dy %d, max_velocity %d, velocity_increment %d", dx, dy, turbotemp, velocity_increment);
-		
 		ElementPtr->thrust_wait =
 				StarShipPtr->RaceDescPtr->characteristics.thrust_wait;
 	}

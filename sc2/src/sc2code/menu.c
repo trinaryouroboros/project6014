@@ -68,7 +68,7 @@ static UNICODE pm_fuel_str[128];
 static void
 DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 {
-#define PC_MENU_HEIGHT 8
+#define PC_MENU_HEIGHT 8 * RESOLUTION_FACTOR // JMS_GFX
 	BYTE pos;
 	COUNT i;
 	int num_items;
@@ -85,7 +85,7 @@ DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 		log_add (log_Error, "Warning, no room for all menu items!");
 	else
 		r->corner.y += (r->extent.height - num_items * PC_MENU_HEIGHT) / 2;
-	r->extent.height = num_items * PC_MENU_HEIGHT + 4;
+	r->extent.height = num_items * PC_MENU_HEIGHT + 4; // JMS_GFX
 	DrawPCMenuFrame (r);
 	OldFont = SetContextFont (StarConFont);
 	t.align = ALIGN_LEFT;
@@ -413,7 +413,6 @@ BOOLEAN
 DoMenuChooser (MENU_STATE *pMS, BYTE BaseState)
 {
 	{
-
 		BYTE NewState = pMS->CurState;
 		BYTE OrigBase = BaseState;
 		BOOLEAN useAltMenu = FALSE;
