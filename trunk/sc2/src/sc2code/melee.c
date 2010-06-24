@@ -883,8 +883,8 @@ DrawMeleeShipStrings (MELEE_STATE *pMS, BYTE NewStarShip)
 	OldContext = SetContext (StatusContext);
 	GetContextClipRect (&OldRect);
 	r = OldRect;
-	r.corner.x += ((SAFE_X << 1) - 32) + MENU_X_OFFS;
-	r.corner.y += 76;
+	r.corner.x += ((SAFE_X << 1) - 32 * RESOLUTION_FACTOR) + MENU_X_OFFS; // JMS_GFX
+	r.corner.y += 76 * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.height = SHIP_INFO_HEIGHT;
 	SetContextClipRect (&r);
 	BatchGraphics ();

@@ -254,6 +254,7 @@ extern void FillOrbits (SOLARSYS_STATE *system, BYTE NumPlanets,
 extern void ScanSystem (void);
 extern void ChangeSolarSys (void);
 extern BOOLEAN DoFlagshipCommands (MENU_STATE *pMS);
+extern BOOLEAN DoFlagshipCommandsAdv (MENU_STATE *pMS); // JMS
 extern void ZoomSystem (void);
 extern void LoadSolarSys (void);
 extern void InitLander (BYTE LanderFlags);

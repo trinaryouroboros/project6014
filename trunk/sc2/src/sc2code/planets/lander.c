@@ -790,7 +790,7 @@ CheckObjectCollision (COUNT index)
 									pPSD->MineralText[0].baseline.y =
 											(SURFACE_HEIGHT >> 1)
 											+ (ElementControl.EndPoint.y
-											- LanderControl.EndPoint.y);
+											- LanderControl.EndPoint.y) * RESOLUTION_FACTOR; // JMS_GFX;
 									pPSD->MineralText[0].CharCount =
 											(COUNT)~0;
 									pPSD->MineralText[1].pStr = pStr;
@@ -1364,10 +1364,10 @@ ScrollPlanetSide (SIZE dx, SIZE dy, SIZE CountDown)
 			pPSD->MineralText[0].baseline.y -= dy;
 			font_DrawText (&pPSD->MineralText[0]);
 			pPSD->MineralText[1].baseline.x = pPSD->MineralText[0].baseline.x;
-			pPSD->MineralText[1].baseline.y = pPSD->MineralText[0].baseline.y + 7;
+			pPSD->MineralText[1].baseline.y = pPSD->MineralText[0].baseline.y + 7 * RESOLUTION_FACTOR; // JMS_GFX
 			font_DrawText (&pPSD->MineralText[1]);
 			pPSD->MineralText[2].baseline.x = pPSD->MineralText[1].baseline.x;
-			pPSD->MineralText[2].baseline.y = pPSD->MineralText[1].baseline.y + 7;
+			pPSD->MineralText[2].baseline.y = pPSD->MineralText[1].baseline.y + 7 * RESOLUTION_FACTOR; // JMS_GFX
 			font_DrawText (&pPSD->MineralText[2]);
 		}
 	}
@@ -1578,7 +1578,7 @@ InitPlanetSide (void)
 		{
 			STAMP s;
 
-			// Note - This code is the same as in ScrollPlanetSize,
+			// Note - This code is the same as in ScrollPlanetSide,
 			// Display planet area, accounting for horizontal wrapping if
 			// near the edges.
 			ClearDrawable ();
@@ -2057,7 +2057,7 @@ PlanetSide (MENU_STATE *pMS)
 
 			ReturnToOrbit (&r);
 #ifdef SPIN_ON_LAUNCH
-			// If PauseRotate is set to 2 the plaet will be displayed, but won't rotate
+			// If PauseRotate is set to 2 the planet will be displayed, but won't rotate
 			// Until the lander animation is complete
 			pSolarSysState->PauseRotate = 0;
 			// Give The RotatePlanet thread a slice to draw the planet

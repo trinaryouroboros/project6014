@@ -57,8 +57,6 @@ DeltaTopography (COUNT num_iterations, SBYTE *DepthArray, RECT *pRect,
 		LineDDA0.x_top = w1 % width; // JMS_GFX: Replaced previous lines with these: BYTE is too small for 640x480 sized maps.
 		LineDDA0.x_bot = w2 % width; // Using w1 and w2 to get difference between top and bottom.
 		
-		log_add(log_Debug, "bot %d, top %d", LineDDA0.x_bot, LineDDA0.x_top);
-		
 		LineDDA0.delta_x = (LineDDA0.x_bot - LineDDA0.x_top) << 1;
 		if (LineDDA0.delta_x >= 0)
 			LineDDA0.x_incr = 1;

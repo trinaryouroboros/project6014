@@ -120,8 +120,8 @@ DrawCargoStrings (BYTE OldElement, BYTE NewElement)
 		s.origin.x = r.corner.x + (r.extent.width >> 1);
 		s.frame = SetAbsFrameIndex (
 				MiscDataFrame,
-				(NUM_SCANDOT_TRANSITIONS << 1) + 3 + (RESOLUTION_FACTOR - 1)
-				); // JMS_GFX
+				(NUM_SCANDOT_TRANSITIONS << 1) + 3
+				);
 		cy = y;
 
 		rt.baseline.y = cy - 7 * RESOLUTION_FACTOR; // JMS_GFX
