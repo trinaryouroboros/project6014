@@ -126,13 +126,13 @@ enum
 	ANDROSYNTH_DEFINED,
 	MYCON_TRAP_DEFINED,
 	SLAVERACE_DEFINED,
-	ORZ_SPACE_PORTAL_DEFINED		// BY JMS - Portal to ORZ space
+	ORZ_SPACE_PORTAL_DEFINED		// JMS: Portal to ORZ space
 };
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED
 
-#define TEXT_X_OFFS 1
-#define TEXT_Y_OFFS 1
+#define TEXT_X_OFFS (1 * RESOLUTION_FACTOR) // JMS_GFX
+#define TEXT_Y_OFFS (1 * RESOLUTION_FACTOR) // JMS_GFX
 #define SIS_TEXT_WIDTH (SIS_SCREEN_WIDTH - (TEXT_X_OFFS << 1))
 
 extern STAR_DESC *CurStarDescPtr;
@@ -185,7 +185,7 @@ extern void GenerateSupox (BYTE control);
 extern void GenerateRainbow (BYTE control);
 extern void GenerateIlwrath (BYTE control);
 extern void GenerateSlaveRace (BYTE control);
-extern void GenerateOrzSpacePortal (BYTE control);		// BY JMS
+extern void GenerateOrzSpacePortal (BYTE control);		// JMS
 
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;

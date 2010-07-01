@@ -31,8 +31,8 @@
 #include <string.h>
 
 
-#define NUM_CELL_COLS MAP_WIDTH / 6
-#define NUM_CELL_ROWS MAP_HEIGHT / 6
+#define NUM_CELL_COLS MAP_WIDTH / (6 * RESOLUTION_FACTOR) + (RESOLUTION_FACTOR -  1) * 4 // JMS_GFX 
+#define NUM_CELL_ROWS MAP_HEIGHT / (6 * RESOLUTION_FACTOR) + (RESOLUTION_FACTOR -  1) * 2 // JMS_GFX
 #define MAX_CELL_COLS 40
 
 extern FRAME SpaceJunkFrame;
@@ -59,7 +59,7 @@ ClearReportArea (void)
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x00, 0x07, 0x00), 0x57));
 	
-	startx = 1 + (r.extent.width >> 1) - 1;
+	startx = 1 + (r.extent.width >> 1) - 1 - (RESOLUTION_FACTOR -  1) * 4;
 	s.origin.y = 1;
 	for (y = 0; y < NUM_CELL_ROWS; ++y)
 	{
@@ -134,8 +134,7 @@ MakeReport (SOUND ReadOutSounds, UNICODE *pStr, COUNT StrLen)
 			t.pStr = end_page_buf;
 			StrLen += end_page_len;
 		}
-		t.baseline.x = 1 + (r.extent.width >> 1)
-				+ (col_cells * (r.extent.width + 1)) - 1;
+		t.baseline.x = 1 + (r.extent.width >> 1) + (col_cells * (r.extent.width + 1)) - 1 - (RESOLUTION_FACTOR -  1) * 4; // JMS_GFX
 		do
 		{
 			COUNT word_chars;
@@ -223,7 +222,7 @@ MakeReport (SOUND ReadOutSounds, UNICODE *pStr, COUNT StrLen)
 
 InitPageCell:
 			ButtonState = 1;
-			t.baseline.y = r.extent.height + 1;
+			t.baseline.y = r.extent.height + 1  - (RESOLUTION_FACTOR -  1); // JMS_GFX
 			row_cells = 0;
 			if (StrLen)
 			{
