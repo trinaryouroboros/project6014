@@ -203,7 +203,7 @@ add_text (int status, TEXT *pTextIn)
 
 		maxchars = pTextIn->CharCount;
 		locText = *pTextIn;
-		locText.baseline.x -= 8;
+		locText.baseline.x -= 8 + (RESOLUTION_FACTOR -1); // JMS_GFX
 		locText.CharCount = (COUNT)~0;
 		locText.pStr = "*";
 		font_DrawText (&locText);
@@ -550,7 +550,7 @@ FeedbackPlayerPhrase (UNICODE *pStr)
 		TEXT ct;
 
 		ct.baseline.x = SIS_SCREEN_WIDTH >> 1;
-		ct.baseline.y = SLIDER_Y + SLIDER_HEIGHT + 13;
+		ct.baseline.y = SLIDER_Y + SLIDER_HEIGHT + 13 * RESOLUTION_FACTOR; // JMS_GFX
 		ct.align = ALIGN_CENTER;
 		ct.CharCount = (COUNT)~0;
 
@@ -559,7 +559,7 @@ FeedbackPlayerPhrase (UNICODE *pStr)
 		SetContextForeGroundColor (COMM_RESPONSE_INTRO_TEXT_COLOR);
 		font_DrawText (&ct);
 
-		ct.baseline.y += 16;
+		ct.baseline.y += 16 * RESOLUTION_FACTOR; // JMS_GFX
 		SetContextForeGroundColor (COMM_FEEDBACK_TEXT_COLOR);
 		ct.pStr = pStr;
 		add_text (-4, &ct);
@@ -909,9 +909,9 @@ typedef struct summary_state
 static BOOLEAN
 DoConvSummary (SUMMARY_STATE *pSS)
 {
-#define DELTA_Y_SUMMARY 8
+#define DELTA_Y_SUMMARY (8 * RESOLUTION_FACTOR) // JMS_GFX
 #define MAX_SUMM_ROWS ((SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT) \
-			/ DELTA_Y_SUMMARY) - 1
+			/ DELTA_Y_SUMMARY) - (1 * RESOLUTION_FACTOR) // JMS_GFX
 
 	if (!pSS->Initialized)
 	{
@@ -959,7 +959,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		SetContextForeGroundColor (COMM_HISTORY_TEXT_COLOR);
 
 		r.extent.width -= 2 + 2;
-		t.baseline.x = 2;
+		t.baseline.x = (2 * RESOLUTION_FACTOR); // JMS_GFX
 		t.align = ALIGN_LEFT;
 		t.baseline.y = DELTA_Y_SUMMARY;
 		oldFont = SetContextFont (TinyFont);
@@ -1663,7 +1663,7 @@ RaceCommunication (void)
 	// JMS: What the heck is this supposed to do???
 	// Commented this one out so the chmmr battlegroups don't vanish after encounter in interplanetary.
 	// ...I think this has something to do with the fact that when sun device is used, the communication
-	// routine creates a "Chmmr ship" which the player is actually talking to. I'm not sure though.
+	// routine creates a fake "Chmmr ship" which the player is actually talking to. I'm not sure though.
 	//
 	//if (i == CHMMR_SHIP)
 	//	ReinitQueue (&GLOBAL (npc_built_ship_q));
@@ -1797,4 +1797,3 @@ SetClearSubtitle (BOOLEAN flag, SUBTITLE_STATE *sub_state)
 
 	return oldClearSubtitle;
 }
-

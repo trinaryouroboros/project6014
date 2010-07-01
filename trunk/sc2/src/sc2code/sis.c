@@ -848,7 +848,7 @@ GetGaugeRect (RECT *pRect, BOOLEAN IsCrewRect)
 {
 	pRect->extent.width = 24 * RESOLUTION_FACTOR; // JMS_GFX;
 	pRect->corner.x = (STATUS_WIDTH >> 1) - (pRect->extent.width >> 1);
-	pRect->extent.height = 5 * RESOLUTION_FACTOR; // JMS_GFX;
+	pRect->extent.height = 5 * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1) * 1; // JMS_GFX;
 	pRect->corner.y = IsCrewRect ? 117 * RESOLUTION_FACTOR : 38 * RESOLUTION_FACTOR; // JMS_GFX
 }
 
@@ -1030,7 +1030,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 
 		sprintf (buf, "%u", GLOBAL_SIS (CrewEnlisted));
 		GetGaugeRect (&r, TRUE);
-		t.baseline.y = r.corner.y + r.extent.height;
+		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR - 1); // JMS_GFX
 		t.CharCount = (COUNT)~0;
 		SetContextForeGroundColor (BLACK_COLOR);
 		DrawFilledRectangle (&r);
@@ -1067,7 +1067,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 		{
 			sprintf (buf, "%u", new_coarse_fuel);
 			GetGaugeRect (&r, FALSE);
-			t.baseline.y = r.corner.y + r.extent.height;
+			t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR - 1);
 			t.CharCount = (COUNT)~0;
 			SetContextForeGroundColor (BLACK_COLOR);
 			DrawFilledRectangle (&r);

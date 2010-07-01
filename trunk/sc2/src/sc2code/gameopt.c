@@ -860,7 +860,7 @@ ShowSummary (SUMMARY_DESC *pSD)
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 		DrawFilledRectangle (&r);
 		t.baseline.x = /*r.corner.x + (SIS_MESSAGE_WIDTH >> 1)*/ 6 * RESOLUTION_FACTOR; // JMS_GFX
-		t.baseline.y = r.corner.y + (r.extent.height - 1);
+		t.baseline.y = r.corner.y + (r.extent.height - 1) - (RESOLUTION_FACTOR - 1) * 2; // JMS_GFX
 		t.align = ALIGN_LEFT;
 		t.pStr = buf;
 		r.corner.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));

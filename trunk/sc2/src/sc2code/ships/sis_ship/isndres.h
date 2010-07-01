@@ -2,4 +2,5 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
+#define EXP_SHIP_SOUNDS "ship.explorer.sounds"
 #define SIS_SHIP_SOUNDS "ship.sis_ship.sounds"

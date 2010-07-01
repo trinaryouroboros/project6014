@@ -225,7 +225,7 @@ InitEncounter (void)
 
 //    t.baseline.x = SIS_SCREEN_WIDTH >> 1;
 	t.baseline.x = (SIS_SCREEN_WIDTH >> 1) + 1;
-	t.baseline.y = 10;
+	t.baseline.y = 10 * RESOLUTION_FACTOR; // JMS_GFX
 	t.align = ALIGN_CENTER;
 
 	SetContextFont (MicroFont);
@@ -237,7 +237,7 @@ InitEncounter (void)
 				// "ENCOUNTER IN"
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
-		t.baseline.y += 12;
+		t.baseline.y += 12 * RESOLUTION_FACTOR; // JMS_GFX
 		if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
 			t.pStr = GAME_STRING (NAVIGATION_STRING_BASE + 6);
 				// JMS: * Below *
@@ -255,12 +255,12 @@ InitEncounter (void)
 				// "ENCOUNTER AT"
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
-		t.baseline.y += 12;
+		t.baseline.y += 12 * RESOLUTION_FACTOR; // JMS_GFX
 		GetClusterName (CurStarDescPtr, buf);
 		t.pStr = buf;
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
-		t.baseline.y += 12;
+		t.baseline.y += 12 * RESOLUTION_FACTOR; // JMS_GFX
 		
 		// JMS: Orz space portal shenanigans. Don't display planet name.
 		if(CurStarDescPtr->Index == ORZ_SPACE_PORTAL_DEFINED)
