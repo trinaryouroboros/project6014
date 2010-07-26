@@ -265,14 +265,21 @@ object_animation (ELEMENT *ElementPtr)
 			else if (ElementPtr->mass_points == EARTHQUAKE_DISASTER)
 			{
 				SIZE s;
-
-				if (frame_index >= 13)
+				SIZE frame_amount; // JMS_GFX
+				
+				// JMS_GFX
+				if(RESOLUTION_FACTOR == 1)
+					frame_amount = 22;
+				else
+					frame_amount = 14;
+				
+				if (frame_index >= (frame_amount-1))
 					s = 0;
 				else
-					s = (14 - frame_index) >> 1;
+					s = (frame_amount - frame_index) >> 1;
 				// XXX: Was 0x8000 the background flag on 3DO?
 				SetPrimColor (pPrim, BUILD_COLOR (0x8000 | MAKE_RGB15 (0x1F, 0x1F, 0x1F), s));
-				if (frame_index == 13)
+				if (frame_index == (frame_amount - 1))
 					PlaySound (SetAbsSoundIndex (LanderSounds, EARTHQUAKE_DISASTER),
 							NotPositional (), NULL, GAME_SOUND_PRIORITY);
 			}
@@ -292,8 +299,8 @@ object_animation (ELEMENT *ElementPtr)
 					angle = FACING_TO_ANGLE (ElementPtr->facing);
 					LockElement (hLavaElement, &LavaElementPtr);
 					LavaElementPtr->next.location = ElementPtr->next.location;
-					LavaElementPtr->next.location.x += COSINE (angle, 4);
-					LavaElementPtr->next.location.y += SINE (angle, 4);
+					LavaElementPtr->next.location.x += COSINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
+					LavaElementPtr->next.location.y += SINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
 					if (LavaElementPtr->next.location.y < 0)
 						LavaElementPtr->next.location.y = 0;
 					else if (LavaElementPtr->next.location.y >= (MAP_HEIGHT << MAG_SHIFT))
