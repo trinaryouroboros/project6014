@@ -69,27 +69,30 @@ static void
 EraseCoarseScan (void)
 {
 	RECT r, tr;
-	const int leftScanWidth   = 80 * RESOLUTION_FACTOR; // JMS_GFX
-	const int rightScanWidth  = 80 * RESOLUTION_FACTOR; // JMS_GFX
-	const int leftScanOffset  = 5 * RESOLUTION_FACTOR; // JMS_GFX
-	const int rightScanOffset = 50 * RESOLUTION_FACTOR; // JMS_GFX
-	const int nameEraseWidth = SIS_SCREEN_WIDTH - 2 * RESOLUTION_FACTOR; // JMS_GFX
+	const int leftScanWidth   = (80 * RESOLUTION_FACTOR); // JMS_GFX
+	const int rightScanWidth  = (80 * RESOLUTION_FACTOR); // JMS_GFX
+	const int leftScanOffset  = (5 * RESOLUTION_FACTOR); // JMS_GFX
+	const int rightScanOffset = (50 * RESOLUTION_FACTOR); // JMS_GFX
+	const int nameEraseWidth = (SIS_SCREEN_WIDTH - 2 * RESOLUTION_FACTOR); // JMS_GFX
 
 	LockMutex (GraphicsLock);
 	SetContext (SpaceContext);
 
+	// Erase planet name
 	r.corner.x = (SIS_SCREEN_WIDTH >> 1) - (nameEraseWidth >> 1);
 	r.corner.y = (13 - 10) * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.width = nameEraseWidth;
 	r.extent.height = 14 * RESOLUTION_FACTOR; // JMS_GFX
 	RepairBackRect (&r);
 
+	// Erase left side (Orbit, atmo, temp...)
 	GetFrameRect (SetAbsFrameIndex (SpaceJunkFrame, 20), &tr);
 	r = tr;
 	r.corner.x += leftScanOffset;
 	r.extent.width = leftScanWidth;
 	RepairBackRect (&r);
 
+	// Erase right side info (Mass, radius, gravity...)
 	r = tr;
 	r.corner.x += (r.extent.width - rightScanOffset);
 	r.extent.width = rightScanWidth;
@@ -1071,7 +1074,7 @@ DoScan (MENU_STATE *pMS)
 			LockMutex (GraphicsLock);
 			SetContext (SpaceContext);
 			r.corner.x = 0;
-			r.corner.y = t.baseline.y - 10;
+			r.corner.y = t.baseline.y - 10 * RESOLUTION_FACTOR; // JMS_GFX
 			r.extent.width = SIS_SCREEN_WIDTH;
 			r.extent.height = t.baseline.y - r.corner.y + 1;
 			RepairBackRect (&r);
@@ -1156,7 +1159,7 @@ DoScan (MENU_STATE *pMS)
 		LockMutex (GraphicsLock);
 		SetContext (SpaceContext);
 		r.corner.x = 0;
-		r.corner.y = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7) - 10;
+		r.corner.y = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7) - 10 * RESOLUTION_FACTOR; // JMS_GFX;
 		r.extent.width = SIS_SCREEN_WIDTH;
 		r.extent.height = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7)
 				- r.corner.y + 1;
