@@ -99,6 +99,11 @@ Oscilloscope (DWORD grab_data)
 		TFB_DrawCanvas_GetPixel (scope_bg->NormalImg,
 				scope_bg->extent.width / 2, scope_bg->extent.height / 2,
 				&r, &g, &b);
+		
+		// JMS_GFX
+		if(RESOLUTION_FACTOR > 1)
+			{r=g=b=0;}
+		
 		for (i = 0; i < RADAR_WIDTH - 3; ++i)
 			TFB_DrawImage_Line (i + 1, scope_data[i], i + 2,
 					scope_data[i + 1], r, g, b, scope_surf);

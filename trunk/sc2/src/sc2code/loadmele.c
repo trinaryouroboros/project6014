@@ -219,8 +219,8 @@ DrawFileString (TEAM_IMAGE *pTI, POINT *origin, BOOLEAN drawShips,
 		STAMP s;
 		FleetShipIndex index;
 
-		s.origin.x = origin->x + 1*RESOLUTION_FACTOR; // JMS_GFX
-		s.origin.y = origin->y + 4*RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.x = origin->x + 1 * RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.y = origin->y + 4 * RESOLUTION_FACTOR; // JMS_GFX
 		for (index = 0; index < MELEE_FLEET_SIZE; index++)
 		{
 			BYTE StarShip;
@@ -259,8 +259,8 @@ FillFileView (MELEE_STATE *pMS)
 	return true;
 }
 
-#define FILE_STRING_ORIGIN_X (5 * RESOLUTION_FACTOR)
-#define FILE_STRING_ORIGIN_Y  34
+#define FILE_STRING_ORIGIN_X (5 * RESOLUTION_FACTOR) // JMS_GFX
+#define FILE_STRING_ORIGIN_Y  (34 * RESOLUTION_FACTOR + (RESOLUTION_FACTOR-1)*21) // JMS_GFX
 #define ENTRY_HEIGHT (32 * RESOLUTION_FACTOR) // JMS_GFX
 
 void
