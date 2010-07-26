@@ -426,13 +426,13 @@ UpdatePickMeleeFleetValue (FRAME frame, COUNT which_player)
 	r.corner.x = r.extent.width - ((6 * 3) * RESOLUTION_FACTOR); // JMS_GFX
 	r.corner.y = 2 * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.width = (6 * 3) * RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.height = (7 - 2) * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.height = (7 - 2) * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1); // JMS_GFX
 	SetContextForeGroundColor (PICK_BG_COLOR);
 	DrawFilledRectangle (&r);
 
 	// Draw the new value text.
 	sprintf (buf, "%d", value);
-	t.baseline.y = 7;
+	t.baseline.y = 7 * RESOLUTION_FACTOR; // JMS_GFX
 	t.align = ALIGN_RIGHT;
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;

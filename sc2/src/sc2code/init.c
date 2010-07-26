@@ -348,5 +348,3 @@ UninitShips (void)
 			FreeHyperspace ();
 	}
 }
-
-

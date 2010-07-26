@@ -90,13 +90,13 @@ enum
 #endif
 
 #define MELEE_X_OFFS (2 * RESOLUTION_FACTOR) // JMS_GFX
-#define MELEE_Y_OFFS (21 * RESOLUTION_FACTOR) // JMS_GFX
+#define MELEE_Y_OFFS (21 * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1) * 21) // JMS_GFX
 #define MELEE_BOX_WIDTH (34 * RESOLUTION_FACTOR) // JMS_GFX
 #define MELEE_BOX_HEIGHT (34 * RESOLUTION_FACTOR) // JMS_GFX
 #define MELEE_BOX_SPACE (1 * RESOLUTION_FACTOR) // JMS_GFX
 
 #define MENU_X_OFFS (29 * RESOLUTION_FACTOR) // JMS_GFX
-#define NAME_AREA_HEIGHT 7 // JMS_GFX
+#define NAME_AREA_HEIGHT (7 * RESOLUTION_FACTOR) // JMS_GFX
 #define MELEE_WIDTH (149 * RESOLUTION_FACTOR) // JMS_GFX
 #define MELEE_HEIGHT (48 * RESOLUTION_FACTOR + NAME_AREA_HEIGHT) // JMS_GFX
 
@@ -441,7 +441,7 @@ DrawTeamString (MELEE_STATE *pMS, COUNT side, COUNT HiLiteState)
 	r.corner.y = (side + 1) * (MELEE_Y_OFFS
 			+ ((MELEE_BOX_HEIGHT + MELEE_BOX_SPACE) * NUM_MELEE_ROWS + 2));
 	r.extent.width = NUM_MELEE_COLUMNS * (MELEE_BOX_WIDTH + MELEE_BOX_SPACE);
-	r.extent.height = 13;
+	r.extent.height = 13 * RESOLUTION_FACTOR; // JMS_GFX
 	if (HiLiteState == DTSHS_REPAIR)
 	{
 		RepairMeleeFrame (&r);
@@ -1596,8 +1596,8 @@ BuildAndDrawShipList (MELEE_STATE *pMS)
 
 		r.corner.x += 2 * RESOLUTION_FACTOR; // JMS_GFX
 		r.corner.y += 2 * RESOLUTION_FACTOR; // JMS_GFX
-		r.extent.width -=( (2 * 2) + (ICON_WIDTH + 2) + 1) * RESOLUTION_FACTOR; // JMS_GFX
-		r.extent.height -=( (2 * 2) + NAME_AREA_HEIGHT) * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width -=( (2 * 2) + (ICON_WIDTH / RESOLUTION_FACTOR + 2) + 1) * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.height -=( (2 * 2  * RESOLUTION_FACTOR) + NAME_AREA_HEIGHT); // JMS_GFX
 		SetContextForeGroundColor (PICK_BG_COLOR);
 		DrawFilledRectangle (&r);
 
@@ -1617,8 +1617,8 @@ BuildAndDrawShipList (MELEE_STATE *pMS)
 
 		// Total team value of the starting team:
 		sprintf (buf, "%u", pMS->SideState[i].star_bucks);
-		t.baseline.x = 4;
-		t.baseline.y = 7;
+		t.baseline.x = 4 * RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y = 7 * RESOLUTION_FACTOR; // JMS_GFX
 		t.align = ALIGN_LEFT;
 		t.pStr = buf;
 		t.CharCount = (COUNT)~0;
@@ -2693,6 +2693,3 @@ closeFeedback (NetConnection *conn)
 }
 
 #endif  /* NETPLAY */
-
-
-

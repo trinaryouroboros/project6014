@@ -388,13 +388,13 @@ DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in,
 	};
 #define NUM_FADES (sizeof (fade_cycle) / sizeof (fade_cycle[0]))
 
-	t1.baseline.x = pRect->corner.x + 100;
-	t1.baseline.y = pRect->corner.y + 45;
+	t1.baseline.x = pRect->corner.x + 100 * RESOLUTION_FACTOR; // JMS_GFX
+	t1.baseline.y = pRect->corner.y + 45 * RESOLUTION_FACTOR; // JMS_GFX
 	t1.align = ALIGN_CENTER;
 	t1.pStr = str1;
 	t1.CharCount = (COUNT)~0;
 	t2 = t1;
-	t2.baseline.y += 11;
+	t2.baseline.y += 11 * RESOLUTION_FACTOR; // JMS_GFX
 	t2.pStr = str2;
 
 	FlushInput ();
@@ -569,7 +569,7 @@ UninitEncounter (void)
 
 								DrawStatusMessage ((UNICODE *)~0);
 								
-								ship_s.origin.x = scavenge_r.corner.x + 32;
+								ship_s.origin.x = scavenge_r.corner.x + 32 * RESOLUTION_FACTOR; // JMS_GFX
 								ship_s.origin.y = scavenge_r.corner.y + 56;
 								ship_s.frame = IncFrameIndex (FragPtr->icons);
 								DrawStamp (&ship_s);
@@ -582,13 +582,13 @@ UninitEncounter (void)
 								// XXX: this will not work with UTF-8 strings
 								strupr (buf);
 
-								t.baseline.x = scavenge_r.corner.x + 100;
-								t.baseline.y = scavenge_r.corner.y + 68;
+								t.baseline.x = scavenge_r.corner.x + 100 * RESOLUTION_FACTOR; // JMS_GFX
+								t.baseline.y = scavenge_r.corner.y + 68 * RESOLUTION_FACTOR; // JMS_GFX
 								t.align = ALIGN_CENTER;
 								t.pStr = buf;
 								t.CharCount = (COUNT)~0;
 								font_DrawText (&t);
-								t.baseline.y += 6;
+								t.baseline.y += 6 * RESOLUTION_FACTOR; // JMS_GFX
 								t.pStr = GAME_STRING (
 										ENCOUNTER_STRING_BASE + 3);
 										// "BATTLE GROUP"
@@ -607,15 +607,15 @@ UninitEncounter (void)
 								DrawFadeText (str1, str2, TRUE, &scavenge_r);
 							}
 
-							r.corner.y = scavenge_r.corner.y + 9;
-							r.extent.height = 22;
+							r.corner.y = scavenge_r.corner.y + 9 * RESOLUTION_FACTOR; // JMS_GFX
+							r.extent.height = 22 * RESOLUTION_FACTOR; // JMS_GFX
 
 							SetContextForeGroundColor (BLACK_COLOR);
 
-							r.extent.width = 34;
+							r.extent.width = 34 * RESOLUTION_FACTOR; // JMS_GFX
 							r.corner.x = scavenge_r.corner.x +
 									scavenge_r.extent.width
-									- (10 + r.extent.width);
+									- (10 * RESOLUTION_FACTOR + r.extent.width); // JMS_GFX
 							DrawFilledRectangle (&r);
 
 							/* collect bounty ResUnits */
@@ -623,7 +623,7 @@ UninitEncounter (void)
 							RecycleAmount += j;
 							sprintf (buf, "%u", RecycleAmount);
 							t.baseline.x = r.corner.x + r.extent.width - 1;
-							t.baseline.y = r.corner.y + 14;
+							t.baseline.y = r.corner.y + 14 * RESOLUTION_FACTOR; // JMS_GFX
 							t.align = ALIGN_RIGHT;
 							t.pStr = buf;
 							t.CharCount = (COUNT)~0;
@@ -633,17 +633,17 @@ UninitEncounter (void)
 							DeltaSISGauges (0, 0, j);
 
 							if ((VictoryState++ - 1) % MAX_DEAD_DISPLAYED)
-								ship_s.origin.x += 17;
+								ship_s.origin.x += 17 * RESOLUTION_FACTOR; // JMS_GFX
 							else
 							{
 								SetContextForeGroundColor (BLACK_COLOR);
 
-								r.corner.x = scavenge_r.corner.x + 10;
-								r.extent.width = 104;
+								r.corner.x = scavenge_r.corner.x + 10 * RESOLUTION_FACTOR; // JMS_GFX
+								r.extent.width = 104 * RESOLUTION_FACTOR; // JMS_GFX
 								DrawFilledRectangle (&r);
 
-								ship_s.origin.x = r.corner.x + 2;
-								ship_s.origin.y = scavenge_r.corner.y + 12;
+								ship_s.origin.x = r.corner.x + 2 * RESOLUTION_FACTOR; // JMS_GFX
+								ship_s.origin.y = scavenge_r.corner.y + 12 * RESOLUTION_FACTOR; // JMS_GFX
 							}
 
 							if (Sleepy)
@@ -697,13 +697,13 @@ UninitEncounter (void)
 				if (!CurrentInputState.key[PlayerControls[0]][KEY_ESCAPE])
 				{
 					SetContextForeGroundColor (BLACK_COLOR);
-					r.corner.x = scavenge_r.corner.x + 10;
-					r.extent.width = 132;
+					r.corner.x = scavenge_r.corner.x + 10 * RESOLUTION_FACTOR; // JMS_GFX
+					r.extent.width = 132 * RESOLUTION_FACTOR; // JMS_GFX
 					DrawFilledRectangle (&r);
 					sprintf (buf, "%u %s", RecycleAmount,
 							GAME_STRING (STATUS_STRING_BASE + 1)); // "RU"
 					t.baseline.x = r.corner.x + (r.extent.width >> 1);
-					t.baseline.y = r.corner.y + 14;
+					t.baseline.y = r.corner.y + 14 * RESOLUTION_FACTOR; // JMS_GFX
 					t.align = ALIGN_CENTER;
 					t.pStr = buf;
 					t.CharCount = (COUNT)~0;

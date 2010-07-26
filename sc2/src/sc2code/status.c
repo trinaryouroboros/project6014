@@ -132,7 +132,7 @@ DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr)
 	t.CharCount = (COUNT)~0;
 
 	r.corner.x = t.baseline.x;
-	r.corner.y = t.baseline.y - 5;
+	r.corner.y = t.baseline.y - 5 * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.width = 6 * MAX_CREW_DIGITS + 6;
 	r.extent.height = 5;
 
