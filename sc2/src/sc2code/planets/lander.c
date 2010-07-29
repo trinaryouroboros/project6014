@@ -1023,7 +1023,7 @@ AddGroundDisaster (COUNT which_disaster)
 
 		if (which_disaster == EARTHQUAKE_DISASTER)
 		{
-			SetPrimType (pPrim, STAMPFILL_PRIM);
+			SetPrimType (pPrim, STAMP_PRIM); // JMS: was STAMPFILL_PRIM
 			pPrim->Object.Stamp.frame = LanderFrame[1];
 			GroundDisasterElementPtr->turn_wait = MAKE_BYTE (2, 2);
 		}

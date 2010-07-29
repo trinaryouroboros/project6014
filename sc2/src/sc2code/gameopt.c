@@ -749,7 +749,7 @@ ShowSummary (SUMMARY_DESC *pSD)
 		r.corner.x = SIS_ORG_X + ((SIS_SCREEN_WIDTH - STATUS_WIDTH) >> 1) +
 				SAFE_X - (16 * RESOLUTION_FACTOR) + SUMMARY_X_OFFS; // JMS_GFX
 //		r.corner.x = SIS_ORG_X + ((SIS_SCREEN_WIDTH - STATUS_WIDTH) >> 1);
-		r.corner.y = SIS_ORG_Y;
+		r.corner.y = SIS_ORG_Y + (RESOLUTION_FACTOR - 1); // JMS_GFX
 		r.extent.width = STATUS_WIDTH;
 		r.extent.height = STATUS_HEIGHT;
 		SetContextClipRect (&r);
@@ -1168,8 +1168,8 @@ ChangeGameSelection:
 				r.corner.y = (160 + (i * 13)) * RESOLUTION_FACTOR; // JMS_GFX
 				DrawRectangle (&r);
 
-				t.baseline.x = r.corner.x + 3 * RESOLUTION_FACTOR; // JMS_GFX
-				t.baseline.y = r.corner.y + 8 * RESOLUTION_FACTOR; // JMS_GFX
+				t.baseline.x = r.corner.x + 3 * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1); // JMS_GFX
+				t.baseline.y = r.corner.y + 8 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1); // JMS_GFX
 				sprintf (buf, "%02i", NewState - SHIFT + i);
 				if (MAX_SAVED_GAMES > 99)
 					sprintf (buf, "%03i", NewState - SHIFT + i);
@@ -1179,7 +1179,7 @@ ChangeGameSelection:
 				r.corner.x = 30 * RESOLUTION_FACTOR + SAFE_X; // JMS_GFX
 				DrawRectangle (&r);
 
-				t.baseline.x = r.corner.x + 3 * RESOLUTION_FACTOR; // JMS_GFX
+				t.baseline.x = r.corner.x + 3 * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1); // JMS_GFX
 				if (((SUMMARY_DESC *)pMS->Extra)[NewState - SHIFT + i].year_index == 0)
 					sprintf (buf, GAME_STRING (SAVEGAME_STRING_BASE + 3)); // "Empty Slot"
 				else

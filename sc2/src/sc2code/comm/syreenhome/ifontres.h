@@ -2,4 +2,4 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define SYREEN_FONT "comm.syreen.font"
+#define SYREEN_FONT "comm.syreenhome.font"
