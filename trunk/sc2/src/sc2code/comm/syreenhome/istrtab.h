@@ -3,4 +3,4 @@
    instead and regenerate. */
 
 #define SYREEN_COLOR_MAP "comm.syreenhome.colortable"
-#define SYREEN_CONVERSATION_PHRASES "comm.syreenhome.dialogue"
+#define SYREEN_CONVERSATION_PHRASES "comm.syreehomen.dialogue"

@@ -1,10 +1,10 @@
 INCLUDE	../../star3do.typ
 
-PATH	comm/syreen
+PATH	comm/syreenhome
 
-PACKAGE	SYREEN_PACKAGE	syreen.con
-	GFXRES			SYREEN_PMAP_ANIM		syreen.ani
-	FONTRES			SYREEN_FONT			syreen.fon
-	MUSICRES		SYREEN_MUSIC			syreen.mod
-	STRTAB			SYREEN_CONVERSATION_PHRASES	syreen.txt
-	STRTAB			SYREEN_COLOR_MAP		syreen.ct
+PACKAGE	SYREEN_PACKAGE	syreenhome.con
+	GFXRES			SYREENHOME_PMAP_ANIM		syreenhome.ani
+	FONTRES			SYREENHOME_FONT			syreenhome.fon
+	MUSICRES		SYREENHOME_MUSIC		syreenhome.mod
+	STRTAB			SYREENHOME_CONVERSATION_PHRASES	syreenhome.txt
+	STRTAB			SYREENHOME_COLOR_MAP		syreenhome.ct

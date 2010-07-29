@@ -59,6 +59,7 @@ FRAME Screen;
 FONT StarConFont;
 FONT MicroFont;
 FONT TinyFont;
+FONT NanoFont; // JMS
 QUEUE race_q[NUM_PLAYERS];
 FRAME ActivityFrame;
 FRAME StatusFrame;
@@ -196,6 +197,11 @@ InitKernel (void)
 
 	TinyFont = LoadFont (TINY_FONT);
 	if (TinyFont == NULL)
+		return FALSE;
+	
+	// JMS: Nanofont for hi-res
+	NanoFont = LoadFont (NANO_FONT);
+	if (NanoFont == NULL)
 		return FALSE;
 
 	ActivityFrame = CaptureDrawable (LoadGraphic (ACTIVITY_ANIM));

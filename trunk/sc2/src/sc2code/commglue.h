@@ -55,7 +55,7 @@ typedef enum {
 	YEHAT_REBEL_CONVERSATION,
 	HUMAN_CONVERSATION,			// JMS
 	ANDROSYNTH_CONVERSATION,	// JMS
-	SLAVERACE_CONVERSATION,		// JMS: Re-located this baby
+	SLAVERACE_CONVERSATION,		// JMS
 	SYREENHOME_CONVERSATION,
 	INVALID_CONVERSATION,
 } CONVERSATION;
@@ -151,7 +151,7 @@ extern LOCDATA* init_supox_comm (void);
 
 extern LOCDATA* init_syreen_comm (void);
 
-extern LOCDATA* init_syreenhome_comm (void);
+extern LOCDATA* init_syreenhome_comm (void); // JMS
 
 extern LOCDATA* init_talkpet_comm (void);
 

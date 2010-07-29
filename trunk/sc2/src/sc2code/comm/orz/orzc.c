@@ -181,7 +181,8 @@ ExitConversation (RESPONSE_REF R)
 
 }
 
-static void
+// JMS: Commented out for demo
+/*static void
 OhFjorn (RESPONSE_REF R)
 {	
 	if (PLAYER_SAID (R, you_have_met_fjorn))
@@ -190,22 +191,13 @@ OhFjorn (RESPONSE_REF R)
 	}
 	
 		Response (goodbye_orz, ExitConversation);
-}
+}*/
 
-
-static void
+// JMS: Commented out for demo
+/* static void
 AllianceMatters2 (RESPONSE_REF R)
 {	
-	if (PLAYER_SAID (R, alliance_question_1))
-	{
-		NPCPhrase (ALLIANCE_ANSWER_1);
-		DISABLE_PHRASE (alliance_question_2);
-	}
-	else if (PLAYER_SAID (R, alliance_question_2))
-	{
-		NPCPhrase (ALLIANCE_ANSWER_1);  //TODO 2
-		DISABLE_PHRASE (alliance_question_2);
-	}
+	
 	else if (PLAYER_SAID (R, ask_know_fjorn))
 	{
 		NPCPhrase (ORZ_DENY_FJORN);
@@ -214,27 +206,38 @@ AllianceMatters2 (RESPONSE_REF R)
 
 	Response (you_have_met_fjorn, OhFjorn);
 	Response (goodbye_orz, ExitConversation);
-}
+}*/
 
-
-
-
+static void SmallTalk1 (RESPONSE_REF R);
 
 static void
 AllianceMatters (RESPONSE_REF R)
 {	
 	if (PLAYER_SAID (R, discuss_alliance_matters))
-	{
 		NPCPhrase (HAPPY_TO_DISCUSS);
+	
+	if (PLAYER_SAID (R, alliance_question_1))
+	{
+		NPCPhrase (ALLIANCE_ANSWER_1);
+		DISABLE_PHRASE (alliance_question_1);
+	}
+	else if (PLAYER_SAID (R, alliance_question_2))
+	{
+		NPCPhrase (ALLIANCE_ANSWER_2);  //TODO 2
+		DISABLE_PHRASE (alliance_question_2);
 	}
 	
-	Response (alliance_question_1, AllianceMatters2);
-	Response (alliance_question_2, AllianceMatters2);
-	Response (ask_know_fjorn, AllianceMatters2);
+	if (PHRASE_ENABLED (alliance_question_1))
+		Response (alliance_question_1, AllianceMatters);
+	if (PHRASE_ENABLED (alliance_question_2))
+		Response (alliance_question_2, AllianceMatters);
+	//if (PHRASE_ENABLED (ask_know_fjorn))
+	//	Response (ask_know_fjorn, AllianceMatters2); // JMS: Commented out for demo
+	
+	Response (enough_alliance, SmallTalk1); // JMS
+	
 	Response (goodbye_orz, ExitConversation);
 }
-
-static void SmallTalk1 (RESPONSE_REF R);
 
 static void
 AnnoyOrz (RESPONSE_REF R)
@@ -242,18 +245,20 @@ AnnoyOrz (RESPONSE_REF R)
 	if (PLAYER_SAID (R, tell_buddies))
 	{
 		NPCPhrase (ORZ_TELL_2);
+		DISABLE_PHRASE (tell_buddies);
+		SET_GAME_STATE(ORZ_STACK0, 1);
 	}
-
-	Response (how_are_things, SmallTalk1);
-	Response (any_news, SmallTalk1);
-	Response (discuss_alliance_matters, AllianceMatters);
-	Response (goodbye_orz, ExitConversation);
+	
+	SmallTalk1 ((RESPONSE_REF)0);
 }
-
 
 void
 SmallTalk1 (RESPONSE_REF R)
 {	
+	if (PLAYER_SAID (R, enough_alliance))
+	{
+		NPCPhrase (ENOUGH_ALLIANCE_OK);
+	}
 	if (PLAYER_SAID (R, how_are_things))
 	{
 		NPCPhrase (HAPPY_ORZ);
@@ -273,36 +278,45 @@ SmallTalk1 (RESPONSE_REF R)
 	{
 		NPCPhrase (ORZ_TELL_1);
 		DISABLE_PHRASE (tell_of_nature);
+		SET_GAME_STATE(ORZ_STACK0, 1);
 	}
 
-	Response (how_are_things, SmallTalk1);
-	Response (any_news, SmallTalk1);
-	Response (discuss_alliance_matters, AllianceMatters);
-	Response (tell_buddies, AnnoyOrz);
+	if (PHRASE_ENABLED (how_are_things))
+		Response (how_are_things, SmallTalk1);
+	if (PHRASE_ENABLED (any_news))
+		Response (any_news, SmallTalk1);
+	if (PHRASE_ENABLED (discuss_alliance_matters))
+		Response (discuss_alliance_matters, AllianceMatters);
+	
+	switch (GET_GAME_STATE(ORZ_STACK0))
+	{
+		case 0:
+			if (PHRASE_ENABLED (tell_of_nature))
+				Response (tell_of_nature, SmallTalk1);
+			break;
+		case 1:
+			if (PHRASE_ENABLED (tell_buddies))
+				Response (tell_buddies, AnnoyOrz);
+			break;
+		default:
+			break;
+	}
+	
 	Response (goodbye_orz, ExitConversation);
 }
-
-
-
-
-
 
 static void
 Intro (void)
 {
-	
 	if (GET_GAME_STATE (ORZ_MET) == 0)
 	{
+		NPCPhrase (ORZ_GREETING);
 		SET_GAME_STATE (ORZ_MET, 1);
 	}
+	else
+		NPCPhrase (ORZ_GREETING_2);
 
-	NPCPhrase (ORZ_GREETING);
-
-	Response (how_are_things, SmallTalk1);
-	Response (any_news, SmallTalk1);
-	Response (discuss_alliance_matters, SmallTalk1);
-	Response (tell_of_nature, SmallTalk1);
-	Response (goodbye_orz, ExitConversation);
+	SmallTalk1 ((RESPONSE_REF)0);
 }
 
 static void

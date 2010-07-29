@@ -92,6 +92,7 @@
 ./obj/debug/src/sc2code/comm/starbas/starbas.c
 ./obj/debug/src/sc2code/comm/supox/supoxc.c
 ./obj/debug/src/sc2code/comm/syreen/syreenc.c
+./obj/debug/src/sc2code/comm/syreenhome/syreenhomec.c
 ./obj/debug/src/sc2code/comm/talkpet/talkpet.c
 ./obj/debug/src/sc2code/comm/thradd/thraddc.c
 ./obj/debug/src/sc2code/comm/transport/transportc.c
