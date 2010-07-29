@@ -2,4 +2,4 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define SYREEN_PMAP_ANIM "comm.syreen.graphics"
+#define SYREEN_PMAP_ANIM "comm.syreenhome.graphics"
