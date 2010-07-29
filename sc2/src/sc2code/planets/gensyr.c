@@ -109,7 +109,7 @@ GenerateSyreen (BYTE control)
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 			{
 				pSolarSysState->MenuState.Initialized += 2;
-				InitCommunication (SYREEN_CONVERSATION);
+				InitCommunication (SYREENHOME_CONVERSATION);
 				pSolarSysState->MenuState.Initialized -= 2;
 				break;
 			}

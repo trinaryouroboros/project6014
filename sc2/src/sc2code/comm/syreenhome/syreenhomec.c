@@ -19,8 +19,8 @@
 // JMS 2010: Cleaned up the comm logic a bit...
 
 #include "comm/commall.h"
-#include "comm/syreen/resinst.h"
-#include "comm/syreen/strings.h"
+#include "comm/syreenhome/resinst.h"
+#include "comm/syreenhome/strings.h"
 #include "libs/sound/sound.h"
 
 #include "build.h"
