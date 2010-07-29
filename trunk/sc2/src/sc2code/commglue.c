@@ -345,6 +345,8 @@ init_race (CONVERSATION comm_id)
 			return init_supox_comm ();
 		case SYREEN_CONVERSATION:
 			return init_syreen_comm ();
+		case SYREENHOME_CONVERSATION:
+			return init_syreenhome_comm ();
 		case TALKING_PET_CONVERSATION:
 			return init_talkpet_comm ();
 		case THRADD_CONVERSATION:
