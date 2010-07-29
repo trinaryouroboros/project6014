@@ -230,6 +230,8 @@ EventHandler (BYTE selector)
 }
 
 // JMS: Transport ship starts its journey. Whee!!!
+
+
 void
 transport_starts_event(void)
 {
