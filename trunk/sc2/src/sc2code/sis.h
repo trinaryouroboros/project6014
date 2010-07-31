@@ -107,6 +107,7 @@ enum
 
 /** Capacities for Explorer **/
 #define EXPLORER_CREW_CAPACITY 50
+#define EXPLORER_FUEL_CAPACITY (200 * FUEL_TANK_SCALE)
 
 #define CREW_EXPENSE_THRESHOLD 1000
 #define CREW_PER_ROW 5

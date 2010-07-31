@@ -579,10 +579,18 @@ DrawFlagshipStats (void)
 	energy_wait = ENERGY_WAIT;
 	max_thrust = MAX_THRUST;
 	turn_wait = TURN_WAIT;
-	fuel = 10 * FUEL_TANK_SCALE;
 
-	for (i = 0; i < NUM_MODULE_SLOTS; i++)
-	{
+
+	if (1)  //TODO switch on flagship
+	  {
+	    fuel = EXPLORER_FUEL_CAPACITY;
+	  }
+	else
+	  {
+	    fuel = 10 * FUEL_TANK_SCALE;
+	    
+	    for (i = 0; i < NUM_MODULE_SLOTS; i++)
+	      {
 		switch (GLOBAL_SIS (ModuleSlots[i])) {
 			case FUEL_TANK:
 				fuel += FUEL_TANK_CAPACITY;
@@ -599,7 +607,8 @@ DrawFlagshipStats (void)
 				energy_regeneration++;
 				break;
 		}
-	}
+	      }
+	  }
 
 	for (i = 0; i < NUM_DRIVE_SLOTS; ++i)
 		if (GLOBAL_SIS (DriveSlots[i]) == FUSION_THRUSTER)
@@ -923,6 +932,11 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 		if (optWhichFonts == OPT_PC)
 			DrawPC_SIS();
 
+	    if (1) // TODO switch on flagship
+	      {
+	      }
+	    else
+	      {
 		s.origin.x = 1;
 		s.origin.y = 0;
 		for (i = 0; i < NUM_DRIVE_SLOTS; ++i)
@@ -977,6 +991,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 
 			s.origin.y -= 3 * RESOLUTION_FACTOR; // JMS_GFX
 		}
+	      }
 
 		{
 			HSHIPFRAG hStarShip, hNextShip;
@@ -1131,7 +1146,7 @@ GetCrewCount (void)
 }
 
 
-
+// BW: New function for populating the Explorer
 COUNT
 GetCPodCapacity (POINT *ppt)
 {
@@ -1177,7 +1192,7 @@ GetCPodCapacity (POINT *ppt)
   return (EXPLORER_CREW_CAPACITY);
 }
 
-/***
+/*** Old function for Vindicator
 COUNT
 GetCPodCapacity (POINT *ppt)
 {
@@ -1287,13 +1302,15 @@ GetSBayCapacity (POINT *ppt)
 	return (capacity);
 }
 
+
+// BW: new function for fueling the Explorer
 DWORD
 GetFTankCapacity (POINT *ppt)
 {
 	COORD x;
 	DWORD capacity;
-	DWORD volume = HEFUEL_TANK_CAPACITY*2;
-    
+	DWORD volume = EXPLORER_FUEL_CAPACITY;
+	
 	x = 200;
 	//	capacity = FUEL_RESERVE;
 	capacity = 0;
@@ -1320,7 +1337,7 @@ GetFTankCapacity (POINT *ppt)
 	      {
 		which_row = (COUNT)(
 				    (GLOBAL_SIS (FuelOnBoard))
-				    * 20 / (HEFUEL_TANK_CAPACITY*2)
+				    * 20 / (EXPLORER_FUEL_CAPACITY)
 				    );
 		
 		ppt->x = 31+which_row;
@@ -1328,7 +1345,7 @@ GetFTankCapacity (POINT *ppt)
 		
 		which_row = (COUNT)(
 				    (GLOBAL_SIS (FuelOnBoard))
-				    * MAX_FUEL_BARS / (HEFUEL_TANK_CAPACITY*2)
+				    * MAX_FUEL_BARS / (EXPLORER_FUEL_CAPACITY)
 				    );
 		
 	      }
@@ -1355,7 +1372,7 @@ GetFTankCapacity (POINT *ppt)
 	return (capacity);
 }
 
-/***
+/*** Old function for Vindicator
 DWORD
 GetFTankCapacity (POINT *ppt)
 {

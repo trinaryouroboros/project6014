@@ -397,8 +397,14 @@ DoInstallModule (MENU_STATE *pMS)
 		do
 		{
 			if (NewState >= EMPTY_SLOT && (PulsedInputState.menu[KEY_MENU_UP] || PulsedInputState.menu[KEY_MENU_DOWN]))
-			{
-				if (PulsedInputState.menu[KEY_MENU_UP])
+			  {
+			    // BW: Explorer has only lander slots
+			    if (1)  //TODO switch on flagship
+			      {
+			      }
+			    else
+			      {
+			        if (PulsedInputState.menu[KEY_MENU_UP])
 				{
 					if (NewState-- == EMPTY_SLOT)
 						NewState = EMPTY_SLOT + 3;
@@ -408,8 +414,9 @@ DoInstallModule (MENU_STATE *pMS)
 					if (NewState++ == EMPTY_SLOT + 3)
 						NewState = EMPTY_SLOT;
 				}
-				NewItem = 0;
-				if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 3)
+			      }
+			    NewItem = 0;
+			    if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 3)
 				{
 					if (NewState == EMPTY_SLOT + 3)
 						NewState = PulsedInputState.menu[KEY_MENU_UP] ?
@@ -417,7 +424,7 @@ DoInstallModule (MENU_STATE *pMS)
 					if (NewState == EMPTY_SLOT + 2)
 						NewItem = NUM_BOMB_MODULES;
 				}
-				pMS->delta_item = NewItem;
+			    pMS->delta_item = NewItem;
 			}
 			else if (PulsedInputState.menu[KEY_MENU_LEFT] ||
 					PulsedInputState.menu[KEY_MENU_UP])

@@ -1088,71 +1088,81 @@ DrawBluePrint (MENU_STATE *pMS)
 			BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x16), 0x01));
 	DrawFilledStamp (&s);
 
-	for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
-	{
+
+	if (1)  //TODO switch on flagship
+	  {
+	  }
+	else
+	  {
+	    for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
+	      {
 		DrawShipPiece (pMS, GLOBAL_SIS (DriveSlots[num_frames]),
 				num_frames, TRUE);
-	}
-	for (num_frames = 0; num_frames < NUM_JET_SLOTS; ++num_frames)
-	{
+	      }
+	    for (num_frames = 0; num_frames < NUM_JET_SLOTS; ++num_frames)
+	      {
 		DrawShipPiece (pMS, GLOBAL_SIS (JetSlots[num_frames]),
 				num_frames, TRUE);
-	}
-	for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
-	{
+	      }
+	    for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
+	      {
 		BYTE which_piece;
 
 		which_piece = GLOBAL_SIS (ModuleSlots[num_frames]);
 
 		if (!(pMS->CurState == SHIPYARD && which_piece == CREW_POD))
 			DrawShipPiece (pMS, which_piece, num_frames, TRUE);
-	}
+	      }
 
-	SetContextForeGroundColor (
+	    SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
-	for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
-	{
+	    for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
+	      {
 		BYTE which_piece;
 
 		which_piece = GLOBAL_SIS (ModuleSlots[num_frames]);
 		if (pMS->CurState == SHIPYARD && which_piece == CREW_POD)
 			DrawShipPiece (pMS, which_piece, num_frames, TRUE);
-	}
+	      }
+	  }
+	    
+	num_frames = GLOBAL_SIS (CrewEnlisted);
+	GLOBAL_SIS (CrewEnlisted) = 0;
+	
+	while (num_frames--)
+	  {
+	    POINT pt;
+	    
+	    GetCPodCapacity (&pt);
+	    DrawPoint (&pt);
+	    
+	    ++GLOBAL_SIS (CrewEnlisted);
+	  }
 
+	if (0) //TODO include a place for putting ressources in explorer
 	{
-		num_frames = GLOBAL_SIS (CrewEnlisted);
-		GLOBAL_SIS (CrewEnlisted) = 0;
-
-		while (num_frames--)
-		{
-			POINT pt;
-
-			GetCPodCapacity (&pt);
-			DrawPoint (&pt);
-
-			++GLOBAL_SIS (CrewEnlisted);
-		}
+	  RECT r;
+	  
+	  num_frames = GLOBAL_SIS (TotalElementMass);
+	  GLOBAL_SIS (TotalElementMass) = 0;
+	  
+	  r.extent.width = 9;
+	  r.extent.height = 1;
+	  while (num_frames)
+	    {
+	      COUNT m;
+	      
+	      m = num_frames < SBAY_MASS_PER_ROW ?
+		num_frames : SBAY_MASS_PER_ROW;
+	      GLOBAL_SIS (TotalElementMass) += m;
+	      GetSBayCapacity (&r.corner);
+	      DrawFilledRectangle (&r);
+	      num_frames -= m;
+	    }
 	}
-	{
-		RECT r;
+	
 
-		num_frames = GLOBAL_SIS (TotalElementMass);
-		GLOBAL_SIS (TotalElementMass) = 0;
-
-		r.extent.width = 9;
-		r.extent.height = 1;
-		while (num_frames)
-		{
-			COUNT m;
-
-			m = num_frames < SBAY_MASS_PER_ROW ?
-					num_frames : SBAY_MASS_PER_ROW;
-			GLOBAL_SIS (TotalElementMass) += m;
-			GetSBayCapacity (&r.corner);
-			DrawFilledRectangle (&r);
-			num_frames -= m;
-		}
-	}
+	
 	if (GLOBAL_SIS (FuelOnBoard) > FUEL_RESERVE)
 	{
 		DWORD FuelVolume;
