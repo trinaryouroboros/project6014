@@ -326,8 +326,9 @@ equipShip (void)
 	****/
 	
 	// Fill the fuel and crew compartments to the maximum.
-	GLOBAL_SIS (FuelOnBoard) = FUEL_RESERVE;
-	GLOBAL_SIS (CrewEnlisted) = 50;
+	GLOBAL_SIS (FuelOnBoard) = EXPLORER_FUEL_CAPACITY;
+	GLOBAL_SIS (CrewEnlisted) = EXPLORER_CREW_CAPACITY;
+
 	for (i = 0; i < NUM_MODULE_SLOTS; i++)
 	{
 		switch (GLOBAL_SIS (ModuleSlots[i])) {
