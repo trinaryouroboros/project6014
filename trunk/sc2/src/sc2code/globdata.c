@@ -205,35 +205,36 @@ InitSIS (void)
 	{
 		COUNT num_ships;
 		SPECIES_ID s_id = ARILOU_ID;
-
+printf("1\n");
 		num_ships = SLYLANDRO_KOHRAH_ID - s_id + 1	// JMS: SLYLANDRO_KOHRAH_ID now replaces KOHR_AH_ID here
 		+ 2; /* Yehat Rebels and Transport ship */
-
+printf("2\n");
 		InitQueue (&GLOBAL (avail_race_q), num_ships, sizeof (FLEET_INFO));
+printf("3\n");
 		for (i = 0; i < num_ships; ++i)
 		{
 			SPECIES_ID ship_ref;
 			HFLEETINFO hFleet;
 			FLEET_INFO *FleetPtr;
-
+printf("4. RUN %d STARTS\n", i);
 			if (i < num_ships - 2)
 				ship_ref = s_id++;
 			else if (i == num_ships - 2)
 				ship_ref = YEHAT_ID;
 			else  /* (i == num_ships - 1) */
 				ship_ref = TRANSPORT_ID;
-			
+printf("5\n");			
 			hFleet = AllocLink (&GLOBAL (avail_race_q));
 			if (!hFleet)
 				continue;
 			FleetPtr = LockFleetInfo (&GLOBAL (avail_race_q), hFleet);
 			FleetPtr->SpeciesID = ship_ref;
-
+printf("6\n");
 			if (i < num_ships - 1)
 			{
 				HMASTERSHIP hMasterShip;
 				MASTER_SHIP_INFO *MasterPtr;
-				
+printf("7\n");				
 				hMasterShip = FindMasterShip (ship_ref);
 				MasterPtr = LockMasterShip (&master_q, hMasterShip);
 				// Grab a copy of loaded icons and strings (not owned)
@@ -243,6 +244,7 @@ InitSIS (void)
 			}
 			else
 			{
+printf("8\n");
 				// Transport ship.
 				RACE_DESC *RDPtr = load_ship (FleetPtr->SpeciesID,
 						FALSE);
@@ -266,7 +268,7 @@ InitSIS (void)
 			FleetPtr->growth_err_term = 255 >> 1;
 			FleetPtr->days_left = 0;
 			FleetPtr->func_index = ~0;
-
+printf("9\n");
 			UnlockFleetInfo (&GLOBAL (avail_race_q), hFleet);
 			PutQueue (&GLOBAL (avail_race_q), hFleet);
 		}

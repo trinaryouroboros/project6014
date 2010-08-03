@@ -92,7 +92,7 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 		if(num_entries > 1) // JMS: Let's keep the Slylandro_kohrah ship and sis ship as the last ones so we won't mess up super-melee...
 				InsertQueue (&master_q, hBuiltShip, hStarShip);
 		else
-			if (BuiltPtr->SpeciesID!=SLYLANDRO_KOHRAH_ID) // And this one actually keeps the kohr-ah-slylandro out of the supermelee
+			//if (BuiltPtr->SpeciesID!=SLYLANDRO_KOHRAH_ID) // And this one actually keeps the kohr-ah-slylandro out of the supermelee
 				PutQueue (&master_q, hBuiltShip);
 	}
 }

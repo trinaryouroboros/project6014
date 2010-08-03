@@ -156,6 +156,7 @@ while (--ac > 0)
 		InitGameClock ();
 		AddInitialGameEvents();
 
+
 		do
 		{
 			SuspendGameClock ();

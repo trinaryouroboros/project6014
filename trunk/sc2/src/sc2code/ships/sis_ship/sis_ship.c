@@ -53,6 +53,11 @@
 #define BLASTER_SPEED DISPLAY_TO_WORLD (24)
 #define BLASTER_LIFE 12
 
+// JMS: Chmmr Explorer has different initial stats for supermelee
+#define EXPLORER_MAX_THRUST 34
+#define EXPLORER_THRUST_INCREMENT 8
+#define EXPLORER_TURN_WAIT 1
+#define EXPLORER_THRUST_WAIT 1
 // JMS: Chmmr Explorer has smaller weapon delay
 #define EXPLORER_WEAPON_WAIT 2
 #define EXPLORER_SPECIAL_WAIT 9
@@ -147,14 +152,14 @@ static RACE_DESC exp_desc =
 		},
 	},
 	{
-		MAX_THRUST,
-		THRUST_INCREMENT,
+		EXPLORER_MAX_THRUST,
+		EXPLORER_THRUST_INCREMENT,
 		ENERGY_REGENERATION,
 		WEAPON_ENERGY_COST,
 		SPECIAL_ENERGY_COST,
 		ENERGY_WAIT,
-		TURN_WAIT,
-		THRUST_WAIT,
+		EXPLORER_TURN_WAIT,
+		EXPLORER_THRUST_WAIT,
 		EXPLORER_WEAPON_WAIT,
 		0,  // JMS: Special weapon wait is abused here to keep track of number of mines.
 		SHIP_MASS,
