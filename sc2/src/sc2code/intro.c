@@ -245,7 +245,7 @@ Present_GenerateSIS (PRESENTATION_INPUT_STATE* pPIS)
 	s.origin.y = 0;
 	DrawStamp (&s);
 
-	if (1)  //TODO switch on flagship
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 	  {
 	  }
 	else
