@@ -95,7 +95,7 @@ ClearShipStatus (COORD y)
 	r.corner.x = 2;
 	r.corner.y = 3 + y;
 	r.extent.width = STATUS_WIDTH - 4;
-	r.extent.height = SHIP_INFO_HEIGHT - 3;
+	r.extent.height = SHIP_INFO_HEIGHT - 3 + 4 * (RESOLUTION_FACTOR - 1); // JMS_GFX
 	DrawFilledRectangle (&r);
 }
 
