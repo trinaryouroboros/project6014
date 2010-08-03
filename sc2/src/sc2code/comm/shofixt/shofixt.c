@@ -344,8 +344,8 @@ Intro (void)
 			SET_GAME_STATE(SHOFIXTI_MET, 1);
 			Response (chmmr_hunt_kohrah, SmallTalk1);
 			Response (no_idea, SmallTalk1);
-			Response (fairwell_shofixti, ExitConversation);
 			Response (pearshaped, ExitConversation);
+			Response (fairwell_shofixti, ExitConversation);
 		}
 		else
 			SmallTalk1 (0);
