@@ -434,7 +434,7 @@ FreeSolarSys (void)
 
 static void
 CheckIntersect (BOOLEAN just_checking)
-{
+{	
 	COUNT i;
 	PLANET_DESC *pCurDesc;
 	INTERSECT_CONTROL ShipIntersect, PlanetIntersect;
