@@ -891,6 +891,7 @@ SIS_QUASI_MASK_PMAP_ANIM,ship.sis_ship.graphics.expquasi,sc2code/ships/sis_ship/
 SIS_ORZ_MASK_PMAP_ANIM,ship.sis_ship.graphics.exporz,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpOrz.ani
 EXP_SHIP_SOUNDS,ship.explorer.sounds,sc2code/ships/sis_ship/isndres.h,SNDRES,base/ships/explorer/expsound.snd
 EXP_ICON_MASK_PMAP_ANIM,ship.explorer.icons,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Expicons.ani
+EXP_MICON_MASK_PMAP_ANIM,ship.explorer.meleeicons,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Expmicon.ani
 EXP_BIG_MASK_PMAP_ANIM,ship.explorer.graphics.sis.large,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.big
 EXP_MED_MASK_PMAP_ANIM,ship.explorer.graphics.sis.medium,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.med
 EXP_SML_MASK_PMAP_ANIM,ship.explorer.graphics.sis.small,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.sml

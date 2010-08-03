@@ -8,6 +8,7 @@
 #define EXP_BIG_MASK_PMAP_ANIM "ship.explorer.graphics.sis.large"
 #define EXP_ICON_MASK_PMAP_ANIM "ship.explorer.icons"
 #define EXP_MED_MASK_PMAP_ANIM "ship.explorer.graphics.sis.medium"
+#define EXP_MICON_MASK_PMAP_ANIM "ship.explorer.meleeicons"
 #define EXP_SML_MASK_PMAP_ANIM "ship.explorer.graphics.sis.small"
 #define SIS_BIG_MASK_PMAP_ANIM "ship.sis_ship.graphics.sis.large"
 #define SIS_CAPTAIN_MASK_PMAP_ANIM "ship.sis_ship.graphics.captain"

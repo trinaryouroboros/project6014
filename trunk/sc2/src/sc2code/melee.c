@@ -1207,7 +1207,7 @@ DoEdit (MELEE_STATE *pMS)
 	return (TRUE);
 }
 
-// Handle the popup from which a ship to add to the fleet can be chosen.
+// Handle the 5x5 popup from which a ship to add to the fleet can be chosen.
 static BOOLEAN
 DoPickShip (MELEE_STATE *pMS)
 {
@@ -1299,15 +1299,25 @@ DoPickShip (MELEE_STATE *pMS)
 
 		NewStarShip = pMS->CurIndex;
 
+#define NUM_OF_ALL_SHIPS (LAST_MELEE_ID - ARILOU_ID) // JMS
+		
 		if (PulsedInputState.menu[KEY_MENU_LEFT])
 		{
 			if (NewStarShip-- % NUM_PICK_COLS == 0)
 				NewStarShip += NUM_PICK_COLS;
+			
+			// JMS: Guard against going over ship list boundaries
+			if (NewStarShip >= NUM_OF_ALL_SHIPS)
+				NewStarShip = NUM_OF_ALL_SHIPS - 1;
 		}
 		else if (PulsedInputState.menu[KEY_MENU_RIGHT])
 		{
 			if (++NewStarShip % NUM_PICK_COLS == 0)
 				NewStarShip -= NUM_PICK_COLS;
+			
+			// JMS: Guard against going over ship list boundaries
+			if (NewStarShip >= NUM_OF_ALL_SHIPS)
+				NewStarShip = (NUM_PICK_ROWS - 1) * NUM_PICK_COLS;
 		}
 		
 		if (PulsedInputState.menu[KEY_MENU_UP])
@@ -1316,12 +1326,20 @@ DoPickShip (MELEE_STATE *pMS)
 				NewStarShip -= NUM_PICK_COLS;
 			else
 				NewStarShip += NUM_PICK_COLS * (NUM_PICK_ROWS - 1);
+		
+			// JMS: Guard against going over ship list boundaries
+			if (NewStarShip >= NUM_OF_ALL_SHIPS)
+				NewStarShip -= NUM_PICK_COLS;
 		}
 		else if (PulsedInputState.menu[KEY_MENU_DOWN])
 		{
 			if (NewStarShip < NUM_PICK_COLS * (NUM_PICK_ROWS - 1))
 				NewStarShip += NUM_PICK_COLS;
 			else
+				NewStarShip -= NUM_PICK_COLS * (NUM_PICK_ROWS - 1);
+			
+			// JMS: Guard against going over ship list boundaries
+			if (NewStarShip >= NUM_OF_ALL_SHIPS)
 				NewStarShip -= NUM_PICK_COLS * (NUM_PICK_ROWS - 1);
 		}
 

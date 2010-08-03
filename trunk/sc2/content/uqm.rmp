@@ -662,6 +662,7 @@ ship.explorer.graphics.sis.large = GFXRES:base/ships/explorer/Exp.big
 ship.explorer.graphics.sis.medium = GFXRES:base/ships/explorer/Exp.med
 ship.explorer.graphics.sis.small = GFXRES:base/ships/explorer/Exp.sml
 ship.explorer.icons = GFXRES:base/ships/explorer/Expicons.ani
+ship.explorer.meleeicons = GFXRES:base/ships/explorer/Expmicon.ani
 ship.explorer.sounds = SNDRES:base/ships/explorer/expsound.snd
 ship.ilwrath.code = SHIP:7
 ship.ilwrath.ditty = MUSICRES:base/ships/ilwrath/ilwditty.mod
