@@ -103,8 +103,8 @@ typedef enum
 	CHENJESU_ID,
 	MMRNMHRM_ID,
 	SLYLANDRO_KOHRAH_ID,	// JMS
-	LAST_MELEE_ID =	SLYLANDRO_KOHRAH_ID,
 	SIS_SHIP_ID,
+	LAST_MELEE_ID =	SIS_SHIP_ID, // JMS: The last ship to be included in super melee is this one
 	SA_MATRA_ID,
 	TRANSPORT_ID,	// JMS
 	NUM_SPECIES_ID

@@ -136,8 +136,8 @@ static RACE_DESC exp_desc =
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
 		NULL_RESOURCE,
-		EXP_ICON_MASK_PMAP_ANIM,	// JMS: Explorer icon
-		NULL_RESOURCE,
+		EXP_ICON_MASK_PMAP_ANIM,	// JMS: Explorer icons
+		EXP_MICON_MASK_PMAP_ANIM,	// JMS: Explorer melee icons
 		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */

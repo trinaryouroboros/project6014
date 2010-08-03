@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Slylandros-in-kohrah-vessels are currently ruled out of the super-melee...
+// JMS 2010: -Slylandros-in-kohrah-vessel is ruled out from supermelee...
+//			 -...But the Sis ship is added into it
 
 #include "master.h"
 
@@ -88,9 +89,10 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 			if (strcmp (built_buf, ship_buf) < 0)
 				break;
 		}
-		if(num_entries !=0) // JMS: Let's keep the Slylandro_kohrah_ship as the last one so we won't mess up super-melee...
+		if(num_entries > 1) // JMS: Let's keep the Slylandro_kohrah ship and sis ship as the last ones so we won't mess up super-melee...
 				InsertQueue (&master_q, hBuiltShip, hStarShip);
 		else
+			if (BuiltPtr->SpeciesID!=SLYLANDRO_KOHRAH_ID) // And this one actually keeps the kohr-ah-slylandro out of the supermelee
 				PutQueue (&master_q, hBuiltShip);
 	}
 }
@@ -218,5 +220,3 @@ GetShipMeleeIconsFromIndex (unsigned Index)
 
 	return val;
 }
-
-
