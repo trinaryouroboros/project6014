@@ -40,7 +40,7 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 	{
 		HMASTERSHIP hBuiltShip;
 		char built_buf[30];
-		HMASTERSHIP hStarShip, hNextShip, hLastShip; // JMS: Added the hLastShip
+		HMASTERSHIP hStarShip, hNextShip;
 		MASTER_SHIP_INFO *BuiltPtr;
 		RACE_DESC *RDPtr;
 

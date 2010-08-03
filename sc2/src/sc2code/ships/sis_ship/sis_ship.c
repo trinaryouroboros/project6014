@@ -140,7 +140,7 @@ static RACE_DESC exp_desc =
 		30, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
-		NULL_RESOURCE,
+		EXP_RACE_STRINGS,
 		EXP_ICON_MASK_PMAP_ANIM,	// JMS: Explorer icons
 		EXP_MICON_MASK_PMAP_ANIM,	// JMS: Explorer melee icons
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
