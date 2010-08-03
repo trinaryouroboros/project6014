@@ -1089,7 +1089,7 @@ DrawBluePrint (MENU_STATE *pMS)
 	DrawFilledStamp (&s);
 
 
-	if (1)  //TODO switch on flagship
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 	  {
 	  }
 	else
@@ -1139,8 +1139,35 @@ DrawBluePrint (MENU_STATE *pMS)
 	    ++GLOBAL_SIS (CrewEnlisted);
 	  }
 
-	if (0) //TODO include a place for putting ressources in explorer
-	{
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+	  {
+	    // BW: Add something here to visualize cargo in blueprint
+	  RECT r;
+	  
+	  num_frames = GLOBAL_SIS (TotalElementMass);
+	  GLOBAL_SIS (TotalElementMass) = 0;
+	  
+	  r.extent.width = 5;
+	  r.extent.height = 1;
+	  while (num_frames)
+	    {
+	      COUNT m;
+	      
+	      m = num_frames < SBAY_MASS_PER_ROW ?
+		num_frames : SBAY_MASS_PER_ROW;
+	      GLOBAL_SIS (TotalElementMass) += m;
+	      GetSBayCapacity (&r.corner);
+	      if (r.corner.x == 40)
+		{
+		  r.extent.width = 3;
+		}
+	      // BW: kinda hacky but the original procedure is not really logical either...
+	      DrawFilledRectangle (&r);
+	      num_frames -= m;
+	    }
+	  }
+	else
+	  {
 	  RECT r;
 	  
 	  num_frames = GLOBAL_SIS (TotalElementMass);
@@ -1159,7 +1186,7 @@ DrawBluePrint (MENU_STATE *pMS)
 	      DrawFilledRectangle (&r);
 	      num_frames -= m;
 	    }
-	}
+	  }
 	
 
 	

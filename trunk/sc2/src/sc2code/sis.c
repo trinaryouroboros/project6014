@@ -581,7 +581,7 @@ DrawFlagshipStats (void)
 	turn_wait = TURN_WAIT;
 
 
-	if (1)  //TODO switch on flagship
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 	  {
 	    fuel = EXPLORER_FUEL_CAPACITY;
 	  }
@@ -932,7 +932,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 		if (optWhichFonts == OPT_PC)
 			DrawPC_SIS();
 
-	    if (1) // TODO switch on flagship
+	    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 	      {
 	      }
 	    else
@@ -1256,7 +1256,15 @@ GetSBayCapacity (POINT *ppt)
 	COORD x;
 	COUNT slot, capacity;
 
-	x = 207 - 8;
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+	  {
+	    x = 39;
+	  }
+	else
+	  {
+	    x = 207 - 8;
+	  }
+	
 	capacity = 0;
 	slot = NUM_MODULE_SLOTS - 1;
 	do
@@ -1290,7 +1298,19 @@ GetSBayCapacity (POINT *ppt)
 					SetContextForeGroundColor (color_bars[--which_row]);
 
 				ppt->x = x;
-				ppt->y = 34 - (which_row << 1);
+
+				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+				  {
+				    ppt->y = 27 - which_row;
+				    if (which_row == 9)
+				      {
+					ppt->x = x + 1;
+				      }
+				  }
+				else
+				  {
+				    ppt->y = 34 - (which_row << 1);
+				  }
 			}
 
 			capacity += STORAGE_BAY_CAPACITY;
@@ -1333,7 +1353,7 @@ GetFTankCapacity (POINT *ppt)
 		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x18, 0x00), 0x79),
 	      };
 	  
-	    if (1) // TODO switch on flagship
+	    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 	      {
 		which_row = (COUNT)(
 				    (GLOBAL_SIS (FuelOnBoard))
@@ -1413,7 +1433,7 @@ GetFTankCapacity (POINT *ppt)
 					BUILD_COLOR (MAKE_RGB15 (0x1F, 0x18, 0x00), 0x79),
 				};
 
-				if (1) // TODO switch on flagship
+			      if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 				{
 					which_row = (COUNT)(
 							(GLOBAL_SIS (FuelOnBoard))

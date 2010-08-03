@@ -884,12 +884,13 @@ initialize_blasters (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 							StarShipPtr->ShipFacing
 							- ANGLE_TO_FACING (QUADRANT));
 					break;
-				case NUM_MODULE_SLOTS - 1: /* TAIL WEAPON */
-					lpMB->pixoffs = SIS_VERT_OFFSET;
-					lpMB->face = NORMALIZE_FACING (
-							StarShipPtr->ShipFacing
-							+ ANGLE_TO_FACING (HALF_CIRCLE));
-					break;
+					// BW: No tail weapon in Explorer
+					//				case NUM_MODULE_SLOTS - 1: /* TAIL WEAPON */
+					//					lpMB->pixoffs = SIS_VERT_OFFSET;
+					//					lpMB->face = NORMALIZE_FACING (
+					//							StarShipPtr->ShipFacing
+					//							+ ANGLE_TO_FACING (HALF_CIRCLE));
+					//					break;
 			}
 
 			++lpMB;
@@ -1022,12 +1023,13 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 						StarShipPtr->ShipFacing
 						- ANGLE_TO_FACING (QUADRANT));
 					break;
-				case NUM_MODULE_SLOTS - 1: /* TAIL WEAPON */
-					lpMB->pixoffs = SIS_VERT_OFFSET;
-					lpMB->face = NORMALIZE_FACING (
-						StarShipPtr->ShipFacing
-						+ ANGLE_TO_FACING (HALF_CIRCLE));
-					break;
+					// BW: No tail weapon in Explorer
+					//				case NUM_MODULE_SLOTS - 1: /* TAIL WEAPON */
+					//					lpMB->pixoffs = SIS_VERT_OFFSET;
+					//					lpMB->face = NORMALIZE_FACING (
+					//						StarShipPtr->ShipFacing
+					//						+ ANGLE_TO_FACING (HALF_CIRCLE));
+					//					break;
 			}
 			
 			++lpMB;

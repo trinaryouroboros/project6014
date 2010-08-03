@@ -399,7 +399,7 @@ DoInstallModule (MENU_STATE *pMS)
 			if (NewState >= EMPTY_SLOT && (PulsedInputState.menu[KEY_MENU_UP] || PulsedInputState.menu[KEY_MENU_DOWN]))
 			  {
 			    // BW: Explorer has only lander slots
-			    if (1)  //TODO switch on flagship
+			    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 			      {
 			      }
 			    else
@@ -414,8 +414,8 @@ DoInstallModule (MENU_STATE *pMS)
 					if (NewState++ == EMPTY_SLOT + 3)
 						NewState = EMPTY_SLOT;
 				}
+				NewItem = 0;
 			      }
-			    NewItem = 0;
 			    if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 3)
 				{
 					if (NewState == EMPTY_SLOT + 3)
@@ -622,10 +622,10 @@ DoOutfit (MENU_STATE *pMS)
 
 			s.frame = CaptureDrawable (
 					LoadGraphic (OUTFIT_PMAP_ANIM));
-			if (1)  //TODO switch on flagship
-			{
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+			  {
 				s.frame = SetAbsFrameIndex(s.frame, 1);
-			}
+			  }
 
 			LockMutex (GraphicsLock);
 			SetTransitionSource (NULL);
@@ -639,13 +639,13 @@ DoOutfit (MENU_STATE *pMS)
 			DrawStamp (&s);
 			DestroyDrawable (ReleaseDrawable (s.frame));
 
-			if (1)  //TODO switch on flagship
-			{
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+			  {
 				RedistributeFuel ();
 				DisplayLanders (pMS);
-			}
+			  }
 			else
-			{
+			  {
 				for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
 				{
 					BYTE which_piece;
@@ -692,7 +692,7 @@ DoOutfit (MENU_STATE *pMS)
 					if (ShieldFlags & (1 << LAVASPOT_DISASTER))
 						DrawStamp (&s);
 				}
-			}
+			  }
 
 			UnlockMutex (GraphicsLock);
 			DrawMenuStateStrings (PM_FUEL, pMS->CurState);
