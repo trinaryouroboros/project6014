@@ -40,7 +40,7 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 	{
 		HMASTERSHIP hBuiltShip;
 		char built_buf[30];
-		HMASTERSHIP hStarShip, hNextShip;
+		HMASTERSHIP hStarShip, hNextShip, hLastShip; // JMS: Added the hLastShip
 		MASTER_SHIP_INFO *BuiltPtr;
 		RACE_DESC *RDPtr;
 
@@ -89,12 +89,23 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 			if (strcmp (built_buf, ship_buf) < 0)
 				break;
 		}
-		if(num_entries > 1) // JMS: Let's keep the Slylandro_kohrah ship and sis ship as the last ones so we won't mess up super-melee...
+		
+		if(num_entries > 1) // JMS: Deal with other than Slylandro_kohrah ship and sis ship normally.
 				InsertQueue (&master_q, hBuiltShip, hStarShip);
-		else
-			//if (BuiltPtr->SpeciesID!=SLYLANDRO_KOHRAH_ID) // And this one actually keeps the kohr-ah-slylandro out of the supermelee
+		else 
+		{
+			// JMS: Slylandro ship goes last.
+			if(BuiltPtr->SpeciesID==SLYLANDRO_KOHRAH_ID)
 				PutQueue (&master_q, hBuiltShip);
-	}
+			
+			// JMS: Explorer goes before the last.
+			else if(BuiltPtr->SpeciesID==SIS_SHIP_ID)
+			{
+				hStarShip = GetTailLink (&master_q);			
+				InsertQueue (&master_q, hBuiltShip, hStarShip);
+			}
+		}
+	}		
 }
 
 void
