@@ -1321,6 +1321,13 @@ init_sis (void)
 	if (LOBYTE (GLOBAL (CurrentActivity)) == SUPER_MELEE)
 	{
 		new_sis_desc.ship_info.crew_level = new_sis_desc.ship_info.max_crew;
+		
+		// JMS: Give the explorer some stats for melee so it won't be slow as fuck
+		new_sis_desc.characteristics.max_thrust = 36 * RESOLUTION_FACTOR;
+		new_sis_desc.characteristics.thrust_wait = 2;
+		new_sis_desc.characteristics.thrust_increment = 7 * RESOLUTION_FACTOR;
+		new_sis_desc.characteristics.turn_wait = 1;
+		
 	}
 	else
 	{

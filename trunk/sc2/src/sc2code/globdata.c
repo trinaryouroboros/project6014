@@ -299,11 +299,15 @@ InitSIS (void)
 
 	for (i = 0; i < NUM_DRIVE_SLOTS; ++i)
 		GLOBAL_SIS (DriveSlots[i]) = EMPTY_SLOT + 0;
+	GLOBAL_SIS (DriveSlots[3]) =
+	GLOBAL_SIS (DriveSlots[4]) =
 	GLOBAL_SIS (DriveSlots[5]) =
 			GLOBAL_SIS (DriveSlots[6]) = FUSION_THRUSTER;
 	for (i = 0; i < NUM_JET_SLOTS; ++i)
 		GLOBAL_SIS (JetSlots[i]) = EMPTY_SLOT + 1;
 	GLOBAL_SIS (JetSlots[0]) =
+	GLOBAL_SIS (JetSlots[1]) =
+	GLOBAL_SIS (JetSlots[5]) =
 			GLOBAL_SIS (JetSlots[6]) = TURNING_JETS;
 	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 		GLOBAL_SIS (ModuleSlots[i]) = EMPTY_SLOT + 2;

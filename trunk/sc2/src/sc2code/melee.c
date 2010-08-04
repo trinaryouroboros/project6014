@@ -2301,7 +2301,7 @@ err:
 
 void
 Melee (void)
-{
+{	
 	InitGlobData ();
 	{
 		MELEE_STATE MenuState;
