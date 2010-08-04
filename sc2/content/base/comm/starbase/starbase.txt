@@ -3,10 +3,9 @@ What's your take on this new barge of mine?
 
 #(ABOUT_EXPLORER_SHIP)
 Ahh... the Explorer.
-The famous joint effort of the new Alliance
+The famed joint effort of the new Alliance
 in the area of spacecraft engineering.
-It's laced with the finest technology from each of the member races
-although to be fair, the Chmmr pitched in the most by far.
+Although to be fair, the Chmmr easily pitched in most of the tech.
 Designed mainly for long-range discovery missions and planetary exploration
 its capabilities match your old Precursor service vessel pretty closely in that area.
 You have room for three planetary landers and 500 kilotons of mineral cargo
@@ -20,7 +19,7 @@ the fuel tank of 200 standard units should get you pretty far, Captain!
 In addition, you can fit up to 6 escort ships into the Explorer's flight hangar.
 
 #(explorer_drawbacks)
-So good so far. Does the Explorer have any drawbacks?
+So far so good. What about the Explorer's drawbacks?
 
 #(ABOUT_EXPLORER_SHIP_2)
 Now, for the bad news.
@@ -366,17 +365,18 @@ the loose and the Kzer-Za lurking god knows where, it's hardly
 unheard of to lose some ships... We have had our share of cruisers gone missing as well.
 What makes this case different are the partial transmissions
 and mayday signals we were able to record before their transceivers went quiet.
-Though garbled, the messages were definitely referring to a Precursor artifact,
-and not some small one at that. We might be talking about another factory here.
-These transmissions, supposedly initiated during an orbital scan however
+Though garbled, the messages were definitely referring to a Precursor artifact
+and not some small one at that.
+We might be talking about another factory here.
+These transmissions, supposedly initiated during an orbital scan
 were quickly cut short with distress calls... shrieks
-The exchanges we've been able to analyze don't make much sense, but for one thing
+The exchanges we've been able to analyze don't make much sense, but for one word
 that's repeated several times: Gravity.
 I would have brushed that off as random junk as the rest of the recordings, but
 a little bit later our cosmologists came forth with abnormal readings
 they recorded just at the time of the accident.
 They indicate that something resembling a strong gravitational lens
-formed in a matter of seconds in the vicinity of xxx
+formed in the vicinity of xxx in a matter of seconds
 and vanished about as quickly.
 Do be careful out there, Captain. This does not sound good to me.
 
@@ -385,11 +385,11 @@ Why am I confined to this small part of the galaxy? I want to fly wherever I wan
 
 #(LAME_MAP_LIMIT_ANSWER)
 You are needed here, Captain.
-The Shofixti patrol went missing in this quadrant of the galaxy.
+The Shofixti patrol went missing in this part of the galaxy.
 For us, it is an uncharted territory.
 They are a long way from home and possibly under dangerous circumstances
 what's more, there might be Precursor influence involved.
-You have experience on all of these.
+You have experience on all of these matters.
 Having seen by far the most action of all the pilots we have and
 being a natural with first contact situations you have the best chances
 of rescuing the Shofixti or at least finding out what happened to them.
