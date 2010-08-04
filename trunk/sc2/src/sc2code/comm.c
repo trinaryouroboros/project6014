@@ -22,6 +22,7 @@
 //			 -Some changes to InitCommunication to remove bugs from fighting against Chmmr
 //
 //			 -Freight transport ships do not disappear after encountering in hyperspace.
+//			 -Increased maximum number of communication responses from 8 to 10
 
 #define COMM_INTERNAL
 #include "comm.h"
@@ -50,7 +51,7 @@
 
 #include <ctype.h>
 
-#define MAX_RESPONSES 8
+#define MAX_RESPONSES 10 // JMS: Increased this from default 8 to house starbase communications
 #define BACKGROUND_VOL \
 		(speechVolumeScale == 0.0f ? NORMAL_VOLUME : (NORMAL_VOLUME >> 1))
 #define FOREGROUND_VOL NORMAL_VOLUME
