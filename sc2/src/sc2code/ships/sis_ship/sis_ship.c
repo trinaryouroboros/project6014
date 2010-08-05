@@ -42,9 +42,9 @@
 #define SPECIAL_ENERGY_COST 0
 #define ENERGY_WAIT 10
 #define MAX_THRUST 10
-#define THRUST_INCREMENT 6
+#define THRUST_INCREMENT 4
 #define TURN_WAIT 17
-#define THRUST_WAIT 4
+#define THRUST_WAIT 6
 #define WEAPON_WAIT 6
 #define SPECIAL_WAIT 9
 
@@ -52,6 +52,12 @@
 
 #define BLASTER_SPEED DISPLAY_TO_WORLD (24)
 #define BLASTER_LIFE 12
+
+// JMS: These affect CHmmr Explorer in Super Melee
+#define EXPLORER_MAX_THRUST 34
+#define EXPLORER_THRUST_INCREMENT 1
+#define EXPLORER_TURN_WAIT 1
+#define EXPLORER_THRUST_WAIT 1
 
 // JMS: Chmmr Explorer has smaller weapon delay
 #define EXPLORER_WEAPON_WAIT 2
@@ -1022,7 +1028,7 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 	MISSILE_BLOCK *lpMB;
 	
 	COORD cx, cy;
-	static COUNT blaster_side;
+	static COUNT blaster_side[2]={0,0};
 	COUNT facing, angle;
 	SIZE offs_x, offs_y;
 	
@@ -1034,12 +1040,15 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 	facing = StarShipPtr->ShipFacing;
 	angle = FACING_TO_ANGLE (facing);
 
-	blaster_side = (blaster_side + 1) % 2;
+	blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))] = 
+		(blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))] + 1) % 2;
+	
+	printf("playa %d, side %d\n",(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)), blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))]);
 		
 	cx = ShipPtr->next.location.x;
 	cy = ShipPtr->next.location.y;
 	
-	if(blaster_side)
+	if(blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))])
 	{
 		offs_x = -SINE (angle, SIS_HORZ_OFFSET_2);
 		offs_y = COSINE (angle, SIS_HORZ_OFFSET_2);
@@ -1405,10 +1414,10 @@ init_sis (void)
 		new_sis_desc.ship_info.crew_level = new_sis_desc.ship_info.max_crew;
 		
 		// JMS: Give the explorer some stats for melee so it won't be slow as fuck
-		new_sis_desc.characteristics.max_thrust = 36 * RESOLUTION_FACTOR;
-		new_sis_desc.characteristics.thrust_wait = 2;
-		new_sis_desc.characteristics.thrust_increment = 7 * RESOLUTION_FACTOR;
-		new_sis_desc.characteristics.turn_wait = 1;
+		new_sis_desc.characteristics.max_thrust = EXPLORER_MAX_THRUST * RESOLUTION_FACTOR;
+		new_sis_desc.characteristics.thrust_wait = EXPLORER_THRUST_WAIT;
+		new_sis_desc.characteristics.thrust_increment = EXPLORER_THRUST_INCREMENT * RESOLUTION_FACTOR;
+		new_sis_desc.characteristics.turn_wait = EXPLORER_TURN_WAIT;
 		
 	}
 	else
