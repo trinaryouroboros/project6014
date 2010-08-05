@@ -99,6 +99,8 @@ const LIFEFORM_DESC CreatureData[] =
 			// Bug-Eyed Bait
 	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5)},
 			// Goo Burger
+	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8)},
+			// Blinking Beholder
 
 	{SPEED_MOTIONLESS | DANGER_MONSTROUS, MAKE_BYTE (1, 1)},
 			// Evil One
