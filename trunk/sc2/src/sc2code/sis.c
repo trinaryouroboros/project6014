@@ -1267,8 +1267,11 @@ GetSBayCapacity (POINT *ppt)
 	
 	capacity = 0;
 	slot = NUM_MODULE_SLOTS - 1;
-	do
-	{
+
+	if (NUM_MODULE_SLOTS != 0)
+	  {
+	    do
+	      {
 		if (GLOBAL_SIS (ModuleSlots[slot]) == STORAGE_BAY)
 		{
 			if (ppt
@@ -1317,7 +1320,11 @@ GetSBayCapacity (POINT *ppt)
 		}
 
 		x -= SHIP_PIECE_OFFSET;
-	} while (slot--);
+	      } while (slot--);
+	  }
+	else
+	  {		
+	  }
 
 	return (capacity);
 }

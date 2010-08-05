@@ -64,7 +64,7 @@ OK. Any particular?
 The Chmmr.
 
 #(CHMMR_INFO_SB)
-The Chmmr have been the de facto leaders of the the Alliance
+The Chmmr have been the de facto leaders of the Alliance
 since the end of the war.
 They are effective and thorough in their undertakings
 sometimes almost overzealously so.
@@ -74,7 +74,7 @@ but the Chmmr patrols also make sure no Alliance ship crosses to other
 races' territory unless specifically authorized.
 You should go to Procyon to ask them more about how the on-going hunt for the remaining Kohr-Ah is going
 lately, the Chmmr have been pretty scarce on giving information,
-acting almost on a need-to-know-basis.
+acting almost on a need-to-know basis.
 
 #(shofixti)
 The Shofixti.
@@ -102,7 +102,7 @@ The Arilou.
 
 #(ARILOU_INFO_SB)
 As you know, the Arilou vanished again suddenly
-as soon as our victory over the both Ur-Quan races was assurred.
+as soon as our victory over the both Ur-Quan races was assured.
 We haven't seen a trace of them since 2160.
 
 #(syreen)

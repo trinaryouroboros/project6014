@@ -1141,7 +1141,6 @@ DrawBluePrint (MENU_STATE *pMS)
 
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 	  {
-	    // BW: Add something here to visualize cargo in blueprint
 	  RECT r;
 	  
 	  num_frames = GLOBAL_SIS (TotalElementMass);

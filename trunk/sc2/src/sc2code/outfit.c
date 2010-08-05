@@ -98,9 +98,12 @@ RedistributeFuel (void)
 	DWORD FuelVolume;
 	RECT r;
 
-	if ((FuelVolume = GLOBAL_SIS (FuelOnBoard)) <= FUEL_RESERVE)
-		return;
-
+	if ((FuelVolume = GLOBAL_SIS (FuelOnBoard)) < FUEL_RESERVE) // <= FUEL_RESERVE)
+	  return;
+	// BW: small hack to make fuel display correctly (as per issue 4)
+	// There's still a discrepancy when player has 10n+1 fuel units
+	// This may cause trouble with a moddable flagship
+	
 	GLOBAL_SIS (FuelOnBoard) = 0;
 	m = FUEL_VOLUME_PER_ROW;
 
