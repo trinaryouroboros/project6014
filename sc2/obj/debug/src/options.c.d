@@ -1,5 +1,5 @@
 obj/debug/src/options.c.o: src/options.c src/options.h src/port.h \
-  src/config.h config_unix.h src/sc2code/libs/compiler.h src/types.h \
+  src/config.h ./config_win.h src/sc2code/libs/compiler.h src/types.h \
   src/sc2code/libs/uio.h src/sc2code/libs/uio/io.h \
   src/sc2code/libs/uio/match.h src/sc2code/libs/uio/fstypes.h \
   src/sc2code/libs/uio/mount.h src/sc2code/libs/uio/mounttree.h \
