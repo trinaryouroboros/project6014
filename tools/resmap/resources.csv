@@ -237,9 +237,10 @@ LIFE19_MASK_PMAP_ANIM,graphics.life.19,sc2code/igfxres.h,GFXRES,base/lander/bio/
 LIFE20_MASK_PMAP_ANIM,graphics.life.20,sc2code/igfxres.h,GFXRES,base/lander/bio/lifew.ani
 LIFE21_MASK_PMAP_ANIM,graphics.life.21,sc2code/igfxres.h,GFXRES,base/lander/bio/lifex.ani
 LIFE22_MASK_PMAP_ANIM,graphics.life.22,sc2code/igfxres.h,GFXRES,base/lander/bio/lifey.ani
-LIFE23_MASK_PMAP_ANIM,graphics.life.23,sc2code/igfxres.h,GFXRES,base/lander/bio/lifeu.ani
-LIFE24_MASK_PMAP_ANIM,graphics.life.24,sc2code/igfxres.h,GFXRES,base/lander/bio/lifev.ani
-LIFE25_MASK_PMAP_ANIM,graphics.life.25,sc2code/igfxres.h,GFXRES,base/lander/bio/lifez.ani
+LIFE23_MASK_PMAP_ANIM,graphics.life.23,sc2code/igfxres.h,GFXRES,base/lander/bio/lifeaa.ani
+LIFE24_MASK_PMAP_ANIM,graphics.life.24,sc2code/igfxres.h,GFXRES,base/lander/bio/lifeu.ani
+LIFE25_MASK_PMAP_ANIM,graphics.life.25,sc2code/igfxres.h,GFXRES,base/lander/bio/lifev.ani
+LIFE26_MASK_PMAP_ANIM,graphics.life.26,sc2code/igfxres.h,GFXRES,base/lander/bio/lifez.ani
 MOONBASE_MASK_PMAP_ANIM,graphics.moonbase,sc2code/igfxres.h,GFXRES,base/lander/energy/moonbase.ani
 MAIDENS_MASK_PMAP_ANIM,graphics.maidens,sc2code/igfxres.h,GFXRES,base/lander/energy/maidens.ani
 AQUA_MASK_PMAP_ANIM,graphics.aquhelix,sc2code/igfxres.h,GFXRES,base/lander/energy/aquahelix.ani
