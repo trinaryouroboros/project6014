@@ -588,7 +588,7 @@ shardmine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 }
 
 // JMS: Chmmr Explorer special: animation and limiting the number of mines in arena
-#define MAX_MINES 7
+#define MAX_MINES 8
 static void
 spin_preprocess (ELEMENT *ElementPtr)
 {
@@ -694,7 +694,7 @@ static void
 spawn_butt_missile (ELEMENT *ShipPtr)
 {
 #define SPATHI_REAR_OFFSET 20
-#define DISCRIMINATOR_LIFE 40
+#define DISCRIMINATOR_LIFE 64
 #define DISCRIMINATOR_HITS 10
 #define DISCRIMINATOR_DAMAGE 4
 #define DISCRIMINATOR_OFFSET 4
