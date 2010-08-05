@@ -539,6 +539,54 @@ spawn_point_defense (ELEMENT *ElementPtr)
 	}
 }
 
+// JMS: Chmmr Explorer special: Collision animation helper
+static void
+shardmine_animate (ELEMENT *ElementPtr)
+{
+	if (ElementPtr->turn_wait > 0)
+		--ElementPtr->turn_wait;
+	else
+	{
+		ElementPtr->next.image.frame =
+		IncFrameIndex (ElementPtr->current.image.frame);
+		ElementPtr->state_flags |= CHANGING;
+		
+		ElementPtr->turn_wait = ElementPtr->next_turn;
+	}
+}
+
+// JMS: Chmmr Explorer special: Collision animation
+static void
+shardmine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
+				   ELEMENT *ElementPtr1, POINT *pPt1)
+{
+	HELEMENT hBlastElement;
+	
+	hBlastElement =
+	weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+	if (hBlastElement)
+	{
+		ELEMENT *BlastElementPtr;
+		
+#define NUM_SPARKLES 8
+		LockElement (hBlastElement, &BlastElementPtr);
+		BlastElementPtr->current.location = ElementPtr1->current.location;
+		
+		BlastElementPtr->life_span = NUM_SPARKLES;
+		BlastElementPtr->turn_wait = BlastElementPtr->next_turn = 0;
+		{
+			BlastElementPtr->preprocess_func = shardmine_animate;
+		}
+		
+		BlastElementPtr->current.image.farray = ElementPtr0->next.image.farray;
+		BlastElementPtr->current.image.frame =
+		SetAbsFrameIndex (BlastElementPtr->current.image.farray[0],
+						  2); /* skip stones */
+		
+		UnlockElement (hBlastElement);
+	}
+}
+
 // JMS: Chmmr Explorer special: animation and limiting the number of mines in arena
 #define MAX_MINES 7
 static void
@@ -647,7 +695,7 @@ spawn_butt_missile (ELEMENT *ShipPtr)
 {
 #define SPATHI_REAR_OFFSET 20
 #define DISCRIMINATOR_LIFE 40
-#define DISCRIMINATOR_HITS 1
+#define DISCRIMINATOR_HITS 10
 #define DISCRIMINATOR_DAMAGE 4
 #define DISCRIMINATOR_OFFSET 4
 	HELEMENT ButtMissile;
@@ -677,6 +725,7 @@ spawn_butt_missile (ELEMENT *ShipPtr)
 		
 		LockElement (ButtMissile, &ButtPtr);
 		ButtPtr->turn_wait = 0;
+		ButtPtr->collision_func = shardmine_collision;
 		ButtPtr->postprocess_func=butt_missile_postprocess;
 		SetElementStarShip (ButtPtr, StarShipPtr);
 		
