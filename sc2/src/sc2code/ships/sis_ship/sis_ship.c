@@ -42,9 +42,9 @@
 #define SPECIAL_ENERGY_COST 0
 #define ENERGY_WAIT 10
 #define MAX_THRUST 10
-#define THRUST_INCREMENT 4
+#define THRUST_INCREMENT 6
 #define TURN_WAIT 17
-#define THRUST_WAIT 6
+#define THRUST_WAIT 4
 #define WEAPON_WAIT 6
 #define SPECIAL_WAIT 9
 
@@ -53,11 +53,6 @@
 #define BLASTER_SPEED DISPLAY_TO_WORLD (24)
 #define BLASTER_LIFE 12
 
-// JMS: THESE CAUSED TROUBLE - COMMENTED OUT. Chmmr Explorer has different initial stats for supermelee
-//#define EXPLORER_MAX_THRUST 34
-//#define EXPLORER_THRUST_INCREMENT 8
-//#define EXPLORER_TURN_WAIT 1
-//#define EXPLORER_THRUST_WAIT 1
 // JMS: Chmmr Explorer has smaller weapon delay
 #define EXPLORER_WEAPON_WAIT 2
 #define EXPLORER_SPECIAL_WAIT 9
@@ -539,51 +534,28 @@ spawn_point_defense (ELEMENT *ElementPtr)
 	}
 }
 
-// JMS: Chmmr Explorer special: Collision animation helper
 static void
-shardmine_animate (ELEMENT *ElementPtr)
+splinter_preprocess (ELEMENT *ElementPtr)
 {
-	if (ElementPtr->turn_wait > 0)
-		--ElementPtr->turn_wait;
-	else
-	{
-		ElementPtr->next.image.frame =
-		IncFrameIndex (ElementPtr->current.image.frame);
-		ElementPtr->state_flags |= CHANGING;
-		
-		ElementPtr->turn_wait = ElementPtr->next_turn;
-	}
+	ElementPtr->next.image.frame =
+	IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->state_flags |= CHANGING;
 }
-
-// JMS: Chmmr Explorer special: Collision animation
 static void
 shardmine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 				   ELEMENT *ElementPtr1, POINT *pPt1)
 {
-	HELEMENT hBlastElement;
-	
-	hBlastElement =
 	weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
-	if (hBlastElement)
+	
+	if (ElementPtr0->state_flags & DISAPPEARING)
 	{
-		ELEMENT *BlastElementPtr;
+		ElementPtr0->state_flags &= ~DISAPPEARING;
+		ElementPtr0->state_flags |= NONSOLID | CHANGING;
+		ElementPtr0->life_span = 8;
+		ElementPtr0->next.image.frame =
+		SetAbsFrameIndex (ElementPtr0->current.image.frame, 0);
 		
-#define NUM_SPARKLES 8
-		LockElement (hBlastElement, &BlastElementPtr);
-		BlastElementPtr->current.location = ElementPtr1->current.location;
-		
-		BlastElementPtr->life_span = NUM_SPARKLES;
-		BlastElementPtr->turn_wait = BlastElementPtr->next_turn = 0;
-		{
-			BlastElementPtr->preprocess_func = shardmine_animate;
-		}
-		
-		BlastElementPtr->current.image.farray = ElementPtr0->next.image.farray;
-		BlastElementPtr->current.image.frame =
-		SetAbsFrameIndex (BlastElementPtr->current.image.farray[0],
-						  2); /* skip stones */
-		
-		UnlockElement (hBlastElement);
+		ElementPtr0->preprocess_func = splinter_preprocess;
 	}
 }
 
@@ -603,7 +575,6 @@ spin_preprocess (ELEMENT *ElementPtr)
 	{		
 		ElementPtr->life_span = 1;
 		ElementPtr->state_flags |= DISAPPEARING;
-		//--StarShipPtr->RaceDescPtr->characteristics.special_wait;
 	}
 	else
 	{
@@ -613,39 +584,98 @@ spin_preprocess (ELEMENT *ElementPtr)
 // For chrissakes, don't put too big a number here!
 #define LAST_SPIN_INDEX 15
 		if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_SPIN_INDEX)
-			ElementPtr->next.image.frame =
-			IncFrameIndex (ElementPtr->current.image.frame);
+			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 		else
-			ElementPtr->next.image.frame =
-			SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+		
 		ElementPtr->state_flags |= CHANGING;
-			
 		ElementPtr->turn_wait = 0;
 	}
 	UnlockElement (StarShipPtr->hShip);
 }
 
-// JMS: Chmmr Explorer special: Enemy tracking
-#define DISCRIMINATOR_SPEED 4
+#define TRACK_WAIT 4
+static void
+buzztrack_preprocess (ELEMENT *ElementPtr)
+{
+	if (ElementPtr->thrust_wait)
+		--ElementPtr->thrust_wait;
+	else
+	{
+		COUNT facing = 0;
+		
+		if (ElementPtr->hTarget == 0
+			&& TrackShip (ElementPtr, &facing) < 0)
+		{
+			ZeroVelocityComponents (&ElementPtr->velocity);
+		}
+		else
+		{
+//#define ACTIVATE_RANGE (224 * RESOLUTION_FACTOR) /* Originally SPACE_WIDTH */ // JMS_GFX
+			SIZE delta_x, delta_y;
+			ELEMENT *eptr;
+			
+			LockElement (ElementPtr->hTarget, &eptr);
+			delta_x = eptr->current.location.x
+			- ElementPtr->current.location.x;
+			delta_y = eptr->current.location.y
+			- ElementPtr->current.location.y;
+			UnlockElement (ElementPtr->hTarget);
+			delta_x = WRAP_DELTA_X (delta_x);
+			delta_y = WRAP_DELTA_Y (delta_y);
+			facing = NORMALIZE_FACING (
+									   ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))
+									   );
+			
+			if (delta_x < 0)
+				delta_x = -delta_x;
+			if (delta_y < 0)
+				delta_y = -delta_y;
+			delta_x = WORLD_TO_DISPLAY (delta_x);
+			delta_y = WORLD_TO_DISPLAY (delta_y);
+			if(1)
+			{
+				ZeroVelocityComponents (&ElementPtr->velocity);
+			}
+			else
+			{
+				ElementPtr->thrust_wait = TRACK_WAIT;
+				SetVelocityVector (&ElementPtr->velocity,
+								   DISPLAY_TO_WORLD (2 * RESOLUTION_FACTOR), facing); // JMS_GFX
+			}
+		}
+	}
+	
+	spin_preprocess (ElementPtr);
+}
+static void
+decelerate_preprocess (ELEMENT *ElementPtr)
+{
+	SIZE dx, dy;
+	
+	GetCurrentVelocityComponents (&ElementPtr->velocity, &dx, &dy);
+	dx /= 2;
+	dy /= 2;
+	SetVelocityComponents (&ElementPtr->velocity, dx, dy);
+	if (dx == 0 && dy == 0)
+	{
+		ElementPtr->preprocess_func = buzztrack_preprocess;
+	}
+	
+	spin_preprocess (ElementPtr);
+}
 static void
 butt_missile_preprocess (ELEMENT *ElementPtr)
 {
-	if (ElementPtr->turn_wait > 0)
-		--ElementPtr->turn_wait;
-	else
+	STARSHIP *StarShipPtr;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	if (!(StarShipPtr->cur_status_flags & WEAPON))
 	{
-		COUNT facing;
-		
-		if (TrackShip (ElementPtr, &facing) > 0)
-		{
-			ElementPtr->state_flags |= CHANGING;
-			
-			SetVelocityVector (&ElementPtr->velocity,
-							   DISCRIMINATOR_SPEED, facing);
-		}
-		
-		ElementPtr->turn_wait = 0;
+		ElementPtr->life_span >>= 1;
+		ElementPtr->preprocess_func = decelerate_preprocess;
 	}
+	
 	spin_preprocess (ElementPtr);
 }
 
@@ -675,9 +705,7 @@ butt_missile_postprocess (ELEMENT *ElementPtr)
 		ListElementPtr->current = ListElementPtr->next;
 		InitIntersectStartPoint (ListElementPtr);
 		InitIntersectEndPoint (ListElementPtr);
-		ListElementPtr->state_flags = (ListElementPtr->state_flags
-									   & ~(PRE_PROCESS | CHANGING | APPEARING))
-		| POST_PROCESS;
+		ListElementPtr->state_flags = (ListElementPtr->state_flags & ~(PRE_PROCESS | CHANGING | APPEARING)) | POST_PROCESS;
 		UnlockElement (hElement);
 		
 		GetElementStarShip (ElementPtr, &StarShipPtr);
@@ -694,10 +722,11 @@ static void
 spawn_butt_missile (ELEMENT *ShipPtr)
 {
 #define SPATHI_REAR_OFFSET 20
+#define DISCRIMINATOR_SPEED 18
 #define DISCRIMINATOR_LIFE 64
 #define DISCRIMINATOR_HITS 10
 #define DISCRIMINATOR_DAMAGE 4
-#define DISCRIMINATOR_OFFSET 4
+#define DISCRIMINATOR_OFFSET 0
 	HELEMENT ButtMissile;
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK ButtMissileBlock;
@@ -718,24 +747,19 @@ spawn_butt_missile (ELEMENT *ShipPtr)
 	ButtMissileBlock.preprocess_func = butt_missile_preprocess;
 	ButtMissileBlock.blast_offs = DISCRIMINATOR_OFFSET;
 	ButtMissile = initialize_missile (&ButtMissileBlock);
-	if (ButtMissile && (DeltaEnergy (ShipPtr,
-		-(StarShipPtr->RaceDescPtr->characteristics.special_energy_cost))))
+	if (ButtMissile)
 	{
 		ELEMENT *ButtPtr;
 		
 		LockElement (ButtMissile, &ButtPtr);
 		ButtPtr->turn_wait = 0;
-		ButtPtr->collision_func = shardmine_collision;
-		ButtPtr->postprocess_func=butt_missile_postprocess;
+		ButtPtr->thrust_wait = 0;
 		SetElementStarShip (ButtPtr, StarShipPtr);
-		
-		ProcessSound (SetAbsSoundIndex (
-			StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ButtPtr);
-		
+		ButtPtr->postprocess_func=butt_missile_postprocess;
+		ButtPtr->collision_func = shardmine_collision;
 		UnlockElement (ButtMissile);
 		PutElement (ButtMissile);
 
-		StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;
 	}
 }
 
@@ -768,13 +792,22 @@ static void
 sis_battle_postprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
-	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	printf("Specialcounter = %d\n",StarShipPtr->special_counter);
 	
 	if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0)
 		&& StarShipPtr->special_counter == 0
-		&& (StarShipPtr->cur_status_flags & SPECIAL))
+		&& (StarShipPtr->cur_status_flags & SPECIAL)
+		&& (DeltaEnergy (ElementPtr, -(StarShipPtr->RaceDescPtr->characteristics.special_energy_cost)))
+		)
+		
+	{
 		spawn_butt_missile(ElementPtr);
+		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+		StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;
+		
+	}
 	
 	else if ((StarShipPtr->cur_status_flags & SPECIAL)
 			&& (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1)
@@ -976,8 +1009,8 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 {
 #define SIS_VERT_OFFSET 28
 #define SIS_HORZ_OFFSET 20
-#define SIS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(10))
-#define SIS_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-10))
+#define SIS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5))
+#define SIS_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5))
 #define BLASTER_HITS 2
 #define BLASTER_OFFSET 8
 	COUNT num_blasters;
@@ -1403,5 +1436,3 @@ uninit_sis (RACE_DESC *pRaceDesc)
 			GLOBAL_SIS (CrewEnlisted)--;
 	}
 }
-
-
