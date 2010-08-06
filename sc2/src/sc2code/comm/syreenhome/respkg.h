@@ -1,5 +1,5 @@
 enum
 {
-	SYREEN_PACKAGE = 1
+	SYREEN_HOME_PACKAGE = 1
 };
 

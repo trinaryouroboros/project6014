@@ -549,11 +549,11 @@ SYREEN_FONT,comm.syreen.font,sc2code/comm/syreen/ifontres.h,FONTRES,base/fonts/s
 SYREEN_CONVERSATION_PHRASES,comm.syreen.dialogue,sc2code/comm/syreen/istrtab.h,CONVERSATION,base/comm/syreen/syreen.txt
 SYREEN_COLOR_MAP,comm.syreen.colortable,sc2code/comm/syreen/istrtab.h,BINTAB,base/comm/syreen/syreen.ct
 SYREEN_PMAP_ANIM,comm.syreen.graphics,sc2code/comm/syreen/igfxres.h,GFXRES,base/comm/syreen/syreen.ani
-SYREEN_MUSIC,comm.syreenhome.music,sc2code/comm/syreenhome/imusicre.h,MUSICRES,base/comm/syreenhome/syreen.mod
-SYREEN_FONT,comm.syreenhome.font,sc2code/comm/syreenhome/ifontres.h,FONTRES,base/fonts/syreen.fon
-SYREEN_CONVERSATION_PHRASES,comm.syreehomen.dialogue,sc2code/comm/syreenhome/istrtab.h,CONVERSATION,base/comm/syreenhome/syreenhome.txt
-SYREEN_COLOR_MAP,comm.syreenhome.colortable,sc2code/comm/syreenhome/istrtab.h,BINTAB,base/comm/syreenhome/syreenhome.ct
-SYREEN_PMAP_ANIM,comm.syreenhome.graphics,sc2code/comm/syreenhome/igfxres.h,GFXRES,base/comm/syreenhome/syreenhome.ani
+SYREEN_HOME_MUSIC,comm.syreenhome.music,sc2code/comm/syreenhome/imusicre.h,MUSICRES,base/comm/syreenhome/syreenhome.mod
+SYREEN_HOME_FONT,comm.syreenhome.font,sc2code/comm/syreenhome/ifontres.h,FONTRES,base/fonts/syreen.fon
+SYREEN_HOME_CONVERSATION_PHRASES,comm.syreehomen.dialogue,sc2code/comm/syreenhome/istrtab.h,CONVERSATION,base/comm/syreenhome/syreenhome.txt
+SYREEN_HOME_COLOR_MAP,comm.syreenhome.colortable,sc2code/comm/syreenhome/istrtab.h,BINTAB,base/comm/syreenhome/syreenhome.ct
+SYREEN_HOME_PMAP_ANIM,comm.syreenhome.graphics,sc2code/comm/syreenhome/igfxres.h,GFXRES,base/comm/syreenhome/syreenhome.ani
 MELNORME_MUSIC,comm.melnorme.music,sc2code/comm/melnorm/imusicre.h,MUSICRES,base/comm/melnorme/melnorme.mod
 MELNORME_FONT,comm.melnorme.font,sc2code/comm/melnorm/ifontres.h,FONTRES,base/fonts/melnorme.fon
 MELNORME_CONVERSATION_PHRASES,comm.melnorme.dialogue,sc2code/comm/melnorm/istrtab.h,CONVERSATION,base/comm/melnorme/melnorme.txt

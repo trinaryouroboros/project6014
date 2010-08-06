@@ -2,5 +2,5 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define SYREEN_COLOR_MAP "comm.syreenhome.colortable"
-#define SYREEN_CONVERSATION_PHRASES "comm.syreehomen.dialogue"
+#define SYREEN_HOME_COLOR_MAP "comm.syreenhome.colortable"
+#define SYREEN_HOME_CONVERSATION_PHRASES "comm.syreenhome.dialogue"
