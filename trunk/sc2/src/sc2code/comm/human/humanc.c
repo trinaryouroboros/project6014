@@ -47,22 +47,86 @@ static LOCDATA human_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	HUMAN_CONVERSATION_PHRASES, /* PlayerPhrases */
-	2, /* NumAnimations */
+	10, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{ /* Blink */
 			1, /* StartIndex */
 			3, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 15, 0, /* FrameRate */
-			0, ONE_SECOND * 8, /* RestartRate */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND, (ONE_SECOND / 10) * 22, /* RestartRate */
 			0, /* BlockMask */
 		},
-		{ /* Running light */
-			10, /* StartIndex */
-			30, /* NumFrames */
+		{ /* Captain's "Picard Tug" */
+			11, /* StartIndex */
+			2, /* NumFrames */
 			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 40, 0, /* FrameRate */
-			ONE_SECOND * 2, 0, /* RestartRate */
+			ONE_SECOND / 6, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND * 5, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Big Ceiling Monitor */
+			13, /* StartIndex */
+			125, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 4, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Small Monitor - left */
+			138, /* StartIndex */
+			94, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 2, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Small Monitor - Right */
+			232, /* StartIndex */
+			26, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 1, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Green Pulsing Stuff */
+			258, /* StartIndex */
+			18, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			0, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Back Wall Computer */
+			276, /* StartIndex */
+			12, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			0, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Guy in the Back */
+			288, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			(ONE_SECOND / 10) * 2, (ONE_SECOND / 10) * 13, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Woman's Left Arm */
+			291, /* StartIndex */
+			3, /* NumFrames */
+			RANDOM_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			ONE_SECOND / 12, (ONE_SECOND / 12) * 15, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Woman's Right Arm */
+			294, /* StartIndex */
+			3, /* NumFrames */
+			RANDOM_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			ONE_SECOND / 12, (ONE_SECOND / 12) * 15, /* RestartRate */
 			0, /* BlockMask */
 		},
 	},
@@ -76,9 +140,9 @@ static LOCDATA human_desc =
 	},
 	{ /* AlienTalkDesc */
 		4, /* StartIndex */
-		6, /* NumFrames */
-		0, /* AnimFlags */
-		ONE_SECOND / 10, ONE_SECOND / 15, /* FrameRate */
+		7, /* NumFrames */
+		RANDOM_ANIM, /* AnimFlags */
+		ONE_SECOND / 6, ONE_SECOND / 15, /* FrameRate */
 		ONE_SECOND * 7 / 60, ONE_SECOND / 12, /* RestartRate */
 		0, /* BlockMask */
 	},

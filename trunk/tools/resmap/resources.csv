@@ -589,9 +589,9 @@ TRANSPORT_PMAP_ANIM,comm.transport.graphics,sc2code/comm/transport/igfxres.h,GFX
 HUMAN_CONVERSATION_PHRASES,comm.human.dialogue,sc2code/comm/human/istrtab.h,CONVERSATION,base/comm/human/human.txt
 HUMAN_MUSIC,comm.human.music,sc2code/comm/human/imusicre.h,MUSICRES,base/comm/human/human.ogg
 HUMAN_FONT,comm.human.font,sc2code/comm/human/ifontres.h,FONTRES,base/fonts/player.fon
-HUMAN_COLOR_MAP,comm.human.colortable,sc2code/comm/human/istrtab.h,BINTAB,base/comm/commander/commander.ct
+HUMAN_COLOR_MAP,comm.human.colortable,sc2code/comm/human/istrtab.h,BINTAB,base/comm/human/human.ct
 HUMAN_COLOR_MAP2,comm.human.colortable2,sc2code/comm/human/istrtab.h,BINTAB,base/comm/druuge/druuge.ct
-HUMAN_PMAP_ANIM,comm.human.graphics,sc2code/comm/human/igfxres.h,GFXRES,base/comm/commander/commander.ani
+HUMAN_PMAP_ANIM,comm.human.graphics,sc2code/comm/human/igfxres.h,GFXRES,base/comm/human/human.ani
 HUMAN_PMAP_ANIM2,comm.human.graphics2,sc2code/comm/human/igfxres.h,GFXRES,base/comm/druuge/druuge.ani
 ANDROSYNTH_CONVERSATION_PHRASES,comm.androsyn.dialogue,sc2code/comm/androsynth/istrtab.h,CONVERSATION,base/comm/androsyn/androsyn.txt
 ANDROSYNTH_MUSIC,comm.androsyn.music,sc2code/comm/androsynth/imusicre.h,MUSICRES,base/comm/androsyn/androsyn.ogg

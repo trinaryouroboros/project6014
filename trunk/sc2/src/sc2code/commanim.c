@@ -538,5 +538,3 @@ StartCommAnimTask(void)
 {
 	return AssignTask (ambient_anim_task, 3072, "ambient animations");
 }
-
-
