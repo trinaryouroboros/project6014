@@ -363,8 +363,12 @@ LoadSolarSys (void)
 			if (GLOBAL_SIS (DriveSlots[i]) == FUSION_THRUSTER)
 				++num_thrusters;
 		}
-		pSolarSysState->max_ship_speed = (BYTE)(
-				(num_thrusters + 5) * IP_SHIP_THRUST_INCREMENT);
+		
+		// JMS: Chmmr explorer is not dependent from number of thrusters
+		if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+			pSolarSysState->max_ship_speed = (BYTE)(102);
+		else
+			pSolarSysState->max_ship_speed = (BYTE)((num_thrusters + 5) * IP_SHIP_THRUST_INCREMENT);
 
 		pSolarSysState->turn_wait = IP_SHIP_TURN_WAIT;
 		for (i = 0; i < NUM_JET_SLOTS; ++i)
@@ -793,13 +797,17 @@ flagship_inertial_thrust (COUNT CurrentAngle)
 		return (SHIP_AT_MAX_SPEED);
 	else
 	{
-		SIZE delta_x, delta_y;
+		SIZE delta_x, delta_y, ip_increment;
 		DWORD desired_speed;
-
-		delta_x = cur_delta_x
-				+ COSINE (CurrentAngle, IP_SHIP_THRUST_INCREMENT);
-		delta_y = cur_delta_y
-				+ SINE (CurrentAngle, IP_SHIP_THRUST_INCREMENT);
+		
+		// JMS: Explorer accelerates at its own slooooow pace
+		if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+			ip_increment = EXPLORER_IP_SHIP_THRUST_INCREMENT;
+		else
+			ip_increment = IP_SHIP_THRUST_INCREMENT;
+			
+		delta_x = cur_delta_x + COSINE (CurrentAngle, ip_increment);
+		delta_y = cur_delta_y + SINE (CurrentAngle, ip_increment);
 		desired_speed = (DWORD) ((long) delta_x * delta_x)
 				+ (DWORD) ((long) delta_y * delta_y);
 		if (desired_speed <= (DWORD) ((UWORD) max_speed * max_speed))
@@ -818,10 +826,10 @@ flagship_inertial_thrust (COUNT CurrentAngle)
 			v = *VelocityPtr;
 
 			DeltaVelocityComponents (&v,
-					COSINE (CurrentAngle, IP_SHIP_THRUST_INCREMENT >> 1)
-					- COSINE (TravelAngle, IP_SHIP_THRUST_INCREMENT),
-					SINE (CurrentAngle, IP_SHIP_THRUST_INCREMENT >> 1)
-					- SINE (TravelAngle, IP_SHIP_THRUST_INCREMENT));
+					COSINE (CurrentAngle, ip_increment >> 1)
+					- COSINE (TravelAngle, ip_increment),
+					SINE (CurrentAngle, ip_increment >> 1)
+					- SINE (TravelAngle, ip_increment));
 			GetCurrentVelocityComponents (&v, &cur_delta_x, &cur_delta_y);
 			desired_speed =
 					(DWORD) ((long) cur_delta_x * cur_delta_x)

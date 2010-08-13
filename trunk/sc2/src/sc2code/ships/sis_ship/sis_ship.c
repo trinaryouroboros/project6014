@@ -21,6 +21,8 @@
 //			 -Added separate weaponry function for Chmmr Explorer
 //			 -Added some nuts and bolts to make Chmmr Explorer weapons work
 //			 -Modded Chmmr Explorer main weapon as dual alternate side firing ion bolt cannon
+//			 -Chmmr Explorer secondary: Shard mines
+//			 -Autopilot now engages only after coming to full stop first
 
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
@@ -229,16 +231,20 @@ sis_hyper_preprocess (ELEMENT *ElementPtr)
 		ElementPtr->velocity = GLOBAL (velocity);
 
 	AccelerateDirection = 0;
-
+	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	++StarShipPtr->weapon_counter; /* no shooting in hyperspace! */
 	if ((GLOBAL (autopilot)).x == ~0
 			|| (GLOBAL (autopilot)).y == ~0
-			|| (StarShipPtr->cur_status_flags & (LEFT | RIGHT | THRUST)))
+			|| (StarShipPtr->cur_status_flags & (LEFT | RIGHT | THRUST))
+			|| !(GET_GAME_STATE(AUTOPILOT_OK))) // JMS: This check makes autopilot engage only after coming to full stop
 	{
 LeaveAutoPilot:
-		(GLOBAL (autopilot)).x =
-				(GLOBAL (autopilot)).y = ~0;
+		
+		// JMS: This re-check is now needed because of the added autopilot_ok variable to previous check
+		if ((GLOBAL (autopilot)).x == ~0 || (GLOBAL (autopilot)).y == ~0 || (StarShipPtr->cur_status_flags & (LEFT | RIGHT | THRUST)))
+				(GLOBAL (autopilot)).x = (GLOBAL (autopilot)).y = ~0;
+		
 		if (!(StarShipPtr->cur_status_flags & THRUST)
 				|| (GLOBAL_SIS (FuelOnBoard) == 0
 				&& (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1) && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1)) // JMS
@@ -246,6 +252,12 @@ LeaveAutoPilot:
 			AccelerateDirection = -1;
 			GetCurrentVelocityComponents (&ElementPtr->velocity,
 					&dx, &dy);
+			
+			// JMS: Engage autopilot only after coming to full stop
+			if (dx==0 && dy==0)
+				SET_GAME_STATE (AUTOPILOT_OK, 1);
+			else
+				SET_GAME_STATE (AUTOPILOT_OK, 0);
 			
 			// JMS_GFX: Since the sis_ship max speed with max thrusters in 640x480 mode is 2048, 
 			// SIZE variables dx and dy would overflow when leftshifted by 4. (The speed would
@@ -338,10 +350,8 @@ LeaveAutoPilot:
 	{
 		COUNT dist;
 		SIZE speed, velocity_increment;
-		SIZE turbotemp;
 
-		velocity_increment = WORLD_TO_VELOCITY (
-				StarShipPtr->RaceDescPtr->characteristics.thrust_increment);
+		velocity_increment = WORLD_TO_VELOCITY (StarShipPtr->RaceDescPtr->characteristics.thrust_increment);
 
 		if ((dist = square_root ((long)udx * udx + (long)udy * udy)) == 0)
 			dist = 1; /* prevent divide by zero */
@@ -376,9 +386,6 @@ LeaveAutoPilot:
 				StarShipPtr->cur_status_flags |= SHIP_AT_MAX_SPEED;
 			}
 		}
-		
-		turbotemp = WORLD_TO_VELOCITY (
-										  StarShipPtr->RaceDescPtr->characteristics.max_thrust);
 		
 		dx = (SIZE)((long)udx * speed / (long)dist);
 		dy = (SIZE)((long)udy * speed / (long)dist);
@@ -800,8 +807,6 @@ sis_battle_postprocess (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	
-	printf("Specialcounter = %d\n",StarShipPtr->special_counter);
-	
 	if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0)
 		&& StarShipPtr->special_counter == 0
 		&& (StarShipPtr->cur_status_flags & SPECIAL)
@@ -1015,8 +1020,8 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 {
 #define SIS_VERT_OFFSET 28
 #define SIS_HORZ_OFFSET 20
-#define SIS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5))
-#define SIS_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5))
+#define SIS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 * RESOLUTION_FACTOR))
+#define SIS_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5 * RESOLUTION_FACTOR))
 #define BLASTER_HITS 2
 #define BLASTER_OFFSET 8
 	COUNT num_blasters;
@@ -1043,8 +1048,6 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 	blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))] = 
 		(blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))] + 1) % 2;
 	
-	printf("playa %d, side %d\n",(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)), blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))]);
-		
 	cx = ShipPtr->next.location.x;
 	cy = ShipPtr->next.location.y;
 	
@@ -1312,8 +1315,8 @@ InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots)
 				break;
 		}
 	}
-	RaceDescPtr->characteristics.thrust_wait = (BYTE)(
-			THRUST_WAIT - (RaceDescPtr->characteristics.thrust_wait >> 1));
+	
+	RaceDescPtr->characteristics.thrust_wait = (BYTE)(THRUST_WAIT - (RaceDescPtr->characteristics.thrust_wait >> 1));
 	RaceDescPtr->characteristics.max_thrust =
 			((RaceDescPtr->characteristics.max_thrust /
 			RaceDescPtr->characteristics.thrust_increment) + 1)
@@ -1409,16 +1412,19 @@ init_sis (void)
 	InitDriveSlots(&new_sis_desc, GLOBAL_SIS (DriveSlots));
 	InitJetSlots(&new_sis_desc, GLOBAL_SIS (JetSlots));
 	
-	if (LOBYTE (GLOBAL (CurrentActivity)) == SUPER_MELEE)
+	// JMS: Give the explorer some stats so it won't be slow as fuck in supermelee
+	// and does not depend on the thruster/jet numbers in adventure mode
+	if((GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS))==0)
 	{
-		new_sis_desc.ship_info.crew_level = new_sis_desc.ship_info.max_crew;
-		
-		// JMS: Give the explorer some stats for melee so it won't be slow as fuck
 		new_sis_desc.characteristics.max_thrust = EXPLORER_MAX_THRUST * RESOLUTION_FACTOR;
 		new_sis_desc.characteristics.thrust_wait = EXPLORER_THRUST_WAIT;
 		new_sis_desc.characteristics.thrust_increment = EXPLORER_THRUST_INCREMENT * RESOLUTION_FACTOR;
 		new_sis_desc.characteristics.turn_wait = EXPLORER_TURN_WAIT;
-		
+	}
+	
+	if (LOBYTE (GLOBAL (CurrentActivity)) == SUPER_MELEE)
+	{
+		new_sis_desc.ship_info.crew_level = new_sis_desc.ship_info.max_crew;
 	}
 	else
 	{

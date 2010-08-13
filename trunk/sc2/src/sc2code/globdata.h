@@ -986,6 +986,8 @@ START_GAME_STATE
 	// JMS: Initer, which is related to starbase month and day tracking (See comm/starbas.c for more info.)
 	ADD_GAME_STATE (STARBASE_VISITED_FOR_FIRST_TIME, 1)
 
+	ADD_GAME_STATE (AUTOPILOT_OK, 1)
+
 END_GAME_STATE
 
 // Values for GAME_STATE.glob_flags:
