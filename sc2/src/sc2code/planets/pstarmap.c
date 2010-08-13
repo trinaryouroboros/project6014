@@ -40,7 +40,6 @@
 #include "libs/mathlib.h"
 
 
-
 #define UNIVERSE_TO_DISPX(ux) \
 		(COORD)(((((long)(ux) - pMenuState->flash_rect1.corner.x) \
 		<< LOBYTE (pMenuState->delta_item)) \

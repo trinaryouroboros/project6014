@@ -134,4 +134,3 @@ GetClusterName (const STAR_DESC *pSD, UNICODE buf[])
 			;
 	}
 }
-
