@@ -51,36 +51,36 @@ static LOCDATA syreen_desc =
 			5, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 24, ONE_SECOND / 24, /* FrameRate */
-			ONE_SECOND * 7, ONE_SECOND * 3, /* RestartRate */
+			ONE_SECOND * 7, ONE_SECOND * 6, /* RestartRate */
 			0, /* BlockMask */
 		},
 		{	// 1 - Bust pump
 			6, /* StartIndex */
-			3, /* NumFrames */
+			4, /* NumFrames */
 			YOYO_ANIM
 			| WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 9, 0, /* FrameRate */
+			ONE_SECOND / 7, 0, /* FrameRate */
 			ONE_SECOND * 4, ONE_SECOND, /* RestartRate */
-			(1 << 2), /* BlockMask */
+			(1 << 2) | (1 << 3), /* BlockMask */
 		},
 		{	// 2 - The seductive leg movement
-			9, /* StartIndex */
+			10, /* StartIndex */
 			12, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 10, ONE_SECOND / 15, /* FrameRate */
+			ONE_SECOND / 13, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 10, ONE_SECOND * 3, /* RestartRate */
 			(1 << 1) | (1 << 5), /* BlockMask */
 		},
 		{	// 3 - Hand moving joystick, resulting in electricity on Tesla coil
-			21, /* StartIndex */
+			22, /* StartIndex */
 			28, /* NumFrames */
 			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 15, 0, /* FrameRate */
-			ONE_SECOND * 8, ONE_SECOND * 2, /* RestartRate */
-			(1 << 5), /* BlockMask */
+			ONE_SECOND * 8, ONE_SECOND * 4, /* RestartRate */
+			(1 << 1) | (1 << 5), /* BlockMask */
 		},
 		{	// 4 - Green syreen ship in oscilloscope view
-			49, /* StartIndex */
+			50, /* StartIndex */
 			6, /* NumFrames */
 			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 12, ONE_SECOND / 15, /* FrameRate */
@@ -88,7 +88,7 @@ static LOCDATA syreen_desc =
 			0, /* BlockMask */
 		},
 		{	// 5 - Hand stroking joystick
-			55, /* StartIndex */
+			56, /* StartIndex */
 			4, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 8, ONE_SECOND / 15, /* FrameRate */
@@ -96,7 +96,7 @@ static LOCDATA syreen_desc =
 			(1 << 2) | (1 << 3), /* BlockMask */
 		},
 		{	// 6 - The looong ship spin anim on big screen
-			59, /* StartIndex */
+			60, /* StartIndex */
 			106, /* NumFrames */
 			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 24, 0, /* FrameRate */
