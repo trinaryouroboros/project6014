@@ -548,7 +548,7 @@ SYREEN_MUSIC,comm.syreen.music,sc2code/comm/syreen/imusicre.h,MUSICRES,base/comm
 SYREEN_FONT,comm.syreen.font,sc2code/comm/syreen/ifontres.h,FONTRES,base/fonts/syreen.fon
 SYREEN_CONVERSATION_PHRASES,comm.syreen.dialogue,sc2code/comm/syreen/istrtab.h,CONVERSATION,base/comm/syreen/syreen.txt
 SYREEN_COLOR_MAP,comm.syreen.colortable,sc2code/comm/syreen/istrtab.h,BINTAB,base/comm/syreen/syreen.ct
-SYREEN_PMAP_ANIM,comm.syreen.graphics,sc2code/comm/syreen/igfxres.h,GFXRES,base/comm/syreen/syreen.ani
+SYREEN_PMAP_ANIM,comm.syreen.graphics,sc2code/comm/syreen/igfxres.h,GFXRES,base/comm/syreen/syreen-captain.ani
 SYREEN_HOME_MUSIC,comm.syreenhome.music,sc2code/comm/syreenhome/imusicre.h,MUSICRES,base/comm/syreenhome/syreenhome.mod
 SYREEN_HOME_FONT,comm.syreenhome.font,sc2code/comm/syreenhome/ifontres.h,FONTRES,base/fonts/syreen.fon
 SYREEN_HOME_CONVERSATION_PHRASES,comm.syreehomen.dialogue,sc2code/comm/syreenhome/istrtab.h,CONVERSATION,base/comm/syreenhome/syreenhome.txt
