@@ -142,7 +142,7 @@ static LOCDATA human_desc =
 		4, /* StartIndex */
 		7, /* NumFrames */
 		RANDOM_ANIM, /* AnimFlags */
-		ONE_SECOND / 6, ONE_SECOND / 15, /* FrameRate */
+		ONE_SECOND / 12, ONE_SECOND / 15, /* FrameRate */
 		ONE_SECOND * 7 / 60, ONE_SECOND / 12, /* RestartRate */
 		0, /* BlockMask */
 	},
