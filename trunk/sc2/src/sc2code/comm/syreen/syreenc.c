@@ -44,12 +44,12 @@ static LOCDATA syreen_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SYREEN_CONVERSATION_PHRASES, /* PlayerPhrases */
-	7, /* NumAnimations */
+	8, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{	// 0 - Flash eyes
 			1, /* StartIndex */
 			5, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 24, ONE_SECOND / 24, /* FrameRate */
 			ONE_SECOND * 7, ONE_SECOND * 6, /* RestartRate */
 			0, /* BlockMask */
@@ -57,8 +57,7 @@ static LOCDATA syreen_desc =
 		{	// 1 - Bust pump
 			6, /* StartIndex */
 			4, /* NumFrames */
-			YOYO_ANIM
-			| WAIT_TALKING, /* AnimFlags */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 7, 0, /* FrameRate */
 			ONE_SECOND * 4, ONE_SECOND, /* RestartRate */
 			(1 << 2) | (1 << 3), /* BlockMask */
@@ -66,7 +65,7 @@ static LOCDATA syreen_desc =
 		{	// 2 - The seductive leg movement
 			10, /* StartIndex */
 			12, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 13, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 10, ONE_SECOND * 3, /* RestartRate */
 			(1 << 1) | (1 << 5), /* BlockMask */
@@ -74,7 +73,7 @@ static LOCDATA syreen_desc =
 		{	// 3 - Hand moving joystick, resulting in electricity on Tesla coil
 			22, /* StartIndex */
 			28, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
+			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 15, 0, /* FrameRate */
 			ONE_SECOND * 8, ONE_SECOND * 4, /* RestartRate */
 			(1 << 1) | (1 << 5), /* BlockMask */
@@ -82,7 +81,7 @@ static LOCDATA syreen_desc =
 		{	// 4 - Green syreen ship in oscilloscope view
 			50, /* StartIndex */
 			6, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
+			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 12, ONE_SECOND / 15, /* FrameRate */
 			0, 0, /* RestartRate */
 			0, /* BlockMask */
@@ -90,7 +89,7 @@ static LOCDATA syreen_desc =
 		{	// 5 - Hand stroking joystick
 			56, /* StartIndex */
 			4, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 8, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 6, ONE_SECOND * 2, /* RestartRate */
 			(1 << 2) | (1 << 3), /* BlockMask */
@@ -98,24 +97,32 @@ static LOCDATA syreen_desc =
 		{	// 6 - The looong ship spin anim on big screen
 			60, /* StartIndex */
 			106, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
+			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 24, 0, /* FrameRate */
 			ONE_SECOND * 3, ONE_SECOND * 2, /* RestartRate */
 			0, /* BlockMask */
 		},
+		{	// 7 - Close-up eyes blink
+			176, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 2, ONE_SECOND * 2, /* RestartRate */
+			0, /* BlockMask */
+		},
 	},
 	{ /* AlienTransitionDesc */
-		0, /* StartIndex */
-		0, /* NumFrames */
+		166, /* StartIndex */
+		8, /* NumFrames */
 		0, /* AnimFlags */
-		0, 0, /* FrameRate */
+		ONE_SECOND / 30, 0, /* FrameRate */
 		0, 0, /* RestartRate */
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
-		1, /* StartIndex */
-		4, /* NumFrames */
-		0, /* AnimFlags */
+		174, /* StartIndex */
+		2, /* NumFrames */
+		TALK_INTRO, /* AnimFlags */
 		ONE_SECOND / 15, 0, /* FrameRate */
 		ONE_SECOND / 12, 0, /* RestartRate */
 		0, /* BlockMask */
@@ -221,7 +228,6 @@ AnyAssistance (RESPONSE_REF R)
 	Response (any_news, AskMenu1);
 	Response (spot_you_later, ExitConversation);
 }
-
 
 static void
 Intro (void)

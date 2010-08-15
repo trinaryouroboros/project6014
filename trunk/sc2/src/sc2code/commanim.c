@@ -181,17 +181,16 @@ ambient_anim_task (void *data)
 		{
 			--ADPtr;
 			--pSeq;
-			if (ADPtr->AnimFlags & ANIM_DISABLED)
-				continue;
+			//if (ADPtr->AnimFlags & WHEN_TALKING) // JMS: Replacing ANIM_DISABLED with WHEN_TALKING to enable zoomed-in ambient anims.
+			//	continue;
 			if (pSeq->Direction == NO_DIR)
 			{
-				if (!(ADPtr->AnimFlags
-						& CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING))
-				{
-					// This animation does not conflict with the talking
-					// animation right now.
-					pSeq->Direction = UP_DIR;
-				}
+					if (!(ADPtr->AnimFlags & CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING))
+					{
+						// This animation does not conflict with the talking
+						// animation right now.
+						pSeq->Direction = UP_DIR;
+					}
 			}
 			else if ((DWORD)pSeq->Alarm > ElapsedTicks)
 				pSeq->Alarm -= (COUNT)ElapsedTicks;
@@ -286,22 +285,40 @@ ambient_anim_task (void *data)
 			}
 
 			if (pSeq->AnimType == PICTURE_ANIM
-					&& (ADPtr->AnimFlags
-					& CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING)
-					&& pSeq->Direction != NO_DIR)
+				&& (ADPtr->AnimFlags
+				& CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING)
+				&& pSeq->Direction != NO_DIR)
 			{
 				// This is a picture animation which would conflict with
 				// the talking animation, and it is not stopped yet.
 				COUNT index;
 
 				CanTalk = FALSE;
-				if (!(pSeq->Direction != UP_DIR
-						|| (index = GetFrameIndex (pSeq->AnimObj.CurFrame)) >
-						ADPtr->StartIndex + 1
-						|| (index == ADPtr->StartIndex + 1
-						&& (ADPtr->AnimFlags & CIRCULAR_ANIM))))
+				if ( !(pSeq->Direction != UP_DIR
+						|| (index = GetFrameIndex (pSeq->AnimObj.CurFrame)) > ADPtr->StartIndex + 1
+						|| (index == ADPtr->StartIndex + 1 && (ADPtr->AnimFlags & CIRCULAR_ANIM))
+						) )
 					pSeq->Direction = NO_DIR;
 			}
+			
+			// JMS: Ambient animations which should occur only during talk
+			if (pSeq->AnimType == PICTURE_ANIM
+				&& ADPtr->AnimFlags & WHEN_TALKING 
+				&& (!(CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING) || (CommData.AlienTalkDesc.AnimFlags & TALK_INTRO))
+				&& pSeq->Direction != NO_DIR)
+					
+			{
+				// Stop the anim if not talking
+				COUNT index;
+				
+				//CanTalk = FALSE;
+				if ( !(pSeq->Direction != UP_DIR
+					   || (index = GetFrameIndex (pSeq->AnimObj.CurFrame)) > ADPtr->StartIndex + 1
+					   || (index == ADPtr->StartIndex + 1 && (ADPtr->AnimFlags & CIRCULAR_ANIM))
+					   ) )
+					pSeq->Direction = NO_DIR;
+			}
+			
 		}
 
 		ADPtr = &CommData.AlienTalkDesc;
@@ -312,8 +329,7 @@ ambient_anim_task (void *data)
 		{
 			BOOLEAN done = FALSE;
 			for (i = 0; i < CommData.NumAnimations; i++)
-				if (ActiveMask & (1L << i)
-					&& CommData.AlienAmbientArray[i].AnimFlags & WAIT_TALKING)
+				if (ActiveMask & (1L << i) && CommData.AlienAmbientArray[i].AnimFlags & WAIT_TALKING)
 					done = TRUE;
 			if (!done)
 			{
@@ -339,6 +355,7 @@ ambient_anim_task (void *data)
 						TalkAlarm = -1;
 
 					AFlags = ADPtr->AnimFlags;
+					// This is the actual talk frame
 					if (!(AFlags & (TALK_INTRO | TALK_DONE)))
 					{
 						FrameRate =
@@ -380,6 +397,7 @@ ambient_anim_task (void *data)
 							}
 						}
 					}
+					// This is the transition before / after talk
 					else
 					{
 						ADPtr = &CommData.AlienTransitionDesc;
