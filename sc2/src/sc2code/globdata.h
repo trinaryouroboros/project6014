@@ -54,7 +54,7 @@
 #define TALK_INTRO (1 << 5)
 #define TALK_DONE (1 << 6)
 
-#define ANIM_DISABLED (1 << 7)
+#define WHEN_TALKING (1 << 7) // JMS
 
 #define COLORXFORM_ANIM PAUSE_TALKING
 

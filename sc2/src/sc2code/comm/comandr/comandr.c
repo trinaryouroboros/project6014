@@ -583,7 +583,7 @@ GiveRadios (RESPONSE_REF R)
 		AlienTalkSegue (1);
 
 		LockMutex (GraphicsLock);
-		CommData.AlienAmbientArray[2].AnimFlags |= ANIM_DISABLED;
+		//CommData.AlienAmbientArray[2].AnimFlags |= ANIM_DISABLED; // JMS
 		UnlockMutex (GraphicsLock);
 
 		XFormColorMap (GetColorMapAddress (
@@ -690,13 +690,13 @@ init_commander_comm ()
 
 	if (GET_GAME_STATE (RADIOACTIVES_PROVIDED))
 	{
-		commander_desc.AlienAmbientArray[2].AnimFlags |= ANIM_DISABLED;
+		//commander_desc.AlienAmbientArray[2].AnimFlags |= ANIM_DISABLED; // JMS
 		// regular track -- let's make sure
 		commander_desc.AlienSongFlags &= ~LDASF_USE_ALTERNATE;
 	}
 	else
 	{	
-		commander_desc.AlienAmbientArray[2].AnimFlags &= ~ANIM_DISABLED;
+		//commander_desc.AlienAmbientArray[2].AnimFlags &= ~ANIM_DISABLED; // JMS
 		// use alternate 'low-power' track if available
 		commander_desc.AlienAltSongRes = COMMANDER_LOWPOW_MUSIC;
 		commander_desc.AlienSongFlags |= LDASF_USE_ALTERNATE;

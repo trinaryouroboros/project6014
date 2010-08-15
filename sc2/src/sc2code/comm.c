@@ -451,7 +451,7 @@ DrawAlienFrame (FRAME aframe, SEQUENCE *pSeq)
 		{
 			s.frame = SetAbsFrameIndex (s.frame, ADPtr->StartIndex);
 			DrawStamp (&s);
-			ADPtr->AnimFlags |= ANIM_DISABLED;
+			//ADPtr->AnimFlags |= ANIM_DISABLED; // JMS
 		}
 		else if (pSeq)
 		{
