@@ -97,7 +97,7 @@ static LOCDATA syreen_desc =
 		{	// 6 - The looong ship spin anim on big screen
 			60, /* StartIndex */
 			106, /* NumFrames */
-			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
+			CIRCULAR_ANIM | WAIT_TALKING | FAST_STOP_AT_TALK_START, /* AnimFlags */
 			ONE_SECOND / 24, 0, /* FrameRate */
 			ONE_SECOND * 3, ONE_SECOND * 2, /* RestartRate */
 			0, /* BlockMask */

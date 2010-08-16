@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Added several mechanics pertaining to talk transition animations (tailor-made for syreen comm zoom-in!)
+
 #define COMM_INTERNAL
 #include "commanim.h"
 
@@ -181,7 +183,7 @@ ambient_anim_task (void *data)
 		{
 			--ADPtr;
 			--pSeq;
-			//if (ADPtr->AnimFlags & WHEN_TALKING) // JMS: Replaced ANIM_DISABLED with WHEN_TALKING to enable zoomed-in ambient anims.
+			//if (ADPtr->AnimFlags & WHEN_TALKING) // JMS: ANIM_DISABLED has been replaced with WHEN_TALKING to enable zoomed-in ambient anims.
 			//	continue;
 			if (pSeq->Direction == NO_DIR)
 			{
@@ -292,8 +294,15 @@ ambient_anim_task (void *data)
 				// the talking animation, and it is not stopped yet.
 				COUNT index;
 
-				CanTalk = FALSE;
-
+				// JMS: Cut marked animations short when starting talk.
+				// The animations are marked with FAST_STOP_AT_TALK_START in the races' comm source codes.
+				if (ADPtr->AnimFlags & FAST_STOP_AT_TALK_START)
+				{	CanTalk = TRUE;
+					pSeq->AnimObj.CurFrame = SetAbsFrameIndex(pSeq->AnimObj.CurFrame, ADPtr->StartIndex);
+					pSeq->Direction = NO_DIR; }
+				else
+					CanTalk = FALSE;
+				
 				if ( !(pSeq->Direction != UP_DIR
 						|| (index = GetFrameIndex (pSeq->AnimObj.CurFrame)) > ADPtr->StartIndex + 1
 						|| (index == ADPtr->StartIndex + 1 && (ADPtr->AnimFlags & CIRCULAR_ANIM))
@@ -302,19 +311,18 @@ ambient_anim_task (void *data)
 			}
 			
 			// JMS: This handles ambient animations which should occur only during talk
+			// A lot of conditions are necessary to eliminate unwanted animations
+			// from the duration of talk transition!
 			if (pSeq->AnimType == PICTURE_ANIM
 				&& ADPtr->AnimFlags & WHEN_TALKING 
-				&& (!(CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING) || (CommData.AlienTalkDesc.AnimFlags & TALK_INTRO))
+				&& (!(CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING) 
+					|| (CommData.AlienTalkDesc.AnimFlags & TALK_INTRO)
+					|| (CommData.AlienTalkDesc.AnimFlags & TALK_DONE))
+				&& !(CommData.AlienTransitionDesc.AnimFlags & PAUSE_TALKING)
 				&& pSeq->Direction != NO_DIR)
-					
 			{
 				// Stop the anim if not talking
-				COUNT index;
-				if ( !(pSeq->Direction != UP_DIR
-					   || (index = GetFrameIndex (pSeq->AnimObj.CurFrame)) > ADPtr->StartIndex + 1
-					   || (index == ADPtr->StartIndex + 1 && (ADPtr->AnimFlags & CIRCULAR_ANIM))
-					   ) )
-					pSeq->Direction = NO_DIR;
+				pSeq->Direction = NO_DIR;
 			}
 			
 		}
@@ -327,8 +335,10 @@ ambient_anim_task (void *data)
 		{
 			BOOLEAN done = FALSE;
 			for (i = 0; i < CommData.NumAnimations; i++)
-				if (ActiveMask & (1L << i) && CommData.AlienAmbientArray[i].AnimFlags & WAIT_TALKING)
-					done = TRUE;
+				if (ActiveMask & (1L << i)
+					&& CommData.AlienAmbientArray[i].AnimFlags & WAIT_TALKING
+					&& !(CommData.AlienAmbientArray[i].AnimFlags & FAST_STOP_AT_TALK_START)) // JMS: Don't wait for fast-stopped animations
+					done = TRUE;															 // to finish (would have to wait forever).
 			if (!done)
 			{
 
