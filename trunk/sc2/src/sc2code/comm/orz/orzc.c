@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Cleaned up the comm logic
+
 #include "comm/commall.h"
 #include "comm/orz/resinst.h"
 #include "comm/orz/strings.h"

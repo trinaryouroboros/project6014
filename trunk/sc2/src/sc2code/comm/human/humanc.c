@@ -17,7 +17,7 @@
  */
 
 // JMS 2010:	-New dialogue
-//				-Mechanism that allows for male/female captains in comm screens
+//				-Mechanism that allows for male/female captains in comm screens (CURRENTLY DISABLED, ALWAYS MALE)
 
 #include "../commall.h"
 #include "resinst.h"
@@ -426,7 +426,7 @@ init_human_comm (void)
 
 	
 	 // JMS: Male earthling gfx
-	if(male)
+	if(1) //if(male)
 	{
 		human_desc.init_encounter_func = Intro;
 		human_desc.post_encounter_func = post_human_enc;

@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Transport ship dialogue. Lot of randomly picked lines here.
+// JMS 2010: -Completely new file for transport ship dialogue. Lot of randomly picked lines here.
 //			  When asking about cargo, the same ship can have many kinds of crap aboard then. Kind of buggy but funny :D
 
 #include "../commall.h"

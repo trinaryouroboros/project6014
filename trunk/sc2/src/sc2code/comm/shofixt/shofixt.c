@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added viewscreen animu
+// JMS 2010: -Added viewscreen animu
+//			 -Added some dialogue options
 
 #include "comm/commall.h"
 #include "comm/shofixt/resinst.h"

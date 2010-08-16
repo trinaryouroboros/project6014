@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Cleaned up the comm logic a bit...
+// JMS 2010: -Cleaned up the comm logic a bit...
+//			 -Added a whole slew of new animations
 
 #include "comm/commall.h"
 #include "comm/syreen/resinst.h"

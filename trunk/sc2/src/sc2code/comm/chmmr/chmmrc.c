@@ -115,7 +115,6 @@ static LOCDATA chmmr_desc =
 	NULL,
 };
 
-
 static void
 ExitConversation (RESPONSE_REF R)
 {	
@@ -123,10 +122,8 @@ ExitConversation (RESPONSE_REF R)
 	NPCPhrase (GOODBYE_HUMAN1);
 }
 
-
 static void
 AskMenu (RESPONSE_REF R);
-
 
 static void
 WhereKohrah (RESPONSE_REF R)
@@ -221,8 +218,6 @@ HaveYouFoundArtefact (RESPONSE_REF R)
 	Response (on_our_way, ExitConversation);
 }
 
-
-
 static void
 Intro (void)
 {
@@ -238,9 +233,6 @@ Intro (void)
 	Response (not_yet, HaveYouFoundArtefact);
 	Response (on_our_way, ExitConversation);
 }
-
-	
-
 
 static COUNT
 uninit_chmmr (void)

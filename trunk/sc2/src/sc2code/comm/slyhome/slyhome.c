@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Totally new dialogue for Slylandros riding Kohr-Ah vessels
+
 #include "gameev.h"
 #include "comm/commall.h"
 #include "comm/slyhome/resinst.h"
@@ -206,88 +208,6 @@ ExitConversation (RESPONSE_REF R)
 		}
 	}
 }
-/*
-static void MainTalk (RESPONSE_REF R);
-
-static void
-HumanInfo (RESPONSE_REF R)
-{
-	BYTE InfoLeft;
-
-	if (PLAYER_SAID (R, happy_to_tell_more))
-	{
-		NPCPhrase (TELL_MORE);
-
-		SET_GAME_STATE (SLYLANDRO_STACK4, 1);
-	}
-	else if (PLAYER_SAID (R, would_you_like_to_know_more))
-	{
-		NPCPhrase (YES_TELL_MORE);
-	}
-	else if (PLAYER_SAID (R, we_come_from_earth))
-	{
-		NPCPhrase (OK_EARTH);
-
-		SET_GAME_STATE (SLYLANDRO_KNOW_EARTH, 1);
-	}
-	else if (PLAYER_SAID (R, we_explore))
-	{
-		NPCPhrase (OK_EXPLORE);
-
-		SET_GAME_STATE (SLYLANDRO_KNOW_EXPLORE, 1);
-	}
-	else if (PLAYER_SAID (R, we_fight_urquan))
-	{
-		NPCPhrase (URQUAN_NICE_GUYS);
-
-		SET_GAME_STATE (SLYLANDRO_KNOW_URQUAN, 1);
-	}
-	else if (PLAYER_SAID (R, not_same_urquan))
-	{
-		NPCPhrase (PERSONALITY_CHANGE);
-
-		SET_GAME_STATE (SLYLANDRO_KNOW_URQUAN, 2);
-	}
-	else if (PLAYER_SAID (R, we_gather))
-	{
-		NPCPhrase (MAYBE_INTERESTED);
-
-		SET_GAME_STATE (SLYLANDRO_KNOW_GATHER, 1);
-	}
-
-	InfoLeft = FALSE;
-	if (GET_GAME_STATE (SLYLANDRO_KNOW_URQUAN) == 1)
-	{
-		InfoLeft = TRUE;
-		Response (not_same_urquan, HumanInfo);
-	}
-	if (!GET_GAME_STATE (SLYLANDRO_KNOW_EARTH))
-	{
-		InfoLeft = TRUE;
-		Response (we_come_from_earth, HumanInfo);
-	}
-	if (!GET_GAME_STATE (SLYLANDRO_KNOW_EXPLORE))
-	{
-		InfoLeft = TRUE;
-		Response (we_explore, HumanInfo);
-	}
-	if (!GET_GAME_STATE (SLYLANDRO_KNOW_URQUAN))
-	{
-		InfoLeft = TRUE;
-		Response (we_fight_urquan, HumanInfo);
-	}
-	if (!GET_GAME_STATE (SLYLANDRO_KNOW_GATHER))
-	{
-		InfoLeft = TRUE;
-		Response (we_gather, HumanInfo);
-	}
-
-	Response (enough_about_me, MainTalk);
-	if (!InfoLeft)
-	{
-		SET_GAME_STATE (SLYLANDRO_STACK4, 2);
-	}
-}*/
 
 static void
 MainTalk (RESPONSE_REF R)
@@ -484,7 +404,7 @@ init_slylandro_comm (void)
 	slylandro_desc.AlienTextBaseline.y = 0;
 	slylandro_desc.AlienTextWidth = SIS_TEXT_WIDTH;
 
-	// JMS: Battle segue 'cause its impossible to tell are these guys kohr-ah or slylandros...
+	// JMS: Always Battle segue 'cause its impossible to tell are these guys kohr-ah or slylandros...
 	SET_GAME_STATE (BATTLE_SEGUE, 1);
 	
 	// JMS: Zero the escape flag
