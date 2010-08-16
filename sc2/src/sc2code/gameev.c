@@ -15,6 +15,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+// JMS 2010: Created events, which move transport ships
+
 #include "gameev.h"
 
 #include "build.h"

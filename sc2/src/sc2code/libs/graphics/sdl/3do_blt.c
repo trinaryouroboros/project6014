@@ -64,7 +64,7 @@ static DISPLAY_INTERFACE DisplayInterface =
 	/* .read_display  = */ read_screen,
 };
 
-// JMS_GFX
+// JMS_GFX: New function for setting up a 640x480 display layer
 static DISPLAY_INTERFACE DisplayInterfaceReal640 =
 {
 	/* .DisplayFlags  = */ WANT_MASK,
@@ -80,7 +80,7 @@ static DISPLAY_INTERFACE DisplayInterfaceReal640 =
 void
 LoadDisplay (DISPLAY_INTERFACE **pDisplay, int res_factor)
 {
-	// JMS_GFX
+	// JMS_GFX: resolution selection
 	if(res_factor==2)
 		*pDisplay = &DisplayInterfaceReal640;
 	else

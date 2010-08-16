@@ -1,142 +1,201 @@
-{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf290
+{\rtf1\ansi\ansicpg1252\cocoartf1038\cocoasubrtf320
 {\fonttbl\f0\fswiss\fcharset0 Helvetica;}
 {\colortbl;\red255\green255\blue255;}
 \paperw11900\paperh16840\margl1440\margr1440\vieww18480\viewh12640\viewkind0
-\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
 
-\f0\fs24 \cf0 UQM edits by JMS 11.5.2010\
-\
+\f0\fs24 \cf0 UQM edits by JMS 15.8.2010\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 \
 CODING:\
+*\
+***Major shit***:\
 -Alpha Vulpeculae (865.4:858.7) with 0 planets and portal to orz space in the sun (ORZ_SPACE_PORTAL_DEFINED).\
 -Orz space. Like hyperspace and quasispace, but has blue gfx. Some new gfx therein.\
--Added Androsynth to Orz space. Infinite sphere of influence there. Also added very basic Androsynth in truespace.\
--Added Orz to Orz space. Infinite sphere of influence there and different npcship spoor gfx.\
--Some dialogue for Androsynth.\
--Dialogue for earthlings.\
--Fixed some bugs with slaverace definitions\
 -Instrument damage. Ships can suffer damage to engines, gauges, etc. from ships. Currently turned off.\
+-Chmmr Explorer ship usable in adventure game melee and also in supermelee. Dual ion bolt cannon primary, crystal shard mine secondary.\
+*\
+***Race-specific***:\
+-Added Androsynth to Orz space. Infinite sphere of influence there. Gave 'em some nice dialogue.\
+-Also added very basic Androsynth in truespace.\
+-Added Orz to Orz space. Infinite sphere of influence there and different npcship spoor gfx.\
+-Added Chenjesu and Mmrnmhrm. They have 0 sphere of influence though as no dialogue or comm screen has been implemented.\
+-Added Slylandros that ride Kohr-ah marauder ships. They hang out at the alliance races' neighborhood of the map. Invisible Sphere of Influence to keep player guessing.\
+-Dialogue for earthlings.\
+-Possibility to have multiple different captain screens for earthlings (Like male/female). Currently turned off.\
 -Chmmr now reside on their starbase also. Starbase fully functional, just like at Sol.\
--Chmmr Explorer ship usable in melee. It has (crappy) primary weapon too!\
+-New "ship": Freight transporter. These guys leave from Sol to Procyon on specific dates. Transports have no melee graphics, melee sounds or ai though.\
+-Implemented Syreen ship captain animations and nice zoom-in transition for talking.\
+*\
+***Smaller stuff***:\
 -Some planets are restricted meaning they cannot be landed on. Like Earth, Procyon and Syreen Homeworld. (Mostly to hide non-working earth graphics.)\
 -New devices: Black Orb, Temporal Wrapper (Don't do anything yet), Slaveshield Buster (Can be used to summon Transport Ship near Sol in HS, for debugging.)\
--New "ship": Freight transporter. These guys leave from Sol to Procyon on specific dates. Transports have no melee graphics, melee sounds or ai though.\
--Added Chenjesu and Mmrnmhrm. They have 0 sphere of influence though as no dialogue or comm screen has been implemented.\
--Added Slylandros that ride Kohr-ah marauder ships. They hang out at the alliance races' neighborhood of the map. Their SoI is invisible to keep the player guessing.\
 \
 AUDIO:\
 -Added new song remixes for most of the races + space, hyperspace etc. Basically only Orz, Melnorme and Slylandro miss new music.\
+-Created Chmmr Explorer secondary weapon sound.\
 \
 GFX:\
--Started real 640x480 resolution project. Heck of a lot of work there to do though...\
+-The real 640x480 resolution project goes on and on and on... See the files affected in the bottom of this listing.\
 \
 ***************************************************************************************************************************************\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-\cf0 EDITED FILES:\
+\cf0 EDITED FILES, NOT 640x480-RELATED:\
 \
-/battle.c					-Play Orzspace music in orz space\
-/clock.c					-Changed the starting date\
-/clock.h					-Changed the starting year\
+/battle.c					-Play Orzspace music in orz space.\
+/cleanup.c				-Release bullet hole gfx when cleaning up.\
+/clock.c					-Changed the starting date.\
+/clock.h					-Changed the starting year.\
 /comm.c					-Commented out a line related to chmmrs in RaceCommunication to avoid vanishing avatars after encounter in interplanetary.\
-						-Some changes to InitCommunication to remove bugs from fighting against Chmmr\
-						-Freight transporters don't vanish after talking them up in hyperspace\
-/commglue.c 				-Added hooks for Earhtling ship and Androsynth dialogue screens\
-/commglue.h				-Added earthling ship and Androsynth dialogue enum and extern locdata\
-/encount.c				-"Encounter in *Below*" text, if encounter ship group in Orz space\
-/encount.h				-Enum to special star systems: Portal to orz space\
-/galaxy.c					-Bluish color for Orz space\
-/gameopt.c				-Loading game state shows "*Below*" text, instead of "hyper/quasispace" when saved in Orz space\
-/gamestr.h				-Edited game string table dimensions to facilitate additional entry (for orz space string)\
-/gendef.c					-Function call for initing orz space portal star system\
+						-Some changes to InitCommunication to remove bugs from fighting against Chmmr.\
+						-Freight transporters don't vanish after talking them up in hyperspace.\
+						-Increased max number of player responses in communication screen from 8 to 10.\
+/commanim.c 				-Added several changes pertaining to talk transitions (like Syreen ship captain zoom-in).\
+/commglue.c 				-Added hooks for Earhtling ship and Androsynth dialogue screens.\
+						-Removed unnecessary init_commander_comm.\
+						-Added transport ship dialogue hook.\
+/commglue.h				-Added earthling ship and Androsynth dialogue enum and extern locdata.\
+						-Added Transport ship dialogue enum and extern locdata.\
+/dummy.c					-Transport ship resource pointer replaces Ur-Quan red probe's one.\
+						-Added resource pointer for Slylandros-riding-kohrah-vessels\
+/element.h				-Added extern declaration of do_instrument_damage.\
+/encount.c				-"Encounter in *Below*" text, if encounter ship group in Orz space.\
+						-If enemy escape occurred, don't scavenge debris.\
+						-At orzspaceportal, no planet name is displayed, instead a portal gfx.\
+/encount.h				-Enum to special star systems: Portal to orz space.\
+/galaxy.c					-Bluish color for Orz space.\
+/gameev.c				-Created events which move transport ships.\
+/gameopt.c				-Loading game state shows "*Below*" text, instead of "hyper/quasispace" when saved in Orz space.\
+/gamestr.h				-Edited game string table dimensions to facilitate additional entry (for orz space string).\
+/gendef.c					-Function call for initing orz space portal star system.\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
-\cf0 /globdata.c				-Increased max number of races to facilitate adding Androsynth and slaverace to the game (IMPORTANT!  At function InitSis)\
+\cf0 /globdata.c				-Increased max number of races to facilitate adding Androsynth and slaverace to the game (IMPORTANT!  At function InitSis).\
 						- STARBASE_AVAILABLE variable is set to be 1 right from the beginning of the game.\
-/globdata.h				-Added new game states for "new" race - humans\
-						-Added new game states for "new" race - Androsynth\
-						-Added new game state fo Orz space\
-						-Added IN_ORZSPACE flag for saved game summaries\
-						-Added Vela factory visited game state\
-						-Added game state for which ship player has as the flagship (Explorer/Precursor vessel)\
-						-Added Black orb, Slaveshield buster and temporal wrapper game states\
-/grpinfo.c					-Changes to make 0 planet star systems work\
-						-Generate Freight Transport ship to Sol and Procyon\
-/hyper.c					-Orz space colors\
-						-Function for entering a portal/system in Orz space\
-						-Orz space check for portal/star graphics when drawing elements\
-						-Orz space check when activating portal spawner\
-						-Orz space npcship and star gfx\
-						-Androsynth sphere of influence infinite in Orz space\
-						-Can't meet melnorme/slylandro in Orz space\
-						-Don't consume fuel in Orz space\
-						-A lot of Freight transport ship thingies\
-/load.c					-Reads the information we're in ORZ space\
-						-Reads info for HS spoor home and destination (mainly for transport ships)\
-/misc.c					-Added instrument damage (engine etc. can be damaged by hits)\
-						-Added engine damage function (one of the instrument damages)\
-/pickship.c				-Different ship picking graphics in full game before melee\
+						-Changed the number of thrusters and turning jets for Chmmr Explorer.\
+/globdata.h				-Added new game states for "new" race - humans.\
+						-Added new game states for "new" race - Androsynth.\
+						-Added new game state fo Orz space.\
+						-Added IN_ORZSPACE flag for saved game summaries.\
+						-Added Vela factory visited game state.\
+						-Added game state for which ship player has as the flagship (Explorer/Precursor vessel).\
+						-Added Black orb, Slaveshield buster and temporal wrapper game states.\
+/grpinfo.c					-Changes to make 0 planet star systems work.\
+						-Generate Freight Transport ship to Sol and Procyon.\
+						-Player can't encounter Kohr-Ah vessels before first running into slylandro-riding-kohrahs.\
+						-Changed encounter probability calculations for kohrah and slykohr.\
+/hyper.c					-Orz space colors.\
+						-Function for entering a portal/system in Orz space.\
+						-Orz space check for portal/star graphics when drawing elements.\
+						-Orz space check when activating portal spawner.\
+						-Orz space npcship and star gfx.\
+						-Androsynth sphere of influence infinite in Orz space.\
+						-Can't meet melnorme/slylandro in Orz space.\
+						-Don't consume fuel in Orz space.\
+						-A lot of Freight transport ship thingies.\
+						-Can't meet kohr-ah before first running into slykohr.\
+/ipdisp.c					-Added freight transport ships to certain star systems.\
+						-Transport ship mechanics.\
+						-Removed some ur-quan probe conditions.\
+/load.c					-Reads the information we're in ORZ space.\
+						-Reads info for HS spoor home and destination (mainly for transport ships).\
+/loadship.c				-Added resource code for Slykohr.\
+/master.c					-Ruled out Slykohr from supermelee\
+						-Added Explorer ship into supermelee\
+/melee.c					-Added Slykohr and Explorer into melee ship list.\
+/misc.c					-Added instrument damage (engine etc. can be damaged by hits).\
+						-Added engine damage function (one of the instrument damages).\
+/pickship.c				-Different ship picking graphics for Explorer and Precursor Vessel in full game (This is the ship selection screen before battle.)\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-\cf0 /plandata.c				-Placed the Orz space portal into Alpha Vulpeculae\
+\cf0 /plandata.c				-Placed the Orz space portal into Alpha Vulpeculae.\
 						-Moved some stars around in the list of stars to make them work. All stars must be sorted by their y-coordinate!!\
 						-Made the biggest stars of new star systems "Alphas" as should be.\
 /plangen.c				-Don't create 4x scaled image of planet surface at restricted planets since they cannot be landed on.\
 /planets.h					-Added PLANET_RESTRICTED flag definition. Restricted planets cannot be landed on.\
-/races.h					-Defined Androsyn conversation, Ip and hyperspace encounter percents and encounter ship makeups\
-						-Moved slaverace enums and defines to better places in the lists\
-						-Instrument damage: Added instrument damage flags. Ship may sustain 10 different damage types\
-						-Defined Mmrnmhrm, Chenjesu and Kohrah-vessel-riding-Slylandro information\
-/save.c					-Stores the information we're in ORZ space\
-						-Stores info for HS spoor home and destination (mainly for transport ships)\
-/shipstat.c					-Instrument damage functions: Crew and Energy gauges can be damaged\
-/sis.c						-Shows *Below* in SIS info screen when in Orz space\
-/sis.h					-Modified saved game summary to store the information of whether we are in orz space\
-/starmap.c				-Star finding business in Orz space\
-/tactrans.c					-Instrument damage: Damaged engines emit different colored ion particles\
-/uqmdebug.c				-Some Orz space checks\
-						-Add 10 crew upon pressing debug button. (To make it possible to use lander)\
-						-No more moon base on ship upon hitting debug key. (moonbase onboard screws up starbase transition gfx)\
-						-Debug key gives black orb instead of rosy sphere, temporal wrapper instead of clear spindle and slaveshield buster instead of maidens\
+/races.h					-Defined Androsyn conversation, Ip and hyperspace encounter percents and encounter ship makeups.\
+						-Moved slaverace enums and defines to better places in the lists.\
+						-Instrument damage: Added instrument damage flags. Ship may sustain 10 different damage types.\
+						-Defined Mmrnmhrm, Chenjesu and Kohrah-vessel-riding-Slylandro information.\
+/save.c					-Stores the information we're in ORZ space.\
+						-Stores info for HS spoor home and destination (mainly for transport ships).\
+/setup.c					-Bullet hole graphics for melee for instrument damage.\
+/setup.h					-Bullet hole graphics for melee for instrument damage.\
+/shipstat.c					-Instrument damage functions: Crew and Energy gauges can be damaged.\
+/sis.c						-Shows *Below* in SIS info screen when in Orz space.\
+/sis.h					-Modified saved game summary to store the information of whether we are in orz space.\
+						-Explorer has smaller thrust increment in interplanetary than precursor ship.\
+/starbase.c				-Procyon starbase has different graphics from earth starbase.\
+/starmap.c				-Star finding business in Orz space.\
+/tactrans.c					-Instrument damage: Damaged engines emit different colored ion particles.\
+/uqmdebug.c				-Some Orz space checks.\
+						-Add 10 crew upon pressing debug button. (To make it possible to use lander).\
+						-No more moon base on ship upon hitting debug key. (moonbase onboard screws up starbase transition gfx).\
+						-Debug key gives black orb instead of rosy sphere, temporal wrapper instead of clear spindle and slaveshield buster instead of maidens.\
 \
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
-\cf0 /comm/shofixt/shofixt.c		-Viewscreen animation for shofixti\
+\cf0 /comm/arilou/arilou.c			-Arilou guarding the Orz space portal dialogue.\
+/comm/blackur/blackurc.c		-New dialogue for the enhanced, vile, disgusting Kohr-Ah-Rath.\
+/comm/comandr/comandr.c	-Removed the use of ANIM_DISABLED since that define is no more. Unnecessary file???\
+/comm/human/humanc.c		-Ridiculous amounts of new animations for earthling ship captains.\
+/comm/orz/orzc.c			-Cleaned up comm logic for Orz.\
+/comm/shofixt/shofixtc.c		-Viewscreen animation for shofixti.\
+/comm/syreen/syreenc.c		-Oodles of new animations for syreen ship captains.\
+/comm/yehat/yehatc.c		-Yehat are no longer hostile upon encountering.\
 \
-/planets/devices.c			-Casters cannot be used in Orz space\
-						-Replaced rosy sphere with black orb\
-						-Replaced clear spindle with Temporal Wrapper\
-						-Replaced shofixti maidens with Slaveshield buster\
-/planets/genilw.c			-No ships orbiting Ilwrath homeworld anymore\
-/planets/genpku.c			-No ships orbiting Pkunk homeworld anymore\
-/planets/gencol.c			-Don't create Ur-quan probe at Vela\
-						-Planet is not slave-shielded anymore\
-						-Create Precursor factory ruins and little background story therein\
-/planets/genshof.c			-Removed Tanaka/Katana from shofixti home system\
-/planets/gensol.c			-Don't create Ur-quan probe at sol\
-						-Removed Fwiffo from Pluto\
+/planets/devices.c			-Casters cannot be used in Orz space.\
+						-Replaced rosy sphere with black orb.\
+						-Replaced clear spindle with Temporal Wrapper.\
+						-Replaced shofixti maidens with Slaveshield buster.\
+						-Disabled sun device's effect in Procyon orbit\
+/planets/gencol.c			-Don't create Ur-quan probe at Vela.\
+						-Planet is not slave-shielded anymore.\
+						-Create Precursor factory ruins and little background story therein.\
+/planets/genchmmr.c			-Added Chmmr to Procyon starbase.\
+						-Restricted landing on Procyon.\
+/planets/genilw.c			-No ships orbiting Ilwrath homeworld anymore.\
+/planets/genorz.c			-Removed Taalo Shield.\
+						-Removed mechanism which varies landing party text at androsynth ruins.\
+/planets/genpku.c			-No ships orbiting Pkunk homeworld anymore.\
+/planets/genshof.c			-Removed Tanaka/Katana from shofixti home system.\
+/planets/gensol.c			-Don't create Ur-quan probe at sol.\
+						-Removed Fwiffo from Pluto.\
+						-Removed tractors from moon surface.\
 						-Earth is now a restricted planet. It cannot be landed on anymore.\
+/planets/gensyr.c			-Syreen home planet is restricted and cannot be landed on.\
+/planets/genvux.c			-Removed shofixti maidens.\
+/planets/genzoq.c			-Removed Zoqfot scout ship from Rigel.\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-\cf0 /planets/solarsys.c			-Changes to make 0 planet star systems possible and the star in those accessible as "planets"\
-						-Different gfx for ORZ space portal/sun in interplanetary\
-/planets/pstarmap.c			-Added Orz space check to fuel requirement showing in starmap (0 fuel needed in orz space)\
-						-Orz space starmap colors and stars\
-						-Do not draw Sphere of Influence for Slylandros that ride Kohr-Ah vessels\
+\cf0 /planets/scan.c				-Cannot dispatch landers on restricted planets.\
+/planets/solarsys.c			-Changes to make 0 planet star systems possible and the star in those accessible as "planets".\
+						-Different gfx for ORZ space portal/sun in interplanetary.\
+/planets/pstarmap.c			-Added Orz space check to fuel requirement showing in starmap (0 fuel needed in orz space).\
+						-Orz space starmap colors and stars.\
+						-Do not draw Sphere of Influence for Slylandros that ride Kohr-Ah vessels.\
+						-Do not draw Sphere of Influence for Kohr-Ah.\
 \
-/ships/sis_ship/sis_ship.c		-Some Orz space checks\
-/ships/shofixti/shofixti.c		-Removed Tanaka/Katana from battle\
+/ships/pkunk/pkunk.c		-Fi instrument damage upon rebirth.\
+/ships/sis_ship/sis_ship.c		-Some Orz space checks.\
+						- Red ship in hyperspace, green in Quasi-, blue in Orzspace.\
+						-Gave Chmmr Explorer completely new weaponry.\
+						-Autopilot engages only after coming to a full stop.\
+/ships/shofixti/shofixti.c		-Removed Tanaka/Katana from battle.\
 \
-/content/base/gamestrings.txt	- Added * below * string that denotes player is in Orz space\
+/content/base/gamestrings.txt	- Added * below * string that denotes player is in Orz space.\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 \
-\
-\
-\
 ***************************************************************************************************************************************\
-ADDED FILES:\
+ADDED FILES, NOT 640x480-RELATED::\
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
-sc2code/comm/human/humanc.c			-New file:Earthling communications\
-sc2code/comm/androsynth/androsynthc.c		-New file:Androsynth communications\
+sc2code/comm/human/humanc.c			-New file:Earthling communications.\
+sc2code/comm/androsynth/androsynthc.c		-New file:Androsynth communications.\
+sc2code/comm/syreenhome/syreenhomec.c	-New file:Syreen starbase communications.\
+sc2code/comm/transport/transportc.c		-New file:Human transport ship communications.\
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
-\cf0 sc2code/planets/genorzspaceportal.c		-New file: Orz space portal definition (0 planet system, star accessible like planets)\
+\cf0 sc2code/planets/genorzspaceportal.c		-New file: Orz space portal definition (0 planet system, star accessible like planets).\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+sc2code/ships/slykohr/slykohr.c			-New file:Kohr-Ah ship with slylandros captaining\
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
 content/base/comm/androsynth/androsynth.txt\
 content/base/comm/human/human.txt\
 content/base/comm/shofixti/shofixt.72...84.png\
@@ -148,9 +207,58 @@ content/base/ships/explorer/ExpOrz.ani\
 content/base/ships/explorer/ExpQuasi.0...31.png\
 content/base/ships/explorer/ExpQuasi.ani\
 content/base/ships/transport\
+AND MORE... I'VE LOST TRACK OF THE NEW CONTENT FILES :(\
 \
 \
 \
 \
+***************************************************************************************************************************************\
+EDITED FILES, HI-RES 640x480 PROJECT:\
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+libs/gfxlib.h							-Introduce resolutionfactor into function call.\
+libs/graphics/gfxcommon.c				-Declared resolutionfactor integer.\
+libs/graphics/gfxcommon.h				-Declared resolutionfactor integer.\
+libs/graphics/sdl/3do_blt.c					-Added a new function "DisplayInterfacereal640" for setting up 640x480 screen layer. (The original sets up only 320x240).\
+libs/graphics/sdl/3do_funcs.c				-Introduced res_factor variable to InitGraphics so it can transfer it to LoadDisplay in 3do_blt.c.\
+libs/graphics/sdl/opengl.c					-Multiply resolution values in \CocoaLigature0 TFB_GL_InitGraphics\CocoaLigature1 . (Is this needed anyway since we don't run opengl in hi-res...)\
+libs/graphics/sdl/pure.c					-Scale according to resolution factor. Check sanity of resolution factor.\
 \
-}
+sc2code/border.c						-The grey screen borders and stuff within them.\
+sc2code/build.h						-Multiplied Status window related units.\
+sc2code/comm.h						-Multiplied comm slider X-resolution.\
+sc2code/element.h						-Multiplied status and text heights.\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
+\cf0 sc2code/encount.c						-Multiplied Encounter segue screen gfx.\
+sc2code/loadmele.c						-Multiplied SuperMelee ship selection box and other supermelee related stuff.\
+sc2code/melee.c						-Multiplied A LOT of supermelee ship selection screen graphics.\
+sc2code/melee.h						-Multiplied a couple of melee icon etc. units.\
+sc2code/menu.c						-Multiplied menu text height.\
+sc2code/oscill.c						-Gave oscilloscope fixed size (110) memory since it couldn't be inited with a variable number (which resolution factor is!)\
+sc2code/pickmele.c						-Multiplied some crap in in-supermelee ship selection screen.\
+sc2code/pickship.c						-Multiplied some crap in in-adventure ship selection screen.\
+sc2code/setupmenu.c					-Introduce resolution hi-res mode to setup menu.\
+sc2code/setupmenu.h					-Enumerate hi-res mode.\
+sc2code/shipcont.h						-Multiplied a single define from this file...\
+sc2code/sis.c							-Multiplied main ship related stuff\
+sc2code/sis.h							-Multiplied radar drawing, ship name drawing, module drawing, SIS messages (planet, star name, time)\
+sc2code/status.c						-Multiplied melee window related stuff\
+sc2code/surface.c						-Mineral and life placing uses the whole planet area at hi-res too.\
+sc2code/trackplayer.c					-Multiplied oscilloscope related crap.\
+sc2code/units.h						-Multiplied most important screen window size related units.\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
+\cf0 \
+sc2code/planets/cargo.c					-Multiplied cargo related stuff.\
+sc2code/planets/devices.c				-Multiplied devices related stuff.\
+sc2code/planets/gentopo.c				-Integer size changes to suit larger resolution numbers.\
+sc2code/planets/orbits.c					-Multiplied different sized stars' orbit units.\
+sc2code/planets/planets.h				-Multiplied slaveshield in-orbit graphic.\
+sc2code/planets/plangen.c				-Multiplied a lot of in-orbit graphics.\
+sc2code/planets/report.c					-Multiplied lander report text and text screen graphics.\
+sc2code/planets/roster.c					-Multiplied roster related stuff.\
+sc2code/planets/scan.c					-Multiplied orbital scan graphics and their cleanups.\
+\
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+sc2code/ships/androsyn/androsyn.c			-All ship files here feature multiplications to constant numbers.\
+sc2code/ships/arilou/arilou.c\
+sc2code/ships/blackurq/blackurq.c\
+sc2code/ships/chenjesu/chenjesu.c}

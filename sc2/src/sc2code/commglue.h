@@ -18,6 +18,7 @@
 
 // JMS 2009: -Added earthling ship conversation enum and extern locdata
 //			 -Added Androsynth conversation enum and extern locdata
+// JMS 2010: -AddedTransport conversation enum and extern locdata
 
 #ifndef _COMMGLUE_H
 #define _COMMGLUE_H

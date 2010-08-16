@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added Slylandro-sin-kohrah-vessels and Chmmr Explorer to melee ship list
+// JMS 2010: Added Slylandros-in-kohrah-vessels and Chmmr Explorer to melee ship list
 
 #ifndef _MELEE_H
 #define _MELEE_H

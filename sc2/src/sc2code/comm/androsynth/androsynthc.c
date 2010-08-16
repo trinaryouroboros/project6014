@@ -1,4 +1,3 @@
-// JMS 2009: Created this file to enable communications with earthling ships/bases
 //Copyright Paul Reiche, Fred Ford. 1992-2002
 
 /*
