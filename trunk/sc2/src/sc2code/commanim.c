@@ -181,7 +181,7 @@ ambient_anim_task (void *data)
 		{
 			--ADPtr;
 			--pSeq;
-			//if (ADPtr->AnimFlags & WHEN_TALKING) // JMS: Replacing ANIM_DISABLED with WHEN_TALKING to enable zoomed-in ambient anims.
+			//if (ADPtr->AnimFlags & WHEN_TALKING) // JMS: Replaced ANIM_DISABLED with WHEN_TALKING to enable zoomed-in ambient anims.
 			//	continue;
 			if (pSeq->Direction == NO_DIR)
 			{
@@ -285,8 +285,7 @@ ambient_anim_task (void *data)
 			}
 
 			if (pSeq->AnimType == PICTURE_ANIM
-				&& (ADPtr->AnimFlags
-				& CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING)
+				&& (ADPtr->AnimFlags & CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING)
 				&& pSeq->Direction != NO_DIR)
 			{
 				// This is a picture animation which would conflict with
@@ -294,6 +293,7 @@ ambient_anim_task (void *data)
 				COUNT index;
 
 				CanTalk = FALSE;
+
 				if ( !(pSeq->Direction != UP_DIR
 						|| (index = GetFrameIndex (pSeq->AnimObj.CurFrame)) > ADPtr->StartIndex + 1
 						|| (index == ADPtr->StartIndex + 1 && (ADPtr->AnimFlags & CIRCULAR_ANIM))
@@ -301,7 +301,7 @@ ambient_anim_task (void *data)
 					pSeq->Direction = NO_DIR;
 			}
 			
-			// JMS: Ambient animations which should occur only during talk
+			// JMS: This handles ambient animations which should occur only during talk
 			if (pSeq->AnimType == PICTURE_ANIM
 				&& ADPtr->AnimFlags & WHEN_TALKING 
 				&& (!(CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING) || (CommData.AlienTalkDesc.AnimFlags & TALK_INTRO))
@@ -310,8 +310,6 @@ ambient_anim_task (void *data)
 			{
 				// Stop the anim if not talking
 				COUNT index;
-				
-				//CanTalk = FALSE;
 				if ( !(pSeq->Direction != UP_DIR
 					   || (index = GetFrameIndex (pSeq->AnimObj.CurFrame)) > ADPtr->StartIndex + 1
 					   || (index == ADPtr->StartIndex + 1 && (ADPtr->AnimFlags & CIRCULAR_ANIM))
