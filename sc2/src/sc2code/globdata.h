@@ -58,6 +58,8 @@
 
 #define COLORXFORM_ANIM PAUSE_TALKING
 
+#define FAST_STOP_AT_TALK_START TALK_DONE // JMS
+
 typedef struct
 {
 	COUNT StartIndex;
