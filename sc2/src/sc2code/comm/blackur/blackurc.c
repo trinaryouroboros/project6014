@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: New dialogue for the new, vile, disgusting and enhanced Kohr-Ah-Rath!
+
 #include "comm/commall.h"
 #include "comm/blackur/resinst.h"
 #include "comm/blackur/strings.h"

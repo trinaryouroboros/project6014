@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Removed the references to ANIM_DISABLED from here since that define is removed...
+//			 ... We're not using this file anyway, but keeping it just to be sure.
+
 #include "setup.h"
 #include "comm/commall.h"
 #include "comm/comandr/resinst.h"

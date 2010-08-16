@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Cleaned up the comm logic a bit...
+// JMS 2010: Totally new file for syreen starbase comm.
 
 #include "comm/commall.h"
 #include "comm/syreenhome/resinst.h"

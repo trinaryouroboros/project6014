@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Removed the arc welder anims that created black spots on top of earth graphics.
+// JMS 2010: -Removed the arc welder anims that created black spots on top of earth graphics.
+//			 -Added rudimentary dialogue regarding other races and lost shofixti mission
 
 #include "comm/commall.h"
 #include "comm/comandr/resinst.h"
