@@ -646,7 +646,7 @@ buzztrack_preprocess (ELEMENT *ElementPtr)
 				delta_y = -delta_y;
 			delta_x = WORLD_TO_DISPLAY (delta_x);
 			delta_y = WORLD_TO_DISPLAY (delta_y);
-			if(1)
+			if(0)
 			{
 				ZeroVelocityComponents (&ElementPtr->velocity);
 			}
