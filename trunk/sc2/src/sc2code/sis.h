@@ -1,4 +1,5 @@
 // JMS 2009: Added byte OrzSpace in SummaryDesc to notify if in orz space or not
+// JMS 2010: Explorer has smaller thrust increment in interplanetary
 
 #ifndef _SIS_H
 #define _SIS_H

@@ -18,6 +18,7 @@
 
 // JMS 2009		-Text for Orz space ship group encounter segue screen "encounter in *Below*
 // JMS 2010		-Also no planet name for the segue screen. Portal gfx instead of planet.
+//				-If enemy escape occurred, don't scavenge debris
 
 #include "encount.h"
 
