@@ -298,7 +298,7 @@ ambient_anim_task (void *data)
 				// The animations are marked with FAST_STOP_AT_TALK_START in the races' comm source codes.
 				if (ADPtr->AnimFlags & FAST_STOP_AT_TALK_START)
 				{	CanTalk = TRUE;
-					pSeq->AnimObj.CurFrame = SetAbsFrameIndex(pSeq->AnimObj.CurFrame, ADPtr->StartIndex);
+					//pSeq->AnimObj.CurFrame = SetAbsFrameIndex(pSeq->AnimObj.CurFrame, ADPtr->StartIndex);
 					pSeq->Direction = NO_DIR; }
 				else
 					CanTalk = FALSE;
