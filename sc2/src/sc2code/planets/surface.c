@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+#include "globdata.h"
 #include "lifeform.h"
 #include "planets.h"
 #include "libs/mathlib.h"
@@ -53,17 +54,23 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 						deposit_quality_gross;
 
 			deposit_quality_fine = ((COUNT)TFB_Random () % 100)
-					+ (
-					DEPOSIT_QUALITY (eptr->Density)
-					+ SysInfoPtr->StarSize
-					) * 50;
-			if (deposit_quality_fine < MEDIUM_DEPOSIT_THRESHOLD)
-				deposit_quality_gross = 0;
-			else if (deposit_quality_fine < LARGE_DEPOSIT_THRESHOLD)
-				deposit_quality_gross = 1;
-			else
-				deposit_quality_gross = 2;
+			  + (
+			     DEPOSIT_QUALITY (eptr->Density)
+			     + SysInfoPtr->StarSize
+			     ) * 50;
 
+			if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) > UNIVERSE_TO_LOGY(6000)))
+			  {
+			    deposit_quality_fine = (COUNT)(deposit_quality_fine / 10);
+			  }
+			
+			if (deposit_quality_fine < MEDIUM_DEPOSIT_THRESHOLD)
+			  deposit_quality_gross = 0;
+			else if (deposit_quality_fine < LARGE_DEPOSIT_THRESHOLD)
+			  deposit_quality_gross = 1;
+			else
+			  deposit_quality_gross = 2;
+			
 			rand_val = TFB_Random ();
 			loword = LOWORD (rand_val);
 			hiword = HIWORD (rand_val);
@@ -220,7 +227,18 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 				UWORD rand_val;
 
 				rand_val = (UWORD)TFB_Random ();
-				index = LOBYTE (rand_val) % NUM_CREATURE_TYPES;
+				
+			        if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) > UNIVERSE_TO_LOGY(6000)))
+				  {
+				    // Check whether we're in the NE quad
+				    // using CurStarDescPtr->star_pt.x
+				    index = LOBYTE (rand_val) % NUM_CREATURE_TYPES;
+				  }
+				else
+				  {
+				    index = (LOBYTE (rand_val) % NUM_NEW_CREATURE_TYPES) + NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES;
+				  }
+				
 				num_creatures = (BYTE)((HIBYTE (rand_val) % 10) + 1);
 				do
 				{

@@ -1348,7 +1348,7 @@ GeneratePlanetSide (void)
 				NodeElementPtr->current.image.frame = f;
 				NodeElementPtr->next.image.frame = SetRelFrameIndex (
 						f, NUM_SCANDOT_TRANSITIONS - 1);
-				NodeElementPtr->turn_wait = MAKE_BYTE (4, 4);
+				NodeElementPtr->turn_wait = MAKE_BYTE (15, 15);
 				NodeElementPtr->preprocess_func = object_animation;
 				if (scan == ENERGY_SCAN)
 				{
