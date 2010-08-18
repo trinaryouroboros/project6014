@@ -211,6 +211,7 @@ HaveYouFoundArtefact (RESPONSE_REF R)
 	}
 	else if (PLAYER_SAID (R, not_yet))
 	{
+		SET_GAME_STATE(TRIANGULATION_SPHERES_CHMMR, 1);
 		NPCPhrase (SEARCH_FOR_IT);
 	}
 

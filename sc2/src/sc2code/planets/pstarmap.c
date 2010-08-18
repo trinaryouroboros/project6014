@@ -18,7 +18,7 @@
 
 // JMS 2009: -Orz space starmap colors and star locations
 // JMS 2010: -Do not draw Sphere of Influence for Slylandros riding Kohr-Ah ships
-//			 -Do not draw Sphere of Influence Kohr-Ahs.
+//			 -Do not draw Sphere of Influence for Kohr-Ahs.
 
 #include "colors.h"
 #include "controls.h"
@@ -38,6 +38,8 @@
 #include "libs/strlib.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
+
+#include "triangul.h"
 
 
 #define UNIVERSE_TO_DISPX(ux) \
@@ -364,6 +366,8 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	}
 
 	star_frame = SetRelFrameIndex (pMenuState->CurFrame, 2);
+	
+	// Draw Spheres of Influence
 	if (which_space <= 1 && orz_space <= 1) // JMS: Orz space check
 	{
 		COUNT index;
@@ -456,20 +460,24 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		}
 	}
 
+	// JMS: Shofixti crash site triangulation sphere drawing, defined in planets/triangul.c
+	//if(!(GET_GAME_STATE(HIDE_TRIANGULATION_SPHERES)))
+	if(1)
+	  drawTriangulationSpheres(which_space, orz_space, pClipRect);
+
 	do
 	{
 		BYTE star_type;
-
 		star_type = SDPtr->Type;
 
 #ifdef NOTYET
 {
 UNICODE buf[256];
-
 GetClusterName (SDPtr, buf);
 printf ("%s\n", buf);
 }
 #endif /* NOTYET */
+
 		s.origin.x = UNIVERSE_TO_DISPX (SDPtr->star_pt.x);
 		s.origin.y = UNIVERSE_TO_DISPY (SDPtr->star_pt.y);
 		if (which_space <= 1)
@@ -487,8 +495,7 @@ printf ("%s\n", buf);
 		DrawStamp (&s);
 
 		++SDPtr;
-	} while (SDPtr->star_pt.x <= MAX_X_UNIVERSE
-			&& SDPtr->star_pt.y <= MAX_Y_UNIVERSE);
+	} while (SDPtr->star_pt.x <= MAX_X_UNIVERSE && SDPtr->star_pt.y <= MAX_Y_UNIVERSE);
 
 	if (GET_GAME_STATE (ARILOU_SPACE))
 	{
@@ -502,8 +509,7 @@ printf ("%s\n", buf);
 			s.origin.x = UNIVERSE_TO_DISPX (QUASI_SPACE_X);
 			s.origin.y = UNIVERSE_TO_DISPY (QUASI_SPACE_Y);
 		}
-		s.frame = SetRelFrameIndex (star_frame,
-				GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
+		s.frame = SetRelFrameIndex (star_frame, GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
 		DrawStamp (&s);
 	}
 
@@ -518,7 +524,6 @@ printf ("%s\n", buf);
 		ScreenTransition (3, &r);
 		transition_pending = FALSE;
 	}
-	
 	UnbatchGraphics ();
 
 	if (pClipRect)
@@ -539,7 +544,6 @@ printf ("%s\n", buf);
 					);
 		}
 	}
-
 	if (draw_cursor)
 		UnlockMutex (GraphicsLock);
 }

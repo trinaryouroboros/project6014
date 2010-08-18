@@ -279,7 +279,7 @@ InitSIS (void)
 
 	InitPlanetInfo ();
 	InitGroupInfo (TRUE);
-
+	
 	GLOBAL (glob_flags) = 0;
 
 	GLOBAL (ElementWorth[COMMON]) = 1;

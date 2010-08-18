@@ -967,7 +967,7 @@ START_GAME_STATE
 	ADD_GAME_STATE (TRANSPORT_SHIP_0_STATUS, 3)
 		// 0 - Waiting for leaving in orbit.
 		// 1 - Leaving for hyperspace, still in home system.
-		// 2 - "Left truespace, not yeat appeared in hyperspace.
+		// 2 - "Left truespace, not yet appeared in hyperspace.
 		// 3 - Now in hyperspace.
 		// 4 - Arriving destination.
 		// 5 - UNUSED
@@ -988,7 +988,15 @@ START_GAME_STATE
 	// JMS: Initer, which is related to starbase month and day tracking (See comm/starbas.c for more info.)
 	ADD_GAME_STATE (STARBASE_VISITED_FOR_FIRST_TIME, 1)
 
+	// JMS: It is allowed for the autopilot to engage
 	ADD_GAME_STATE (AUTOPILOT_OK, 1)
+
+	// JMS: Set shofixti crash site triangulation spheres visible in starmap
+	ADD_GAME_STATE (TRIANGULATION_SPHERES_CHMMR, 1)
+	ADD_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1)
+
+	// JMS: Once the artifact is found, the spheres are no longer necessary
+	ADD_GAME_STATE (HIDE_TRIANGULATION_SPHERES, 1)
 
 END_GAME_STATE
 

@@ -180,6 +180,9 @@ extern BOOLEAN instantMove;
 void dumpStrings(FILE *out);
 
 
+// JMS: Toggle shofixt distress site triangulation spheres on / off
+void ToggleTriangulationSpheres (BOOLEAN triangSphereSwitch);
+
 // To add some day:
 // - a function to fast forward the game clock to a specifiable time.
 
