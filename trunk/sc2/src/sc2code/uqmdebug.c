@@ -70,6 +70,8 @@ BOOLEAN instantMove = FALSE;
 BOOLEAN disableInteractivity = FALSE;
 void (* volatile debugHook) (void) = NULL;
 
+// JMS
+BOOLEAN triangSphereSwitch = FALSE;
 
 void
 debugKeyPressed (void)
@@ -101,6 +103,9 @@ debugKeyPressed (void)
 	instantMove = !instantMove;
 	showSpheres ();
 	activateAllShips ();
+	
+	triangSphereSwitch = !triangSphereSwitch;
+	ToggleTriangulationSpheres(triangSphereSwitch);
 //	forwardToNextEvent (TRUE);
 //	SET_GAME_STATE (MELNORME_CREDIT1, 100);
 //	GLOBAL_SIS (ResUnits) = 100000;
@@ -540,6 +545,17 @@ showSpheres (void)
 	}
 }
 
+////////////////////////////////////////////////////////////////////////////
+
+// JMS
+void
+ToggleTriangulationSpheres (BOOLEAN triangSphereSwitch)
+{
+	int onOff = (int)triangSphereSwitch;
+	SET_GAME_STATE (TRIANGULATION_SPHERES_CHMMR, onOff);
+	SET_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, onOff);
+}
+	
 ////////////////////////////////////////////////////////////////////////////
 
 void

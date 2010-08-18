@@ -474,8 +474,8 @@ Procyon
 Rigel
 
 
-#(Unassigned2)
-Unassigned2
+#(Eidolonii)
+Eidolonii
 
 
 #(Mizar)

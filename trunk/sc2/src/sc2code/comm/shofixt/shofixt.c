@@ -234,6 +234,7 @@ SmallTalk2 (RESPONSE_REF R)
 {	
 	if (PLAYER_SAID (R, any_news))
 	{
+		SET_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1);
 		NPCPhrase (NOT_MUCH_NEWS);
 		DISABLE_PHRASE (any_news);
 	}
