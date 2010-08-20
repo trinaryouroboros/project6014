@@ -59,9 +59,9 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 			     + SysInfoPtr->StarSize
 			     ) * 50;
 
-			if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) > UNIVERSE_TO_LOGY(6000)))
+			if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
 			  {
-			    deposit_quality_fine = (COUNT)(deposit_quality_fine / 10);
+			    deposit_quality_fine = (COUNT)(deposit_quality_fine * DEPLETION_RATE);
 			  }
 			
 			if (deposit_quality_fine < MEDIUM_DEPOSIT_THRESHOLD)
@@ -228,7 +228,7 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 
 				rand_val = (UWORD)TFB_Random ();
 				
-			        if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) > UNIVERSE_TO_LOGY(6000)))
+			        if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
 				  {
 				    // Check whether we're in the NE quad
 				    // using CurStarDescPtr->star_pt.x

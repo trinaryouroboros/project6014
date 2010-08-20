@@ -1348,7 +1348,7 @@ GeneratePlanetSide (void)
 				NodeElementPtr->current.image.frame = f;
 				NodeElementPtr->next.image.frame = SetRelFrameIndex (
 						f, NUM_SCANDOT_TRANSITIONS - 1);
-				NodeElementPtr->turn_wait = MAKE_BYTE (15, 15);
+				NodeElementPtr->turn_wait = MAKE_BYTE (4, 4);
 				NodeElementPtr->preprocess_func = object_animation;
 				if (scan == ENERGY_SCAN)
 				{
@@ -1394,6 +1394,7 @@ GeneratePlanetSide (void)
 						break;
 					}
 
+					NodeElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[which_node].FrameRate);
 					NodeElementPtr->mass_points = (BYTE)which_node;
 					NodeElementPtr->hit_points = HINIBBLE (
 							CreatureData[which_node].ValueAndHitPoints);
