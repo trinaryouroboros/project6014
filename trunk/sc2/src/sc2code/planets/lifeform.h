@@ -62,7 +62,13 @@
 typedef struct
 {
 	BYTE Attributes, ValueAndHitPoints;
+        COUNT FrameRate;
 } LIFEFORM_DESC;
+
+// BW: FrameRate is an integer between 0 and 15
+// where (FrameRate+1)/32 is (roughly ?) the number of seconds
+// between two frames when animating the lifeform.
+// This should be defined with ONE_SECOND to comply with the other animations
 
 extern const LIFEFORM_DESC CreatureData[];
 

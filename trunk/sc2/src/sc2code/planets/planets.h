@@ -99,6 +99,8 @@ enum
 };
 #define MAX_SCROUNGED 50 /* max lander can hold */
 
+#define DEPLETION_RATE 0.1
+
 #define SCALE_RADIUS(r) ((r) << 6)
 #define UNSCALE_RADIUS(r) ((r) >> 6)
 #define MAX_ZOOM_RADIUS SCALE_RADIUS(128)
