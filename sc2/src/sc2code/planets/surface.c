@@ -59,6 +59,7 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 			     + SysInfoPtr->StarSize
 			     ) * 50;
 
+			// BW: Check whether we're in the NE quadrant
 			if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
 			  {
 			    deposit_quality_fine = (COUNT)(deposit_quality_fine * DEPLETION_RATE);
@@ -228,10 +229,9 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 
 				rand_val = (UWORD)TFB_Random ();
 				
+				// BW: Check whether we're in the NE quadrant
 			        if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
 				  {
-				    // Check whether we're in the NE quad
-				    // using CurStarDescPtr->star_pt.x
 				    index = LOBYTE (rand_val) % NUM_CREATURE_TYPES;
 				  }
 				else
