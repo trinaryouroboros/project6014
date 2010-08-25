@@ -783,6 +783,21 @@ hyper_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 			CurStarDescPtr = SDPtr;
 			ElementPtr0->state_flags |= DEFY_PHYSICS | COLLISION;
 		}
+		else if (SDPtr->Index == MELNORME_HOME_DEFINED)
+		{
+			//TODO If the player has the "Deflection nullifier device", they can enter the Melnorme home world.
+			SIZE dx, dy;
+
+			dx = WORLD_TO_VELOCITY (ElementPtr0->next.location.x
+					- ElementPtr1->next.location.x);
+			dy = WORLD_TO_VELOCITY (ElementPtr0->next.location.y
+					- ElementPtr1->next.location.y);
+
+			//Deflect at angle -- probably need to do more trig here...
+			DeltaVelocityComponents (&ElementPtr1->velocity,
+					-dy/4, -dx/4);
+			ElementPtr0->state_flags |= DEFY_PHYSICS;
+		}
 		else if ((GLOBAL (CurrentActivity) & IN_BATTLE)
 				&& (GLOBAL (autopilot.x) == ~0
 				|| GLOBAL (autopilot.y) == ~0
