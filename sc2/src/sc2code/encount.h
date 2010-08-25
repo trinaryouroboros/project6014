@@ -126,6 +126,7 @@ enum
 	ANDROSYNTH_DEFINED,
 	MYCON_TRAP_DEFINED,
 	SLAVERACE_DEFINED,
+	MELNORME_HOME_DEFINED,          // Also generates deflection shield in hyperspace
 	ORZ_SPACE_PORTAL_DEFINED		// JMS: Portal to ORZ space
 };
 

@@ -470,6 +470,8 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		BYTE star_type;
 		star_type = SDPtr->Type;
 
+		if (SDPtr->Index != MELNORME_HOME_DEFINED)
+		{
 #ifdef NOTYET
 {
 UNICODE buf[256];
@@ -478,21 +480,22 @@ printf ("%s\n", buf);
 }
 #endif /* NOTYET */
 
-		s.origin.x = UNIVERSE_TO_DISPX (SDPtr->star_pt.x);
-		s.origin.y = UNIVERSE_TO_DISPY (SDPtr->star_pt.y);
-		if (which_space <= 1)
-			s.frame = SetRelFrameIndex (star_frame,
-					STAR_TYPE (star_type)
-					* NUM_STAR_COLORS
-					+ STAR_COLOR (star_type));
-		else if (SDPtr->star_pt.x == ARILOU_HOME_X
-				&& SDPtr->star_pt.y == ARILOU_HOME_Y)
-			s.frame = SetRelFrameIndex (star_frame,
-					SUPER_GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
-		else
-			s.frame = SetRelFrameIndex (star_frame,
-					GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
-		DrawStamp (&s);
+			s.origin.x = UNIVERSE_TO_DISPX (SDPtr->star_pt.x);
+			s.origin.y = UNIVERSE_TO_DISPY (SDPtr->star_pt.y);
+			if (which_space <= 1)
+				s.frame = SetRelFrameIndex (star_frame,
+						STAR_TYPE (star_type)
+						* NUM_STAR_COLORS
+						+ STAR_COLOR (star_type));
+			else if (SDPtr->star_pt.x == ARILOU_HOME_X
+					&& SDPtr->star_pt.y == ARILOU_HOME_Y)
+				s.frame = SetRelFrameIndex (star_frame,
+						SUPER_GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
+			else
+				s.frame = SetRelFrameIndex (star_frame,
+						GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
+			DrawStamp (&s);
+		}
 
 		++SDPtr;
 	} while (SDPtr->star_pt.x <= MAX_X_UNIVERSE && SDPtr->star_pt.y <= MAX_Y_UNIVERSE);

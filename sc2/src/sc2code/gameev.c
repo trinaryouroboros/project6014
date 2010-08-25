@@ -245,11 +245,13 @@ transport_starts_event(void)
 	if(GLOBAL (GameClock).day_index % 7 == 0 && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 0)
 		SET_GAME_STATE (TRANSPORT_SHIP_0_STATUS,1);
 	
+	month_index = GLOBAL (GameClock.month_index) % 12;
+
 	if (day_index==28)
 	{
 		
 		// If december 28th, next transport starts next year.
-		if ((month_index = GLOBAL (GameClock.month_index) % 12) == 0)
+		if (month_index == 0)
 			++year_index;
 		
 		// Next transport starts on a date of next month.

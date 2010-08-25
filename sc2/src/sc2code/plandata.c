@@ -24,6 +24,9 @@
 #include "planets/elemdata.h"
 
 
+// NOTE: each block of stars (hyperspace, quasispace, etc.) MUST be
+// y-ordered for the FindStar binary search to work!  Typical symptoms of
+// it NOT working are flying up to a star but not being sucked into it.
 STAR_DESC starmap_array[] =
 {
 //                           postfix name index (like 'Normae')
@@ -38,7 +41,7 @@ STAR_DESC starmap_array[] =
 {{3468, 182}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 1, 17},
 {{5314, 210}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 2, 29},
 {{9044, 228}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 1, 49},
-{{1325, 230}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 104},
+{{1325, 230}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), MELNORME_HOME_DEFINED, 2, 104},  //TODO pick a better star somewhere round here
 {{6886, 317}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 2, 36},
 {{1877, 355}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 1, 104},
 {{3254, 357}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 4, 17},
@@ -49,8 +52,8 @@ STAR_DESC starmap_array[] =
 {{9862, 467}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 0, 32},
 {{5482, 480}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 6, 29},
 {{5184, 485}, MAKE_STAR (GIANT_STAR, BLUE_BODY, -1), 0, 1, 29},
-{{5386, 520}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 5, 29},
 {{4817, 501}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 7, 29},
+{{5386, 520}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 5, 29},
 {{7727, 525}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 115},
 {{3256, 528}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 3, 17},
 {{ 606, 602}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 1, 58},
@@ -167,6 +170,7 @@ STAR_DESC starmap_array[] =
 {{2115,3099}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 0, 49},
 {{7495,3100}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 6, 2},
 {{1329,3105}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 4, 27},
+{{6915,3125}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 2, 67},
 {{4534,3127}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 0, 26},
 {{1730,3146}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 7, 27},
 {{5200,3162}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 2, 69},
@@ -174,7 +178,6 @@ STAR_DESC starmap_array[] =
 {{1638,3189}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 6, 27},
 {{1143,3215}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 3, 27},
 {{5491,3218}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 3, 69},
-{{6915,3125}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 2, 67},
 {{ 162,3233}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 2, 30},
 {{7533,3271}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 5, 2},
 {{3656,3286}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 1, 57},
