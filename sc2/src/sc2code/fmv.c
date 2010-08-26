@@ -161,9 +161,9 @@ Introduction (void)
 
 	/* by default we do 3DO cinematics; or PC slides when 3DO files are
 	 * not present */
-	/*if (optWhichIntro == OPT_PC || !DoFMV ("slides/intro/intro.duk"))
+	if (optWhichIntro == OPT_PC || !DoFMV ("slides/intro/intro.duk"))
 		ShowPresentation ( CaptureStringTable (
-			LoadStringTable (INTROPRES_STRTAB)));*/
+				LoadStringTable (INTROPRES_STRTAB)));
 
 	xform_buf[0] = FadeAllToBlack;
 	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
