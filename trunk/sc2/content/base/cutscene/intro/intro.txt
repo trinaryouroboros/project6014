@@ -51,7 +51,7 @@ DRAW 0
 #(Fade-in a slide; param1=fade time)
 FTC 1500
 #(Wait)
-WAIT 2000
+WAIT 500
 #(Fade slide to black; param1=fade time)
 FTB 2000
 #(Wait)
@@ -67,15 +67,27 @@ RESYNC
 
 #(Draw slide; param1=ANI index)
 DRAW 1
+
+#(Fade-in a slide; param1=fade time)
+FTC 1500
+
+WAIT 1500
+
 #(Fade-in a slide; param1=fade time)
 FTC 3000
 #(Synchronize)
 SYNC 5000
-#(Text fade-in)
-TFI Based on the source code of STAR CONTROL II
-(STAR CONTROL is a trademark of Atari)
+#(Text fade-out)
+TFO
+#(Wait)
+WAIT 200
+
+
+
+#(Fade-in a slide; param1=fade time)
+FTC 3000
 #(Synchronize)
-SYNC 8000
+SYNC 5000
 #(Text fade-out)
 TFO
 #(Wait)
@@ -124,7 +136,7 @@ DRAW 0
 #(Fade-in a slide; param1=fade time)
 FTC 700
 #(Text fade-in)
-TFI There were many great battles...
+TFI It is the year 2164...
 #(Wait)
 WAIT 2500
 #(Text fade-out)
@@ -135,8 +147,8 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI Earth and her partners in the
-Alliance of Free Stars...
+TFI Three years have passed since 
+you travelled the galaxy...
 #(Wait)
 WAIT 3000
 #(Text fade-out)
@@ -147,8 +159,8 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI Against the evil Ur-Quan and its
-Hierarchy of Battle Thralls.
+TFI assembling the scattered forces
+of the old Alliance of Free Stars...
 #(!!! Milestone Sync 2 !!!)
 SYNC 35000
 #(Text fade-out)
@@ -159,7 +171,8 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI ...and the Ur-Quan were winning...
+TFI ...to destroy the Sa-Matra 
+battle platform.
 #(Wait)
 WAIT 2000
 #(Text fade-out)
@@ -170,13 +183,25 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI Meanwhile, on the edge of the
-known frontier, an amazing
-discovery was made...
-#(!!! Milestone Sync 3 !!!)
-SYNC 41000
+TFI The Ur-Quan fled to the far 
+reaches of space....
 #(Wait)
-WAIT 4000
+WAIT 2000
+
+#(!!! Milestone Sync 2 !!!)
+SYNC 35000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Wait)
+WAIT 2000
+
+#(Text fade-in)
+TFI And left the Hierachy forces
+in disarray...
+#(Wait)
+WAIT 2000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
@@ -184,23 +209,10 @@ DRAW 0
 #(Wait)
 WAIT 500
 
-#(Text fade-in)
-TFI far beneath the surface of an
-unexplored, alien world...
-#(Wait)
-WAIT 4000
-#(Text fade-out)
-TFO
-#(Draw slide; param1=ANI index)
-DRAW 0
-
-#(Wait)
-WAIT 700
-
 #(Fade slide to black; param1=fade time)
 FTB 700
 
-#(+++++++++++++++++++++ Slide 2 ++++++++++++++++++++++)
+#(+++++++++++++++++++++ Slide 1 ++++++++++++++++++++++)
 
 #(Set text fade in/out color; 0xRRGGBB)
 TFC 707070
@@ -211,7 +223,8 @@ DRAW 1
 FTC 700
 
 #(Text fade-in)
-TFI A huge underground city...
+TFI The Chmmr have emerged as the
+new leaders of the known galaxy.
 #(Wait)
 WAIT 3500
 #(Text fade-out)
@@ -222,76 +235,129 @@ DRAW 1
 WAIT 500
 
 #(Text fade-in)
-TFI Filled with the technological
-wonders of an advanced alien
-race, the Precursors...
+TFI And have asserted their authority...
 #(Wait)
 WAIT 6000
 #(Text fade-out)
 TFO
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(+++++++++++++++++++++++ Slide 2 +++++++++++++++++++++++++++)
+
 #(Draw slide; param1=ANI index)
-DRAW 1
+DRAW 2
+#(Fade-in a slide; param1=fade time)
+FTC 500
+
 #(Wait)
-WAIT 500
+WAIT 700
+
 
 #(Text fade-in)
-TFI Who vanished a thousand
-centuries ago.
+TFI Slave worlds have been freed...
+#(Wait)
+WAIT 2000
+#(Text fade-out)
+TFO
+
+#(Fade slide to White; param1=fade time)
+FTW 500
+
+#(+++++++++++++++++++++++ Slide 3 +++++++++++++++++++++++++++)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 707070
+
+#(Draw slide; param1=ANI index)
+DRAW 3
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+
+#(Draw slide; param1=ANI index)
+DRAW 3
+#(Wait)
+WAIT 1500
+
+
+#(Text fade-in)
+TFI And a new era of peace 
+has emerged..
 #(Wait)
 WAIT 4000
 #(Text fade-out)
 TFO
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+#(+++++++++++++++++++++++ Slide 4 +++++++++++++++++++++++++++)
+
 #(Draw slide; param1=ANI index)
-DRAW 1
+DRAW 4
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+
 #(Wait)
-WAIT 500
+WAIT 1500
 
 #(Text fade-in)
-TFI But then the main Ur-Quan fleet
-broke through the Alliance's
+TFI For their service to the Ur-Quan
 defensive line...
 #(Wait)
-WAIT 6500
+WAIT 1500
 #(Text fade-out)
 TFO
+
+
+#(Fade slide to White; param1=fade time)
+FTW 500
+#(+++++++++++++++++++++++ Slide 5 +++++++++++++++++++++++++++)
+
 #(Draw slide; param1=ANI index)
-DRAW 1
+DRAW 5
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+#(Draw slide; param1=ANI index)
+DRAW 5
+
+
+
+#(Text fade-in)
+TFI Hieracy battle thralls have
+been punished
+#(Wait)
+WAIT 1500
+#(Text fade-out)
+TFO
+
+#(Draw slide; param1=ANI index)
+DRAW 5
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI Isolating the planet, stranding
-the scientists a hundred light
-years away from Earth.
-#(Wait)
-WAIT 6500
-#(Text fade-out)
-TFO
-#(Draw slide; param1=ANI index)
-DRAW 1
-#(Wait)
-WAIT 500
-
-#(Text fade-in)
-TFI They waited hopefully for a
-rescue vessel...
+TFI The New Alliance of Free Stars
+is rebuilding decimated homeworlds,
 #(Wait)
 WAIT 3500
 #(Text fade-out)
 TFO
+
+
 #(Draw slide; param1=ANI index)
-DRAW 1
+DRAW 5
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI which never came.
+TFI and continues to drive out
+scattered Ur-Quan from known
+space.
 #(Wait)
-WAIT 3000
+WAIT 3500
 #(Text fade-out)
 TFO
-#(Draw slide; param1=ANI index)
-DRAW 1
 
 #(Wait)
 WAIT 700
@@ -299,71 +365,75 @@ WAIT 700
 #(Fade slide to black; param1=fade time)
 FTB 700
 
-#(+++++++++++++++++++++++ Slide 3 +++++++++++++++++++++++++++)
+#(+++++++++++++++++++++++ Slide 6 +++++++++++++++++++++++++++)
+# (Unzervault)
 
 #(Set text fade in/out color; 0xRRGGBB)
 TFC FCA030
 
 #(Draw slide; param1=ANI index)
-DRAW 2
+DRAW 6
 #(Fade-in a slide; param1=fade time)
 FTC 700
 
 #(Text fade-in)
-TFI 20 years have passed...
+TFI After many years of travelling the
+galaxy fighting the Ur-Quan
 #(Wait)
 WAIT 3000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 2
+DRAW 6
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI We, the survivors of the research
-mission have colonized this world.
+TFI A peaceful life on Unzervalt 
+with Talana beckons
 #(Wait)
-WAIT 4500
+WAIT 2500
+#(Text fade-out)
+TFO
+
+#(Draw slide; param1=ANI index)
+DRAW 6
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI You will devote your years to
+the study of Precursor technology.
+#(Wait)
+WAIT 2500
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 2
+DRAW 6
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI We continued our investigation of
-the underground city...
-#(Wait)
-WAIT 4500
-#(Text fade-out)
-TFO
-#(Draw slide; param1=ANI index)
-DRAW 2
-#(Wait)
-WAIT 500
-
-#(Text fade-in)
-TFI And we have discovered its
-purpose...
-#(Wait)
-WAIT 4000
-#(Text fade-out)
-TFO
-#(Draw slide; param1=ANI index)
-DRAW 2
-#(Wait)
-WAIT 500
-
-#(Text fade-in)
-TFI It is a factory. 
+TFI Not willing to be involved in
+diplomacy, politics or military
+operations.
 #(Wait)
 WAIT 3000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 2
+DRAW 6
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI But your new life must wait. 
+#(Wait)
+WAIT 3000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 6
 
 #(Wait)
 WAIT 700
@@ -371,156 +441,147 @@ WAIT 700
 #(Fade slide to black; param1=fade time)
 FTB 700
 
-#(+++++++++++++++++++++++ Slide 4 +++++++++++++++++++++++++++)
+#(+++++++++++++++++++++++ Slide 7 +++++++++++++++++++++++++++)
+# (Distress Call)
 
 #(Set text fade in/out color; 0xRRGGBB)
 TFC FC480C
 
 #(Draw slide; param1=ANI index)
-DRAW 3
+DRAW 10
 #(Fade-in a slide; param1=fade time)
 FTC 700
 
+#(Draw slide; param1=ANI index)
+DRAW 8
+wait 500
+#(Draw slide; param1=ANI index)
+DRAW 9
+wait 500
+#(Draw slide; param1=ANI index)
+DRAW 10
+wait 500
+#(Draw slide; param1=ANI index)
+DRAW 11
+wait 500
+
+
 #(Text fade-in)
-TFI A factory for building starships!
+TFI Alliance command at Procyon
+has received a distress signal
 #(Wait)
 WAIT 4500
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 3
+DRAW 7
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI But there aren't enough materials
-to make a complete vessel.
+TFI From a Shofixti scout in 
+deep unknown space.
 #(Wait)
 WAIT 5000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 3
+DRAW 8
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI We can finish only the skeleton
-of one starship.
+TFI The urget, garbled message refers
+to a dangerous Precursor machine
 #(Wait)
 WAIT 5000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 3
+DRAW 11
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI But that must be enough --
+TFI That has destroyed several
+Scout vessels.
+
 #(Wait)
 WAIT 3500
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 3
+DRAW 13
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI Because YOU must captain the
-vessel...
+TFI The Chmmr have asked YOU to lead
+an Expedition
 #(Wait)
 WAIT 4000
 #(Text fade-out)
 TFO
-#(Draw slide; param1=ANI index)
-DRAW 3
-#(Wait)
-WAIT 500
 
-#(Text fade-in)
-TFI And return to Earth!
-#(Wait)
-WAIT 4000
-#(Text fade-out)
-TFO
-#(Draw slide; param1=ANI index)
-DRAW 3
-
-#(Wait)
-WAIT 700
 
 #(Fade slide to black; param1=fade time)
 FTB 700
 
-#(+++++++++++++++++++++++ Slide 5 +++++++++++++++++++++++++++)
+#(+++++++++++++++++++++++ Slide 8 +++++++++++++++++++++++++++)
+# (To Infinity... and beyond!)
 
 #(Set text fade in/out color; 0xRRGGBB)
 TFC 000000
 
 #(Draw slide; param1=ANI index)
-DRAW 4
+DRAW 14
 #(Fade-in a slide; param1=fade time)
 FTC 700
 
 #(Text fade-in)
-TFI To travel the great distance,
-you must push through into
-HyperSpace...
+TFI Travel to Beta Ecorereus 
+far from Earth..
 #(Wait)
 WAIT 6000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 4
+DRAW 14
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI Find out what has happened over
-these many years...
+TFI Track down the Shofixti and 
+neutralize this artifact.
 #(Wait)
 WAIT 5000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 4
+DRAW 14
 #(Wait)
 WAIT 500
 
 #(Text fade-in)
-TFI Tell Earth of our plight!
+TFI A terrible new danger awaits...
 #(Wait)
 WAIT 4000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 4
+DRAW 14
 #(Wait)
 WAIT 500
 
-#(Text fade-in)
-TFI And if the war with the Ur-Quan
-still rages...
-#(Wait)
-WAIT 5000
-#(Text fade-out)
-TFO
-#(Draw slide; param1=ANI index)
-DRAW 4
-#(Wait)
-WAIT 500
 
 #(Text fade-in)
-TFI Fight for Earth and the Alliance,
-as well as you can...
+TFI Are you ready for this?
 #(Wait)
 WAIT 6000
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
-DRAW 4
+DRAW 14
 
 #(Wait)
 WAIT 700
