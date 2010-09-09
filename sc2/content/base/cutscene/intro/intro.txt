@@ -136,7 +136,7 @@ DRAW 0
 #(Fade-in a slide; param1=fade time)
 FTC 700
 #(Text fade-in)
-TFI It is the year 2164...
+TFI It is the year 2165.
 #(Wait)
 WAIT 2500
 #(Text fade-out)
@@ -147,7 +147,7 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI Three years have passed since 
+TFI Four years have passed since 
 you travelled the galaxy...
 #(Wait)
 WAIT 3000
@@ -159,7 +159,7 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI assembling the scattered forces
+TFI ...assembling the scattered forces
 of the old Alliance of Free Stars...
 #(!!! Milestone Sync 2 !!!)
 SYNC 35000
@@ -171,22 +171,21 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI ...to destroy the Sa-Matra 
-battle platform.
+TFI ...to free the human race
+from Ur-Quan enslavement.
 #(Wait)
-WAIT 2000
+WAIT 2500
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
 DRAW 0
 #(Wait)
-WAIT 500
+WAIT 1250
 
 #(Text fade-in)
-TFI The Ur-Quan fled to the far 
-reaches of space....
+TFI You succeeded.
 #(Wait)
-WAIT 2000
+WAIT 750
 
 #(!!! Milestone Sync 2 !!!)
 SYNC 35000
@@ -195,13 +194,13 @@ TFO
 #(Draw slide; param1=ANI index)
 DRAW 0
 #(Wait)
-WAIT 2000
+WAIT 1500
 
 #(Text fade-in)
-TFI And left the Hierachy forces
-in disarray...
+TFI The Ur-Quan fled, leaving
+their Hierarchy forces in disarray.
 #(Wait)
-WAIT 2000
+WAIT 2500
 #(Text fade-out)
 TFO
 #(Draw slide; param1=ANI index)
@@ -224,7 +223,7 @@ FTC 700
 
 #(Text fade-in)
 TFI The Chmmr have emerged as the
-new leaders of the known galaxy.
+new leaders of the known space...
 #(Wait)
 WAIT 3500
 #(Text fade-out)
@@ -235,7 +234,7 @@ DRAW 1
 WAIT 500
 
 #(Text fade-in)
-TFI And have asserted their authority...
+TFI ...and have asserted their authority.
 #(Wait)
 WAIT 6000
 #(Text fade-out)
@@ -256,7 +255,7 @@ WAIT 700
 
 
 #(Text fade-in)
-TFI Slave worlds have been freed...
+TFI Slave worlds have been freed.
 #(Wait)
 WAIT 2000
 #(Text fade-out)
@@ -283,7 +282,7 @@ WAIT 1500
 
 #(Text fade-in)
 TFI And a new era of peace 
-has emerged..
+has emerged.
 #(Wait)
 WAIT 4000
 #(Text fade-out)
@@ -324,8 +323,8 @@ DRAW 5
 
 
 #(Text fade-in)
-TFI Hieracy battle thralls have
-been punished
+TFI ...Hierarchy battle thralls have
+been punished.
 #(Wait)
 WAIT 1500
 #(Text fade-out)
@@ -352,7 +351,7 @@ WAIT 500
 
 #(Text fade-in)
 TFI and continues to drive out
-scattered Ur-Quan from known
+the scattered Ur-Quan from known
 space.
 #(Wait)
 WAIT 3500
@@ -378,7 +377,7 @@ FTC 700
 
 #(Text fade-in)
 TFI After many years of travelling the
-galaxy fighting the Ur-Quan
+galaxy fighting the Ur-Quan...
 #(Wait)
 WAIT 3000
 #(Text fade-out)
@@ -389,8 +388,8 @@ DRAW 6
 WAIT 500
 
 #(Text fade-in)
-TFI A peaceful life on Unzervalt 
-with Talana beckons
+TFI ...a peaceful life on Unzervalt 
+with Talana beckons.
 #(Wait)
 WAIT 2500
 #(Text fade-out)
@@ -402,8 +401,8 @@ DRAW 6
 WAIT 500
 
 #(Text fade-in)
-TFI You will devote your years to
-the study of Precursor technology.
+TFI You have devoted your years to
+the study of Precursor technology...
 #(Wait)
 WAIT 2500
 #(Text fade-out)
@@ -414,7 +413,7 @@ DRAW 6
 WAIT 500
 
 #(Text fade-in)
-TFI Not willing to be involved in
+TFI ...not willing to be involved in
 diplomacy, politics or military
 operations.
 #(Wait)
@@ -468,7 +467,7 @@ wait 500
 
 #(Text fade-in)
 TFI Alliance command at Procyon
-has received a distress signal
+has received a distress signal...
 #(Wait)
 WAIT 4500
 #(Text fade-out)
@@ -479,8 +478,8 @@ DRAW 7
 WAIT 500
 
 #(Text fade-in)
-TFI From a Shofixti scout in 
-deep unknown space.
+TFI ...from a Shofixti scout
+deep in unknown space.
 #(Wait)
 WAIT 5000
 #(Text fade-out)
@@ -491,8 +490,8 @@ DRAW 8
 WAIT 500
 
 #(Text fade-in)
-TFI The urget, garbled message refers
-to a dangerous Precursor machine
+TFI The urgent, garbled message refers
+to an enormous machine...
 #(Wait)
 WAIT 5000
 #(Text fade-out)
@@ -503,8 +502,8 @@ DRAW 11
 WAIT 500
 
 #(Text fade-in)
-TFI That has destroyed several
-Scout vessels.
+TFI that destroyed several scout vessels
+upon contact. Then... only static.
 
 #(Wait)
 WAIT 3500
@@ -517,7 +516,7 @@ WAIT 500
 
 #(Text fade-in)
 TFI The Chmmr have asked YOU to lead
-an Expedition
+an expedition...
 #(Wait)
 WAIT 4000
 #(Text fade-out)
@@ -539,8 +538,8 @@ DRAW 14
 FTC 700
 
 #(Text fade-in)
-TFI Travel to Beta Ecorereus 
-far from Earth..
+TFI ...to travel to the distress site 
+far from Earth...
 #(Wait)
 WAIT 6000
 #(Text fade-out)
@@ -551,7 +550,7 @@ DRAW 14
 WAIT 500
 
 #(Text fade-in)
-TFI Track down the Shofixti and 
+TFI ...to track down the Shofixti and 
 neutralize this artifact.
 #(Wait)
 WAIT 5000
@@ -563,7 +562,8 @@ DRAW 14
 WAIT 500
 
 #(Text fade-in)
-TFI A terrible new danger awaits...
+TFI As you punch through the fabric
+of truespace, you keep wondering...
 #(Wait)
 WAIT 4000
 #(Text fade-out)
