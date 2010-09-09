@@ -95,16 +95,18 @@ thousand
 #(HELLO_NOW_DOWN_TO_BUSINESS1)
 Attention alien vessel, this is Trademaster Greenish of the starship
 `Inevitably Successful In All Circumstances'.
-We offer trade to enhance your species' way of life...
-...Captain?  Is that you?
-I must say what a pleasure it is to run into you after all this time. How are all the Earthlings?
+We offer trade to enhance your species' way of life
+Captain? Is that you?
+I must say what a pleasure it is to run into you after all this time.
+How are all the Earthlings?
 
 #(hi_doing_great)
-Hi Mr Melnorme! The Earthlings are doing just great. But now I have to sort out some business with a precursor artefact. As you do...
+We are doing just great! But now I have to sort out some business with a Shofixti gone missing.
 
 #(DOING_GOOD_RESPONSE)
-Ah, if it's precursor artefacts that interest you, I have some very valuable information.
-In accordance with our protocols and code of ethics this information can be given to you in exchange for credits.
+Ah, if it's lost Shofixtis that interest you, I have some very valuable information.
+In accordance with our protocols and code of ethics
+this information can be given to you in exchange for credits.
 
 #(doing_average)
 Just about average. How about yourselves?
@@ -120,7 +122,8 @@ Could be better to be honest.
 #(NOT_GOOD_RESPONSE)
 I'm sorry to hear that Captain.
 Perhaps a shiny new bauble will raise your spirits.
-I have cunningly acquired two remarkable items from the Druuge which I am willing to pass on to you
+I have cunningly acquired two remarkable items
+from the Druuge which I am willing to pass on to you
 for an astonishly low price.
 
 #(WANT_TO_TRADE)
@@ -258,7 +261,6 @@ unless, of course
 a hostile alien vessel finds you here helpless
 and annihilates you mercilessly.
 This has been known to happen.
-
 However
 as a gesture of good will, and in the spirit of friendship, we offer our assistance!
 For a nominal fee.
@@ -503,11 +505,31 @@ What else would you like to buy?
 What else would you like to buy?
 
 #(OK_BUY_EVENT_1)
-Captain, I recommend you consider contributing to this game. 
-I'm sure it will be worthwhile
+The Alliance high command as well as the Shofixti are in a turmoil
+over a patrol of Shofixti scout vessels that were probably destroyed
+but managed to transmit a distress call before that.
+While the Shofixti are naturally aggrieved over the loss of their friends
+the Chmmr have other considerations in mind.
+It is most probable that the machinery the distress message was pointing to
+is Precursor in origin.
+And lately
+the Chmmr have devoted a lot of their resources in finding Precursor artifacts.
+How we know this all?
+Usually it is not in our custom to reveal sources of information
+but in this case, it is relevant to the very fact we are selling.
+One of our 'agents' was able to intercept the signal while enroute to Archytas near
+the Persipina constellation.
+We also have news on the other Shofixti patrols.
+Whilst we have recently had sightings of the patrol
+that was dispatched near the Angstrom system
+the one that was tasked with the Messier system is actually missing
+and probably destroyed.
+Two months ago, the patrol just vanished somewhere near the Messier system
+despite our agents' daily checks on them -- they're just gone.
 
 #(OK_BUY_EVENT_2)	melno092.ogg
-
+Captain, I recommend you consider contributing to this game. 
+I'm sure it will be worthwhile
 
 #(OK_BUY_EVENT_3)	melno093.ogg
 

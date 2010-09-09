@@ -186,7 +186,7 @@ ExitConversation (RESPONSE_REF R)
 		SET_GAME_STATE (SHOFIXTI_ANGRY, 2);
 		SET_GAME_STATE (BATTLE_SEGUE, 1);
 	}	
-	else if (PLAYER_SAID (R, fairwell_shofixti))
+	else if (PLAYER_SAID (R, farewell_shofixti))
 	{
 		if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
 			NPCPhrase (MIFFED_GOODBYE_EARTHLING);
@@ -215,7 +215,7 @@ ThankYou (RESPONSE_REF R)
 	NPCPhrase (THANK_YOU);
 	DISABLE_PHRASE (sorry_to_hear);	
 
-	Response (fairwell_shofixti, ExitConversation);
+	Response (farewell_shofixti, ExitConversation);
 
 }
 
@@ -226,17 +226,26 @@ HowReconstruction (RESPONSE_REF R)
 	DISABLE_PHRASE (how_goes_reconstruction);	
 
 	Response (sorry_to_hear, ThankYou);
-	Response (fairwell_shofixti, ExitConversation);
+	Response (farewell_shofixti, ExitConversation);
 }
 
 static void
 SmallTalk2 (RESPONSE_REF R)
 {	
-	if (PLAYER_SAID (R, any_news))
+	static BYTE PatrolInfoState = 0;
+	
+	if (PLAYER_SAID (R, where_patrol))
+	{
+		NPCPhrase (LOST_PATROLS);
+		DISABLE_PHRASE (where_patrol);
+		PatrolInfoState++;
+	}
+	else if (PLAYER_SAID (R, why_not_call))
 	{
 		SET_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1);
-		NPCPhrase (NOT_MUCH_NEWS);
-		DISABLE_PHRASE (any_news);
+		NPCPhrase (NO_RESOURCES_TO_CALL);
+		DISABLE_PHRASE (why_not_call);
+		PatrolInfoState = 0;
 	}
 	else if (PLAYER_SAID (R, how_goes_reconstruction))
 	{
@@ -244,9 +253,14 @@ SmallTalk2 (RESPONSE_REF R)
 		DISABLE_PHRASE (how_goes_reconstruction);
 	}
 	
-	if (PHRASE_ENABLED (any_news))
+	if (PatrolInfoState == 0 && PHRASE_ENABLED (where_patrol))
 	{
-		Response (any_news, SmallTalk2);
+		Response (where_patrol, SmallTalk2);
+	}
+	
+	if (PatrolInfoState == 1 && PHRASE_ENABLED (why_not_call))
+	{
+		Response (why_not_call, SmallTalk2);
 	}
 
 	if (PHRASE_ENABLED (how_goes_reconstruction))
@@ -255,7 +269,7 @@ SmallTalk2 (RESPONSE_REF R)
 	}
 
 
-	Response (fairwell_shofixti, ExitConversation);
+	Response (farewell_shofixti, ExitConversation);
 }
 
 
@@ -272,9 +286,9 @@ SmallTalk1 (RESPONSE_REF R)
 		NPCPhrase (SHARE_NEWS);
 	}
 
-	Response (any_news, SmallTalk2);
+	Response (where_patrol, SmallTalk2);
 	Response (how_goes_reconstruction, SmallTalk2);
-	Response (fairwell_shofixti, ExitConversation);
+	Response (farewell_shofixti, ExitConversation);
 }
 
 
@@ -347,7 +361,7 @@ Intro (void)
 			Response (chmmr_hunt_kohrah, SmallTalk1);
 			Response (no_idea, SmallTalk1);
 			Response (pearshaped, ExitConversation);
-			Response (fairwell_shofixti, ExitConversation);
+			Response (farewell_shofixti, ExitConversation);
 		}
 		else
 			SmallTalk1 (0);

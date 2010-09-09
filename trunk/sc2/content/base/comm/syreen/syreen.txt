@@ -6,7 +6,7 @@ As always we are very pleased to welcome you. What brings you here?
 We're here because we can be. Had the opportunity to visit so here we are!
 
 #(looking_for_artefacts)
-The Chmmr have sent us on a mission to find a precursor artefact. Which, come to think of it, is nowhere near here.
+The Chmmr have sent us on a mission to find some missing Shofixti. Who, come to think of it, are nowhere near here.
 
 #(spacebabes)
 We're cruisin' for space-babes!
@@ -16,7 +16,7 @@ If it's space-babes you're after it's space-babes you'll get I'm sure.
 Nice tug by the way.
 
 #(thanks_tug_complement)
-Thanks! The Chmmr gave me this one, it's OKAY but not as cool as my old one *sniff*
+Thanks! The Chmmr gave me this one, it's OKAY but not as cool as my old one...
 you are talking about the vessel right?
 
 #(not_fooled)

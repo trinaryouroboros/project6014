@@ -83,14 +83,9 @@ GenerateChmmr (BYTE control)
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 			{
 				// JMS: The Chmmr reside in starbase
-				CloneShipFragment (CHMMR_SHIP,
-								   &GLOBAL (npc_built_ship_q), INFINITE_FLEET);
+				CloneShipFragment (CHMMR_SHIP, &GLOBAL (npc_built_ship_q), INFINITE_FLEET);
 				
-				//pSolarSysState->MenuState.Initialized += 2;
-				//InitCommunication (CHMMR_CONVERSATION);
-				//pSolarSysState->MenuState.Initialized -= 2;
-				
-				// JMS: This code summons starbase subroutine. (The global_flags_and_data = 0
+				// JMS: This code summons starbase subroutine. (The global_flags_and_data == ~0
 				// is checked in Starcon2Main function in starcon.c)
 				GLOBAL (CurrentActivity) |= START_ENCOUNTER;
 				SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
@@ -105,42 +100,9 @@ GenerateChmmr (BYTE control)
 				}
 				
 				break;
-				/*RECT r;
-
-				LockMutex (GraphicsLock);
-
-				LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-				pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-						CaptureStringTable (
-								LoadStringTable (CHMMR_BASE_STRTAB));
-
-				ScanContext = CreateContext ();
-				SetContext (ScanContext);
-				SetContextFGFrame (Screen);
-				r.corner.x = (SIS_ORG_X + SIS_SCREEN_WIDTH) - MAP_WIDTH;
-				r.corner.y = (SIS_ORG_Y + SIS_SCREEN_HEIGHT) - MAP_HEIGHT;
-				r.extent.width = MAP_WIDTH;
-				r.extent.height = MAP_HEIGHT;
-				SetContextClipRect (&r);
-
-				DoDiscoveryReport (MenuSounds);
-
-				SetContext (SpaceContext);
-				DestroyContext (ScanContext);
-				ScanContext = 0;
-
-				DestroyStringTable (ReleaseStringTable (
-						pSolarSysState->SysInfo.PlanetInfo.DiscoveryString
-						));
-				pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = 0;
-				FreeLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-
-				UnlockMutex (GraphicsLock);
-				break;*/
 			}
 		default:
 			GenerateRandomIP (control);
 			break;
 	}
 }
-

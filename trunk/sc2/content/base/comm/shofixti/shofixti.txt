@@ -44,7 +44,8 @@ before we know if you can be trusted.
 I will smite you to smithereens, you rabid, puss-oozing centipede!
 
 #(WILL_ATTACK_TOO)
-Not before I rip that tincan open and feast upon your entrails! KYAIEE!
+Not before I rip that tincan open and feast upon your entrails!
+Kyaiee!
 
 #(chmmr_hunt_kohrah)
 The Chmmr continue to hunt the Kohr-Ah. They also slave-shielded the VUX and Mycon.
@@ -56,25 +57,32 @@ We heard of the VUX and Mycon. Under a slave shield is the best place for them.
 Seems to be all under control... Actually I have no idea!
 
 #(SHARE_NEWS)
-Well should you find out more, please stop by and share news if convenient. 
+Well should you find out more
+please stop by and share news if convenient. 
 We've had little contact with the other races in this new Alliance.
 
 #(pearshaped)
 Oooh, actually it all turned pear-shaped. The Ur-Quan are back in charge and we're here to conquer you!
 
 #(KYAIEE)
-Traitor! It is for occasions like this that we developed our extra-powerful Glory Annihilators. Kyaiee!
+Traitor!
+It is for occasions like this that we developed our extra-powerful Glory Annihilators
+Kyaiee!
 
 #(how_goes_reconstruction)
 How goes the reconstruction of your society, culture, population, civilisation and everything else?
 
 #(NOT_GOOD_RECONSTRUCTION)
-Oh captain, not well. As you know when the Ur-Quan hordes approached our homeworld we 'novaed our sun. 
-Unfortunately that wiped life from the planet's surface and turned it into an infertile wasteland. 
-We have attempted to rebuild a home at Delta Gorno but none of the planets are fertile enough.  
-But we are determined to stay with our roots. 
-We know the technology exists to regenerate life on planets. 
-We hope that the Chmmr can help us with this but they seem to be occupied elsewhere.
+Oh captain, not well. 
+As you know when the Ur-Quan hordes approached our homeworld we 'novaed our sun. 
+Unfortunately that wiped life from the planet's surface
+and turned it into an infertile wasteland. 
+We have attempted to rebuild a home at Delta Gorno
+but none of the planets are fertile enough.  
+Our attempts to find a habitable planet in other star systems has so far been useless
+so, we stay with our roots. 
+We know there must be technology to regenerate life on planets. 
+We hope that the Chmmr could help us but they seem to be occupied elsewhere.
 
 #(sorry_to_hear)
 We're sorry to hear that. We'll remind the Chmmr of your Struggle. I'm sure they will assist you.
@@ -82,14 +90,39 @@ We're sorry to hear that. We'll remind the Chmmr of your Struggle. I'm sure they
 #(THANK_YOU)
 Thank you Earthling, your assistance is greatly appreciated once again.
 
-#(any_news)
-Any news or interesting tit-bits of information you'd like to share?
+#(where_patrol)
+Tell me about the lost scout patrol.
 
-#(NOT_MUCH_NEWS)
-Not really other than our own reconnaissance scouts going missing in Beta xxx. 
-It sounds like they stumbled across something dangerous.
+#(LOST_PATROLS)
+As you know, the Alliance has been all but too busy with the Kohr-Ah
+to effectively help us in our plight.
+So about six months ago we started our own program
+to find a suitable alternative for a new home planet.
+We sent several task forces of four to six scout vessels
+to various reaches of this galactic quadrant.
+Most returned on the date agreed upon, without success, but not all
+three patrols are still missing.
 
-#(fairwell_shofixti)
+#(why_not_call)
+Why don't you give them a call and say 'come back'?
+
+#(NO_RESOURCES_TO_CALL)
+Call them, you say?
+Hyperwave 'casters that can cover such interstellar distances
+are few and far between.
+Such a device costs a fortune and requires a large vessel to be housed on
+neither of which we have.
+We are hard-stretched to keep even this meager scout fleet running
+so we had no option but to give each patrol a lot of autonomity
+and a large area of stars to investigate.
+They all knew they would be on their own once they left
+yet they volunteered with joy.
+Please, captain, find out what has happened to them
+A lot of those brave ones are my friends.
+I'll transfer you now the coordinates
+of the areas that were designated for the lost patrols.
+
+#(farewell_shofixti)
 Farewell Shofixti, see you next time!
 
 #(GOODBYE_EARHTLING)
