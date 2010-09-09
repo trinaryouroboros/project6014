@@ -53,7 +53,7 @@ GetTriangulationSphereRect (COUNT radius, POINT coords, char sphereString[], REC
 		SetContextFont (TinyFont);
 		
 		t.baseline.x = pRect->corner.x + (pRect->extent.width >> 1);
-		t.baseline.y = pRect->corner.y + (pRect->extent.height+8*RESOLUTION_FACTOR) - 1;
+		t.baseline.y = pRect->corner.y + (pRect->extent.height + 8 * RESOLUTION_FACTOR) - 1;
 		t.align = ALIGN_CENTER;
 		t.CharCount =sizeof(sphereString);
 		t.pStr = (UNICODE *)sphereString;

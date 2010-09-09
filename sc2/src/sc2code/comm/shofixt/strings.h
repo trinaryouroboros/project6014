@@ -44,9 +44,11 @@ enum
 	NOT_GOOD_RECONSTRUCTION,
 	sorry_to_hear,
 	THANK_YOU,
-	any_news,
-	NOT_MUCH_NEWS,
-	fairwell_shofixti,
+	where_patrol,
+	LOST_PATROLS,
+	why_not_call,
+	NO_RESOURCES_TO_CALL,
+	farewell_shofixti,
 	GOODBYE_EARTHLING,
 	MIFFED_GOODBYE_EARTHLING
 };

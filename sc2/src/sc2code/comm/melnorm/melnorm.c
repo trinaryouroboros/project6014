@@ -194,6 +194,33 @@ static NUMBER_SPEECH_DESC melnorme_numbers_english =
 	}
 };
 
+static COUNT
+DeltaCredit (SIZE delta_credit)
+{
+	COUNT Credit;
+	
+	Credit = MAKE_WORD (
+						GET_GAME_STATE (MELNORME_CREDIT0),
+						GET_GAME_STATE (MELNORME_CREDIT1)
+						);
+	if ((int)delta_credit >= 0 || ((int)(-delta_credit) <= (int)(Credit)))
+	{
+		Credit += delta_credit;
+		SET_GAME_STATE (MELNORME_CREDIT0, LOBYTE (Credit));
+		SET_GAME_STATE (MELNORME_CREDIT1, HIBYTE (Credit));
+		LockMutex (GraphicsLock);
+		DrawStatusMessage ((UNICODE *)~0);
+		UnlockMutex (GraphicsLock);
+	}
+	else
+	{
+		NPCPhrase (NEED_MORE_CREDIT0);
+		NPCPhrase (delta_credit + (int)Credit);
+		NPCPhrase (NEED_MORE_CREDIT1);
+	}
+	
+	return (Credit);
+}
 
 
 static void
@@ -221,14 +248,30 @@ TradeMenu (RESPONSE_REF R);
 static void
 BuyInfoMenu (RESPONSE_REF R)
 {
+	COUNT credit;
+	SIZE needed_credit;
+	
+	credit = MAKE_WORD (GET_GAME_STATE (MELNORME_CREDIT0), GET_GAME_STATE (MELNORME_CREDIT1));
+	
+#define INFO_COST 75
+	needed_credit = INFO_COST;
+	
 	if (PLAYER_SAID (R, buy_info))
 	{
 		NPCPhrase (BUY_INFO_INTRO);
 	}
 	if (PLAYER_SAID (R, buy_current_events))
 	{
-		NPCPhrase (OK_BUY_EVENT_1);
-		NPCPhrase (OK_NO_TRADE_NOW_BYE);
+		if ((int)credit >= (int)needed_credit)
+		{
+			NPCPhrase (OK_BUY_EVENT_1);
+			DeltaCredit (-needed_credit);
+		}
+		else
+		{
+			NPCPhrase (OK_BUY_EVENT_2);
+			NPCPhrase (OK_NO_TRADE_NOW_BYE);
+		}
 	}
 	else if (PLAYER_SAID (R, buy_alien_races))
 	{
@@ -280,12 +323,114 @@ PurchaseMenu (RESPONSE_REF R)
 static void
 SellMenu (RESPONSE_REF R)
 {
-	if (PLAYER_SAID (R, items_to_sell))
+	BYTE num_new_rainbows;
+	UWORD rainbow_mask;
+	SIZE added_credit;
+	int what_to_sell_queued = 0;
+	
+	rainbow_mask = MAKE_WORD (GET_GAME_STATE (RAINBOW_WORLD0),GET_GAME_STATE (RAINBOW_WORLD1));
+	num_new_rainbows = (BYTE)(-GET_GAME_STATE (MELNORME_RAINBOW_COUNT));
+	
+	while (rainbow_mask)
 	{
-		NPCPhrase (NOTHING_TO_SELL);
+		if (rainbow_mask & 1)
+			++num_new_rainbows;
+		
+		rainbow_mask >>= 1;
 	}
+	
+	if (!PLAYER_SAID (R, items_to_sell))
+	{
+		if (PLAYER_SAID (R, sell_life_data))
+		{
+			DWORD TimeIn;
+			
+			added_credit = GLOBAL_SIS (TotalBioMass) * BIO_CREDIT_VALUE;
+			
+			NPCPhrase (SOLD_LIFE_DATA1);
+			NPCPhrase (-(int)GLOBAL_SIS (TotalBioMass));
+			NPCPhrase (SOLD_LIFE_DATA2);
+			NPCPhrase (-(int)added_credit);
+			NPCPhrase (SOLD_LIFE_DATA3);
+			// queue WHAT_TO_SELL before talk-segue
+			if (num_new_rainbows)
+			{
+				NPCPhrase (WHAT_TO_SELL);
+				what_to_sell_queued = 1;
+			}
+			AlienTalkSegue (1);
+			
+			DrawCargoStrings ((BYTE)~0, (BYTE)~0);
+			SleepThread (ONE_SECOND / 2);
+			TimeIn = GetTimeCounter ();
+			DrawCargoStrings (
+							  (BYTE)NUM_ELEMENT_CATEGORIES,
+							  (BYTE)NUM_ELEMENT_CATEGORIES
+							  );
+			do
+			{
+				TimeIn = GetTimeCounter ();
+				if (AnyButtonPress (TRUE))
+				{
+					DeltaCredit (GLOBAL_SIS (TotalBioMass) * BIO_CREDIT_VALUE);
+					GLOBAL_SIS (TotalBioMass) = 0;
+				}
+				else
+				{
+					--GLOBAL_SIS (TotalBioMass);
+					DeltaCredit (BIO_CREDIT_VALUE);
+				}
+				DrawCargoStrings (
+								  (BYTE)NUM_ELEMENT_CATEGORIES,
+								  (BYTE)NUM_ELEMENT_CATEGORIES
+								  );
+			} while (GLOBAL_SIS (TotalBioMass));
+			SleepThread (ONE_SECOND / 2);
+			
+			LockMutex (GraphicsLock);
+			ClearSISRect (DRAW_SIS_DISPLAY);
+			UnlockMutex (GraphicsLock);
+		}
+		else /* if (R == sell_rainbow_locations) */
+		{
+			added_credit = num_new_rainbows * (250 * BIO_CREDIT_VALUE);
+			
+			NPCPhrase (SOLD_RAINBOW_LOCATIONS1);
+			NPCPhrase (-(int)num_new_rainbows);
+			NPCPhrase (SOLD_RAINBOW_LOCATIONS2);
+			NPCPhrase (-(int)added_credit);
+			NPCPhrase (SOLD_RAINBOW_LOCATIONS3);
+			
+			num_new_rainbows += GET_GAME_STATE (MELNORME_RAINBOW_COUNT);
+			SET_GAME_STATE (MELNORME_RAINBOW_COUNT, num_new_rainbows);
+			num_new_rainbows = 0;
+			
+			DeltaCredit (added_credit);
+		}
+	}
+	
+	if (GLOBAL_SIS (TotalBioMass) || num_new_rainbows)
+	{
+		if (!what_to_sell_queued)
+			NPCPhrase (WHAT_TO_SELL);
+		
+		if (GLOBAL_SIS (TotalBioMass))
+			Response (sell_life_data, SellMenu);
+		if (num_new_rainbows)
+			Response (sell_rainbow_locations, SellMenu);
+	}
+	else
+	{
+		if (PLAYER_SAID (R, items_to_sell))
+		{
+			NPCPhrase (NOTHING_TO_SELL);
+			DISABLE_PHRASE (items_to_sell);
+		}
+	}
+	
 	Response (make_purchases, PurchaseMenu);
-	Response (items_to_sell, SellMenu);
+	if (PHRASE_ENABLED (items_to_sell))
+		Response (items_to_sell, SellMenu);
 	Response (no_trade_now, ExitConversation);
 
 }
@@ -308,6 +453,10 @@ TradeMenu (RESPONSE_REF R)
 		NPCPhrase (TRADING_INFO1);
 		NPCPhrase (MORE_TRADING_INFO);
 	}
+	else if (PLAYER_SAID (R, done_buying))
+	{
+		NPCPhrase (OK_DONE_BUYING);
+	}
 	//TODO HELLO_NOW_DOWN_TO_BUSINESS2 if normal,
 	//HELLO_NOW_DOWN_TO_BUSINESS3 if attack last time
 	else if (GET_GAME_STATE (MET_MELNORME) == 0)
@@ -319,17 +468,15 @@ TradeMenu (RESPONSE_REF R)
 	{
 		SET_GAME_STATE (MET_MELNORME, 2);
 		NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS3);
-		
 	}
 
 	NPCPhrase (BUY_OR_SELL);
-	
 
 	Response (make_purchases, PurchaseMenu);
-	Response (items_to_sell, SellMenu);
+	if (PHRASE_ENABLED(items_to_sell))
+		Response (items_to_sell, SellMenu);
 	Response (no_trade_now, ExitConversation);
 }
-
 
 static void
 Threaten (RESPONSE_REF R)
@@ -343,7 +490,6 @@ Threaten (RESPONSE_REF R)
 	Response (only_joke, TradeMenu);
 	
 }
-
 
 static void
 HowAreYou (RESPONSE_REF R)
@@ -379,7 +525,6 @@ DoFirstMeeting (RESPONSE_REF R)
 	Response (not_good, HowAreYou);
 }
 
-
 static void
 Intro (void) {
 	if (GET_GAME_STATE (MET_MELNORME) == 0)
@@ -392,7 +537,6 @@ Intro (void) {
 		TradeMenu(0);
 	}
 }
-
 
 static COUNT
 uninit_melnorme (void)

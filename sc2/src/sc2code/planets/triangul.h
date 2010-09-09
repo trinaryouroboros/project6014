@@ -40,9 +40,9 @@
     TRIANGUL_SPHERE_SHOFIXTI_RAD,\
     TRIANGUL_SPHERE_SHOFIXTI_RAD, \
 
-#define SPHERE_STRINGS \
-  "",			\
-    "Distress site?", \
+#define SPHERE_STRINGS	\
+	"Crash site?",	\
+    "", \
     "Patrol1", \
     "Patrol2", \
     "Patrol3", \

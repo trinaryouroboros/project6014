@@ -16,20 +16,21 @@ Actually, we need to scoot now.
 
 #(WHY_ARE_YOU_HERE1)
 Droogs? We know nothing of this. It's been too long.
-We thought ye had settled for the quiet life on Vega.
+We thought ye had settled for the quiet life on Vela.
 
 #(WHY_ARE_YOU_HERE2)
-It's been too long. We thought ye had settled for the quiet life on Vega.
+It's been too long. We thought ye had settled for the quiet life on Vela.
 
 #(WHY_CHMMR_STARSHIP)
 What brings you here in a Chmmr starship?
 
 #(investigating_precursors)
-We're investigating Precursor artefacts. We thought we'd stop by and say hi.
+We're investigating a case of missing Shofixti patrol. We thought we'd stop by and say hi.
 
 #(PLEASED_TO_SEE_ALLY)
-We're pleased to see our old friend. Precursor Artefacts you say.
-A Terminator scout group reported something interesting in Gamma YYY
+We're pleased to see our old friend. Missing Shofixti you say.
+We have no news on their patrols, but
+a Terminator scout group reported something interesting in Gamma Janus
 while chasing a lone Kohr-Ah vessel.
 Ye might consider checking it out.
 Apparently it bore the hall-marks of a Precursor item.

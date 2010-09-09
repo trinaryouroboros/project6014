@@ -7,8 +7,11 @@ The famed joint effort of the new Alliance
 in the area of spacecraft engineering.
 Although to be fair, the Chmmr easily pitched in most of the tech.
 Designed mainly for long-range discovery missions and planetary exploration
-its capabilities match your old Precursor service vessel pretty closely in that area.
-You have room for three planetary landers and 500 kilotons of mineral cargo
+the Explorer is a first-response ship, fast, yet versatile.
+It is not a mining ship, so you won't have any room for mineral cargo
+nor have you any need for that: The Chmmr provide all we need from their
+vast pools of mineral wealth. 
+In spite of that, you still have room for three planetary landers
 and highly sophisticated analysis/containment system exists for taking samples
 of biological life. That should provide most useful when dealing with the Melnorme.
 Those guys still have a hankering for bio-data from this galactic quadrant
@@ -28,7 +31,7 @@ so certain equipment just wouldn't fit on board.
 For example, there's an absolute minimum of dynamo units.
 To cope with the lack of batteries, a couple of low energy ion-bolt guns serve
 as your primary weapon.
-The guns consume your batteries still pretty rapidly, whilst being horribly inaccurate, so
+The guns consume your batteries still pretty rapidly, whilst being on the inaccurate side, so
 if I were you, I'd bet my money on the so-called secondary weapon
 the shard mines.
 These 'mines' consist of swarms of crystaline nanobots that draw their power
@@ -103,7 +106,7 @@ The Arilou.
 #(ARILOU_INFO_SB)
 As you know, the Arilou vanished again suddenly
 as soon as our victory over the both Ur-Quan races was assured.
-We haven't seen a trace of them since 2160.
+We haven't seen a trace of them since 2161.
 
 #(syreen)
 The Syreen.
@@ -121,7 +124,9 @@ The Spathi.
 The Spathi of Epsilon Gruis keep little contact with the outside world,
 and most of them remain under the slave shield. Happily, I guess.
 The Chmmr did erect a starbase for them and require the Spathi to do their
-share of the Alliance duties. The Spathi are hardly living up to the bargain.
+share of the Alliance duties. The Spathi are hardly living up to the bargain
+they are late again for their monthly dispatch of Nargil yokes.
+If you have time, go shake them up a little, will you?
 
 #(zoqfot)
 The Zoq-Fot-Pik.
@@ -142,7 +147,8 @@ after almost a decade of research. And the actions of the Orz
 sometimes make as little sense as how they talk.
 Now, the fish-folk seem friendly, fun even in a bizarre way, but something about them worries me
 and it's not just a gut feeling.
-Our interstellar telescopes have been picking up very strange readings that emanate from the direction
+For the last two months
+our interstellar telescopes have been picking up very strange readings that emanate from the direction
 of the Vulpeculae constellation. The home of the Orz.
 
 #(supox_and_utwig)
@@ -358,25 +364,25 @@ What's the current news?
 
 #(SHOFIXTI_MISSING)
 The talk of the town is your mission, Captain.
-The group of Shofixti reconnaissance ships have gone missing near the
-xxx constellation, leaving no trace. So we give you the task: To find them.
+A group of Shofixti reconnaissance ships has gone missing, leaving no trace
+so, we give you the task: To find them.
 Why are they so special, one might ask. You know, with the Kohr-Ah on
 the loose and the Kzer-Za lurking god knows where, it's hardly
 unheard of to lose some ships... We have had our share of cruisers gone missing as well.
-What makes this case different are the partial transmissions
-and mayday signals we were able to record before their transceivers went quiet.
-Though garbled, the messages were definitely referring to a Precursor artifact
+What makes this case different is the partial mayday message
+the Chmmr were able to record before the transmission died down.
+Though garbled, the message was definitely referring to 'machinery', dangerous
 and not some small one at that.
-We might be talking about another factory here.
-These transmissions, supposedly initiated during an orbital scan
-were quickly cut short with distress calls... shrieks
+We might be talking about something of planetary scale here.
+This transmission, supposedly initiated during an orbital scan
+was quickly cut short with distress calls... shrieks
 The exchanges we've been able to analyze don't make much sense, but for one word
 that's repeated several times: Gravity.
 I would have brushed that off as random junk as the rest of the recordings, but
 a little bit later our cosmologists came forth with abnormal readings
 they recorded just at the time of the accident.
-They indicate that something resembling a strong gravitational lens
-formed in the vicinity of xxx in a matter of seconds
+They indicate that something resembling strong gravitational lenses
+formed all around this quadrant in a matter of seconds
 and vanished about as quickly.
 Do be careful out there, Captain. This does not sound good to me.
 
@@ -388,7 +394,7 @@ You are needed here, Captain.
 The Shofixti patrol went missing in this part of the galaxy.
 For us, it is an uncharted territory.
 They are a long way from home and possibly under dangerous circumstances
-what's more, there might be Precursor influence involved.
+what's more, there might be technology from a foreign civilization involved.
 You have experience on all of these matters.
 Having seen by far the most action of all the pilots we have and
 being a natural with first contact situations you have the best chances
@@ -416,7 +422,7 @@ Long time, no see. Eh, Captain?
 #(BEFORE_WE_GO_ON_7)
  I know you're busy, but I've got some news.
 
-#(NORMAL_HELLO_A0) starb007
+#(NORMAL_HELLO_A0)
 Welcome back, Captain,
 #(NORMAL_HELLO_A1)
 .

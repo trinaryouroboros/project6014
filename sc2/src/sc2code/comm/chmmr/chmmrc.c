@@ -148,16 +148,41 @@ ProvokeAboutYehat (RESPONSE_REF R)
 static void
 AskMenu (RESPONSE_REF R)
 {	
+	static BYTE distressInfoState = 0;
+	
 	/* Alien speech */
-	if (PLAYER_SAID (R, where_urquan))
-	{
-		NPCPhrase (URQUAN_ARE);
-		DISABLE_PHRASE (where_urquan);
-	}
-	else if (PLAYER_SAID (R, better_starship))
+	if (PLAYER_SAID (R, better_starship))
 	{
 		NPCPhrase (NO_BETTER_STARSHIP);
 		DISABLE_PHRASE (better_starship);
+	}
+	else if (PLAYER_SAID (R, how_you_heard_call))
+	{
+		NPCPhrase (HEARD_CALL_SO);
+		DISABLE_PHRASE (how_you_heard_call);
+		distressInfoState++;
+	}
+	else if (PLAYER_SAID (R, where_distress_site))
+	{
+		// Can give location at procyon
+		if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) == (BYTE)~0)
+		{
+			NPCPhrase (GIVE_DISTRESS_LOCATION);
+			DISABLE_PHRASE (where_distress_site);
+			SET_GAME_STATE(TRIANGULATION_SPHERES_CHMMR, 1);
+			distressInfoState++;
+		}
+		// Ship groups don't know the location
+		else
+		{
+			NPCPhrase (DONT_KNOW_LOCATION);
+			DISABLE_PHRASE (where_distress_site);
+		}
+	}
+	else if (PLAYER_SAID (R, where_urquan))
+	{
+		NPCPhrase (URQUAN_ARE);
+		DISABLE_PHRASE (where_urquan);
 	}
 	else if (PLAYER_SAID (R, why_kohrah_still_here))
 	{
@@ -171,18 +196,29 @@ AskMenu (RESPONSE_REF R)
 	{
 		NPCPhrase (SPEAK_TO_YEHAT);
 	}
-	else
+	else if (PLAYER_SAID (R, can_we_ask))
 	{
 		NPCPhrase (YOU_CAN_ASK);
 	}
 
 	/* Human speech options */
 	
-	if (PHRASE_ENABLED (better_starship))
+	// Ask about getting a new ship only at the starbase
+	if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) == (BYTE)~0 && PHRASE_ENABLED (better_starship))
 	{
 		Response (better_starship, AskMenu);
 	}
 
+	if (distressInfoState == 0 && PHRASE_ENABLED (how_you_heard_call))
+	{
+		Response (how_you_heard_call, AskMenu);
+	}
+	
+	if (distressInfoState == 1 && PHRASE_ENABLED (where_distress_site))
+	{
+		Response (where_distress_site, AskMenu);
+	}
+	
     if (PHRASE_ENABLED (where_urquan))
 	{
 		Response (where_urquan, AskMenu);
@@ -209,10 +245,14 @@ HaveYouFoundArtefact (RESPONSE_REF R)
 	{
 		NPCPhrase (BRING_HERE);
 	}
-	else if (PLAYER_SAID (R, not_yet))
+	else if (PLAYER_SAID (R, not_yet) && GET_GAME_STATE(TRIANGULATION_SPHERES_CHMMR))
+	{
+		NPCPhrase (SEARCH_FOR_IT);
+	}
+	else
 	{
 		SET_GAME_STATE(TRIANGULATION_SPHERES_CHMMR, 1);
-		NPCPhrase (SEARCH_FOR_IT);
+		NPCPhrase (GIVE_DISTRESS_LOCATION);
 	}
 
 	Response (can_we_ask, AskMenu);
@@ -222,17 +262,52 @@ HaveYouFoundArtefact (RESPONSE_REF R)
 static void
 Intro (void)
 {
-	if (GET_GAME_STATE (CHMMR_MET) == 0)
+	BYTE NumVisits;
+	
+	// If on home planet
+	if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) == (BYTE)~0)
 	{
-		SET_GAME_STATE (CHMMR_MET, 1);
+		if (GET_GAME_STATE (CHMMR_MET) == 0)
+		{
+			SET_GAME_STATE (CHMMR_MET, 1);
+			NPCPhrase (CHMMR_GREETING_HOME_1);
+	
+			AskMenu ((RESPONSE_REF)0);
+		}
+		else 
+		{
+			NPCPhrase (CHMMR_GREETING_HOME_2);
+		
+			Response (yes_but_dont_have, HaveYouFoundArtefact);
+			Response (not_yet, HaveYouFoundArtefact);
+			Response (on_our_way, ExitConversation);
+		}
 	}
-
-	NPCPhrase (CHMMR_GREETING1);
-
-
-	Response (yes_but_dont_have, HaveYouFoundArtefact);
-	Response (not_yet, HaveYouFoundArtefact);
-	Response (on_our_way, ExitConversation);
+	// Meet a ship group
+	else
+	{
+		NumVisits = GET_GAME_STATE (CHMMR_SPACE_VISITS);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (CHMMR_GREETING_SPACE_1);
+				break;
+			case 1:
+				NPCPhrase (CHMMR_GREETING_SPACE_2);
+				break;
+			case 2:
+				NPCPhrase (CHMMR_GREETING_SPACE_3);
+				break;
+			case 3:
+				NPCPhrase (CHMMR_GREETING_SPACE_4);
+				NumVisits = 0;
+				break;
+		}
+		SET_GAME_STATE (CHMMR_SPACE_VISITS, NumVisits);
+		
+		AskMenu ((RESPONSE_REF)0);
+	}
+	
 }
 
 static COUNT
