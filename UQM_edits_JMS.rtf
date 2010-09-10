@@ -4,7 +4,7 @@
 \paperw11900\paperh16840\margl1440\margr1440\vieww18480\viewh12640\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
 
-\f0\fs24 \cf0 UQM edits by JMS 18.8.2010\
+\f0\fs24 \cf0 UQM edits by JMS 9.9.2010\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 \
 CODING:\
@@ -18,15 +18,17 @@ CODING:\
 *\
 ***Race-specific***:\
 -Added Androsynth to Orz space. Infinite sphere of influence there. Gave 'em some nice dialogue.\
--Also added very basic Androsynth in truespace.\
+-Also added very basic Androsynth in truespace. Currently 0 sphere of Influence.\
 -Added Orz to Orz space. Infinite sphere of influence there and different npcship spoor gfx.\
 -Added Chenjesu and Mmrnmhrm. They have 0 sphere of influence though as no dialogue or comm screen has been implemented.\
 -Added Slylandros that ride Kohr-ah marauder ships. They hang out at the alliance races' neighborhood of the map. Invisible Sphere of Influence to keep player guessing.\
+-Dialogue for Kohr-Ah.\
 -Dialogue for earthlings.\
 -Possibility to have multiple different captain screens for earthlings (Like male/female). Currently turned off.\
 -Chmmr now reside on their starbase also. Starbase fully functional, just like at Sol.\
 -New "ship": Freight transporter. These guys leave from Sol to Procyon on specific dates. Transports have no melee graphics, melee sounds or ai though.\
 -Implemented Syreen ship captain animations and nice zoom-in transition for talking.\
+-Dialogue for earth starbase.\
 *\
 ***Smaller stuff***:\
 -Some planets are restricted meaning they cannot be landed on. Like Earth, Procyon and Syreen Homeworld. (Mostly to hide non-working earth graphics.)\
@@ -37,7 +39,7 @@ AUDIO:\
 -Created Chmmr Explorer secondary weapon sound.\
 \
 GFX:\
--The real 640x480 resolution project goes on and on and on... See the files affected in the bottom of this listing.\
+-The "real 640x480" resolution project goes on and on and on... See the files affected in the bottom of this listing.\
 \
 ***************************************************************************************************************************************\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
@@ -135,10 +137,12 @@ GFX:\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 /comm/arilou/arilou.c			-Arilou guarding the Orz space portal dialogue.\
 /comm/blackur/blackurc.c		-New dialogue for the enhanced, vile, disgusting Kohr-Ah-Rath.\
+/comm/chmmr/chmmr.c		-Cleaned up Chmmr comm logic. Triangulation spheres added.\
 /comm/comandr/comandr.c	-Removed the use of ANIM_DISABLED since that define is no more. Unnecessary file???\
 /comm/human/humanc.c		-Ridiculous amounts of new animations for earthling ship captains.\
+/comm/human/melnormc.c	-Shofixti distress site hints. Bit of cleanup on the logic. Still a mess though.\
 /comm/orz/orzc.c			-Cleaned up comm logic for Orz.\
-/comm/shofixt/shofixtc.c		-Viewscreen animation for shofixti.\
+/comm/shofixt/shofixtc.c		-Viewscreen animation for shofixti. Triangulation spheres added.\
 /comm/syreen/syreenc.c		-Oodles of new animations for syreen ship captains.\
 /comm/yehat/yehatc.c		-Yehat are no longer hostile upon encountering.\
 \
@@ -193,6 +197,8 @@ sc2code/comm/transport/transportc.c		-New file:Human transport ship communicatio
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 sc2code/planets/genorzspaceportal.c		-New file: Orz space portal definition (0 planet system, star accessible like planets).\
+sc2code/planets/triangul.c				-New file: Triangulation sphere mechanics. Most of the code copied from pstarmap.c\
+sc2code/planets/triangul.h				-New file: Constant values and definitions for the triangulation spheres.\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
 sc2code/ships/slykohr/slykohr.c			-New file:Kohr-Ah ship with slylandros captaining\

@@ -16,8 +16,7 @@ If it's space-babes you're after it's space-babes you'll get I'm sure.
 Nice tug by the way.
 
 #(thanks_tug_complement)
-Thanks! The Chmmr gave me this one, it's OKAY but not as cool as my old one...
-you are talking about the vessel right?
+Thanks! The Chmmr gave me this one, it's OKAY but not as cool as my old one... you are talking about the vessel right?
 
 #(not_fooled)
 I'm not fooled by your dirty Syreen double entendres. Naughty!
@@ -38,16 +37,19 @@ It must be good to roam the stars once more.
 
 #(WE_DONT_STRAY)
 Well to be honest, we don't stray far from our homeworld. 
-Our fleet is still rebuilding and there is the risk of running in to rogue Kohr-Ah
+Our fleet is still rebuilding
+and there is the risk of running into rogue Kohr-Ah
 who still plague this part of space. 
-We are grateful to the Chmmr who are diligent in their duty to eradicate these monsters. 
+We are grateful to the Chmmr who are diligent
+in their duty to eradicate these monsters. 
 
 #(any_news)
 Anything exciting going on around here?
 
 #(NO_NEWS)
 Right now we don't get out much, and most of the real activity
-seems to be happening rim-ward of of Chmmr space where the Kohr-Ah are being pursued. 
+seems to be happening rim-ward of Chmmr space
+where the Kohr-Ah are being pursued. 
 We're now at the periphery of current events it seems.
 
 #(spot_you_later)
