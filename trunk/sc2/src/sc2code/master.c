@@ -18,6 +18,7 @@
 
 // JMS 2010: -Slylandros-in-kohrah-vessel is ruled out from supermelee...
 //			 -...But the Sis ship is added into it
+//			 -Lurg ship likewise!
 
 #include "master.h"
 
@@ -90,20 +91,33 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 				break;
 		}
 		
-		if(num_entries > 1) // JMS: Deal with other than Slylandro_kohrah ship and sis ship normally.
+		if(num_entries > 2) // JMS: Deal with other than Slylandro_kohrah ship and sis ship normally.
 				InsertQueue (&master_q, hBuiltShip, hStarShip);
 		else 
 		{
-			// JMS: Slylandro ship goes last.
+			// JMS: Slylandro_kohrah ship goes last.
 			if(BuiltPtr->SpeciesID==SLYLANDRO_KOHRAH_ID)
 				PutQueue (&master_q, hBuiltShip);
 			
-			// JMS: Explorer goes before the last.
-			else if(BuiltPtr->SpeciesID==SIS_SHIP_ID)
+			// JMS: Lurg goes before the last.
+			else if(BuiltPtr->SpeciesID==LURG_ID)
 			{
 				hStarShip = GetTailLink (&master_q);			
 				InsertQueue (&master_q, hBuiltShip, hStarShip);
 			}
+			
+			// JMS: Explorer goes before the last.
+			else if(BuiltPtr->SpeciesID==SIS_SHIP_ID)
+			{
+				MASTER_SHIP_INFO *MasterPtr;
+				
+				hStarShip = GetTailLink (&master_q);
+				MasterPtr = LockMasterShip (&master_q, hStarShip);
+				hNextShip = _GetPredLink (MasterPtr);
+				InsertQueue (&master_q, hBuiltShip, hNextShip);
+				UnlockMasterShip (&master_q, hStarShip);
+			}
+			
 		}
 	}		
 }

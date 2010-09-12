@@ -56,6 +56,7 @@ typedef enum {
 	YEHAT_REBEL_CONVERSATION,
 	HUMAN_CONVERSATION,			// JMS
 	ANDROSYNTH_CONVERSATION,	// JMS
+	LURG_CONVERSATION,			// JMS
 	SLAVERACE_CONVERSATION,		// JMS
 	SYREENHOME_CONVERSATION,
 	INVALID_CONVERSATION,
@@ -120,9 +121,11 @@ extern LOCDATA* init_commander_comm (void);
 
 extern LOCDATA* init_druuge_comm (void);
 
-extern LOCDATA* init_ilwrath_comm (void);
-
 extern LOCDATA* init_human_comm (void);			// BY JMS
+
+extern LOCDATA* init_ilwrath_comm (void);		// BY JMS
+
+extern LOCDATA* init_lurg_comm (void);
 
 extern LOCDATA* init_melnorme_comm (void);
 
@@ -135,8 +138,6 @@ extern LOCDATA* init_pkunk_comm (void);
 extern LOCDATA* init_rebel_yehat_comm (void);
 
 extern LOCDATA* init_shofixti_comm (void);
-
-extern LOCDATA* init_slaverace_comm (void);
 
 extern LOCDATA* init_slyland_comm (void);
 

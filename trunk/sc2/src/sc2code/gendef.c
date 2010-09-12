@@ -17,6 +17,7 @@
  */
 
 // JMS 2009: Function call for initing orz space portal when encountering its enum label
+// JMS 2010: Function call for initing Lurg home system when encountering its enum label
 
 #include "encount.h"
 
@@ -125,8 +126,11 @@ GenerateIP (BYTE Index)
 		case SLAVERACE_DEFINED:
 			GenFunc = GenerateSlaveRace;
 			break;
-		case ORZ_SPACE_PORTAL_DEFINED: // JMS - hook to genertaing the contents of portal star system 
+		case ORZ_SPACE_PORTAL_DEFINED: // JMS - hook to generating the contents of portal star system 
 			GenFunc = GenerateOrzSpacePortal;
+			break;
+		case LURG_DEFINED:
+			GenFunc = GenerateLurg;	 // JMS - hook to generating Lurg home system
 			break;
 		default:
 			GenFunc = GenerateRandomIP;
@@ -135,5 +139,3 @@ GenerateIP (BYTE Index)
 
 	return (GenFunc);
 }
-
-

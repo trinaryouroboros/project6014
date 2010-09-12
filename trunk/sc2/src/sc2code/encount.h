@@ -17,6 +17,7 @@
  */
 
 // JMS 2009 - Portal to Orz space enum
+// JMS 2010 - Lurg home system enum
 
 #ifndef _ENCOUNT_H
 #define _ENCOUNT_H
@@ -125,6 +126,7 @@ enum
 	ILWRATH_DEFINED,
 	ANDROSYNTH_DEFINED,
 	MYCON_TRAP_DEFINED,
+	LURG_DEFINED,					// JMS: Lurg home system
 	SLAVERACE_DEFINED,
 	MELNORME_HOME_DEFINED,          // Also generates deflection shield in hyperspace
 	ORZ_SPACE_PORTAL_DEFINED		// JMS: Portal to ORZ space
@@ -187,6 +189,7 @@ extern void GenerateRainbow (BYTE control);
 extern void GenerateIlwrath (BYTE control);
 extern void GenerateSlaveRace (BYTE control);
 extern void GenerateOrzSpacePortal (BYTE control);		// JMS
+extern void GenerateLurg (BYTE control);
 
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;
