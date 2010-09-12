@@ -81,7 +81,7 @@ typedef struct
 			// be active at the same time as this animation.
 } ANIMATION_DESC;
 
-#define MAX_ANIMATIONS 20
+#define MAX_ANIMATIONS 30 // JMS: Was 20
 
 // general numbers-speech generator info
 // should accomodate most common base-10 languages
