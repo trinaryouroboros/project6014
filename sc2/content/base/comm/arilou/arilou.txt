@@ -523,6 +523,11 @@ Do not feel bad, my child.
 In the fullness of time you might be ready for more knowledge
 like in the full version of this game!
 
+#(TOO_EARLY)
+It is too early... much too early.
+Forgive us, but we shall take our leave
+for the time being.
+
 #(OUT_TAKES) arilo060.ogg
 Do you really believe Project Bluebook revealed EVERYTHING the Army Air Corps knew?
 Do you know what REALLY happened at Roswell, New Mexico in the late 1940's?

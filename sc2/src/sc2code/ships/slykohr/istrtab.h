@@ -2,4 +2,4 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define SLY_KOHR_RACE_STRINGS "ship.slykohr.text"
+#define SLYLANDRO_KOHRAH_RACE_STRINGS "ship.slykohr.text"

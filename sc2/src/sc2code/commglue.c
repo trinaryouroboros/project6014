@@ -323,6 +323,8 @@ init_race (CONVERSATION comm_id)
 			return init_human_comm ();
 		case ILWRATH_CONVERSATION:
 			return init_ilwrath_comm ();
+		case LURG_CONVERSATION:				// BY JMS - Hook to Lurg ship dialogue screen
+			return init_lurg_comm ();
 		case MELNORME_CONVERSATION:
 			return init_melnorme_comm ();
 		case MYCON_CONVERSATION:
@@ -333,8 +335,6 @@ init_race (CONVERSATION comm_id)
 			return init_pkunk_comm ();
 		case SHOFIXTI_CONVERSATION:
 			return init_shofixti_comm ();
-		case SLAVERACE_CONVERSATION:
-			return init_slaverace_comm ();
 		case SLYLANDRO_CONVERSATION:
 			return init_slyland_comm ();
 		case SLYLANDRO_HOME_CONVERSATION:

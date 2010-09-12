@@ -13,4 +13,4 @@
 #define KOHR_AH_MED_MASK_PMAP_ANIM "ship.slykohr.graphics.blackurq.medium"
 #define KOHR_AH_MICON_MASK_PMAP_ANIM "ship.slykohr.meleeicons"
 #define KOHR_AH_SML_MASK_PMAP_ANIM "ship.slykohr.graphics.blackurq.small"
-#define SLY_KOHR_CAPTAIN_MASK_PMAP_ANIM "ship.slykohr.graphics.captain"
+#define SLYLANDRO_KOHRAH_CAPTAIN_MASK_PMAP_ANIM "ship.slykohr.graphics.captain"

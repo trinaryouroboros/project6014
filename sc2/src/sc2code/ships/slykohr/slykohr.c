@@ -41,14 +41,14 @@
 										 * hold the button down.
 										 */
 
-static RACE_DESC sly_kohr_desc =
+static RACE_DESC slylandro_kohrah_desc =
 {
 	{ /* SHIP_INFO */
 		FIRES_FORE,
 		30, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
-		SLY_KOHR_RACE_STRINGS,
+		SLYLANDRO_KOHRAH_RACE_STRINGS,
 		KOHR_AH_ICON_MASK_PMAP_ANIM,
 		KOHR_AH_MICON_MASK_PMAP_ANIM,
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
@@ -89,7 +89,7 @@ static RACE_DESC sly_kohr_desc =
 			GAS_SML_MASK_PMAP_ANIM,
 		},
 		{
-			SLY_KOHR_CAPTAIN_MASK_PMAP_ANIM,
+			SLYLANDRO_KOHRAH_CAPTAIN_MASK_PMAP_ANIM,
 			NULL, NULL, NULL, NULL, NULL
 		},
 		KOHR_AH_VICTORY_SONG,
@@ -349,7 +349,7 @@ initialize_buzzsaw (ELEMENT *ShipPtr, HELEMENT SawArray[])
 }
 
 static void
-sly_kohr_escape (STARSHIP *StarShipPtr)
+slylandro_kohrah_escape (STARSHIP *StarShipPtr)
 {
 	ELEMENT *ElementPtr;
 	
@@ -388,7 +388,7 @@ sly_kohr_escape (STARSHIP *StarShipPtr)
 }
 
 static void
-sly_kohr_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
+slylandro_kohrah_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		COUNT ConcernCounter)
 {
 	EVALUATE_DESC *lpEvalDesc;
@@ -408,7 +408,7 @@ sly_kohr_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	StarShipPtr->ship_input_state &= ~SPECIAL;
 
 	// JMS: Slylandro-kohrahs will escape from battle ASAP.
-	sly_kohr_escape(StarShipPtr);	
+	slylandro_kohrah_escape(StarShipPtr);	
 	
 	if (StarShipPtr->special_counter == 0
 			&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST
@@ -559,7 +559,7 @@ spawn_gas_cloud (ELEMENT *ElementPtr)
 }
 
 static void
-sly_kohr_postprocess (ELEMENT *ElementPtr)
+slylandro_kohrah_postprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 
@@ -578,7 +578,7 @@ sly_kohr_postprocess (ELEMENT *ElementPtr)
 }
 
 static void
-sly_kohr_preprocess (ELEMENT *ElementPtr)
+slylandro_kohrah_preprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 
@@ -592,16 +592,16 @@ sly_kohr_preprocess (ELEMENT *ElementPtr)
 }
 
 RACE_DESC*
-init_sly_kohr (void)
+init_slylandro_kohrah (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	sly_kohr_desc.preprocess_func = sly_kohr_preprocess;
-	sly_kohr_desc.postprocess_func = sly_kohr_postprocess;
-	sly_kohr_desc.init_weapon_func = initialize_buzzsaw;
-	sly_kohr_desc.cyborg_control.intelligence_func = sly_kohr_intelligence;
+	slylandro_kohrah_desc.preprocess_func = slylandro_kohrah_preprocess;
+	slylandro_kohrah_desc.postprocess_func = slylandro_kohrah_postprocess;
+	slylandro_kohrah_desc.init_weapon_func = initialize_buzzsaw;
+	slylandro_kohrah_desc.cyborg_control.intelligence_func = slylandro_kohrah_intelligence;
 
-	RaceDescPtr = &sly_kohr_desc;
+	RaceDescPtr = &slylandro_kohrah_desc;
 
 	return (RaceDescPtr);
 }

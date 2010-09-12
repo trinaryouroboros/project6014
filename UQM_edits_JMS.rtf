@@ -4,7 +4,7 @@
 \paperw11900\paperh16840\margl1440\margr1440\vieww18480\viewh12640\viewkind0
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\qc\pardirnatural
 
-\f0\fs24 \cf0 UQM edits by JMS 9.9.2010\
+\f0\fs24 \cf0 UQM edits by JMS 12.9.2010\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 \
 CODING:\
@@ -15,6 +15,7 @@ CODING:\
 -Instrument damage. Ships can suffer damage to engines, gauges, etc. from ships. Currently turned off.\
 -Chmmr Explorer ship usable in adventure game melee and also in supermelee. Dual ion bolt cannon primary, crystal shard mine secondary.\
 -"Triangulation spheres" in starmap which help find the missing shofixti patrol. Talk to Chmmr/Shofixti to get the spheres.\
+-New race: Lurg. Home at Beta Ursae Majoris (371.0: 438.9 or thereabouts...)\
 *\
 ***Race-specific***:\
 -Added Androsynth to Orz space. Infinite sphere of influence there. Gave 'em some nice dialogue.\
@@ -192,15 +193,18 @@ ADDED FILES, NOT 640x480-RELATED::\
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
 sc2code/comm/human/humanc.c			-New file:Earthling communications.\
 sc2code/comm/androsynth/androsynthc.c		-New file:Androsynth communications.\
+sc2code/comm/lurg/lurgc.c				-New file:Lurg ship communications.\
 sc2code/comm/syreenhome/syreenhomec.c	-New file:Syreen starbase communications.\
 sc2code/comm/transport/transportc.c		-New file:Human transport ship communications.\
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+sc2code/planets/gensol.c					-New file: Lurg home system\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\ql\qnatural\pardirnatural
 \cf0 sc2code/planets/genorzspaceportal.c		-New file: Orz space portal definition (0 planet system, star accessible like planets).\
 sc2code/planets/triangul.c				-New file: Triangulation sphere mechanics. Most of the code copied from pstarmap.c\
 sc2code/planets/triangul.h				-New file: Constant values and definitions for the triangulation spheres.\
 \pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\ql\qnatural\pardirnatural
 \cf0 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
+sc2code/ships/lurg/lurg.c					-New file:Lurg ship\
 sc2code/ships/slykohr/slykohr.c			-New file:Kohr-Ah ship with slylandros captaining\
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------\
 content/base/comm/androsynth/androsynth.txt\

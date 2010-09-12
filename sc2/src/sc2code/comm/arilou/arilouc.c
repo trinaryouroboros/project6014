@@ -676,6 +676,13 @@ Intro (void)
 		}
 	}
 	
+	else
+	{
+		RESPONSE_FUNC  RespFunc;
+		NPCPhrase (TOO_EARLY);
+		return;
+	}
+	/*
 	else if (!GET_GAME_STATE (MET_ARILOU))
 	{
 		RESPONSE_FUNC  RespFunc;
@@ -819,7 +826,7 @@ Intro (void)
 
 			ArilouHome ((RESPONSE_REF)0);
 		}
-	}
+	}*/
 }
 
 static COUNT

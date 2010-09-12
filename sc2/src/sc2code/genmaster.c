@@ -1,3 +1,37 @@
+//
+//
+// JMS 2010: THIS FILE SEEMS TO BE OBSOLETE... GENMASTER.C IS NOT IN THE MAKEINFO AND MASTER.C
+// WHICH IS MENTIONED THERE HAS THE SAME CONTENTS AS THIS FILE.
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
 //Copyright Paul Reiche, Fred Ford. 1992-2002
 
 /*
@@ -15,10 +49,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-
-// JMS 2010: THIS FILE SEEMS TO BE OBSOLETE... GENMASTER.C IS NOT IN THE MAKEINFO AND MASTER.C
-// WHICH IS MENTIONED THERE HAS THE SAME CONTENTS AS THIS FILE.
-
 #include "master.h"
 
 #include "build.h"

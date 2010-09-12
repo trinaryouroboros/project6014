@@ -20,6 +20,7 @@
 // JMS 2010: -Some systems now have a freight transport ship in interplanetary.
 //			 -Can't encounter Kohr-ahs before meeting slylandros riding kohr-ah vessels first at least once
 //			 -Changed the encounter probability calculation for Kohr-Ah and Slylandros riding Kohr-Ah vessels.
+//			 -Gave Lurg groups a homeworld
 
 #include "build.h"
 #include "encount.h"
@@ -280,12 +281,16 @@ BuildGroups (void)
 		0,                /* URQUAN_SHIP */
 		ZOQFOT_DEFINED,   /* ZOQFOTPIK_SHIP */
 
-		SYREEN_DEFINED,   /* SYREEN_SHIP */
-		0,                /* BLACK_URQUAN_SHIP */
-		0,                /* YEHAT_REBEL_SHIP */
+		SYREEN_DEFINED,		/* SYREEN_SHIP */
+		0,					/* BLACK_URQUAN_SHIP */
+		0,					/* ANDROSYNTH_SHIP */
 
-		SLAVERACE_DEFINED, 	/* SLAVERACE_SHIP */
+		0,					/* CHENJESU_SHIP */
+		0,					/* MMRNMHRM_SHIP */
+		
 		0,					/* JMS: SLYLANDRO_KOHRAH_SHIP */
+		LURG_SHIP,			/* JMS: LURG_SHIP */
+		0,					/* YEHAT_REBEL_SHIP */
 	};
 	BYTE EncounterPercent[] =
 	{

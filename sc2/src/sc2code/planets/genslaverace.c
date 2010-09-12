@@ -33,7 +33,6 @@
 void
 GenerateSlaveRace (BYTE control)
 {
-	
 	switch (control)
 	{	
 	

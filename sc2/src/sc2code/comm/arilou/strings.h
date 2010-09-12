@@ -123,6 +123,7 @@ enum
 	PREVENT_ACTIONS,
 	i_understand_goodbye,
 	SEE_YOU_IN_FULL_GAME,
+	TOO_EARLY,
 	OUT_TAKES,
 };
 
