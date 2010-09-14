@@ -168,6 +168,8 @@ DRUUGE_RUINS_STRTAB,text.sphere,sc2code/istrtab.h,STRTAB,base/lander/energy/sphe
 PKUNK_RUINS_STRTAB,text.spindle,sc2code/istrtab.h,STRTAB,base/lander/energy/spindle.txt
 RUINS_STRTAB,text.ruins,sc2code/istrtab.h,STRTAB,base/lander/energy/ruins.txt
 UMGAH_BCS_STRTAB,text.umgtrans,sc2code/istrtab.h,STRTAB,base/lander/energy/umgahcaster.txt
+SHOFIXTI_CRASH_SITE_STRTAB,text.shocrashsite,sc2code/istrtab.h,STRTAB,base/lander/energy/distressartifact.txt
+LEFTHURRY_STRTAB,text.lefthurry,sc2code/istrtab.h,STRTAB,base/lander/energy/hurry.txt
 IPSUN_COLOR_MAP,colortable.ip_sun,sc2code/istrtab.h,BINTAB,base/nav/truespace.ct
 HANGAR_COLOR_TAB,colortable.hangar,sc2code/istrtab.h,BINTAB,base/ui/hangar.ct
 INTROPRES_STRTAB,slides.intro,sc2code/istrtab.h,STRTAB,base/cutscene/intro/intro.txt
@@ -277,6 +279,7 @@ EGG_CASE_MASK_PMAP_ANIM,graphics.eggcase,sc2code/igfxres.h,GFXRES,base/lander/en
 SPAPLUTO_MASK_PMAP_ANIM,graphics.spapluto,sc2code/igfxres.h,GFXRES,base/lander/energy/fwiffo.ani
 RUINS_MASK_PMAP_ANIM,graphics.ruins,sc2code/igfxres.h,GFXRES,base/lander/energy/ruins.ani
 UMGAH_BCS_MASK_PMAP_ANIM,graphics.umgtrans,sc2code/igfxres.h,GFXRES,base/lander/energy/umgahcaster.ani
+PRECURSOR_BATTLESHIP_MASK_PMAP_ANIM,graphics.precbattleship,sc2code/igfxres.h,GFXRES,base/lander/energy/utwigbomb.ani
 MELEE_SCREEN_PMAP_ANIM,graphics.melebkgd,sc2code/igfxres.h,GFXRES,base/ui/meleebackground.ani
 MELEE_PICK_MASK_PMAP_ANIM,graphics.melee,sc2code/igfxres.h,GFXRES,base/ui/melee.ani
 SEGUE_PMAP_ANIM,graphics.segue,sc2code/igfxres.h,GFXRES,base/ui/segue.ani
@@ -529,6 +532,7 @@ ARILOU_FONT,comm.arilou.font,sc2code/comm/arilou/ifontres.h,FONTRES,base/fonts/a
 ARILOU_CONVERSATION_PHRASES,comm.arilou.dialogue,sc2code/comm/arilou/istrtab.h,CONVERSATION,base/comm/arilou/arilou.txt
 ARILOU_PMAP_ANIM,comm.arilou.graphics,sc2code/comm/arilou/igfxres.h,GFXRES,base/comm/arilou/arilou.ani
 ARILOU_COLOR_MAP,comm.arilou.colortable,sc2code/comm/arilou/igfxres.h,BINTAB,base/comm/arilou/arilou.ct
+ARILOU_ALT_COLOR_MAP,comm.arilou_alt.colortable,sc2code/comm/arilou/igfxres.h,BINTAB,base/comm/arilou/arilou_alt.ct
 COMMANDER_MUSIC,comm.commander.music,sc2code/comm/comandr/imusicre.h,MUSICRES,base/comm/commander/commander.mod
 STARBASE_ALT_MUSIC,comm.starbase.music,sc2code/comm/comandr/imusicre.h,--,--
 COMMANDER_LOWPOW_MUSIC,comm.comlowpw.music,sc2code/comm/comandr/imusicre.h,--,--

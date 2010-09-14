@@ -127,6 +127,7 @@ enum
 	ANDROSYNTH_DEFINED,
 	MYCON_TRAP_DEFINED,
 	LURG_DEFINED,					// JMS: Lurg home system
+	SHOFIXTI_CRASH_SITE_DEFINED,	// JMS: Shofixti distress site
 	SLAVERACE_DEFINED,
 	MELNORME_HOME_DEFINED,          // Also generates deflection shield in hyperspace
 	ORZ_SPACE_PORTAL_DEFINED		// JMS: Portal to ORZ space
@@ -189,7 +190,8 @@ extern void GenerateRainbow (BYTE control);
 extern void GenerateIlwrath (BYTE control);
 extern void GenerateSlaveRace (BYTE control);
 extern void GenerateOrzSpacePortal (BYTE control);		// JMS
-extern void GenerateLurg (BYTE control);
+extern void GenerateLurg (BYTE control);				// JMS
+extern void GenerateShofixtiCrashSite (BYTE control);	// JMS
 
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;

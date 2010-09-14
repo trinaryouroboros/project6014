@@ -284,7 +284,7 @@ typedef struct
 			//          NUM_CREATURE_TYPES     is an Evil One
 			//          NUM_CREATURE_TYPES + 1 is a Brainbox Bulldozer
 			//          NUM_CREATURE_TYPES + 2 is Zex' Beauty
-                        //          NUM_CREATURE_TYPES +3 through NUM_CREATURE_TYPES + 2 + NUM_NEW_CREATURE_TYPES are creatures for the new quadrant
+			//          NUM_CREATURE_TYPES +3 through NUM_CREATURE_TYPES + 2 + NUM_NEW_CREATURE_TYPES are creatures for the new quadrant
 			// For energy: 0 - Liftoff on collision
 			//             1 - No liftoff on collision
 			//             2 - (special case) Fwiffo

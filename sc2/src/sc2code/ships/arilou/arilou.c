@@ -57,7 +57,7 @@ static RACE_DESC arilou_desc =
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
-		250 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, // JMS: Was 250 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
 			438, 6372,
 		},
