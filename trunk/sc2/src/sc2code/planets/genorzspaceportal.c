@@ -19,7 +19,12 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2009: Totally new file: Orz space portal
+
 #include "genall.h"
+#include "grpinfo.h"
+#include "races.h"
+#include "state.h"
 #include "../encount.h"
 
 void
@@ -27,6 +32,14 @@ GenerateOrzSpacePortal (BYTE control)
 {
 	switch (control)
 	{
+		case INIT_NPCS:
+			 
+			CloneShipFragment (ORZ_SHIP, &GLOBAL (npc_built_ship_q), 0);
+			GLOBAL (BattleGroupRef) = PutGroupInfo (GROUPS_ADD_NEW, 1);
+			ReinitQueue (&GLOBAL (npc_built_ship_q));
+
+			GenerateRandomIP (INIT_NPCS);
+			break;
 		case GENERATE_MOONS:
 			//GenerateRandomIP (GENERATE_MOONS);
 			break;

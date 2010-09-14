@@ -957,7 +957,7 @@ START_GAME_STATE
 	ADD_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2)
 			// 0 - Chmmr Explorer
 			// 1 - Precursor vessel
-			// 2 - UNUSED
+			// 2 - Precursor Battleship, full game
 			// 3 - UNUSED
 
 	// JMS: New devices. They either are or aren't on ship.
@@ -1000,6 +1000,9 @@ START_GAME_STATE
 
 	// JMS: Once the artifact is found, the spheres are no longer necessary
 	ADD_GAME_STATE (HIDE_TRIANGULATION_SPHERES, 1)
+
+	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
+	ADD_GAME_STATE (CRASH_SITE_UNPROTECTED, 1)
 
 END_GAME_STATE
 

@@ -18,6 +18,8 @@
 
 // JMS 2009: -Made Alpha Vulpeculae Orz space portal
 //			 -Added a system into Orz space starmap_array
+// JMS 2010: -Added Lurg home system
+//			 -Added shofixti crash site
 
 #include "encount.h"
 #include "resinst.h"
@@ -237,7 +239,7 @@ STAR_DESC starmap_array[] =
 {{6615,4310}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 7, 7},
 {{3002,4326}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 4, 40},
 {{9786,4377}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 39},
-{{3710,4387}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), LURG_DEFINED, 2, 112},
+{{3710,4387}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 112}, // JMS: This baby should have LURG_DEFINED in full game...
 {{6540,4400}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 8, 7},
 {{9680,4495}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 3, 39},
 {{2251,4502}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 0, 121},
@@ -276,7 +278,7 @@ STAR_DESC starmap_array[] =
 {{7266,5623}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 1, 33},
 {{2881,5630}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 8, 18},
 {{6014,5632}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 2, 21},
-{{4416,5633}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 64},
+{{4416,5633}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), SHOFIXTI_CRASH_SITE_DEFINED, 2, 64}, // JMS
 {{3537,5652}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 5, 18},
 {{8066,5653}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 3, 72},
 {{ 822,5659}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 2, 73},

@@ -274,6 +274,7 @@
 #define PLANET58_MED_MASK_PMAP_ANIM "planet.yellowgas.medium"
 #define PLANET58_SML_MASK_PMAP_ANIM "planet.yellowgas.small"
 #define PLAYMENU_ANIM "graphics.playmenu"
+#define PRECURSOR_BATTLESHIP_MASK_PMAP_ANIM "graphics.precbattleship"
 #define QUAKE_MASK_PMAP_ANIM "graphics.quake"
 #define RESTART_PMAP_ANIM "graphics.newgame"
 #define RUINS_MASK_PMAP_ANIM "graphics.ruins"

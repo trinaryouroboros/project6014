@@ -54,7 +54,7 @@ static RACE_DESC lurg_desc =
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
-		1525 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, //1525 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
 			3710, 4389,
 		},

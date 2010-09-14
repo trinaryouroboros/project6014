@@ -84,8 +84,7 @@ GenerateColony (BYTE control)
 				pSolarSysState->SysInfo.PlanetInfo.CurPt.y = MAP_HEIGHT * 2 / 5;
 				pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
 				pSolarSysState->SysInfo.PlanetInfo.CurType = 1;
-				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-					  & (1L << 0))
+				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << 0))
 					&& pSolarSysState->CurNode == (COUNT)~0)
 				{
 					pSolarSysState->CurNode = 1;
@@ -93,8 +92,7 @@ GenerateColony (BYTE control)
 				else
 				{
 					pSolarSysState->CurNode = 0;
-					if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-						& (1L << 0))
+					if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << 0))
 					{
 						SET_GAME_STATE (VELA_FACTORY_VISITED, 1);
 					}
@@ -126,14 +124,13 @@ GenerateColony (BYTE control)
 		case GENERATE_ORBITAL:
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
 			{
-				DoPlanetaryAnalysis (
-						&pSolarSysState->SysInfo, pSolarSysState->pOrbitalDesc
-						);
+				DoPlanetaryAnalysis (&pSolarSysState->SysInfo, pSolarSysState->pOrbitalDesc);
+				
 				// JMS: This displays the graphics of the Precursor factory remnants
 				// and gives the landing team message upon finding it.
 				LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
 				pSolarSysState->PlanetSideFrame[1] =
-					CaptureDrawable (LoadGraphic (RUINS_MASK_PMAP_ANIM));
+					CaptureDrawable (LoadGraphic (UMGAH_BCS_MASK_PMAP_ANIM));
 				pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
 					CaptureStringTable (LoadStringTable (VELA_FACTORY_STRTAB));
 				

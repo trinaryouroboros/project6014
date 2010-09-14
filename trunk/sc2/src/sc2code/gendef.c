@@ -132,6 +132,9 @@ GenerateIP (BYTE Index)
 		case LURG_DEFINED:
 			GenFunc = GenerateLurg;	 // JMS - hook to generating Lurg home system
 			break;
+		case SHOFIXTI_CRASH_SITE_DEFINED:
+			GenFunc = GenerateShofixtiCrashSite;	 // JMS - hook to generating Shofixti crash site
+			break;
 		default:
 			GenFunc = GenerateRandomIP;
 			break;
