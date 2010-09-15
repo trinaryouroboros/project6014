@@ -51,7 +51,7 @@ DRAW 0
 #(Fade-in a slide; param1=fade time)
 FTC 1500
 #(Wait)
-WAIT 500
+WAIT 4500
 #(Fade slide to black; param1=fade time)
 FTB 2000
 #(Wait)
@@ -223,7 +223,7 @@ FTC 700
 
 #(Text fade-in)
 TFI The Chmmr have emerged as the
-new leaders of the known space...
+new leaders of known space...
 #(Wait)
 WAIT 3500
 #(Text fade-out)
