@@ -107,12 +107,13 @@ const LIFEFORM_DESC CreatureData[] =
 			// Zex's Beauty
 
 	// ---- New Critters from here on ----
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1), 5},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 3), 5},
 			// Echinosol
 	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 2},
 			// Flora Flatulensis
 	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 2},
 			// Hopping Hatchling
+#define HOPPING_HATCHLING_INDEX 28 // If you change Hopping hatchling's location in this list, change this define also!
 	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 2},
 			// Venus Frytrap
 	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 5},
@@ -123,7 +124,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Dizzy Fnarble
 	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 2},
 			// Flagellum Pest
-	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (1, 1), 1},
+	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (2, 1), 1},
 			// Flying O'Hairy
 	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 3},
 			// Migrator Blimp
@@ -155,7 +156,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Crabby Octopus
 	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2},
 			// Blinking Beholder
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 3), 3},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 5), 3},
 			// Creeping head
 };
 
@@ -771,7 +772,22 @@ CheckObjectCollision (COUNT index)
 						/* Collision of a stun bolt with a viable creature */
 						if (ElementPtr->hit_points)
 						{
-							if (--ElementPtr->hit_points == 0)
+							int WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
+							COUNT frame_index;
+							PRIMITIVE *pPrim;
+							pPrim = &DisplayArray[ElementPtr->PrimIndex];
+							frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
+							
+							// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
+							if (WhichCreature == HOPPING_HATCHLING_INDEX && frame_index < 45) 
+							{
+								PlaySound (SetAbsSoundIndex (
+										LanderSounds, BIOLOGICAL_DISASTER
+										), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+								break;
+							}
+							
+							else if (--ElementPtr->hit_points == 0)
 							{
 								ElementPtr->mass_points = value;
 								DisplayArray[
