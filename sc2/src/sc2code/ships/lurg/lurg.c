@@ -34,7 +34,7 @@
 #define THRUST_INCREMENT 8
 #define TURN_WAIT 1
 #define THRUST_WAIT 0
-#define WEAPON_WAIT 2
+#define WEAPON_WAIT 5
 #define SPECIAL_WAIT 0
 
 #define SHIP_MASS 4

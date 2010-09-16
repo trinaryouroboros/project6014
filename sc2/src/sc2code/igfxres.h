@@ -82,6 +82,7 @@
 #define LIFE47_MASK_PMAP_ANIM "graphics.life.47"
 #define LIFE48_MASK_PMAP_ANIM "graphics.life.48"
 #define LIFE49_MASK_PMAP_ANIM "graphics.life.49"
+#define LIFE50_MASK_PMAP_ANIM "graphics.life.50"
 #define LIGHTNING_MASK_ANIM "graphics.lightnin"
 #define MAIDENS_MASK_PMAP_ANIM "graphics.maidens"
 #define MELEE_PICK_MASK_PMAP_ANIM "graphics.melee"

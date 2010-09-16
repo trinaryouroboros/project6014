@@ -106,9 +106,10 @@ const LIFEFORM_DESC CreatureData[] =
 	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_MONSTROUS, MAKE_BYTE (15, 15), 4},
 			// Zex's Beauty
 
-        {SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1), 5},
+	// ---- New Critters from here on ----
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1), 5},
 			// Echinosol
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 1},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 2},
 			// Flora Flatulensis
 	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 2},
 			// Hopping Hatchling
@@ -154,6 +155,8 @@ const LIFEFORM_DESC CreatureData[] =
 			// Crabby Octopus
 	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2},
 			// Blinking Beholder
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 3), 3},
+			// Creeping head
 };
 
 #define FLASH_WIDTH 9
