@@ -54,7 +54,7 @@
 
 #define NUM_CREATURE_TYPES 23
 #define NUM_SPECIAL_CREATURE_TYPES 3
-#define NUM_NEW_CREATURE_TYPES 24
+#define NUM_NEW_CREATURE_TYPES 25 // JMS: Was 24, increased because I added Damon's biosprite as lifeyy
 #define MAX_LIFE_VARIATION 3
 
 #define CREATURE_AWARE (BYTE)(1 << 7)
