@@ -1049,6 +1049,7 @@ static void
 dumpWorld (FILE *out, const PLANET_DESC *world)
 {
 	PLANET_INFO *info;
+	COUNT bio[NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES + NUM_B_CREATURE_TYPES + NUM_C_CREATURE_TYPES];
 	
 	if (world->data_index == (BYTE) ~0) {
 		// StarBase
@@ -1079,8 +1080,11 @@ dumpWorld (FILE *out, const PLANET_DESC *world)
 	}
 
 	fprintf (out, "          Bio: %4d    Min: %4d\n",
-			calculateBioValue (pSolarSysState, world),
+		 calculateBioValue (pSolarSysState, world),
 			calculateMineralValue (pSolarSysState, world));
+	//	generateBioIndex(pSolarSysState, world, bio, out);
+	// BW: call this to get a list of critters on each planet
+	// (wrong indexes, probably a wrong type cast or printing)
 }
 
 COUNT
@@ -1109,7 +1113,7 @@ calculateBioValue (const SOLARSYS_STATE *system, const PLANET_DESC *world)
 
 void
 generateBioIndex(const SOLARSYS_STATE *system,
-		const PLANET_DESC *world, COUNT bio[])
+		 const PLANET_DESC *world, COUNT bio[], FILE *out)
 {
 	COUNT numBio;
 	COUNT i;
@@ -1120,7 +1124,7 @@ generateBioIndex(const SOLARSYS_STATE *system,
 	(*system->GenFunc) (GENERATE_LIFE);
 	numBio = system->CurNode;
 
-	for (i = 0; i < NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES; i++)
+	for (i = 0; i < NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES + NUM_B_CREATURE_TYPES + NUM_C_CREATURE_TYPES; i++)
 		bio[i] = 0;
 	
 	for (i = 0; i < numBio; i++)
@@ -1128,6 +1132,7 @@ generateBioIndex(const SOLARSYS_STATE *system,
 		((SOLARSYS_STATE *) system)->CurNode = i;
 		(*system->GenFunc) (GENERATE_LIFE);
 		bio[system->SysInfo.PlanetInfo.CurType]++;
+		fprintf(out, "Bio type: %4d\n", system->SysInfo.PlanetInfo.CurType);
 	}
 }
 
