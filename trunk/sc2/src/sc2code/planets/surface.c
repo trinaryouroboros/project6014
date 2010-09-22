@@ -224,19 +224,39 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 			num_types = (BYTE)(((BYTE)TFB_Random () % MAX_LIFE_VARIATION) + 1);
 			do
 			{
-				BYTE index, num_creatures;
+			        BYTE index, num_creatures, range_types;
 				UWORD rand_val;
+				BOOLEAN zoneA, zoneB, zoneC;
 
 				rand_val = (UWORD)TFB_Random ();
 				
-				// BW: Check whether we're in the NE quadrant
-			        if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
+				// BW: Compute which life forms should appear				
+				zoneA = (LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) > 9000);
+				zoneB = (LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + 3*LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) < 21000);
+				zoneC = (3*LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) < 19000);
+				
+				range_types = 0;
+				if (zoneA)
+				  range_types += NUM_CREATURE_TYPES;
+				if (zoneB)
+				  range_types += NUM_B_CREATURE_TYPES;
+				if (zoneC)
+				  range_types += NUM_C_CREATURE_TYPES;
+
+				index = LOBYTE (rand_val) % range_types;
+				
+				// BW: adjust index so that it takes creatures from the correct set.
+				if (!zoneA)
 				  {
-				    index = LOBYTE (rand_val) % NUM_CREATURE_TYPES;
+				    index += NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES;
+				    if (!zoneB)
+				      index += NUM_B_CREATURE_TYPES;
 				  }
-				else
+				if (zoneA && index >= NUM_CREATURE_TYPES)
 				  {
-				    index = (LOBYTE (rand_val) % NUM_NEW_CREATURE_TYPES) + NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES;
+				    index += NUM_SPECIAL_CREATURE_TYPES;
+				    if (!zoneB)
+				      index += NUM_B_CREATURE_TYPES;
 				  }
 				
 				num_creatures = (BYTE)((HIBYTE (rand_val) % 10) + 1);
