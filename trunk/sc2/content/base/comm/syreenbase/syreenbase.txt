@@ -1,49 +1,48 @@
-#(SYREEN_GREETING1)
+#(MOOSY_GREETING)
 Sorry handsome, but your princess is in another castle.
 
-
-#(because_we_can)
+#(holy_crap)
 Yeah my girlfriend used to work here and I was just being nostalgic... Holy Crap! I mean, uhh... Greetings. 
 
-#(looking_for_artefacts)
+#(am_i_lost)
 Whoa. Am I lost? This is the Syreen homeworld, right?
 
-#(spacebabes)
+#(had_to_stop_by)
 Talana asked I stop by to say "hi".
 
-#(NICE_TUG)
+#(MOOSY_SAYS_HI)
 Awww. Isn't she just a sweetheart? You tell her Moosy says "Hi".
 
-#(thanks_tug_complement)
+#(i_ll_tell_her)
 Alright... Moosy. I'll tell her.
 
-#(not_fooled)
+#(perfect_name)
 Moosy? Ha! What a perfect name. Err...a lovely name.
 
-#(DOUBLE_WHATNOW) 
+#(THANKS_SUGAR) 
 Why Thank you sugar! 
 
-#(SURE_I_WAS)
+#(YOU_CUTIE)
 Sugar, she was right about you. You are a cutie.
 
-#(ANY_ASSISTANCE)
+#(TALK_TO_COMMANDER)
 Sure is! I suggest you talk to the Syreen Commander on the planet below for any questions. 
 
-#(roam_stars)
+#(huge_fan)
 BIG fan of the Syreen. Err... No, huge Fan. I mean, Syreen are awesome.
 
-#(WE_DONT_STRAY)
+#(JEALOUS)
 Well, the Syreen are big fans of you Captain. 
 Frankly, the story of the handsome captain who freed us from the Ur-Quan made many Syreen jealous of Talana.
 
-#(any_news)
+#(not_hot)
 I thought all Syreen were supposed to be hot! No offense.
 
-#(NO_NEWS)
+#(MUCH_WOMAN)
 None taken. Not everybody can handle this much woman. Your loss Captain. Most Syreen are skinny.
 
-#(spot_you_later)
+#(must_be_going)
 Well, ummm, I really must be going now.
 
-#(COME_BACK_ANYTIME)
+#(COME_BACK_ANYTIME_MOOSY)
 Come back anytime sugar!
