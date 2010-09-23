@@ -577,9 +577,14 @@ SYREEN_FONT,comm.syreen.font,sc2code/comm/syreen/ifontres.h,FONTRES,base/fonts/s
 SYREEN_CONVERSATION_PHRASES,comm.syreen.dialogue,sc2code/comm/syreen/istrtab.h,CONVERSATION,base/comm/syreen/syreen.txt
 SYREEN_COLOR_MAP,comm.syreen.colortable,sc2code/comm/syreen/istrtab.h,BINTAB,base/comm/syreen/syreen.ct
 SYREEN_PMAP_ANIM,comm.syreen.graphics,sc2code/comm/syreen/igfxres.h,GFXRES,base/comm/syreen/syreen-captain.ani
+SYREEN_BASE_MUSIC,comm.syreenbase.music,sc2code/comm/syreenbase/imusicre.h,MUSICRES,base/comm/syreenbase/syreenbase.mod
+SYREEN_BASE_FONT,comm.syreenbase.font,sc2code/comm/syreenbase/ifontres.h,FONTRES,base/fonts/syreen.fon
+SYREEN_BASE_CONVERSATION_PHRASES,comm.syreenbase.dialogue,sc2code/comm/syreenbase/istrtab.h,CONVERSATION,base/comm/syreenbase/syreenbase.txt
+SYREEN_BASE_COLOR_MAP,comm.syreenbase.colortable,sc2code/comm/syreenbase/istrtab.h,BINTAB,base/comm/syreenbase/syreenbase.ct
+SYREEN_BASE_PMAP_ANIM,comm.syreenbase.graphics,sc2code/comm/syreenbase/igfxres.h,GFXRES,base/comm/syreenbase/syreenbase.ani
 SYREEN_HOME_MUSIC,comm.syreenhome.music,sc2code/comm/syreenhome/imusicre.h,MUSICRES,base/comm/syreenhome/syreenhome.mod
 SYREEN_HOME_FONT,comm.syreenhome.font,sc2code/comm/syreenhome/ifontres.h,FONTRES,base/fonts/syreen.fon
-SYREEN_HOME_CONVERSATION_PHRASES,comm.syreehomen.dialogue,sc2code/comm/syreenhome/istrtab.h,CONVERSATION,base/comm/syreenhome/syreenhome.txt
+SYREEN_HOME_CONVERSATION_PHRASES,comm.syreenhome.dialogue,sc2code/comm/syreenhome/istrtab.h,CONVERSATION,base/comm/syreenhome/syreenhome.txt
 SYREEN_HOME_COLOR_MAP,comm.syreenhome.colortable,sc2code/comm/syreenhome/istrtab.h,BINTAB,base/comm/syreenhome/syreenhome.ct
 SYREEN_HOME_PMAP_ANIM,comm.syreenhome.graphics,sc2code/comm/syreenhome/igfxres.h,GFXRES,base/comm/syreenhome/syreenhome.ani
 MELNORME_MUSIC,comm.melnorme.music,sc2code/comm/melnorm/imusicre.h,MUSICRES,base/comm/melnorme/melnorme.mod
@@ -604,11 +609,6 @@ YEHAT_CONVERSATION_PHRASES,comm.yehat.dialogue,sc2code/comm/yehat/istrtab.h,CONV
 REBEL_CONVERSATION_PHRASES,comm.yehat.rebel.dialogue,sc2code/comm/yehat/istrtab.h,CONVERSATION,base/comm/yehatrebels/yehatrebels.txt
 YEHAT_COLOR_MAP,comm.yehat.colortable,sc2code/comm/yehat/istrtab.h,BINTAB,base/comm/yehat/yehat.ct
 YEHAT_PMAP_ANIM,comm.yehat.graphics,sc2code/comm/yehat/igfxres.h,GFXRES,base/comm/yehat/yehat.ani
-SUPOX_MUSIC,comm.supox.music,sc2code/comm/supox/imusicre.h,MUSICRES,base/comm/supox/supox.mod
-SUPOX_FONT,comm.supox.font,sc2code/comm/supox/ifontres.h,FONTRES,base/fonts/supox.fon
-SUPOX_CONVERSATION_PHRASES,comm.supox.dialogue,sc2code/comm/supox/istrtab.h,CONVERSATION,base/comm/supox/supox.txt
-SUPOX_COLOR_MAP,comm.supox.colortable,sc2code/comm/supox/istrtab.h,BINTAB,base/comm/supox/supox.ct
-SUPOX_PMAP_ANIM,comm.supox.graphics,sc2code/comm/supox/igfxres.h,GFXRES,base/comm/supox/supox.ani
 THRADD_MUSIC,comm.thraddash.music,sc2code/comm/thradd/imusicre.h,MUSICRES,base/comm/thraddash/thraddash.mod
 THRADD_FONT,comm.thraddash.font,sc2code/comm/thradd/ifontres.h,FONTRES,base/fonts/thraddash.fon
 THRADD_CONVERSATION_PHRASES,comm.thraddash.dialogue,sc2code/comm/thradd/istrtab.h,CONVERSATION,base/comm/thraddash/thraddash.txt

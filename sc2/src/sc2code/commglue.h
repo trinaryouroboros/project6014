@@ -58,6 +58,7 @@ typedef enum {
 	ANDROSYNTH_CONVERSATION,	// JMS
 	LURG_CONVERSATION,			// JMS
 	SLAVERACE_CONVERSATION,		// JMS
+	SYREENBASE_CONVERSATION,
 	SYREENHOME_CONVERSATION,
 	INVALID_CONVERSATION,
 } CONVERSATION;
@@ -152,6 +153,8 @@ extern LOCDATA* init_starbase_comm (void);
 extern LOCDATA* init_supox_comm (void);
 
 extern LOCDATA* init_syreen_comm (void);
+
+extern LOCDATA* init_syreenbase_comm (void); // BW
 
 extern LOCDATA* init_syreenhome_comm (void); // JMS
 
