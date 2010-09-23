@@ -96,12 +96,9 @@ GenerateSyreen (BYTE control)
 		case GENERATE_ORBITAL:
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
 			{
-				GenerateRandomIP (GENERATE_ORBITAL);
-				pSolarSysState->SysInfo.PlanetInfo.SurfaceTemperature = 19;
-				pSolarSysState->SysInfo.PlanetInfo.Tectonics = 0;
-				pSolarSysState->SysInfo.PlanetInfo.Weather = 0;
-				pSolarSysState->SysInfo.PlanetInfo.AtmoDensity =
-						EARTH_ATMOSPHERE * 9 / 10;
+				pSolarSysState->MenuState.Initialized += 2;
+				InitCommunication (SYREENHOME_CONVERSATION);
+				pSolarSysState->MenuState.Initialized -= 2;
 				break;
 			}
 				/* Starbase */
