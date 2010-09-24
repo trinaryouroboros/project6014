@@ -67,7 +67,7 @@ static RACE_DESC mmrnmhrm_desc =
 	{ /* FLEET_STUFF */
 		0, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
-			523, 8412,
+			0, 0,
 		},
 	},
 	{

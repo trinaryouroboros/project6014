@@ -448,7 +448,7 @@ main (int argc, char *argv[])
 	optAddons = options.addons;
 	
 	// JMS_GFX
-	resolutionFactor = options.resolutionFactor;
+	resolutionFactor = 1; //resolutionFactor = options.resolutionFactor; // JMS_DEMO
 	resFactorWasChanged = FALSE;
 	
 	prepareContentDir (options.contentDir, options.addonDir, argv[0]);
