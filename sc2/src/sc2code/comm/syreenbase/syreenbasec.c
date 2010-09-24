@@ -157,7 +157,7 @@ AnyAssistance (RESPONSE_REF R)
 
 	else if (PLAYER_SAID (R, holy_crap))
 	{
-		NPCPhrase (TALK_TO_COMMANDER);
+		NPCPhrase (YOU_CUTIE);
 	}
 
 	Response (huge_fan, AskMenu1);
