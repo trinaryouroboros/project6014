@@ -17,6 +17,7 @@
  */
 
 // JMS 2010: -Cannot dispatch landers on restricted planets
+//			 -Certain star systems can have more than one energy blip graphics on planet surface simultaneously
 
 #include "build.h"
 #include "cons_res.h"
@@ -1358,8 +1359,18 @@ GeneratePlanetSide (void)
 						NodeElementPtr->mass_points = 1;
 					else
 						NodeElementPtr->mass_points = MAX_SCROUNGED;
-					DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame =
-							pSolarSysState->PlanetSideFrame[1];
+					
+					// JMS: At GenerateHint star system, there can be more than on energy blip graphics on the planet surface simultaneously.
+					if (CurStarDescPtr->Index == HINT_DEFINED)
+					{
+						if (num_nodes % 2)
+							DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[1];
+						else
+							DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[2];
+					}
+					// JMS: Elsewhere - there can be only one.
+					else
+						DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[1];
 				}
 				else
 				{

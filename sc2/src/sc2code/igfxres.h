@@ -19,6 +19,8 @@
 #define BULLETHOLES_PMAP_ANIM "graphics.bulletholes"
 #define BURV_BCS_MASK_PMAP_ANIM "graphics.drutrans"
 #define CANNISTER_MASK_PMAP_ANIM "graphics.lifecan"
+#define CIRCLES_A_MASK_PMAP_ANIM "graphics.circles_a"
+#define CIRCLES_B_MASK_PMAP_ANIM "graphics.circles_b"
 #define CREDITS_BACK_ANIM "credits.background"
 #define EARTH_MASK_ANIM "graphics.eartmask"
 #define EGG_CASE_MASK_PMAP_ANIM "graphics.eggcase"
