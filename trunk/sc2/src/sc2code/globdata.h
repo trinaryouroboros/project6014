@@ -58,7 +58,8 @@
 
 #define COLORXFORM_ANIM PAUSE_TALKING
 
-#define FAST_STOP_AT_TALK_START TALK_DONE // JMS
+#define FAST_STOP_AT_TALK_START TALK_DONE // JMS: If there's a very loooong animation, it can be forced to stop when talking with this.
+										  // (otherwise there'll be nasty, unwanted pauses in the conversation.)
 
 typedef struct
 {
