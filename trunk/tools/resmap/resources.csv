@@ -281,6 +281,8 @@ SPAPLUTO_MASK_PMAP_ANIM,graphics.spapluto,sc2code/igfxres.h,GFXRES,base/lander/e
 RUINS_MASK_PMAP_ANIM,graphics.ruins,sc2code/igfxres.h,GFXRES,base/lander/energy/ruins.ani
 UMGAH_BCS_MASK_PMAP_ANIM,graphics.umgtrans,sc2code/igfxres.h,GFXRES,base/lander/energy/umgahcaster.ani
 PRECURSOR_BATTLESHIP_MASK_PMAP_ANIM,graphics.precbattleship,sc2code/igfxres.h,GFXRES,base/lander/energy/utwigbomb.ani
+CIRCLES_A_MASK_PMAP_ANIM,graphics.circles_a,sc2code/igfxres.h,GFXRES,base/lander/energy/circles_a.ani
+CIRCLES_B_MASK_PMAP_ANIM,graphics.circles_b,sc2code/igfxres.h,GFXRES,base/lander/energy/circles_b.ani
 MELEE_SCREEN_PMAP_ANIM,graphics.melebkgd,sc2code/igfxres.h,GFXRES,base/ui/meleebackground.ani
 MELEE_PICK_MASK_PMAP_ANIM,graphics.melee,sc2code/igfxres.h,GFXRES,base/ui/melee.ani
 SEGUE_PMAP_ANIM,graphics.segue,sc2code/igfxres.h,GFXRES,base/ui/segue.ani

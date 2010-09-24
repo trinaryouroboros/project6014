@@ -17,7 +17,8 @@
  */
 
 // JMS 2009: Function call for initing orz space portal when encountering its enum label
-// JMS 2010: Function call for initing Lurg home system when encountering its enum label
+// JMS 2010: -Function call for initing Lurg home system when encountering its enum label
+//			 -Function call for initing those ones that mysteriously vanished in a hurry
 
 #include "encount.h"
 
@@ -135,6 +136,9 @@ GenerateIP (BYTE Index)
 		case SHOFIXTI_CRASH_SITE_DEFINED:
 			GenFunc = GenerateShofixtiCrashSite;	 // JMS - hook to generating Shofixti crash site
 			break;
+		case HINT_DEFINED:
+			GenFunc = GenerateHint;	 // JMS - hook to generating hint for those ones mysteriously vanished in a hurry
+			break;	
 		default:
 			GenFunc = GenerateRandomIP;
 			break;

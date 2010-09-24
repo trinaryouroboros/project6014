@@ -18,6 +18,7 @@
 
 // JMS 2009 - Portal to Orz space enum
 // JMS 2010 - Lurg home system enum
+//			- Enum for those guys that have mysteriously vanished
 
 #ifndef _ENCOUNT_H
 #define _ENCOUNT_H
@@ -130,7 +131,8 @@ enum
 	SHOFIXTI_CRASH_SITE_DEFINED,	// JMS: Shofixti distress site
 	SLAVERACE_DEFINED,
 	MELNORME_HOME_DEFINED,          // Also generates deflection shield in hyperspace
-	ORZ_SPACE_PORTAL_DEFINED		// JMS: Portal to ORZ space
+	ORZ_SPACE_PORTAL_DEFINED,		// JMS: Portal to ORZ space
+	HINT_DEFINED,					// JMS: Those guys that have mysteriously vanished
 };
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED
@@ -192,6 +194,7 @@ extern void GenerateSlaveRace (BYTE control);
 extern void GenerateOrzSpacePortal (BYTE control);		// JMS
 extern void GenerateLurg (BYTE control);				// JMS
 extern void GenerateShofixtiCrashSite (BYTE control);	// JMS
+extern void GenerateHint (BYTE control);				// JMS
 
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;

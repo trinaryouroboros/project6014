@@ -20,6 +20,7 @@
 //			 -Added a system into Orz space starmap_array
 // JMS 2010: -Added Lurg home system
 //			 -Added shofixti crash site
+//			 -Added system for those who mysteriously vanished in a hurry...
 
 #include "encount.h"
 #include "resinst.h"
@@ -219,7 +220,7 @@ STAR_DESC starmap_array[] =
 {{2376,3941}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 6, 37},
 {{3062,3951}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 1, 40},
 {{4942,3957}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 2, 8},
-{{6480,3970}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 4, 7},
+{{6480,3970}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), HINT_DEFINED, 4, 7}, // JMS: Someone was here, but left in a hurry...
 {{1471,4000}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 2, 35},
 {{ 239,4026}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 113},
 {{9142,4075}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 4, 6},
