@@ -26,7 +26,7 @@
 #include "build.h"
 
 
-static LOCDATA syreen_desc =
+static LOCDATA syreenhome_desc =
 {
 	NULL, /* init_encounter_func */
 	NULL, /* post_encounter_func */
@@ -52,65 +52,9 @@ static LOCDATA syreen_desc =
 			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 2, ONE_SECOND, /* FrameRate */
 			ONE_SECOND * 3, ONE_SECOND * 5, /* RestartRate */
-			(1 << 8), /* BlockMask */
+			(1 << 1), /* BlockMask */
 		},
-	  {             // 1 - water flow
-			10, /* StartIndex */
-			4, /* NumFrames */
-			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 2, 0,/* FrameRate */
-			0, 0, /* RestartRate */
-			0, /* BlockMask */
-		},
-	  {             // 2 - right girl moving pieces
-			14, /* StartIndex */
-			8, /* NumFrames */
-			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 5, ONE_SECOND / 5, /* FrameRate */
-			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			0, /* BlockMask */
-		},
-	  {             // 3 - lights switching on board
-			22, /* StartIndex */
-			5, /* NumFrames */
-			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 2, 0, /* FrameRate */
-			ONE_SECOND, 0, /* RestartRate */
-			0, /* BlockMask */
-		},
-	  {             // 4 - front girl breathing
-			27, /* StartIndex */
-			4, /* NumFrames */
-			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 7, 0, /* FrameRate */
-			ONE_SECOND*4, ONE_SECOND, /* RestartRate */
-			(1 << 6), /* BlockMask */
-		},
-	  {             // 5 - blinking eyes
-			31, /* StartIndex */
-			3, /* NumFrames */
-			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
-			ONE_SECOND * 7, ONE_SECOND * 6, /* RestartRate */
-			(1 << 6) | (1 << 7), /* BlockMask */
-		},
-	  {             // 6 - moving hip
-			34, /* StartIndex */
-			19, /* NumFrames */
-			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 30, 0, /* FrameRate */
-			ONE_SECOND * 10, ONE_SECOND * 3, /* RestartRate */
-			(1 << 4) | (1 << 5) | (1 << 7), /* BlockMask */
-		},
-	  {             // 7 - smiley face
-			53, /* StartIndex */
-			17, /* NumFrames */
-			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 10, ONE_SECOND / 10, /* FrameRate */
-			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 5) | (1 << 6), /* BlockMask */
-		},
-	  {             // 8 - left girl manipulating starmap
+	  {             // 1 - left girl manipulating starmap
 			3, /* StartIndex */
 			7, /* NumFrames */
 			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
@@ -118,25 +62,81 @@ static LOCDATA syreen_desc =
 			ONE_SECOND * 3, ONE_SECOND * 5, /* RestartRate */
 			(1 << 0), /* BlockMask */
 		},
+	  {             // 2 - water flow
+			10, /* StartIndex */
+			4, /* NumFrames */
+			CIRCULAR_ANIM | WAIT_TALKING | FAST_STOP_AT_TALK_START, /* AnimFlags */
+			ONE_SECOND / 2, 0,/* FrameRate */
+			0, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+	  {             // 3 - right girl moving pieces
+			14, /* StartIndex */
+			8, /* NumFrames */
+			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
+			ONE_SECOND / 5, ONE_SECOND / 5, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+	  {             // 4 - lights switching on board
+			22, /* StartIndex */
+			5, /* NumFrames */
+			CIRCULAR_ANIM | WAIT_TALKING | FAST_STOP_AT_TALK_START, /* AnimFlags */
+			ONE_SECOND / 2, 0, /* FrameRate */
+			ONE_SECOND, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+	  {             // 5 - front girl breathing
+			27, /* StartIndex */
+			4, /* NumFrames */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			ONE_SECOND / 7, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND, /* RestartRate */
+			(1 << 7), /* BlockMask */
+		},
+	  {             // 6 - blinking eyes
+			31, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
+			ONE_SECOND * 7, ONE_SECOND * 6, /* RestartRate */
+			(1 << 7) | (1 << 8), /* BlockMask */
+		},
+	  {             // 7 - moving hip
+			34, /* StartIndex */
+			19, /* NumFrames */
+			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
+			ONE_SECOND / 30, 0, /* FrameRate */
+			ONE_SECOND * 10, ONE_SECOND * 3, /* RestartRate */
+			(1 << 5) | (1 << 6) | (1 << 8), /* BlockMask */
+		},
+	  {             // 8 - smiley face
+			53, /* StartIndex */
+			17, /* NumFrames */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			ONE_SECOND / 10, ONE_SECOND / 20, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			(1 << 6) | (1 << 7), /* BlockMask */
+		},
 	  {             // 9 - zoomed left girl turning head
 			79, /* StartIndex */
-			2, /* NumFrames */
+			3, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 2, ONE_SECOND, /* FrameRate */
 			ONE_SECOND * 3, ONE_SECOND * 5, /* RestartRate */
 			(1 << 10), /* BlockMask */
 		},
 	  {             // 10 - zoomed left girl manipulating starmap
-			81, /* StartIndex */
-			7, /* NumFrames */
+			82, /* StartIndex */
+			8, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND * 3, ONE_SECOND * 5, /* RestartRate */
 			(1 << 9), /* BlockMask */
 		},
 	  {             // 11 - zoomed front girl breathing
-			88, /* StartIndex */
-			7, /* NumFrames */
+			90, /* StartIndex */
+			8, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 7, 0, /* FrameRate */
 			ONE_SECOND * 4, ONE_SECOND, /* RestartRate */
@@ -152,7 +152,7 @@ static LOCDATA syreen_desc =
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
-		95, /* StartIndex */
+		98, /* StartIndex */
 		59, /* NumFrames */
 		TALK_INTRO, /* AnimFlags */
 		ONE_SECOND / 20, 0, /* FrameRate */
@@ -279,13 +279,13 @@ Intro (void)
 
 
 static COUNT
-uninit_syreen (void)
+uninit_syreenhome (void)
 {
 	return (0);
 }
 
 static void
-post_syreen_enc (void)
+post_syreenhome_enc (void)
 {
 	// nothing defined so far
 }
@@ -295,16 +295,16 @@ init_syreenhome_comm (void)
 {
 	LOCDATA *retval;
 
-	syreen_desc.init_encounter_func = Intro;
-	syreen_desc.post_encounter_func = post_syreen_enc;
-	syreen_desc.uninit_encounter_func = uninit_syreen;
+	syreenhome_desc.init_encounter_func = Intro;
+	syreenhome_desc.post_encounter_func = post_syreenhome_enc;
+	syreenhome_desc.uninit_encounter_func = uninit_syreenhome;
 
-	syreen_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreen_desc.AlienTextBaseline.y = 0;
-	syreen_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
+	syreenhome_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
+	syreenhome_desc.AlienTextBaseline.y = 0;
+	syreenhome_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
-	retval = &syreen_desc;
+	retval = &syreenhome_desc;
 
 	return (retval);
 }

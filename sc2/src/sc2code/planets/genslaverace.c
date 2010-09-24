@@ -91,7 +91,7 @@ GenerateSlaveRace (BYTE control)
 					}
 					pSolarSysState->MenuState.Initialized += 2;
 					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
-					InitCommunication (SLAVERACE_CONVERSATION);
+					InitCommunication (CHMMR_CONVERSATION);
 					pSolarSysState->MenuState.Initialized -= 2;
 
 					if (GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))

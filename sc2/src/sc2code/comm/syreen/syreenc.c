@@ -105,7 +105,7 @@ static LOCDATA syreen_desc =
 		},
 		{	// 7 - Close-up eyes blink
 			183, /* StartIndex */
-			6, /* NumFrames */
+			7, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 24, 0, /* FrameRate */
 			ONE_SECOND * 2, ONE_SECOND * 2, /* RestartRate */
