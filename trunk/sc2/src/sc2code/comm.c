@@ -1493,9 +1493,7 @@ InitCommunication (CONVERSATION which_comm)
 		BuildBattle (1);
 	}
 
-	LocDataPtr = init_race (
-			status != YEHAT_REBEL_SHIP ? which_comm :
-			YEHAT_REBEL_CONVERSATION);
+	LocDataPtr = init_race ( status != YEHAT_REBEL_SHIP ? which_comm : YEHAT_REBEL_CONVERSATION);
 	if (LocDataPtr)
 		CommData = *LocDataPtr;
 

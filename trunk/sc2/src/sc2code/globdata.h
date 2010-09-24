@@ -22,6 +22,7 @@
 // JMS 2010: -Added new game state for which ship is the flagship
 //			 -Added new device: Black orb
 //			 -Added new device: Temporal wrapper
+//			 -Increased max number of comm screen animations for one race from 20 to 30
 
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H

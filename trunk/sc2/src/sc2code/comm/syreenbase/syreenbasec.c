@@ -26,7 +26,7 @@
 #include "build.h"
 
 
-static LOCDATA syreen_desc =
+static LOCDATA syreenbase_desc =
 {
 	NULL, /* init_encounter_func */
 	NULL, /* post_encounter_func */
@@ -199,16 +199,16 @@ init_syreenbase_comm (void)
 {
 	LOCDATA *retval;
 
-	syreen_desc.init_encounter_func = Intro;
-	syreen_desc.post_encounter_func = post_syreen_enc;
-	syreen_desc.uninit_encounter_func = uninit_syreen;
+	syreenbase_desc.init_encounter_func = Intro;
+	syreenbase_desc.post_encounter_func = post_syreen_enc;
+	syreenbase_desc.uninit_encounter_func = uninit_syreen;
 
-	syreen_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreen_desc.AlienTextBaseline.y = 0;
-	syreen_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
+	syreenbase_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
+	syreenbase_desc.AlienTextBaseline.y = 0;
+	syreenbase_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
-	retval = &syreen_desc;
+	retval = &syreenbase_desc;
 
 	return (retval);
 }
