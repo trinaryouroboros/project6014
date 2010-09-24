@@ -52,7 +52,7 @@ static RACE_DESC androsynth_desc =
 	{ /* FLEET_STUFF */
 		0 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
-			6816, 4970,
+			0, 0,
 		},
 	},
 	{

@@ -2176,8 +2176,13 @@ or vice versa.
 Please restart the game before proceeding.
 
 
-#()
+#(hires_not_done)
+We're sorry, but the experimental
+mega-graphic mode is still in the works.
 
+Estimated time of completion: 2012
+
+(Hey, we're not getting paid for this...)
 
 
 #()

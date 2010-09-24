@@ -36,6 +36,8 @@
 #include "resinst.h"
 #include "nameref.h"
 
+#include "gamestr.h"
+
 static STRING SetupTab;
 
 typedef struct setup_menu_state {
@@ -1251,7 +1253,8 @@ SetGlobalOptions (GLOBALOPTS *opts)
 		NewWidth = 640;
 		NewHeight = 480;
 		NewDriver = TFB_GFXDRIVER_SDL_PURE;
-		resolutionFactor=2;
+		resolutionFactor=1; //resolutionFactor=2; // JMS_DEMO
+		DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 36)); // JMS_DEMO
 		break;
 	default:
 		/* Don't mess with the custom value */
