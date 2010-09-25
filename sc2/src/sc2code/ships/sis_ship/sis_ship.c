@@ -23,6 +23,8 @@
 //			 -Modded Chmmr Explorer main weapon as dual alternate side firing ion bolt cannon
 //			 -Chmmr Explorer secondary: Shard mines
 //			 -Autopilot now engages only after coming to full stop first
+//			 -Reduced weapon range (Blaster life) from 12 to 9
+//			 -Changed special weapon to confuse banger. Retained the shardmine code still, but it is disabled. Look for JMS_CONFUSER
 
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
@@ -53,17 +55,18 @@
 #define SHIP_MASS MAX_SHIP_MASS
 
 #define BLASTER_SPEED DISPLAY_TO_WORLD (24)
-#define BLASTER_LIFE 12
+#define BLASTER_LIFE 7 // JMS: WAS 12
 
 // JMS: These affect CHmmr Explorer in Super Melee
 #define EXPLORER_MAX_THRUST 34
-#define EXPLORER_THRUST_INCREMENT 1
+#define EXPLORER_THRUST_INCREMENT 9
 #define EXPLORER_TURN_WAIT 1
 #define EXPLORER_THRUST_WAIT 1
 
-// JMS: Chmmr Explorer has smaller weapon delay
+// JMS: Chmmr Explorer has smaller weapon delay and largish special delay
 #define EXPLORER_WEAPON_WAIT 2
-#define EXPLORER_SPECIAL_WAIT 9
+#define EXPLORER_SPECIAL_WAIT 22
+#define EXPLORER_WEAPON_ENERGY_COST 1
 
 static RACE_DESC sis_desc =
 {
@@ -158,7 +161,7 @@ static RACE_DESC exp_desc =
 		MAX_THRUST,
 		THRUST_INCREMENT,
 		ENERGY_REGENERATION,
-		WEAPON_ENERGY_COST,
+		EXPLORER_WEAPON_ENERGY_COST,
 		SPECIAL_ENERGY_COST,
 		ENERGY_WAIT,
 		TURN_WAIT,
@@ -179,9 +182,13 @@ static RACE_DESC exp_desc =
 			BLASTER_SML_MASK_PMAP_ANIM,
 		},
 		{
-			SPARK_ONLY_BIG_MASK_PMAP_ANIM,
+			// JMS_CONFUSER: Replaced old special gfx with new ones
+			/*SPARK_ONLY_BIG_MASK_PMAP_ANIM,
 			SPARK_ONLY_MED_MASK_PMAP_ANIM,
-			SPARK_ONLY_SML_MASK_PMAP_ANIM,
+			SPARK_ONLY_SML_MASK_PMAP_ANIM,*/
+			CONFUSE_BANGER_BIG_MASK_PMAP_ANIM,
+			CONFUSE_BANGER_MED_MASK_PMAP_ANIM,
+			CONFUSE_BANGER_SML_MASK_PMAP_ANIM,
 		},
 		{
 			SIS_CAPTAIN_MASK_PMAP_ANIM,
@@ -415,7 +422,11 @@ sis_hyper_postprocess (ELEMENT *ElementPtr)
 	}
 }
 
-// Precursor vessel special
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+// Precursor vessel special//////////////////////////////////
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 static void
 spawn_point_defense (ELEMENT *ElementPtr)
 {
@@ -547,8 +558,14 @@ spawn_point_defense (ELEMENT *ElementPtr)
 	}
 }
 
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+// Shardmine special ////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 static void
-splinter_preprocess (ELEMENT *ElementPtr)
+shardmine_splinter_preprocess (ELEMENT *ElementPtr)
 {
 	ElementPtr->next.image.frame =
 	IncFrameIndex (ElementPtr->current.image.frame);
@@ -568,14 +585,13 @@ shardmine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ElementPtr0->next.image.frame =
 		SetAbsFrameIndex (ElementPtr0->current.image.frame, 0);
 		
-		ElementPtr0->preprocess_func = splinter_preprocess;
+		ElementPtr0->preprocess_func = shardmine_splinter_preprocess;
 	}
 }
-
 // JMS: Chmmr Explorer special: animation and limiting the number of mines in arena
 #define MAX_MINES 8
 static void
-spin_preprocess (ELEMENT *ElementPtr)
+shardmine_spin_preprocess (ELEMENT *ElementPtr)
 {
 	ELEMENT *ShipPtr;
 	STARSHIP *StarShipPtr;
@@ -606,10 +622,9 @@ spin_preprocess (ELEMENT *ElementPtr)
 	}
 	UnlockElement (StarShipPtr->hShip);
 }
-
 #define TRACK_WAIT 4
 static void
-buzztrack_preprocess (ELEMENT *ElementPtr)
+shardminetrack_preprocess (ELEMENT *ElementPtr)
 {
 	if (ElementPtr->thrust_wait)
 		--ElementPtr->thrust_wait;
@@ -659,10 +674,10 @@ buzztrack_preprocess (ELEMENT *ElementPtr)
 		}
 	}
 	
-	spin_preprocess (ElementPtr);
+	shardmine_spin_preprocess (ElementPtr);
 }
 static void
-decelerate_preprocess (ELEMENT *ElementPtr)
+shardmine_decelerate_preprocess (ELEMENT *ElementPtr)
 {
 	SIZE dx, dy;
 	
@@ -672,13 +687,13 @@ decelerate_preprocess (ELEMENT *ElementPtr)
 	SetVelocityComponents (&ElementPtr->velocity, dx, dy);
 	if (dx == 0 && dy == 0)
 	{
-		ElementPtr->preprocess_func = buzztrack_preprocess;
+		ElementPtr->preprocess_func = shardminetrack_preprocess;
 	}
 	
-	spin_preprocess (ElementPtr);
+	shardmine_spin_preprocess (ElementPtr);
 }
 static void
-butt_missile_preprocess (ELEMENT *ElementPtr)
+shardmine_missile_preprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 	
@@ -686,18 +701,17 @@ butt_missile_preprocess (ELEMENT *ElementPtr)
 	if (!(StarShipPtr->cur_status_flags & WEAPON))
 	{
 		ElementPtr->life_span >>= 1;
-		ElementPtr->preprocess_func = decelerate_preprocess;
+		ElementPtr->preprocess_func = shardmine_decelerate_preprocess;
 	}
 	
-	spin_preprocess (ElementPtr);
+	shardmine_spin_preprocess (ElementPtr);
 }
-
 // JMS: Chmmr Explorer special: This puts the newest mine on the arena to
 // the last place in the list of mine elements. 
 //
 // -> When new mines are deployed, oldest ones are eradicated from their way.
 static void
-butt_missile_postprocess (ELEMENT *ElementPtr)
+shardmine_missile_postprocess (ELEMENT *ElementPtr)
 {
 	HELEMENT hElement;
 	
@@ -729,10 +743,9 @@ butt_missile_postprocess (ELEMENT *ElementPtr)
 		ElementPtr->life_span = 0;
 	}
 }
-
 // JMS: Chmmr Explorer special: Main function
 static void
-spawn_butt_missile (ELEMENT *ShipPtr)
+spawn_shardmine_missile (ELEMENT *ShipPtr)
 {
 #define SPATHI_REAR_OFFSET 20
 #define DISCRIMINATOR_SPEED 18
@@ -757,7 +770,7 @@ spawn_butt_missile (ELEMENT *ShipPtr)
 	ButtMissileBlock.hit_points = DISCRIMINATOR_HITS;
 	ButtMissileBlock.damage = DISCRIMINATOR_DAMAGE;
 	ButtMissileBlock.life = DISCRIMINATOR_LIFE;
-	ButtMissileBlock.preprocess_func = butt_missile_preprocess;
+	ButtMissileBlock.preprocess_func = shardmine_missile_preprocess;
 	ButtMissileBlock.blast_offs = DISCRIMINATOR_OFFSET;
 	ButtMissile = initialize_missile (&ButtMissileBlock);
 	if (ButtMissile)
@@ -768,7 +781,7 @@ spawn_butt_missile (ELEMENT *ShipPtr)
 		ButtPtr->turn_wait = 0;
 		ButtPtr->thrust_wait = 0;
 		SetElementStarShip (ButtPtr, StarShipPtr);
-		ButtPtr->postprocess_func=butt_missile_postprocess;
+		ButtPtr->postprocess_func = shardmine_missile_postprocess;
 		ButtPtr->collision_func = shardmine_collision;
 		UnlockElement (ButtMissile);
 		PutElement (ButtMissile);
@@ -776,6 +789,214 @@ spawn_butt_missile (ELEMENT *ShipPtr)
 	}
 }
 
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+// Confuser special /////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+static void
+confuse_banger_preprocess (ELEMENT *ElementPtr)
+{
+	if (!(ElementPtr->state_flags & NONSOLID))
+	{
+		/*ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame,
+			(GetFrameIndex (ElementPtr->current.image.frame) + 1) & 7);*/
+		ElementPtr->state_flags |= CHANGING;
+	}
+	else if (ElementPtr->hTarget == 0)
+	{
+		ElementPtr->life_span = 0;
+		ElementPtr->state_flags |= DISAPPEARING;
+	}
+	else
+	{
+		ELEMENT *eptr;
+		
+		LockElement (ElementPtr->hTarget, &eptr);
+		
+		ElementPtr->next.location = eptr->next.location;
+		
+		if (ElementPtr->turn_wait)
+		{
+			HELEMENT hEffect;
+			STARSHIP *StarShipPtr;
+			
+			if (GetFrameIndex (ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame)) == 0)
+				ElementPtr->next.image.frame =
+				SetRelFrameIndex (ElementPtr->next.image.frame, -8);
+			
+			GetElementStarShip (eptr, &StarShipPtr);
+			StarShipPtr->ship_input_state = (StarShipPtr->ship_input_state & ~(LEFT | RIGHT | THRUST)) | ElementPtr->turn_wait;
+			
+			hEffect = AllocElement ();
+			if (hEffect)
+			{
+				LockElement (hEffect, &eptr);
+				
+				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING | (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+				eptr->life_span = 1;
+				eptr->current = eptr->next = ElementPtr->next;
+				eptr->preprocess_func = confuse_banger_preprocess;
+				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
+				
+				GetElementStarShip (ElementPtr, &StarShipPtr);
+				SetElementStarShip (eptr, StarShipPtr);
+				eptr->hTarget = ElementPtr->hTarget;
+				
+				UnlockElement (hEffect);
+				PutElement (hEffect);
+			}
+		}
+		
+		UnlockElement (ElementPtr->hTarget);
+	}
+}
+
+#define RECOIL_VELOCITY WORLD_TO_VELOCITY (DISPLAY_TO_WORLD (2))
+#define MAX_RECOIL_VELOCITY (RECOIL_VELOCITY * 3)
+#define CONFUSE_DURATION 20
+
+static void
+confuse_banger_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+{	
+	if ((ElementPtr1->state_flags & PLAYER_SHIP)
+		&& ElementPtr1->crew_level
+		&& !GRAVITY_MASS (ElementPtr1->mass_points + 1))
+	{
+		COUNT angle;
+		SIZE cur_delta_x, cur_delta_y;
+		STARSHIP *StarShipPtr;
+		
+		GetElementStarShip (ElementPtr1, &StarShipPtr);
+		StarShipPtr->cur_status_flags &= ~(SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED);
+		
+		angle = FACING_TO_ANGLE (GetFrameIndex (ElementPtr0->next.image.frame) );
+		DeltaVelocityComponents (&ElementPtr1->velocity,
+								 COSINE (angle, RECOIL_VELOCITY),
+								 SINE (angle, RECOIL_VELOCITY));
+		GetCurrentVelocityComponents (&ElementPtr1->velocity,&cur_delta_x, &cur_delta_y);
+	
+		if ((long)cur_delta_x * (long)cur_delta_x
+			+ (long)cur_delta_y * (long)cur_delta_y
+			> (long)MAX_RECOIL_VELOCITY * (long)MAX_RECOIL_VELOCITY)
+		{
+			angle = ARCTAN (cur_delta_x, cur_delta_y);
+			SetVelocityComponents (&ElementPtr1->velocity,
+								   COSINE (angle, MAX_RECOIL_VELOCITY),
+								   SINE (angle, MAX_RECOIL_VELOCITY));
+		}
+	}
+	
+	if (ElementPtr1->state_flags & PLAYER_SHIP)
+	{
+		HELEMENT hConfusionElement, hNextElement;
+		ELEMENT *ConfusionPtr;
+		STARSHIP *StarShipPtr;
+		
+		GetElementStarShip (ElementPtr0, &StarShipPtr);
+		for (hConfusionElement = GetHeadElement ();
+			 hConfusionElement; hConfusionElement = hNextElement)
+		{
+			LockElement (hConfusionElement, &ConfusionPtr);
+			if ((ConfusionPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
+				(ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY))
+				&& ConfusionPtr->current.image.farray ==
+				StarShipPtr->RaceDescPtr->ship_data.special
+				&& (ConfusionPtr->state_flags & NONSOLID))
+			{
+				UnlockElement (hConfusionElement);
+				break;
+			}
+			hNextElement = GetSuccElement (ConfusionPtr);
+			UnlockElement (hConfusionElement);
+		}
+		
+		if (hConfusionElement || (hConfusionElement = AllocElement ()))
+		{
+			LockElement (hConfusionElement, &ConfusionPtr);
+			
+			if (ConfusionPtr->state_flags == 0) /* not allocated before */
+			{
+				InsertElement (hConfusionElement, GetHeadElement ());
+				
+				ConfusionPtr->current = ElementPtr0->next;
+				ConfusionPtr->current.image.frame = SetAbsFrameIndex (ConfusionPtr->current.image.frame, 16);
+				ConfusionPtr->next = ConfusionPtr->current;
+				ConfusionPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
+				| (ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY));
+				ConfusionPtr->preprocess_func = confuse_banger_preprocess;
+				SetPrimType ( &(GLOBAL (DisplayArray))[ConfusionPtr->PrimIndex], NO_PRIM);
+				
+				SetElementStarShip (ConfusionPtr, StarShipPtr);
+				GetElementStarShip (ElementPtr1, &StarShipPtr);
+				ConfusionPtr->hTarget = StarShipPtr->hShip;
+			}
+			
+			ConfusionPtr->life_span = CONFUSE_DURATION;
+			ConfusionPtr->turn_wait =
+			(BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
+			
+			UnlockElement (hConfusionElement);
+		}
+		
+		weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+		
+		ElementPtr0->hit_points = 0;
+		ElementPtr0->life_span = 0;
+		ElementPtr0->state_flags |= DISAPPEARING | COLLISION | NONSOLID;
+		
+	}
+	(void) pPt0;  /* Satisfying compiler (unused parameter) */
+	(void) pPt1;  /* Satisfying compiler (unused parameter) */
+}
+
+static COUNT
+initialize_confuse_banger (ELEMENT *ShipPtr, HELEMENT ConfusionArray[])
+{
+#define CMISSILE_SPEED DISPLAY_TO_WORLD (24)
+#define CMISSILE_HITS 4
+#define CMISSILE_DAMAGE 3
+#define CMISSILE_LIFE 10
+#define CMISSILE_OFFSET 4
+#define CMISSILE_START_OFFSET 28
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK ConfusionBlock;
+	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	ConfusionBlock.cx = ShipPtr->next.location.x;
+	ConfusionBlock.cy = ShipPtr->next.location.y;
+	ConfusionBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+	ConfusionBlock.face = StarShipPtr->ShipFacing;
+	ConfusionBlock.index = ConfusionBlock.face;
+	ConfusionBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
+	| IGNORE_SIMILAR;
+	ConfusionBlock.pixoffs = CMISSILE_START_OFFSET;
+	ConfusionBlock.speed = CMISSILE_SPEED;
+	ConfusionBlock.hit_points = CMISSILE_HITS;
+	ConfusionBlock.damage = CMISSILE_DAMAGE;
+	ConfusionBlock.life = CMISSILE_LIFE;
+	ConfusionBlock.preprocess_func = confuse_banger_preprocess;
+	ConfusionBlock.blast_offs = CMISSILE_OFFSET;
+	ConfusionArray[0] = initialize_missile (&ConfusionBlock);
+	
+	if (ConfusionArray[0])
+	{
+		ELEMENT *CMissilePtr;
+		
+		LockElement (ConfusionArray[0], &CMissilePtr);
+		CMissilePtr->collision_func = confuse_banger_collision;
+		SetElementStarShip (CMissilePtr, StarShipPtr);
+		UnlockElement (ConfusionArray[0]);
+	}
+	return (1);
+}
+
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+// SPECIALS END /////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 static void
 sis_battle_preprocess (ELEMENT *ElementPtr)
 {
@@ -783,9 +1004,11 @@ sis_battle_preprocess (ELEMENT *ElementPtr)
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	
-	// JMS: This is needed to keep track of the number of mines with Chmmr Explorer
-	if (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0)
-		StarShipPtr->RaceDescPtr->characteristics.special_wait = 0;
+	// JMS_CONFUSER: Commented these out for the confuse_banger special weapon to work correctly
+	//
+	// JMS: This is needed to keep track of the number of shard mines with Chmmr Explorer
+	//if (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0)
+	//	StarShipPtr->RaceDescPtr->characteristics.special_wait = 0;
 	
 	if (StarShipPtr->RaceDescPtr->characteristics.special_energy_cost == 0
 		&&(GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
@@ -814,9 +1037,25 @@ sis_battle_postprocess (ELEMENT *ElementPtr)
 		)
 		
 	{
-		spawn_butt_missile(ElementPtr);
+		// JMS_CONFUSER: Disabled the shard mine related lines...
+		/*spawn_shardmine_missile(ElementPtr);
 		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
-		StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;
+		StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;*/ // JMS: Disabled shardmines and introduced confuser banger
+		
+		// JMS_CONFUSER:... and added these instead!
+		HELEMENT ConfuseBanger;
+		initialize_confuse_banger (ElementPtr, &ConfuseBanger);
+		if (ConfuseBanger)
+		{
+			ELEMENT *CMissilePtr;
+			LockElement (ConfuseBanger, &CMissilePtr);
+			
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), CMissilePtr);
+			
+			UnlockElement (ConfuseBanger);
+			PutElement (ConfuseBanger);
+			StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;
+		}
 		
 	}
 	
@@ -1265,8 +1504,7 @@ InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots)
 				if (i <= 1)
 					RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
 				else if (i == 2)
-					RaceDescPtr->ship_info.ship_flags |=
-							FIRES_LEFT | FIRES_RIGHT;
+					RaceDescPtr->ship_info.ship_flags |= FIRES_LEFT | FIRES_RIGHT;
 				else
 					RaceDescPtr->ship_info.ship_flags |= FIRES_AFT;
 				break;
