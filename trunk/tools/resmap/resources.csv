@@ -932,6 +932,9 @@ EXP_MICON_MASK_PMAP_ANIM,ship.explorer.meleeicons,sc2code/ships/sis_ship/igfxres
 EXP_BIG_MASK_PMAP_ANIM,ship.explorer.graphics.sis.large,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.big
 EXP_MED_MASK_PMAP_ANIM,ship.explorer.graphics.sis.medium,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.med
 EXP_SML_MASK_PMAP_ANIM,ship.explorer.graphics.sis.small,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Exp.sml
+CONFUSE_BANGER_BIG_MASK_PMAP_ANIM,ship.exp.graphics.con.large,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/conbig.ani
+CONFUSE_BANGER_MED_MASK_PMAP_ANIM,ship.exp.graphics.con.medium,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/conmed.ani
+CONFUSE_BANGER_SML_MASK_PMAP_ANIM,ship.exp.graphics.con.small,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/consml.ani
 ILWRATH_CODE,ship.ilwrath.code,sc2code/ships/ilwrath/icode.h,SHIP,7
 ILWRATH_VICTORY_SONG,ship.ilwrath.ditty,sc2code/ships/ilwrath/imusicre.h,MUSICRES,base/ships/ilwrath/ilwditty.mod
 ILWRATH_RACE_STRINGS,ship.ilwrath.text,sc2code/ships/ilwrath/istrtab.h,STRTAB,base/ships/ilwrath/ilwtext.txt
