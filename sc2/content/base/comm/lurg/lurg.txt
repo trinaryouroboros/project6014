@@ -7,7 +7,7 @@ It was a only a matter of time, but this intrusion into Lurg space cannot be all
 For this, you must die.
 
 #(we_mean_no_harm)
-I assure you, we mean you no harm. As a gesture of good will, we will leave the way we came.
+I assure you, we mean you no harm. As a gesture of good will we leave the way we came.
 
 #(distress_call)
 We are on a rescue mission. A distress call was sent by one of our Allies, we must be allowed to pass.
@@ -16,14 +16,14 @@ We are on a rescue mission. A distress call was sent by one of our Allies, we mu
 Prepare to suck vacuum you hideous space slug!
 
 #(CANT_LEAVE)
-You cannot be permitted to leave Captain. Here. You will die.
+You cannot be permitted to leave Captain. Here you will die.
 
 #(DONT_INSULT_US)
-Earthling, do not insult me. We know exactly who you are. The famous Unzervault Hero who defeated the Ur-Quan Sa Matra.
+Earthling, do not insult me. We know exactly who you are. The famous Vela Hero who defeated the Ur-Quan Sa Matra.
 We know why you are here. You cannot leave alive.
 
 #(let_us_pass)
-Ah. I see my reputation proceeds me. Well, then you know, I’m not bluffing, let us pass or you will be the ones dying.
+Ah. I see my reputation proceeds me. Well, then you know I’m not bluffing. Let us pass.
 
 #(can_we_pass)
 Please. I implore you. Let us pass peacefully. We mean no harm.
@@ -59,16 +59,16 @@ The Ur-Quan knew it would be a fatal mistake to fight against us. So, they ignor
 Humans, peaceful? Is that what you really think?  
 When the rest of humanity was locked inside a slave shield, and had the resources of a single planet, 
 your species practically destroyed each other fighting each other. 
-If it hadn't been for your colony being lost, humans would have surely destroyed themselves.
+You would surely have destroyed yourselves had you not been emancipated by the Chmmr.
 
 #(OUR_SPECIES)
 We are the Lurg. 
 
 #(OUR_SHIP)
-The Lurg Prawn is a genetically altered lifeform designed by us to live even in the harshest environments.
+The Lurg Prawn is a genetically altered lifeform designed by us to survive in the void of space.
 
 #(you_look_familiar) 
-You look strangely familiar. But, you have a face I don't think I'd forget.
+You look strangely familiar. You have a face I don't think I'd forget.
 
 #(YOU_FEEL_US)
 You can feel it in the back of your mind, can't you? Somehow, you've always felt we were watching you.
@@ -98,7 +98,7 @@ If we wanted you dead, we could have let the Mycon destroy your world a thousand
 You are nothing to us.
 
 #(last_chance)
-This is your last chance for a peaceful resolution or we will fight you.
+This is your last chance for a peaceful resolution, Lurg.
 
 #(lets_fight)
 Okay. Is this the part where we fight now?
@@ -106,5 +106,5 @@ Okay. Is this the part where we fight now?
 #(GOODBYE)
 Now it is time for you to die.
 Even if you run, you will help spread our message.  
-Too long we have ignore this sector of space. 
+Too long we have ignored this sector of space. 
 Let it be known, the Lurg are back.

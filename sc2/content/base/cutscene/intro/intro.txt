@@ -308,6 +308,19 @@ WAIT 1500
 #(Text fade-out)
 TFO
 
+#(Wait)
+WAIT 1500
+
+#(Text fade-in)
+TFI ...Hierarchy battle thralls have
+been punished.
+#(Wait)
+WAIT 1500
+#(Text fade-out)
+TFO
+
+
+
 
 #(Fade slide to White; param1=fade time)
 FTW 500
@@ -321,14 +334,6 @@ FTC 1200
 DRAW 5
 
 
-
-#(Text fade-in)
-TFI ...Hierarchy battle thralls have
-been punished.
-#(Wait)
-WAIT 1500
-#(Text fade-out)
-TFO
 
 #(Draw slide; param1=ANI index)
 DRAW 5

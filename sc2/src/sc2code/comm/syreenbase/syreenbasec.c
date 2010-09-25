@@ -45,7 +45,7 @@ static LOCDATA syreenbase_desc =
 	0, /* AlienSongFlags */
 	SYREEN_BASE_CONVERSATION_PHRASES, /* PlayerPhrases */
 	0, /* NumAnimations */
-	{ /* AlienAmbientArray (ambient animations) */
+	{0 /* AlienAmbientArray (ambient animations) */
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
