@@ -26,7 +26,7 @@
 void
 PropFile_from_string (char *d, PROPERTY_HANDLER handler)
 {
-        int len, i;
+	int len, i;
 
 	len = strlen(d);
 	i = 0;

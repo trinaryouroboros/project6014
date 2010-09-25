@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Yeaht no longer are hostile upon encountering.
-
 #include "comm/commall.h"
 #include "comm/yehat/resinst.h"
 #include "comm/yehat/strings.h"
@@ -196,119 +194,457 @@ static LOCDATA yehat_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	NPCPhrase (GOODBYE_EARTHLING);
-	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	SET_GAME_STATE (BATTLE_SEGUE, 1);
 
-}
+	if (PLAYER_SAID (R, bye_homeworld))
+		NPCPhrase (GOODBYE_AND_DIE_HOMEWORLD);
+	else if (PLAYER_SAID (R, bye_royalist))
+		NPCPhrase (GOODBYE_AND_DIE_ROYALIST);
+	else if (PLAYER_SAID (R, i_demand_you_ally_homeworld0))
+	{
+		NPCPhrase (ENEMY_MUST_DIE);
 
+		SET_GAME_STATE (NO_YEHAT_ALLY_HOME, 1);
+	}
+	else if (PLAYER_SAID (R, bye_space))
+	{
+		if ((BYTE)TFB_Random () & 1)
+			NPCPhrase (GOODBYE_AND_DIE_SPACE);
+		else
+		{
+			NPCPhrase (GO_IN_PEACE);
 
-static void
-AskMenu (RESPONSE_REF R)
-{	
-	/* Alien speech */
+			SET_GAME_STATE (BATTLE_SEGUE, 0);
+		}
+	}
+	else if (PLAYER_SAID (R, not_here)
+			|| PLAYER_SAID (R, not_send))
+	{
+		switch (GET_GAME_STATE (YEHAT_REBEL_VISITS))
+		{
+			case 0:
+				NPCPhrase (JUST_A_TRICK_1);
+				break;
+			case 1:
+				NPCPhrase (JUST_A_TRICK_2);
+				break;
+		}
+		SET_GAME_STATE (YEHAT_REBEL_VISITS, 1);
+	}
+	else if (PLAYER_SAID (R, ok_send))
+	{
+		NPCPhrase (WE_REVOLT);
 
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+		SET_GAME_STATE (YEHAT_CIVIL_WAR, 1);
+		SET_GAME_STATE (YEHAT_VISITS, 0);
+		SET_GAME_STATE (YEHAT_HOME_VISITS, 0);
+		SET_GAME_STATE (YEHAT_REBEL_VISITS, 0);
+		SET_GAME_STATE (YEHAT_REBEL_INFO, 0);
+		SET_GAME_STATE (YEHAT_REBEL_TOLD_PKUNK, 0);
+		SET_GAME_STATE (NO_YEHAT_INFO, 0);
 
-
-	if (PLAYER_SAID (R, investigating_precursors))
-	{
-		NPCPhrase (PLEASED_TO_SEE_ALLY);
-	}
-	else if (PLAYER_SAID (R, reinstate_veepneep))
-	{
-		NPCPhrase (BAD_HUMOUR);
-	}
-	
-	
-	if (PLAYER_SAID (R, how_are_you))
-	{
-		NPCPhrase (YEHAT_DOING_GOOD);
-		DISABLE_PHRASE (how_are_you);
-	}
-	else if (PLAYER_SAID (R, how_are_shofixti))
-	{
-		NPCPhrase (SHOFIXTI_INFO);
-		DISABLE_PHRASE (how_are_shofixti);
-	}
-	else if (PLAYER_SAID (R, how_are_pkunk))
-	{
-		NPCPhrase (PKUNK_INFORMATION);
-		DISABLE_PHRASE (how_are_pkunk);
-	}
-	else if (PLAYER_SAID (R, more_news))
-	{
-		NPCPhrase (CHMMR_INFO);
-		DISABLE_PHRASE (more_news);
-	}
-	
-
-	/* Human speech options */
-	
-	if (PHRASE_ENABLED (how_are_you))
-	{
-		Response (how_are_you, AskMenu);
-	}
-
-    if (PHRASE_ENABLED (how_are_shofixti))
-	{
-		Response (how_are_shofixti, AskMenu);
-	}
-	
-    if (PHRASE_ENABLED (how_are_pkunk))
-	{
-		Response (how_are_pkunk, AskMenu);
-	}
-
-	if (PHRASE_ENABLED (more_news))
-	{
-		Response (more_news, AskMenu);
-	}
-
-	if (PHRASE_ENABLED (must_scoot))
-	{
-		Response (must_scoot, ExitConversation);
+		AddEvent (RELATIVE_EVENT, 0, 0, 0, YEHAT_REBEL_EVENT);
 	}
 }
 
+static void
+Royalists (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, how_is_rebellion))
+	{
+		BYTE NumVisits;
 
+		NumVisits = GET_GAME_STATE (YEHAT_ROYALIST_INFO);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (ROYALIST_REBELLION_1);
+				break;
+			case 1:
+				NPCPhrase (ROYALIST_REBELLION_2);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (YEHAT_ROYALIST_INFO, NumVisits);
+
+		DISABLE_PHRASE (how_is_rebellion);
+	}
+	else if (PLAYER_SAID (R, what_about_pkunk_royalist))
+	{
+		if (GET_GAME_STATE (YEHAT_ABSORBED_PKUNK))
+			NPCPhrase (PKUNK_ABSORBED_ROYALIST);
+		else
+			NPCPhrase (HATE_PKUNK_ROYALIST);
+
+		SET_GAME_STATE (YEHAT_ROYALIST_TOLD_PKUNK, 1);
+	}
+	else if (PLAYER_SAID (R, sorry_about_revolution))
+	{
+		NPCPhrase (ALL_YOUR_FAULT);
+
+		SET_GAME_STATE (NO_YEHAT_INFO, 1);
+	}
+
+	if (PHRASE_ENABLED (how_is_rebellion))
+		Response (how_is_rebellion, Royalists);
+	if (!GET_GAME_STATE (YEHAT_ROYALIST_TOLD_PKUNK)
+			&& GET_GAME_STATE (PKUNK_VISITS)
+			&& GET_GAME_STATE (PKUNK_HOME_VISITS))
+		Response (what_about_pkunk_royalist, Royalists);
+	if (!GET_GAME_STATE (NO_YEHAT_INFO))
+		Response (sorry_about_revolution, Royalists);
+	Response (bye_royalist, ExitConversation);
+}
 
 static void
-WhyHere (RESPONSE_REF R)
-{	
-	if (PLAYER_SAID (R, hail_yehat))
+StartRevolt (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, shofixti_alive_1))
 	{
-		NPCPhrase (WHY_ARE_YOU_HERE2);
+		NPCPhrase (SEND_HIM_OVER_1);
+
+		SET_GAME_STATE (YEHAT_REBEL_TOLD_PKUNK, 1);
 	}
+	else if (PLAYER_SAID (R, shofixti_alive_2))
+		NPCPhrase (SEND_HIM_OVER_2);
+
+	if (ActivateStarShip (SHOFIXTI_SHIP, ESCORTING_FLAGSHIP))
+		Response (ok_send, ExitConversation);
 	else
-	{
-		NPCPhrase (WHY_ARE_YOU_HERE1);
-	}
-	NPCPhrase (WHY_CHMMR_STARSHIP);
-
-	Response (investigating_precursors, AskMenu);
-	Response (reinstate_veepneep, AskMenu);
-	Response (must_scoot, ExitConversation);
+		Response (not_here, ExitConversation);
+	Response (not_send, ExitConversation);
 }
 
+static void
+YehatHome (RESPONSE_REF R)
+{
 
+	if (PLAYER_SAID (R, whats_up_homeworld))
+	{
+		BYTE NumVisits;
 
+		NumVisits = GET_GAME_STATE (YEHAT_ROYALIST_INFO);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (GENERAL_INFO_HOMEWORLD_1);
+				break;
+			case 1:
+				NPCPhrase (GENERAL_INFO_HOMEWORLD_2);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (YEHAT_ROYALIST_INFO, NumVisits);
+
+		DISABLE_PHRASE (whats_up_homeworld);
+	}
+	else if (PLAYER_SAID (R, at_least_help_us_homeworld))
+	{
+		NPCPhrase (NO_HELP_ENEMY);
+
+		SET_GAME_STATE (NO_YEHAT_HELP_HOME, 1);
+	}
+	else if (PLAYER_SAID (R, give_info))
+	{
+		NPCPhrase (NO_INFO_FOR_ENEMY);
+
+		SET_GAME_STATE (NO_YEHAT_INFO, 1);
+	}
+	else if (PLAYER_SAID (R, what_about_pkunk_royalist))
+	{
+		if (GET_GAME_STATE (YEHAT_ABSORBED_PKUNK))
+			NPCPhrase (PKUNK_ABSORBED_ROYALIST);
+		else
+			NPCPhrase (HATE_PKUNK_ROYALIST);
+
+		SET_GAME_STATE (YEHAT_ROYALIST_TOLD_PKUNK, 1);
+	}
+
+	if (PHRASE_ENABLED (whats_up_homeworld))
+		Response (whats_up_homeworld, YehatHome);
+	if (!GET_GAME_STATE (YEHAT_ROYALIST_TOLD_PKUNK)
+			&& GET_GAME_STATE (PKUNK_VISITS)
+			&& GET_GAME_STATE (PKUNK_HOME_VISITS))
+		Response (what_about_pkunk_royalist, YehatHome);
+	if (!GET_GAME_STATE (NO_YEHAT_HELP_HOME))
+		Response (at_least_help_us_homeworld, YehatHome);
+	if (!GET_GAME_STATE (NO_YEHAT_INFO))
+		Response (give_info, YehatHome);
+	if (!GET_GAME_STATE (NO_YEHAT_ALLY_HOME))
+	{
+		UNICODE buf[ALLIANCE_NAME_BUFSIZE];
+
+		GetAllianceName (buf, name_1);
+		construct_response (
+				shared_phrase_buf,
+				i_demand_you_ally_homeworld0,
+				GLOBAL_SIS (CommanderName),
+				i_demand_you_ally_homeworld1,
+				buf,
+				i_demand_you_ally_homeworld2,
+				GLOBAL_SIS (ShipName),
+				i_demand_you_ally_homeworld3,
+				(UNICODE*)NULL);
+		DoResponsePhrase (i_demand_you_ally_homeworld0,
+				ExitConversation, shared_phrase_buf);
+	}
+	Response (bye_homeworld, ExitConversation);
+}
+
+static void
+YehatSpace (RESPONSE_REF R)
+{
+	BYTE i, LastStack;
+	RESPONSE_REF pStr[3];
+
+	LastStack = 0;
+	pStr[0] = pStr[1] = pStr[2] = 0;
+	if (PLAYER_SAID (R, whats_up_space_1)
+			|| PLAYER_SAID (R, whats_up_space_2)
+			|| PLAYER_SAID (R, whats_up_space_3)
+			|| PLAYER_SAID (R, whats_up_space_4))
+	{
+		BYTE NumVisits;
+
+		NumVisits = GET_GAME_STATE (YEHAT_REBEL_INFO);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (GENERAL_INFO_SPACE_1);
+				break;
+			case 1:
+				NPCPhrase (GENERAL_INFO_SPACE_2);
+				break;
+			case 2:
+				NPCPhrase (GENERAL_INFO_SPACE_3);
+				break;
+			case 3:
+				NPCPhrase (GENERAL_INFO_SPACE_4);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (YEHAT_REBEL_INFO, NumVisits);
+
+		DISABLE_PHRASE (whats_up_space_1);
+	}
+	else if (PLAYER_SAID (R, i_demand_you_ally_space0))
+	{
+		NPCPhrase (WE_CANNOT_1);
+
+		LastStack = 2;
+		SET_GAME_STATE (NO_YEHAT_ALLY_SPACE, 1);
+	}
+	else if (PLAYER_SAID (R, obligation))
+	{
+		NPCPhrase (WE_CANNOT_2);
+
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+		SET_GAME_STATE (NO_YEHAT_ALLY_SPACE, 2);
+
+		return;
+	}
+	else if (PLAYER_SAID (R, at_least_help_us_space))
+	{
+		NPCPhrase (SORRY_CANNOT);
+
+		LastStack = 1;
+		SET_GAME_STATE (NO_YEHAT_HELP_SPACE, 1);
+	}
+	else if (PLAYER_SAID (R, dishonor))
+	{
+		NPCPhrase (HERES_A_HINT);
+
+		SET_GAME_STATE (NO_YEHAT_HELP_SPACE, 2);
+	}
+	else if (PLAYER_SAID (R, what_about_pkunk_royalist))
+	{
+		if (GET_GAME_STATE (YEHAT_ABSORBED_PKUNK))
+			NPCPhrase (PKUNK_ABSORBED_ROYALIST);
+		else
+			NPCPhrase (HATE_PKUNK_ROYALIST);
+
+		SET_GAME_STATE (YEHAT_ROYALIST_TOLD_PKUNK, 1);
+	}
+
+// SET_FUNCPTR (&PtrDesc, YehatSpace);
+	if (PHRASE_ENABLED (whats_up_space_1))
+	{
+		switch (GET_GAME_STATE (YEHAT_REBEL_INFO))
+		{
+			case 0:
+				pStr[0] = whats_up_space_1;
+				break;
+			case 1:
+				pStr[0] = whats_up_space_2;
+				break;
+			case 2:
+				pStr[0] = whats_up_space_3;
+				break;
+			case 3:
+				pStr[0] = whats_up_space_4;
+				break;
+		}
+	}
+	switch (GET_GAME_STATE (NO_YEHAT_HELP_SPACE))
+	{
+		case 0:
+			pStr[1] = at_least_help_us_space;
+			break;
+		case 1:
+			pStr[1] = dishonor;
+			break;
+	}
+	switch (GET_GAME_STATE (NO_YEHAT_ALLY_SPACE))
+	{
+		case 0:
+		{
+			UNICODE buf[ALLIANCE_NAME_BUFSIZE];
+
+			GetAllianceName (buf, name_1);
+			construct_response (
+					shared_phrase_buf,
+					i_demand_you_ally_space0,
+					GLOBAL_SIS (CommanderName),
+					i_demand_you_ally_space1,
+					GLOBAL_SIS (ShipName),
+					i_demand_you_ally_space2,
+					buf,
+					i_demand_you_ally_space3,
+					(UNICODE*)NULL);
+			pStr[2] = i_demand_you_ally_space0;
+			break;
+		}
+		case 1:
+			pStr[2] = obligation;
+			break;
+	}
+
+	if (pStr[LastStack])
+	{
+		if (pStr[LastStack] != i_demand_you_ally_space0)
+			Response (pStr[LastStack], YehatSpace);
+		else
+			DoResponsePhrase (pStr[LastStack], YehatSpace, shared_phrase_buf);
+	}
+	for (i = 0; i < 3; ++i)
+	{
+		if (i != LastStack && pStr[i])
+		{
+			if (pStr[i] != i_demand_you_ally_space0)
+				Response (pStr[i], YehatSpace);
+			else
+				DoResponsePhrase (pStr[i], YehatSpace, shared_phrase_buf);
+		}
+	}
+	if (!GET_GAME_STATE (YEHAT_ROYALIST_TOLD_PKUNK)
+			&& GET_GAME_STATE (PKUNK_VISITS)
+			&& GET_GAME_STATE (PKUNK_HOME_VISITS))
+		Response (what_about_pkunk_royalist, YehatSpace);
+	if (GET_GAME_STATE (SHOFIXTI_VISITS))
+	{
+		switch (GET_GAME_STATE (YEHAT_REBEL_TOLD_PKUNK))
+		{
+			case 0:
+				Response (shofixti_alive_1, StartRevolt);
+				break;
+			case 1:
+				Response (shofixti_alive_2, StartRevolt);
+				break;
+		}
+	}
+	Response (bye_space, ExitConversation);
+}
 
 static void
 Intro (void)
 {
-	if (GET_GAME_STATE (YEHAT_MET) == 0)
+	BYTE NumVisits;
+
+	if (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
 	{
-		SET_GAME_STATE (YEHAT_MET, 1);
+		NPCPhrase (OUT_TAKES);
+
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+		return;
 	}
 
-	NPCPhrase (YEHAT_GREETING1);
+	if (GET_GAME_STATE (YEHAT_CIVIL_WAR))
+	{
+		if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7))
+		{
+			NumVisits = GET_GAME_STATE (YEHAT_HOME_VISITS);
+			switch (NumVisits++)
+			{
+				case 0:
+					NPCPhrase (ROYALIST_HOMEWORLD_HELLO_1);
+					break;
+				case 1:
+					NPCPhrase (ROYALIST_HOMEWORLD_HELLO_2);
+					--NumVisits;
+					break;
+			}
+			SET_GAME_STATE (YEHAT_HOME_VISITS, NumVisits);
+		}
+		else
+		{
+			NumVisits = GET_GAME_STATE (YEHAT_VISITS);
+			switch (NumVisits++)
+			{
+				case 0:
+					NPCPhrase (ROYALIST_SPACE_HELLO_1);
+					break;
+				case 1:
+					NPCPhrase (ROYALIST_SPACE_HELLO_2);
+					--NumVisits;
+					break;
+			}
+			SET_GAME_STATE (YEHAT_VISITS, NumVisits);
+		}
 
+		Royalists ((RESPONSE_REF)0);
+	}
+	else if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7))
+	{
+		NumVisits = GET_GAME_STATE (YEHAT_HOME_VISITS);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (HOMEWORLD_HELLO_1);
+				break;
+			case 1:
+				NPCPhrase (HOMEWORLD_HELLO_2);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (YEHAT_HOME_VISITS, NumVisits);
 
-	Response (hail_yehat, WhyHere);
-	Response (what_up, WhyHere);
-	Response (must_scoot, ExitConversation);
+		YehatHome ((RESPONSE_REF)0);
+	}
+	else
+	{
+		NumVisits = GET_GAME_STATE (YEHAT_VISITS);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (SPACE_HELLO_1);
+				break;
+			case 1:
+				NPCPhrase (SPACE_HELLO_2);
+				break;
+			case 2:
+				NPCPhrase (SPACE_HELLO_3);
+				break;
+			case 3:
+				NPCPhrase (SPACE_HELLO_4);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (YEHAT_VISITS, NumVisits);
+
+		YehatSpace ((RESPONSE_REF)0);
+	}
 }
-
-
 
 static COUNT
 uninit_yehat (void)
@@ -335,9 +671,14 @@ init_yehat_comm (void)
 	yehat_desc.AlienTextBaseline.y = 60;
 	yehat_desc.AlienTextWidth = (SIS_TEXT_WIDTH - 16) * 2 / 3;
 
-	// JMS: Yehat are no longer hostile upon the encountering
-	SET_GAME_STATE (BATTLE_SEGUE, 0);
-	
+	if (LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE)
+	{
+		SET_GAME_STATE (BATTLE_SEGUE, 1);
+	}
+	else
+	{
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+	}
 	retval = &yehat_desc;
 
 	return (retval);

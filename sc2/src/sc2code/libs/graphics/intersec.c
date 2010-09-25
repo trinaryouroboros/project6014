@@ -403,6 +403,7 @@ DrawablesIntersect (INTERSECT_CONTROL *pControl0,
 			}
 		}
 	}
+
 	return ((TIME_VALUE)0);
 }
 

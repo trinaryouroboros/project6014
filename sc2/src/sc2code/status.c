@@ -132,9 +132,9 @@ DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr)
 	t.CharCount = (COUNT)~0;
 
 	r.corner.x = t.baseline.x;
-	r.corner.y = t.baseline.y - 5 * RESOLUTION_FACTOR - 1 * (RESOLUTION_FACTOR - 1); // JMS_GFX
-	r.extent.width = 6 * MAX_CREW_DIGITS + 6 * RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.height = 5 * RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y = t.baseline.y - 5;
+	r.extent.width = 6 * MAX_CREW_DIGITS + 6;
+	r.extent.height = 5;
 
 	sprintf (buf, "%u", ShipInfoPtr->crew_level);
 	SetContextFont (StarConFont);
@@ -176,10 +176,10 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	y_offs = CAPTAIN_YOFFS
 			+ ((RDPtr->ship_info.ship_flags & GOOD_GUY) ?
 			GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
-	r.corner.x = CAPTAIN_XOFFS - 2 - (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
-	r.corner.y = y_offs - 4* RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.width = STATUS_WIDTH - CAPTAIN_XOFFS + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
-	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + (2 * RESOLUTION_FACTOR) + 2 * (RESOLUTION_FACTOR-1); // JMS_GFX
+	r.corner.x = CAPTAIN_XOFFS - 2;
+	r.corner.y = y_offs - 4;
+	r.extent.width = STATUS_WIDTH - CAPTAIN_XOFFS;
+	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + 2;
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	DrawFilledRectangle (&r);
@@ -217,29 +217,27 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	DrawFilledRectangle (&r);
 
 	{
-		// Darker grey rectangle at bottom and right of captain's window
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
-		r.corner.x = 59 + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
+		r.corner.x = 59;
 		r.corner.y = y_offs;
 		r.extent.width = 1;
 		r.extent.height = 30;
 		DrawFilledRectangle (&r);
-		r.corner.x = 3 + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
+		r.corner.x = 3;
 		r.corner.y += 30;
 		r.extent.width = 57;
 		r.extent.height = 1;
 		DrawFilledRectangle (&r);
 
-		// Light grey rectangle at top and left of captains window
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
-		r.corner.x = 3 + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
+		r.corner.x = 3;
 		r.extent.width = 57;
 		r.corner.y = y_offs - 1;
 		r.extent.height = 1;
 		DrawFilledRectangle (&r);
-		r.corner.x = 3 + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
+		r.corner.x = 3;
 		r.extent.width = 1;
 		r.corner.y = y_offs;
 		r.extent.height = 30;

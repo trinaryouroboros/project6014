@@ -245,13 +245,8 @@ Present_GenerateSIS (PRESENTATION_INPUT_STATE* pPIS)
 	s.origin.y = 0;
 	DrawStamp (&s);
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-	  {
-	  }
-	else
-	  {
-	    for (slot = 0; slot < NUM_DRIVE_SLOTS; ++slot)
-	      {
+	for (slot = 0; slot < NUM_DRIVE_SLOTS; ++slot)
+	{
 		piece = GLOBAL_SIS (DriveSlots[slot]);
 		if (piece < EMPTY_SLOT)
 		{
@@ -261,9 +256,9 @@ Present_GenerateSIS (PRESENTATION_INPUT_STATE* pPIS)
 			s.frame = SetAbsFrameIndex (ModuleFrame, piece);
 			DrawStamp (&s);
 		}
-	      }
-	    for (slot = 0; slot < NUM_JET_SLOTS; ++slot)
-	      {
+	}
+	for (slot = 0; slot < NUM_JET_SLOTS; ++slot)
+	{
 		piece = GLOBAL_SIS (JetSlots[slot]);
 		if (piece < EMPTY_SLOT)
 		{
@@ -273,9 +268,9 @@ Present_GenerateSIS (PRESENTATION_INPUT_STATE* pPIS)
 			s.frame = SetAbsFrameIndex (ModuleFrame, piece);
 			DrawStamp (&s);
 		}
-	      }
-	    for (slot = 0; slot < NUM_MODULE_SLOTS; ++slot)
-	      {
+	}
+	for (slot = 0; slot < NUM_MODULE_SLOTS; ++slot)
+	{
 		piece = GLOBAL_SIS (ModuleSlots[slot]);
 		if (piece < EMPTY_SLOT)
 		{
@@ -285,8 +280,7 @@ Present_GenerateSIS (PRESENTATION_INPUT_STATE* pPIS)
 			s.frame = SetAbsFrameIndex (ModuleFrame, piece);
 			DrawStamp (&s);
 		}
-	      }
-	  }
+	}
 
 	DestroyDrawable (ReleaseDrawable (SkelFrame));
 	DestroyDrawable (ReleaseDrawable (ModuleFrame));

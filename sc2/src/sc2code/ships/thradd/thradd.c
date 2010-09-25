@@ -50,12 +50,12 @@ static RACE_DESC thraddash_desc =
 		THRADDASH_RACE_STRINGS,
 		THRADDASH_ICON_MASK_PMAP_ANIM,
 		THRADDASH_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial SoI radius */
+		833 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			0,0,
+			2535, 8358,
 		},
 	},
 	{

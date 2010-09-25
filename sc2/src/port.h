@@ -143,7 +143,7 @@ typedef unsigned short mode_t;
 // Printf
 #ifdef _MSC_VER
 #define snprintf _snprintf
-//#define vsnprintf _vsnprintf
+#define vsnprintf _vsnprintf
 #endif
 
 // setenv()

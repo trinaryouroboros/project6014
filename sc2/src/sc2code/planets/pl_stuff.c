@@ -24,8 +24,6 @@
 
 #include <math.h>
 
-#include "libs/log.h"
-
 
 // define USE_ADDITIVE_SCAN_BLIT to use additive blittting
 // instead of transparency for the planet scans.

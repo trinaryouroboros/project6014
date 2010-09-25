@@ -892,9 +892,6 @@ GetSoundData (void *data)
 				}
 
 				s = *(SWORD*) (&sbuffer[pos]);
-				
-				s *= RESOLUTION_FACTOR; // JMS_GFX
-				
 				s = (s / 1360) + (RADAR_HEIGHT >> 1);
 				if (s < 1)
 					s = 1;
@@ -977,8 +974,6 @@ GetSoundData (void *data)
 				}
 
 				s = (*(SWORD*)(&sbuffer[pos])) + (*(SWORD*)(&sbuffer[pos + 2]));
-				
-				s *= RESOLUTION_FACTOR; // JMS_GFX
 				
 				s = (s / 1800) + (RADAR_HEIGHT >> 1);
 				if (s < 1)

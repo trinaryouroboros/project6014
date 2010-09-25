@@ -16,11 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: -Don't create Ur-quan probe.
-// JMS 2010: -Removed Fwiffo from Pluto
-//			 -Removed tractors and base from moon
-//			 -Earth is now restricted planet meaning it cannot be landed on.
-
 #include "build.h"
 #include "gamestr.h"
 #include "globdata.h"
@@ -34,7 +29,6 @@
 #include "encount.h"
 #include "planets/genall.h"
 #include "libs/mathlib.h"
-#include "libs/log.h"
 
 
 static int
@@ -67,12 +61,29 @@ static void
 generate_energy_nodes (void)
 {
 				/* Pluto */
-	// JMS: Removed Fwiffo energy blip from Pluto.
-	
+	if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[8])
+	{
+		if (!GET_GAME_STATE (FOUND_PLUTO_SPATHI))
+		{
+			pSolarSysState->SysInfo.PlanetInfo.CurPt.x = 20;
+			pSolarSysState->SysInfo.PlanetInfo.CurPt.y = MAP_HEIGHT - 8;
+			pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
+			pSolarSysState->SysInfo.PlanetInfo.CurType = 2;
+			if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
+					& (1L << 0))
+			{
+				SET_GAME_STATE (FOUND_PLUTO_SPATHI, 1);
+				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
+						&= ~(1L << 0);
+				((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
+			}
+			else if (pSolarSysState->CurNode == (COUNT)~0)
+				pSolarSysState->CurNode = 1;
+			return;
+		}
+	}
 				/* Earth Moon */
-	
-	// JMS: Removed moonbase.
-	/*if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
+	else if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
 			&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[1]
 			&& !GET_GAME_STATE (MOONBASE_DESTROYED))
 	{
@@ -95,7 +106,7 @@ generate_energy_nodes (void)
 			}
 		}
 		return;
-	}*/
+	}
 	pSolarSysState->CurNode = 0;
 }
 
@@ -264,7 +275,17 @@ generate_orbital (void)
 						EARTH_RADIUS * 2999L / 100;
 				break;
 			case 8: /* PLUTO */
-				// JMS: Removed Fwiffo stuff.
+				if (!GET_GAME_STATE (FOUND_PLUTO_SPATHI))
+				{
+					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
+					pSolarSysState->PlanetSideFrame[1] =
+							CaptureDrawable (
+							LoadGraphic (SPAPLUTO_MASK_PMAP_ANIM));
+					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
+							CaptureStringTable (
+							LoadStringTable (SPAPLUTO_STRTAB));
+				}
+
 				pSolarSysState->SysInfo.PlanetInfo.AtmoDensity = 0;
 				pSolarSysState->SysInfo.PlanetInfo.PlanetDensity = 33;
 				pSolarSysState->SysInfo.PlanetInfo.PlanetRadius = 18;
@@ -296,9 +317,8 @@ generate_orbital (void)
 			case 2: /* moons of EARTH */
 				pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] =
 						rand_val;
-				
-				// JMS: Removed the moonbase gfx and text upon finding it.
-				/*if (!GET_GAME_STATE (MOONBASE_DESTROYED))
+
+				if (!GET_GAME_STATE (MOONBASE_DESTROYED))
 				{
 					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
 					pSolarSysState->PlanetSideFrame[1] =
@@ -307,8 +327,7 @@ generate_orbital (void)
 					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
 							CaptureStringTable (
 							LoadStringTable (MOONBASE_STRTAB));
-				}*/
-				
+				}
 				pSolarSysState->SysInfo.PlanetInfo.PlanetDensity = 60;
 				pSolarSysState->SysInfo.PlanetInfo.PlanetRadius = 25;
 				pSolarSysState->SysInfo.PlanetInfo.AxialTilt = 0;
@@ -390,9 +409,6 @@ GenerateSOL (BYTE control)
 	switch (control)
 	{
 		case INIT_NPCS:
-			
-			// JMS: Don't create Ur-quan probe
-			/*
 			GLOBAL (BattleGroupRef) =
 					GET_GAME_STATE_32 (URQUAN_PROBE_GRPOFFS0);
 			if (GLOBAL (BattleGroupRef) == 0)
@@ -405,8 +421,7 @@ GenerateSOL (BYTE control)
 						GLOBAL (BattleGroupRef));
 			}
 			if (!init_probe ())
-			*/
-			GenerateRandomIP (INIT_NPCS);
+				GenerateRandomIP (INIT_NPCS);
 			break;
 		case REINIT_NPCS:
 			if (GET_GAME_STATE (CHMMR_BOMB_STATE) != 3)
@@ -417,7 +432,12 @@ GenerateSOL (BYTE control)
 				ReinitQueue (&GLOBAL (ip_group_q));
 				assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
 			}
-			
+			break;
+		case GENERATE_ENERGY:
+			generate_energy_nodes ();
+			break;
+		case GENERATE_LIFE:
+			generate_tractors ();
 			break;
 		case GENERATE_ORBITAL:
 			generate_orbital ();
@@ -512,8 +532,7 @@ GenerateSOL (BYTE control)
 						angle = NORMALIZE_ANGLE (FULL_CIRCLE - angle);
 						break;
 					case 2: /* EARTH */
-						pCurDesc->data_index = WATER_WORLD;
-						pCurDesc->flags = PLANET_RESTRICTED; // JMS: Earth cannot be landed on.
+						pCurDesc->data_index = WATER_WORLD | PLANET_SHIELDED;
 						pCurDesc->radius = EARTH_RADIUS;
 						pCurDesc->NumPlanets = 2;
 						break;

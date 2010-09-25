@@ -47,12 +47,12 @@ static RACE_DESC spathi_desc =
 		SPATHI_RACE_STRINGS,
 		SPATHI_ICON_MASK_PMAP_ANIM,
 		SPATHI_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		1000 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			7549, 9600,
+			2549, 3600,
 		},
 	},
 	{

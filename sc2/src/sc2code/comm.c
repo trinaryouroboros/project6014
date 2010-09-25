@@ -16,14 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Commented out a line related to chmmrs in RaceCommunication to avoid vanishing avatars
-//			 after encounter in interplanetary.
-//
-//			 -Some changes to InitCommunication to remove bugs from fighting against Chmmr
-//
-//			 -Freight transport ships do not disappear after encountering in hyperspace.
-//			 -Increased maximum number of communication responses from 8 to 10
-
 #define COMM_INTERNAL
 #include "comm.h"
 
@@ -51,7 +43,7 @@
 
 #include <ctype.h>
 
-#define MAX_RESPONSES 10 // JMS: Increased this from default 8 to house starbase communications
+#define MAX_RESPONSES 8
 #define BACKGROUND_VOL \
 		(speechVolumeScale == 0.0f ? NORMAL_VOLUME : (NORMAL_VOLUME >> 1))
 #define FOREGROUND_VOL NORMAL_VOLUME
@@ -95,7 +87,7 @@ FRAME TextCacheFrame;
 
 RECT CommWndRect = {
 	// default values; actually inited by HailAlien()
-	{0, 0}, //{SIS_ORG_X, SIS_ORG_Y}, // JMS_GFX
+	{SIS_ORG_X, SIS_ORG_Y},
 	{0, 0}
 };
 
@@ -204,7 +196,7 @@ add_text (int status, TEXT *pTextIn)
 
 		maxchars = pTextIn->CharCount;
 		locText = *pTextIn;
-		locText.baseline.x -= 8 + (RESOLUTION_FACTOR -1); // JMS_GFX
+		locText.baseline.x -= 8;
 		locText.CharCount = (COUNT)~0;
 		locText.pStr = "*";
 		font_DrawText (&locText);
@@ -451,7 +443,7 @@ DrawAlienFrame (FRAME aframe, SEQUENCE *pSeq)
 		{
 			s.frame = SetAbsFrameIndex (s.frame, ADPtr->StartIndex);
 			DrawStamp (&s);
-			//ADPtr->AnimFlags |= ANIM_DISABLED; // JMS
+			ADPtr->AnimFlags |= ANIM_DISABLED;
 		}
 		else if (pSeq)
 		{
@@ -551,7 +543,7 @@ FeedbackPlayerPhrase (UNICODE *pStr)
 		TEXT ct;
 
 		ct.baseline.x = SIS_SCREEN_WIDTH >> 1;
-		ct.baseline.y = SLIDER_Y + SLIDER_HEIGHT + 13 * RESOLUTION_FACTOR; // JMS_GFX
+		ct.baseline.y = SLIDER_Y + SLIDER_HEIGHT + 13;
 		ct.align = ALIGN_CENTER;
 		ct.CharCount = (COUNT)~0;
 
@@ -560,7 +552,7 @@ FeedbackPlayerPhrase (UNICODE *pStr)
 		SetContextForeGroundColor (COMM_RESPONSE_INTRO_TEXT_COLOR);
 		font_DrawText (&ct);
 
-		ct.baseline.y += 16 * RESOLUTION_FACTOR; // JMS_GFX
+		ct.baseline.y += 16;
 		SetContextForeGroundColor (COMM_FEEDBACK_TEXT_COLOR);
 		ct.pStr = pStr;
 		add_text (-4, &ct);
@@ -843,10 +835,8 @@ AlienTalkSegue (COUNT wait_track)
 			BYTE clut_buf[] = {FadeAllToColor};
 			
 			UnbatchGraphics ();
-				// JMS: We don't want these conditions messing up with our graphics...
-			if (//GET_GAME_STATE (MOONBASE_ON_SHIP)
-					//||
-				GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
+			if (GET_GAME_STATE (MOONBASE_ON_SHIP)
+					|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 				XFormColorMap ((COLORMAPPTR)clut_buf, ONE_SECOND * 2);
 			else if (GET_GAME_STATE (CHMMR_EMERGING))
 				XFormColorMap ((COLORMAPPTR)clut_buf, ONE_SECOND * 2);
@@ -910,9 +900,9 @@ typedef struct summary_state
 static BOOLEAN
 DoConvSummary (SUMMARY_STATE *pSS)
 {
-#define DELTA_Y_SUMMARY (8 * RESOLUTION_FACTOR) // JMS_GFX
+#define DELTA_Y_SUMMARY 8
 #define MAX_SUMM_ROWS ((SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT) \
-			/ DELTA_Y_SUMMARY) - (1 * RESOLUTION_FACTOR) // JMS_GFX
+			/ DELTA_Y_SUMMARY) - 1
 
 	if (!pSS->Initialized)
 	{
@@ -951,7 +941,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		r.corner.x = 0;
 		r.corner.y = 0;
 		r.extent.width = SIS_SCREEN_WIDTH;
-		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - (SLIDER_HEIGHT * RESOLUTION_FACTOR) + (2 * RESOLUTION_FACTOR); // JMS_GFX
+		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + 2;
 
 		LockMutex (GraphicsLock);
 		SetContextForeGroundColor (COMM_HISTORY_BACKGROUND_COLOR);
@@ -960,7 +950,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		SetContextForeGroundColor (COMM_HISTORY_TEXT_COLOR);
 
 		r.extent.width -= 2 + 2;
-		t.baseline.x = (2 * RESOLUTION_FACTOR); // JMS_GFX
+		t.baseline.x = 2;
 		t.align = ALIGN_LEFT;
 		t.baseline.y = DELTA_Y_SUMMARY;
 		oldFont = SetContextFont (TinyFont);
@@ -1343,8 +1333,6 @@ HailAlien (void)
 		SetContextFGFrame (Screen);
 		GetFrameRect (CommData.AlienFrame, &r);
 		r.extent.width = SIS_SCREEN_WIDTH;
-		CommWndRect.corner.x = SIS_ORG_X; // JMS_GFX
-		CommWndRect.corner.y = SIS_ORG_Y; // JMS_GFX
 		CommWndRect.extent = r.extent;
 		
 		SetTransitionSource (NULL);
@@ -1456,10 +1444,10 @@ InitCommunication (CONVERSATION which_comm)
 		}
 	}
 
-	if (which_comm == TRANSPORT_CONVERSATION)
+	if (which_comm == URQUAN_PROBE_CONVERSATION)
 	{
-		status = TRANSPORT_SHIP;
-		which_comm = TRANSPORT_CONVERSATION;
+		status = URQUAN_PROBE_SHIP;
+		which_comm = URQUAN_CONVERSATION;
 	}
 	else
 	{
@@ -1481,19 +1469,19 @@ InitCommunication (CONVERSATION which_comm)
 		}
 		ActivateStarShip (status, SPHERE_TRACKING);
 
-		// JMS: This initializes computer controlled battle group for melee.
-		// JMS: Removed the if condition so battle groups are inited for every race.
-		//
-		/*if (which_comm == ORZ_CONVERSATION
+		if (which_comm == ORZ_CONVERSATION
 				|| (which_comm == TALKING_PET_CONVERSATION
 				&& (!GET_GAME_STATE (TALKING_PET_ON_SHIP)
 				|| LOBYTE (GLOBAL (CurrentActivity)) == IN_LAST_BATTLE))
-				|| (which_comm != SYREEN_CONVERSATION
-				))//&& (ActivateStarShip (status, CHECK_ALLIANCE) & BAD_GUY)))*/
-		BuildBattle (1);
+				|| (which_comm != CHMMR_CONVERSATION
+				&& which_comm != SYREEN_CONVERSATION
+				))//&& (ActivateStarShip (status, CHECK_ALLIANCE) & BAD_GUY)))
+			BuildBattle (1);
 	}
 
-	LocDataPtr = init_race ( status != YEHAT_REBEL_SHIP ? which_comm : YEHAT_REBEL_CONVERSATION);
+	LocDataPtr = init_race (
+			status != YEHAT_REBEL_SHIP ? which_comm :
+			YEHAT_REBEL_CONVERSATION);
 	if (LocDataPtr)
 		CommData = *LocDataPtr;
 
@@ -1533,7 +1521,7 @@ InitCommunication (CONVERSATION which_comm)
 	}
 
 	UnlockMutex (GraphicsLock);
-	
+
 	status = 0;
 	if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
 	{
@@ -1659,13 +1647,8 @@ RaceCommunication (void)
 	if (GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))
 		return;
 
-	// JMS: What the heck is this supposed to do???
-	// Commented this one out so the chmmr battlegroups don't vanish after encounter in interplanetary.
-	// ...I think this has something to do with the fact that when sun device is used, the communication
-	// routine creates a fake "Chmmr ship" which the player is actually talking to. I'm not sure though.
-	//
-	//if (i == CHMMR_SHIP)
-	//	ReinitQueue (&GLOBAL (npc_built_ship_q));
+	if (i == CHMMR_SHIP)
+		ReinitQueue (&GLOBAL (npc_built_ship_q));
 
 	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY)
 	{
@@ -1684,11 +1667,7 @@ RaceCommunication (void)
 		NumShips = (BYTE)CountLinks (&GLOBAL (npc_built_ship_q));
 		EncounterPtr->SD.Index = MAKE_BYTE (NumShips,
 				HINIBBLE (EncounterPtr->SD.Index));
-		
-		// JMS: This condition makes it so that freight transport ships do not disappear upon encountering in hyperspace.
-		if(FragPtr->race_id != TRANSPORT_SHIP)
-			EncounterPtr->SD.Index |= ENCOUNTER_REFORMING;
-		
+		EncounterPtr->SD.Index |= ENCOUNTER_REFORMING;
 		if (status == 0)
 			EncounterPtr->SD.Index |= ONE_SHOT_ENCOUNTER;
 
@@ -1796,3 +1775,4 @@ SetClearSubtitle (BOOLEAN flag, SUBTITLE_STATE *sub_state)
 
 	return oldClearSubtitle;
 }
+

@@ -1,5 +1,3 @@
-// JMS 2009: Check Orz space in DoInstantMove
-
 /*
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -70,8 +68,6 @@ BOOLEAN instantMove = FALSE;
 BOOLEAN disableInteractivity = FALSE;
 void (* volatile debugHook) (void) = NULL;
 
-// JMS
-BOOLEAN triangSphereSwitch = FALSE;
 
 void
 debugKeyPressed (void)
@@ -83,29 +79,24 @@ debugKeyPressed (void)
 	// Give the player the ships you can't ally with under normal
 	// conditions.
 	clearEscorts ();
-	ActivateStarShip (CHMMR_SHIP, 1);
+	ActivateStarShip (ARILOU_SHIP, 1);
 	ActivateStarShip (PKUNK_SHIP, 1);
 	ActivateStarShip (VUX_SHIP, 1);
 	ActivateStarShip (YEHAT_SHIP, 1);
 	ActivateStarShip (MELNORME_SHIP, 1);
-	ActivateStarShip (BLACK_URQUAN_SHIP, 1);
-	/*** No more than 6 escorts for the Explorer
+	ActivateStarShip (DRUUGE_SHIP, 1);
 	ActivateStarShip (ILWRATH_SHIP, 1);
 	ActivateStarShip (MYCON_SHIP, 1);
 	ActivateStarShip (SLYLANDRO_SHIP, 1);
 	ActivateStarShip (UMGAH_SHIP, 1);
 	ActivateStarShip (URQUAN_SHIP, 1);
 	ActivateStarShip (BLACK_URQUAN_SHIP, 1);
-	****/
-	
+
 	resetCrewBattle ();
 	resetEnergyBattle ();
 	instantMove = !instantMove;
 	showSpheres ();
 	activateAllShips ();
-	
-	triangSphereSwitch = !triangSphereSwitch;
-	ToggleTriangulationSpheres(triangSphereSwitch);
 //	forwardToNextEvent (TRUE);
 //	SET_GAME_STATE (MELNORME_CREDIT1, 100);
 //	GLOBAL_SIS (ResUnits) = 100000;
@@ -285,11 +276,8 @@ equipShip (void)
 			(1 << BIOLOGICAL_DISASTER) |
 			(1 << LIGHTNING_DISASTER) |
 			(1 << LAVASPOT_DISASTER));
-	
-	SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1); 
 
 	// Modules:
-	/********  NO MODULES TO EQUIP ON EXPLORER
 	if (GET_GAME_STATE (CHMMR_BOMB_STATE) < 2)
 	{
 		// The Precursor bomb has not been installed.
@@ -328,12 +316,10 @@ equipShip (void)
 	}
 
 	assert (i <= NUM_MODULE_SLOTS);
-	****/
-	
-	// Fill the fuel and crew compartments to the maximum.
-	GLOBAL_SIS (FuelOnBoard) = EXPLORER_FUEL_CAPACITY;
-	GLOBAL_SIS (CrewEnlisted) = EXPLORER_CREW_CAPACITY;
 
+	// Fill the fuel and crew compartments to the maximum.
+	GLOBAL_SIS (FuelOnBoard) = FUEL_RESERVE;
+	GLOBAL_SIS (CrewEnlisted) = 0;
 	for (i = 0; i < NUM_MODULE_SLOTS; i++)
 	{
 		switch (GLOBAL_SIS (ModuleSlots[i])) {
@@ -379,6 +365,7 @@ equipShip (void)
 
 void
 giveDevices (void) {
+	SET_GAME_STATE (ROSY_SPHERE_ON_SHIP, 1);
 	SET_GAME_STATE (ARTIFACT_2_ON_SHIP, 1);
 	SET_GAME_STATE (ARTIFACT_3_ON_SHIP, 1);
 	SET_GAME_STATE (SUN_DEVICE_ON_SHIP, 1);
@@ -387,8 +374,10 @@ giveDevices (void) {
 	//SET_GAME_STATE (ULTRON_CONDITION, 2);
 	//SET_GAME_STATE (ULTRON_CONDITION, 3);
 	//SET_GAME_STATE (ULTRON_CONDITION, 4);
+	SET_GAME_STATE (MAIDENS_ON_SHIP, 1);
 	SET_GAME_STATE (TALKING_PET_ON_SHIP, 1);
 	SET_GAME_STATE (AQUA_HELIX_ON_SHIP, 1);
+	SET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP, 1);
 	SET_GAME_STATE (UMGAH_BROADCASTERS_ON_SHIP, 1);
 	SET_GAME_STATE (TAALO_PROTECTOR_ON_SHIP, 1);
 	SET_GAME_STATE (EGG_CASE0_ON_SHIP, 1);
@@ -399,24 +388,10 @@ giveDevices (void) {
 	SET_GAME_STATE (PORTAL_SPAWNER_ON_SHIP, 1);
 	SET_GAME_STATE (PORTAL_KEY_ON_SHIP, 1);
 	SET_GAME_STATE (BURV_BROADCASTERS_ON_SHIP, 1);
-	SET_GAME_STATE (MOONBASE_ON_SHIP, 0);
+	SET_GAME_STATE (MOONBASE_ON_SHIP, 1);
 	
 	// Not strictly a device (although it originally was one).
 	SET_GAME_STATE (DESTRUCT_CODE_ON_SHIP, 1);
-	
-	// JMS
-	SET_GAME_STATE (BLACK_ORB_ON_SHIP, 1);
-	if (!(GET_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP)))
-	{
-		SET_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP, 1);
-	}
-	else
-	{
-		SET_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP, 0);
-	}
-
-	
-	SET_GAME_STATE (SHIELD_BUSTER_ON_SHIP, 1);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -496,8 +471,8 @@ doInstantMove (void)
 		GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY((GLOBAL (autopilot)).y);
 	}
 
-	// Check for a solar systems at the destination. JMS: Orz space side check.
-	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1 && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1)
+	// Check for a solar systems at the destination.
+	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
 	{
 		// If there's a solar system at the destination, enter it.
 		CurStarDescPtr = FindStar (0, &(GLOBAL (autopilot)), 0, 0);
@@ -545,17 +520,6 @@ showSpheres (void)
 	}
 }
 
-////////////////////////////////////////////////////////////////////////////
-
-// JMS
-void
-ToggleTriangulationSpheres (BOOLEAN triangSphereSwitch)
-{
-	int onOff = (int)triangSphereSwitch;
-	SET_GAME_STATE (TRIANGULATION_SPHERES_CHMMR, onOff);
-	SET_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, onOff);
-}
-	
 ////////////////////////////////////////////////////////////////////////////
 
 void
@@ -659,7 +623,7 @@ starRecurse (STAR_DESC *star, void *arg)
 	SOLARSYS_STATE SolarSysState;
 	SOLARSYS_STATE *oldPSolarSysState = pSolarSysState;
 	DWORD oldSeed =
-			TFB_SeedRandom (MAKE_DWORD (star->star_pt.x - 5000, star->star_pt.y - 6000));
+			TFB_SeedRandom (MAKE_DWORD (star->star_pt.x, star->star_pt.y));
 
 	STAR_DESC *oldStarDescPtr = CurStarDescPtr;
 	CurStarDescPtr = star;
@@ -1049,7 +1013,6 @@ static void
 dumpWorld (FILE *out, const PLANET_DESC *world)
 {
 	PLANET_INFO *info;
-	COUNT bio[NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES + NUM_B_CREATURE_TYPES + NUM_C_CREATURE_TYPES];
 	
 	if (world->data_index == (BYTE) ~0) {
 		// StarBase
@@ -1080,11 +1043,8 @@ dumpWorld (FILE *out, const PLANET_DESC *world)
 	}
 
 	fprintf (out, "          Bio: %4d    Min: %4d\n",
-		 calculateBioValue (pSolarSysState, world),
+			calculateBioValue (pSolarSysState, world),
 			calculateMineralValue (pSolarSysState, world));
-	//	generateBioIndex(pSolarSysState, world, bio, out);
-	// BW: call this to get a list of critters on each planet
-	// (wrong indexes, probably a wrong type cast or printing)
 }
 
 COUNT
@@ -1113,7 +1073,7 @@ calculateBioValue (const SOLARSYS_STATE *system, const PLANET_DESC *world)
 
 void
 generateBioIndex(const SOLARSYS_STATE *system,
-		 const PLANET_DESC *world, COUNT bio[], FILE *out)
+		const PLANET_DESC *world, COUNT bio[])
 {
 	COUNT numBio;
 	COUNT i;
@@ -1124,7 +1084,7 @@ generateBioIndex(const SOLARSYS_STATE *system,
 	(*system->GenFunc) (GENERATE_LIFE);
 	numBio = system->CurNode;
 
-	for (i = 0; i < NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES + NUM_B_CREATURE_TYPES + NUM_C_CREATURE_TYPES; i++)
+	for (i = 0; i < NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES; i++)
 		bio[i] = 0;
 	
 	for (i = 0; i < numBio; i++)
@@ -1132,7 +1092,6 @@ generateBioIndex(const SOLARSYS_STATE *system,
 		((SOLARSYS_STATE *) system)->CurNode = i;
 		(*system->GenFunc) (GENERATE_LIFE);
 		bio[system->SysInfo.PlanetInfo.CurType]++;
-		fprintf(out, "Bio type: %4d\n", system->SysInfo.PlanetInfo.CurType);
 	}
 }
 

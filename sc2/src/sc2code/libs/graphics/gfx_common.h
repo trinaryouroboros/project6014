@@ -95,9 +95,6 @@ void TFB_FlushGraphics (void); // Only call from main thread!!
 void TFB_SetGamma (float gamma);
 // Unknown Stuff
 
-// JMS_GFX
-extern int resolutionFactor;
-
 extern int ScreenWidth;
 extern int ScreenHeight;
 extern int ScreenWidthActual;

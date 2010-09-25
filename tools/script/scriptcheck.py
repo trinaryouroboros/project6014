@@ -95,23 +95,18 @@ def read_source_header(filename):
                 if id != "": ids.append (id)
     return ids
 
-races = ['arilou', 'chmmr', 'commander', 'druuge', 'ilwrath',
-         'kohrah', 'melnorme', 'mycon', 'orz', 'pkunk', 'shofixti',
-         'slyhome', 'slylandro', 'spahome', 'spathi', 'starbase',
-         'supox', 'syreen', 'talkingpet', 'thraddash', 'umgah','urquan',
-         'utwig', 'vux', 'yehat', 'yehatrebels', 'zoqfotpik']
-races2 = ['arilou', 'chmmr', 'comandr', 'druuge', 'ilwrath',
-         'blackur', 'melnorm', 'mycon', 'orz', 'pkunk', 'shofixt',
-         'slyhome', 'slyland', 'spahome', 'spathi', 'starbas',
-         'supox', 'syreen', 'talkpet', 'thradd', 'umgah', 'urquan',
-         'utwig', 'vux', 'yehat', 'rebel', 'zoqfot']
+races = ['arilou', 'blackur', 'chmmr', 'comandr', 'druuge',
+         'ilwrath', 'melnorm', 'mycon', 'orz', 'pkunk', 'rebel',
+         'shofixt', 'slyhome', 'slyland', 'spahome', 'spathi',
+         'starbas', 'supox', 'syreen', 'talkpet', 'thradd',
+         'umgah', 'urquan', 'utwig', 'vux', 'yehat', 'zoqfot']
 
 root = os.path.join('..','..','sc2')
 
-for race,race2 in zip(races, races2):
+for race in races:
     try:
-        filename = os.path.join(root,'content','base','comm',race,race+'.txt')
-        source = os.path.join(root,'src','sc2code','comm',race2,'strings.h')
+        filename = os.path.join(root,'content','comm',race,race+'.txt')
+        source = os.path.join(root,'src','sc2code','comm',race,'strings.h')
         print "Checking: "+race
         data = read_old_file(filename)
         id_seq = read_source_header(source)
@@ -129,5 +124,5 @@ for race,race2 in zip(races, races2):
                 print "Warning!  text identifier "+x[0].id+" doesn't match enum constant "+x[1]+"!"
     except ValueError:
         print "Malformed header line"
-    except IOError, ex:
-        print ex
+    except IOError:
+        print "I/O Error"

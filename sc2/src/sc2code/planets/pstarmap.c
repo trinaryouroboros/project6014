@@ -16,10 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: -Orz space starmap colors and star locations
-// JMS 2010: -Do not draw Sphere of Influence for Slylandros riding Kohr-Ah ships
-//			 -Do not draw Sphere of Influence for Kohr-Ahs.
-
 #include "colors.h"
 #include "controls.h"
 #include "encount.h"
@@ -39,7 +35,6 @@
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
 
-#include "triangul.h"
 
 
 #define UNIVERSE_TO_DISPX(ux) \
@@ -244,7 +239,6 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 #define GRID_DELTA 500
 	SIZE i;
 	COUNT which_space;
-	COUNT orz_space;	// JMS
 	long diameter;
 	RECT r, old_r;
 	STAMP s;
@@ -283,7 +277,6 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	BatchGraphics ();
 	
 	which_space = GET_GAME_STATE (ARILOU_SPACE_SIDE);
-	orz_space= GET_GAME_STATE (ORZ_SPACE_SIDE);	// JMS
 
 	if (which_space <= 1)
 	{
@@ -300,19 +293,10 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		SetContextBackGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x6E));
 	}
-	if(orz_space > 1)// JMS: ORZ space starmap BG color
-	{
-		SDPtr = &star_array[NUM_SOLAR_SYSTEMS + 15 + 2 + 1]; // JMS: ORZ space starsystems, 15 = number of 
-		SetContextForeGroundColor (						     // quasispace vortices, 2 = Two space size definitions, 1 = arilou world  
-								   BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x0B), 0x6D));
-		SetContextBackGroundColor (
-								   BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x08), 0x6E));
-	}
 	ClearDrawable ();
 
 	if (race_update == 0
 			&& which_space < 2
-			&& orz_space < 2 // JMS: Orz space check
 			&& (diameter = (long)GLOBAL_SIS (FuelOnBoard) << 1))
 	{
 		COLOR OldColor;
@@ -366,9 +350,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	}
 
 	star_frame = SetRelFrameIndex (pMenuState->CurFrame, 2);
-	
-	// Draw Spheres of Influence
-	if (which_space <= 1 && orz_space <= 1) // JMS: Orz space check
+	if (which_space <= 1)
 	{
 		COUNT index;
 		HFLEETINFO hStarShip, hNextShip;
@@ -386,9 +368,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 			FleetPtr = LockFleetInfo (&GLOBAL (avail_race_q), hStarShip);
 			hNextShip = _GetSuccLink (FleetPtr);
 
-			if (FleetPtr->known_strength 
-				&& FleetPtr->SpeciesID!=SLYLANDRO_KOHRAH_ID // JMS: Don't draw circle for Slylandro-Kohrahs
-				&& FleetPtr->SpeciesID!=KOHR_AH_ID)	// JMS: Don't draw circle for Kohr-Ahs
+			if (FleetPtr->known_strength)
 			{
 				RECT repair_r;
 
@@ -460,45 +440,39 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		}
 	}
 
-	// JMS: Shofixti crash site triangulation sphere drawing, defined in planets/triangul.c
-	//if(!(GET_GAME_STATE(HIDE_TRIANGULATION_SPHERES)))
-	if(1)
-	  drawTriangulationSpheres(which_space, orz_space, pClipRect);
-
 	do
 	{
 		BYTE star_type;
+
 		star_type = SDPtr->Type;
 
-		if (SDPtr->Index != MELNORME_HOME_DEFINED)
-		{
 #ifdef NOTYET
 {
 UNICODE buf[256];
+
 GetClusterName (SDPtr, buf);
 printf ("%s\n", buf);
 }
 #endif /* NOTYET */
-
-			s.origin.x = UNIVERSE_TO_DISPX (SDPtr->star_pt.x);
-			s.origin.y = UNIVERSE_TO_DISPY (SDPtr->star_pt.y);
-			if (which_space <= 1)
-				s.frame = SetRelFrameIndex (star_frame,
-						STAR_TYPE (star_type)
-						* NUM_STAR_COLORS
-						+ STAR_COLOR (star_type));
-			else if (SDPtr->star_pt.x == ARILOU_HOME_X
-					&& SDPtr->star_pt.y == ARILOU_HOME_Y)
-				s.frame = SetRelFrameIndex (star_frame,
-						SUPER_GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
-			else
-				s.frame = SetRelFrameIndex (star_frame,
-						GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
-			DrawStamp (&s);
-		}
+		s.origin.x = UNIVERSE_TO_DISPX (SDPtr->star_pt.x);
+		s.origin.y = UNIVERSE_TO_DISPY (SDPtr->star_pt.y);
+		if (which_space <= 1)
+			s.frame = SetRelFrameIndex (star_frame,
+					STAR_TYPE (star_type)
+					* NUM_STAR_COLORS
+					+ STAR_COLOR (star_type));
+		else if (SDPtr->star_pt.x == ARILOU_HOME_X
+				&& SDPtr->star_pt.y == ARILOU_HOME_Y)
+			s.frame = SetRelFrameIndex (star_frame,
+					SUPER_GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
+		else
+			s.frame = SetRelFrameIndex (star_frame,
+					GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
+		DrawStamp (&s);
 
 		++SDPtr;
-	} while (SDPtr->star_pt.x <= MAX_X_UNIVERSE && SDPtr->star_pt.y <= MAX_Y_UNIVERSE);
+	} while (SDPtr->star_pt.x <= MAX_X_UNIVERSE
+			&& SDPtr->star_pt.y <= MAX_Y_UNIVERSE);
 
 	if (GET_GAME_STATE (ARILOU_SPACE))
 	{
@@ -512,7 +486,8 @@ printf ("%s\n", buf);
 			s.origin.x = UNIVERSE_TO_DISPX (QUASI_SPACE_X);
 			s.origin.y = UNIVERSE_TO_DISPY (QUASI_SPACE_Y);
 		}
-		s.frame = SetRelFrameIndex (star_frame, GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
+		s.frame = SetRelFrameIndex (star_frame,
+				GIANT_STAR * NUM_STAR_COLORS + GREEN_BODY);
 		DrawStamp (&s);
 	}
 
@@ -527,6 +502,7 @@ printf ("%s\n", buf);
 		ScreenTransition (3, &r);
 		transition_pending = FALSE;
 	}
+	
 	UnbatchGraphics ();
 
 	if (pClipRect)
@@ -547,6 +523,7 @@ printf ("%s\n", buf);
 					);
 		}
 	}
+
 	if (draw_cursor)
 		UnlockMutex (GraphicsLock);
 }
@@ -784,7 +761,7 @@ UpdateFuelRequirement (MENU_STATE *pMS)
 	pt.y -= pMS->first_item.y;
 
 	f = (DWORD)((long)pt.x * pt.x + (long)pt.y * pt.y);
-	if (f == 0 || GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1 || GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) // JMS: ORZ space check
+	if (f == 0 || GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1)
 		fuel_required = 0;
 	else
 		fuel_required = square_root (f) + (FUEL_TANK_SCALE / 20);

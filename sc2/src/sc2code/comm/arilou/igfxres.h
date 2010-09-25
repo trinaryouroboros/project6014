@@ -2,6 +2,5 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define ARILOU_ALT_COLOR_MAP "comm.arilou_alt.colortable"
 #define ARILOU_COLOR_MAP "comm.arilou.colortable"
 #define ARILOU_PMAP_ANIM "comm.arilou.graphics"

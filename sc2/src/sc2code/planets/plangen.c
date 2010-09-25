@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Don't draw 4x image of restricted planets since they cannot be landed on anyway.
-
 #include "nameref.h"
 #include "resinst.h"
 #include "setup.h"
@@ -61,15 +59,14 @@ extern void getpixelarray (void *map, int Bpp, FRAME FramePtr,
 
 #define NUM_BATCH_POINTS 64
 #define USE_3D_PLANET 1
-#define RADIUS (37 * RESOLUTION_FACTOR) // JMS_GFX
+#define RADIUS 37
 //2*RADIUS
 #define TWORADIUS (RADIUS << 1)
 //RADIUS^2
 #define RADIUS_2 (RADIUS * RADIUS)
 // distance beyond which all pixels are transparent (for aa)
 #define RADIUS_THRES  ((RADIUS + 1) * (RADIUS + 1))
-#define DIAMETER (TWORADIUS + 1) // JMS_GFX
-
+#define DIAMETER (TWORADIUS + 1)
 #if 0
 #	define SPHERE_SPAN_X (MAP_WIDTH >> 1)
 #else
@@ -93,16 +90,15 @@ extern void getpixelarray (void *map, int Bpp, FRAME FramePtr,
 #define M_DEG2RAD (M_TWOPI / 360.0)
 #endif
 
-// JMS_GFX: Change initialization to constant numbers since DIAMETER is now variably defined
-DWORD light_diff[150][150]; //DWORD light_diff[DIAMETER][DIAMETER];
+DWORD light_diff[DIAMETER][DIAMETER];
 
 typedef struct 
 {
 	POINT p[4];
 	DWORD m[4];
 } MAP3D_POINT;
-// JMS_GFX: Change initialization to constant numbers since DIAMETER is now variably defined
-MAP3D_POINT map_rotate[150][150];//MAP3D_POINT map_rotate[DIAMETER][DIAMETER];
+
+MAP3D_POINT map_rotate[DIAMETER][DIAMETER];
 
 typedef struct
 {
@@ -169,7 +165,6 @@ TransformTopography (FRAME DstFrame, BYTE *pTopoData, int w, int h)
 		i = NUM_BATCH_POINTS;
 		pBatch = &BatchArray[i];
 		pSrc = pTopoData;
-
 		for (pt.y = 0; pt.y < h; ++pt.y)
 		{
 			for (pt.x = 0; pt.x < w; ++pt.x, ++pSrc)
@@ -277,7 +272,6 @@ RenderPhongMask (POINT loc)
 
 #define AMBIENT_LIGHT 0.1
 #define LIGHT_Z       1.2
-	
 	// lrad is the distance from the sun to the planet
 	lrad = sqrt (loc.x * loc.x + loc.y * loc.y);
 	// light is the sun's position.  the z-coordinate is whatever
@@ -472,7 +466,7 @@ SetPlanetTilt (int angle)
 	const double multx = ((double)SPHERE_SPAN_X / M_PI);
 	const double multy = ((double)MAP_HEIGHT / M_PI);
 	const double xadj = ((double)SPHERE_SPAN_X / 2.0);
-	
+
 	for (y = -RADIUS; y <= RADIUS; y++)
 	{
 		int y_2 = y * y;
@@ -535,7 +529,7 @@ init_zoom_array (COUNT *zoom_arr)
 	float frames_per_sec;
 	int num_frames, i;
 	int base = GSCALE_IDENTITY;
-	
+
 	frames_per_sec = (float)MAP_WIDTH / ROTATION_TIME;
 	num_frames = (int)((frames_per_sec * ZOOM_TIME)  + 0.5);
 	for (i = 0; i < num_frames; i++)
@@ -556,22 +550,22 @@ init_zoom_array (COUNT *zoom_arr)
 // this routine, but a filter can be applied if desired too.
 
 // HALO rim size
-#define SHIELD_HALO          (7 * RESOLUTION_FACTOR) // JMS_GFX
+#define SHIELD_HALO          7
 #define SHIELD_RADIUS        (RADIUS + SHIELD_HALO)
-#define SHIELD_DIAM          ((SHIELD_RADIUS << 1) + 1) 
+#define SHIELD_DIAM          ((SHIELD_RADIUS << 1) + 1)
 #define SHIELD_RADIUS_2      (SHIELD_RADIUS * SHIELD_RADIUS)
-#define SHIELD_RADIUS_THRES  ((SHIELD_RADIUS + 1 * RESOLUTION_FACTOR) * (SHIELD_RADIUS + 1 * RESOLUTION_FACTOR)) // JMS_GFX
+#define SHIELD_RADIUS_THRES  ((SHIELD_RADIUS + 1) * (SHIELD_RADIUS + 1))
 #define SHIELD_HALO_GLOW     (SHIELD_GLOW_COMP + SHIELD_REFLECT_COMP)
 #define SHIELD_HALO_GLOW_MIN (SHIELD_HALO_GLOW >> 2)
 
 static FRAME
-CreateShieldMask (BYTE flags)
+CreateShieldMask (void)
 {
 	DWORD clear, *rgba, *p_rgba;
 	int x, y;
 	FRAME ShieldFrame;
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
-	
+
 	ShieldFrame = CaptureDrawable (
 			CreateDrawable (WANT_PIXMAP | WANT_ALPHA,
 				SHIELD_DIAM, SHIELD_DIAM, 1));
@@ -620,10 +614,7 @@ CreateShieldMask (BYTE flags)
 					red = 0;
 			}
 			
-			if (flags & BLUE_SHIELD)
-				*p_rgba = frame_mapRGBA (ShieldFrame, 0, 0, red, alpha);
-			else
-				*p_rgba = frame_mapRGBA (ShieldFrame, red, 0, 0, alpha);
+			*p_rgba = frame_mapRGBA (ShieldFrame, red, 0, 0, alpha);
 		}
 	}
 	
@@ -667,7 +658,7 @@ SetShieldThrobEffect (FRAME ShieldFrame, int offset, FRAME ThrobFrame)
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
 	DWORD *rgba;
 	int level;
-	
+
 	level = shield_level (offset);
 
 	width = GetFrameWidth (ShieldFrame);
@@ -704,13 +695,13 @@ SetShieldThrobEffect (FRAME ShieldFrame, int offset, FRAME ThrobFrame)
 
 // Apply the shield to the topo image
 static void
-ApplyShieldTint (BYTE flags)
+ApplyShieldTint (void)
 {
 	UBYTE a;
 	int blit_type;
 	FRAME tintFrame = pSolarSysState->Orbit.TintFrame;
 	DWORD p;
-	
+
 #ifdef USE_ALPHA_SHIELD
 	a = 200;
 	blit_type = 0;
@@ -719,10 +710,7 @@ ApplyShieldTint (BYTE flags)
 	a = 255;
 	blit_type = -1;
 #endif
-	if (flags & BLUE_SHIELD)
-		p = frame_mapRGBA (tintFrame, 0, 0, 255, a);
-	else
-		p = frame_mapRGBA (tintFrame, 255, 0, 0, a);
+	p = frame_mapRGBA (tintFrame, 255, 0, 0, a);
 	fill_frame_rgb (tintFrame, p, 0, 0, 0, 0);
 	arith_frame_blit (tintFrame, NULL, pSolarSysState->TopoFrame, NULL,
 			0, blit_type);
@@ -732,7 +720,7 @@ static inline UBYTE
 calc_map_light (UBYTE val, DWORD dif, int lvf)
 {
 	int i;
-	
+
 	// apply diffusion
 	i = (dif * val) >> DIFFUSE_BITS;
 	// apply light variance for 3d lighting effect
@@ -839,13 +827,8 @@ RenderLevelMasks (FRAME MaskFrame, int offset, BOOLEAN doThrob)
 				int r;
 				
 				// add lite red filter (3/4) component
-				// JMS: Blue filter for blue shielded planets
-				if (pSolarSysState->pOrbitalDesc->flags & BLUE_SHIELD)
-					c[2] = (c[2] >> 1) + (c[2] >> 2);
-				else
-					c[0] = (c[0] >> 1) + (c[0] >> 2);
 				c[1] = (c[1] >> 1) + (c[1] >> 2);
-				
+				c[0] = (c[0] >> 1) + (c[0] >> 2);
 
 				c[2] = calc_map_light (c[2], diffus, lvf);
 				c[1] = calc_map_light (c[1], diffus, lvf);
@@ -860,20 +843,10 @@ RenderLevelMasks (FRAME MaskFrame, int offset, BOOLEAN doThrob)
 					r = r * shLevel / THROB_MAX_LEVEL;
 				}
 
-				if (pSolarSysState->pOrbitalDesc->flags & BLUE_SHIELD)
-				{
-					r += c[0];
-					if (r > 255)
-						r = 255;
-					c[0] = r;
-				}
-				else
-				{
-					r += c[2];
-					if (r > 255)
-						r = 255;
-					c[2] = r;
-				}
+				r += c[2];
+				if (r > 255)
+					r = 255;
+				c[2] = r;
 			} 
 			else
 			{
@@ -914,7 +887,7 @@ DitherMap (SBYTE *DepthArray)
 {
 	COUNT i;
 	SBYTE *lpDst;
-	
+
 	i = (MAP_WIDTH * MAP_HEIGHT) >> 2;
 	lpDst = DepthArray;
 	do
@@ -947,7 +920,7 @@ MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
 				Bsquared, TwoBsquared;
 	long d, dx, dy;
 	COUNT TopIndex, BotIndex, rim_pixels;
-	
+
 	A = pRect->extent.width >> 1;
 	B = pRect->extent.height >> 1;
 
@@ -1136,7 +1109,7 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 	COUNT i;
 	RECT storm_r[MAX_STORMS];
 	RECT *pstorm_r;
-	
+
 	pstorm_r = &storm_r[i = storm_count];
 	while (i--)
 	{
@@ -1187,10 +1160,11 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 			pstorm_r->extent.width = pstorm_r->extent.height
 					+ (LOBYTE (loword) % pstorm_r->extent.height);
 
-			//pstorm_r->corner.x = HIBYTE (loword) % (MAP_WIDTH - pstorm_r->extent.width);
-			pstorm_r->corner.x = loword % (MAP_WIDTH - pstorm_r->extent.width); // JMS_GFX: changed the previous line to this. BYTE was too small for 640x480 resolution
-			pstorm_r->corner.y = LOBYTE (loword) % (MAP_HEIGHT - pstorm_r->extent.height);
-			
+			pstorm_r->corner.x = HIBYTE (loword)
+					% (MAP_WIDTH - pstorm_r->extent.width);
+			pstorm_r->corner.y = LOBYTE (loword)
+					% (MAP_HEIGHT - pstorm_r->extent.height);
+
 			for (j = i + 1; j < storm_count; ++j)
 			{
 				COORD x, y;
@@ -1262,7 +1236,7 @@ MakeGasGiant (COUNT num_bands, SBYTE *DepthArray, RECT *pRect, SIZE
 	SBYTE *lpDst;
 	UWORD loword, hiword;
 	DWORD rand_val;
-	
+
 	band_height = pRect->extent.height / num_bands;
 	band_bump = pRect->extent.height % num_bands;
 	band_error = num_bands >> 1;
@@ -1330,7 +1304,7 @@ ValidateMap (SBYTE *DepthArray)
 	SBYTE last_byte;
 	COUNT i;
 	SBYTE *lpDst;
-	
+
 	i = MAP_WIDTH - 1;
 	lpDst = DepthArray;
 	last_byte = *lpDst++;
@@ -1379,7 +1353,7 @@ void
 planet_orbit_init ()
 {
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
-	
+
 	Orbit->PlanetFrameArray = CaptureDrawable (
 			CreateDrawable (WANT_PIXMAP | WANT_ALPHA, DIAMETER, DIAMETER,
 				2));
@@ -1693,7 +1667,7 @@ GenerateLightMap (SBYTE *pTopo, int w, int h)
 {
 #define LMAP_BLOCKS       (2 * LMAP_MAX_DIST + 1)
 	int x, y;
-	elev_block_t vblocks[100];
+	elev_block_t vblocks[LMAP_BLOCKS];
 			// we use a running block average to reduce the amount of work
 			// where a block is a vertical line of map points
 	SBYTE *elev;
@@ -1812,13 +1786,12 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	RECT r;
 	DWORD old_seed;
 	const PlanetFrame *PlanDataPtr;
-	COUNT i;
-	DWORD y;
+	COUNT i, y;
 	POINT loc;
 	CONTEXT OldContext;
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
 	BYTE *pScaledTopo = 0;
-	
+
 	old_seed = TFB_SeedRandom (pPlanetDesc->rand_seed);
 
 	OldContext = SetContext (TaskContext);
@@ -1831,7 +1804,7 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 		// elevation data is supplied in Surface Definition frame
 		BOOLEAN DeleteDef = FALSE;
 		FRAME ElevFrame;
-		
+
 		// surface pixmap
 		SurfDefFrame = SetAbsFrameIndex (SurfDefFrame, 0);
 		if (GetFrameWidth (SurfDefFrame) != MAP_WIDTH
@@ -1928,9 +1901,10 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 					
 						loword = LOWORD (TFB_Random ());
 						crater_r.extent.height = crater_r.extent.width;
-						//crater_r.corner.x = HIBYTE (loword) % (MAP_WIDTH - crater_r.extent.width);
-						crater_r.corner.x = loword % (MAP_WIDTH - crater_r.extent.width); // JMS_GFX: changed the previous line to this. BYTE was too small for 640x480 resolution
-						crater_r.corner.y = LOBYTE (loword) % (MAP_HEIGHT - crater_r.extent.height);
+						crater_r.corner.x = HIBYTE (loword)
+								% (MAP_WIDTH - crater_r.extent.width);
+						crater_r.corner.y = LOBYTE (loword)
+								% (MAP_HEIGHT - crater_r.extent.height);
 						MakeCrater (&crater_r, Orbit->lpTopoData,
 								PlanDataPtr->fault_depth << 2,
 								-(PlanDataPtr->fault_depth << 2),
@@ -1971,9 +1945,7 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 		RenderTopography (FALSE);
 	}
 
-	// JMS Don't create 4x image for restricted planets since they cannot be landed on anyway.
 	if (!(pPlanetDesc->data_index & PLANET_SHIELDED)
-			&& !(pPlanetDesc->flags & PLANET_RESTRICTED)
 			&& pSolarSysState->SysInfo.PlanetInfo.AtmoDensity
 				!= GAS_GIANT_ATMOSPHERE)
 	{	// produce 4x scaled topo image for IP
@@ -1986,10 +1958,11 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 					* (PLANALGO (PlanDataPtr->Type) == CRATERED_ALGO ? 2 : 1  ));
 			TransformTopography (Orbit->TopoZoomFrame, pScaledTopo,
 					MAP_WIDTH * 4, MAP_HEIGHT * 4);
-			
+
 			HFree (pScaledTopo);
 		}
 	}
+
 	// Generate a pixel array from the Topography map.
 	// We use this instead of lpTopoData because it needs to be
 	// WAP_WIDTH+SPHERE_SPAN_X wide and we need this method for Earth anyway.
@@ -1997,14 +1970,12 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	// FRAMPTR though.
 	getpixelarray (Orbit->lpTopoMap, 4, pSolarSysState->TopoFrame,
 			MAP_WIDTH + SPHERE_SPAN_X, MAP_HEIGHT);
-	
 	// Extend the width from MAP_WIDTH to MAP_WIDTH+SPHERE_SPAN_X
 	for (y = 0; y < MAP_HEIGHT * (MAP_WIDTH + SPHERE_SPAN_X);
 			y += MAP_WIDTH + SPHERE_SPAN_X)
-	{
 		memcpy (Orbit->lpTopoMap + y + MAP_WIDTH, Orbit->lpTopoMap + y,
 				SPHERE_SPAN_X * sizeof (Orbit->lpTopoMap[0]));
-	}
+
 	if (PLANALGO (PlanDataPtr->Type) != GAS_GIANT_ALGO)
 	{	// convert topo data to a light map, based on relative
 		// map point elevations
@@ -2014,6 +1985,7 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	{	// gas giants are pretty much flat
 		memset (Orbit->lpTopoData, 0, MAP_WIDTH * MAP_HEIGHT);
 	}
+			
 	if (pSolarSysState->pOrbitalDesc->pPrevDesc ==
 			&pSolarSysState->SunDesc[0])
 	{	// this is a planet -- get its location
@@ -2023,11 +1995,13 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	{	// this is a moon -- get its planet's location
 		loc = pSolarSysState->pOrbitalDesc->pPrevDesc->location;
 	}
+	
 	RenderPhongMask (loc);
+
 	if (pPlanetDesc->data_index & PLANET_SHIELDED)
 	{
-		Orbit->ObjectFrame = CreateShieldMask (pPlanetDesc->flags);
-		ApplyShieldTint (pPlanetDesc->flags);
+		Orbit->ObjectFrame = CreateShieldMask ();
+		ApplyShieldTint ();
 	}
 
 	SetContext (OldContext);
@@ -2097,7 +2071,7 @@ rotate_planet_task (void *data)
 	TimeIn = GetTimeCounter ();
 	while (!Task_ReadState (task, TASK_EXIT))
 	{
-		SIZE view_index;
+		BYTE view_index;
 		COORD x;
 
 		x = init_x;
@@ -2130,7 +2104,7 @@ rotate_planet_task (void *data)
 				}
 
 				repair = RotatePlanet (x, SIS_SCREEN_WIDTH >> 1,
-						(148 * RESOLUTION_FACTOR - SIS_ORG_Y) >> 1, zoom_amt, zoom_from, repair); // JMS_GFX
+						(148 - SIS_ORG_Y) >> 1, zoom_amt, zoom_from, repair);
 
 				if (!repair && zooming)
 				{

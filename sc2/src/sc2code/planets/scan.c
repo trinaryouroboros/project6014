@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Cannot dispatch landers on restricted planets
-//			 -Certain star systems can have more than one energy blip graphics on planet surface simultaneously
-
 #include "build.h"
 #include "cons_res.h"
 #include "controls.h"
@@ -70,30 +67,27 @@ static void
 EraseCoarseScan (void)
 {
 	RECT r, tr;
-	const int leftScanWidth   = (80 * RESOLUTION_FACTOR); // JMS_GFX
-	const int rightScanWidth  = (80 * RESOLUTION_FACTOR); // JMS_GFX
-	const int leftScanOffset  = (5 * RESOLUTION_FACTOR); // JMS_GFX
-	const int rightScanOffset = (50 * RESOLUTION_FACTOR); // JMS_GFX
-	const int nameEraseWidth = (SIS_SCREEN_WIDTH - 2 * RESOLUTION_FACTOR); // JMS_GFX
+	const int leftScanWidth   = 80;
+	const int rightScanWidth  = 80;
+	const int leftScanOffset  = 5;
+	const int rightScanOffset = 50;
+	const int nameEraseWidth = SIS_SCREEN_WIDTH - 2;
 
 	LockMutex (GraphicsLock);
 	SetContext (SpaceContext);
 
-	// Erase planet name
 	r.corner.x = (SIS_SCREEN_WIDTH >> 1) - (nameEraseWidth >> 1);
-	r.corner.y = (13 - 10) * RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y = 13 - 10;
 	r.extent.width = nameEraseWidth;
-	r.extent.height = 14 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.height = 14;
 	RepairBackRect (&r);
 
-	// Erase left side (Orbit, atmo, temp...)
 	GetFrameRect (SetAbsFrameIndex (SpaceJunkFrame, 20), &tr);
 	r = tr;
 	r.corner.x += leftScanOffset;
 	r.extent.width = leftScanWidth;
 	RepairBackRect (&r);
 
-	// Erase right side info (Mass, radius, gravity...)
 	r = tr;
 	r.corner.x += (r.extent.width - rightScanOffset);
 	r.extent.width = rightScanWidth;
@@ -133,7 +127,7 @@ MakeScanValue (UNICODE *buf, long val, const UNICODE *extra)
 static void
 PrintCoarseScanPC (void)
 {
-#define SCAN_LEADING_PC (14 * RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_LEADING_PC 14
 	SDWORD val;
 	TEXT t;
 	RECT r;
@@ -202,7 +196,7 @@ PrintCoarseScanPC (void)
 
 	t.align = ALIGN_CENTER;
 	t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-	t.baseline.y = 13 * RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = 13;
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
@@ -214,9 +208,9 @@ PrintCoarseScanPC (void)
 	SetContextFont (TinyFont);
 	UnlockMutex (GraphicsLock);
 
-#define LEFT_SIDE_BASELINE_X_PC (5 * RESOLUTION_FACTOR) // JMS_GFX
-#define RIGHT_SIDE_BASELINE_X_PC (SIS_SCREEN_WIDTH - (75 * RESOLUTION_FACTOR)) // JMS_GFX
-#define SCAN_BASELINE_Y_PC (40 * RESOLUTION_FACTOR) // JMS_GFX
+#define LEFT_SIDE_BASELINE_X_PC 5
+#define RIGHT_SIDE_BASELINE_X_PC (SIS_SCREEN_WIDTH - 75)
+#define SCAN_BASELINE_Y_PC 40
 
 	t.baseline.y = SCAN_BASELINE_Y_PC;
 	t.align = ALIGN_LEFT;
@@ -375,7 +369,7 @@ PrintCoarseScanPC (void)
 static void
 PrintCoarseScan3DO (void)
 {
-#define SCAN_LEADING (19 * RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_LEADING 19
 	SDWORD val;
 	TEXT t;
 	STAMP s;
@@ -443,7 +437,7 @@ PrintCoarseScan3DO (void)
 
 	t.align = ALIGN_CENTER;
 	t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-	t.baseline.y = 13 * RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = 13;
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
@@ -453,15 +447,15 @@ PrintCoarseScan3DO (void)
 	font_DrawText (&t);
 
 	s.origin.x = s.origin.y = 0;
-	s.origin.x = (16 - SAFE_X) * RESOLUTION_FACTOR; // JMS_GFX
+	s.origin.x = 16 - SAFE_X;
 	s.frame = SetAbsFrameIndex (SpaceJunkFrame, 20);
 	DrawStamp (&s);
 
 	UnlockMutex (GraphicsLock);
 
-#define LEFT_SIDE_BASELINE_X ((27 + (16 - SAFE_X)) * RESOLUTION_FACTOR) // JMS_GFX
-#define RIGHT_SIDE_BASELINE_X ((SIS_SCREEN_WIDTH - LEFT_SIDE_BASELINE_X) * RESOLUTION_FACTOR) // JMS_GFX
-#define SCAN_BASELINE_Y (25 * RESOLUTION_FACTOR) // JMS_GFX
+#define LEFT_SIDE_BASELINE_X (27 + (16 - SAFE_X))
+#define RIGHT_SIDE_BASELINE_X (SIS_SCREEN_WIDTH - LEFT_SIDE_BASELINE_X)
+#define SCAN_BASELINE_Y 25
 
 	t.baseline.x = LEFT_SIDE_BASELINE_X;
 	t.baseline.y = SCAN_BASELINE_Y;
@@ -993,10 +987,9 @@ DoScan (MENU_STATE *pMS)
 			UNICODE buf[100];
 
 			if ((pSolarSysState->pOrbitalDesc->data_index & PLANET_SHIELDED)
-					||	pSolarSysState->pOrbitalDesc->flags & PLANET_RESTRICTED
 					|| (pSolarSysState->SysInfo.PlanetInfo.AtmoDensity ==
 						GAS_GIANT_ATMOSPHERE))
-			{	// JMS: cannot dispatch to shielded planets, restricted planets, or gas giants
+			{	// cannot dispatch to shielded planets or gas giants
 				PlayMenuSound (MENU_SOUND_FAILURE);
 				return (TRUE);
 			}
@@ -1075,7 +1068,7 @@ DoScan (MENU_STATE *pMS)
 			LockMutex (GraphicsLock);
 			SetContext (SpaceContext);
 			r.corner.x = 0;
-			r.corner.y = t.baseline.y - 10 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.y = t.baseline.y - 10;
 			r.extent.width = SIS_SCREEN_WIDTH;
 			r.extent.height = t.baseline.y - r.corner.y + 1;
 			RepairBackRect (&r);
@@ -1160,7 +1153,7 @@ DoScan (MENU_STATE *pMS)
 		LockMutex (GraphicsLock);
 		SetContext (SpaceContext);
 		r.corner.x = 0;
-		r.corner.y = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7) - 10 * RESOLUTION_FACTOR; // JMS_GFX;
+		r.corner.y = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7) - 10;
 		r.extent.width = SIS_SCREEN_WIDTH;
 		r.extent.height = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7)
 				- r.corner.y + 1;
@@ -1359,18 +1352,8 @@ GeneratePlanetSide (void)
 						NodeElementPtr->mass_points = 1;
 					else
 						NodeElementPtr->mass_points = MAX_SCROUNGED;
-					
-					// JMS: At GenerateHint star system, there can be more than on energy blip graphics on the planet surface simultaneously.
-					if (CurStarDescPtr->Index == HINT_DEFINED)
-					{
-						if (num_nodes % 2)
-							DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[1];
-						else
-							DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[2];
-					}
-					// JMS: Elsewhere - there can be only one.
-					else
-						DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[1];
+					DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame =
+							pSolarSysState->PlanetSideFrame[1];
 				}
 				else
 				{
@@ -1405,7 +1388,6 @@ GeneratePlanetSide (void)
 						break;
 					}
 
-					NodeElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[which_node].FrameRate);
 					NodeElementPtr->mass_points = (BYTE)which_node;
 					NodeElementPtr->hit_points = HINIBBLE (
 							CreatureData[which_node].ValueAndHitPoints);

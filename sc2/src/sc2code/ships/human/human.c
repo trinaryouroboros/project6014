@@ -51,12 +51,12 @@ static RACE_DESC human_desc =
 		HUMAN_RACE_STRINGS,
 		HUMAN_ICON_MASK_PMAP_ANIM,
 		HUMAN_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		400 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
+		0, /* Initial sphere of influence radius */
 		{ /* Known location (center of SoI) */
-			6752, 7450,
+			1752, 1450,
 		},
 	},
 	{

@@ -95,9 +95,3 @@ PlaySoundEffect (SOUND S, COUNT Channel, SoundPosition Pos,
 	}
 }
 
-void
-ToggleVoice (void)
-{
-	GLOBAL (glob_flags) ^= VOICE_DISABLED;
-}
-

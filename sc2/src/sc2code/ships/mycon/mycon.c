@@ -50,12 +50,12 @@ static RACE_DESC mycon_desc =
 		MYCON_RACE_STRINGS,
 		MYCON_ICON_MASK_PMAP_ANIM,
 		MYCON_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial SoI radius */
+		1070 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			0,0,
+			6392, 2200,
 		},
 	},
 	{

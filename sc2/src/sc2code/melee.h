@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added Slylandros-in-kohrah-vessels and Chmmr Explorer to melee ship list
-
 #ifndef _MELEE_H
 #define _MELEE_H
 
@@ -59,8 +57,6 @@ enum
 	MELEE_VUX,
 	MELEE_YEHAT,
 	MELEE_ZOQFOTPIK,
-	MELEE_SLYKOHR,   // JMS
-	MELEE_EXPLORER,  // JMS
 	
 	NUM_MELEE_SHIPS,
 
@@ -71,8 +67,8 @@ enum
 #define NUM_MELEE_COLUMNS 7
 //#define NUM_MELEE_COLUMNS 6
 #define MELEE_FLEET_SIZE (NUM_MELEE_ROWS * NUM_MELEE_COLUMNS)
-#define ICON_WIDTH (16 * RESOLUTION_FACTOR) // JMS_GFX
-#define ICON_HEIGHT (16 * RESOLUTION_FACTOR) // JMS_GFX
+#define ICON_WIDTH 16
+#define ICON_HEIGHT 16
 
 extern FRAME PickMeleeFrame;
 
@@ -83,7 +79,7 @@ extern FRAME PickMeleeFrame;
 
 #define MAX_TEAM_CHARS 30
 #define NUM_PICK_COLS 5
-#define NUM_PICK_ROWS 6 // JMS
+#define NUM_PICK_ROWS 5
 
 typedef BYTE MELEE_OPTIONS;
 typedef COUNT FleetShipIndex;

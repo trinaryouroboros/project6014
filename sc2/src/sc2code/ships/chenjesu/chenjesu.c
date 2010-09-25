@@ -44,10 +44,6 @@
 										 * hold the button down.
 										 */
 
-#define MAX_THRUST_HIRES /* DISPLAY_TO_WORLD (14) */ 54 // JMS_GFX
-#define THRUST_INCREMENT_HIRES /* DISPLAY_TO_WORLD (4) */ 6 // JMS_GFX
-#define MISSILE_SPEED_HIRES DISPLAY_TO_WORLD (32) // JMS_GFX
-
 static RACE_DESC chenjesu_desc =
 {
 	{ /* SHIP_INFO */
@@ -58,7 +54,7 @@ static RACE_DESC chenjesu_desc =
 		CHENJESU_RACE_STRINGS,
 		CHENJESU_ICON_MASK_PMAP_ANIM,
 		CHENJESU_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial sphere of influence radius */
@@ -118,77 +114,6 @@ static RACE_DESC chenjesu_desc =
 	0,
 };
 
-// JMS_GFX
-static RACE_DESC chenjesu_desc_hires =
-{
-	{ /* SHIP_INFO */
-		FIRES_FORE | SEEKING_SPECIAL | SEEKING_WEAPON,
-		28, /* Super Melee cost */
-		MAX_CREW, MAX_CREW,
-		MAX_ENERGY, MAX_ENERGY,
-		CHENJESU_RACE_STRINGS,
-		CHENJESU_ICON_MASK_PMAP_ANIM,
-		CHENJESU_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
-	},
-	{ /* FLEET_STUFF */
-		0, /* Initial sphere of influence radius */
-		{ /* Known location (center of SoI) */
-			0, 0,
-		},
-	},
-	{
-		MAX_THRUST_HIRES,
-		THRUST_INCREMENT_HIRES,
-		ENERGY_REGENERATION,
-		WEAPON_ENERGY_COST,
-		SPECIAL_ENERGY_COST,
-		ENERGY_WAIT,
-		TURN_WAIT,
-		THRUST_WAIT,
-		WEAPON_WAIT,
-		SPECIAL_WAIT,
-		SHIP_MASS,
-	},
-	{
-		{
-			CHENJESU_BIG_MASK_PMAP_ANIM,
-			CHENJESU_MED_MASK_PMAP_ANIM,
-			CHENJESU_SML_MASK_PMAP_ANIM,
-		},
-		{
-			SPARK_BIG_MASK_PMAP_ANIM,
-			SPARK_MED_MASK_PMAP_ANIM,
-			SPARK_SML_MASK_PMAP_ANIM,
-		},
-		{
-			DOGGY_BIG_MASK_PMAP_ANIM,
-			DOGGY_MED_MASK_PMAP_ANIM,
-			DOGGY_SML_MASK_PMAP_ANIM,
-		},
-		{
-			CHENJESU_CAPTAIN_MASK_PMAP_ANIM,
-			NULL, NULL, NULL, NULL, NULL
-		},
-		CHENJESU_VICTORY_SONG,
-		CHENJESU_SHIP_SOUNDS,
-		{ NULL, NULL, NULL },
-		{ NULL, NULL, NULL },
-		{ NULL, NULL, NULL },
-		NULL, NULL
-	},
-	{
-		0,
-		LONG_RANGE_WEAPON,
-		NULL,
-	},
-	(UNINIT_FUNC *) NULL,
-	(PREPROCESS_FUNC *) NULL,
-	(POSTPROCESS_FUNC *) NULL,
-	(INIT_WEAPON_FUNC *) NULL,
-	0,
-};
-
 #define FRAGMENT_LIFE 10
 #define FRAGMENT_SPEED MISSILE_SPEED
 #define FRAGMENT_RANGE (FRAGMENT_LIFE * FRAGMENT_SPEED)
@@ -198,7 +123,7 @@ crystal_postprocess (ELEMENT *ElementPtr)
 {
 #define FRAGMENT_HITS 1
 #define FRAGMENT_DAMAGE 2
-#define FRAGMENT_OFFSET (2 * RESOLUTION_FACTOR) // JMS_GFX
+#define FRAGMENT_OFFSET 2
 #define NUM_FRAGMENTS 8
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
@@ -212,7 +137,7 @@ crystal_postprocess (ELEMENT *ElementPtr)
 			(ElementPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
 	MissileBlock.pixoffs = 0;
-	MissileBlock.speed = FRAGMENT_SPEED * RESOLUTION_FACTOR; // JMS_GFX
+	MissileBlock.speed = FRAGMENT_SPEED;
 	MissileBlock.hit_points = FRAGMENT_HITS;
 	MissileBlock.damage = FRAGMENT_DAMAGE;
 	MissileBlock.life = FRAGMENT_LIFE;
@@ -305,8 +230,8 @@ crystal_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 	}
 }
 
-#define DOGGY_OFFSET (18 * RESOLUTION_FACTOR) // JMS_GFX
-#define DOGGY_SPEED DISPLAY_TO_WORLD (8 * RESOLUTION_FACTOR) // JMS_GFX
+#define DOGGY_OFFSET 18
+#define DOGGY_SPEED DISPLAY_TO_WORLD (8)
 
 static void
 doggy_preprocess (ELEMENT *ElementPtr)
@@ -412,7 +337,7 @@ doggy_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ElementPtr0->thrust_wait += COLLISION_THRUST_WAIT << 1;
 }
 
-#define CHENJESU_OFFSET (16 * RESOLUTION_FACTOR) // JMS_GFX
+#define CHENJESU_OFFSET 16
 
 static void
 spawn_doggy (ELEMENT *ElementPtr)
@@ -531,11 +456,11 @@ chenjesu_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					if ((which_turn = PlotIntercept (CrystalPtr,
 							ObjectsOfConcern[ENEMY_SHIP_INDEX].ObjectPtr,
 							CrystalPtr->life_span,
-							FRAGMENT_RANGE * RESOLUTION_FACTOR / 2)) == 0
+							FRAGMENT_RANGE / 2)) == 0
 							|| (which_turn == 1
 							&& PlotIntercept (CrystalPtr,
 							ObjectsOfConcern[ENEMY_SHIP_INDEX].ObjectPtr,
-							CrystalPtr->life_span, 0) == 0)) // JMS_GFX
+							CrystalPtr->life_span, 0) == 0))
 						StarShipPtr->ship_input_state &= ~WEAPON;
 					else if (StarShipPtr->weapon_counter == 0)
 					{
@@ -560,7 +485,7 @@ chenjesu_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					StarShipPtr->weapon_counter = 3;
 			}
 			else if (StarShipPtr->weapon_counter == 0
-					&& ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, FRAGMENT_RANGE * RESOLUTION_FACTOR / 2)) // JMS_GFX
+					&& ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, FRAGMENT_RANGE / 2))
 				StarShipPtr->ship_input_state |= WEAPON;
 		}
 	}
@@ -592,7 +517,7 @@ initialize_crystal (ELEMENT *ShipPtr, HELEMENT CrystalArray[])
 	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
 	MissileBlock.pixoffs = CHENJESU_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED * RESOLUTION_FACTOR; // JMS_GFX
+	MissileBlock.speed = MISSILE_SPEED;
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -651,24 +576,13 @@ init_chenjesu (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	// JMS_GFX: A rather clumsy way of giving ship correct max speed at hi-res mode
-	if (RESOLUTION_FACTOR == 1)
-	{
-		chenjesu_desc.preprocess_func = chenjesu_preprocess;
-		chenjesu_desc.postprocess_func = chenjesu_postprocess;
-		chenjesu_desc.init_weapon_func = initialize_crystal;
-		chenjesu_desc.cyborg_control.intelligence_func = chenjesu_intelligence;
-		RaceDescPtr = &chenjesu_desc;
-	}
-	else
-	{
-		chenjesu_desc_hires.preprocess_func = chenjesu_preprocess;
-		chenjesu_desc_hires.postprocess_func = chenjesu_postprocess;
-		chenjesu_desc_hires.init_weapon_func = initialize_crystal;
-		chenjesu_desc_hires.cyborg_control.intelligence_func = chenjesu_intelligence;
-		RaceDescPtr = &chenjesu_desc_hires;
-	}
-	
+	chenjesu_desc.preprocess_func = chenjesu_preprocess;
+	chenjesu_desc.postprocess_func = chenjesu_postprocess;
+	chenjesu_desc.init_weapon_func = initialize_crystal;
+	chenjesu_desc.cyborg_control.intelligence_func = chenjesu_intelligence;
+
+	RaceDescPtr = &chenjesu_desc;
+
 	return (RaceDescPtr);
 }
 

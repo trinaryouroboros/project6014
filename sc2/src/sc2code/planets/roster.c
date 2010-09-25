@@ -132,8 +132,8 @@ DeltaSupportCrew (SIZE crew_delta)
 		{
 			RECT r;
 
-			r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
-			r.corner.y = 130 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.x = 2;
+			r.corner.y = 130;
 			r.extent.width = STATUS_MESSAGE_WIDTH;
 			r.extent.height = STATUS_MESSAGE_HEIGHT;
 			SetContext (StatusContext);
@@ -250,8 +250,8 @@ DoModifyRoster (MENU_STATE *pMS)
 		{
 			RosterCleanup (pMS);
 
-			r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
-			r.corner.y = 130 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.x = 2;
+			r.corner.y = 130;
 			r.extent.width = STATUS_MESSAGE_WIDTH;
 			r.extent.height = STATUS_MESSAGE_HEIGHT;
 			SetContext (StatusContext);

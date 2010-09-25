@@ -60,31 +60,14 @@ static DISPLAY_INTERFACE DisplayInterface =
 	/* .DisplayWidth  = */ 320,
 	/* .DisplayHeight = */ 240,
 
-	/* .alloc_image   = */ alloc_image,
-	/* .read_display  = */ read_screen,
-};
-
-// JMS_GFX: New function for setting up a 640x480 display layer
-static DISPLAY_INTERFACE DisplayInterfaceReal640 =
-{
-	/* .DisplayFlags  = */ WANT_MASK,
-	
-	/* .DisplayDepth  = */ 16,
-	/* .DisplayWidth  = */ 640, // JMS_GFX
-	/* .DisplayHeight = */ 480, // JMS_GFX
-	
-	/* .alloc_image   = */ alloc_image,
+	/* .alloc_iamge   = */ alloc_image,
 	/* .read_display  = */ read_screen,
 };
 
 void
-LoadDisplay (DISPLAY_INTERFACE **pDisplay, int res_factor)
+LoadDisplay (DISPLAY_INTERFACE **pDisplay)
 {
-	// JMS_GFX: resolution selection
-	if(res_factor==2)
-		*pDisplay = &DisplayInterfaceReal640;
-	else
-		*pDisplay = &DisplayInterface;
+	*pDisplay = &DisplayInterface;
 }
 
 #endif

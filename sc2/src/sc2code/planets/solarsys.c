@@ -15,10 +15,6 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
-// JMS 2009: -Can intersect with suns in 0 planet star systems (e.g. ORZ space portal)
-//			 -Some other shit related to ORZ space portal / 0 planet star systems
-// JMS 2010: -Different gfx for ORZ space portal/sun in interplanetary
-//			 -Option to add randomness to interplanetary background stars
 
 #include "colors.h"
 #include "controls.h"
@@ -196,18 +192,7 @@ FreeIPData (void)
 
 void
 LoadIPData (void)
-{	
-	// JMS: ORZ space portal gfx replaces normal sun gfx. 
-	// Originally there was only the statement within else block and it was within the if (SpaceJunkFrame == 0) block.
-	if (CurStarDescPtr->Index==ORZ_SPACE_PORTAL_DEFINED) 
-	{
-		SunFrame = CaptureDrawable (LoadGraphic (ORZSPACEPORTAL_MASK_PMAP_ANIM));
-	}
-	else
-	{
-		SunFrame = CaptureDrawable (LoadGraphic (SUN_MASK_PMAP_ANIM));
-	}
-	
+{
 	if (SpaceJunkFrame == 0)
 	{
 		SpaceJunkFrame = CaptureDrawable (
@@ -218,6 +203,7 @@ LoadIPData (void)
 		OrbitalFrame = CaptureDrawable (
 				LoadGraphic (ORBPLAN_MASK_PMAP_ANIM));
 		SunCMap = CaptureColorMap (LoadColorMap (IPSUN_COLOR_MAP));
+		SunFrame = CaptureDrawable (LoadGraphic (SUN_MASK_PMAP_ANIM));
 
 		SpaceMusic = LoadMusic (IP_MUSIC);
 	}
@@ -254,8 +240,8 @@ LoadSolarSys (void)
 // LoadIPData ();
 	}
 
-	old_seed = TFB_SeedRandom (MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000,
-			CurStarDescPtr->star_pt.y - 6000));
+	old_seed = TFB_SeedRandom (MAKE_DWORD (CurStarDescPtr->star_pt.x,
+			CurStarDescPtr->star_pt.y));
 
 	SunFrame = SetAbsFrameIndex (SunFrame, STAR_TYPE (CurStarDescPtr->Type));
 
@@ -363,12 +349,8 @@ LoadSolarSys (void)
 			if (GLOBAL_SIS (DriveSlots[i]) == FUSION_THRUSTER)
 				++num_thrusters;
 		}
-		
-		// JMS: Chmmr explorer is not dependent from number of thrusters
-		if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-			pSolarSysState->max_ship_speed = (BYTE)(102);
-		else
-			pSolarSysState->max_ship_speed = (BYTE)((num_thrusters + 5) * IP_SHIP_THRUST_INCREMENT);
+		pSolarSysState->max_ship_speed = (BYTE)(
+				(num_thrusters + 5) * IP_SHIP_THRUST_INCREMENT);
 
 		pSolarSysState->turn_wait = IP_SHIP_TURN_WAIT;
 		for (i = 0; i < NUM_JET_SLOTS; ++i)
@@ -438,7 +420,7 @@ FreeSolarSys (void)
 
 static void
 CheckIntersect (BOOLEAN just_checking)
-{	
+{
 	COUNT i;
 	PLANET_DESC *pCurDesc;
 	INTERSECT_CONTROL ShipIntersect, PlanetIntersect;
@@ -463,12 +445,9 @@ CheckIntersect (BOOLEAN just_checking)
 
 	NewWaitPlanet = 0;
 
-	if ( (pCurDesc != pSolarSysState->SunDesc /* JMS: can't intersect with sun... */
-		  && DrawablesIntersect (&ShipIntersect, &PlanetIntersect, MAX_TIME_VALUE)) 
-		  ||									//
-		(pCurDesc == pSolarSysState->SunDesc /* ...except in systems with 0 planets. JMS */
-		 && DrawablesIntersect (&ShipIntersect, &PlanetIntersect, MAX_TIME_VALUE) //
-		 && pSolarSysState->SunDesc[0].NumPlanets == 0) )//
+	if (pCurDesc != pSolarSysState->SunDesc /* can't intersect with sun */
+			&& DrawablesIntersect (&ShipIntersect,
+			&PlanetIntersect, MAX_TIME_VALUE))
 	{
 		PlanetOffset = pCurDesc - pSolarSysState->PlanetDesc + 1;
 		MoonOffset = 1;
@@ -684,18 +663,11 @@ if (!(draw_sys_flags & DRAW_PLANETS))
 		else
 		{
 			--Size;
-			if(pSolarSysState->SunDesc[0].NumPlanets!=0)					// JMS:
-			{																// Originally there was no if statement and brackets.
-				pPlanetDesc->image.frame = SetAbsFrameIndex (OrbitalFrame,	// This is to make 0 planet star systems work.
-						(Size << FACING_SHIFT) + NORMALIZE_FACING (
-						ANGLE_TO_FACING (ARCTAN (
-						pPlanetDesc->pPrevDesc->location.x,
-						pPlanetDesc->pPrevDesc->location.y))));
-			}
-			else // JMS: This is the case for 0 planet system
-			{
-				pPlanetDesc->image.frame = SetAbsFrameIndex (SunFrame, (Size << FACING_SHIFT)+2);
-			}
+			pPlanetDesc->image.frame = SetAbsFrameIndex (OrbitalFrame,
+					(Size << FACING_SHIFT) + NORMALIZE_FACING (
+					ANGLE_TO_FACING (ARCTAN (
+					pPlanetDesc->pPrevDesc->location.x,
+					pPlanetDesc->pPrevDesc->location.y))));
 		}
 	}
 
@@ -716,10 +688,7 @@ if (!(draw_sys_flags & DRAW_PLANETS))
 		if (index < NUMBER_OF_PLANET_TYPES
 				&& (pPlanetDesc->data_index & PLANET_SHIELDED))
 		{
-			if (pPlanetDesc->flags & BLUE_SHIELD)
-				s.frame = SetAbsFrameIndex (SpaceJunkFrame, 22);
-			else
-				s.frame = SetAbsFrameIndex (SpaceJunkFrame, 17);
+			s.frame = SetAbsFrameIndex (SpaceJunkFrame, 17);
 			DrawStamp (&s);
 		}
 	}
@@ -797,17 +766,13 @@ flagship_inertial_thrust (COUNT CurrentAngle)
 		return (SHIP_AT_MAX_SPEED);
 	else
 	{
-		SIZE delta_x, delta_y, ip_increment;
+		SIZE delta_x, delta_y;
 		DWORD desired_speed;
-		
-		// JMS: Explorer accelerates at its own slooooow pace
-		if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
-			ip_increment = EXPLORER_IP_SHIP_THRUST_INCREMENT;
-		else
-			ip_increment = IP_SHIP_THRUST_INCREMENT;
-			
-		delta_x = cur_delta_x + COSINE (CurrentAngle, ip_increment);
-		delta_y = cur_delta_y + SINE (CurrentAngle, ip_increment);
+
+		delta_x = cur_delta_x
+				+ COSINE (CurrentAngle, IP_SHIP_THRUST_INCREMENT);
+		delta_y = cur_delta_y
+				+ SINE (CurrentAngle, IP_SHIP_THRUST_INCREMENT);
 		desired_speed = (DWORD) ((long) delta_x * delta_x)
 				+ (DWORD) ((long) delta_y * delta_y);
 		if (desired_speed <= (DWORD) ((UWORD) max_speed * max_speed))
@@ -826,10 +791,10 @@ flagship_inertial_thrust (COUNT CurrentAngle)
 			v = *VelocityPtr;
 
 			DeltaVelocityComponents (&v,
-					COSINE (CurrentAngle, ip_increment >> 1)
-					- COSINE (TravelAngle, ip_increment),
-					SINE (CurrentAngle, ip_increment >> 1)
-					- SINE (TravelAngle, ip_increment));
+					COSINE (CurrentAngle, IP_SHIP_THRUST_INCREMENT >> 1)
+					- COSINE (TravelAngle, IP_SHIP_THRUST_INCREMENT),
+					SINE (CurrentAngle, IP_SHIP_THRUST_INCREMENT >> 1)
+					- SINE (TravelAngle, IP_SHIP_THRUST_INCREMENT));
 			GetCurrentVelocityComponents (&v, &cur_delta_x, &cur_delta_y);
 			desired_speed =
 					(DWORD) ((long) cur_delta_x * cur_delta_x)
@@ -854,9 +819,9 @@ ProcessShipControls (void)
 {
 	COUNT index;
 	SIZE delta_x, delta_y;
-	
+
 	ClockTick ();
-	
+
 	if (CurrentInputState.key[PlayerControls[0]][KEY_UP])
 		delta_y = -1;
 	else
@@ -1478,12 +1443,7 @@ InitSolarSys (void)
 
 		GLOBAL (ShipStamp.origin.x) = SIS_SCREEN_WIDTH >> 1;
 		GLOBAL (ShipStamp.origin.y) = SIS_SCREEN_HEIGHT >> 1;
-		
-		// JMS: When exiting Orz space, exit to middle of star
-		if (GET_GAME_STATE(LEAVING_ORZ_SPACE)==1)
-			SET_GAME_STATE(LEAVING_ORZ_SPACE,0);
-		else
-			GLOBAL (ShipStamp.origin.y) += (SIS_SCREEN_HEIGHT >> 1) - 1;
+		GLOBAL (ShipStamp.origin.y) += (SIS_SCREEN_HEIGHT >> 1) - 1;
 
 		pSolarSysState->SunDesc[0].radius = MAX_ZOOM_RADIUS;
 		XFormIPLoc (&GLOBAL (ShipStamp.origin), &GLOBAL (ip_location), FALSE);
@@ -1711,7 +1671,6 @@ DrawSystem (SIZE radius, BOOLEAN IsInnerSystem)
 	PLANET_DESC *pBaseDesc;
 
 	BatchGraphics ();
-	
 	if (draw_sys_flags & DRAW_STARS)
 		DrawStarBackGround (FALSE);
 
@@ -1828,10 +1787,9 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 
 	ClearDrawable ();
 
-	// JMS: You can add randomness to background stars by uncommenting the Global tick_counts
 	old_seed = TFB_SeedRandom (
-			MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000/*+(GLOBAL (GameClock).tick_count)*/,
-			CurStarDescPtr->star_pt.y - 6000/*+(GLOBAL (GameClock).tick_count <= 0)*/ ));
+			MAKE_DWORD (CurStarDescPtr->star_pt.x,
+			CurStarDescPtr->star_pt.y));
 
 #define NUM_DIM_PIECES 8
 	s.frame = SpaceJunkFrame;
@@ -1948,14 +1906,13 @@ ExploreSolarSys (void)
 {
 	SOLARSYS_STATE SolarSysState;
 	
-	if (CurStarDescPtr == 0 || GET_GAME_STATE (LEAVING_ORZ_SPACE) >= 1) // JMS: Added Leaving Orz space check
+	if (CurStarDescPtr == 0)
 	{
 		POINT universe;
+
 		universe.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
 		universe.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
-		
 		CurStarDescPtr = FindStar (0, &universe, 1, 1);
-		
 		/*
 		// The following code used to be there, but the test is
 		// pointless.  Maybe we should panic here?
@@ -1963,7 +1920,6 @@ ExploreSolarSys (void)
 			;
 		*/
 	}
-	
 	GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (CurStarDescPtr->star_pt.x);
 	GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (CurStarDescPtr->star_pt.y);
 

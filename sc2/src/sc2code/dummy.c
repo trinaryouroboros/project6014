@@ -21,10 +21,6 @@
  * much.
  */
 
-// JMS 2010: -Added Transport ship resource pointer, which replaces that of the Ur-Quan Probe.
-//			 -Added resource pointer for Slylandros-riding-kohrah-vessels
-//			 -Added resource pointer for Lurg
-
 #include "coderes.h"
 #include "globdata.h"
 #include "races.h"
@@ -71,12 +67,10 @@ enum
 	VUX_CODE_RES,
 	YEHAT_CODE_RES,
 	ZOQFOT_CODE_RES,
-	SLYLANDRO_KOHRAH_CODE_RES,	// JMS
-	LURG_CODE_RES,				// JMS
-	
+
+	SAMATRA_CODE_RES,
 	SIS_CODE_RES,
-	TRANSPORT_CODE_RES,			// JMS
-	SAMATRA_CODE_RES,			// JMS: Moved this under SIS_CODE_RES and TRANSPORT_CODE_RES
+	PROBE_CODE_RES
 };
 
 	BYTE which_res;
@@ -283,28 +277,11 @@ enum
 				RDPtr = init_sis ();
 				break;
 			}
-			// JMS: Transport code_res replaces ur-quan probe
-			case TRANSPORT_CODE_RES:
+			case PROBE_CODE_RES:
 			{
-				extern RACE_DESC* init_transport (void);
-				
-				RDPtr = init_transport ();
-				break;
-			}
-			// JMS: Slylandros in kohr-ah ships code res
-			case SLYLANDRO_KOHRAH_CODE_RES:
-			{
-				extern RACE_DESC* init_slylandro_kohrah (void);
-				
-				RDPtr = init_slylandro_kohrah ();
-				break;
-			}
-			// JMS: Lurg code res
-			case LURG_CODE_RES:
-			{
-				extern RACE_DESC* init_lurg (void);
-				
-				RDPtr = init_lurg ();
+				extern RACE_DESC* init_probe (void);
+
+				RDPtr = init_probe ();
 				break;
 			}
 			default:
@@ -391,3 +368,4 @@ ReleaseCodeRes (void *CodeRef)
 {
 	return CodeRef;
 }
+

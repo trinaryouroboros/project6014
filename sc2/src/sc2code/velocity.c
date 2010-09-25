@@ -20,7 +20,6 @@
 
 #include "units.h"
 #include "libs/compiler.h"
-#include "libs/log.h"
 
 
 #define VELOCITY_REMAINDER(v) ((v) & (VELOCITY_SCALE - 1))

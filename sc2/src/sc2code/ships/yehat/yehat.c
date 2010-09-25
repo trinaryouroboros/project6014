@@ -49,12 +49,12 @@ static RACE_DESC yehat_desc =
 		YEHAT_RACE_STRINGS,
 		YEHAT_ICON_MASK_PMAP_ANIM,
 		YEHAT_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		800/ SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		750 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			9970, 6040,
+			4970, 40,
 		},
 	},
 	{

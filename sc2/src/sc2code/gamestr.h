@@ -19,35 +19,33 @@
  * the game. libs/strlib.h is for the string library.
  */
 
-// JMS 2009: Added label for ORZ space = "*below*"
-
 #ifndef _GAMESTR_H
 #define _GAMESTR_H
 
 
 #include "libs/strlib.h"
 
-#define STAR_STRING_COUNT       132
+#define STAR_STRING_COUNT       133
 #define DEVICE_STRING_COUNT      29
 #define CARGO_STRING_COUNT       10
 #define ELEMENTS_STRING_COUNT   133
 #define SCAN_STRING_COUNT        56
-#define STAR_NUMBER_COUNT        15
+#define STAR_NUMBER_COUNT        14
 #define PLANET_NUMBER_COUNT      32
 #define MONTHS_STRING_COUNT      12
 #define FEEDBACK_STRING_COUNT     2
 #define STARBASE_STRING_COUNT     5
 #define ENCOUNTER_STRING_COUNT    8
-#define NAVIGATION_STRING_COUNT   7 // JMS: Original value was 6. This facilitates the text "*below*".
+#define NAVIGATION_STRING_COUNT   6
 #define NAMING_STRING_COUNT       4
 #define MELEE_STRING_COUNT        9
 #define SAVEGAME_STRING_COUNT     5
-#define OPTION_STRING_COUNT       6
+#define OPTION_STRING_COUNT       5
 #define QUITMENU_STRING_COUNT     5
 #define STATUS_STRING_COUNT       6
 #define FLAGSHIP_STRING_COUNT    13
 #define ORBITSCAN_STRING_COUNT   19
-#define MAINMENU_STRING_COUNT    59
+#define MAINMENU_STRING_COUNT    57
 #define NETMELEE_STRING_COUNT    19
 
 enum {

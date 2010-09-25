@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: - Added IN_ORZSPACE condition check to PrepareSummary
-// JMS 2010: - Added Encounter pointer's home and destination pt's to house transport ships to SaveEncounter
-
 #include <assert.h>
 
 #include "save.h"
@@ -267,10 +264,6 @@ SaveEncounter (const ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	cwrite_16  (fh, EncounterPtr->origin.x);
 	cwrite_16  (fh, EncounterPtr->origin.y);
 	cwrite_16  (fh, EncounterPtr->radius);
-	cwrite_16  (fh, EncounterPtr->destination_pt.x);//JMS
-	cwrite_16  (fh, EncounterPtr->destination_pt.y);//JMS
-	cwrite_16  (fh, EncounterPtr->home_pt.x);		//JMS
-	cwrite_16  (fh, EncounterPtr->home_pt.y);		//JMS
 	// STAR_DESC fields
 	cwrite_16  (fh, EncounterPtr->SD.star_pt.x);
 	cwrite_16  (fh, EncounterPtr->SD.star_pt.y);
@@ -356,7 +349,7 @@ static void
 SaveGameState (const GAME_STATE *GSPtr, DECODE_REF fh)
 {
 	cwrite_8   (fh, 0); /* obsolete; BYTE cur_state */
-	cwrite_16   (fh, GSPtr->glob_flags);
+	cwrite_8   (fh, GSPtr->glob_flags);
 	cwrite_8   (fh, GSPtr->CrewCost);
 	cwrite_8   (fh, GSPtr->FuelCost);
 	cwrite_a8  (fh, GSPtr->ModuleCost, NUM_MODULES);
@@ -397,7 +390,7 @@ SaveGameState (const GAME_STATE *GSPtr, DECODE_REF fh)
 
 	cwrite_a8  (fh, GSPtr->GameState, sizeof (GSPtr->GameState));
 
-	//assert (sizeof (GSPtr->GameState) % 4 == 3);
+	assert (sizeof (GSPtr->GameState) % 4 == 3);
 	cwrite_8  (fh, 0); /* GAME_STATE alignment padding */
 }
 
@@ -474,8 +467,6 @@ PrepareSummary (SUMMARY_DESC *SummPtr)
 	switch (SummPtr->Activity = LOBYTE (GLOBAL (CurrentActivity)))
 	{
 		case IN_HYPERSPACE:
-			if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) // JMS: this condition stores that we're in ORZ space
-				SummPtr->Activity = IN_ORZSPACE;
 			if (GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1)
 				SummPtr->Activity = IN_QUASISPACE;
 			break;

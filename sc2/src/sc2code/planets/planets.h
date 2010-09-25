@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added definition of PLANET_RESTRICTED. Restricted planets cannot be landed on.
-
 #ifndef _PLANETS_H
 #define _PLANETS_H
 
@@ -50,7 +48,7 @@ enum
 };
 
 #define MAP_WIDTH SIS_SCREEN_WIDTH
-#define MAP_HEIGHT (75 * RESOLUTION_FACTOR - SAFE_Y) // JMS_GFX
+#define MAP_HEIGHT (75 - SAFE_Y)
 
 enum
 {
@@ -59,7 +57,7 @@ enum
 	GENERATE_MOONS,
 			// Layout of moons around a planet.
 	GENERATE_ORBITAL,
-			// Characteristics of worlds (planets and moons).
+			// Characteristics of words (planets and moons).
 
 	INIT_NPCS,
 			// Ships in the solar system, the first time it is accessed.
@@ -99,41 +97,29 @@ enum
 };
 #define MAX_SCROUNGED 50 /* max lander can hold */
 
-#define DEPLETION_RATE 0.1
-
 #define SCALE_RADIUS(r) ((r) << 6)
 #define UNSCALE_RADIUS(r) ((r) >> 6)
 #define MAX_ZOOM_RADIUS SCALE_RADIUS(128)
 #define MIN_ZOOM_RADIUS (MAX_ZOOM_RADIUS>>3)
 #define EARTH_RADIUS SCALE_RADIUS(8)
 
-#define MIN_PLANET_RADIUS SCALE_RADIUS (4 * RESOLUTION_FACTOR) // JMS_GFX
+#define MIN_PLANET_RADIUS SCALE_RADIUS (4)
 #define MAX_PLANET_RADIUS SCALE_RADIUS (124)
 
 #define DISPLAY_FACTOR ((SIS_SCREEN_WIDTH >> 1) - 8)
 
 #define NUM_SCANDOT_TRANSITIONS 4
 
-#define MIN_MOON_RADIUS (35 * RESOLUTION_FACTOR) // JMS_GFX
-#define MOON_DELTA (20  * RESOLUTION_FACTOR) // JMS_GFX
+#define MIN_MOON_RADIUS 35
+#define MOON_DELTA 20
 
 #define PLANET_SHIELDED (1 << 7)
-
-#define BLUE_SHIELD (1 << 0)
-
-// JMS: Restricted planets are not allowed to land on. For example race homeworlds
-// Earth, Procyon, Syreen homeworld. Plotwise this is because you wouldn't want aliens
-// landing on your backyard, stealing your minerals, would you?
-// Actually this is implemented just to hide the fact that Earth surface graphics
-// don't load properly upon landing... 
-#define PLANET_RESTRICTED (1 << 1)
 
 typedef struct planet_desc
 {
 	DWORD rand_seed;
 
 	BYTE data_index;
-	BYTE flags;
 	BYTE NumPlanets;
 	SIZE radius;
 	POINT location;
@@ -256,7 +242,6 @@ extern void FillOrbits (SOLARSYS_STATE *system, BYTE NumPlanets,
 extern void ScanSystem (void);
 extern void ChangeSolarSys (void);
 extern BOOLEAN DoFlagshipCommands (MENU_STATE *pMS);
-extern BOOLEAN DoFlagshipCommandsAdv (MENU_STATE *pMS); // JMS
 extern void ZoomSystem (void);
 extern void LoadSolarSys (void);
 extern void InitLander (BYTE LanderFlags);

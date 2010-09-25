@@ -54,7 +54,7 @@ static const COORD hangar_x_coords[HANGAR_SHIPS_ROW] =
 #else // use PC hangar
 // modified PC 6x2 hangar layout
 #	define HANGAR_SHIPS_ROW  6
-#	define HANGAR_Y          116
+#	define HANGAR_Y          88
 #	define HANGAR_DY         84
 
 static const COORD hangar_x_coords[HANGAR_SHIPS_ROW] =
@@ -65,7 +65,7 @@ static const COORD hangar_x_coords[HANGAR_SHIPS_ROW] =
 #	define WANT_HANGAR_ANIMATION
 #endif // USE_3DO_HANGAR
 
-#define HANGAR_SHIPS      6
+#define HANGAR_SHIPS      12
 #define HANGAR_ROWS       (HANGAR_SHIPS / HANGAR_SHIPS_ROW)
 #define HANGAR_ANIM_RATE  15 // fps
 
@@ -1088,107 +1088,71 @@ DrawBluePrint (MENU_STATE *pMS)
 			BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x16), 0x01));
 	DrawFilledStamp (&s);
 
-
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-	  {
-	  }
-	else
-	  {
-	    for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
-	      {
+	for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
+	{
 		DrawShipPiece (pMS, GLOBAL_SIS (DriveSlots[num_frames]),
 				num_frames, TRUE);
-	      }
-	    for (num_frames = 0; num_frames < NUM_JET_SLOTS; ++num_frames)
-	      {
+	}
+	for (num_frames = 0; num_frames < NUM_JET_SLOTS; ++num_frames)
+	{
 		DrawShipPiece (pMS, GLOBAL_SIS (JetSlots[num_frames]),
 				num_frames, TRUE);
-	      }
-	    for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
-	      {
+	}
+	for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
+	{
 		BYTE which_piece;
 
 		which_piece = GLOBAL_SIS (ModuleSlots[num_frames]);
 
 		if (!(pMS->CurState == SHIPYARD && which_piece == CREW_POD))
 			DrawShipPiece (pMS, which_piece, num_frames, TRUE);
-	      }
+	}
 
-	    SetContextForeGroundColor (
+	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
-	    for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
-	      {
+	for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
+	{
 		BYTE which_piece;
 
 		which_piece = GLOBAL_SIS (ModuleSlots[num_frames]);
 		if (pMS->CurState == SHIPYARD && which_piece == CREW_POD)
 			DrawShipPiece (pMS, which_piece, num_frames, TRUE);
-	      }
-	  }
-	    
-	num_frames = GLOBAL_SIS (CrewEnlisted);
-	GLOBAL_SIS (CrewEnlisted) = 0;
-	
-	while (num_frames--)
-	  {
-	    POINT pt;
-	    
-	    GetCPodCapacity (&pt);
-	    DrawPoint (&pt);
-	    
-	    ++GLOBAL_SIS (CrewEnlisted);
-	  }
+	}
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-	  {
-	  RECT r;
-	  
-	  num_frames = GLOBAL_SIS (TotalElementMass);
-	  GLOBAL_SIS (TotalElementMass) = 0;
-	  
-	  r.extent.width = 5;
-	  r.extent.height = 1;
-	  while (num_frames)
-	    {
-	      COUNT m;
-	      
-	      m = num_frames < SBAY_MASS_PER_ROW ?
-		num_frames : SBAY_MASS_PER_ROW;
-	      GLOBAL_SIS (TotalElementMass) += m;
-	      GetSBayCapacity (&r.corner);
-	      if (r.corner.x == 40)
+	{
+		num_frames = GLOBAL_SIS (CrewEnlisted);
+		GLOBAL_SIS (CrewEnlisted) = 0;
+
+		while (num_frames--)
 		{
-		  r.extent.width = 3;
-		}
-	      // BW: kinda hacky but the original procedure is not really logical either...
-	      DrawFilledRectangle (&r);
-	      num_frames -= m;
-	    }
-	  }
-	else
-	  {
-	  RECT r;
-	  
-	  num_frames = GLOBAL_SIS (TotalElementMass);
-	  GLOBAL_SIS (TotalElementMass) = 0;
-	  
-	  r.extent.width = 9;
-	  r.extent.height = 1;
-	  while (num_frames)
-	    {
-	      COUNT m;
-	      
-	      m = num_frames < SBAY_MASS_PER_ROW ?
-		num_frames : SBAY_MASS_PER_ROW;
-	      GLOBAL_SIS (TotalElementMass) += m;
-	      GetSBayCapacity (&r.corner);
-	      DrawFilledRectangle (&r);
-	      num_frames -= m;
-	    }
-	  }
-	
+			POINT pt;
 
-	
+			GetCPodCapacity (&pt);
+			DrawPoint (&pt);
+
+			++GLOBAL_SIS (CrewEnlisted);
+		}
+	}
+	{
+		RECT r;
+
+		num_frames = GLOBAL_SIS (TotalElementMass);
+		GLOBAL_SIS (TotalElementMass) = 0;
+
+		r.extent.width = 9;
+		r.extent.height = 1;
+		while (num_frames)
+		{
+			COUNT m;
+
+			m = num_frames < SBAY_MASS_PER_ROW ?
+					num_frames : SBAY_MASS_PER_ROW;
+			GLOBAL_SIS (TotalElementMass) += m;
+			GetSBayCapacity (&r.corner);
+			DrawFilledRectangle (&r);
+			num_frames -= m;
+		}
+	}
 	if (GLOBAL_SIS (FuelOnBoard) > FUEL_RESERVE)
 	{
 		DWORD FuelVolume;
@@ -1197,19 +1161,17 @@ DrawBluePrint (MENU_STATE *pMS)
 		FuelVolume = GLOBAL_SIS (FuelOnBoard) - FUEL_RESERVE;
 		GLOBAL_SIS (FuelOnBoard) = FUEL_RESERVE;
 
-		r.extent.width = 1;
+		r.extent.width = 3;
 		r.extent.height = 1;
 		while (FuelVolume)
 		{
 			COUNT m;
 
 			GetFTankCapacity (&r.corner);
-			r.corner.x += 36;
-			r.corner.y += 18;
 			DrawPoint (&r.corner);
-			r.corner.y += r.extent.height + 1;
+			r.corner.x += r.extent.width + 1;
 			DrawPoint (&r.corner);
-			r.corner.y -= r.extent.height;
+			r.corner.x -= r.extent.width;
 			SetContextForeGroundColor (
 					SetContextBackGroundColor (BLACK_COLOR));
 			DrawFilledRectangle (&r);

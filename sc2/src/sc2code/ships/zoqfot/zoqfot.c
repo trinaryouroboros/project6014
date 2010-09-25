@@ -50,12 +50,12 @@ static RACE_DESC zoqfotpik_desc =
 		ZOQFOTPIK_RACE_STRINGS,
 		ZOQFOTPIK_ICON_MASK_PMAP_ANIM,
 		ZOQFOTPIK_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial SoI radius */
+		320 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			0,0,
+			3761, 5333,
 		},
 	},
 	{

@@ -16,14 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Certain systems have freight transport ships. These ships leave the system for their 
-//			  supposed freight run on first day of the month + every date divisible with seven thereafter.
-//			 
-//			 -More Transport ship mechanics: The ship's status flag is 0 when orbiting a planet, 1 when
-//			  leaving for hyperspace and 2 when arriving from hyperspace.
-//
-//			 -Removed some Ur-Quan probe conditions.
-
 #include "collide.h"
 #include "globdata.h"
 #include "init.h"
@@ -31,7 +23,6 @@
 #include "grpinfo.h"
 #include "encount.h"
 #include "libs/mathlib.h"
-#include "libs/log.h"
 
 
 void
@@ -50,6 +41,7 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 		if (GroupPtr->race_id == which_race)
 		{
 			BYTE task;
+
 			task = GroupPtr->task | IGNORE_FLAGSHIP;
 
 			if (target_loc == 0)
@@ -72,16 +64,6 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 						(COUNT)TFB_Random ()
 						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
 #endif /* OLD */
-				// JMS
-				if (target_loc==0 && GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP)
-				{
-				task &= ~IGNORE_FLAGSHIP;
-				task = ON_STATION;
-				target_loc = (BYTE)((
-						(COUNT)TFB_Random ()
-						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
-					
-				}
 				if (!(task & REFORM_GROUP))
 				{
 					if ((task & ~IGNORE_FLAGSHIP) != EXPLORE)
@@ -92,6 +74,7 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 								<< FACING_SHIFT;
 				}
 			}
+
 			GroupPtr->task = task;
 			GroupPtr->dest_loc = target_loc;
 		}
@@ -109,7 +92,6 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 	SIZE radius;
 	POINT dest_pt;
 	SIZE vdx, vdy;
-	SIZE tdx, tdy;
 	ELEMENT *EPtr;
 	IP_GROUP *GroupPtr;
 
@@ -164,35 +146,7 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 			GroupPtr->group_counter = ((COUNT)TFB_Random ()
 					% MAX_REVOLUTIONS) << FACING_SHIFT;
 	}
-	
-	// JMS: If Slylandro-kohrah battlegroup is fought, all Slylandro battle groups escape from the system
-	if (GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP && GET_GAME_STATE (ENEMY_ESCAPE_OCCURRED))
-	{
-		GroupPtr->task = FLEE;
-		GroupPtr->dest_loc = 0;
-	}
-	
-	// JMS: A transport ship leaves star system on the first day of the month and on every seventh day thereafter.
-	if (GroupPtr->race_id == TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
-	{
-		GroupPtr->task = FLEE;
-		GroupPtr->dest_loc = 0;
-	}
 
-	// JMS: If a transport ship is arriving its destination, zero its status flag once it reaches destination planet.
-	if (GroupPtr->race_id == TRANSPORT_SHIP 
-		&& GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 4
-		&& group_loc == GroupPtr->dest_loc)
-	{
-		tdx = GroupPtr->loc.x;
-		tdy = GroupPtr->loc.y;
-
-		if ((long)tdx * tdx + (long)tdy * tdy <= (long)ORBIT_RADIUS * ORBIT_RADIUS)
-		{
-			SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 0);
-		}
-	}
-	
 	if (!(task & REFORM_GROUP))
 	{
 		if ((task & ~(IGNORE_FLAGSHIP | REFORM_GROUP)) != FLEE)
@@ -230,9 +184,8 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 			if (group_loc != 0) /* if in planetary views */
 			{
 				detect_dist *= (MAX_ZOOM_RADIUS / MIN_ZOOM_RADIUS);
-				// JMS: Bye bye, Ur-Quan probe.
-				//if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
-				//	detect_dist <<= 1;
+				if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
+					detect_dist <<= 1;
 			}
 			vdx = GLOBAL (ip_location.x) - GroupPtr->loc.x;
 			vdy = GLOBAL (ip_location.y) - GroupPtr->loc.y;
@@ -249,18 +202,6 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 			}
 		}
 	}
-	
-	// JMS: If escaping Slylandro-kohrah battlegroup is caught and talked to peace, the battlegroups stop fleeing from system.
-	if (GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP 
-		&& GET_GAME_STATE (ENEMY_ESCAPE_OCCURRED) == 0
-		&& GroupPtr->task == FLEE)
-	{
-		GroupPtr->task = ON_STATION | IGNORE_FLAGSHIP;
-		GroupPtr->dest_loc = (BYTE)(((COUNT)TFB_Random () % pSolarSysState->SunDesc[0].NumPlanets) + 1);
-		
-		if (GroupPtr->dest_loc == 0)
-			GroupPtr->dest_loc = 1;
-	}	
 
 	GetCurrentVelocityComponents (&EPtr->velocity, &vdx, &vdy);
 
@@ -289,8 +230,6 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		{
 			if (GroupPtr->dest_loc == 0)
 				dest_pt = GLOBAL (ip_location);
-			
-			// ship is circling around a planet.
 			else
 			{
 				COUNT orbit_dist;
@@ -473,16 +412,6 @@ CheckGetAway:
 					EPtr->life_span = 0;
 					EPtr->state_flags |= DISAPPEARING | NONSOLID;
 					GroupPtr->in_system = 0;
-					
-					// JMS: When one Slylandro-kohrah group has exited the system
-					// it is safe to assume that all groups have been given the FLEE flag.
-					// Thus we can finally zero the game state that tells the sly-kohrs to flee the system.
-					if(GET_GAME_STATE(ENEMY_ESCAPE_OCCURRED))
-						SET_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 0);
-					
-					// JMS: Freight Transport ship has left the system.
-					if (GroupPtr->race_id==TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
-						SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 2);
 					return;
 				}
 				else
@@ -616,9 +545,7 @@ ip_group_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 	{
 		EncounterGroup = GroupPtr->group_id;
 
-		// JMS: So long, Ur-Quan probe.
-		//if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
-		if(0)
+		if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
 		{
 			GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
 			GroupPtr->dest_loc = 0;

@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Removed the arc welder anims that created black spots on top of earth graphics.
-//			 -Added rudimentary dialogue regarding other races and lost shofixti mission
-
 #include "comm/commall.h"
 #include "comm/comandr/resinst.h"
 #include "comm/starbas/strings.h"
@@ -55,7 +52,7 @@ static LOCDATA commander_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	STARBASE_CONVERSATION_PHRASES, /* PlayerPhrases */
-	3, /* NumAnimations */
+	10, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{ /* Blink */
 			1, /* StartIndex */
@@ -71,6 +68,62 @@ static LOCDATA commander_desc =
 			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 40, 0, /* FrameRate */
 			ONE_SECOND * 2, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Arc welder 0 */
+			40, /* StartIndex */
+			7, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 40, 0, /* FrameRate */
+			0, ONE_SECOND * 8, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Arc welder 1 */
+			47, /* StartIndex */
+			8, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 40, 0, /* FrameRate */
+			0, ONE_SECOND * 8, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Arc welder 2 */
+			55, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 40, 0, /* FrameRate */
+			0, ONE_SECOND * 8, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Arc welder 3 */
+			61, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 40, 0, /* FrameRate */
+			0, ONE_SECOND * 8, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Arc welder 4 */
+			67, /* StartIndex */
+			7, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 40, 0, /* FrameRate */
+			0, ONE_SECOND * 8, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Arc welder 5 */
+			74, /* StartIndex */
+			11, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 40, 0, /* FrameRate */
+			0, ONE_SECOND * 8, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Arc welder 6 */
+			85, /* StartIndex */
+			10, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 40, 0, /* FrameRate */
+			0, ONE_SECOND * 8, /* RestartRate */
 			0, /* BlockMask */
 		},
 		{ /* Flagship picture */
@@ -159,271 +212,813 @@ ByeBye (RESPONSE_REF R)
 		}
 
 		NPCPhrase (pStr0);
+		if (speechVolumeScale == 0.0f)
+		{
+			NPCPhrase (SPACE);
+			NPCPhrase (GLOBAL_PLAYER_NAME);
+		}
+		NPCPhrase (pStr1);
 	}
 }
 
+static void NeedInfo (RESPONSE_REF R);
+static void TellHistory (RESPONSE_REF R);
 static void AlienRaces (RESPONSE_REF R);
+
+static BYTE stack0,
+			stack1,
+			stack2,
+			stack3;
 
 static void
 AllianceInfo (RESPONSE_REF R)
 {
-#define ALLIANCE_CHMMR (1 << 0)
-#define ALLIANCE_SHOFIXTI (1 << 1)
-#define ALLIANCE_YEHATPKUNK (1 << 2)
-#define ALLIANCE_ARILOU (1 << 3)
-#define ALLIANCE_SYREEN (1 << 4)
-#define ALLIANCE_SPATHI (1 << 5)
-#define ALLIANCE_ORZ	(1 << 6)
-
-#define ALLIANCE_SUPOXUTWIG (1 << 0)
-#define ALLIANCE_ZOQFOT (1 << 1)
-	
+#define ALLIANCE_SHOFIXTI (1 << 0)
+#define ALLIANCE_YEHAT (1 << 1)
+#define ALLIANCE_ARILOU (1 << 2)
+#define ALLIANCE_CHENJESU (1 << 3)
+#define ALLIANCE_MMRNMHRM (1 << 4)
+#define ALLIANCE_SYREEN (1 << 5)
 	static BYTE AllianceMask = 0;
-	static BYTE AllianceMask2 = 0;
 
-	if (PLAYER_SAID (R, alliance_races))
+	if (PLAYER_SAID (R, what_about_alliance))
 	{
-		NPCPhrase (WHICH_ALLY);
+		NPCPhrase (WHICH_ALLIANCE);
 		AllianceMask = 0;
-	}
-	else if (PLAYER_SAID (R, chmmr))
-	{
-		NPCPhrase (CHMMR_INFO_SB);
-		AllianceMask |= ALLIANCE_CHMMR;
 	}
 	else if (PLAYER_SAID (R, shofixti))
 	{
-		NPCPhrase (SHOFIXTI_INFO_SB);
+		NPCPhrase (ABOUT_SHOFIXTI);
 		AllianceMask |= ALLIANCE_SHOFIXTI;
 	}
-	else if (PLAYER_SAID (R, yehat_and_pkunk))
+	else if (PLAYER_SAID (R, yehat))
 	{
-		NPCPhrase (YEHAT_AND_PKUNK_INFO_SB);
-		AllianceMask |= ALLIANCE_YEHATPKUNK;
+		NPCPhrase (ABOUT_YEHAT);
+		AllianceMask |= ALLIANCE_YEHAT;
 	}
 	else if (PLAYER_SAID (R, arilou))
 	{
-		NPCPhrase (ARILOU_INFO_SB);
+		NPCPhrase (ABOUT_ARILOU);
 		AllianceMask |= ALLIANCE_ARILOU;
+	}
+	else if (PLAYER_SAID (R, chenjesu))
+	{
+		NPCPhrase (ABOUT_CHENJESU);
+		AllianceMask |= ALLIANCE_CHENJESU;
+	}
+	else if (PLAYER_SAID (R, mmrnmhrm))
+	{
+		NPCPhrase (ABOUT_MMRNMHRM);
+		AllianceMask |= ALLIANCE_MMRNMHRM;
 	}
 	else if (PLAYER_SAID (R, syreen))
 	{
-		NPCPhrase (SYREEN_INFO_SB);
+		NPCPhrase (ABOUT_SYREEN);
 		AllianceMask |= ALLIANCE_SYREEN;
 	}
-	else if (PLAYER_SAID (R, spathi))
-	{
-		NPCPhrase (SPATHI_INFO_SB);
-		AllianceMask |= ALLIANCE_SPATHI;
-	}
-	else if (PLAYER_SAID (R, orz))
-	{
-		NPCPhrase (ORZ_INFO_SB);
-		AllianceMask |= ALLIANCE_ORZ;
-	}
-	else if (PLAYER_SAID (R, supox_and_utwig))
-	{
-		NPCPhrase (SUPOX_UTWIG_INFO_SB);
-		AllianceMask2 |= ALLIANCE_SUPOXUTWIG;
-	}
-	else if (PLAYER_SAID (R, zoqfot))
-	{
-		NPCPhrase (ZOQFOT_INFO_SB);
-		AllianceMask2 |= ALLIANCE_ZOQFOT;
-	}
 
-	if (!(AllianceMask & ALLIANCE_CHMMR))
-		Response (chmmr, AllianceInfo);
 	if (!(AllianceMask & ALLIANCE_SHOFIXTI))
 		Response (shofixti, AllianceInfo);
-	if (!(AllianceMask & ALLIANCE_YEHATPKUNK))
-		Response (yehat_and_pkunk, AllianceInfo);
+	if (!(AllianceMask & ALLIANCE_YEHAT))
+		Response (yehat, AllianceInfo);
 	if (!(AllianceMask & ALLIANCE_ARILOU))
 		Response (arilou, AllianceInfo);
+	if (!(AllianceMask & ALLIANCE_CHENJESU))
+		Response (chenjesu, AllianceInfo);
+	if (!(AllianceMask & ALLIANCE_MMRNMHRM))
+		Response (mmrnmhrm, AllianceInfo);
 	if (!(AllianceMask & ALLIANCE_SYREEN))
 		Response (syreen, AllianceInfo);
-	if (!(AllianceMask & ALLIANCE_SPATHI))
-		Response (spathi, AllianceInfo);
-	if (!(AllianceMask & ALLIANCE_ORZ))
-		Response (orz, AllianceInfo);
-	if (!(AllianceMask2 & ALLIANCE_SUPOXUTWIG))
-		Response (supox_and_utwig, AllianceInfo);
-	if (!(AllianceMask2 & ALLIANCE_ZOQFOT))
-		Response (zoqfot, AllianceInfo);
-	Response (enough_allies, AlienRaces);
+	Response (enough_alliance, AlienRaces);
 }
 
 static void
-HostileInfo (RESPONSE_REF R)
+HierarchyInfo (RESPONSE_REF R)
 {
-#define HOSTILE_URQUAN (1 << 0)
-#define HOSTILE_KOHRAH (1 << 1)
-#define HOSTILE_VUX (1 << 2)
-#define HOSTILE_MYCON (1 << 3)
-#define HOSTILE_ANDROSYNTH (1 << 4)
-#define HOSTILE_ILWRATH (1 << 5)
-#define HOSTILE_THRADDASH (1 << 6)
-	
-	static BYTE HostileMask = 0;
+#define HIERARCHY_MYCON (1 << 0)
+#define HIERARCHY_SPATHI (1 << 1)
+#define HIERARCHY_UMGAH (1 << 2)
+#define HIERARCHY_ANDROSYNTH (1 << 3)
+#define HIERARCHY_ILWRATH (1 << 4)
+#define HIERARCHY_VUX (1 << 5)
+	static BYTE HierarchyMask = 0;
 
-	if (PLAYER_SAID (R, hostile_races))
+	if (PLAYER_SAID (R, what_about_hierarchy))
 	{
-		NPCPhrase (WHICH_ENEMY);
-		HostileMask = 0;
-	}
-	else if (PLAYER_SAID (R, urquan))
-	{
-		NPCPhrase (UR_QUAN_INFO_SB);
-		HostileMask |= HOSTILE_URQUAN;
-	}
-	else if (PLAYER_SAID (R, kohrah))
-	{
-		NPCPhrase (KOHR_AH_INFO_SB);
-		HostileMask |= HOSTILE_KOHRAH;
-	}
-	else if (PLAYER_SAID (R, vux))
-	{
-		NPCPhrase (VUX_INFO_SB);
-		HostileMask |= HOSTILE_VUX;
+		NPCPhrase (WHICH_HIERARCHY);
+		HierarchyMask = 0;
 	}
 	else if (PLAYER_SAID (R, mycon))
 	{
-		NPCPhrase (MYCON_INFO_SB);
-		HostileMask |= HOSTILE_MYCON;
+		NPCPhrase (ABOUT_MYCON);
+		HierarchyMask |= HIERARCHY_MYCON;
 	}
-	else if (PLAYER_SAID (R, androsynth))
+	else if (PLAYER_SAID (R, spathi))
 	{
-		NPCPhrase (ANDROSYNTH_INFO_SB);
-		HostileMask |= HOSTILE_ANDROSYNTH;
-	}
-	else if (PLAYER_SAID (R, ilwrath))
-	{
-		NPCPhrase (ILWRATH_INFO_SB);
-		HostileMask |= HOSTILE_ILWRATH;
-	}
-	else if (PLAYER_SAID (R, thraddash))
-	{
-		NPCPhrase (THRADDASH_INFO_SB);
-		HostileMask |= HOSTILE_THRADDASH;
-	}
-
-	if (!(HostileMask & HOSTILE_URQUAN))
-		Response (urquan, HostileInfo);
-	if (!(HostileMask & HOSTILE_KOHRAH))
-		Response (kohrah, HostileInfo);
-	if (!(HostileMask & HOSTILE_VUX))
-		Response (vux, HostileInfo);
-	if (!(HostileMask & HOSTILE_MYCON))
-		Response (mycon, HostileInfo);
-	if (!(HostileMask & HOSTILE_ANDROSYNTH))
-		Response (androsynth, HostileInfo);
-	if (!(HostileMask & HOSTILE_ILWRATH))
-		Response (ilwrath, HostileInfo);
-	if (!(HostileMask & HOSTILE_THRADDASH))
-		Response (thraddash, HostileInfo);
-	Response (enough_enemies, AlienRaces);
-}
-
-static void
-NeutralInfo (RESPONSE_REF R)
-{
-#define NEUTRAL_DRUUGE (1 << 0)
-#define NEUTRAL_UMGAH (1 << 1)
-#define NEUTRAL_MELNORME (1 << 2)
-#define NEUTRAL_SLYLANDRO (1 << 3)
-	static BYTE NeutralMask = 0;
-	static BYTE MelnormeInfoState = 0;
-	
-	if (PLAYER_SAID (R, neutral_races))
-	{
-		NPCPhrase (WHICH_NEUTRAL);
-		NeutralMask = 0;
-	}
-	else if (PLAYER_SAID (R, druuge))
-	{
-		NPCPhrase (DRUUGE_INFO_SB);
-		NeutralMask |= NEUTRAL_DRUUGE;
+		NPCPhrase (ABOUT_SPATHI);
+		HierarchyMask |= HIERARCHY_SPATHI;
 	}
 	else if (PLAYER_SAID (R, umgah))
 	{
-		NPCPhrase (UMGAH_INFO_SB);
-		NeutralMask |= NEUTRAL_UMGAH;
+		NPCPhrase (ABOUT_UMGAH);
+		HierarchyMask |= HIERARCHY_UMGAH;
 	}
-	else if (PLAYER_SAID (R, melnorme))
+	else if (PLAYER_SAID (R, androsynth))
 	{
-		NPCPhrase (MELNORME_INFO_SB);
-		NeutralMask |= NEUTRAL_MELNORME;
-		++MelnormeInfoState;
+		NPCPhrase (ABOUT_ANDROSYNTH);
+		HierarchyMask |= HIERARCHY_ANDROSYNTH;
 	}
-	else if (PLAYER_SAID (R, where_melnorme_planet))
+	else if (PLAYER_SAID (R, ilwrath))
 	{
-		NPCPhrase (MELNORME_INFO_SB_2);
-		++MelnormeInfoState;
+		NPCPhrase (ABOUT_ILWRATH);
+		HierarchyMask |= HIERARCHY_ILWRATH;
 	}
-	else if (PLAYER_SAID (R, slylandro))
+	else if (PLAYER_SAID (R, vux))
 	{
-		NPCPhrase (SLYLANDRO_INFO_SB);
-		NeutralMask |= NEUTRAL_SLYLANDRO;
+		NPCPhrase (ABOUT_VUX);
+		HierarchyMask |= HIERARCHY_VUX;
 	}
-	
-	if (!(NeutralMask & NEUTRAL_UMGAH))
-		Response (umgah, NeutralInfo);
-	if (!(NeutralMask & NEUTRAL_DRUUGE))
-		Response (druuge, NeutralInfo);
-	if (!(NeutralMask & NEUTRAL_MELNORME))
-		Response (melnorme, NeutralInfo);
-	if (MelnormeInfoState == 1)
-		Response (where_melnorme_planet, NeutralInfo);
-	if (!(NeutralMask & NEUTRAL_SLYLANDRO))
-		Response (slylandro, NeutralInfo);
-	Response (enough_neutral, AlienRaces);
-}
 
-static void NormalStarbase (RESPONSE_REF R);
+	if (!(HierarchyMask & HIERARCHY_MYCON))
+		Response (mycon, HierarchyInfo);
+	if (!(HierarchyMask & HIERARCHY_SPATHI))
+		Response (spathi, HierarchyInfo);
+	if (!(HierarchyMask & HIERARCHY_UMGAH))
+		Response (umgah, HierarchyInfo);
+	if (!(HierarchyMask & HIERARCHY_ANDROSYNTH))
+		Response (androsynth, HierarchyInfo);
+	if (!(HierarchyMask & HIERARCHY_ILWRATH))
+		Response (ilwrath, HierarchyInfo);
+	if (!(HierarchyMask & HIERARCHY_VUX))
+		Response (vux, HierarchyInfo);
+	Response (enough_hierarchy, AlienRaces);
+}
 
 static void
 AlienRaces (RESPONSE_REF R)
 {
 #define RACES_ALLIANCE (1 << 0)
-#define RACES_HOSTILE (1 << 1)
-#define RACES_NEUTRAL (1 << 2)
+#define RACES_HIERARCHY (1 << 1)
+#define RACES_OTHER (1 << 2)
 	static BYTE RacesMask = 0;
 
-	if (PLAYER_SAID (R, info_on_races))
+	if (PLAYER_SAID (R, alien_races))
 	{
 		NPCPhrase (WHICH_ALIEN);
 		RacesMask = 0;
 	}
-	else if (PLAYER_SAID (R, enough_allies))
+	else if (PLAYER_SAID (R, enough_alliance))
 	{
-		NPCPhrase (ENOUGH_ALLIES_OK);
+		NPCPhrase (OK_ENOUGH_ALLIANCE);
 		RacesMask |= RACES_ALLIANCE;
 	}
-	else if (PLAYER_SAID (R, enough_enemies))
+	else if (PLAYER_SAID (R, enough_hierarchy))
 	{
-		NPCPhrase (ENOUGH_HOSTILES_OK);
-		RacesMask |= RACES_HOSTILE;
+		NPCPhrase (OK_ENOUGH_HIERARCHY);
+		RacesMask |= RACES_HIERARCHY;
 	}
-	else if (PLAYER_SAID (R, enough_neutral))
+	else if (PLAYER_SAID (R, what_about_other))
 	{
-		NPCPhrase (ENOUGH_NEUTRAL_OK);
-		RacesMask |= RACES_NEUTRAL;
+		NPCPhrase (ABOUT_OTHER);
+		RacesMask |= RACES_OTHER;
 	}
 
 	if (!(RacesMask & RACES_ALLIANCE))
 	{
-		Response (alliance_races, AllianceInfo);
+		Response (what_about_alliance, AllianceInfo);
 	}
-	if (!(RacesMask & RACES_HOSTILE))
+	if (!(RacesMask & RACES_HIERARCHY))
 	{
-		Response (hostile_races, HostileInfo);
+		Response (what_about_hierarchy, HierarchyInfo);
 	}
-	if (!(RacesMask & RACES_NEUTRAL))
+	if (!(RacesMask & RACES_OTHER))
 	{
-		Response (neutral_races, NeutralInfo);
+		Response (what_about_other, AlienRaces);
 	}
-	
-	Response (enough_info_races, NormalStarbase);
+	Response (enough_aliens, TellHistory);
+}
+
+static void
+WarInfo (RESPONSE_REF R)
+{
+#define WAR_STARTED (1 << 0)
+#define WAR_WAS_LIKE (1 << 1)
+#define WAR_LOST (1 << 2)
+#define WAR_AFTERMATH (1 << 3)
+	static BYTE WarMask = 0;
+
+	if (PLAYER_SAID (R, the_war))
+	{
+		NPCPhrase (WHICH_WAR);
+		WarMask = 0;
+	}
+	else if (PLAYER_SAID (R, what_started_war))
+	{
+		NPCPhrase (URQUAN_STARTED_WAR);
+		WarMask |= WAR_STARTED;
+	}
+	else if (PLAYER_SAID (R, what_was_war_like))
+	{
+		NPCPhrase (WAR_WAS_LIKE_SO);
+		WarMask |= WAR_WAS_LIKE;
+	}
+	else if (PLAYER_SAID (R, why_lose_war))
+	{
+		NPCPhrase (LOST_WAR_BECAUSE);
+		WarMask |= WAR_LOST;
+	}
+	else if (PLAYER_SAID (R, what_after_war))
+	{
+		NPCPhrase (AFTER_WAR);
+		WarMask |= WAR_AFTERMATH;
+	}
+
+	if (!(WarMask & WAR_STARTED))
+		Response (what_started_war, WarInfo);
+	if (!(WarMask & WAR_WAS_LIKE))
+		Response (what_was_war_like, WarInfo);
+	if (!(WarMask & WAR_LOST))
+		Response (why_lose_war, WarInfo);
+	if (!(WarMask & WAR_AFTERMATH))
+		Response (what_after_war, WarInfo);
+	Response (enough_war, TellHistory);
+}
+
+static void
+AncientHistory (RESPONSE_REF R)
+{
+#define ANCIENT_PRECURSORS (1 << 0)
+#define ANCIENT_RACES (1 << 1)
+#define ANCIENT_EARTH (1 << 2)
+	static BYTE AncientMask = 0;
+
+	if (PLAYER_SAID (R, ancient_history))
+	{
+		NPCPhrase (WHICH_ANCIENT);
+		AncientMask = 0;
+	}
+	else if (PLAYER_SAID (R, precursors))
+	{
+		NPCPhrase (ABOUT_PRECURSORS);
+		AncientMask |= ANCIENT_PRECURSORS;
+	}
+	else if (PLAYER_SAID (R, old_races))
+	{
+		NPCPhrase (ABOUT_OLD_RACES);
+		AncientMask |= ANCIENT_RACES;
+	}
+	else if (PLAYER_SAID (R, aliens_on_earth))
+	{
+		NPCPhrase (ABOUT_ALIENS_ON_EARTH);
+		AncientMask |= ANCIENT_EARTH;
+	}
+
+	if (!(AncientMask & ANCIENT_PRECURSORS))
+		Response (precursors, AncientHistory);
+	if (!(AncientMask & ANCIENT_RACES))
+		Response (old_races, AncientHistory);
+	if (!(AncientMask & ANCIENT_EARTH))
+		Response (aliens_on_earth, AncientHistory);
+	Response (enough_ancient, TellHistory);
+}
+
+static void
+TellHistory (RESPONSE_REF R)
+{
+	RESPONSE_REF pstack[3];
+
+	if (PLAYER_SAID (R, history))
+	{
+		NPCPhrase (WHICH_HISTORY);
+		stack0 = stack1 = stack2 = 0;
+	}
+	else if (PLAYER_SAID (R, enough_aliens))
+	{
+		NPCPhrase (OK_ENOUGH_ALIENS);
+
+		stack0 = 1;
+	}
+	else if (PLAYER_SAID (R, enough_war))
+	{
+		NPCPhrase (OK_ENOUGH_WAR);
+
+		stack1 = 1;
+	}
+	else if (PLAYER_SAID (R, enough_ancient))
+	{
+		NPCPhrase (OK_ENOUGH_ANCIENT);
+
+		stack2 = 1;
+	}
+
+	switch (stack0)
+	{
+		case 0:
+			pstack[0] = alien_races;
+			break;
+		case 1:
+			pstack[0] = 0;
+			break;
+	}
+	switch (stack1)
+	{
+		case 0:
+			pstack[1] = the_war;
+			break;
+		case 1:
+			pstack[1] = 0;
+			break;
+	}
+	switch (stack2)
+	{
+		case 0:
+			pstack[2] = ancient_history;
+			break;
+		case 1:
+			pstack[2] = 0;
+			break;
+	}
+
+	if (pstack[0])
+	{
+		Response (pstack[0], AlienRaces);
+	}
+	if (pstack[1])
+	{
+		Response (pstack[1], WarInfo);
+	}
+	if (pstack[2])
+	{
+		Response (pstack[2], AncientHistory);
+	}
+	Response (enough_history, NeedInfo);
+}
+
+static void
+DefeatUrquan (RESPONSE_REF R)
+{
+#define HOW_FIND_URQUAN (1 << 0)
+#define HOW_FIGHT_URQUAN (1 << 1)
+#define HOW_ALLY_AGAINST_URQUAN (1 << 2)
+#define HOW_STRONG_AGAINST_URQUAN (1 << 3)
+	static BYTE DefeatMask = 0;
+
+	if (PLAYER_SAID (R, how_defeat))
+	{
+		NPCPhrase (DEFEAT_LIKE_SO);
+		DefeatMask = 0;
+	}
+	else if (PLAYER_SAID (R, how_find_urquan))
+	{
+		NPCPhrase (FIND_URQUAN);
+		DefeatMask |= HOW_FIND_URQUAN;
+	}
+	else if (PLAYER_SAID (R, how_fight_urquan))
+	{
+		NPCPhrase (FIGHT_URQUAN);
+		DefeatMask |= HOW_FIGHT_URQUAN;
+	}
+	else if (PLAYER_SAID (R, how_ally))
+	{
+		NPCPhrase (ALLY_LIKE_SO);
+		DefeatMask |= HOW_ALLY_AGAINST_URQUAN;
+	}
+	else if (PLAYER_SAID (R, how_get_strong))
+	{
+		NPCPhrase (STRONG_LIKE_SO);
+		DefeatMask |= HOW_STRONG_AGAINST_URQUAN;
+	}
+
+	if (!(DefeatMask & HOW_FIND_URQUAN))
+		Response (how_find_urquan, DefeatUrquan);
+	if (!(DefeatMask & HOW_FIGHT_URQUAN))
+		Response (how_fight_urquan, DefeatUrquan);
+	if (!(DefeatMask & HOW_ALLY_AGAINST_URQUAN))
+		Response (how_ally, DefeatUrquan);
+	if (!(DefeatMask & HOW_STRONG_AGAINST_URQUAN))
+		Response (how_get_strong, DefeatUrquan);
+	Response (enough_defeat, TellMission);
+}
+
+static void
+AnalyzeCondition (void)
+{
+	BYTE i;
+	BYTE num_thrusters = 0,
+				num_jets = 0,
+				num_guns = 0,
+				num_bays = 0,
+				num_batts = 0,
+				num_track = 0,
+				num_defense = 0;
+	BOOLEAN HasMinimum;
+
+	for (i = 0; i < NUM_DRIVE_SLOTS; ++i)
+	{
+		if (GLOBAL_SIS (DriveSlots[i]) < EMPTY_SLOT)
+			++num_thrusters;
+	}
+	for (i = 0; i < NUM_JET_SLOTS; ++i)
+	{
+		if (GLOBAL_SIS (JetSlots[i]) < EMPTY_SLOT)
+			++num_jets;
+	}
+	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
+	{
+		BYTE which_piece;
+
+		switch (which_piece = GLOBAL_SIS (ModuleSlots[i]))
+		{
+			case STORAGE_BAY:
+				++num_bays;
+				break;
+			case DYNAMO_UNIT:
+			case SHIVA_FURNACE:
+				num_batts += 1 + (which_piece - DYNAMO_UNIT);
+				break;
+			case GUN_WEAPON:
+			case BLASTER_WEAPON:
+			case CANNON_WEAPON:
+				num_guns += 1 + (which_piece - GUN_WEAPON);
+				break;
+			case TRACKING_SYSTEM:
+				++num_track;
+				break;
+			case ANTIMISSILE_DEFENSE:
+				++num_defense;
+				break;
+		}
+	}
+	if (num_track && num_guns)
+		num_guns += 2;
+
+	HasMinimum = (num_thrusters >= 7 && num_jets >= 5
+			&& GLOBAL_SIS (CrewEnlisted) >= CREW_POD_CAPACITY
+			&& GLOBAL_SIS (FuelOnBoard) >= FUEL_TANK_CAPACITY
+			&& num_bays >= 1 && GLOBAL_SIS (NumLanders)
+			&& num_batts >= 1 && num_guns >= 2);
+	NPCPhrase (LETS_SEE);
+	if (!HasMinimum && GET_GAME_STATE (CHMMR_BOMB_STATE) < 2)
+	{
+		NPCPhrase (IMPROVE_1);
+		if (num_thrusters < 7)
+			NPCPhrase (NEED_THRUSTERS_1);
+		if (num_jets < 5)
+			NPCPhrase (NEED_TURN_1);
+		if (num_guns < 2)
+			NPCPhrase (NEED_GUNS_1);
+		if (GLOBAL_SIS (CrewEnlisted) < CREW_POD_CAPACITY)
+			NPCPhrase (NEED_CREW_1);
+		if (GLOBAL_SIS (FuelOnBoard) < FUEL_TANK_CAPACITY)
+			NPCPhrase (NEED_FUEL_1);
+		if (num_bays < 1)
+			NPCPhrase (NEED_STORAGE_1);
+		if (GLOBAL_SIS (NumLanders) == 0)
+			NPCPhrase (NEED_LANDERS_1);
+		if (num_batts < 1)
+			NPCPhrase (NEED_DYNAMOS_1);
+
+		if (GLOBAL_SIS (ResUnits) >= 3000)
+			NPCPhrase (IMPROVE_FLAGSHIP_WITH_RU);
+		else
+			NPCPhrase (GO_GET_MINERALS);
+	}
+	else
+	{
+		BYTE num_aliens = 0;
+		COUNT FleetStrength;
+		BOOLEAN HasMaximum;
+
+		FleetStrength = ActivateStarShip (0, ESCORT_WORTH);
+		for (i = 0; i < NUM_AVAILABLE_RACES; ++i)
+		{
+			if (i != HUMAN_SHIP
+					&& (ActivateStarShip (i, CHECK_ALLIANCE) & GOOD_GUY))
+				++num_aliens;
+		}
+
+		HasMaximum = (num_thrusters == NUM_DRIVE_SLOTS
+				&& num_jets == NUM_JET_SLOTS
+				&& GLOBAL_SIS (CrewEnlisted) >= CREW_POD_CAPACITY * 3
+				&& GLOBAL_SIS (FuelOnBoard) >= FUEL_TANK_CAPACITY * 3
+				&& GLOBAL_SIS (NumLanders) >= 3
+				&& num_batts >= 4 && num_guns >= 7 && num_defense >= 2);
+		if (!HasMaximum && GET_GAME_STATE (CHMMR_BOMB_STATE) < 2)
+			NPCPhrase (GOT_OK_FLAGSHIP);
+		else
+			NPCPhrase (GOT_AWESOME_FLAGSHIP);
+
+		if (GET_GAME_STATE (CHMMR_BOMB_STATE) >= 2)
+		{
+			NPCPhrase (CHMMR_IMPROVED_BOMB);
+			if (FleetStrength < 20000)
+				NPCPhrase (MUST_ACQUIRE_AWESOME_FLEET);
+			else
+			{
+				NPCPhrase (GOT_AWESOME_FLEET);
+				if (!GET_GAME_STATE (TALKING_PET_ON_SHIP))
+					NPCPhrase (MUST_ELIMINATE_URQUAN_GUARDS);
+				else
+					NPCPhrase (GO_DESTROY_SAMATRA);
+			}
+		}
+		else if (num_aliens < 2)
+			NPCPhrase (GO_ALLY_WITH_ALIENS);
+		else
+		{
+			NPCPhrase (MADE_SOME_ALLIES);
+			if (FleetStrength < 6000)
+			{
+				if (GLOBAL_SIS (ResUnits) >= 3000)
+					NPCPhrase (BUY_COMBAT_SHIPS);
+				else
+					NPCPhrase (GET_SHIPS_BY_MINING_OR_ALLIANCE);
+			}
+			else
+			{
+				NPCPhrase (GOT_OK_FLEET);
+				if (!HasMaximum)
+				{
+					NPCPhrase (IMPROVE_2);
+					if (num_thrusters < NUM_DRIVE_SLOTS)
+						NPCPhrase (NEED_THRUSTERS_2);
+					if (num_jets < NUM_JET_SLOTS)
+						NPCPhrase (NEED_TURN_2);
+					if (num_guns < 7)
+						NPCPhrase (NEED_GUNS_2);
+					if (GLOBAL_SIS (CrewEnlisted) < CREW_POD_CAPACITY * 3)
+						NPCPhrase (NEED_CREW_2);
+					if (GLOBAL_SIS (FuelOnBoard) < FUEL_TANK_CAPACITY * 3)
+						NPCPhrase (NEED_FUEL_2);
+					if (GLOBAL_SIS (NumLanders) < 3)
+						NPCPhrase (NEED_LANDERS_2);
+					if (num_batts < 4)
+						NPCPhrase (NEED_DYNAMOS_2);
+					if (num_defense < 2)
+						NPCPhrase (NEED_POINT);
+				}
+				else if (!GET_GAME_STATE (AWARE_OF_SAMATRA))
+					NPCPhrase (GO_LEARN_ABOUT_URQUAN);
+				else
+				{
+					NPCPhrase (KNOW_ABOUT_SAMATRA);
+					if (!GET_GAME_STATE (UTWIG_BOMB))
+						NPCPhrase (FIND_WAY_TO_DESTROY_SAMATRA);
+					else if (GET_GAME_STATE (UTWIG_BOMB_ON_SHIP))
+						NPCPhrase (MUST_INCREASE_BOMB_STRENGTH);
+				}
+			}
+		}
+	}
+}
+
+static void
+TellMission (RESPONSE_REF R)
+{
+	RESPONSE_REF pstack[4];
+
+	if (PLAYER_SAID (R, our_mission))
+	{
+		NPCPhrase (WHICH_MISSION);
+		stack0 = stack1 = stack2 = stack3 = 0;
+	}
+	else if (PLAYER_SAID (R, where_get_minerals))
+	{
+		NPCPhrase (GET_MINERALS);
+
+		stack0 = 1;
+	}
+	else if (PLAYER_SAID (R, what_about_aliens))
+	{
+		NPCPhrase (ABOUT_ALIENS);
+
+		stack1 = 1;
+	}
+	else if (PLAYER_SAID (R, what_do_now))
+	{
+		AnalyzeCondition ();
+
+		stack2 = 1;
+	}
+	else if (PLAYER_SAID (R, what_about_urquan))
+	{
+		NPCPhrase (MUST_DEFEAT);
+
+		stack3 = 1;
+	}
+	else if (PLAYER_SAID (R, enough_defeat))
+	{
+		NPCPhrase (OK_ENOUGH_DEFEAT);
+
+		stack3 = 2;
+	}
+
+	switch (stack0)
+	{
+		case 0:
+			pstack[0] = where_get_minerals;
+			break;
+		default:
+			pstack[0] = 0;
+			break;
+	}
+	switch (stack1)
+	{
+		case 0:
+			pstack[1] = what_about_aliens;
+			break;
+		default:
+			pstack[1] = 0;
+			break;
+	}
+	switch (stack2)
+	{
+		case 0:
+			pstack[2] = what_do_now;
+			break;
+		default:
+			pstack[2] = 0;
+			break;
+	}
+	switch (stack3)
+	{
+		case 0:
+			pstack[3] = what_about_urquan;
+			break;
+		case 1:
+			pstack[3] = how_defeat;
+			break;
+		default:
+			pstack[3] = 0;
+			break;
+	}
+
+	if (pstack[0])
+		Response (pstack[0], TellMission);
+	if (pstack[1])
+		Response (pstack[1], TellMission);
+	if (pstack[2])
+		Response (pstack[2], TellMission);
+	if (pstack[3])
+	{
+		if (stack3 == 1)
+			Response (pstack[3], DefeatUrquan);
+		else
+			Response (pstack[3], TellMission);
+	}
+
+	Response (enough_mission, NeedInfo);
+}
+
+static void
+TellStarBase (RESPONSE_REF R)
+{
+	RESPONSE_REF pstack[4];
+	static UNICODE buf0[80];
+
+	if (PLAYER_SAID (R, starbase_functions))
+	{
+		NPCPhrase (WHICH_FUNCTION);
+		stack0 = stack1 = stack2 = stack3 = 0;
+	}
+	else if (PLAYER_SAID (R, tell_me_about_fuel0))
+	{
+		NPCPhrase (ABOUT_FUEL);
+
+		stack1 = 1;
+	}
+	else if (PLAYER_SAID (R, tell_me_about_crew))
+	{
+		NPCPhrase (ABOUT_CREW0);
+		if (speechVolumeScale > 0.0f)
+			NPCPhrase (YOUR_FLAGSHIP_3DO2);
+		else {
+			NPCPhrase (YOUR_FLAGSHIP_PC);
+			NPCPhrase (GLOBAL_SHIP_NAME);
+		}
+		NPCPhrase (ABOUT_CREW1);
+
+		stack2 = 2;
+	}
+	else if (PLAYER_SAID (R, tell_me_about_modules0))
+	{
+		NPCPhrase (ABOUT_MODULES);
+
+		stack0 = 1;
+	}
+	else if (PLAYER_SAID (R, tell_me_about_ships))
+	{
+		NPCPhrase (ABOUT_SHIPS);
+
+		stack2 = 1;
+	}
+	else if (PLAYER_SAID (R, tell_me_about_ru))
+	{
+		NPCPhrase (ABOUT_RU);
+
+		stack3 = 1;
+	}
+	else if (PLAYER_SAID (R, tell_me_about_minerals))
+	{
+		NPCPhrase (ABOUT_MINERALS);
+
+		stack3 = 2;
+	}
+	else if (PLAYER_SAID (R, tell_me_about_life))
+	{
+		NPCPhrase (ABOUT_LIFE);
+
+		stack3 = 3;
+	}
+
+	switch (stack0)
+	{
+		case 0:
+			construct_response (
+					buf0,
+					tell_me_about_modules0,
+					GLOBAL_SIS (ShipName),
+					tell_me_about_modules1,
+					(UNICODE*)NULL);
+			pstack[0] = tell_me_about_modules0;
+			break;
+		default:
+			pstack[0] = 0;
+			break;
+	}
+	switch (stack1)
+	{
+		case 0:
+			construct_response (
+					shared_phrase_buf,
+					tell_me_about_fuel0,
+					GLOBAL_SIS (ShipName),
+					tell_me_about_fuel1,
+					(UNICODE*)NULL);
+			pstack[1] = tell_me_about_fuel0;
+			break;
+		default:
+			pstack[1] = 0;
+			break;
+	}
+	switch (stack2)
+	{
+		case 0:
+			pstack[2] = tell_me_about_ships;
+			break;
+		case 1:
+			pstack[2] = tell_me_about_crew;
+			break;
+		default:
+			pstack[2] = 0;
+			break;
+	}
+	switch (stack3)
+	{
+		case 0:
+			pstack[3] = tell_me_about_ru;
+			break;
+		case 1:
+			pstack[3] = tell_me_about_minerals;
+			break;
+		case 2:
+			pstack[3] = tell_me_about_life;
+			break;
+		default:
+			pstack[3] = 0;
+			break;
+	}
+
+	if (pstack[0])
+		DoResponsePhrase (pstack[0], TellStarBase, buf0);
+	if (pstack[1])
+		DoResponsePhrase (pstack[1], TellStarBase, shared_phrase_buf);
+	if (pstack[2])
+		Response (pstack[2], TellStarBase);
+	if (pstack[3])
+		Response (pstack[3], TellStarBase);
+
+	Response (enough_starbase, NeedInfo);
+}
+
+static void NormalStarbase (RESPONSE_REF R);
+
+static void
+NeedInfo (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, need_info))
+		NPCPhrase (WHAT_KIND_OF_INFO);
+	else if (PLAYER_SAID (R, enough_starbase))
+		NPCPhrase (OK_ENOUGH_STARBASE);
+	else if (PLAYER_SAID (R, enough_history))
+		NPCPhrase (OK_ENOUGH_HISTORY);
+	else if (PLAYER_SAID (R, enough_mission))
+		NPCPhrase (OK_ENOUGH_MISSION);
+
+	Response (starbase_functions, TellStarBase);
+	Response (history, TellHistory);
+	Response (our_mission, TellMission);
+	Response (no_need_info, NormalStarbase);
 }
 
 static BOOLEAN
@@ -445,6 +1040,14 @@ DiscussDevices (BOOLEAN TalkAbout)
 		pStr = 0;
 		switch (i)
 		{
+			case ROSY_SPHERE_DEVICE:
+				if (GET_GAME_STATE (ROSY_SPHERE_ON_SHIP)
+						&& !GET_GAME_STATE (DISCUSSED_ROSY_SPHERE))
+				{
+					pStr = ABOUT_SPHERE;
+					SET_GAME_STATE (DISCUSSED_ROSY_SPHERE, TalkAbout);
+				}
+				break;
 			case ARTIFACT_2_DEVICE:
 				if (GET_GAME_STATE (ARTIFACT_2_ON_SHIP)
 						&& !GET_GAME_STATE (DISCUSSED_ARTIFACT_2))
@@ -509,6 +1112,14 @@ DiscussDevices (BOOLEAN TalkAbout)
 					SET_GAME_STATE (DISCUSSED_ULTRON, TalkAbout);
 				}
 				break;
+			case MAIDENS_DEVICE:
+				if (GET_GAME_STATE (MAIDENS_ON_SHIP)
+						&& !GET_GAME_STATE (DISCUSSED_MAIDENS))
+				{
+					pStr = ABOUT_MAIDENS;
+					SET_GAME_STATE (DISCUSSED_MAIDENS, TalkAbout);
+				}
+				break;
 			case TALKING_PET_DEVICE:
 				if (GET_GAME_STATE (TALKING_PET_ON_SHIP)
 						&& !GET_GAME_STATE (DISCUSSED_TALKING_PET))
@@ -523,6 +1134,14 @@ DiscussDevices (BOOLEAN TalkAbout)
 				{
 					pStr = ABOUT_HELIX;
 					SET_GAME_STATE (DISCUSSED_AQUA_HELIX, TalkAbout);
+				}
+				break;
+			case CLEAR_SPINDLE_DEVICE:
+				if (GET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP)
+						&& !GET_GAME_STATE (DISCUSSED_CLEAR_SPINDLE))
+				{
+					pStr = ABOUT_SPINDLE;
+					SET_GAME_STATE (DISCUSSED_CLEAR_SPINDLE, TalkAbout);
 				}
 				break;
 			case UMGAH_HYPERWAVE_DEVICE:
@@ -718,21 +1337,327 @@ CheckTiming (COUNT month_index, COUNT day_index)
 }
 
 static void
-NormalStarbase (RESPONSE_REF R)
-{	
-	static BYTE ExplorerInfoState = 0;
-	static BYTE NewsState = 0;
-	
-	if (R == 0)
+CheckBulletins (BOOLEAN Repeat)
+{
+	RESPONSE_REF pIntro;
+	BYTE b0;
+	DWORD BulletinMask;
+
+	if (Repeat)
+		BulletinMask = CurBulletinMask ^ 0xFFFFFFFFL;
+	else
+		BulletinMask = GET_GAME_STATE_32 (STARBASE_BULLETS0);
+
+	pIntro = 0;
+	for (b0 = 0; b0 < 32; ++b0)
 	{
-		if(!(GET_GAME_STATE(STARBASE_VISITED_FOR_FIRST_TIME)))
+		if (!(BulletinMask & (1L << b0)))
 		{
+			RESPONSE_REF pStr;
+
+			pStr = 0;
+			switch (b0)
+			{
+				case 0:
+					if (ActivateStarShip (SPATHI_SHIP, CHECK_ALLIANCE)
+							& GOOD_GUY)
+					{
+						pStr = STARBASE_BULLETIN_1;
+					}
+					break;
+				case 1:
+					if (ActivateStarShip (ZOQFOTPIK_SHIP, CHECK_ALLIANCE)
+							& GOOD_GUY)
+					{
+						pStr = STARBASE_BULLETIN_2;
+					}
+					break;
+				case 2:
+					if (ActivateStarShip (SUPOX_SHIP, CHECK_ALLIANCE)
+							& GOOD_GUY)
+					{
+						pStr = STARBASE_BULLETIN_3;
+					}
+					break;
+				case 3:
+					if (ActivateStarShip (UTWIG_SHIP, CHECK_ALLIANCE)
+							& GOOD_GUY)
+					{
+						pStr = STARBASE_BULLETIN_4;
+					}
+					break;
+				case 4:
+					if (ActivateStarShip (ORZ_SHIP, CHECK_ALLIANCE)
+							& GOOD_GUY)
+					{
+						pStr = STARBASE_BULLETIN_5;
+					}
+					break;
+				case 5:
+					if (GET_GAME_STATE (ARILOU_MANNER) == 2)
+						BulletinMask |= 1L << b0;
+					else if (GET_GAME_STATE (PORTAL_SPAWNER)
+							&& (Repeat || ActivateStarShip (
+									ARILOU_SHIP, FEASIBILITY_STUDY
+									)))
+					{
+#define NUM_GIFT_ARILOUS 3
+						pStr = STARBASE_BULLETIN_6;
+						if (!Repeat)
+							ActivateStarShip (ARILOU_SHIP, NUM_GIFT_ARILOUS);
+					}
+					break;
+				case 6:
+					if (GET_GAME_STATE (ZOQFOT_DISTRESS) == 1)
+					{
+						pStr = STARBASE_BULLETIN_7;
+					}
+					break;
+				case 7:
+					if (GET_GAME_STATE (MET_MELNORME))
+						BulletinMask |= 1L << b0;
+					else if (CheckTiming (3, 0))
+					{
+						pStr = STARBASE_BULLETIN_8;
+					}
+					break;
+				case 8:
+					if (GET_GAME_STATE (MET_MELNORME))
+						BulletinMask |= 1L << b0;
+					else if (CheckTiming (6, 0))
+					{
+						pStr = STARBASE_BULLETIN_9;
+					}
+					break;
+				case 9:
+					if (GET_GAME_STATE (FOUND_PLUTO_SPATHI))
+						BulletinMask |= 1L << b0;
+					else if (CheckTiming (0, 7))
+					{
+						pStr = STARBASE_BULLETIN_10;
+					}
+					break;
+				case 10:
+					if (GET_GAME_STATE (SPATHI_SHIELDED_SELVES))
+					{
+						pStr = STARBASE_BULLETIN_11;
+					}
+					break;
+				case 11:
+					if (GET_GAME_STATE (ZOQFOT_HOME_VISITS)
+							|| GET_GAME_STATE_32 (ZOQFOT_GRPOFFS0))
+						BulletinMask |= 1L << b0;
+					else if (CheckTiming (0, 42))
+					{
+						pStr = STARBASE_BULLETIN_12;
+					}
+					break;
+				case 12:
+					if (ActivateStarShip (CHMMR_SHIP, CHECK_ALLIANCE)
+							& GOOD_GUY)
+					{
+						pStr = STARBASE_BULLETIN_13;
+					}
+					break;
+				case 13:
+					if (ActivateStarShip (SHOFIXTI_SHIP, CHECK_ALLIANCE)
+							& GOOD_GUY)
+					{
+						pStr = STARBASE_BULLETIN_14;
+					}
+					break;
+				case 14:
+					if (GET_GAME_STATE (PKUNK_MISSION))
+					{
+						pStr = STARBASE_BULLETIN_15;
+					}
+					break;
+				case 15:
+					if (GET_GAME_STATE (DESTRUCT_CODE_ON_SHIP))
+						BulletinMask |= 1L << b0;
+					else if (CheckTiming (7, 0))
+					{
+						pStr = STARBASE_BULLETIN_16;
+					}
+					break;
+				case 16:
+					break;
+				case 17:
+					if (GET_GAME_STATE (YEHAT_ABSORBED_PKUNK))
+					{
+						pStr = STARBASE_BULLETIN_18;
+					}
+					break;
+				case 18:
+					if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
+					{
+						pStr = STARBASE_BULLETIN_19;
+					}
+					break;
+				case 19:
+					break;
+				case 20:
+					break;
+				case 21:
+					if (GET_GAME_STATE (ZOQFOT_DISTRESS) == 2)
+					{
+						pStr = STARBASE_BULLETIN_22;
+					}
+					break;
+				case 22:
+					break;
+				case 23:
+					break;
+				case 24:
+					break;
+				case 25:
+					break;
+				case 26:
+				{
+					COUNT crew_sold;
+
+					crew_sold = MAKE_WORD (
+							GET_GAME_STATE (CREW_SOLD_TO_DRUUGE0),
+							GET_GAME_STATE (CREW_SOLD_TO_DRUUGE1)
+							);
+					if (crew_sold > 100)
+						BulletinMask |= 1L << b0;
+					else if (crew_sold)
+					{
+						pStr = STARBASE_BULLETIN_27;
+					}
+					break;
+				}
+				case 27:
+				{
+					COUNT crew_sold;
+
+					crew_sold = MAKE_WORD (
+							GET_GAME_STATE (CREW_SOLD_TO_DRUUGE0),
+							GET_GAME_STATE (CREW_SOLD_TO_DRUUGE1)
+							);
+					if (crew_sold > 250)
+						BulletinMask |= 1L << b0;
+					else if (crew_sold > 100)
+					{
+						pStr = STARBASE_BULLETIN_28;
+					}
+					break;
+				}
+				case 28:
+				{
+					COUNT crew_bought;
+
+					crew_bought = MAKE_WORD (
+							GET_GAME_STATE (CREW_PURCHASED0),
+							GET_GAME_STATE (CREW_PURCHASED1)
+							);
+					if (crew_bought >= CREW_EXPENSE_THRESHOLD)
+					{
+						pStr = STARBASE_BULLETIN_29;
+					}
+					break;
+				}
+				case 29:
+					if (MAKE_WORD (
+							GET_GAME_STATE (CREW_SOLD_TO_DRUUGE0),
+							GET_GAME_STATE (CREW_SOLD_TO_DRUUGE1)
+							) > 250)
+					{
+						pStr = STARBASE_BULLETIN_30;
+					}
+					break;
+				case 30:
+					break;
+				case 31:
+					break;
+			}
+
+			if (pStr)
+			{
+				if (pIntro)
+					NPCPhrase (BETWEEN_BULLETINS);
+				else if (Repeat)
+					pIntro = BEFORE_WE_GO_ON_1;
+				else
+				{
+					switch ((BYTE)TFB_Random () % 7)
+					{
+						case 0:
+							pIntro = BEFORE_WE_GO_ON_1;
+							break;
+						case 1:
+							pIntro = BEFORE_WE_GO_ON_2;
+							break;
+						case 2:
+							pIntro = BEFORE_WE_GO_ON_3;
+							break;
+						case 3:
+							pIntro = BEFORE_WE_GO_ON_4;
+							break;
+						case 4:
+							pIntro = BEFORE_WE_GO_ON_5;
+							break;
+						case 5:
+							pIntro = BEFORE_WE_GO_ON_6;
+							break;
+						default:
+							pIntro = BEFORE_WE_GO_ON_7;
+							break;
+					}
+
+					NPCPhrase (pIntro);
+				}
+
+				NPCPhrase (pStr);
+				CurBulletinMask |= 1L << b0;
+			}
+		}
+	}
+
+	if (pIntro == 0 && GET_GAME_STATE (STARBASE_VISITED))
+		NPCPhrase (RETURN_HELLO);
+	else if (!Repeat)
+		SET_GAME_STATE_32 (STARBASE_BULLETS0, BulletinMask);
+}
+
+static void
+NormalStarbase (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, no_need_info))
+		NPCPhrase (OK_NO_NEED_INFO);
+	else if (PLAYER_SAID (R, new_devices))
+		DiscussDevices (TRUE);
+	else if (PLAYER_SAID (R, repeat_bulletins))
+		CheckBulletins (TRUE);
+	else if (R == 0)
+	{
+		if (GET_GAME_STATE (MOONBASE_ON_SHIP))
+		{
+			NPCPhrase (STARBASE_IS_READY_A);
+			if (speechVolumeScale > 0.0f)
+				NPCPhrase (YOUR_FLAGSHIP_3DO1);
+			else {
+				NPCPhrase (YOUR_FLAGSHIP_PC);
+				NPCPhrase (GLOBAL_SHIP_NAME);
+			}
+			NPCPhrase (STARBASE_IS_READY_B);
+			if (speechVolumeScale > 0.0f)
+				NPCPhrase (YOUR_FLAGSHIP_3DO0);
+			else
+				NPCPhrase (GLOBAL_SHIP_NAME);
+			NPCPhrase (STARBASE_IS_READY_C);
+			LockMutex (GraphicsLock);
+			DeltaSISGauges (0, 0, 2500);
+			UnlockMutex (GraphicsLock);
 			SET_GAME_STATE (STARBASE_MONTH,
 					GLOBAL (GameClock.month_index));
 			SET_GAME_STATE (STARBASE_DAY,
 					GLOBAL (GameClock.day_index));
-			NPCPhrase (FIRST_HELLO);
-			SET_GAME_STATE(STARBASE_VISITED_FOR_FIRST_TIME, 1);
+		}
+		else if (GET_GAME_STATE (STARBASE_VISITED))
+		{
+			CheckBulletins (FALSE);
 		}
 		else
 		{
@@ -774,77 +1699,25 @@ NormalStarbase (RESPONSE_REF R)
 					break;
 			}
 			NPCPhrase (pStr0);
+			if (speechVolumeScale == 0.0f)
+			{
+				NPCPhrase (SPACE);
+				NPCPhrase (GLOBAL_PLAYER_NAME);
+			}
+			NPCPhrase (pStr1);
+			CheckBulletins (FALSE);
 		}
 
 		SET_GAME_STATE (STARBASE_VISITED, 1);
 	}
-	
-	////// ANSWERS
-	// Answer returning from AlienRaces
-	if (PLAYER_SAID (R, enough_info_races))
-		NPCPhrase (ENOUGH_INFO_RACES_OK);
-	
-	// Answer about ship
-	else if (PLAYER_SAID (R, explorer_info))
-	{
-		NPCPhrase (ABOUT_EXPLORER_SHIP);
-		++ExplorerInfoState;
-	}
-	else if (PLAYER_SAID (R, explorer_drawbacks))
-	{
-		NPCPhrase (ABOUT_EXPLORER_SHIP_2);
-		++ExplorerInfoState;
-	}
-	else if (PLAYER_SAID (R, explorer_run))
-	{
-		NPCPhrase (ABOUT_EXPLORER_SHIP_3);
-		DISABLE_PHRASE(explorer_info);
-		ExplorerInfoState = 0;
-	}
-	
-	// Answer news
-	else if (PLAYER_SAID (R, current_news))
-	{
-		NPCPhrase (SHOFIXTI_MISSING);
-		DISABLE_PHRASE(current_news);
-		++NewsState;
-	}
-	// Answer map limits
-	else if (PLAYER_SAID (R, lame_map_limit_question))
-	{
-		NPCPhrase (LAME_MAP_LIMIT_ANSWER);
-		DISABLE_PHRASE(lame_map_limit_question);
-		--NewsState;
-	}
-	
-	///////QUESTIONS
-	// Ask news
-	if (PHRASE_ENABLED (current_news))
-		Response (current_news, NormalStarbase);
-	// Ask about map limitations
-	else if (NewsState==1 && PHRASE_ENABLED (lame_map_limit_question))
-		Response (lame_map_limit_question, NormalStarbase);
-	
-	// Ask about ship
-	if (ExplorerInfoState == 0 && PHRASE_ENABLED (explorer_info))
-		Response (explorer_info, NormalStarbase);
-	else if (ExplorerInfoState == 1)
-		Response (explorer_drawbacks, NormalStarbase);
-	else if (ExplorerInfoState == 2)
-		Response (explorer_run, NormalStarbase);
-	
-	// Minerals to offload
+
 	if (GLOBAL_SIS (TotalElementMass))
 		Response (have_minerals, SellMinerals);
-	
-	// Devices
-	//if (DiscussDevices (FALSE))
-	//	Response (new_devices, NormalStarbase);
-	
-	// Ask about aliens and other info
-	Response (info_on_races, AlienRaces);
-	
-	// Leave
+	if (DiscussDevices (FALSE))
+		Response (new_devices, NormalStarbase);
+	if (CurBulletinMask)
+		Response (repeat_bulletins, NormalStarbase);
+	Response (need_info, NeedInfo);
 	Response (goodbye_commander, ByeBye);
 }
 
@@ -1052,6 +1925,11 @@ uninit_starbase (void)
 static void
 post_starbase_enc (void)
 {
+	SET_GAME_STATE (MOONBASE_ON_SHIP, 0);
+	if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
+	{
+		SET_GAME_STATE (CHMMR_BOMB_STATE, 3);
+	}
 }
 
 LOCDATA*

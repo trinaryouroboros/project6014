@@ -39,11 +39,6 @@
 #define ARILOU_OFFSET 9
 #define LASER_RANGE DISPLAY_TO_WORLD (100 + ARILOU_OFFSET)
 
-#define MAX_THRUST_HIRES /* DISPLAY_TO_WORLD (20) */ 80 // JMS_GFX
-#define THRUST_INCREMENT_HIRES MAX_THRUST_HIRES // JMS_GFX
-#define ARILOU_OFFSET_HIRES 18 // JMS_GFX
-#define LASER_RANGE_HIRES DISPLAY_TO_WORLD (200 + ARILOU_OFFSET) // JMS_GFX
-
 static RACE_DESC arilou_desc =
 {
 	{ /* SHIP_INFO */
@@ -54,10 +49,10 @@ static RACE_DESC arilou_desc =
 		ARILOU_RACE_STRINGS,
 		ARILOU_ICON_MASK_PMAP_ANIM,
 		ARILOU_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, // JMS: Was 250 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		250 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
 			438, 6372,
 		},
@@ -114,78 +109,6 @@ static RACE_DESC arilou_desc =
 	0,
 };
 
-// JMS_GFX
-static RACE_DESC arilou_desc_hires =
-{
-	{ /* SHIP_INFO */
-		/* FIRES_FORE | */ IMMEDIATE_WEAPON,
-		16, /* Super Melee cost */
-		MAX_CREW, MAX_CREW,
-		MAX_ENERGY, MAX_ENERGY,
-		ARILOU_RACE_STRINGS,
-		ARILOU_ICON_MASK_PMAP_ANIM,
-		ARILOU_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
-	},
-	{ /* FLEET_STUFF */
-		250 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
-		{ /* Known location (center of SoI) */
-			438, 6372,
-		},
-	},
-	{
-		MAX_THRUST_HIRES,
-		THRUST_INCREMENT_HIRES,
-		ENERGY_REGENERATION,
-		WEAPON_ENERGY_COST,
-		SPECIAL_ENERGY_COST,
-		ENERGY_WAIT,
-		TURN_WAIT,
-		THRUST_WAIT,
-		WEAPON_WAIT,
-		SPECIAL_WAIT,
-		SHIP_MASS,
-	},
-	{
-		{
-			ARILOU_BIG_MASK_PMAP_ANIM,
-			ARILOU_MED_MASK_PMAP_ANIM,
-			ARILOU_SML_MASK_PMAP_ANIM,
-		},
-		{
-			NULL_RESOURCE,
-			NULL_RESOURCE,
-			NULL_RESOURCE,
-		},
-		{
-			WARP_BIG_MASK_PMAP_ANIM,
-			WARP_MED_MASK_PMAP_ANIM,
-			WARP_SML_MASK_PMAP_ANIM,
-		},
-		{
-			ARILOU_CAPTAIN_MASK_PMAP_ANIM,
-			NULL, NULL, NULL, NULL, NULL
-		},
-		ARILOU_VICTORY_SONG,
-		ARILOU_SHIP_SOUNDS,
-		{ NULL, NULL, NULL },
-		{ NULL, NULL, NULL },
-		{ NULL, NULL, NULL },
-		NULL, NULL
-	},
-	{
-		0,
-		LASER_RANGE_HIRES >> 1,
-		NULL,
-	},
-	(UNINIT_FUNC *) NULL,
-	(PREPROCESS_FUNC *) NULL,
-	(POSTPROCESS_FUNC *) NULL,
-	(INIT_WEAPON_FUNC *) NULL,
-	0,
-};
-
-
 static COUNT
 initialize_autoaim_laser (ELEMENT *ShipPtr, HELEMENT LaserArray[])
 {
@@ -206,7 +129,7 @@ initialize_autoaim_laser (ELEMENT *ShipPtr, HELEMENT LaserArray[])
 	LaserBlock.ey = SINE (FACING_TO_ANGLE (LaserBlock.face), LASER_RANGE);
 	LaserBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
-	LaserBlock.pixoffs = ARILOU_OFFSET * RESOLUTION_FACTOR; // JMS_GFX
+	LaserBlock.pixoffs = ARILOU_OFFSET;
 	LaserBlock.color = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x0A), 0x0E);
 	LaserArray[0] = initialize_laser (&LaserBlock);
 
@@ -364,21 +287,12 @@ init_arilou (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	// JMS_GFX: A rather clumsy way of giving ship correct max speed at hi-res mode
-	if (RESOLUTION_FACTOR == 1)
-	{
-		arilou_desc.preprocess_func = arilou_preprocess;
-		arilou_desc.init_weapon_func = initialize_autoaim_laser;
-		arilou_desc.cyborg_control.intelligence_func = arilou_intelligence;
-		RaceDescPtr = &arilou_desc;
-	}
-	else
-	{
-		arilou_desc_hires.preprocess_func = arilou_preprocess;
-		arilou_desc_hires.init_weapon_func = initialize_autoaim_laser;
-		arilou_desc_hires.cyborg_control.intelligence_func = arilou_intelligence;
-		RaceDescPtr = &arilou_desc_hires;
-	}
+	arilou_desc.preprocess_func = arilou_preprocess;
+	arilou_desc.init_weapon_func = initialize_autoaim_laser;
+	arilou_desc.cyborg_control.intelligence_func = arilou_intelligence;
+
+	RaceDescPtr = &arilou_desc;
+
 	return (RaceDescPtr);
 }
 

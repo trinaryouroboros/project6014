@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Release Bullet hole gfx when uniniting kernel
-
 #include "battle.h"
 #include "master.h"
 #include "nameref.h"
@@ -78,7 +76,6 @@ UninitKernel (BOOLEAN ships)
 	DestroyFont (MicroFont);
 	DestroyStringTable (ReleaseStringTable (GameStrings));
 	DestroyDrawable (ReleaseDrawable (StatusFrame));
-	DestroyDrawable (ReleaseDrawable (BulletFrame));	// JMS
 	DestroyDrawable (ReleaseDrawable (ActivityFrame));
 	DestroyFont (TinyFont);
 	DestroyFont (StarConFont);

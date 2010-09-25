@@ -49,12 +49,12 @@ static RACE_DESC ilwrath_desc =
 		ILWRATH_RACE_STRINGS,
 		ILWRATH_ICON_MASK_PMAP_ANIM,
 		ILWRATH_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial SoI radius */
+		1410 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			0,0,
+			48, 1700,
 		},
 	},
 	{

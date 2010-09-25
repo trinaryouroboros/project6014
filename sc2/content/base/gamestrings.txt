@@ -1,297 +1,297 @@
-#(Denebola )
-Denebola
+#(Vega)
+Vega
 
 
-#(Acamar)
-Acamar
+#(Antliae)
+Antliae
 
 
-#(Acoreus)
-Acoreus
+#(Apodis)
+Apodis
 
 
-#(Adrastus)
-Adrastus
+#(Aquarii)
+Aquarii
 
 
-#(Aeolus)
-Aeolus
+#(Aquilae)
+Aquilae
 
 
-#(Alcyone)
-Alcyone
+#(Arae)
+Arae
 
 
-#(Angstrom)
-Angstrom
+#(Arietis)
+Arietis
 
 
-#(Apollonius)
-Apollonius
+#(Aurigae)
+Aurigae
 
 
-#(Arachne)
-Arachne
+#(Trianguli)
+Trianguli
 
 
 #(Caeli)
 Caeli
 
 
-#(Archimedes)
-Archimedes
+#(Camelopardalis)
+Camelopardalis
 
 
-#(Archytas)
-Archytas
+#(Cancri)
+Cancri
 
 
-#(Ares)
-Ares
+#(Brahe)
+Brahe
 
 
-#(Aristillus)
-Aristillus
+#(Kepler)
+Kepler
 
 
-#(Artemis)
-Artemis
+#(Copernicus)
+Copernicus
 
 
-#(Ascella)
-Ascella
+#(Capricorni)
+Capricorni
 
 
-#(Auster)
-Auster
+#(Carinae)
+Carinae
 
 
-#(Bellona)
-Bellona
+#(Cassiopeiae)
+Cassiopeiae
 
 
-#(Bessel)
-Bessel
+#(Tucanae)
+Tucanae
 
 
-#(Canis Majoris)
-Canis Majoris
+#(Cephei)
+Cephei
 
 
-#(Canis Minoris)
-Canis Minoris
+#(Ceti)
+Ceti
 
 
-#(Cassini)
-Cassini
+#(Crateris)
+Crateris
 
 
-#(Celaeno)
-Celaeno
+#(Circini)
+Circini
 
 
-#(Conon)
-Conon
+#(Columbae)
+Columbae
 
 
-#(Demeter)
-Demeter
+#(Chandrasekhar)
+Chandrasekhar
 
 
-#(Electra)
-Electra
+#(Sagittae)
+Sagittae
 
 
-#(Eltanin)
-Eltanin
+#(Cygnus)
+Cygnus
 
 
-#(Eurus)
-Eurus
+#(Corvi)
+Corvi
 
 
-#(Faunus)
-Faunus
+#(Chamaeleonis)
+Chamaeleonis
 
 
-#(Favonius)
-Favonius
+#(Equulei)
+Equulei
 
 
-#(Fortuna)
-Fortuna
+#(Delphini)
+Delphini
 
 
-#(Fraunhofer)
-Fraunhofer
+#(Doradus)
+Doradus
 
 
-#(Gacrux )
-Gacrux 
+#(Monocerotis)
+Monocerotis
 
 
-#(Galilei)
-Galilei
+#(Crucis)
+Crucis
 
 
-#(Halley)
-Halley
+#(Eridani)
+Eridani
 
 
-#(Hecate)
-Hecate
+#(Fornacis)
+Fornacis
 
 
-#(Heraclides)
-Heraclides
+#(Geminorum)
+Geminorum
 
 
-#(Hespera)
-Hespera
+#(Altair)
+Altair
 
 
-#(Hestia)
-Hestia
+#(Antares)
+Antares
 
 
-#(Hicetas)
-Hicetas
+#(Horologii)
+Horologii
 
 
-#(Hulse)
-Hulse
+#(Hydrae)
+Hydrae
 
 
-#(Huygens)
-Huygens
+#(Andromedae)
+Andromedae
 
 
-#(Hydri)
-Hydri
+#(Groombridge)
+Groombridge
 
 
-#(Hygea)
-Hygea
+#(Lacertae)
+Lacertae
+
+
+#(Leonis)
+Leonis
+
+
+#(Hyades)
+Hyades
+
+
+#(Leporis)
+Leporis
+
+
+#(Librae)
+Librae
+
+
+#(Lipi)
+Lipi
+
+
+#(Lyncis)
+Lyncis
+
+
+#(Fomalhaut)
+Fomalhaut
+
+
+#(Menkar)
+Menkar
+
+
+#(Microscopii)
+Microscopii
+
+
+#(Draconis)
+Draconis
+
+
+#(Orionis)
+Orionis
+
+
+#(Normae)
+Normae
+
+
+#(Octantis)
+Octantis
+
+
+#(Ophiuchi)
+Ophiuchi
+
+
+#(Muscae)
+Muscae
+
+
+#(Pavonis)
+Pavonis
+
+
+#(Pegasi)
+Pegasi
+
+
+#(Persei)
+Persei
+
+
+#(Phoenicis)
+Phoenicis
+
+
+#(Pictoris)
+Pictoris
+
+
+#(Piscium)
+Piscium
 
 
 #(Hyginus)
 Hyginus
 
 
-#(Hymen)
-Hymen
+#(Puppis)
+Puppis
 
 
-#(Hypnos)
-Hypnos
+#(Pyxidis)
+Pyxidis
 
 
-#(Janus)
-Janus
+#(Reticuli)
+Reticuli
 
 
-#(Juno)
-Juno
+#(Arianni)
+Arianni
 
 
-#(Juturna)
-Juturna
+#(Sagittarii)
+Sagittarii
 
 
-#(Juventus)
-Juventus
+#(Scorpii)
+Scorpii
 
 
-#(Kapteyn)
-Kapteyn
+#(Sculptoris)
+Sculptoris
 
 
-#(Kornephoros)
-Kornephoros
-
-
-#(Lemaitre)
-Lemaitre
-
-
-#(Eris)
-Eris
-
-
-#(Libitina)
-Libitina
-
-
-#(Lupi)
-Lupi
-
-
-#(Lycaeus)
-Lycaeus
-
-
-#(Macrobius)
-Macrobius
-
-
-#(Menelaus)
-Menelaus
-
-
-#(Menkent)
-Menkent
-
-
-#(Messier)
-Messier
-
-
-#(Meton)
-Meton
-
-
-#(Minerva)
-Minerva
-
-
-#(Naos)
-Naos
-
-
-#(Notus)
-Notus
-
-
-#(Pales)
-Pales
-
-
-#(Morpheus)
-Morpheus
-
-
-#(Poena)
-Poena
-
-
-#(Priapus)
-Priapus
-
-
-#(Proclus)
-Proclus
-
-
-#(Riccioli)
-Riccioli
-
-
-#(Sylvanus)
-Sylvanus
-
-
-#(Syrma)
-Syrma
+#(Scuti)
+Scuti
 
 
 #(Serpentis)
@@ -306,8 +306,8 @@ Sextantis
 Tauri
 
 
-#(Ursae Minoris)
-Ursae Minoris
+#(Telescopii)
+Telescopii
 
 
 #(Bootis)
@@ -402,20 +402,20 @@ Mira
 Cerenkov
 
 
-#(Parmenides)
-Parmenides
+#(Mersenne)
+Mersenne
 
 
-#(Penzias)
-Penzias
+#(Maksutov)
+Maksutov
 
 
-#(Persipina)
-Persipina
+#(Klystron)
+Klystron
 
 
-#(Phosphor)
-Phosphor
+#(Metis)
+Metis
 
 
 #(Mensae)
@@ -442,28 +442,28 @@ Gruis
 Squidi
 
 
-#(Pleione)
-Pleione
+#(Almagest)
+Almagest
 
 
-#(Ursae Majoris)
-Ursae Majoris
+#(Alcor)
+Alcor
 
 
-#(Polydectes)
-Polydectes
+#(Algol)
+Algol
 
 
 #(Betelgeuse)
 Betelgeuse
 
 
-#(Vertumnus)
-Vertumnus
+#(Aldebaran)
+Aldebaran
 
 
-#(Nereus)
-Nereus
+#(Achernar)
+Achernar
 
 
 #(Procyon)
@@ -474,28 +474,28 @@ Procyon
 Rigel
 
 
-#(Eidolonii)
-Eidolonii
+#(Bellatrix)
+Bellatrix
 
 
 #(Mizar)
 Mizar
 
 
-#(Pythagoras)
-Pythagoras
+#(Hyperion)
+Hyperion
 
 
 #(Regulus)
 Regulus
 
 
-#(Vindemiatrix)
-Vindemiatrix
+#(Organon)
+Organon
 
 
-#(Somnus)
-Somnus
+#(Pollux)
+Pollux
 
 
 #(Capella)
@@ -518,8 +518,12 @@ Sirius
 Sol
 
 
-#(Coronae)
-Coronae
+#(Arcturus)
+Arcturus
+
+
+#(Lentilis)
+Lentilis
 
 
 #(UNKNOWN)
@@ -546,16 +550,16 @@ Utwig Bomb
 Sun Device
 
 
-#(Black Orb)
-Black Orb
+#(Rosy Sphere)
+Rosy Sphere
 
 
 #(Aqua Helix)
 Aqua Helix
 
 
-#(Shield Buster)
-Shield Buster
+#(Clear Spindle)
+Clear Spindle
 
 
 #(Broken Ultron)
@@ -574,8 +578,8 @@ Broken Ultron
 Perfect Ultron
 
 
-#(Temporal Wrapper)
-Temporal Wrapper
+#(Shofixti Maidens)
+Shofixti Maidens
 
 
 #(Umgah Caster)
@@ -1494,10 +1498,6 @@ Nu
 Xi
 
 
-#(Omicron)
-Omicron
-
-
 #(Mercury)
 Mercury
 
@@ -1757,8 +1757,6 @@ Fuel:
 #(Fuel Use:)
 Fuel Use:
 
-#(*Below*)
-* Below *
 
 #(Enter name)
 Enter name
@@ -1769,7 +1767,7 @@ FLAGSHIP
 
 
 #(Vindicator)
-Discovery
+Vindicator
 
 
 #(Zelnick)
@@ -1838,10 +1836,6 @@ Sound
 
 #(Music)
 Music
-
-
-#(Voice)
-Voice
 
 
 #(Cyborg)
@@ -2148,10 +2142,6 @@ sound
 music
 
 
-#(voice)
-voice
-
-
 #(cyborg)
 cyborg
 
@@ -2168,21 +2158,8 @@ flagship
 exit menu
 
 
-#(must restart)
-You have switched from original
-graphic mode to high resolution
-or vice versa.
+#()
 
-Please restart the game before proceeding.
-
-
-#(hires_not_done)
-We're sorry, but the experimental
-mega-graphic mode is still in the works.
-
-Estimated time of completion: 2012
-
-(Hey, we're not getting paid for this...)
 
 
 #()
@@ -2267,7 +2244,6 @@ dispatch
 
 #(exit menu)
 exit menu
-
 
 #(mouse_err)
 Mouse input is not supported in UQM.

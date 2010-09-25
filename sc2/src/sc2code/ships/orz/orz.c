@@ -52,12 +52,12 @@ static RACE_DESC orz_desc =
 		ORZ_RACE_STRINGS,
 		ORZ_ICON_MASK_PMAP_ANIM,
 		ORZ_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		350 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		333 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			8608, 8637,
+			3608, 2637,
 		},
 	},
 	{

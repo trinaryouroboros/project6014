@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added code resource for slylandros-riding-kohrah-vessels
-
 #include "build.h"
 #include "coderes.h"
 #include "corecode.h"
@@ -52,8 +50,6 @@ static RESOURCE code_resources[] = {
 		ANDROSYNTH_CODE,
 		CHENJESU_CODE,
 		MMRNMHRM_CODE,
-		SLYLANDRO_KOHRAH_CODE, // JMS
-		LURG_CODE, // JMS
 		SIS_CODE,
 		SAMATRA_CODE,
 		PROBE_CODE };

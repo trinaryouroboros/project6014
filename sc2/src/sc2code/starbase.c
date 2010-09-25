@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Removed unnecessary chmmr_bomb condition related to starbase visiting.
-//			 -Procyon starbase now has different gfx from Sol starbase
-
 #include "build.h"
 #include "colors.h"
 #include "controls.h"
@@ -34,7 +31,7 @@
 #include "libs/graphics/gfx_common.h"
 #include "libs/tasklib.h"
 #include "libs/inplib.h"
-#include "libs/log.h"
+
 
 MENU_STATE *pMenuState;
 
@@ -323,23 +320,18 @@ DoStarBase (MENU_STATE *pMS)
 		}
 
 		pMS->Initialized = TRUE;
+		SetContext (ScreenContext);
+
 		UnlockMutex (GraphicsLock);
 
 		//s.origin.x = s.origin.y = 0;
 		s.origin.x = SAFE_X;
 		s.origin.y = SAFE_Y + 4;
-		
-		// JMS: Different graphics for Sol and Procyon starbases. 
-		if (CurStarDescPtr->Index == SOL_DEFINED)
-			s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
-		else
-			s.frame = CaptureDrawable (LoadGraphic (STARBASE_PROCYON_ANIM));
-		
+		s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
 		pMS->CurFrame = s.frame;
 		pMS->hMusic = LoadMusic (STARBASE_MUSIC);
 
 		LockMutex (GraphicsLock);
-		SetContext (ScreenContext);
 		SetTransitionSource (NULL);
 		BatchGraphics ();
 		SetContextBackGroundColor (BLACK_COLOR);
@@ -361,11 +353,9 @@ DoStarBase (MENU_STATE *pMS)
 				"rotate starbase");
 		UnlockMutex (GraphicsLock);
 	}
-	// JMS: These lines that are commented out are unnecessary also...
 	else if (PulsedInputState.menu[KEY_MENU_SELECT]
-			//|| GET_GAME_STATE (MOONBASE_ON_SHIP)
-			//|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2
-			)
+			|| GET_GAME_STATE (MOONBASE_ON_SHIP)
+			|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 	{
 ExitStarBase:
 		if (pMS->flash_task)
@@ -395,13 +385,7 @@ ExitStarBase:
 		if (pMS->CurState == TALK_COMMANDER)
 		{
 			FlushInput ();
-			
-			// JMS: Procyon starbase has Chmmr, Sol naturally humans.
-			if (CurStarDescPtr->Index == SOL_DEFINED)
-				InitCommunication (COMMANDER_CONVERSATION);
-			else
-				InitCommunication (CHMMR_CONVERSATION);
-			
+			InitCommunication (COMMANDER_CONVERSATION);
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
 		}
 		else
@@ -491,7 +475,7 @@ VisitStarBase (void)
 		SHIP_FRAGMENT *FragPtr;
 
 		pMenuState = 0;
-		
+
 		InitCommunication (COMMANDER_CONVERSATION);
 		if (!GET_GAME_STATE (PROBE_ILWRATH_ENCOUNTER)
 				|| (GLOBAL (CurrentActivity) & CHECK_ABORT))
@@ -530,14 +514,12 @@ TimePassage:
 	memset (&MenuState, 0, sizeof (MenuState));
 
 	MenuState.InputFunc = DoStarBase;
-	
-	// JMS: This is unnecessary for our little sequel...
-	/*if (GET_GAME_STATE (MOONBASE_ON_SHIP)
+	if (GET_GAME_STATE (MOONBASE_ON_SHIP)
 			|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 	{
 		MenuState.Initialized = TRUE;
 		MenuState.CurState = TALK_COMMANDER;
-	}*/
+	}
 
 	OldContext = SetContext (ScreenContext);
 	DoInput (pMenuState, TRUE);

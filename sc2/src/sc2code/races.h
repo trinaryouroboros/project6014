@@ -16,13 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009:- Added Androsynth ship enum 
-//			- Defined Androsynth conversation, Interplanetary and hyperspace encounter percents and encounter ship number limits
-// JMS 2010:- Added ship damage flags to SHIP_INFO structure and the damage definitions
-//			- Added Slylandro_kohrah ship enums, and all the other relevant stuff
-//			- Added Lurg shipenums, and all the other relevant stuff
-
-
 #ifndef _RACES_H
 #define _RACES_H
 
@@ -62,19 +55,6 @@ typedef HLINK HSTARSHIP;
 #define PLAYER_CAPTAIN    (1 << 13)
 		/* The protagonist himself is on board. He gets a different color. */
 
-// JMS: Damage flags for a ship
-#define SHIP_IS_NOT_DAMAGED		(1 << 0)
-#define DAMAGE_GAUGE_ENERGY		(1 << 1)
-#define DAMAGE_GAUGE_CREW		(1 << 2)
-#define DAMAGE_GAUGE_CAPTAIN	(1 << 3)
-#define DAMAGE_THRUST			(1 << 4)
-#define DAMAGE_TEMP_WEAPON		(1 << 5)
-#define DAMAGE_TEMP_SPECIAL		(1 << 6)
-#define DAMAGE_TEMP_TURN		(1 << 7)
-#define DAMAGE_8				(1 << 8)
-#define DAMAGE_9				(1 << 9)
-
-
 /* These track the old resource package orderings for the ship resource indices */
 typedef enum
 {
@@ -104,12 +84,10 @@ typedef enum
 	ANDROSYNTH_ID,
 	CHENJESU_ID,
 	MMRNMHRM_ID,
-	SLYLANDRO_KOHRAH_ID,	// JMS
-	LURG_ID,				// JMS
+	LAST_MELEE_ID = MMRNMHRM_ID,
 	SIS_SHIP_ID,
-	LAST_MELEE_ID =	SIS_SHIP_ID, // JMS: The last ship to be included in super melee is this one
 	SA_MATRA_ID,
-	TRANSPORT_ID,	// JMS
+	UR_QUAN_PROBE_ID,
 	NUM_SPECIES_ID
 } SPECIES_ID;
 
@@ -180,10 +158,6 @@ typedef struct
 	STRING race_strings;
 	FRAME icons;
 	FRAME melee_icon;
-	
-	// JMS: Damage Flags
-	UWORD damage_flags;
-	
 } SHIP_INFO;
 
 typedef struct
@@ -282,7 +256,7 @@ struct STARSHIP
 	BYTE ship_input_state;
 	STATUS_FLAGS cur_status_flags;
 	STATUS_FLAGS old_status_flags;
-	
+
 	HELEMENT hShip;
 	COUNT ShipFacing;
 };
@@ -414,16 +388,12 @@ enum
 	UMGAH_SHIP,
 	URQUAN_SHIP,
 	ZOQFOTPIK_SHIP,
+
 	SYREEN_SHIP,
 	BLACK_URQUAN_SHIP,
-	ANDROSYNTH_SHIP,		// JMS: Added this line for Androsynth ship enum.
-	CHENJESU_SHIP,
-	MMRNMHRM_SHIP,
-	SLYLANDRO_KOHRAH_SHIP,	// JMS: Slylandros flying Kohr-ah vessel
-	LURG_SHIP,				// JMS: The fearsome Lurg
 	YEHAT_REBEL_SHIP,
-	TRANSPORT_SHIP,			// JMS: Transport replaces Ur-Quan probe
-	SAMATRA_SHIP = TRANSPORT_SHIP,
+	URQUAN_PROBE_SHIP,
+	SAMATRA_SHIP = URQUAN_PROBE_SHIP,
 
 	NUM_AVAILABLE_RACES
 };
@@ -431,7 +401,7 @@ enum
 #define RACE_COMMUNICATION \
 		ARILOU_CONVERSATION,       /* ARILOU_SHIP */ \
 		CHMMR_CONVERSATION,        /* CHMMR_SHIP */ \
-		HUMAN_CONVERSATION,		   /* JMS: HUMAN_SHIP */ \
+		INVALID_CONVERSATION,      /* HUMAN_SHIP */ \
 		ORZ_CONVERSATION,          /* ORZ_SHIP */ \
 		PKUNK_CONVERSATION,        /* PKUNK_SHIP */ \
 		SHOFIXTI_CONVERSATION,     /* SHOFIXTI_SHIP */ \
@@ -449,22 +419,15 @@ enum
 		UMGAH_CONVERSATION,        /* UMGAH_SHIP */ \
 		URQUAN_CONVERSATION,       /* URQUAN_SHIP */ \
 		ZOQFOTPIK_CONVERSATION,    /* ZOQFOTPIK_SHIP */ \
-		SYREEN_CONVERSATION,       /* SYREEN_SHIP */ \
+		INVALID_CONVERSATION,      /* SYREEN_SHIP */ \
 		BLACKURQ_CONVERSATION,     /* BLACK_URQUAN_SHIP */ \
-		ANDROSYNTH_CONVERSATION,   /* JMS: ANDROSYNTH_SHIP */ \
-		INVALID_CONVERSATION,      /* JMS: CHENJESU_SHIP */ \
-		INVALID_CONVERSATION,      /* JMS: MMRNMHRM_SHIP */ \
-		SLYLANDRO_HOME_CONVERSATION,/* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		LURG_CONVERSATION,			/* JMS: LURG_SHIP */ \
 		YEHAT_REBEL_CONVERSATION,  /* YEHAT_REBEL_SHIP */ \
-		TRANSPORT_CONVERSATION,    /* JMS: TRANSPORT_SHIP */ \
-		SYREENBASE_CONVERSATION,    /* SYREEN_BASE */ \
-		SYREENHOME_CONVERSATION,    /* SYREEN_HOME */ \
+		URQUAN_PROBE_CONVERSATION, /* URQUAN_PROBE_SHIP */
 
 #define RACE_SHIP_FOR_COMM \
 	ARILOU_SHIP,       /* ARILOU_CONVERSATION */ \
 	CHMMR_SHIP,        /* CHMMR_CONVERSATION */ \
-	HUMAN_SHIP,        /* JMS: HUMAN_CONVERSATION */ \
+	HUMAN_SHIP,        /* COMMANDER_CONVERSATION */ \
 	ORZ_SHIP,          /* ORZ_CONVERSATION */ \
 	PKUNK_SHIP,        /* PKUNK_CONVERSATION */ \
 	SHOFIXTI_SHIP,     /* SHOFIXTI_CONVERSATION */ \
@@ -484,16 +447,11 @@ enum
 	ZOQFOTPIK_SHIP,    /* ZOQFOTPIK_CONVERSATION */ \
 	SYREEN_SHIP,       /* SYREEN_CONVERSATION */ \
 	BLACK_URQUAN_SHIP, /* BLACKURQ_CONVERSATION */ \
-	ANDROSYNTH_SHIP,   /* JMS: ANDROSYNTH_CONVERSATION */ \
-	CHENJESU_SHIP,	   /* JMS: CHENJESU_CONVERSATION */ \
-	MMRNMHRM_SHIP,	   /* JMS: MMRNMHRM_CONVERSATION */ \
-	SLYLANDRO_KOHRAH_SHIP, /* JMS: SLYLANDRO_HOME_CONVERSATION */ \
-	LURG_SHIP,			/* JMS: LURG_CONVERSATION */ \
 	UMGAH_SHIP,        /* TALKING_PET_CONVERSATION */ \
-	TRANSPORT_SHIP,    /* TRANSPORT_CONVERSATION */ \
+	SLYLANDRO_SHIP,    /* SLYLANDRO_HOME_CONVERSATION */ \
+	URQUAN_PROBE_SHIP, /* URQUAN_PROBE_CONVERSATION */ \
 	YEHAT_SHIP,        /* YEHAT_REBEL_CONVERSATION */ \
 	HUMAN_SHIP         /* INVALID_CONVERSATION */
-	
  
 #define RACE_SHIP_COST \
 		1600,  /* ARILOU_SHIP */ \
@@ -518,18 +476,12 @@ enum
 		 600,  /* ZOQFOTPIK_SHIP */ \
 		1300,  /* SYREEN_SHIP */ \
 		3000,  /* BLACK_URQUAN_SHIP */ \
-		1900,  /* JMS: ANDROSYNTH_SHIP*/ \
-		2800,  /* JMS: CHENJESU_SHIP */ \
-		1800,  /* JMS: MMRNMHRM_SHIP */ \
-		3000,  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		2000,  /* JMS: LURG_SHIP */ \
 		2300,  /* YEHAT_REBEL_SHIP */
-		 
 
 #define LOG_TO_IP(s) ((s) << 1)
 #define RACE_IP_SPEED \
 		LOG_TO_IP (40),  /* ARILOU_SHIP */ \
-		LOG_TO_IP (30),  /* CHMMR_SHIP */ \
+		LOG_TO_IP (27),  /* CHMMR_SHIP */ \
 		LOG_TO_IP (24),  /* HUMAN_SHIP */ \
 		LOG_TO_IP (40),  /* ORZ_SHIP */ \
 		LOG_TO_IP (40),  /* PKUNK_SHIP */ \
@@ -550,53 +502,42 @@ enum
 		LOG_TO_IP (40),  /* ZOQFOTPIK_SHIP */ \
 		LOG_TO_IP (36),  /* SYREEN_SHIP */ \
 		LOG_TO_IP (30),  /* BLACK_URQUAN_SHIP */ \
-		LOG_TO_IP (40),  /* JMS: ANDROSYNTH_SHIP */ \
-		LOG_TO_IP (30),  /* JMS: CHENJESU_SHIP */ \
-		LOG_TO_IP (42),  /* JMS: MMRNMHRM_SHIP */ \
-		LOG_TO_IP (30),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		LOG_TO_IP (40),  /* JMS: LURG_SHIP */ \
 		LOG_TO_IP (30),  /* YEHAT_REBEL_SHIP */ \
-		LOG_TO_IP (24),  /* JMS: TRANSPORT_SHIP */ 
+		LOG_TO_IP (90),  /* URQUAN_PROBE_SHIP */
 
 #define LOG_TO_HYPER(s) (WORLD_TO_VELOCITY (s) >> 1)
 #define RACE_HYPER_SPEED \
-		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* ARILOU_SHIP */ \
-		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* CHMMR_SHIP */ \
-		LOG_TO_HYPER (24 * RESOLUTION_FACTOR),  /* HUMAN_SHIP */ \
-		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* ORZ_SHIP */ \
-		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* PKUNK_SHIP */ \
-		LOG_TO_HYPER (35 * RESOLUTION_FACTOR),  /* SHOFIXTI_SHIP */ \
-		LOG_TO_HYPER (48 * RESOLUTION_FACTOR),  /* SPATHI_SHIP */ \
-		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* SUPOX_SHIP */ \
-		LOG_TO_HYPER (50 * RESOLUTION_FACTOR),  /* THRADDASH_SHIP */ \
-		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* UTWIG_SHIP */ \
-		LOG_TO_HYPER (21 * RESOLUTION_FACTOR),  /* VUX_SHIP */ \
-		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* YEHAT_SHIP */ \
-		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* MELNORME_SHIP */ \
-		LOG_TO_HYPER (20 * RESOLUTION_FACTOR),  /* DRUUGE_SHIP */ \
-		LOG_TO_HYPER (25 * RESOLUTION_FACTOR),  /* ILWRATH_SHIP */ \
-		LOG_TO_HYPER (27 * RESOLUTION_FACTOR),  /* MYCON_SHIP */ \
-		LOG_TO_HYPER (60 * RESOLUTION_FACTOR),  /* SLYLANDRO_SHIP */ \
-		LOG_TO_HYPER (18 * RESOLUTION_FACTOR),  /* UMGAH_SHIP */ \
-		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* URQUAN_SHIP */ \
-		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* ZOQFOTPIK_SHIP */ \
-		LOG_TO_HYPER (36 * RESOLUTION_FACTOR),  /* SYREEN_SHIP */ \
-		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* BLACK_URQUAN_SHIP */ \
-		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* JMS: ANDROSYNTH_SHIP */ \
-		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* JMS: CHENJESU_SHIP */ \
-		LOG_TO_HYPER (42 * RESOLUTION_FACTOR),  /* JMS: MMRNMHRM_SHIP */ \
-		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* JMS LURG_SHIP */ \
-		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* YEHAT_REBEL_SHIP */ \
-		LOG_TO_HYPER (24 * RESOLUTION_FACTOR),  /* JMS: TRANSPORT_SHIP */ \
+		LOG_TO_HYPER (40),  /* ARILOU_SHIP */ \
+		LOG_TO_HYPER (27),  /* CHMMR_SHIP */ \
+		LOG_TO_HYPER (24),  /* HUMAN_SHIP */ \
+		LOG_TO_HYPER (40),  /* ORZ_SHIP */ \
+		LOG_TO_HYPER (40),  /* PKUNK_SHIP */ \
+		LOG_TO_HYPER (35),  /* SHOFIXTI_SHIP */ \
+		LOG_TO_HYPER (48),  /* SPATHI_SHIP */ \
+		LOG_TO_HYPER (40),  /* SUPOX_SHIP */ \
+		LOG_TO_HYPER (50),  /* THRADDASH_SHIP */ \
+		LOG_TO_HYPER (30),  /* UTWIG_SHIP */ \
+		LOG_TO_HYPER (21),  /* VUX_SHIP */ \
+		LOG_TO_HYPER (30),  /* YEHAT_SHIP */ \
+		LOG_TO_HYPER (40),  /* MELNORME_SHIP */ \
+		LOG_TO_HYPER (20),  /* DRUUGE_SHIP */ \
+		LOG_TO_HYPER (25),  /* ILWRATH_SHIP */ \
+		LOG_TO_HYPER (27),  /* MYCON_SHIP */ \
+		LOG_TO_HYPER (60),  /* SLYLANDRO_SHIP */ \
+		LOG_TO_HYPER (18),  /* UMGAH_SHIP */ \
+		LOG_TO_HYPER (30),  /* URQUAN_SHIP */ \
+		LOG_TO_HYPER (40),  /* ZOQFOTPIK_SHIP */ \
+		LOG_TO_HYPER (36),  /* SYREEN_SHIP */ \
+		LOG_TO_HYPER (30),  /* BLACK_URQUAN_SHIP */ \
+		LOG_TO_HYPER (30),  /* YEHAT_REBEL_SHIP */
 
 #define RACE_HYPERSPACE_PERCENT \
-		13,  /* ARILOU_SHIP */ \
-		60,  /* CHMMR_SHIP */ \
-		30,  /* HUMAN_SHIP */ \
+		20,  /* ARILOU_SHIP */ \
+		 0,  /* CHMMR_SHIP */ \
+		 0,  /* HUMAN_SHIP */ \
 		20,  /* ORZ_SHIP */ \
 		40,  /* PKUNK_SHIP */ \
-		20,  /* SHOFIXTI_SHIP */ \
+		 0,  /* SHOFIXTI_SHIP */ \
 		20,  /* SPATHI_SHIP */ \
 		40,  /* SUPOX_SHIP */ \
 		60,  /* THRADDASH_SHIP */ \
@@ -605,29 +546,24 @@ enum
 		60,  /* YEHAT_SHIP */ \
 		 0,  /* MELNORME_SHIP */ \
 		30,  /* DRUUGE_SHIP */ \
-		 0,  /* ILWRATH_SHIP */ \
+		60,  /* ILWRATH_SHIP */ \
 		40,  /* MYCON_SHIP */ \
-		 0,  /* SLYLANDRO_SHIP */ \
+		 2,  /* SLYLANDRO_SHIP */ \
 		30,  /* UMGAH_SHIP */ \
-		 0,  /* URQUAN_SHIP */ \
+		70,  /* URQUAN_SHIP */ \
 		 0,  /* ZOQFOTPIK_SHIP */ \
-		30,  /* SYREEN_SHIP */ \
-		15,  /* BLACK_URQUAN_SHIP */ \
-	    20, /* JMS: ANDROSYNTH_SHIP */ \
-		60,  /* JMS: CHENJESU_SHIP */ \
-		60,  /* JMS: MMRNMHRM_SHIP */ \
-		15, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		45, /* JMS: LURG_SHIP */ \
+		 0,  /* SYREEN_SHIP */ \
+		70,  /* BLACK_URQUAN_SHIP */ \
 		60,  /* YEHAT_REBEL_SHIP */ \
-		 0,  /* JMS: TRANSPORT_SHIP */
+		 0,  /* URQUAN_PROBE_SHIP */
 
 #define RACE_INTERPLANETARY_PERCENT \
 		 0,  /* ARILOU_SHIP */ \
-		60,  /* CHMMR_SHIP */ \
-		30,  /* HUMAN_SHIP */ \
+		 0,  /* CHMMR_SHIP */ \
+		 0,  /* HUMAN_SHIP */ \
 		20,  /* ORZ_SHIP */ \
 		20,  /* PKUNK_SHIP */ \
-		40,  /* SHOFIXTI_SHIP */ \
+		 0,  /* SHOFIXTI_SHIP */ \
 		10,  /* SPATHI_SHIP */ \
 		20,  /* SUPOX_SHIP */ \
 		20,  /* THRADDASH_SHIP */ \
@@ -636,32 +572,27 @@ enum
 		40,  /* YEHAT_SHIP */ \
 		 0,  /* MELNORME_SHIP */ \
 		20,  /* DRUUGE_SHIP */ \
-		 0,  /* ILWRATH_SHIP */ \
+		60,  /* ILWRATH_SHIP */ \
 		20,  /* MYCON_SHIP */ \
-		 0,  /* SLYLANDRO_SHIP */ \
+		 5,  /* SLYLANDRO_SHIP */ \
 		20,  /* UMGAH_SHIP */ \
-		 0,  /* URQUAN_SHIP */ \
+		40,  /* URQUAN_SHIP */ \
 		 0,  /* ZOQFOTPIK_SHIP */ \
-	    20,  /* SYREEN_SHIP */ \
-		25,  /* BLACK_URQUAN_SHIP */ \
-		50,  /* JMS: ANDROSYNTH_SHIP */ \
-		40,  /* JMS: CHENJESU_SHIP */ \
-		40,  /* JMS: MMRNMHRM_SHIP */ \
-		25, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		45, /* JMS: LURG_SHIP */ \
+		 0,  /* SYREEN_SHIP */ \
+		40,  /* BLACK_URQUAN_SHIP */ \
 		40,  /* YEHAT_REBEL_SHIP */ \
-		 0,  /* TRANSPORT_SHIP */ \
+		 0,  /* URQUAN_PROBE_SHIP */
 
 // How many ships will an encounter consist of.
 // The first number specifies the minimum, the second the maximum.
 // The chance is 50% for each ship past the minimum to be present.
 #define RACE_ENCOUNTER_MAKEUP \
 		MAKE_BYTE (1, 5),  /* ARILOU_SHIP */ \
-		MAKE_BYTE (1, 5),  /* CHMMR_SHIP */ \
-		MAKE_BYTE (1, 5),  /* HUMAN_SHIP */ \
+		0,                 /* CHMMR_SHIP */ \
+		0,                 /* HUMAN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* ORZ_SHIP */ \
 		MAKE_BYTE (1, 5),  /* PKUNK_SHIP */ \
-		MAKE_BYTE (1, 5),  /* SHOFIXTI_SHIP */ \
+		0,                 /* SHOFIXTI_SHIP */ \
 		MAKE_BYTE (1, 5),  /* SPATHI_SHIP */ \
 		MAKE_BYTE (1, 5),  /* SUPOX_SHIP */ \
 		MAKE_BYTE (1, 5),  /* THRADDASH_SHIP */ \
@@ -676,23 +607,17 @@ enum
 		MAKE_BYTE (1, 5),  /* UMGAH_SHIP */ \
 		MAKE_BYTE (1, 5),  /* URQUAN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* ZOQFOTPIK_SHIP */ \
-		MAKE_BYTE (1, 5),  /* SYREEN_SHIP */ \
+		0,                 /* SYREEN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* BLACK_URQUAN_SHIP */ \
-		MAKE_BYTE (1, 5),  /* JMS: ANDROSYNTH_SHIP*/ \
-		MAKE_BYTE (1, 5),  /* JMS: CHENJESU_SHIP */\
-		MAKE_BYTE (1, 5),  /* JMS: MMRNMHRM_SHIP */\
-		MAKE_BYTE (1, 5),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		MAKE_BYTE (1, 5),  /* JMS: LURG_SHIP */ \
-		MAKE_BYTE (1, 5),  /* YEHAT_REBEL_SHIP */\
-		MAKE_BYTE (1, 1),  /* JMS:TRANSPORT_SHIP */ \
+		MAKE_BYTE (1, 5),  /* YEHAT_REBEL_SHIP */
 
 #define RACE_COLORS \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x10), 0x53),  /* ARILOU_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x0F, 0x0F, 0x0F), 0x00),  /* CHMMR_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x01, 0x1F), 0x4D),  /* HUMAN_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x07, 0x09), 0x36),  /* ORZ_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00),  /* CHMMR_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x01, 0x1f), 0x4D),  /* HUMAN_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x0E, 0x00, 0x0E), 0x36),  /* ORZ_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x06, 0x08), 0x62),  /* PKUNK_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x0A, 0x06, 0x00), 0x00),  /* SHOFIXTI_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00),  /* SHOFIXTI_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x0C, 0x05, 0x00), 0x76),  /* SPATHI_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x0C, 0x05, 0x00), 0x76),  /* SUPOX_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x06, 0x08), 0x62),  /* THRADDASH_SHIP */ \
@@ -707,15 +632,9 @@ enum
 		BUILD_COLOR (MAKE_RGB15 (0x0A, 0x00, 0x11), 0x3D),  /* UMGAH_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x6E),  /* URQUAN_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x00), 0x2D),  /* ZOQFOTPIK_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x1E, 0x09, 0x03), 0x00),  /* SYREEN_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00),  /* SYREEN_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x06, 0x06, 0x06), 0x20),  /* BLACK_URQUAN_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x1F, 0x00), 0x4D),  /* ANDROSYNTH_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x2A, 0x2A, 0x2A), 0x39),  /* JMS: CHENJESU_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x4D),  /* JMS: MMRNMHRM_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x02, 0x02, 0x02), 0x39),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x1B, 0x02), 0x4D),  /* JMS: LURG_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x2A, 0x00, 0x00), 0x39),  /* YEHAT_REBEL_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x03, 0x1F), 0x39),  /* JMS:TRANSPORT_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x14, 0x07, 0x1F), 0x39),  /* YEHAT_REBEL_SHIP */
 
 #define RADAR_SCAN_WIDTH (UNIT_SCREEN_WIDTH * NUM_RADAR_SCREENS)
 #define RADAR_SCAN_HEIGHT (UNIT_SCREEN_HEIGHT * NUM_RADAR_SCREENS)
@@ -734,8 +653,8 @@ enum
 
 // Hyperspace coordinates of the Sol system
 // Should be the same as in plandata.c
-#define SOL_X  6752
-#define SOL_Y  7450
+#define SOL_X  1752
+#define SOL_Y  1450
 
 extern BOOLEAN InitKernel (void);
 
@@ -753,3 +672,4 @@ extern BOOLEAN free_image (FRAME *pixarray);
 extern void NotifyOthers (COUNT which_race, BYTE target_loc);
 
 #endif /* _RACES_H */
+

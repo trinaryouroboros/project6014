@@ -24,8 +24,6 @@
 #include "libs/compiler.h"
 #include "libs/mathlib.h"
 
-#include "libs/log.h"
-
 
 // Allocate a new STARSHIP or SHIP_FRAGMENT and put it in the queue
 HLINK

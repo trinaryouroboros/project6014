@@ -16,12 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: -Implemented changes to make 0 planet star systems work
-// JMS 2010: -Some systems now have a freight transport ship in interplanetary.
-//			 -Can't encounter Kohr-ahs before meeting slylandros riding kohr-ah vessels first at least once
-//			 -Changed the encounter probability calculation for Kohr-Ah and Slylandros riding Kohr-Ah vessels.
-//			 -Gave Lurg groups a homeworld
-
 #include "build.h"
 #include "encount.h"
 #include "file.h"
@@ -37,8 +31,6 @@
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
 #endif
-
-#include "libs/log.h"
 
 static BYTE LastEncGroup;
 		// Last encountered group, saved into state files
@@ -261,11 +253,11 @@ BuildGroups (void)
 	BYTE HomeWorld[] =
 	{
 		0,                /* ARILOU_SHIP */
-		CHMMR_DEFINED,    /* CHMMR_SHIP */
-		SOL_DEFINED,	  /* JMS: HUMAN_SHIP */
+		0,                /* CHMMR_SHIP */
+		0,                /* HUMAN_SHIP */
 		ORZ_DEFINED,      /* ORZ_SHIP */
 		PKUNK_DEFINED,    /* PKUNK_SHIP */
-		SHOFIXTI_DEFINED, /* JMS: SHOFIXTI_SHIP */
+		0,                /* SHOFIXTI_SHIP */
 		SPATHI_DEFINED,   /* SPATHI_SHIP */
 		SUPOX_DEFINED,    /* SUPOX_SHIP */
 		THRADD_DEFINED,   /* THRADDASH_SHIP */
@@ -281,26 +273,15 @@ BuildGroups (void)
 		0,                /* URQUAN_SHIP */
 		ZOQFOT_DEFINED,   /* ZOQFOTPIK_SHIP */
 
-		SYREEN_DEFINED,		/* SYREEN_SHIP */
-		0,					/* BLACK_URQUAN_SHIP */
-		0,					/* ANDROSYNTH_SHIP */
-
-		0,					/* CHENJESU_SHIP */
-		0,					/* MMRNMHRM_SHIP */
-		
-		0,					/* JMS: SLYLANDRO_KOHRAH_SHIP */
-		LURG_SHIP,			/* JMS: LURG_SHIP */
-		0,					/* YEHAT_REBEL_SHIP */
+		0,                /* SYREEN_SHIP */
+		0,                /* BLACK_URQUAN_SHIP */
+		0,                /* YEHAT_REBEL_SHIP */
 	};
 	BYTE EncounterPercent[] =
 	{
 		RACE_INTERPLANETARY_PERCENT
 	};
 
-	// JMS: Can't encounter Kohr-ahs before meeting slylandros riding kohr-ah vessels first at least once
-	if (GET_GAME_STATE(SLYLANDRO_KOHRAH_MET_TIMES)==0)
-		EncounterPercent[BLACK_URQUAN_SHIP] = 0;
-	
 	EncounterPercent[SLYLANDRO_SHIP] *= GET_GAME_STATE (SLYLANDRO_MULTIPLIER);
 	Index = GET_GAME_STATE (UTWIG_SUPOX_MISSION);
 	if (Index > 1 && Index < 5)
@@ -367,13 +348,8 @@ BuildGroups (void)
 
 				// EncounterPercent is only used in practice for the Slylandro
 				// Probes, for the rest of races the chance of encounter is
-				// calced directly below from the distance to the Homeworld.
-				//
-				// JMS: Also Kohr-Ah ships and Slylandros riding Kohr-Ah vessels
-				// now have EncounterPercent as their probability.
-				if (FleetPtr->actual_strength != INFINITE_RADIUS
-					&& FleetPtr->SpeciesID != SLYLANDRO_KOHRAH_ID
-					&& FleetPtr->SpeciesID != KOHR_AH_ID)
+				// calced directly below from the distance to the Homeworld
+				if (FleetPtr->actual_strength != INFINITE_RADIUS)
 				{
 					i = 70 - (COUNT)((DWORD)square_root (d_squared)
 							* 60L / encounter_radius);
@@ -422,20 +398,10 @@ FoundHome:
 			for (Index = HINIBBLE (EncounterMakeup[BestIndex]); Index;
 					--Index)
 			{
-				if (Index <= LONIBBLE (EncounterMakeup[BestIndex]) || (COUNT)TFB_Random () % 100 < 50)
-				{
-					// JMS: Generate freight transport ship in specific systems.
-					if(which_group == 0 && (
-					     (CurStarDescPtr->Index==SOL_DEFINED && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS)<2 )
-					  || (CurStarDescPtr->Index==CHMMR_DEFINED && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS)>3 )
-					  //|| CurStarDescPtr->Index==SYREEN_DEFINED
-					  //|| CurStarDescPtr->Index==YEHAT_DEFINED			
-							)
-					   )
-						CloneShipFragment (TRANSPORT_SHIP, &GLOBAL (npc_built_ship_q), 0);
-					else
-						CloneShipFragment (BestIndex, &GLOBAL (npc_built_ship_q), 0);
-				}
+				if (Index <= LONIBBLE (EncounterMakeup[BestIndex])
+						|| (COUNT)TFB_Random () % 100 < 50)
+					CloneShipFragment (BestIndex,
+							&GLOBAL (npc_built_ship_q), 0);
 			}
 
 			PutGroupInfo (GROUPS_RANDOM, ++which_group);
@@ -590,14 +556,14 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 		fp = OpenStateFile (DEFGRPINFO_FILE, "r+b");
 	else
 		fp = OpenStateFile (RANDGRPINFO_FILE, "r+b");
-			
+
 	if (!fp)
-			return FALSE;
+		return FALSE;
 
 	SeekStateFile (fp, offset, SEEK_SET);
 	ReadGroupHeader (fp, &GH);
 #ifdef DEBUG_GROUPS
-	log_add (log_Debug, "******GetGroupInfo(%lu): %u(%lu) out of %u", offset,
+	log_add (log_Debug, "GetGroupInfo(%lu): %u(%lu) out of %u", offset,
 			which_group, GH.GroupOffset[which_group], GH.NumGroups);
 #endif /* DEBUG_GROUPS */
 
@@ -655,7 +621,6 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 			SeekStateFile (fp, GH.GroupOffset[which_group], SEEK_SET);
 			sread_8 (fp, &RaceType);
 			sread_8 (fp, &NumShips);
-
 			if (!NumShips)
 				continue; /* group is dead */
 
@@ -673,28 +638,15 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 			GroupPtr->orbit_pos = NORMALIZE_FACING (
 					LOBYTE (HIWORD (rand_val)));
 
-			if (pSolarSysState->SunDesc[0].NumPlanets==0)			// JMS:
-				group_loc = 1;										// Originally
-			else													// Only
-				group_loc = pSolarSysState->SunDesc[0].NumPlanets;	// THIS line existed. Modified to enable 0 planet systems.
+			group_loc = pSolarSysState->SunDesc[0].NumPlanets;
 			if (group_loc == 1 && task == EXPLORE)
 				task = IN_ORBIT;
 			else
 				group_loc = (BYTE)((HIBYTE (LOWORD (rand_val)) % group_loc) + 1);
 			GroupPtr->dest_loc = group_loc;
 			rand_val = TFB_Random ();
-			
-			if (pSolarSysState->SunDesc[0].NumPlanets==0)			// JMS:
-			{														// Modified to enable 0 planet star systems.
-				GroupPtr->loc.x = (LOWORD (rand_val) % 1000) + 5000;//
-				GroupPtr->loc.y = (HIWORD (rand_val) % 1000) + 5000;//
-			}														//
-			else													// Originally only lines within this else existed.
-			{														
-				GroupPtr->loc.x = (LOWORD (rand_val) % 10000) - 5000;
-				GroupPtr->loc.y = (HIWORD (rand_val) % 10000) - 5000;
-			}
-			
+			GroupPtr->loc.x = (LOWORD (rand_val) % 10000) - 5000;
+			GroupPtr->loc.y = (HIWORD (rand_val) % 10000) - 5000;
 			GroupPtr->group_counter = 0;
 			if (task == EXPLORE)
 			{
@@ -709,61 +661,13 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 				XFormIPLoc (&pSolarSysState->PlanetDesc[group_loc - 1]
 						.image.origin, &org, FALSE);
 				angle = FACING_TO_ANGLE (GroupPtr->orbit_pos + 1);
-				
-				if (pSolarSysState->SunDesc[0].NumPlanets==0)			// JMS:
-				{														// Modified to enable 0 planet star systems.
-					XFormIPLoc (&pSolarSysState->SunDesc[0]				//
-								.image.origin, &org, FALSE);			//
-					GroupPtr->loc.x = (LOWORD (rand_val) % 1000)+1000;	//
-					GroupPtr->loc.y = (LOWORD (rand_val) % 1000)+1000;	//
-				}														//
-				else													// Originally only lines within this else existed.
-				{
-					GroupPtr->loc.x = org.x + COSINE (angle, STATION_RADIUS);
-					GroupPtr->loc.y = org.y + SINE (angle, STATION_RADIUS);
-				}
-				
+				GroupPtr->loc.x = org.x + COSINE (angle, STATION_RADIUS);
+				GroupPtr->loc.y = org.y + SINE (angle, STATION_RADIUS);
 				group_loc = 0;
 			}
-			
-			// JMS: Transport ship resides near starbase / home planet
-			if (GroupPtr->race_id==TRANSPORT_SHIP) {
-				
-				COUNT startposition;
 
-				// Transport ship is leaving system with status 1, otherwise it sits tight in planet orbit
-				if (GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1) {
-					GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
-				}
-				else
-					GroupPtr->task = IN_ORBIT | IGNORE_FLAGSHIP;
-				
-				startposition = 1;
-				if(CurStarDescPtr->Index==SOL_DEFINED)
-					startposition=3; /* orbitting earth */
-				if(CurStarDescPtr->Index==CHMMR_DEFINED)
-					startposition=2; /* orbitting Procyon II */
-				//if(CurStarDescPtr->Index==SYREEN_DEFINED)					
-				//	startposition=1; /* orbitting Betelgeuse I */
-				//if(CurStarDescPtr->Index==YEHAT_DEFINED)
-				//	startposition=1; /* orbitting Gamma Serpentis I */
-				
-				// JMS: Transport ship is arriving from hyperspace
-				if(GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 4)
-				{
-					GroupPtr->loc.x = 18000;
-					GroupPtr->loc.y = 6000;
-				}
-				else
-					GroupPtr->sys_loc = startposition;
-				
-				GroupPtr->dest_loc = startposition;
-			}
-			else
-			{
-				GroupPtr->task = task;
-				GroupPtr->sys_loc = group_loc;
-			}
+			GroupPtr->task = task;
+			GroupPtr->sys_loc = group_loc;
 
 #ifdef DEBUG_GROUPS
 			log_add (log_Debug, "battle group %u(0x%04x) strength "
@@ -879,7 +783,7 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 	{
 		/* Read 'which_group' group into npc_built_ship_q */
 		BYTE NumShips;
-		
+
 		// XXX: Hack: The assumption here is that we only read the makeup
 		//   of a particular group when initializing an encounter, which
 		//   makes this group 'last encountered'. Also the state of all

@@ -126,10 +126,10 @@ void generateMineralIndex(const SOLARSYS_STATE *system,
 		const PLANET_DESC *world, COUNT minerals[]);
 // Calculate the total value of all bio on a world.
 COUNT calculateBioValue (const SOLARSYS_STATE *system,
-			 const PLANET_DESC *world);
+		const PLANET_DESC *world);
 // Determine how much of each mineral type is present on a world
 void generateBioIndex(const SOLARSYS_STATE *system,
-		      const PLANET_DESC *world, COUNT bio[], FILE *out);
+		const PLANET_DESC *world, COUNT bio[]);
 
 // Tally the resources for each star system.
 void tallyResources (FILE *out);
@@ -179,9 +179,6 @@ extern BOOLEAN instantMove;
 // Dump all game strings.
 void dumpStrings(FILE *out);
 
-
-// JMS: Toggle shofixt distress site triangulation spheres on / off
-void ToggleTriangulationSpheres (BOOLEAN triangSphereSwitch);
 
 // To add some day:
 // - a function to fast forward the game clock to a specifiable time.

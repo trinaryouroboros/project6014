@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Removed the references to ANIM_DISABLED from here since that define is removed...
-//			 ... We're not using this file anyway, but keeping it just to be sure.
-
 #include "setup.h"
 #include "comm/commall.h"
 #include "comm/comandr/resinst.h"
@@ -43,7 +40,7 @@ static LOCDATA commander_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	COMMANDER_CONVERSATION_PHRASES, /* PlayerPhrases */
-	2, /* NumAnimations */
+	3, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{ /* Blink */
 			1, /* StartIndex */
@@ -59,6 +56,14 @@ static LOCDATA commander_desc =
 			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 40, 0, /* FrameRate */
 			ONE_SECOND * 2, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{
+			1, /* StartIndex */
+			3, /* NumFrames */
+			RANDOM_ANIM | COLORXFORM_ANIM,/* AnimFlags */
+			0, ONE_SECOND / 30, /* FrameRate */
+			0, ONE_SECOND / 15, /* RestartRate */
 			0, /* BlockMask */
 		},
 	},
@@ -586,7 +591,7 @@ GiveRadios (RESPONSE_REF R)
 		AlienTalkSegue (1);
 
 		LockMutex (GraphicsLock);
-		//CommData.AlienAmbientArray[2].AnimFlags |= ANIM_DISABLED; // JMS
+		CommData.AlienAmbientArray[2].AnimFlags |= ANIM_DISABLED;
 		UnlockMutex (GraphicsLock);
 
 		XFormColorMap (GetColorMapAddress (
@@ -613,10 +618,6 @@ GiveRadios (RESPONSE_REF R)
 static void
 Intro (void)
 {
-	SET_GAME_STATE (STARBASE_AVAILABLE, 1);
-	NPCPhrase (STARBASE_WILL_BE_READY);
-	return;
-
 	if (GET_GAME_STATE (PROBE_ILWRATH_ENCOUNTER))
 	{
 		NPCPhrase (VERY_IMPRESSIVE);
@@ -693,13 +694,13 @@ init_commander_comm ()
 
 	if (GET_GAME_STATE (RADIOACTIVES_PROVIDED))
 	{
-		//commander_desc.AlienAmbientArray[2].AnimFlags |= ANIM_DISABLED; // JMS
+		commander_desc.AlienAmbientArray[2].AnimFlags |= ANIM_DISABLED;
 		// regular track -- let's make sure
 		commander_desc.AlienSongFlags &= ~LDASF_USE_ALTERNATE;
 	}
 	else
 	{	
-		//commander_desc.AlienAmbientArray[2].AnimFlags &= ~ANIM_DISABLED; // JMS
+		commander_desc.AlienAmbientArray[2].AnimFlags &= ~ANIM_DISABLED;
 		// use alternate 'low-power' track if available
 		commander_desc.AlienAltSongRes = COMMANDER_LOWPOW_MUSIC;
 		commander_desc.AlienSongFlags |= LDASF_USE_ALTERNATE;

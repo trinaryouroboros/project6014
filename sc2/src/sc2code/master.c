@@ -16,10 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Slylandros-in-kohrah-vessel is ruled out from supermelee...
-//			 -...But the Sis ship is added into it
-//			 -Lurg ship likewise!
-
 #include "master.h"
 
 #include "build.h"
@@ -76,7 +72,8 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 
 		// Insert the ship in the master queue in the right location
 		// to keep the list sorted on the name of the race.
-		for (hStarShip = GetHeadLink (&master_q); hStarShip; hStarShip = hNextShip)
+		for (hStarShip = GetHeadLink (&master_q);
+				hStarShip; hStarShip = hNextShip)
 		{
 			char ship_buf[30];
 			MASTER_SHIP_INFO *MasterPtr;
@@ -84,42 +81,15 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 			MasterPtr = LockMasterShip (&master_q, hStarShip);
 			hNextShip = _GetSuccLink (MasterPtr);
 			GetStringContents (SetAbsStringTableIndex (
-				MasterPtr->ShipInfo.race_strings, 2), (STRINGPTR)ship_buf, FALSE);
+					MasterPtr->ShipInfo.race_strings, 2
+					), (STRINGPTR)ship_buf, FALSE);
 			UnlockMasterShip (&master_q, hStarShip);
 
 			if (strcmp (built_buf, ship_buf) < 0)
 				break;
 		}
-		
-		if(num_entries > 2) // JMS: Deal with other than Slylandro_kohrah ship and sis ship normally.
-				InsertQueue (&master_q, hBuiltShip, hStarShip);
-		else 
-		{
-			// JMS: Slylandro_kohrah ship goes last.
-			if(BuiltPtr->SpeciesID==SLYLANDRO_KOHRAH_ID)
-				PutQueue (&master_q, hBuiltShip);
-			
-			// JMS: Lurg goes before the last.
-			else if(BuiltPtr->SpeciesID==LURG_ID)
-			{
-				hStarShip = GetTailLink (&master_q);			
-				InsertQueue (&master_q, hBuiltShip, hStarShip);
-			}
-			
-			// JMS: Explorer goes before the last.
-			else if(BuiltPtr->SpeciesID==SIS_SHIP_ID)
-			{
-				MASTER_SHIP_INFO *MasterPtr;
-				
-				hStarShip = GetTailLink (&master_q);
-				MasterPtr = LockMasterShip (&master_q, hStarShip);
-				hNextShip = _GetPredLink (MasterPtr);
-				InsertQueue (&master_q, hBuiltShip, hNextShip);
-				UnlockMasterShip (&master_q, hStarShip);
-			}
-			
-		}
-	}		
+		InsertQueue (&master_q, hBuiltShip, hStarShip);
+	}
 }
 
 void
@@ -245,3 +215,5 @@ GetShipMeleeIconsFromIndex (unsigned Index)
 
 	return val;
 }
+
+

@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Added viewscreen animu
-//			 -Added some dialogue options
-
 #include "comm/commall.h"
 #include "comm/shofixt/resinst.h"
 #include "comm/shofixt/strings.h"
@@ -44,7 +41,7 @@ static LOCDATA shofixti_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SHOFIXTI_CONVERSATION_PHRASES, /* PlayerPhrases */
-	13, /* NumAnimations */
+	11, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{
 			5, /* StartIndex */
@@ -135,23 +132,6 @@ static LOCDATA shofixti_desc =
 			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
 			(1 << 9), /* BlockMask */
 		},
-		{
-			69, /* StartIndex */
-			3, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 30, 0, /* FrameRate */
-			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{	// JMS: Viewscreen animation is this one.
-			72, /* StartIndex */
-			14, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, 0, /* FrameRate */
-			ONE_SECOND * 2, ONE_SECOND * 4, /* RestartRate */
-			0, /* BlockMask */
-		},
-
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
@@ -176,195 +156,466 @@ static LOCDATA shofixti_desc =
 	NULL,
 };
 
+static RESPONSE_REF shofixti_name;
+
+static void
+GetShofixtiName (void)
+{
+	if (GET_GAME_STATE (SHOFIXTI_KIA))
+		shofixti_name = katana;
+	else
+		shofixti_name = tanaka;
+}
 
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	if (PLAYER_SAID (R, pearshaped))
+	SET_GAME_STATE (BATTLE_SEGUE, 1);
+
+	if (PLAYER_SAID (R, bye0))
 	{
-		NPCPhrase (KYAIEE);
-		SET_GAME_STATE (SHOFIXTI_ANGRY, 2);
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	}	
-	else if (PLAYER_SAID (R, farewell_shofixti))
-	{
-		if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
-			NPCPhrase (MIFFED_GOODBYE_EARTHLING);
-		else
-			NPCPhrase (GOODBYE_EARTHLING);
+		NPCPhrase (GOODBYE);
+
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
 	}
-	else if (PLAYER_SAID (R, will_attack))
+	else if (PLAYER_SAID (R, go_ahead))
 	{
-		NPCPhrase (WILL_ATTACK_TOO);
-		SET_GAME_STATE (SHOFIXTI_ANGRY, 3);
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	}	
-	else if (PLAYER_SAID (R, sorry))
-	{
-		NPCPhrase (SORRY_ACCEPTED);
-		SET_GAME_STATE (SHOFIXTI_ANGRY, 1);
+		NPCPhrase (ON_SECOND_THOUGHT);
+
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
 	}
+	else if (PLAYER_SAID (R, need_you_for_duty))
+	{
+		NPCPhrase (OK_WILL_BE_SENTRY);
 
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+	}
+	else if (PLAYER_SAID (R, females)
+			|| PLAYER_SAID (R, nubiles)
+			|| PLAYER_SAID (R, rat_babes))
+	{
+		NPCPhrase (LEAPING_HAPPINESS);
+
+		SET_GAME_STATE (SHOFIXTI_RECRUITED, 1);
+		SET_GAME_STATE (MAIDENS_ON_SHIP, 0);
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+
+		AddEvent (RELATIVE_EVENT, 2, 0, 0, SHOFIXTI_RETURN_EVENT);
+	}
+	else if (PLAYER_SAID (R, dont_attack))
+	{
+		NPCPhrase (TYPICAL_PLOY);
+
+		SET_GAME_STATE (SHOFIXTI_STACK1, 1);
+	}
+	else if (PLAYER_SAID (R, hey_stop))
+	{
+		NPCPhrase (ONLY_STOP);
+
+		SET_GAME_STATE (SHOFIXTI_STACK1, 2);
+	}
+	else if (PLAYER_SAID (R, look_you_are))
+	{
+		NPCPhrase (TOO_BAD);
+
+		SET_GAME_STATE (SHOFIXTI_STACK1, 3);
+	}
+	else if (PLAYER_SAID (R, no_one_insults))
+	{
+		NPCPhrase (YOU_LIMP);
+
+		SET_GAME_STATE (SHOFIXTI_STACK2, 1);
+	}
+	else if (PLAYER_SAID (R, mighty_words))
+	{
+		NPCPhrase (HANG_YOUR);
+
+		SET_GAME_STATE (SHOFIXTI_STACK2, 2);
+	}
+	else if (PLAYER_SAID (R, dont_know))
+	{
+		NPCPhrase (NEVER);
+
+		SET_GAME_STATE (SHOFIXTI_STACK3, 1);
+	}
+	else if (PLAYER_SAID (R, look0))
+	{
+		NPCPhrase (FOR_YOU);
+
+		SET_GAME_STATE (SHOFIXTI_STACK3, 2);
+	}
+	else if (PLAYER_SAID (R, no_bloodshed))
+	{
+		NPCPhrase (YES_BLOODSHED);
+
+		SET_GAME_STATE (SHOFIXTI_STACK3, 3);
+	}
+	else if (PLAYER_SAID (R, dont_want_to_fight))
+	{
+		BYTE NumVisits;
+
+		NumVisits = GET_GAME_STATE (SHOFIXTI_STACK4);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (MUST_FIGHT_YOU_URQUAN_1);
+				break;
+			case 1:
+				NPCPhrase (MUST_FIGHT_YOU_URQUAN_2);
+				break;
+			case 2:
+				NPCPhrase (MUST_FIGHT_YOU_URQUAN_3);
+				break;
+			case 3:
+				NPCPhrase (MUST_FIGHT_YOU_URQUAN_4);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (SHOFIXTI_STACK4, NumVisits);
+	}
 }
 
 static void
-ThankYou (RESPONSE_REF R)
-{	
-	NPCPhrase (THANK_YOU);
-	DISABLE_PHRASE (sorry_to_hear);	
-
-	Response (farewell_shofixti, ExitConversation);
-
-}
-
-static void
-HowReconstruction (RESPONSE_REF R)
-{	
-	NPCPhrase (NOT_GOOD_RECONSTRUCTION);
-	DISABLE_PHRASE (how_goes_reconstruction);	
-
-	Response (sorry_to_hear, ThankYou);
-	Response (farewell_shofixti, ExitConversation);
-}
-
-static void
-SmallTalk2 (RESPONSE_REF R)
-{	
-	static BYTE PatrolInfoState = 0;
-	
-	if (PLAYER_SAID (R, where_patrol))
-	{
-		NPCPhrase (LOST_PATROLS);
-		DISABLE_PHRASE (where_patrol);
-		PatrolInfoState++;
-	}
-	else if (PLAYER_SAID (R, why_not_call))
-	{
-		SET_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1);
-		NPCPhrase (NO_RESOURCES_TO_CALL);
-		DISABLE_PHRASE (why_not_call);
-		PatrolInfoState = 0;
-	}
-	else if (PLAYER_SAID (R, how_goes_reconstruction))
-	{
-		NPCPhrase (NOT_GOOD_RECONSTRUCTION);
-		DISABLE_PHRASE (how_goes_reconstruction);
-	}
-	
-	if (PatrolInfoState == 0 && PHRASE_ENABLED (where_patrol))
-	{
-		Response (where_patrol, SmallTalk2);
-	}
-	
-	if (PatrolInfoState == 1 && PHRASE_ENABLED (why_not_call))
-	{
-		Response (why_not_call, SmallTalk2);
-	}
-
-	if (PHRASE_ENABLED (how_goes_reconstruction))
-	{
-		Response (how_goes_reconstruction, HowReconstruction);
-	}
-
-
-	Response (farewell_shofixti, ExitConversation);
-}
-
-
-
-static void
-SmallTalk1 (RESPONSE_REF R)
-{	
-	if (PLAYER_SAID (R, chmmr_hunt_kohrah))
-	{
-		NPCPhrase (SLAVE_SHIELD_BEST_PLACE);
-	}
-	else if (PLAYER_SAID (R, no_idea))
-	{
-		NPCPhrase (SHARE_NEWS);
-	}
-
-	Response (where_patrol, SmallTalk2);
-	Response (how_goes_reconstruction, SmallTalk2);
-	Response (farewell_shofixti, ExitConversation);
-}
-
-
-
-static void
-DoShofixtiAngry (RESPONSE_REF R)
+GiveMaidens (RESPONSE_REF R)
 {
-	NPCPhrase (ANGRY_SHOFIXTI_GREETING_1);
+	if (PLAYER_SAID (R, important_duty))
+	{
+		NPCPhrase (WHAT_DUTY);
 
-	Response (sorry, ExitConversation);
-	Response (will_attack, ExitConversation);
+		Response (procreating_wildly, GiveMaidens);
+		Response (replenishing_your_species, GiveMaidens);
+		Response (hope_you_have, GiveMaidens);
+	}
+	else
+	{
+		NPCPhrase (SOUNDS_GREAT_BUT_HOW);
+
+		Response (females, ExitConversation);
+		Response (nubiles, ExitConversation);
+		Response (rat_babes, ExitConversation);
+	}
 }
 
+static void
+ConsoleShofixti (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, dont_do_it))
+	{
+		NPCPhrase (YES_I_DO_IT);
+		DISABLE_PHRASE (dont_do_it);
+	}
+	else
+		NPCPhrase (VERY_SAD_KILL_SELF);
+
+	if (GET_GAME_STATE (MAIDENS_ON_SHIP))
+	{
+		Response (important_duty, GiveMaidens);
+	}
+	if (PHRASE_ENABLED (dont_do_it))
+	{
+		Response (dont_do_it, ConsoleShofixti);
+	}
+	Response (need_you_for_duty, ExitConversation);
+	Response (go_ahead, ExitConversation);
+}
+
+static void
+ExplainDefeat (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, i_am_nice))
+		NPCPhrase (MUST_UNDERSTAND);
+	else if (PLAYER_SAID (R, i_am_guy))
+		NPCPhrase (NICE_BUT_WHAT_IS_DONKEY);
+	else /* if (PLAYER_SAID (R, i_am_captain0)) */
+		NPCPhrase (SO_SORRY);
+	NPCPhrase (IS_DEFEAT_TRUE);
+
+	Response (yes_and_no, ConsoleShofixti);
+	Response (clobbered, ConsoleShofixti);
+	Response (butt_blasted, ConsoleShofixti);
+}
+
+static void
+RealizeMistake (RESPONSE_REF R)
+{
+	(void) R;  // ignored
+	NPCPhrase (DGRUNTI);
+	SET_GAME_STATE (SHOFIXTI_STACK1, 0);
+	SET_GAME_STATE (SHOFIXTI_STACK3, 0);
+	SET_GAME_STATE (SHOFIXTI_STACK2, 3);
+
+	{
+		UNICODE buf[ALLIANCE_NAME_BUFSIZE];
+
+		GetAllianceName (buf, name_1);
+		construct_response (
+				shared_phrase_buf,
+				i_am_captain0,
+				GLOBAL_SIS (CommanderName),
+				i_am_captain1,
+				buf,
+				i_am_captain2,
+				GLOBAL_SIS (ShipName),
+				i_am_captain3,
+				(UNICODE*)NULL);
+	}
+	DoResponsePhrase (i_am_captain0, ExplainDefeat, shared_phrase_buf);
+	Response (i_am_nice, ExplainDefeat);
+	Response (i_am_guy, ExplainDefeat);
+}
+
+static void
+Hostile (RESPONSE_REF R)
+{
+	(void) R;  // ignored
+	switch (GET_GAME_STATE (SHOFIXTI_STACK1))
+	{
+		case 0:
+			Response (dont_attack, ExitConversation);
+			break;
+		case 1:
+			Response (hey_stop, ExitConversation);
+			break;
+		case 2:
+			Response (look_you_are, ExitConversation);
+			break;
+	}
+	switch (GET_GAME_STATE (SHOFIXTI_STACK2))
+	{
+		case 0:
+			Response (no_one_insults, ExitConversation);
+			break;
+		case 1:
+			Response (mighty_words, ExitConversation);
+			break;
+		case 2:
+			Response (donkey_breath, RealizeMistake);
+			break;
+	}
+	switch (GET_GAME_STATE (SHOFIXTI_STACK3))
+	{
+		case 0:
+			Response (dont_know, ExitConversation);
+			break;
+		case 1:
+		{
+			construct_response (
+					shared_phrase_buf,
+					look0,
+					"",
+					shofixti_name,
+					"",
+					look1,
+					(UNICODE*)NULL);
+			DoResponsePhrase (look0, ExitConversation, shared_phrase_buf);
+			break;
+		}
+		case 2:
+			Response (look_you_are, ExitConversation);
+			break;
+	}
+	Response (dont_want_to_fight, ExitConversation);
+}
+
+static void
+Friendly (RESPONSE_REF R)
+{
+	BYTE i, LastStack;
+	struct
+	{
+		RESPONSE_REF pStr;
+		UNICODE *c_buf;
+	} Resp[3];
+	static UNICODE buf0[80], buf1[80];
+	
+	LastStack = 0;
+	memset (Resp, 0, sizeof (Resp));
+	if (PLAYER_SAID (R, report0))
+	{
+		NPCPhrase (NOTHING_NEW);
+
+		DISABLE_PHRASE (report0);
+	}
+	else if (PLAYER_SAID (R, why_here0))
+	{
+		NPCPhrase (I_GUARD);
+
+		LastStack = 1;
+		SET_GAME_STATE (SHOFIXTI_STACK1, 1);
+	}
+	else if (PLAYER_SAID (R, what_happened))
+	{
+		NPCPhrase (MET_VUX);
+
+		LastStack = 1;
+		SET_GAME_STATE (SHOFIXTI_STACK1, 2);
+	}
+	else if (PLAYER_SAID (R, glory_device))
+	{
+		NPCPhrase (SWITCH_BROKE);
+
+		SET_GAME_STATE (SHOFIXTI_STACK1, 3);
+	}
+	else if (PLAYER_SAID (R, where_world))
+	{
+		NPCPhrase (BLEW_IT_UP);
+
+		LastStack = 2;
+		SET_GAME_STATE (SHOFIXTI_STACK3, 1);
+	}
+	else if (PLAYER_SAID (R, how_survive))
+	{
+		NPCPhrase (NOT_HERE);
+
+		SET_GAME_STATE (SHOFIXTI_STACK3, 2);
+	}
+
+	if (PHRASE_ENABLED (report0))
+	{
+		construct_response (
+				buf0,
+				report0,
+				"",
+				shofixti_name,
+				"",
+				report1,
+				(UNICODE*)NULL);
+		Resp[0].pStr = report0;
+		Resp[0].c_buf = buf0;
+	}
+
+	switch (GET_GAME_STATE (SHOFIXTI_STACK1))
+	{
+		case 0:
+			construct_response (
+					buf1,
+					why_here0,
+					"",
+					shofixti_name,
+					"",
+					why_here1,
+					(UNICODE*)NULL);
+			Resp[1].pStr = why_here0;
+			Resp[1].c_buf = buf1;
+			break;
+		case 1:
+			Resp[1].pStr = what_happened;
+			break;
+		case 2:
+			Resp[1].pStr = glory_device;
+			break;
+	}
+
+	switch (GET_GAME_STATE (SHOFIXTI_STACK3))
+	{
+		case 0:
+				Resp[2].pStr = where_world;
+			break;
+		case 1:
+				Resp[2].pStr = how_survive;
+			break;
+	}
+
+	if (Resp[LastStack].pStr)
+		DoResponsePhrase (Resp[LastStack].pStr, Friendly, Resp[LastStack].c_buf);
+	for (i = 0; i < 3; ++i)
+	{
+		if (i != LastStack && Resp[i].pStr)
+			DoResponsePhrase (Resp[i].pStr, Friendly, Resp[i].c_buf);
+	}
+	if (GET_GAME_STATE (MAIDENS_ON_SHIP))
+	{
+		Response (important_duty, GiveMaidens);
+	}
+
+	construct_response (
+			shared_phrase_buf,
+			bye0,
+			"",
+			shofixti_name,
+			"",
+			bye1,
+			(UNICODE*)NULL);
+	DoResponsePhrase (bye0, ExitConversation, shared_phrase_buf);
+}
 
 static void
 Intro (void)
 {
+	if (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
+	{
+		NPCPhrase (OUT_TAKES);
 
-	BYTE NumVisits;
-	
-	if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 1)
-	{
-		NumVisits = GET_GAME_STATE (SHOFIXTI_VISITS);
-		switch (NumVisits++)
-		{
-			case 1:
-				NPCPhrase (MIFFED_SHOFIXTI_GREETING_1);
-				break;
-			case 2:
-				NPCPhrase (MIFFED_SHOFIXTI_GREETING_2);
-				break;
-			case 3:
-				NPCPhrase (MIFFED_SHOFIXTI_GREETING_3);
-				--NumVisits;
-				break;
-		}
-		
-		SmallTalk1 (0);
-		SET_GAME_STATE (SHOFIXTI_VISITS, NumVisits);
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+		return;
 	}
-	else if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 2)
-		DoShofixtiAngry (0);
-	else if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 3)
+
+	GetShofixtiName ();
+
+	if (GET_GAME_STATE (SHOFIXTI_STACK2) > 2)
 	{
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-		NPCPhrase (ANGRY_SHOFIXTI_GREETING_2);
+		NPCPhrase (FRIENDLY_HELLO);
+
+		Friendly ((RESPONSE_REF)0);
 	}
 	else
 	{
+		BYTE NumVisits;
+
 		NumVisits = GET_GAME_STATE (SHOFIXTI_VISITS);
-		switch (NumVisits++)
+		if (GET_GAME_STATE (SHOFIXTI_KIA))
 		{
-			case 0:
-				NPCPhrase (SHOFIXTI_GREETING_1);
-				break;
-			case 1:
-				NPCPhrase (SHOFIXTI_GREETING_2);
-				break;
-			case 2:
-				NPCPhrase (SHOFIXTI_GREETING_3);
-				--NumVisits;
-				break;
-		}
-		
-		SET_GAME_STATE (SHOFIXTI_VISITS, NumVisits);
-		
-		if (GET_GAME_STATE(SHOFIXTI_MET) == 0)
-		{
-			SET_GAME_STATE(SHOFIXTI_MET, 1);
-			Response (chmmr_hunt_kohrah, SmallTalk1);
-			Response (no_idea, SmallTalk1);
-			Response (pearshaped, ExitConversation);
-			Response (farewell_shofixti, ExitConversation);
+			switch (NumVisits++)
+			{
+				case 0:
+					NPCPhrase (HOSTILE_KATANA_1);
+					break;
+				case 1:
+					NPCPhrase (HOSTILE_KATANA_2);
+					break;
+				case 2:
+					NPCPhrase (HOSTILE_KATANA_3);
+					break;
+				case 3:
+					NPCPhrase (HOSTILE_KATANA_4);
+					--NumVisits;
+					break;
+			}
 		}
 		else
-			SmallTalk1 (0);
+		{
+			switch (NumVisits++)
+			{
+				case 0:
+					NPCPhrase (HOSTILE_TANAKA_1);
+					break;
+				case 1:
+					NPCPhrase (HOSTILE_TANAKA_2);
+					break;
+				case 2:
+					NPCPhrase (HOSTILE_TANAKA_3);
+					break;
+				case 3:
+					NPCPhrase (HOSTILE_TANAKA_4);
+					break;
+				case 4:
+					NPCPhrase (HOSTILE_TANAKA_5);
+					break;
+				case 5:
+					NPCPhrase (HOSTILE_TANAKA_6);
+					break;
+				case 6:
+					NPCPhrase (HOSTILE_TANAKA_7);
+					break;
+				case 7:
+					NPCPhrase (HOSTILE_TANAKA_8);
+					--NumVisits;
+					break;
+			}
+		}
+		SET_GAME_STATE (SHOFIXTI_VISITS, NumVisits);
+
+		Hostile ((RESPONSE_REF)0);
 	}
 }
 
@@ -393,10 +644,7 @@ init_shofixti_comm (void)
 	shofixti_desc.AlienTextBaseline.y = 0;
 	shofixti_desc.AlienTextWidth = SIS_TEXT_WIDTH;
 
-	if (GET_GAME_STATE (SHOFIXTI_ANGRY) > 1)
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	else
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
+	SET_GAME_STATE (BATTLE_SEGUE, 0);
 
 	retval = &shofixti_desc;
 

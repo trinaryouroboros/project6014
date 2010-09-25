@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -No ships orbit Pkunk homeworld anymore.
-//			 -Removed clear spindle
-
 #include "build.h"
 #include "encount.h"
 #include "globdata.h"
@@ -53,25 +50,24 @@ GeneratePkunk (BYTE control)
 							(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
 					pSolarSysState->SysInfo.PlanetInfo.CurPt.y =
 							(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
-					// JMS: No more clear spindles!
-					/*if (!GET_GAME_STATE (CLEAR_SPINDLE))
+					if (!GET_GAME_STATE (CLEAR_SPINDLE))
 						pSolarSysState->SysInfo.PlanetInfo.CurType = 0;
-					else*/
-					pSolarSysState->SysInfo.PlanetInfo.CurType = 1;
+					else
+						pSolarSysState->SysInfo.PlanetInfo.CurType = 1;
 					pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
 					if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
 							& (1L << i))
 					{
 						pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
 								&= ~(1L << i);
-						// JMS: No more clear spindles!
-						/*if (!GET_GAME_STATE (CLEAR_SPINDLE))
+
+						if (!GET_GAME_STATE (CLEAR_SPINDLE))
 						{
 							((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
 
 							SET_GAME_STATE (CLEAR_SPINDLE, 1);
 							SET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP, 1);
-						}*/
+						}
 					}
 					if (which_node >= pSolarSysState->CurNode
 							&& !(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
@@ -107,9 +103,7 @@ GeneratePkunk (BYTE control)
 		case GENERATE_ORBITAL:
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
 			{
-				// JMS: No ships orbit Pkunk homeworld anymore.
-				//if (ActivateStarShip (PKUNK_SHIP, SPHERE_TRACKING))
-				if(0)
+				if (ActivateStarShip (PKUNK_SHIP, SPHERE_TRACKING))
 				{
 					NotifyOthers (PKUNK_SHIP, (BYTE)~0);
 					PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);
@@ -144,9 +138,8 @@ GeneratePkunk (BYTE control)
 							CaptureStringTable (
 									LoadStringTable (PKUNK_RUINS_STRTAB)
 									);
-					// JMS: No more clear spindles!
-					//if (GET_GAME_STATE (CLEAR_SPINDLE))
-					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
+					if (GET_GAME_STATE (CLEAR_SPINDLE))
+						pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
 								SetAbsStringTableIndex (
 								pSolarSysState->SysInfo.PlanetInfo.DiscoveryString,
 								1

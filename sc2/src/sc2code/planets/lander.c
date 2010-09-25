@@ -53,111 +53,59 @@ MUSIC_REF LanderMusic;
 static MUSIC_REF OrbitMusic[NUM_ORBIT_THEMES];
 const LIFEFORM_DESC CreatureData[] =
 {
-  {SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1)},
 			// Roto-Dendron
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 4},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1)},
 			// Macrocillia
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 4},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1)},
 			// Splort Wort
-	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 4},
+	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3)},
 			// Whackin' Bush
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 4},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10)},
 			// Slot Machine Tree
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2)},
 			// Neon Worm
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 4},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5)},
 			// Stiletto Urchin
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 4},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2)},
 			// Deluxe Blob
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8)},
 			// Glowing Medusa
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 4},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15)},
 			// Carousel Beast
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 4},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3)},
 			// Mysterious Bees
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 4},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1)},
 			// Hopping Blobby
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2)},
 			// Blood Monkey
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 4},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6)},
 			// Yompin Yiminy
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12)},
 			// Amorphous Trandicula
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 4},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1)},
 			// Crazy Weasel
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1)},
 			// Merry Whumpet
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 4},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8)},
 			// Fungal Squid
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 4},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2)},
 			// Penguin Cyclops
-	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (1, 1), 4},
+	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (1, 1)},
 			// Chicken
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2)},
 			// Bubble Vine
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 4},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2)},
 			// Bug-Eyed Bait
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 4},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5)},
 			// Goo Burger
-	{SPEED_MOTIONLESS | DANGER_MONSTROUS, MAKE_BYTE (1, 1), 4},
-			// Evil One
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (0, 1), 4},
-			// Brainbox Bulldozers
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_MONSTROUS, MAKE_BYTE (15, 15), 4},
-			// Zex's Beauty
 
-	// ---- New Critters from here on ----
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 3), 5},
-			// Echinosol
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 2},
-			// Flora Flatulensis
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 2},
-			// Hopping Hatchling
-#define HOPPING_HATCHLING_INDEX 28 // If you change Hopping hatchling's location in this list, change this define also!
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 2},
-			// Dizzy Fnarble
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 2},
-			// Flagellum Pest
-	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (2, 1), 1},
-			// Flying O'Hairy
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 2},
-			// Bobbing Whibbit
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 2},
-			// Muddy Morphlegm
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 2},
-			// Ultramoeba
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 3},
-			// Electroptera
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 2},
-			// Quartzerback
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 2},
-			// Tuberus Humungus
-	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 2},
-			// Venus Frytrap
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 5},
-			// Watchful Willow
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 1},
-			// Xerophytic Autovore
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 3},
-			// Migrator Blimp
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 5},
-			// Tentacle Du Jour
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 2},
-			// Vanishing Vermin
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 5},
-			// Tripazoid Tumbler
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 2},
-			// Dumpy Dweejus
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1},
-			// Radial Arachnid
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 0},
-			// Wackodemon
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 2},
-			// Crabby Octopus
-	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2},
-			// Blinking Beholder
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 5), 3},
-			// Creeping head
+	{SPEED_MOTIONLESS | DANGER_MONSTROUS, MAKE_BYTE (1, 1)},
+			// Evil One
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (0, 1)},
+			// Brainbox Bulldozers
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_MONSTROUS, MAKE_BYTE (15, 15)},
+			// Zex's Beauty
 };
 
 #define FLASH_WIDTH 9
@@ -175,7 +123,7 @@ extern PRIM_LINKS DisplayLinks;
 #define SURFACE_X SIS_ORG_X
 #define SURFACE_Y SIS_ORG_Y
 #define SURFACE_WIDTH SIS_SCREEN_WIDTH
-#define SURFACE_HEIGHT (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 5) // JMS_GFX
+#define SURFACE_HEIGHT (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 5)
 
 #define REPAIR_LANDER (1 << 7)
 #define REPAIR_TRANSITION (1 << 6)
@@ -183,7 +131,7 @@ extern PRIM_LINKS DisplayLinks;
 #define ADD_AT_END (1 << 4)
 #define REPAIR_COUNT (0xf)
 
-#define LANDER_SPEED_DENOM (10 / RESOLUTION_FACTOR) // JMS_GFX
+#define LANDER_SPEED_DENOM 10
 
 static BYTE lander_flags;
 
@@ -317,21 +265,14 @@ object_animation (ELEMENT *ElementPtr)
 			else if (ElementPtr->mass_points == EARTHQUAKE_DISASTER)
 			{
 				SIZE s;
-				SIZE frame_amount; // JMS_GFX
-				
-				// JMS_GFX
-				if(RESOLUTION_FACTOR == 1)
-					frame_amount = 22;
-				else
-					frame_amount = 14;
-				
-				if (frame_index >= (frame_amount-1))
+
+				if (frame_index >= 13)
 					s = 0;
 				else
-					s = (frame_amount - frame_index) >> 1;
+					s = (14 - frame_index) >> 1;
 				// XXX: Was 0x8000 the background flag on 3DO?
 				SetPrimColor (pPrim, BUILD_COLOR (0x8000 | MAKE_RGB15 (0x1F, 0x1F, 0x1F), s));
-				if (frame_index == (frame_amount - 1))
+				if (frame_index == 13)
 					PlaySound (SetAbsSoundIndex (LanderSounds, EARTHQUAKE_DISASTER),
 							NotPositional (), NULL, GAME_SOUND_PRIORITY);
 			}
@@ -351,8 +292,8 @@ object_animation (ELEMENT *ElementPtr)
 					angle = FACING_TO_ANGLE (ElementPtr->facing);
 					LockElement (hLavaElement, &LavaElementPtr);
 					LavaElementPtr->next.location = ElementPtr->next.location;
-					LavaElementPtr->next.location.x += COSINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
-					LavaElementPtr->next.location.y += SINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
+					LavaElementPtr->next.location.x += COSINE (angle, 4);
+					LavaElementPtr->next.location.y += SINE (angle, 4);
 					if (LavaElementPtr->next.location.y < 0)
 						LavaElementPtr->next.location.y = 0;
 					else if (LavaElementPtr->next.location.y >= (MAP_HEIGHT << MAG_SHIFT))
@@ -532,8 +473,8 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 				NotPositional (), NULL, GAME_SOUND_PRIORITY);
 	}
 
-	s.origin.x = (11 + (6 * (crew_delta % NUM_CREW_COLS))) * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
-	s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) * RESOLUTION_FACTOR; // JMS_GFX
+	s.origin.x = 11 + (6 * (crew_delta % NUM_CREW_COLS));
+	s.origin.y = 35 - (6 * (crew_delta / NUM_CREW_COLS));
 
 	OldContext = SetContext (RadarContext);
 	DrawStamp (&s);
@@ -552,14 +493,15 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 
 	if (scan == BIOLOGICAL_SCAN)
 	{
-		start_count = (pPSD->BiologicalLevel) * RESOLUTION_FACTOR; // JMS_GFX
+		start_count = pPSD->BiologicalLevel;
+
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 41);
 
 		pPSD->BiologicalLevel += NumRetrieved;
 	}
 	else
 	{
-		start_count = (pPSD->ElementLevel) * RESOLUTION_FACTOR; // JMS_GFX
+		start_count = pPSD->ElementLevel;
 		pPSD->ElementLevel += NumRetrieved;
 		if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
 		{
@@ -570,8 +512,8 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 43);
 	}
 
-	s.origin.x = RESOLUTION_FACTOR - 1; // JMS_GFX
-	s.origin.y = (RESOLUTION_FACTOR - 1) * 50 - (int)start_count;
+	s.origin.x = 0;
+	s.origin.y = -(int)start_count;
 	if (!(start_count & 1))
 		s.frame = IncFrameIndex (s.frame);
 
@@ -583,7 +525,7 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		else
 			s.frame = DecFrameIndex (s.frame);
 		DrawStamp (&s);
-		s.origin.y-=1*RESOLUTION_FACTOR; // JMS_GFX
+		--s.origin.y;
 	}
 	SetContext (OldContext);
 }
@@ -772,22 +714,7 @@ CheckObjectCollision (COUNT index)
 						/* Collision of a stun bolt with a viable creature */
 						if (ElementPtr->hit_points)
 						{
-							int WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
-							COUNT frame_index;
-							PRIMITIVE *pPrim;
-							pPrim = &DisplayArray[ElementPtr->PrimIndex];
-							frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
-							
-							// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
-							if (WhichCreature == HOPPING_HATCHLING_INDEX && frame_index < 45) 
-							{
-								PlaySound (SetAbsSoundIndex (
-										LanderSounds, BIOLOGICAL_DISASTER
-										), NotPositional (), NULL, GAME_SOUND_PRIORITY);
-								break;
-							}
-							
-							else if (--ElementPtr->hit_points == 0)
+							if (--ElementPtr->hit_points == 0)
 							{
 								ElementPtr->mass_points = value;
 								DisplayArray[
@@ -864,7 +791,7 @@ CheckObjectCollision (COUNT index)
 									pPSD->MineralText[0].baseline.y =
 											(SURFACE_HEIGHT >> 1)
 											+ (ElementControl.EndPoint.y
-											- LanderControl.EndPoint.y) * RESOLUTION_FACTOR; // JMS_GFX;
+											- LanderControl.EndPoint.y);
 									pPSD->MineralText[0].CharCount =
 											(COUNT)~0;
 									pPSD->MineralText[1].pStr = pStr;
@@ -1090,7 +1017,7 @@ AddGroundDisaster (COUNT which_disaster)
 
 		if (which_disaster == EARTHQUAKE_DISASTER)
 		{
-			SetPrimType (pPrim, STAMP_PRIM); // JMS: was STAMPFILL_PRIM
+			SetPrimType (pPrim, STAMPFILL_PRIM);
 			pPrim->Object.Stamp.frame = LanderFrame[1];
 			GroundDisasterElementPtr->turn_wait = MAKE_BYTE (2, 2);
 		}
@@ -1438,10 +1365,10 @@ ScrollPlanetSide (SIZE dx, SIZE dy, SIZE CountDown)
 			pPSD->MineralText[0].baseline.y -= dy;
 			font_DrawText (&pPSD->MineralText[0]);
 			pPSD->MineralText[1].baseline.x = pPSD->MineralText[0].baseline.x;
-			pPSD->MineralText[1].baseline.y = pPSD->MineralText[0].baseline.y + 7 * RESOLUTION_FACTOR; // JMS_GFX
+			pPSD->MineralText[1].baseline.y = pPSD->MineralText[0].baseline.y + 7;
 			font_DrawText (&pPSD->MineralText[1]);
 			pPSD->MineralText[2].baseline.x = pPSD->MineralText[1].baseline.x;
-			pPSD->MineralText[2].baseline.y = pPSD->MineralText[1].baseline.y + 7 * RESOLUTION_FACTOR; // JMS_GFX
+			pPSD->MineralText[2].baseline.y = pPSD->MineralText[1].baseline.y + 7;
 			font_DrawText (&pPSD->MineralText[2]);
 		}
 	}
@@ -1652,7 +1579,7 @@ InitPlanetSide (void)
 		{
 			STAMP s;
 
-			// Note - This code is the same as in ScrollPlanetSide,
+			// Note - This code is the same as in ScrollPlanetSize,
 			// Display planet area, accounting for horizontal wrapping if
 			// near the edges.
 			ClearDrawable ();
@@ -2131,7 +2058,7 @@ PlanetSide (MENU_STATE *pMS)
 
 			ReturnToOrbit (&r);
 #ifdef SPIN_ON_LAUNCH
-			// If PauseRotate is set to 2 the planet will be displayed, but won't rotate
+			// If PauseRotate is set to 2 the plaet will be displayed, but won't rotate
 			// Until the lander animation is complete
 			pSolarSysState->PauseRotate = 0;
 			// Give The RotatePlanet thread a slice to draw the planet

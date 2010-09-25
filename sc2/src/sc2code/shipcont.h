@@ -21,7 +21,7 @@
 
 #include "menustat.h"
 
-#define FIELD_WIDTH (STATUS_WIDTH - (5 * RESOLUTION_FACTOR)) // JMS_GFX
+#define FIELD_WIDTH (STATUS_WIDTH - 5)
 
 extern void Cargo (MENU_STATE *pMS);
 extern BOOLEAN Roster (void);

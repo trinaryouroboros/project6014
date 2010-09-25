@@ -68,7 +68,7 @@ static UNICODE pm_fuel_str[128];
 static void
 DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 {
-#define PC_MENU_HEIGHT 8 * RESOLUTION_FACTOR // JMS_GFX
+#define PC_MENU_HEIGHT 8
 	BYTE pos;
 	COUNT i;
 	int num_items;
@@ -85,7 +85,7 @@ DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 		log_add (log_Error, "Warning, no room for all menu items!");
 	else
 		r->corner.y += (r->extent.height - num_items * PC_MENU_HEIGHT) / 2;
-	r->extent.height = num_items * PC_MENU_HEIGHT + 4; // JMS_GFX
+	r->extent.height = num_items * PC_MENU_HEIGHT + 4;
 	DrawPCMenuFrame (r);
 	OldFont = SetContextFont (StarConFont);
 	t.align = ALIGN_LEFT;
@@ -189,11 +189,6 @@ FixMenuState (BYTE BadState)
 				return (PM_MUSIC_OFF);
 			else
 				return (PM_MUSIC_ON);
-		case PM_VOICE_ON:
-			if (GLOBAL (glob_flags) & VOICE_DISABLED)
-				return (PM_VOICE_OFF);
-			else
-				return (PM_VOICE_ON);
 		case PM_CYBORG_OFF:
 			return (PM_CYBORG_OFF + 
 				((BYTE)(GLOBAL (glob_flags) & COMBAT_SPEED_MASK) >> COMBAT_SPEED_SHIFT));
@@ -219,10 +214,6 @@ NextMenuState (BYTE BaseState, BYTE CurState)
 			break;
 		case PM_MUSIC_ON:
 		case PM_MUSIC_OFF:
-			NextState = PM_VOICE_ON;
-			break;
-		case PM_VOICE_ON:
-		case PM_VOICE_OFF:
 			NextState = PM_CYBORG_OFF;
 			break;
 		case PM_CYBORG_OFF:
@@ -258,15 +249,11 @@ PreviousMenuState (BYTE BaseState, BYTE CurState)
 		case PM_MUSIC_OFF:
 			NextState = PM_SOUND_ON;
 			break;
-		case PM_VOICE_ON:
-		case PM_VOICE_OFF:
-			NextState = PM_MUSIC_ON;
-			break;
 		case PM_CYBORG_OFF:
 		case PM_CYBORG_NORMAL:
 		case PM_CYBORG_DOUBLE:
 		case PM_CYBORG_SUPER:
-			NextState = PM_VOICE_ON;
+			NextState = PM_MUSIC_ON;
 			break;
 		case PM_CHANGE_CAPTAIN:
 			NextState = PM_CYBORG_OFF;
@@ -413,6 +400,7 @@ BOOLEAN
 DoMenuChooser (MENU_STATE *pMS, BYTE BaseState)
 {
 	{
+
 		BYTE NewState = pMS->CurState;
 		BYTE OrigBase = BaseState;
 		BOOLEAN useAltMenu = FALSE;
@@ -516,7 +504,7 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 					 GLOBAL (FuelCost));
 		if (beg_index == PM_SOUND_ON)
 		{
-			end_index = beg_index + 6;
+			end_index = beg_index + 5;
 			switch (beg_index + NewState)
 			{
 				case PM_SOUND_ON:
@@ -527,24 +515,20 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 				case PM_MUSIC_OFF:
 					NewState = 1;
 					break;
-				case PM_VOICE_ON:
-				case PM_VOICE_OFF:
-					NewState = 2;
-					break;
 				case PM_CYBORG_OFF:
 				case PM_CYBORG_NORMAL:
 				case PM_CYBORG_DOUBLE:
 				case PM_CYBORG_SUPER:
-					NewState = 3;
+					NewState = 2;
 					break;
 				case PM_CHANGE_CAPTAIN:
-					NewState = 4;
+					NewState = 3;
 					break;
 				case PM_CHANGE_SHIP:
-					NewState = 5;
+					NewState = 4;
 					break;
 				case PM_EXIT_MENU4:
-					NewState = 6;
+					NewState = 5;
 					break;
 			}
 		}

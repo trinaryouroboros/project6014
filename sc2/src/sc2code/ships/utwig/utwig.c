@@ -51,12 +51,12 @@ static RACE_DESC utwig_desc =
 		UTWIG_RACE_STRINGS,
 		UTWIG_ICON_MASK_PMAP_ANIM,
 		UTWIG_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial SoI radius */
+		666 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			0,0,
+			8534, 8797,
 		},
 	},
 	{

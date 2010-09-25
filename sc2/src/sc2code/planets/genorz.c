@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Removed the Taalo shield from the planet surface at Delta Vulpeculae II-C.
-//			 -Removed the mechanism that varies landing party text at three different androsynth ruins.
-
 #include "build.h"
 #include "encount.h"
 #include "globdata.h"
@@ -65,7 +62,6 @@ GenerateAndrosynth (BYTE control)
 					{
 						pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
 								&= ~(1L << i);
-						
 						if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
 								& (1L << (i + 16))))
 						{
@@ -81,14 +77,11 @@ GenerateAndrosynth (BYTE control)
 								UnbatchGraphics ();
 								DoDiscoveryReport (MenuSounds);
 								BatchGraphics ();
-								
-								// JMS: Removed the mechanism that varies landing party text 
-								// at three different androsynth ruins.
-								/*pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
+								pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
 										SetRelStringTableIndex (
 										pSolarSysState->SysInfo.PlanetInfo.DiscoveryString,
 										1
-										);*/
+										);
 							}
 						}
 					}
@@ -195,9 +188,7 @@ GenerateOrz (BYTE control)
 		{
 			DWORD rand_val, old_rand;
 
-			// JMS: Removed the Taalo shield from the planet surface at Delta Vulpeculae II-C.
-			//
-			/*if (CurStarDescPtr->Index != ORZ_DEFINED
+			if (CurStarDescPtr->Index != ORZ_DEFINED
 					&& pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[1]
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[2]
 					&& !GET_GAME_STATE (TAALO_PROTECTOR))
@@ -217,7 +208,6 @@ GenerateOrz (BYTE control)
 						& (1L << 0))
 						&& pSolarSysState->CurNode == (COUNT)~0)
 					pSolarSysState->CurNode = 1;
-				
 				else
 				{
 					pSolarSysState->CurNode = 0;
@@ -232,8 +222,7 @@ GenerateOrz (BYTE control)
 				TFB_SeedRandom (old_rand);
 				break;
 			}
-			else*/
-			if (CurStarDescPtr->Index == ORZ_DEFINED
+			else if (CurStarDescPtr->Index == ORZ_DEFINED
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
 			{
 				COUNT i, which_node;
@@ -314,12 +303,9 @@ GenerateOrz (BYTE control)
 					}
 					else
 					{
-						// JMS: Changed the size of ORZ fleet at Delta Vulpeculae II-C to infinite
-						/*for (i = 0; i < 14; ++i)
+						for (i = 0; i < 14; ++i)
 							CloneShipFragment (ORZ_SHIP,
-									&GLOBAL (npc_built_ship_q), 0);*/
-						CloneShipFragment (ORZ_SHIP,
-										   &GLOBAL (npc_built_ship_q), INFINITE_FLEET);
+									&GLOBAL (npc_built_ship_q), 0);
 						SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 6);
 					}
 					pSolarSysState->MenuState.Initialized += 2;

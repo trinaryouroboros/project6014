@@ -16,7 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "globdata.h"
 #include "lifeform.h"
 #include "planets.h"
 #include "libs/mathlib.h"
@@ -54,34 +53,24 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 						deposit_quality_gross;
 
 			deposit_quality_fine = ((COUNT)TFB_Random () % 100)
-			  + (
-			     DEPOSIT_QUALITY (eptr->Density)
-			     + SysInfoPtr->StarSize
-			     ) * 50;
-
-			// BW: Check whether we're in the NE quadrant
-			if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
-			  {
-			    deposit_quality_fine = (COUNT)(deposit_quality_fine * DEPLETION_RATE);
-			  }
-			
+					+ (
+					DEPOSIT_QUALITY (eptr->Density)
+					+ SysInfoPtr->StarSize
+					) * 50;
 			if (deposit_quality_fine < MEDIUM_DEPOSIT_THRESHOLD)
-			  deposit_quality_gross = 0;
+				deposit_quality_gross = 0;
 			else if (deposit_quality_fine < LARGE_DEPOSIT_THRESHOLD)
-			  deposit_quality_gross = 1;
+				deposit_quality_gross = 1;
 			else
-			  deposit_quality_gross = 2;
-			
+				deposit_quality_gross = 2;
+
 			rand_val = TFB_Random ();
 			loword = LOWORD (rand_val);
 			hiword = HIWORD (rand_val);
-			
-			if (RESOLUTION_FACTOR == 1)
-				SysInfoPtr->PlanetInfo.CurPt.x = (LOBYTE (loword) % (MAP_WIDTH - (8 << 1))) + 8;
-			else
-				SysInfoPtr->PlanetInfo.CurPt.x = loword % (MAP_WIDTH - (8 << 1)) + 8; // JMS_GFX: Replaced previous line with this line (BYTE was too small for 640x480 maps.)
-			
-			SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (loword) % (MAP_HEIGHT - (8 << 1))) + 8;
+			SysInfoPtr->PlanetInfo.CurPt.x =
+					(LOBYTE (loword) % (MAP_WIDTH - (8 << 1))) + 8;
+			SysInfoPtr->PlanetInfo.CurPt.y =
+					(HIBYTE (loword) % (MAP_HEIGHT - (8 << 1))) + 8;
 
 			SysInfoPtr->PlanetInfo.CurDensity =
 					MAKE_WORD (
@@ -224,52 +213,19 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 			num_types = (BYTE)(((BYTE)TFB_Random () % MAX_LIFE_VARIATION) + 1);
 			do
 			{
-			        BYTE index, num_creatures, range_types;
+				BYTE index, num_creatures;
 				UWORD rand_val;
-				BOOLEAN zoneA, zoneB, zoneC;
 
 				rand_val = (UWORD)TFB_Random ();
-				
-				// BW: Compute which life forms should appear				
-				zoneA = (LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) > 9000);
-				zoneB = (LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + 3*LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) < 21000);
-				zoneC = (3*LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) < 19000);
-				
-				range_types = 0;
-				if (zoneA)
-				  range_types += NUM_CREATURE_TYPES;
-				if (zoneB)
-				  range_types += NUM_B_CREATURE_TYPES;
-				if (zoneC)
-				  range_types += NUM_C_CREATURE_TYPES;
-
-				index = LOBYTE (rand_val) % range_types;
-				
-				// BW: adjust index so that it takes creatures from the correct set.
-				if (!zoneA)
-				  {
-				    index += NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES;
-				    if (!zoneB)
-				      index += NUM_B_CREATURE_TYPES;
-				  }
-				if (zoneA && index >= NUM_CREATURE_TYPES)
-				  {
-				    index += NUM_SPECIAL_CREATURE_TYPES;
-				    if (!zoneB)
-				      index += NUM_B_CREATURE_TYPES;
-				  }
-				
+				index = LOBYTE (rand_val) % NUM_CREATURE_TYPES;
 				num_creatures = (BYTE)((HIBYTE (rand_val) % 10) + 1);
 				do
 				{
 					rand_val = (UWORD)TFB_Random ();
-					
-					if (RESOLUTION_FACTOR == 1)
-						SysInfoPtr->PlanetInfo.CurPt.x = (LOBYTE (rand_val) % (MAP_WIDTH - (8 << 1))) + 8;
-					else
-						SysInfoPtr->PlanetInfo.CurPt.x = rand_val % (MAP_WIDTH - (8 << 1)) + 8; // JMS_GFX: Replaced previous line with this line (BYTE was too small for 640x480 maps.)
-					
-					SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (rand_val) % (MAP_HEIGHT - (8 << 1))) + 8; // JMS_GFX
+					SysInfoPtr->PlanetInfo.CurPt.x =
+							(LOBYTE (rand_val) % (MAP_WIDTH - (8 << 1))) + 8;
+					SysInfoPtr->PlanetInfo.CurPt.y =
+							(HIBYTE (rand_val) % (MAP_HEIGHT - (8 << 1))) + 8;
 					SysInfoPtr->PlanetInfo.CurType = index;
 
 					if ((num_life_forms >= which_life
@@ -303,3 +259,6 @@ GenerateLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT *pwhich_life)
 	*pwhich_life = CalcLifeForms (SysInfoPtr, *pwhich_life);
 	return (TFB_SeedRandom (old_rand));
 }
+
+
+

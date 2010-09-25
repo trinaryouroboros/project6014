@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: New dialogue for the new, vile, disgusting and enhanced Kohr-Ah-Rath!
-
 #include "comm/commall.h"
 #include "comm/blackur/resinst.h"
 #include "comm/blackur/strings.h"
@@ -40,7 +38,7 @@ static LOCDATA blackurq_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	BLACKURQ_CONVERSATION_PHRASES, /* PlayerPhrases */
-	7, /* NumAnimations */
+	8, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{
 			7, /* StartIndex */
@@ -83,6 +81,14 @@ static LOCDATA blackurq_desc =
 			0, /* BlockMask */
 		},
 		{
+			29, /* StartIndex */
+			4, /* NumFrames */
+			RANDOM_ANIM, /* AnimFlags */
+			ONE_SECOND / 10, 0, /* FrameRate */
+			ONE_SECOND / 10, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{
 			33, /* StartIndex */
 			5, /* NumFrames */
 			CIRCULAR_ANIM
@@ -101,7 +107,7 @@ static LOCDATA blackurq_desc =
 		},
 	},
 	{ /* AlienTransitionDesc */
-		29, /* StartIndex */
+		1, /* StartIndex */
 		2, /* NumFrames */
 		0, /* AnimFlags */
 		ONE_SECOND / 6, 0, /* FrameRate */
@@ -109,11 +115,11 @@ static LOCDATA blackurq_desc =
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
-		29, /* StartIndex */
-		4, /* NumFrames */
-		RANDOM_ANIM, /* AnimFlags */
-		ONE_SECOND / 10, 0, /* FrameRate */
-		ONE_SECOND / 10, 0, /* RestartRate */
+		2, /* StartIndex */
+		5, /* NumFrames */
+		0, /* AnimFlags */
+		ONE_SECOND / 15, 0, /* FrameRate */
+		ONE_SECOND / 12, 0, /* RestartRate */
 		0, /* BlockMask */
 	},
 	NULL, /* AlienNumberSpeech - none */
@@ -128,8 +134,6 @@ CombatIsInevitable (RESPONSE_REF R)
 {
 	BYTE NumVisits;
 
-	int temp_info;
-	
 	SET_GAME_STATE (BATTLE_SEGUE, 1);
 
 	if (PLAYER_SAID (R, bye))
@@ -137,136 +141,390 @@ CombatIsInevitable (RESPONSE_REF R)
 		if (GET_GAME_STATE (KOHR_AH_BYES) == 0)
 			NPCPhrase (GOODBYE_AND_DIE);
 		else
-			NPCPhrase (DIE_HUMAN);
+			NPCPhrase (DIE_HUMAN /* GOODBYE_AND_DIE_2 */);
 
 		SET_GAME_STATE (KOHR_AH_BYES, 1);
 	}
-	
-	if (PLAYER_SAID (R, we_attack))
+	else if (PLAYER_SAID (R, guess_thats_all))
+		NPCPhrase (THEN_DIE);
+	else if (PLAYER_SAID (R, what_are_you_hovering_over))
 	{
-		NPCPhrase (NO_WE_ATTACK);
+		NPCPhrase (BONE_PILE);
+
+		SET_GAME_STATE (KOHR_AH_INFO, 1);
 	}
-		
-	if (PLAYER_SAID (R, murderous_bastards))
+	else if (PLAYER_SAID (R, you_sure_are_creepy))
 	{
-		NPCPhrase (BRING_IT_ON);
-		temp_info=GET_GAME_STATE (KOHR_AH_PLEAD);
-		SET_GAME_STATE(KOHR_AH_PLEAD, (temp_info+1));
+		NPCPhrase (YES_CREEPY);
+
+		SET_GAME_STATE (KOHR_AH_INFO, 2);
 	}
-	
-	else if (PLAYER_SAID (R, give_up_1)
-			|| PLAYER_SAID (R, give_up_extra_2)
-			|| PLAYER_SAID (R, give_up_3))
+	else if (PLAYER_SAID (R, stop_that_gross_blinking))
+	{
+		NPCPhrase (DIE_HUMAN);
+
+		SET_GAME_STATE (KOHR_AH_INFO, 3);
+	}
+	else if (PLAYER_SAID (R, threat_1)
+			|| PLAYER_SAID (R, threat_2)
+			|| PLAYER_SAID (R, threat_3)
+			|| PLAYER_SAID (R, threat_4))
 	{
 		NumVisits = GET_GAME_STATE (KOHR_AH_REASONS);
 		switch (NumVisits++)
 		{
 			case 0:
-				NPCPhrase (NO_GIVE_UP_1);
+				NPCPhrase (RESISTANCE_IS_USELESS_1);
 				break;
 			case 1:
-				NPCPhrase (NO_GIVE_UP_EXTRA_2);
+				NPCPhrase (RESISTANCE_IS_USELESS_2);
 				break;
 			case 2:
-				NPCPhrase (NO_GIVE_UP_3);
+				NPCPhrase (RESISTANCE_IS_USELESS_3);
+				break;
+			case 3:
+				NPCPhrase (RESISTANCE_IS_USELESS_4);
 				--NumVisits;
 				break;
 		}
 		SET_GAME_STATE (KOHR_AH_REASONS, NumVisits);
 	}
+	else if (PLAYER_SAID (R, plead_1)
+			|| PLAYER_SAID (R, plead_2)
+			|| PLAYER_SAID (R, plead_3)
+			|| PLAYER_SAID (R, plead_4))
+	{
+		NumVisits = GET_GAME_STATE (KOHR_AH_PLEAD);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (PLEADING_IS_USELESS_1);
+				break;
+			case 1:
+				NPCPhrase (PLEADING_IS_USELESS_2);
+				break;
+			case 2:
+				// This response disabled due to lack of a speech file.
+				// NPCPhrase (PLEADING_IS_USELESS_3);
+				// break;
+			case 3:
+				NPCPhrase (PLEADING_IS_USELESS_4);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (KOHR_AH_PLEAD, NumVisits);
+	}
+	else if (PLAYER_SAID (R, why_kill_all_1)
+			|| PLAYER_SAID (R, why_kill_all_2)
+			|| PLAYER_SAID (R, why_kill_all_3)
+			|| PLAYER_SAID (R, why_kill_all_4))
+	{
+		NumVisits = GET_GAME_STATE (KOHR_AH_REASONS);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (KILL_BECAUSE_1);
+				break;
+			case 1:
+				NPCPhrase (KILL_BECAUSE_2);
+				break;
+			case 2:
+				NPCPhrase (KILL_BECAUSE_3);
+				break;
+			case 3:
+				NPCPhrase (KILL_BECAUSE_4);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (KOHR_AH_REASONS, NumVisits);
+	}
+	else if (PLAYER_SAID (R, please_dont_kill_1)
+			|| PLAYER_SAID (R, please_dont_kill_2)
+			|| PLAYER_SAID (R, please_dont_kill_3)
+			|| PLAYER_SAID (R, please_dont_kill_4))
+	{
+		NumVisits = GET_GAME_STATE (KOHR_AH_PLEAD);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (WILL_KILL_1);
+				break;
+			case 1:
+				NPCPhrase (WILL_KILL_2);
+				break;
+			case 2:
+				NPCPhrase (WILL_KILL_3);
+				break;
+			case 3:
+				NPCPhrase (WILL_KILL_4);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (KOHR_AH_PLEAD, NumVisits);
+	}
+	else if (PLAYER_SAID (R, bye_frenzy_1)
+			|| PLAYER_SAID (R, bye_frenzy_2)
+			|| PLAYER_SAID (R, bye_frenzy_3)
+			|| PLAYER_SAID (R, bye_frenzy_4))
+	{
+		NumVisits = GET_GAME_STATE (KOHR_AH_INFO);
+		switch (NumVisits++)
+		{
+			case 0:
+				NPCPhrase (GOODBYE_AND_DIE_FRENZY_1);
+				break;
+			case 1:
+				NPCPhrase (GOODBYE_AND_DIE_FRENZY_2);
+				break;
+			case 2:
+				NPCPhrase (GOODBYE_AND_DIE_FRENZY_3);
+				break;
+			case 3:
+				NPCPhrase (GOODBYE_AND_DIE_FRENZY_4);
+				--NumVisits;
+				break;
+		}
+		SET_GAME_STATE (KOHR_AH_INFO, NumVisits);
+	}
 }
 
 static void
-DieHuman (RESPONSE_REF R)
+Frenzy (RESPONSE_REF R)
 {
-	//(void) R;  // ignored
-	int temp_info;
-	
-	if (PLAYER_SAID (R, who_is_rath))
-	{
-		NPCPhrase (RATH_IS_GREAT);
-		temp_info=GET_GAME_STATE (KOHR_AH_INFO);
-		SET_GAME_STATE(KOHR_AH_INFO, (temp_info+1));
-	}
-	if (PLAYER_SAID (R, hmm_new_doctrine))
-	{
-		NPCPhrase (THIS_IS_NEW_DOCTRINE);
-		temp_info=GET_GAME_STATE (KOHR_AH_INFO);
-		SET_GAME_STATE(KOHR_AH_INFO, (temp_info+1));
-	}
-	if (PLAYER_SAID (R, wheres_talking_pet))
-	{
-		NPCPhrase (TALKING_PET_DEAD);
-		temp_info=GET_GAME_STATE (KOHR_AH_PLEAD);
-		SET_GAME_STATE(KOHR_AH_PLEAD, (temp_info+1));
-	}
-	if (PLAYER_SAID (R, give_up_2))
-	{
-		NPCPhrase (NO_GIVE_UP_2);
-		DISABLE_PHRASE (give_up_2);
-	}
-		
+	(void) R;  // ignored
 	switch (GET_GAME_STATE (KOHR_AH_REASONS))
 	{
 		case 0:
-			Response (give_up_1, CombatIsInevitable);
+			Response (why_kill_all_1, CombatIsInevitable);
 			break;
 		case 1:
-			if(PHRASE_ENABLED(give_up_2))
-				Response (give_up_2, DieHuman);
-			else
-				Response (give_up_extra_2, CombatIsInevitable);
+			Response (why_kill_all_2, CombatIsInevitable);
 			break;
 		case 2:
-			Response (give_up_3, CombatIsInevitable);
+			Response (why_kill_all_3, CombatIsInevitable);
 			break;
-	}
-	switch (GET_GAME_STATE (KOHR_AH_INFO))
-	{
-		case 0:
-			Response (who_is_rath, DieHuman);
-			break;
-		case 1:
-			Response (hmm_new_doctrine, DieHuman);
+		case 3:
+			Response (why_kill_all_4, CombatIsInevitable);
 			break;
 	}
 	switch (GET_GAME_STATE (KOHR_AH_PLEAD))
 	{
 		case 0:
-			Response (wheres_talking_pet, DieHuman);
+			Response (please_dont_kill_1, CombatIsInevitable);
 			break;
 		case 1:
-			Response (murderous_bastards, CombatIsInevitable);
+			Response (please_dont_kill_2, CombatIsInevitable);
+			break;
+		case 2:
+			Response (please_dont_kill_3, CombatIsInevitable);
+			break;
+		case 3:
+			Response (please_dont_kill_4, CombatIsInevitable);
 			break;
 	}
-	Response (we_attack, CombatIsInevitable);
+	switch (GET_GAME_STATE (KOHR_AH_INFO))
+	{
+		case 0:
+			Response (bye_frenzy_1, CombatIsInevitable);
+			break;
+		case 1:
+			Response (bye_frenzy_2, CombatIsInevitable);
+			break;
+		case 2:
+			Response (bye_frenzy_3, CombatIsInevitable);
+			break;
+		case 3:
+			Response (bye_frenzy_4, CombatIsInevitable);
+			break;
+	}
+}
+
+static void
+KohrAhStory (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, key_phrase))
+	{
+		NPCPhrase (RESPONSE_TO_KEY_PHRASE);
+
+		SET_GAME_STATE (KNOW_KOHR_AH_STORY, 2);
+	}
+	else if (PLAYER_SAID (R, why_do_you_destroy))
+	{
+		NPCPhrase (WE_WERE_SLAVES);
+
+		DISABLE_PHRASE (why_do_you_destroy);
+	}
+	else if (PLAYER_SAID (R, relationship_with_urquan))
+	{
+		NPCPhrase (WE_ARE_URQUAN_TOO);
+
+		DISABLE_PHRASE (relationship_with_urquan);
+	}
+	else if (PLAYER_SAID (R, what_about_culture))
+	{
+		NPCPhrase (BONE_GARDENS);
+
+		DISABLE_PHRASE (what_about_culture);
+	}
+	else if (PLAYER_SAID (R, how_leave_me_alone))
+	{
+		NPCPhrase (YOU_DIE);
+
+		DISABLE_PHRASE (how_leave_me_alone);
+	}
+
+	if (PHRASE_ENABLED (why_do_you_destroy))
+		Response (why_do_you_destroy, KohrAhStory);
+	if (PHRASE_ENABLED (relationship_with_urquan))
+		Response (relationship_with_urquan, KohrAhStory);
+	if (PHRASE_ENABLED (what_about_culture))
+		Response (what_about_culture, KohrAhStory);
+	if (PHRASE_ENABLED (how_leave_me_alone))
+		Response (how_leave_me_alone, KohrAhStory);
+	Response (guess_thats_all, CombatIsInevitable);
+}
+
+static void
+DieHuman (RESPONSE_REF R)
+{
+	(void) R;  // ignored
+	switch (GET_GAME_STATE (KOHR_AH_REASONS))
+	{
+		case 0:
+			Response (threat_1, CombatIsInevitable);
+			break;
+		case 1:
+			Response (threat_2, CombatIsInevitable);
+			break;
+		case 2:
+			Response (threat_3, CombatIsInevitable);
+			break;
+		case 3:
+			Response (threat_4, CombatIsInevitable);
+			break;
+	}
+	if (GET_GAME_STATE (KNOW_KOHR_AH_STORY) == 1)
+	{
+		Response (key_phrase, KohrAhStory);
+	}
+	switch (GET_GAME_STATE (KOHR_AH_INFO))
+	{
+		case 0:
+			Response (what_are_you_hovering_over, CombatIsInevitable);
+			break;
+		case 1:
+			Response (you_sure_are_creepy, CombatIsInevitable);
+			break;
+		case 2:
+			Response (stop_that_gross_blinking, CombatIsInevitable);
+			break;
+	}
+	switch (GET_GAME_STATE (KOHR_AH_PLEAD))
+	{
+		case 0:
+			Response (plead_1, CombatIsInevitable);
+			break;
+		case 1:
+			Response (plead_2, CombatIsInevitable);
+			break;
+		case 2:
+			// This response disabled due to lack of a speech file.
+			// Response (plead_3, CombatIsInevitable);
+			// break;
+		case 3:
+			Response (plead_4, CombatIsInevitable);
+			break;
+	}
 	Response (bye, CombatIsInevitable);
 }
 
 static void
 Intro (void)
 {
-	BYTE NumVisits;
+	DWORD GrpOffs;
 
-	NumVisits = GET_GAME_STATE (KOHR_AH_VISITS);
-	switch (NumVisits++)
+	if (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
 	{
-		case 0:
-			NPCPhrase (HELLO_AND_DIE_1);
-			break;
-		case 1:
-			NPCPhrase (HELLO_AND_DIE_2);
-			break;
-		case 2:
-			NPCPhrase (HELLO_AND_DIE_3);
-			break;
-		case 3:
-			NPCPhrase (HELLO_AND_DIE_4);
-			--NumVisits;
-			break;
+		NPCPhrase (OUT_TAKES);
+
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+		return;
 	}
-	DieHuman ((RESPONSE_REF)0);
-	SET_GAME_STATE (KOHR_AH_VISITS, NumVisits);
+
+	if (GET_GAME_STATE (KOHR_AH_KILLED_ALL))
+	{
+		NPCPhrase (GAME_OVER_DUDE);
+
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+		return;
+	}
+
+	if (!GET_GAME_STATE (KOHR_AH_SENSES_EVIL)
+			&& GET_GAME_STATE (TALKING_PET_ON_SHIP))
+	{
+		NPCPhrase (SENSE_EVIL);
+		SET_GAME_STATE (KOHR_AH_SENSES_EVIL, 1);
+	}
+
+	GrpOffs = GET_GAME_STATE_32 (SAMATRA_GRPOFFS0);
+	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY
+			&& GLOBAL (BattleGroupRef)
+			&& GLOBAL (BattleGroupRef) == GrpOffs)
+	{
+		NPCPhrase (HELLO_SAMATRA);
+
+		SET_GAME_STATE (AWARE_OF_SAMATRA, 1);
+		SET_GAME_STATE (BATTLE_SEGUE, 1);
+	}
+	else
+	{
+		BYTE NumVisits;
+
+		NumVisits = GET_GAME_STATE (KOHR_AH_VISITS);
+		if (GET_GAME_STATE (KOHR_AH_FRENZY))
+		{
+			switch (NumVisits++)
+			{
+				case 0:
+					NPCPhrase (WE_KILL_ALL_1);
+					break;
+				case 1:
+					NPCPhrase (WE_KILL_ALL_2);
+					break;
+				case 2:
+					NPCPhrase (WE_KILL_ALL_3);
+					break;
+				case 3:
+					NPCPhrase (WE_KILL_ALL_4);
+					--NumVisits;
+					break;
+			}
+
+			Frenzy ((RESPONSE_REF)0);
+		}
+		else
+		{
+			switch (NumVisits++)
+			{
+				case 0:
+					NPCPhrase (HELLO_AND_DIE_1);
+					break;
+				case 1:
+					NPCPhrase (HELLO_AND_DIE_2);
+					break;
+				case 2:
+					NPCPhrase (HELLO_AND_DIE_3);
+					break;
+				case 3:
+					NPCPhrase (HELLO_AND_DIE_4);
+					--NumVisits;
+					break;
+			}
+
+			DieHuman ((RESPONSE_REF)0);
+		}
+		SET_GAME_STATE (KOHR_AH_VISITS, NumVisits);
+	}
 }
 
 static COUNT
@@ -294,8 +552,15 @@ init_blackurq_comm (void)
 	blackurq_desc.AlienTextBaseline.y = 0;
 	blackurq_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
-	SET_GAME_STATE (BATTLE_SEGUE, 1);
-	
+	if (!GET_GAME_STATE (KOHR_AH_KILLED_ALL)
+			&& LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE)
+	{
+		SET_GAME_STATE (BATTLE_SEGUE, 1);
+	}
+	else
+	{
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+	}
 	retval = &blackurq_desc;
 
 	return (retval);

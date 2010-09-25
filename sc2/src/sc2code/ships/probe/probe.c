@@ -44,7 +44,7 @@ static RACE_DESC probe_desc =
 		0,
 		0,
 		PROBE_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial sphere of influence radius */

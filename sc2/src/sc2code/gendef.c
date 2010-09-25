@@ -16,10 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: Function call for initing orz space portal when encountering its enum label
-// JMS 2010: -Function call for initing Lurg home system when encountering its enum label
-//			 -Function call for initing those ones that mysteriously vanished in a hurry
-
 #include "encount.h"
 
 PLAN_GEN_FUNC
@@ -124,21 +120,6 @@ GenerateIP (BYTE Index)
 		case ILWRATH_DEFINED:
 			GenFunc = GenerateIlwrath;
 			break;
-		case SLAVERACE_DEFINED:
-			GenFunc = GenerateSlaveRace;
-			break;
-		case ORZ_SPACE_PORTAL_DEFINED: // JMS - hook to generating the contents of portal star system 
-			GenFunc = GenerateOrzSpacePortal;
-			break;
-		case LURG_DEFINED:
-			GenFunc = GenerateLurg;	 // JMS - hook to generating Lurg home system
-			break;
-		case SHOFIXTI_CRASH_SITE_DEFINED:
-			GenFunc = GenerateShofixtiCrashSite;	 // JMS - hook to generating Shofixti crash site
-			break;
-		case HINT_DEFINED:
-			GenFunc = GenerateHint;	 // JMS - hook to generating hint for those ones mysteriously vanished in a hurry
-			break;	
 		default:
 			GenFunc = GenerateRandomIP;
 			break;
@@ -146,3 +127,5 @@ GenerateIP (BYTE Index)
 
 	return (GenFunc);
 }
+
+

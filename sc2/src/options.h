@@ -38,10 +38,6 @@ extern int optWhichShield;
 extern int optSmoothScroll;
 extern int optMeleeScale;
 
-// JMS_GFX
-extern int resolutionFactor;
-extern BOOLEAN resFactorWasChanged;
-
 extern BOOLEAN opt3doMusic;
 extern BOOLEAN optPrecursorsMusic;
 extern BOOLEAN optSubtitles;

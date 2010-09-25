@@ -16,14 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: -Added new game states for "new" race - humans
-//			 -Added IN_ORZSPACE flag for saved game summaries
-//			 -Added new game state for Vela factory visit
-// JMS 2010: -Added new game state for which ship is the flagship
-//			 -Added new device: Black orb
-//			 -Added new device: Temporal wrapper
-//			 -Increased max number of comm screen animations for one race from 20 to 30
-
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
 
@@ -55,12 +47,9 @@
 #define TALK_INTRO (1 << 5)
 #define TALK_DONE (1 << 6)
 
-#define WHEN_TALKING (1L << 7) // JMS
+#define ANIM_DISABLED (1 << 7)
 
 #define COLORXFORM_ANIM PAUSE_TALKING
-
-#define FAST_STOP_AT_TALK_START TALK_DONE // JMS: If there's a very loooong animation, it can be forced to stop when talking with this.
-										  // (otherwise there'll be nasty, unwanted pauses in the conversation.)
 
 typedef struct
 {
@@ -83,7 +72,7 @@ typedef struct
 			// be active at the same time as this animation.
 } ANIMATION_DESC;
 
-#define MAX_ANIMATIONS 30 // JMS: Was 20
+#define MAX_ANIMATIONS 20
 
 // general numbers-speech generator info
 // should accomodate most common base-10 languages
@@ -190,14 +179,14 @@ enum
 	TALKING_PET_DEVICE,
 	UTWIG_BOMB_DEVICE,
 	SUN_EFFICIENCY_DEVICE,
-	BLACK_ORB_DEVICE,	// JMS: Replaces ROSY_SPHERE_DEVICE
+	ROSY_SPHERE_DEVICE,
 	AQUA_HELIX_DEVICE,
-	SHIELD_BUSTER_DEVICE,	// JMS: Replaces CLEAR_SPINDLE_DEVICE
+	CLEAR_SPINDLE_DEVICE,
 	ULTRON_0_DEVICE,
 	ULTRON_1_DEVICE,
 	ULTRON_2_DEVICE,
 	ULTRON_3_DEVICE,
-	TEMPORAL_WRAPPER_DEVICE,	// JMS: Replaces MAIDENS_DEVICE
+	MAIDENS_DEVICE,
 	UMGAH_HYPERWAVE_DEVICE,
 	BURVIX_HYPERWAVE_DEVICE,
 	DATA_PLATE_1_DEVICE,
@@ -233,12 +222,9 @@ START_GAME_STATE
 	ADD_GAME_STATE (SHOFIXTI_KIA, 1)
 	ADD_GAME_STATE (SHOFIXTI_BRO_KIA, 1)
 	ADD_GAME_STATE (SHOFIXTI_RECRUITED, 1)
-	ADD_GAME_STATE (SHOFIXTI_MET, 1)
-	ADD_GAME_STATE (SHOFIXTI_ANGRY, 2) // JMS: How angry the shofixti are.
-									   // Can be calmed down at 1. At 2 all is lost.
+
 	ADD_GAME_STATE (SHOFIXTI_MAIDENS, 1) /* Did you find the babes yet? */
 	ADD_GAME_STATE (MAIDENS_ON_SHIP, 1)
-
 	ADD_GAME_STATE (BATTLE_SEGUE, 1)
 			/* Set to 0 in init_xxx_comm() if communications directly
 			 * follows an encounter.
@@ -276,7 +262,6 @@ START_GAME_STATE
 	ADD_GAME_STATE (LIED_ABOUT_CREATURES, 2)
 	ADD_GAME_STATE (SPATHI_PARTY, 1)
 	ADD_GAME_STATE (KNOW_SPATHI_PASSWORD, 1)
-	ADD_GAME_STATE (SPATHIHOME_MET, 1)
 
 	ADD_GAME_STATE (ILWRATH_HOME_VISITS, 3)
 	ADD_GAME_STATE (ILWRATH_CHMMR_VISITS, 1)
@@ -362,7 +347,7 @@ START_GAME_STATE
 	ADD_GAME_STATE (MELNORME8_GRPOFFS2, 8)
 	ADD_GAME_STATE (MELNORME8_GRPOFFS3, 8)
 
-	ADD_GAME_STATE (MET_MELNORME, 1)  //TODO rename MELNORME_MET
+	ADD_GAME_STATE (MET_MELNORME, 1)
 	ADD_GAME_STATE (MELNORME_RESCUE_REFUSED, 1)
 	ADD_GAME_STATE (MELNORME_RESCUE_COUNT, 3)
 	ADD_GAME_STATE (TRADED_WITH_MELNORME, 1)
@@ -508,7 +493,6 @@ START_GAME_STATE
 	ADD_GAME_STATE (ORZ_VISITS, 3)
 	ADD_GAME_STATE (TAALO_VISITS, 3)
 	ADD_GAME_STATE (ORZ_MANNER, 2)
-	ADD_GAME_STATE (ORZ_MET, 1)
 
 	ADD_GAME_STATE (PROBE_EXHIBITED_BUG, 1)
 	ADD_GAME_STATE (CLEAR_SPINDLE_ON_SHIP, 1)
@@ -569,8 +553,6 @@ START_GAME_STATE
 	ADD_GAME_STATE (CHMMR_EMERGING, 1)
 	ADD_GAME_STATE (CHMMR_UNLEASHED, 1)
 	ADD_GAME_STATE (CHMMR_BOMB_STATE, 2)
-	ADD_GAME_STATE (CHMMR_MET, 2)
-
 			/* 0 - Nothing is known about the Precursor Bomb.
 			 * 1 - The captain knows from the Chmmr that some extremely
 			 *     powerful weapon is needed to destroy the Sa-Matra.
@@ -588,7 +570,6 @@ START_GAME_STATE
 	ADD_GAME_STATE (YEHAT_SHIP_MONTH, 4)
 	ADD_GAME_STATE (YEHAT_SHIP_DAY, 5)
 	ADD_GAME_STATE (YEHAT_SHIP_YEAR, 5)
-	ADD_GAME_STATE (YEHAT_MET, 2)
 
 	ADD_GAME_STATE (CLEAR_SPINDLE, 1)
 	ADD_GAME_STATE (PKUNK_VISITS, 3)
@@ -854,7 +835,6 @@ START_GAME_STATE
 	ADD_GAME_STATE (VUX_STACK_2, 2)
 	ADD_GAME_STATE (VUX_STACK_3, 2)
 	ADD_GAME_STATE (VUX_STACK_4, 2)
-	ADD_GAME_STATE (VUX_MET, 2)
 
 	ADD_GAME_STATE (SHOFIXTI_STACK4, 2)
 
@@ -918,7 +898,6 @@ START_GAME_STATE
 	ADD_GAME_STATE (SYREEN_STACK0, 2)
 	ADD_GAME_STATE (SYREEN_STACK1, 2)
 	ADD_GAME_STATE (SYREEN_STACK2, 2)
-	ADD_GAME_STATE (SYREEN_MET, 2)
 
 	ADD_GAME_STATE (REFUSED_ULTRON_AT_BOMB, 1)
 	ADD_GAME_STATE (NO_TRICK_AT_SUN, 1)
@@ -927,95 +906,17 @@ START_GAME_STATE
 	ADD_GAME_STATE (SPATHI_STACK1, 1)
 	ADD_GAME_STATE (SPATHI_STACK2, 1)
 
-	// JMS: Resized Orz stacks
-	ADD_GAME_STATE (ORZ_STACK0, 2)
-	ADD_GAME_STATE (ORZ_STACK1, 2)
-
-	// JMS: Androsynth states
-	ADD_GAME_STATE (ANDROSYNTH_VISITS, 3)
-	ADD_GAME_STATE (ANDROSYNTH_HOSTILE, 1)
-	ADD_GAME_STATE (ANDROSYNTH_MET, 1)
-	ADD_GAME_STATE (KNOW_ANDROSYNTH_STATE, 1)
-	ADD_GAME_STATE (ANDROSYNTH_STACK_1, 3)
-	ADD_GAME_STATE (ANDROSYNTH_STACK_2, 1)
-
-	// JMS: Androsynth states
-	ADD_GAME_STATE (CHMMR_SPACE_VISITS, 2)
-
-	// JMS: Human states
-	ADD_GAME_STATE (HUMAN_VISITS, 3)
-	ADD_GAME_STATE (HUMAN_NEWS, 3)
-	ADD_GAME_STATE (HUMAN_FUEL_INFO, 3)
-	ADD_GAME_STATE (HUMAN_NUKES_DONE, 1)
-
-	// JMS: ORZ space states
-	ADD_GAME_STATE (ORZ_SPACE_SIDE, 2)
-	ADD_GAME_STATE (LEAVING_ORZ_SPACE, 1)
-
-	// JMS: Vela Precursor factory
-	ADD_GAME_STATE (VELA_FACTORY_VISITED, 1)
-
-	// JMS: Which ship is the flagship
-	ADD_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2)
-			// 0 - Chmmr Explorer
-			// 1 - Precursor vessel
-			// 2 - Precursor Battleship, full game
-			// 3 - UNUSED
-
-	// JMS: New devices. They either are or aren't on ship.
-	ADD_GAME_STATE (BLACK_ORB_ON_SHIP, 1)
-	ADD_GAME_STATE (BLACK_ORB, 1)
-	ADD_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP, 1)
-	ADD_GAME_STATE (SHIELD_BUSTER_ON_SHIP, 1)
-
-	// JMS: Transport ship states
-	ADD_GAME_STATE (TRANSPORT_SHIP_0_STATUS, 3)
-		// 0 - Waiting for leaving in orbit.
-		// 1 - Leaving for hyperspace, still in home system.
-		// 2 - "Left truespace, not yet appeared in hyperspace.
-		// 3 - Now in hyperspace.
-		// 4 - Arriving destination.
-		// 5 - UNUSED
-		// 6 - UNUSED
-		// 7 - UNUSED
-	
-	// JMS: Slaveshield buster crap
-	ADD_GAME_STATE (USED_BUSTER, 1)
-
-	// JMS: How many times player has met Slylandros in kohr-ah vessels
-	ADD_GAME_STATE (SLYLANDRO_KOHRAH_MET_TIMES, 2)
-	ADD_GAME_STATE (KNOW_SLYLANDRO_KOHRAH, 1)
-	ADD_GAME_STATE (SLYLANDRO_KOHRAH_PANIC, 1)
-
-	// JMS: Did enemy ship escape from combat
-	ADD_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 1)
-
-	// JMS: Initer, which is related to starbase month and day tracking (See comm/starbas.c for more info.)
-	ADD_GAME_STATE (STARBASE_VISITED_FOR_FIRST_TIME, 1)
-
-	// JMS: It is allowed for the autopilot to engage
-	ADD_GAME_STATE (AUTOPILOT_OK, 1)
-
-	// JMS: Set shofixti crash site triangulation spheres visible in starmap
-	ADD_GAME_STATE (TRIANGULATION_SPHERES_CHMMR, 1)
-	ADD_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1)
-
-	// JMS: Once the artifact is found, the spheres are no longer necessary
-	ADD_GAME_STATE (HIDE_TRIANGULATION_SPHERES, 1)
-
-	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
-	ADD_GAME_STATE (CRASH_SITE_UNPROTECTED, 1)
-
+	ADD_GAME_STATE (ORZ_STACK0, 1)
+	ADD_GAME_STATE (ORZ_STACK1, 1)
 END_GAME_STATE
 
 // Values for GAME_STATE.glob_flags:
-#define COMBAT_SPEED_SHIFT 7
+#define COMBAT_SPEED_SHIFT 6
 #define COMBAT_SPEED_MASK (((1 << 2) - 1) << COMBAT_SPEED_SHIFT)
 #define NUM_COMBAT_SPEEDS 4
 #define MUSIC_DISABLED (1 << 3)
 #define SOUND_DISABLED (1 << 4)
-#define VOICE_DISABLED (1 << 5)
-#define CYBORG_ENABLED (1 << 6)
+#define CYBORG_ENABLED (1 << 5)
 
 enum
 {
@@ -1039,14 +940,12 @@ enum
 	CHECK_LOAD = MAKE_WORD (0, (1 << 4)),
 	CHECK_RESTART = MAKE_WORD (0, (1 << 5)),
 	CHECK_ABORT = MAKE_WORD (0, (1 << 6)),
-	
-	IN_ORZSPACE,	// JMS: In *below* (Orz space) or not
 };
 typedef UWORD ACTIVITY;
 
 typedef struct
 {
-	UWORD glob_flags;
+	BYTE glob_flags;
 			// See above for the meaning of the bits.
 
 	BYTE CrewCost, FuelCost;

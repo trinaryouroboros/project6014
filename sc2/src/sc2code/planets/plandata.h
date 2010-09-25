@@ -284,8 +284,6 @@ typedef struct
 			//          NUM_CREATURE_TYPES     is an Evil One
 			//          NUM_CREATURE_TYPES + 1 is a Brainbox Bulldozer
 			//          NUM_CREATURE_TYPES + 2 is Zex' Beauty
-			//          NUM_CREATURE_TYPES + 3 through NUM_CREATURE_TYPES + 2 + NUM_B_CREATURE_TYPES are creatures for the southern part of the new quadrant
-			//          NUM_CREATURE_TYPES + 2 + NUM_B_CREATURE_TYPES through NUM_CREATURE_TYPES + 2 + NUM_B_CREATURE_TYPES + NUM_C_CREATURE_TYPES are creatures for the western part of the new quadrant
 			// For energy: 0 - Liftoff on collision
 			//             1 - No liftoff on collision
 			//             2 - (special case) Fwiffo

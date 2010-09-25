@@ -23,19 +23,16 @@
 
 extern int ScreenWidth;
 extern int ScreenHeight;
-extern int resolutionFactor; // JMS_GFX
 
 #define SCREEN_WIDTH ScreenWidth
 #define SCREEN_HEIGHT ScreenHeight
-#define RESOLUTION_FACTOR resolutionFactor // JMS_GFX 
-
 #define SAFE_X 0
-#define SIS_ORG_X (7 * RESOLUTION_FACTOR + SAFE_X) // JMS_GFX
 		/* Left and right screen margin to be left unused */
 #define SAFE_Y 0
-#define SIS_ORG_Y (10 * RESOLUTION_FACTOR + SAFE_Y) // JMS_GFX
 		/* Top and bottom screen margin to be left unused */
-#define STATUS_WIDTH (64 * RESOLUTION_FACTOR) // JMS_GFX
+#define SIS_ORG_X (7 + SAFE_X)
+#define SIS_ORG_Y (10 + SAFE_Y)
+#define STATUS_WIDTH 64
 		/* Width of the status "window" (the right part of the screen) */
 #define STATUS_HEIGHT (SCREEN_HEIGHT - (SAFE_Y * 2))
 		/* Height of the status "window" (the right part of the screen) */
@@ -43,10 +40,11 @@ extern int resolutionFactor; // JMS_GFX
 		/* Width of the space "window" (the left part of the screen) */
 #define SPACE_HEIGHT (SCREEN_HEIGHT - (SAFE_Y * 2))
 		/* Height of the space "window" (the left part of the screen) */
-#define SIS_SCREEN_WIDTH (SPACE_WIDTH - (14 * RESOLUTION_FACTOR)) // JMS_GFX
+#define SIS_SCREEN_WIDTH (SPACE_WIDTH - 14)
 		/* Width of the usable part of the space "window" */
-#define SIS_SCREEN_HEIGHT (SPACE_HEIGHT - (13 * RESOLUTION_FACTOR)) // JMS_GFX
+#define SIS_SCREEN_HEIGHT (SPACE_HEIGHT - 13)
 		/* Height of the usable part of the space "window" */
+
 
 #define MAX_REDUCTION 3
 #define MAX_VIS_REDUCTION 2
@@ -84,11 +82,8 @@ extern int resolutionFactor; // JMS_GFX
 		((UNIVERSE_TO_LOGY (MAX_Y_UNIVERSE + 1) > UNIVERSE_TO_LOGY (-1) ? \
 				UNIVERSE_TO_LOGY (MAX_Y_UNIVERSE) : UNIVERSE_TO_LOGY (-1)) \
 				- 1L)
-
-// JMS_GFX: Not quite sure what these do... Something to do with the mapping of coordinates from one number system to another
-//
-#define SECTOR_WIDTH (195)
-#define SECTOR_HEIGHT (25)
+#define SECTOR_WIDTH 195
+#define SECTOR_HEIGHT 25
 
 #define SPHERE_RADIUS_INCREMENT 11
 

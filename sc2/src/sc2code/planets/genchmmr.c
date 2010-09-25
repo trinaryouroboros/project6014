@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Added Chmmr to starbase
-//			 -Chmmr home planet is now restricted from landing
-
 #include "build.h"
 #include "encount.h"
 #include "globdata.h"
@@ -57,7 +54,8 @@ GenerateChmmr (BYTE control)
 		case GENERATE_PLANETS:
 			GenerateRandomIP (GENERATE_PLANETS);
 			pSolarSysState->PlanetDesc[1].data_index = SAPPHIRE_WORLD;
-			pSolarSysState->PlanetDesc[1].flags = PLANET_RESTRICTED; // JMS: Can't land on Chmmr homeworld
+			if (!GET_GAME_STATE (CHMMR_UNLEASHED))
+				pSolarSysState->PlanetDesc[1].data_index |= PLANET_SHIELDED;
 			pSolarSysState->PlanetDesc[1].NumPlanets = 1;
 			break;
 		case GENERATE_ORBITAL:
@@ -76,29 +74,67 @@ GenerateChmmr (BYTE control)
 					}
 					break;
 				}
-				
+				else if (GET_GAME_STATE (SUN_DEVICE_ON_SHIP)
+						&& !GET_GAME_STATE (ILWRATH_DECEIVED)
+						&& ActivateStarShip (ILWRATH_SHIP, SPHERE_TRACKING))
+				{
+					PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);
+					ReinitQueue (&GLOBAL (ip_group_q));
+					assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
+
+					CloneShipFragment (ILWRATH_SHIP,
+							&GLOBAL (npc_built_ship_q), INFINITE_FLEET);
+
+					pSolarSysState->MenuState.Initialized += 2;
+					SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 6);
+					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
+					InitCommunication (ILWRATH_CONVERSATION);
+					pSolarSysState->MenuState.Initialized -= 2;
+
+					if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
+					{
+						GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
+						ReinitQueue (&GLOBAL (npc_built_ship_q));
+						GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
+					}
+					break;
+				}
 			}
 				/* Starbase */
 			else if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[1]
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 			{
-				// JMS: The Chmmr reside in starbase
-				CloneShipFragment (CHMMR_SHIP, &GLOBAL (npc_built_ship_q), INFINITE_FLEET);
-				
-				// JMS: This code summons starbase subroutine. (The global_flags_and_data == ~0
-				// is checked in Starcon2Main function in starcon.c)
-				GLOBAL (CurrentActivity) |= START_ENCOUNTER;
-				SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
-				
-				// JMS: Necessary to empty the NPC ship queue after visit.
-				// Otherwise next encounter with a ship crashes the game.
-				if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
-				{
-					GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
-					ReinitQueue (&GLOBAL (npc_built_ship_q));
-					GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
-				}
-				
+				RECT r;
+
+				LockMutex (GraphicsLock);
+
+				LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
+				pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
+						CaptureStringTable (
+								LoadStringTable (CHMMR_BASE_STRTAB));
+
+				ScanContext = CreateContext ();
+				SetContext (ScanContext);
+				SetContextFGFrame (Screen);
+				r.corner.x = (SIS_ORG_X + SIS_SCREEN_WIDTH) - MAP_WIDTH;
+				r.corner.y = (SIS_ORG_Y + SIS_SCREEN_HEIGHT) - MAP_HEIGHT;
+				r.extent.width = MAP_WIDTH;
+				r.extent.height = MAP_HEIGHT;
+				SetContextClipRect (&r);
+
+				DoDiscoveryReport (MenuSounds);
+
+				SetContext (SpaceContext);
+				DestroyContext (ScanContext);
+				ScanContext = 0;
+
+				DestroyStringTable (ReleaseStringTable (
+						pSolarSysState->SysInfo.PlanetInfo.DiscoveryString
+						));
+				pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = 0;
+				FreeLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
+
+				UnlockMutex (GraphicsLock);
 				break;
 			}
 		default:
@@ -106,3 +142,4 @@ GenerateChmmr (BYTE control)
 			break;
 	}
 }
+

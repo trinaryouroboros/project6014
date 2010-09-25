@@ -37,9 +37,9 @@
 
 
 #define NUM_MELEE_COLS_ORIG NUM_MELEE_COLUMNS
-#define PICK_X_OFFS (57 * RESOLUTION_FACTOR) // JMS_GFX
-#define PICK_Y_OFFS (24 * RESOLUTION_FACTOR) // JMS_GFX
-#define PICK_SIDE_OFFS (100 * RESOLUTION_FACTOR) // JMS_GFX
+#define PICK_X_OFFS 57
+#define PICK_Y_OFFS 24
+#define PICK_SIDE_OFFS 100
 
 #ifdef NETPLAY
 static void reportShipSelected (GETMELEE_STATE *gms, COUNT index);
@@ -110,11 +110,11 @@ static void
 PickMelee_ChangedSelection (GETMELEE_STATE *gms, COUNT playerI)
 {
 	RECT r;
-	r.corner.x = PICK_X_OFFS + ((ICON_WIDTH + 2 * RESOLUTION_FACTOR) * gms->player[playerI].col); // JMS_GFX
-	r.corner.y = PICK_Y_OFFS + ((ICON_HEIGHT + 2 * RESOLUTION_FACTOR) * gms->player[playerI].row)
-			+ ((1 - playerI) * PICK_SIDE_OFFS); // JMS_GFX
-	r.extent.width = (ICON_WIDTH + 2 * RESOLUTION_FACTOR); // JMS_GFX
-	r.extent.height = (ICON_HEIGHT + 2 * RESOLUTION_FACTOR);// JMS_GFX
+	r.corner.x = PICK_X_OFFS + ((ICON_WIDTH + 2) * gms->player[playerI].col);
+	r.corner.y = PICK_Y_OFFS + ((ICON_HEIGHT + 2) * gms->player[playerI].row)
+			+ ((1 - playerI) * PICK_SIDE_OFFS);
+	r.extent.width = (ICON_WIDTH + 2);
+	r.extent.height = (ICON_HEIGHT + 2);
 	Flash_setRect (gms->player[playerI].flashContext, &r);
 }
 
@@ -394,8 +394,8 @@ CrossOutShip (FRAME frame, COUNT shipI)
 	
 	SetContextFGFrame (frame);
 
-	s.origin.x = 3 * RESOLUTION_FACTOR + ((ICON_WIDTH + 2 * RESOLUTION_FACTOR) * (shipI % NUM_MELEE_COLS_ORIG));// JMS_GFX
-	s.origin.y = 9 * RESOLUTION_FACTOR + ((ICON_HEIGHT + 2 * RESOLUTION_FACTOR) * (shipI / NUM_MELEE_COLS_ORIG));// JMS_GFX
+	s.origin.x = 3 + ((ICON_WIDTH + 2) * (shipI % NUM_MELEE_COLS_ORIG));
+	s.origin.y = 9 + ((ICON_HEIGHT + 2) * (shipI / NUM_MELEE_COLS_ORIG));
 	s.frame = SetAbsFrameIndex (StatusFrame, 3);
 			// Cross for through the ship image.
 	DrawStamp (&s);
@@ -421,18 +421,18 @@ UpdatePickMeleeFleetValue (FRAME frame, COUNT which_player)
 
 	// Erase the old value text.
 	GetFrameRect (frame, &r);
-	r.extent.width -= 4 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.width -= 4;
 	t.baseline.x = r.extent.width;
-	r.corner.x = r.extent.width - ((6 * 3) * RESOLUTION_FACTOR); // JMS_GFX
-	r.corner.y = 2 * RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.width = (6 * 3) * RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.height = (7 - 2) * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1); // JMS_GFX
+	r.corner.x = r.extent.width - (6 * 3);
+	r.corner.y = 2;
+	r.extent.width = (6 * 3);
+	r.extent.height = 7 - 2;
 	SetContextForeGroundColor (PICK_BG_COLOR);
 	DrawFilledRectangle (&r);
 
 	// Draw the new value text.
 	sprintf (buf, "%d", value);
-	t.baseline.y = 7 * RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = 7;
 	t.align = ALIGN_RIGHT;
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
@@ -452,8 +452,8 @@ DrawPickMeleeFrame (COUNT which_player)
 
 	oldContext = SetContext (SpaceContext);
 	s.frame = SetAbsFrameIndex (PickMeleeFrame, which_player);
-	s.origin.x = PICK_X_OFFS - 3 * RESOLUTION_FACTOR; // JMS_GFX
-	s.origin.y = PICK_Y_OFFS - 9 * RESOLUTION_FACTOR + ((1 - which_player) * PICK_SIDE_OFFS);
+	s.origin.x = PICK_X_OFFS - 3;
+	s.origin.y = PICK_Y_OFFS - 9 + ((1 - which_player) * PICK_SIDE_OFFS);
 	DrawStamp (&s);
 			// Draw the selection box to screen.
 	

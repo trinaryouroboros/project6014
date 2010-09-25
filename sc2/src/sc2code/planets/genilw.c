@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: No ships orbiting Ilwrath homeworld anymore.
-
 #include "build.h"
 #include "encount.h"
 #include "globdata.h"
@@ -86,9 +84,7 @@ GenerateIlwrath (BYTE control)
 		case GENERATE_ORBITAL:
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
 			{
-				// JMS: By deactivating this if, Ilwrath homeworld no longer has any ships
-				//if (ActivateStarShip (ILWRATH_SHIP, SPHERE_TRACKING))
-				if(0)
+				if (ActivateStarShip (ILWRATH_SHIP, SPHERE_TRACKING))
 				{
 					NotifyOthers (ILWRATH_SHIP, (BYTE)~0);
 					PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);

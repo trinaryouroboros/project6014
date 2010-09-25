@@ -13,7 +13,6 @@
 #define ORBIT3_MUSIC "music.orbit3"
 #define ORBIT4_MUSIC "music.orbit4"
 #define ORBIT5_MUSIC "music.orbit5"
-#define ORZSPACE_MUSIC "music.orzspace"
 #define OUTFIT_MUSIC "music.outfit"
 #define QUASISPACE_MUSIC "music.arispace"
 #define REDALERT_MUSIC "music.redalert"

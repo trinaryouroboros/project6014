@@ -49,12 +49,12 @@ static RACE_DESC supox_desc =
 		SUPOX_RACE_STRINGS,
 		SUPOX_ICON_MASK_PMAP_ANIM,
 		SUPOX_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
-		0, /* Initial SoI radius */
+		333 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			0, 0,
+			7468, 9246,
 		},
 	},
 	{

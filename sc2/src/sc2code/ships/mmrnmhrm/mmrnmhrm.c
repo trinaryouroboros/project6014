@@ -62,7 +62,7 @@ static RACE_DESC mmrnmhrm_desc =
 		MMRNMHRM_RACE_STRINGS,
 		MMRNMHRM_ICON_MASK_PMAP_ANIM,
 		MMRNMHRM_MICON_MASK_PMAP_ANIM,
-		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+		NULL, NULL, NULL
 	},
 	{ /* FLEET_STUFF */
 		0, /* Initial sphere of influence radius */

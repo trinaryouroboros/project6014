@@ -92,7 +92,6 @@ struct options_struct {
 	float musicVolumeScale;
 	float sfxVolumeScale;
 	float speechVolumeScale;
-	int resolutionFactor;	// JMS_GFX
 };
 
 static int preParseOptions (int argc, char *argv[],
@@ -144,7 +143,6 @@ main (int argc, char *argv[])
 		/* .musicVolumeScale = */   1.0f,
 		/* .sfxVolumeScale = */     1.0f,
 		/* .speechVolumeScale = */  1.0f,
-		/* .resolutionfactor = */	1, // JMS_GFX
 	};
 	int optionsResult;
 
@@ -375,7 +373,7 @@ main (int argc, char *argv[])
 		{
 			log_add (log_Error, "Illegal control template '%d' for Player "
 					"Two.", PlayerControls[1]);
-			PlayerControls[1] = CONTROL_TEMPLATE_KB_2;
+			PlayerControls[1] = CONTROL_TEMPLATE_JOY_1;
 		}
 	}
 	if (res_HasKey ("config.musicvol"))
@@ -392,13 +390,7 @@ main (int argc, char *argv[])
 	{
 		parseVolume (res_GetString ("config.speechvol"), 
 				&options.speechVolumeScale, "speech volume");
-	}
-	
-	// JMS_GFX
-	if (res_HasKey ("config.resolutionfactor"))
-	{
-		options.resolutionFactor = res_GetInteger ("config.resolutionfactor");
-	}
+	}		
 
 	{	/* remove old control template names */
 		int i;
@@ -446,11 +438,7 @@ main (int argc, char *argv[])
 	sfxVolumeScale = options.sfxVolumeScale;
 	speechVolumeScale = options.speechVolumeScale;
 	optAddons = options.addons;
-	
-	// JMS_GFX
-	resolutionFactor = 1; //resolutionFactor = options.resolutionFactor; // JMS_DEMO
-	resFactorWasChanged = FALSE;
-	
+
 	prepareContentDir (options.contentDir, options.addonDir, argv[0]);
 	prepareMeleeDir ();
 	prepareSaveDir ();

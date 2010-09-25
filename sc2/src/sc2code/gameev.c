@@ -15,8 +15,6 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-// JMS 2010: Created events, which move transport ships
-
 #include "gameev.h"
 
 #include "build.h"
@@ -26,8 +24,6 @@
 #include "hyper.h"
 #include "libs/compiler.h"
 #include "libs/mathlib.h"
-
-#include "libs/log.h"
 
 
 static void arilou_entrance_event (void);
@@ -39,7 +35,6 @@ static void thradd_mission (void);
 static void ilwrath_mission (void);
 static void utwig_supox_mission (void);
 static void mycon_mission (void);
-static void transport_starts_event (void);
 
 
 void
@@ -49,9 +44,6 @@ AddInitialGameEvents (void) {
 	AddEvent (RELATIVE_EVENT, 0, 0, YEARS_TO_KOHRAH_VICTORY,
 			KOHR_AH_VICTORIOUS_EVENT);
 	AddEvent (RELATIVE_EVENT, 0, 0, 0, SLYLANDRO_RAMP_UP);
-	
-	// JMS: Start transport ships
-	AddEvent (ABSOLUTE_EVENT, 3, 28, START_YEAR, TRANSPORT_STARTS_EVENT);
 }
 
 void
@@ -214,60 +206,7 @@ EventHandler (BYTE selector)
 			SET_GAME_STATE (SLYLANDRO_MULTIPLIER, ramp_factor);
 			break;
 		}
-		case TRANSPORT_STARTS_EVENT:
-			transport_starts_event();
-			
-			// If transport is leaving from truespace, force it to hyperspace after 2 days.
-			AddEvent (RELATIVE_EVENT, 0, 2, 0, TRANSPORT_FROM_TRUESPACE_TO_HYPERSPACE_EVENT);
-			break;
-		case TRANSPORT_FROM_TRUESPACE_TO_HYPERSPACE_EVENT:
-			if(GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
-				SET_GAME_STATE (TRANSPORT_SHIP_0_STATUS,2);
-			break;
-		case TRANSPORT_HAS_ARRIVED_AT_DESTINATION_EVENT:
-			if(GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 4)
-				SET_GAME_STATE (TRANSPORT_SHIP_0_STATUS,0);
-			break;	
 	}
-}
-
-// JMS: Transport ship starts its journey. Whee!!!
-
-
-void
-transport_starts_event(void)
-{
-	COUNT month_index, year_index, day_index;
-
-	day_index = GLOBAL (GameClock.day_index);
-	year_index = GLOBAL (GameClock.year_index);
-	
-	if(GLOBAL (GameClock).day_index % 7 == 0 && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 0)
-		SET_GAME_STATE (TRANSPORT_SHIP_0_STATUS,1);
-	
-	month_index = GLOBAL (GameClock.month_index) % 12;
-
-	if (day_index==28)
-	{
-		
-		// If december 28th, next transport starts next year.
-		if (month_index == 0)
-			++year_index;
-		
-		// Next transport starts on a date of next month.
-		++month_index;
-		
-		// Next transport starts on the 7th of the correct year and month.
-		AddEvent (ABSOLUTE_EVENT, month_index, 7, year_index, TRANSPORT_STARTS_EVENT);
-		log_add(log_Debug, "next day 7, next month %d, next year %d, status %d", day_index,
-				month_index,year_index,GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS));
-	}
-	// Dates other than 28th are pretty straightforward: Just add 7 to the current day number.
-	else
-		AddEvent (RELATIVE_EVENT, 0, 7, 0, TRANSPORT_STARTS_EVENT);
-	
-	log_add(log_Debug, "next day %d, next month %d, next year %d, status %d", day_index,
-			month_index,year_index+7,GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS));
 }
 
 void

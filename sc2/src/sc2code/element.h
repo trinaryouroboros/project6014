@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added extern declaration of do_instrument_damage
-
 #ifndef _ELEMENT_H
 #define _ELEMENT_H
 
@@ -29,14 +27,15 @@
 
 #define BATTLE_FRAME_RATE (ONE_SECOND / 24)
 
-#define SHIP_INFO_HEIGHT (65 * RESOLUTION_FACTOR) // JMS_GFX
-#define CAPTAIN_XOFFS (4 + (32 * (RESOLUTION_FACTOR-1))) // JMS_GFX
-#define CAPTAIN_YOFFS (SHIP_INFO_HEIGHT + 4 * RESOLUTION_FACTOR) // JMS_GFX
+#define SHIP_INFO_HEIGHT 65
+#define CAPTAIN_XOFFS 4
+#define CAPTAIN_YOFFS (SHIP_INFO_HEIGHT + 4)
 #define SHIP_STATUS_HEIGHT (STATUS_HEIGHT >> 1)
 #define BAD_GUY_YOFFS 0
 #define GOOD_GUY_YOFFS SHIP_STATUS_HEIGHT
-#define STARCON_TEXT_HEIGHT (7 * RESOLUTION_FACTOR) // JMS_GFX
-#define TINY_TEXT_HEIGHT (9 * RESOLUTION_FACTOR) // JMS_GFX
+#define STARCON_TEXT_HEIGHT 7
+#define TINY_TEXT_HEIGHT 9
+
 #define BATTLE_CREW_X 10
 #define BATTLE_CREW_Y (64 - SAFE_Y)
 
@@ -212,8 +211,6 @@ extern void spawn_planet (void);
 extern void spawn_asteroid (ELEMENT *ElementPtr);
 extern void animation_preprocess (ELEMENT *ElementPtr);
 extern void do_damage (ELEMENT *ElementPtr, SIZE damage);
-extern void do_instrument_damage (ELEMENT *ElementPtr, SIZE damage); // JMS
-extern void do_engine_damage (ELEMENT *ElementPtr); // JMS
 extern void collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ELEMENT *ElementPtr1, POINT *pPt1);
 extern void crew_preprocess (ELEMENT *ElementPtr);
@@ -260,6 +257,7 @@ typedef UWORD STATUS_FLAGS;
 #define PLAY_VICTORY_DITTY     (1 << 9)
 
 extern STATUS_FLAGS inertial_thrust (ELEMENT *ElementPtr);
+
 
 #endif /* _ELEMENT_H */
 

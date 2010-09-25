@@ -16,18 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: -Added maximum number of races into InitSIS function to facilitate Androsynth into the game.
-// It is very important to remember to update this number of races here when adding races to the game, otherwise
-// the races won't show up in the game AND the defines and enums in races.h will have quirky side-effects.
-//
-// Originally the max number of races was defined by KOHR_AH_ID and some constant numbers.
-// Max num of races is now defined by LURG_ID plus the constant numbers because of the added new races.
-//
-// JMS 2010: -Added SET_GAME_STATE (STARBASE_AVAILABLE, 1); to InitSIS so starbase is available right
-// from the start of the game. Kind of hack, maybe we should just remove the whole starbase_available variable...
-//
-//			 -Changed the starting number of thrusters and turning jets for Chmmr Explorer
-
 #include "globdata.h"
 
 #include "coderes.h"
@@ -208,9 +196,9 @@ InitSIS (void)
 		COUNT num_ships;
 		SPECIES_ID s_id = ARILOU_ID;
 
-		num_ships = LURG_ID - s_id + 1	// JMS: LURG_ID now replaces KOHR_AH_ID here
-		+ 2; /* Yehat Rebels and Transport ship */
-		
+		num_ships = KOHR_AH_ID - s_id + 1
+				+ 2; /* Yehat Rebels and Ur-Quan probe */
+
 		InitQueue (&GLOBAL (avail_race_q), num_ships, sizeof (FLEET_INFO));
 		for (i = 0; i < num_ships; ++i)
 		{
@@ -223,7 +211,7 @@ InitSIS (void)
 			else if (i == num_ships - 2)
 				ship_ref = YEHAT_ID;
 			else  /* (i == num_ships - 1) */
-				ship_ref = TRANSPORT_ID;
+				ship_ref = UR_QUAN_PROBE_ID;
 			
 			hFleet = AllocLink (&GLOBAL (avail_race_q));
 			if (!hFleet)
@@ -245,7 +233,7 @@ InitSIS (void)
 			}
 			else
 			{
-				// Transport ship.
+				// Ur-Quan probe.
 				RACE_DESC *RDPtr = load_ship (FleetPtr->SpeciesID,
 						FALSE);
 				if (RDPtr)
@@ -256,6 +244,7 @@ InitSIS (void)
 					free_ship (RDPtr, FALSE, FALSE);
 				}
 			}
+
 			FleetPtr->ship_flags = BAD_GUY;
 			FleetPtr->known_strength = 0;
 			FleetPtr->loc = FleetPtr->known_loc;
@@ -300,33 +289,20 @@ InitSIS (void)
 
 	for (i = 0; i < NUM_DRIVE_SLOTS; ++i)
 		GLOBAL_SIS (DriveSlots[i]) = EMPTY_SLOT + 0;
-	GLOBAL_SIS (DriveSlots[0]) =  // JMS
-	GLOBAL_SIS (DriveSlots[1]) =  // JMS
-	GLOBAL_SIS (DriveSlots[2]) =  // JMS
-	GLOBAL_SIS (DriveSlots[3]) =
-	GLOBAL_SIS (DriveSlots[4]) = // JMS
-	GLOBAL_SIS (DriveSlots[5]) = // JMS
-	GLOBAL_SIS (DriveSlots[6]) = // JMS
-			GLOBAL_SIS (DriveSlots[7]) = FUSION_THRUSTER;
+	GLOBAL_SIS (DriveSlots[5]) =
+			GLOBAL_SIS (DriveSlots[6]) = FUSION_THRUSTER;
 	for (i = 0; i < NUM_JET_SLOTS; ++i)
 		GLOBAL_SIS (JetSlots[i]) = EMPTY_SLOT + 1;
 	GLOBAL_SIS (JetSlots[0]) =
-	GLOBAL_SIS (JetSlots[1]) = // JMS
-	GLOBAL_SIS (JetSlots[2]) = // JMS
-	GLOBAL_SIS (JetSlots[3]) = // JMS
-	GLOBAL_SIS (JetSlots[4]) = // JMS
-	GLOBAL_SIS (JetSlots[5]) = // JMS
-	GLOBAL_SIS (JetSlots[6]) = // JMS
-		GLOBAL_SIS (JetSlots[7]) = TURNING_JETS;
+			GLOBAL_SIS (JetSlots[6]) = TURNING_JETS;
 	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 		GLOBAL_SIS (ModuleSlots[i]) = EMPTY_SLOT + 2;
-	/*GLOBAL_SIS (ModuleSlots[15]) = GUN_WEAPON;
+	GLOBAL_SIS (ModuleSlots[15]) = GUN_WEAPON;
 	GLOBAL_SIS (ModuleSlots[2]) = CREW_POD;
+	GLOBAL_SIS (CrewEnlisted) = CREW_POD_CAPACITY;
 	GLOBAL_SIS (ModuleSlots[8]) = STORAGE_BAY;
-	GLOBAL_SIS (ModuleSlots[1]) = FUEL_TANK;*/
-	//	GLOBAL_SIS (ModuleSlots[0]) = STORAGE_BAY; // BW: no storage
-	GLOBAL_SIS (CrewEnlisted) = EXPLORER_CREW_CAPACITY;
-	GLOBAL_SIS (FuelOnBoard) = EXPLORER_FUEL_CAPACITY;
+	GLOBAL_SIS (ModuleSlots[1]) = FUEL_TANK;
+	GLOBAL_SIS (FuelOnBoard) = 10 * FUEL_TANK_SCALE;
 
 	InitQueue (&GLOBAL (built_ship_q),
 			MAX_BUILT_SHIPS, sizeof (SHIP_FRAGMENT));
@@ -336,9 +312,6 @@ InitSIS (void)
 			sizeof (IP_GROUP));
 	InitQueue (&GLOBAL (encounter_q), MAX_ENCOUNTERS, sizeof (ENCOUNTER));
 
-	// JMS: Starbase is available right from the start!
-	SET_GAME_STATE (STARBASE_AVAILABLE, 1);
-	
 	GLOBAL (CurrentActivity) = IN_INTERPLANETARY | START_INTERPLANETARY;
 
 	GLOBAL_SIS (ResUnits) = 0;

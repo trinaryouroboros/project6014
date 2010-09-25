@@ -27,7 +27,6 @@
 #include "sounds.h"
 #include "libs/mathlib.h"
 
-#include "libs/log.h"
 
 void
 animation_preprocess (ELEMENT *ElementPtr)
@@ -523,7 +522,6 @@ GetNextStarShip (STARSHIP *LastStarShipPtr, COUNT which_side)
 		if (!spawn_ship (StarShipPtr))
 		{
 			UnlockStarShip (&race_q[which_side], hBattleShip);
-			
 			return (FALSE);
 		}
 		UnlockStarShip (&race_q[which_side], hBattleShip);

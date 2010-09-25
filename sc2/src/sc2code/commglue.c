@@ -16,10 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: -Added earthling ship and Androsynth dialogue screen hooks
-// JMS 2010: -Removed unnecessary init_commander_comm
-//			 -Added transport ship dialogue screen hook
-
 #include "commglue.h"
 
 #include "races.h"
@@ -116,8 +112,6 @@ NPCPhrase_cb (int index,  TFB_TrackCB cb)
 			break;
 	}
 
-	if (GLOBAL (glob_flags) & VOICE_DISABLED || pClip == NULL)
-		pClip = "noname.ogg";
 	SpliceTrack (pClip, pStr, pTimeStamp, cb);
 }
 
@@ -303,8 +297,6 @@ init_race (CONVERSATION comm_id)
 {
 	switch (comm_id)
 	{
-		case ANDROSYNTH_CONVERSATION:		// BY JMS - Hook to Androsynth dialogue screen
-			return init_androsynth_comm ();
 		case ARILOU_CONVERSATION:
 			return init_arilou_comm ();
 		case BLACKURQ_CONVERSATION:
@@ -312,19 +304,14 @@ init_race (CONVERSATION comm_id)
 		case CHMMR_CONVERSATION:
 			return init_chmmr_comm ();
 		case COMMANDER_CONVERSATION:
-			// JMS: Commented out the unnecessary init_commander_comm
-			//if (!GET_GAME_STATE (STARBASE_AVAILABLE))
-			//	return init_commander_comm ();
-			//else
-			return init_starbase_comm ();
+			if (!GET_GAME_STATE (STARBASE_AVAILABLE))
+				return init_commander_comm ();
+			else
+				return init_starbase_comm ();
 		case DRUUGE_CONVERSATION:
 			return init_druuge_comm ();
-		case HUMAN_CONVERSATION:			// BY JMS - Hook to earthling ship dialogue screen
-			return init_human_comm ();
 		case ILWRATH_CONVERSATION:
 			return init_ilwrath_comm ();
-		case LURG_CONVERSATION:				// BY JMS - Hook to Lurg ship dialogue screen
-			return init_lurg_comm ();
 		case MELNORME_CONVERSATION:
 			return init_melnorme_comm ();
 		case MYCON_CONVERSATION:
@@ -340,21 +327,18 @@ init_race (CONVERSATION comm_id)
 		case SLYLANDRO_HOME_CONVERSATION:
 			return init_slylandro_comm ();
 		case SPATHI_CONVERSATION:
-			return init_spahome_comm ();
+			if (!(GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7)))
+				return init_spathi_comm ();
+			else
+				return init_spahome_comm ();
 		case SUPOX_CONVERSATION:
 			return init_supox_comm ();
 		case SYREEN_CONVERSATION:
 			return init_syreen_comm ();
-		case SYREENBASE_CONVERSATION:
-			return init_syreenbase_comm ();
-		case SYREENHOME_CONVERSATION:
-			return init_syreenhome_comm ();
 		case TALKING_PET_CONVERSATION:
 			return init_talkpet_comm ();
 		case THRADD_CONVERSATION:
 			return init_thradd_comm ();
-		case TRANSPORT_CONVERSATION:			// BY JMS - Hook to transport ship dialogue screen
-			return init_transport_comm ();
 		case UMGAH_CONVERSATION:
 			return init_umgah_comm ();
 		case URQUAN_CONVERSATION:

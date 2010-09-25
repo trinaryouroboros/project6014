@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Damaged thrusters emit differently colored particles
-
 #include "battlecontrols.h"
 #include "build.h"
 #include "collide.h"
@@ -35,8 +33,6 @@
 #include "settings.h"
 #include "sounds.h"
 #include "libs/mathlib.h"
-
-#include "libs/log.h"
 
 
 BOOLEAN
@@ -581,17 +577,10 @@ ship_death (ELEMENT *ShipPtr)
 }
 
 #define START_ION_COLOR BUILD_COLOR (MAKE_RGB15 (0x1F, 0x15, 0x00), 0x7A)
-#define START_ION_COLOR_DAMAGED BUILD_COLOR (MAKE_RGB15 (0x20, 0x20, 0x00), 0x7A)
 
 void
 spawn_ion_trail (ELEMENT *ElementPtr)
 {
-	// JMS: Get the pointers to element's owner ship.
-	// They are needed to see if the ship's thrust is damaged
-	STARSHIP *StarShipPtr;
-	SHIP_INFO *ShipInfoPtr;
-	GetElementStarShip (ElementPtr, &StarShipPtr);
-	ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
 		  
 	if (ElementPtr->state_flags & PLAYER_SHIP)
 	{
@@ -616,19 +605,8 @@ spawn_ion_trail (ELEMENT *ElementPtr)
 			IonElementPtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID;
 			IonElementPtr->life_span = IonElementPtr->thrust_wait = ION_LIFE;
 			SetPrimType (&DisplayArray[IonElementPtr->PrimIndex], POINT_PRIM);
-			
-			// JMS: Damaged thruster emits differently colored particles
-			if (ShipInfoPtr->damage_flags & DAMAGE_THRUST)
-			{
-				SetPrimColor (&DisplayArray[IonElementPtr->PrimIndex],
-					START_ION_COLOR_DAMAGED);
-			}
-			else
-			{
-				SetPrimColor (&DisplayArray[IonElementPtr->PrimIndex],
+			SetPrimColor (&DisplayArray[IonElementPtr->PrimIndex],
 					START_ION_COLOR);
-			}
-			
 			IonElementPtr->current.image.frame =
 					DecFrameIndex (stars_in_space);
 			IonElementPtr->current.image.farray = &stars_in_space;
@@ -656,7 +634,6 @@ spawn_ion_trail (ELEMENT *ElementPtr)
 	}
 	else
 	{
-		// Color table for fully functional thrusters
 		static const COLOR color_tab[] =
 		{
 			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x00, 0x00), 0x2a),
@@ -672,26 +649,8 @@ spawn_ion_trail (ELEMENT *ElementPtr)
 			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x07, 0x00), 0x7e),
 			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7f),
 		};
-		
-		// JMS: Color table for damaged thrusters
-		static const COLOR color_tab2[] =
-		{
-			BUILD_COLOR (MAKE_RGB15 (0x0F, 0x0F, 0x00), 0x7a),
-			BUILD_COLOR (MAKE_RGB15 (0x0E, 0x0E, 0x00), 0x7b),
-			BUILD_COLOR (MAKE_RGB15 (0x0C, 0x0C, 0x00), 0x7c),
-			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x00), 0x7d),
-			BUILD_COLOR (MAKE_RGB15 (0x07, 0x07, 0x00), 0x7e),
-			BUILD_COLOR (MAKE_RGB15 (0x03, 0x03, 0x00), 0x7f),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x2a),
-			BUILD_COLOR (MAKE_RGB15 (0x1B, 0x1B, 0x00), 0x2b),
-			BUILD_COLOR (MAKE_RGB15 (0x17, 0x17, 0x00), 0x2c),
-			BUILD_COLOR (MAKE_RGB15 (0x15, 0x15, 0x00), 0x2d),
-			BUILD_COLOR (MAKE_RGB15 (0x13, 0x13, 0x00), 0x2e),
-			BUILD_COLOR (MAKE_RGB15 (0x11, 0x11, 0x00), 0x2f),
-		};
-		
 #define NUM_TAB_COLORS (sizeof (color_tab) / sizeof (color_tab[0]))
-		
+				
 		COUNT color_index = 0;
 		COLOR Color;
 
@@ -707,18 +666,8 @@ spawn_ion_trail (ELEMENT *ElementPtr)
 				color_index = (COUNT)Color - 0x2a;
 			else /* color is between 0x7a and 0x7f */
 				color_index = (COUNT)(Color - 0x7a) + (NUM_TAB_COLORS >> 1);
-			
-			// JMS: Damaged thruster emits differently colored particles
-			if (ShipInfoPtr->damage_flags & DAMAGE_THRUST)
-			{
-				SetPrimColor (&DisplayArray[ElementPtr->PrimIndex],
-					color_tab2[color_index]);
-			}
-			else
-			{
-				SetPrimColor (&DisplayArray[ElementPtr->PrimIndex],
+			SetPrimColor (&DisplayArray[ElementPtr->PrimIndex],
 					color_tab[color_index]);
-			}
 
 			ElementPtr->state_flags &= ~DISAPPEARING;
 			ElementPtr->state_flags |= CHANGING;
@@ -782,7 +731,7 @@ ship_transition (ELEMENT *ElementPtr)
 		}
 		else if ((hShipImage = AllocElement ()))
 		{
-#define TRANSITION_SPEED DISPLAY_TO_WORLD (40 * RESOLUTION_FACTOR) // JMS_GFX
+#define TRANSITION_SPEED DISPLAY_TO_WORLD (40)
 #define TRANSITION_LIFE 1
 			COUNT angle;
 
@@ -887,7 +836,6 @@ flee_preprocess (ELEMENT *ElementPtr)
 		else
 		{
 			ElementPtr->death_func = new_ship;
-			//if (StarShipPtr->which_side == 0) // JMS: Added this condition so escaping enemy ships are not considered destroyed
 			ElementPtr->crew_level = 0;
 
 			ElementPtr->life_span = HYPERJUMP_LIFE + 1;

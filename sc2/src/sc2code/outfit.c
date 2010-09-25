@@ -98,25 +98,22 @@ RedistributeFuel (void)
 	DWORD FuelVolume;
 	RECT r;
 
-	if ((FuelVolume = GLOBAL_SIS (FuelOnBoard)) < FUEL_RESERVE) // <= FUEL_RESERVE)
-	  return;
-	// BW: small hack to make fuel display correctly (as per issue 4)
-	// There's still a discrepancy when player has 10n+1 fuel units
-	// This may cause trouble with a moddable flagship
-	
+	if ((FuelVolume = GLOBAL_SIS (FuelOnBoard)) <= FUEL_RESERVE)
+		return;
+
 	GLOBAL_SIS (FuelOnBoard) = 0;
 	m = FUEL_VOLUME_PER_ROW;
 
-	r.extent.width = 1;
-	r.extent.height = 5;
+	r.extent.width = 3;
+	r.extent.height = 1;
 	while (FuelVolume -= m)
 	{
 		GLOBAL_SIS (FuelOnBoard) += FUEL_VOLUME_PER_ROW;
 		GetFTankCapacity (&r.corner);
 		DrawPoint (&r.corner);
-		r.corner.y += r.extent.height + 1;
+		r.corner.x += r.extent.width + 1;
 		DrawPoint (&r.corner);
-		r.corner.y -= r.extent.height;
+		r.corner.x -= r.extent.width;
 		SetContextForeGroundColor (SetContextBackGroundColor (BLACK_COLOR));
 		DrawFilledRectangle (&r);
 		if (FuelVolume < FUEL_VOLUME_PER_ROW)
@@ -125,7 +122,7 @@ RedistributeFuel (void)
 
 	FuelVolume = GLOBAL_SIS (FuelOnBoard) + m;
 
-	r.extent.height = 7;
+	r.extent.width = 5;
 	while ((GLOBAL_SIS (FuelOnBoard) += FUEL_VOLUME_PER_ROW) <
 			GetFTankCapacity (&r.corner))
 	{
@@ -137,8 +134,8 @@ RedistributeFuel (void)
 	GLOBAL_SIS (FuelOnBoard) = FuelVolume;
 }
 
-#define LANDER_X 180
-#define LANDER_Y 18
+#define LANDER_X 24
+#define LANDER_Y 67
 #define LANDER_WIDTH 15
 
 static void
@@ -400,14 +397,8 @@ DoInstallModule (MENU_STATE *pMS)
 		do
 		{
 			if (NewState >= EMPTY_SLOT && (PulsedInputState.menu[KEY_MENU_UP] || PulsedInputState.menu[KEY_MENU_DOWN]))
-			  {
-			    // BW: Explorer has only lander slots
-			    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-			      {
-			      }
-			    else
-			      {
-			        if (PulsedInputState.menu[KEY_MENU_UP])
+			{
+				if (PulsedInputState.menu[KEY_MENU_UP])
 				{
 					if (NewState-- == EMPTY_SLOT)
 						NewState = EMPTY_SLOT + 3;
@@ -418,8 +409,7 @@ DoInstallModule (MENU_STATE *pMS)
 						NewState = EMPTY_SLOT;
 				}
 				NewItem = 0;
-			      }
-			    if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 3)
+				if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 3)
 				{
 					if (NewState == EMPTY_SLOT + 3)
 						NewState = PulsedInputState.menu[KEY_MENU_UP] ?
@@ -427,7 +417,7 @@ DoInstallModule (MENU_STATE *pMS)
 					if (NewState == EMPTY_SLOT + 2)
 						NewItem = NUM_BOMB_MODULES;
 				}
-			    pMS->delta_item = NewItem;
+				pMS->delta_item = NewItem;
 			}
 			else if (PulsedInputState.menu[KEY_MENU_LEFT] ||
 					PulsedInputState.menu[KEY_MENU_UP])
@@ -557,7 +547,7 @@ ChangeFuelQuantity (void)
 {
 	RECT r;
 	
-	r.extent.width = 1;
+	r.extent.height = 1;
 	
 	if (PulsedInputState.menu[KEY_MENU_UP])
 	{
@@ -567,7 +557,17 @@ ChangeFuelQuantity (void)
 			&& GLOBAL_SIS (ResUnits) >=
 			(DWORD)GLOBAL (FuelCost))
 		{
-			RedistributeFuel();
+			if (GLOBAL_SIS (FuelOnBoard) >=
+				FUEL_RESERVE - FUEL_TANK_SCALE)
+			{
+				r.extent.width = 3;
+				DrawPoint (&r.corner);
+				r.corner.x += r.extent.width + 1;
+				DrawPoint (&r.corner);
+				r.corner.x -= r.extent.width;
+				SetContextForeGroundColor (SetContextBackGroundColor (BLACK_COLOR));
+				DrawFilledRectangle (&r);
+			}
 			DeltaSISGauges (0, FUEL_TANK_SCALE, -GLOBAL (FuelCost));
 			SetContext (StatusContext);
 			GetGaugeRect (&r, FALSE);
@@ -587,7 +587,15 @@ ChangeFuelQuantity (void)
 		{
 			DeltaSISGauges (0, -FUEL_TANK_SCALE,
 				GLOBAL (FuelCost));
-			RedistributeFuel();
+			if (GLOBAL_SIS (FuelOnBoard)
+				% FUEL_VOLUME_PER_ROW == 0)
+			{
+				GetFTankCapacity (&r.corner);
+				SetContextForeGroundColor (
+						BUILD_COLOR (MAKE_RGB15 (0x0B, 0x00, 0x00), 0x2E));
+				r.extent.width = 5;
+				DrawFilledRectangle (&r);
+			}
 		}
 		else
 		{	// no fuel left to drain
@@ -622,13 +630,8 @@ DoOutfit (MENU_STATE *pMS)
 			pMS->ModuleFrame = CaptureDrawable (
 					LoadGraphic (SISMODS_MASK_PMAP_ANIM));
 			s.origin.x = s.origin.y = 0;
-
 			s.frame = CaptureDrawable (
 					LoadGraphic (OUTFIT_PMAP_ANIM));
-			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-			  {
-				s.frame = SetAbsFrameIndex(s.frame, 1);
-			  }
 
 			LockMutex (GraphicsLock);
 			SetTransitionSource (NULL);
@@ -642,60 +645,52 @@ DoOutfit (MENU_STATE *pMS)
 			DrawStamp (&s);
 			DestroyDrawable (ReleaseDrawable (s.frame));
 
-			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-			  {
-				RedistributeFuel ();
-				DisplayLanders (pMS);
-			  }
-			else
-			  {
-				for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
-				{
-					BYTE which_piece;
+			for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
+			{
+				BYTE which_piece;
 
-					which_piece = GLOBAL_SIS (DriveSlots[num_frames]);
-					if (which_piece < EMPTY_SLOT)
-						DrawShipPiece (pMS, which_piece, num_frames, FALSE);
-				}
-				for (num_frames = 0; num_frames < NUM_JET_SLOTS; ++num_frames)
-				{
-					BYTE which_piece;
+				which_piece = GLOBAL_SIS (DriveSlots[num_frames]);
+				if (which_piece < EMPTY_SLOT)
+					DrawShipPiece (pMS, which_piece, num_frames, FALSE);
+			}
+			for (num_frames = 0; num_frames < NUM_JET_SLOTS; ++num_frames)
+			{
+				BYTE which_piece;
 
-					which_piece = GLOBAL_SIS (JetSlots[num_frames]);
-					if (which_piece < EMPTY_SLOT)
-						DrawShipPiece (pMS, which_piece, num_frames, FALSE);
-				}
-				for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
-				{
-					BYTE which_piece;
+				which_piece = GLOBAL_SIS (JetSlots[num_frames]);
+				if (which_piece < EMPTY_SLOT)
+					DrawShipPiece (pMS, which_piece, num_frames, FALSE);
+			}
+			for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
+			{
+				BYTE which_piece;
 
-					which_piece = GLOBAL_SIS (ModuleSlots[num_frames]);
-					if (which_piece < EMPTY_SLOT)
-						DrawShipPiece (pMS, which_piece, num_frames, FALSE);
-				}
-				RedistributeFuel ();
-				DisplayLanders (pMS);
-				if (GET_GAME_STATE (CHMMR_BOMB_STATE) < 3)
-				{
-					BYTE ShieldFlags;
-					
-					ShieldFlags = GET_GAME_STATE (LANDER_SHIELDS);
+				which_piece = GLOBAL_SIS (ModuleSlots[num_frames]);
+				if (which_piece < EMPTY_SLOT)
+					DrawShipPiece (pMS, which_piece, num_frames, FALSE);
+			}
+			RedistributeFuel ();
+			DisplayLanders (pMS);
+			if (GET_GAME_STATE (CHMMR_BOMB_STATE) < 3)
+			{
+				BYTE ShieldFlags;
+				
+				ShieldFlags = GET_GAME_STATE (LANDER_SHIELDS);
 
-					s.frame = SetAbsFrameIndex (pMS->ModuleFrame,
-							GetFrameCount (pMS->ModuleFrame) - 5);
-					if (ShieldFlags & (1 << EARTHQUAKE_DISASTER))
-						DrawStamp (&s);
-					s.frame = IncFrameIndex (s.frame);
-					if (ShieldFlags & (1 << BIOLOGICAL_DISASTER))
-						DrawStamp (&s);
-					s.frame = IncFrameIndex (s.frame);
-					if (ShieldFlags & (1 << LIGHTNING_DISASTER))
-						DrawStamp (&s);
-					s.frame = IncFrameIndex (s.frame);
-					if (ShieldFlags & (1 << LAVASPOT_DISASTER))
-						DrawStamp (&s);
-				}
-			  }
+				s.frame = SetAbsFrameIndex (pMS->ModuleFrame,
+						GetFrameCount (pMS->ModuleFrame) - 5);
+				if (ShieldFlags & (1 << EARTHQUAKE_DISASTER))
+					DrawStamp (&s);
+				s.frame = IncFrameIndex (s.frame);
+				if (ShieldFlags & (1 << BIOLOGICAL_DISASTER))
+					DrawStamp (&s);
+				s.frame = IncFrameIndex (s.frame);
+				if (ShieldFlags & (1 << LIGHTNING_DISASTER))
+					DrawStamp (&s);
+				s.frame = IncFrameIndex (s.frame);
+				if (ShieldFlags & (1 << LAVASPOT_DISASTER))
+					DrawStamp (&s);
+			}
 
 			UnlockMutex (GraphicsLock);
 			DrawMenuStateStrings (PM_FUEL, pMS->CurState);
@@ -774,7 +769,7 @@ ExitOutfit:
 				UnlockMutex (GraphicsLock);
 				break;
 			case OUTFIT_MODULES:
-				pMS->CurState = EMPTY_SLOT+3;
+				pMS->CurState = EMPTY_SLOT + 2;
 				if (GET_GAME_STATE (CHMMR_BOMB_STATE) != 3)
 					pMS->delta_item = 0;
 				else

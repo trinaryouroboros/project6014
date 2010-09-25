@@ -16,12 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009 -In Orz space no one can hear your 'caster...
-// JMS 2010 -Black orb replaces rosy sphere
-//			-Temporal wrapper replaces shofixti maidens
-//			-Slaveshield buster replaces Clear spindle
-//			-Disabled sun device's and casters' effect on Chmmr at Procyon orbit.
-
 #include "build.h"
 #include "encount.h"
 #include "gamestr.h"
@@ -56,8 +50,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 	SetContext (StatusContext);
 	SetContextFont (TinyFont);
 
-	y = 41 * RESOLUTION_FACTOR; // JMS_GFX
-	t.baseline.x = 40 * RESOLUTION_FACTOR; // JMS_GFX
+	y = 41;
+	t.baseline.x = 40;
 	t.align = ALIGN_CENTER;
 	t.CharCount = 3;
 
@@ -69,15 +63,15 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 	{
 		STAMP s;
 
-		r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
-		r.extent.width = FIELD_WIDTH + (1 * RESOLUTION_FACTOR); // JMS_GFX
+		r.corner.x = 2;
+		r.extent.width = FIELD_WIDTH + 1;
 
 		if (!(pMS->Initialized & 1))
 		{
-			r.corner.x += 1 * RESOLUTION_FACTOR; // JMS_GFX
-			r.extent.width -= 2 * RESOLUTION_FACTOR; // JMS_GFX
-			r.corner.y = 33 * RESOLUTION_FACTOR; // JMS_GFX
-			r.extent.height = 89 * RESOLUTION_FACTOR; // JMS_GFX
+			++r.corner.x;
+			r.extent.width -= 2;
+			r.corner.y = 33;
+			r.extent.height = 89;
 			SetContextForeGroundColor (
 					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 			DrawFilledRectangle (&r);
@@ -86,8 +80,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		{
 			TEXT ct;
 
-			r.corner.y = 20 * RESOLUTION_FACTOR; // JMS_GFX
-			r.extent.height = 109 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.y = 20;
+			r.extent.height = 109;
 			DrawStarConBox (&r, 1,
 					BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19),
 					BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F),
@@ -95,8 +89,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 
 			SetContextFont (StarConFont);
-			ct.baseline.x = (STATUS_WIDTH >> 1) - (1 * RESOLUTION_FACTOR); // JMS_GFX
-			ct.baseline.y = 27 * RESOLUTION_FACTOR; // JMS_GFX
+			ct.baseline.x = (STATUS_WIDTH >> 1) - 1;
+			ct.baseline.y = 27;
 			ct.align = ALIGN_CENTER;
 			ct.pStr = GAME_STRING (DEVICE_STRING_BASE);
 			ct.CharCount = (COUNT)~0;
@@ -112,8 +106,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		else if (NewDevice >= (BYTE)(pMS->first_item.y + MAX_VIS_DEVICES))
 			pMS->first_item.y = NewDevice - (MAX_VIS_DEVICES - 1);
 
-		s.origin.x = 4 * RESOLUTION_FACTOR; // JMS_GFX
-		s.origin.y = 34 * RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.x = 4;
+		s.origin.y = 34;
 		cy = y;
 
 		SetContextForeGroundColor (
@@ -134,27 +128,27 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 						DEVICE_STRING_BASE + 1);
 				t.CharCount = utf8StringPos (t.pStr, ' ');
 				font_DrawText (&t);
-				t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
+				t.baseline.y += 7;
 				t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 				t.CharCount = (COUNT)~0;
 				font_DrawText (&t);
 			}
 
-			cy += 18 * RESOLUTION_FACTOR; // JMS_GFX
-			s.origin.y += 18 * RESOLUTION_FACTOR; // JMS_GFX
+			cy += 18;
+			s.origin.y += 18;
 		}
 
 		OldDevice = NewDevice;
 	}
 
-	r.extent.width = 41 * RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.height = 14 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.width = 41;
+	r.extent.height = 14;
 	r.corner.x = t.baseline.x - (r.extent.width >> 1);
 
 	if (OldDevice != NewDevice)
 	{
-		cy = y + ((OldDevice - pMS->first_item.y) * (18 * RESOLUTION_FACTOR)); // JMS_GFX
-		r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
+		cy = y + ((OldDevice - pMS->first_item.y) * 18);
+		r.corner.y = cy - 6;
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 		DrawFilledRectangle (&r);
@@ -165,7 +159,7 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		t.pStr = GAME_STRING (pDeviceMap[OldDevice] + DEVICE_STRING_BASE + 1);
 		t.CharCount = utf8StringPos (t.pStr, ' ');
 		font_DrawText (&t);
-		t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y += 7;
 		t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
@@ -173,8 +167,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 
 	if (NewDevice < NUM_DEVICES)
 	{
-		cy = y + ((NewDevice - pMS->first_item.y) * (18 * RESOLUTION_FACTOR)); // JMS_GFX
-		r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
+		cy = y + ((NewDevice - pMS->first_item.y) * 18);
+		r.corner.y = cy - 6;
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
 		DrawFilledRectangle (&r);
@@ -185,7 +179,7 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		t.pStr = GAME_STRING (pDeviceMap[NewDevice] + DEVICE_STRING_BASE + 1);
 		t.CharCount = utf8StringPos (t.pStr, ' ');
 		font_DrawText (&t);
-		t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y += 7;
 		t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
@@ -201,8 +195,7 @@ UseCaster (void)
 {
 	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
 	{
-		// BY JMS: ORZ space condition added - can't use caster in ORZ space.
-		if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1 && GET_GAME_STATE (ORZ_SPACE_SIDE) <= 1)
+		if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
 		{
 			SET_GAME_STATE (USED_BROADCASTER, 1);
 			return TRUE;
@@ -214,12 +207,10 @@ UseCaster (void)
 			|| pSolarSysState == NULL)
 		return FALSE;
 
-	/*if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1]
+	if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1]
 			&& pSolarSysState->MenuState.Initialized == 3
 			&& CurStarDescPtr->Index == CHMMR_DEFINED
-			&& !GET_GAME_STATE (CHMMR_UNLEASHED)) */
-	// JMS: Disabled the caster's effect on CHMMR at Procyon.
-	if(0)
+			&& !GET_GAME_STATE (CHMMR_UNLEASHED))
 	{
 		// In orbit around the Chenjesu/Mmrnmhrm home planet.
 		NextActivity |= CHECK_LOAD;  /* fake a load game */
@@ -290,8 +281,16 @@ DeviceFailed (BYTE which_device)
 
 	switch (which_device)
 	{
-		// JMS: Added Black orb device
-		case BLACK_ORB_DEVICE:
+		case ROSY_SPHERE_DEVICE:
+			val = GET_GAME_STATE (ULTRON_CONDITION);
+			if (val)
+			{
+				SET_GAME_STATE (ULTRON_CONDITION, val + 1);
+				SET_GAME_STATE (ROSY_SPHERE_ON_SHIP, 0);
+				SET_GAME_STATE (DISCUSSED_ULTRON, 0);
+				SET_GAME_STATE (SUPOX_ULTRON_HELP, 0);
+				return (FALSE);
+			}
 			break;
 		case ARTIFACT_2_DEVICE:
 			break;
@@ -310,14 +309,9 @@ DeviceFailed (BYTE which_device)
 				SleepThreadUntil (
 						XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND * 1)
 						+ (ONE_SECOND * 2));
-				
-				
-				//if (CurStarDescPtr->Index != CHMMR_DEFINED
-				//		|| pSolarSysState->pOrbitalDesc !=
-				//		&pSolarSysState->PlanetDesc[1])
-				// JMS: Although the Sun device won't be in the final game, disabled its
-				// effect on Chmmr at procyon anyways.
-				if(1)
+				if (CurStarDescPtr->Index != CHMMR_DEFINED
+						|| pSolarSysState->pOrbitalDesc !=
+						&pSolarSysState->PlanetDesc[1])
 				{
 					fade_buf[0] = FadeAllToColor;
 					XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND * 2);
@@ -352,8 +346,7 @@ DeviceFailed (BYTE which_device)
 			break;
 		case ULTRON_3_DEVICE:
 			break;
-		// JMS: Temporal Wrapper replaces Maidens device
-		case TEMPORAL_WRAPPER_DEVICE:
+		case MAIDENS_DEVICE:
 			break;
 		case TALKING_PET_DEVICE:
 			NextActivity |= CHECK_LOAD; /* fake a load game */
@@ -399,19 +392,16 @@ DeviceFailed (BYTE which_device)
 				return (FALSE);
 			}
 			break;
-			// JMS: Slaveshield buster replaces Clear Spindle
-		case SHIELD_BUSTER_DEVICE:
-			if (LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
+		case CLEAR_SPINDLE_DEVICE:
+			val = GET_GAME_STATE (ULTRON_CONDITION);
+			if (val)
 			{
-				if(!GET_GAME_STATE(USED_BUSTER))
-					SET_GAME_STATE (USED_BUSTER, 1);
-				else
-					SET_GAME_STATE (USED_BUSTER, 0);
-				return(FALSE);
+				SET_GAME_STATE (ULTRON_CONDITION, val + 1);
+				SET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP, 0);
+				SET_GAME_STATE (DISCUSSED_ULTRON, 0);
+				SET_GAME_STATE (SUPOX_ULTRON_HELP, 0);
+				return (FALSE);
 			}
-			else
-				return(TRUE);
-
 			break;
 		case UMGAH_HYPERWAVE_DEVICE:
 		case BURVIX_HYPERWAVE_DEVICE:
@@ -551,9 +541,8 @@ InventoryDevices (BYTE *pDeviceMap)
 		DeviceState = 0;
 		switch (i)
 		{
-			// JMS: Black orb device
-			case BLACK_ORB_DEVICE:
-				DeviceState = GET_GAME_STATE (BLACK_ORB_ON_SHIP);
+			case ROSY_SPHERE_DEVICE:
+				DeviceState = GET_GAME_STATE (ROSY_SPHERE_ON_SHIP);
 				break;
 			case ARTIFACT_2_DEVICE:
 				DeviceState = GET_GAME_STATE (ARTIFACT_2_ON_SHIP);
@@ -579,9 +568,8 @@ InventoryDevices (BYTE *pDeviceMap)
 			case ULTRON_3_DEVICE:
 				DeviceState = (GET_GAME_STATE (ULTRON_CONDITION) == 4);
 				break;
-			// JMS: Temporal Wrapper device
-			case TEMPORAL_WRAPPER_DEVICE:
-				DeviceState = GET_GAME_STATE (TEMPORAL_WRAPPER_ON_SHIP);
+			case MAIDENS_DEVICE:
+				DeviceState = GET_GAME_STATE (MAIDENS_ON_SHIP);
 				break;
 			case TALKING_PET_DEVICE:
 				DeviceState = GET_GAME_STATE (TALKING_PET_ON_SHIP);
@@ -589,9 +577,8 @@ InventoryDevices (BYTE *pDeviceMap)
 			case AQUA_HELIX_DEVICE:
 				DeviceState = GET_GAME_STATE (AQUA_HELIX_ON_SHIP);
 				break;
-			// JMS: Slaveshield buster device
-			case SHIELD_BUSTER_DEVICE:
-				DeviceState = GET_GAME_STATE (SHIELD_BUSTER_ON_SHIP);
+			case CLEAR_SPINDLE_DEVICE:
+				DeviceState = GET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP);
 				break;
 			case UMGAH_HYPERWAVE_DEVICE:
 				DeviceState = GET_GAME_STATE (UMGAH_BROADCASTERS_ON_SHIP);

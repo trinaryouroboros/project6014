@@ -16,10 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009 - Portal to Orz space enum
-// JMS 2010 - Lurg home system enum
-//			- Enum for those guys that have mysteriously vanished
-
 #ifndef _ENCOUNT_H
 #define _ENCOUNT_H
 
@@ -57,9 +53,6 @@ typedef struct
 	POINT origin;
 	COUNT radius;
 
-	POINT destination_pt;	// JMS: This one helps when we want to designate a target destination to a Hyperspace spoor.
-	POINT home_pt;			// JMS: This one helps when we want to designate a starting point to a Hyperspace spoor.
-	
 	STAR_DESC SD;
 	BRIEF_SHIP_INFO ShipList[MAX_HYPER_SHIPS];
 
@@ -126,19 +119,13 @@ enum
 	RAINBOW_DEFINED,
 	ILWRATH_DEFINED,
 	ANDROSYNTH_DEFINED,
-	MYCON_TRAP_DEFINED,
-	LURG_DEFINED,					// JMS: Lurg home system
-	SHOFIXTI_CRASH_SITE_DEFINED,	// JMS: Shofixti distress site
-	SLAVERACE_DEFINED,
-	MELNORME_HOME_DEFINED,          // Also generates deflection shield in hyperspace
-	ORZ_SPACE_PORTAL_DEFINED,		// JMS: Portal to ORZ space
-	HINT_DEFINED,					// JMS: Those guys that have mysteriously vanished
+	MYCON_TRAP_DEFINED
 };
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED
 
-#define TEXT_X_OFFS (1 * RESOLUTION_FACTOR) // JMS_GFX
-#define TEXT_Y_OFFS (1 * RESOLUTION_FACTOR) // JMS_GFX
+#define TEXT_X_OFFS 1
+#define TEXT_Y_OFFS 1
 #define SIS_TEXT_WIDTH (SIS_SCREEN_WIDTH - (TEXT_X_OFFS << 1))
 
 extern STAR_DESC *CurStarDescPtr;
@@ -190,11 +177,6 @@ extern void GeneratePkunk (BYTE control);
 extern void GenerateSupox (BYTE control);
 extern void GenerateRainbow (BYTE control);
 extern void GenerateIlwrath (BYTE control);
-extern void GenerateSlaveRace (BYTE control);
-extern void GenerateOrzSpacePortal (BYTE control);		// JMS
-extern void GenerateLurg (BYTE control);				// JMS
-extern void GenerateShofixtiCrashSite (BYTE control);	// JMS
-extern void GenerateHint (BYTE control);				// JMS
 
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;
