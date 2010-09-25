@@ -104,7 +104,7 @@ How are all the Earthlings?
 We are doing just great! But now I have to sort out some business with a Shofixti gone missing.
 
 #(DOING_GOOD_RESPONSE)
-Ah, if it's lost Shofixtis that interest you, I have some very valuable information.
+Ah, if it's lost Shofixti that interest you, I have some very valuable information.
 In accordance with our protocols and code of ethics
 this information can be given to you in exchange for credits.
 
@@ -131,10 +131,10 @@ So, like old times, would you like to resume your trading account?
 Of course we still sell fuel and information.
 
 #(how_to_trade)
-Sounds good, can you remind me how this works again?
+Sounds good. Remind me how this works again.
 
 #(TRADING_INFO1)
-Certainly captain.
+Certainly, captain.
 
 #(MORE_TRADING_INFO)
 We are interested in purchasing certain items, specifically
@@ -162,7 +162,7 @@ I would like to make some purchases.
 I have some items I would like to sell.
 
 #(spank_ass1)
-Actually I never really liked the way you made me collect all that bio stuff just so I could save the galaxy. I'm gonna spank yo ass!
+Actually I never really liked how you made me collect all that bio stuff just so I could save the galaxy. I'm gonna spank yo ass!
 
 #(spank_ass2)
 And I think I'm gonna spank yo ass!
@@ -195,7 +195,7 @@ Perhaps during this encounter, we will be able to establish a successful, busine
 Shall we begin trading now?
 
 #(no_trade_now)
-We cannot continue this conversation. Goodbye.
+Goodbye, Trade Master.
 
 #(OK_NO_TRADE_NOW_BYE)	melno011.ogg
 When you wish to trade with us, seek any supergiant star system.
@@ -364,7 +364,7 @@ As you wish.
 I have some data on alien lifeforms.
 
 #(SOLD_LIFE_DATA1)	melno074.ogg
-The
+The 
 
 #(SOLD_LIFE_DATA2)	melno203.ogg
  units of biological data we downloaded from your ship earn you
@@ -513,12 +513,12 @@ the Chmmr have other considerations in mind.
 It is most probable that the machinery the distress message was pointing to
 is Precursor in origin.
 And lately
-the Chmmr have devoted a lot of their resources in finding Precursor artifacts.
+the Chmmr have devoted a lot of their resources to finding Precursor artifacts.
 How we know this all?
 Usually it is not in our custom to reveal sources of information
 but in this case, it is relevant to the very fact we are selling.
-One of our 'agents' was able to intercept the signal while enroute to Archytas near
-the Persipina constellation.
+While enroute to Archytas, one of our 'agents' was able to intercept the signal near
+the Naos constellation.
 We also have news on the other Shofixti patrols.
 Whilst we have recently had sightings of the patrol
 that was dispatched near the Angstrom system

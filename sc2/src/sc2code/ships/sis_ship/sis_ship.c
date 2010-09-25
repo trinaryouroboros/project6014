@@ -58,7 +58,7 @@
 #define BLASTER_LIFE 7 // JMS: WAS 12
 
 // JMS: These affect CHmmr Explorer in Super Melee
-#define EXPLORER_MAX_THRUST 34
+#define EXPLORER_MAX_THRUST 36
 #define EXPLORER_THRUST_INCREMENT 9
 #define EXPLORER_TURN_WAIT 1
 #define EXPLORER_THRUST_WAIT 1

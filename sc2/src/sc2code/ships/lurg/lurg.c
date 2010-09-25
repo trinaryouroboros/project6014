@@ -27,7 +27,7 @@
 #define MAX_CREW 20
 #define MAX_ENERGY 16
 #define ENERGY_REGENERATION 1
-#define WEAPON_ENERGY_COST 1
+#define WEAPON_ENERGY_COST 3
 #define SPECIAL_ENERGY_COST 1
 #define ENERGY_WAIT 4
 #define MAX_THRUST 40
@@ -180,7 +180,7 @@ static COUNT
 initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 {
 #define MISSILE_HITS 1
-#define MISSILE_DAMAGE 1
+#define MISSILE_DAMAGE 2
 #define MISSILE_OFFSET 2
 #define LURG_OFFSET 23
 	STARSHIP *StarShipPtr;
