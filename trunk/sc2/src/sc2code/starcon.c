@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Game ends upon finding black orb & new precursor ship and running the corresponding cutscene.
+
 #include <stdlib.h>
 
 #include "encount.h"
@@ -177,9 +179,10 @@ while (--ac > 0)
 					// not going into talking pet conversation
 			else if (GLOBAL (CurrentActivity) & CHECK_LOAD)
 				GLOBAL (CurrentActivity) = NextActivity;
-
+			
 			if ((GLOBAL (CurrentActivity) & START_ENCOUNTER)
-					|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
+					|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2
+					|| (GLOBAL (CurrentActivity) & BLACK_ORB_CUTSCENE))
 			{
 				if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 2
 						&& !GET_GAME_STATE (STARBASE_AVAILABLE))
@@ -234,9 +237,9 @@ while (--ac > 0)
 			LastActivity = GLOBAL (CurrentActivity);
 
 			if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))
-					&& (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE
-							// if died for some reason
-					|| GLOBAL_SIS (CrewEnlisted) == (COUNT)~0))
+					&& (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE 
+						|| LOBYTE (GLOBAL (CurrentActivity)) == BLACK_ORB_CUTSCENE 	// JMS: End demo at cutscene upon finding black orb.
+						|| GLOBAL_SIS (CrewEnlisted) == (COUNT)~0)) // if died for some reason
 			{
 				if(GLOBAL_SIS (CrewEnlisted) == (COUNT)~0)
 				

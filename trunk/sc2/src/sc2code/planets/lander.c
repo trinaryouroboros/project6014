@@ -32,6 +32,8 @@
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
 
+#include "load.h"
+
 
 //define SPIN_ON_LAUNCH to let the planet spin while
 // the lander animation is playing
@@ -691,15 +693,17 @@ CheckObjectCollision (COUNT index)
 						{
 							DWORD TimeIn;
 
-							/* Ran into Spathi on Pluto */
+							// JMS: Finding the new Precursor ship and black orb. (Was "Ran into Spathi on Pluto".)
+							// Currently does nothing, but all kinds of nice crap can be added here.
 							TimeIn = GetTimeCounter ();
 							which_node = 8;
-							do
+							
+							/*do
 							{
 								DeltaLanderCrew (-1, LANDER_INJURED);
 								SleepThreadUntil (TimeIn + ONE_SECOND / 20);
 								TimeIn = GetTimeCounter();
-							} while (HIBYTE (pMenuState->delta_item) && --which_node);
+							} while (HIBYTE (pMenuState->delta_item) && --which_node);*/
 						}
 
 						if (HIBYTE (pMenuState->delta_item)
@@ -1980,7 +1984,7 @@ ReturnToOrbit (RECT *pRect)
 	LoadIntoExtraScreen (pRect);
 	SetContext (OldContext);
 	UnlockMutex (GraphicsLock);
-
+	
 //	SetPlanetTilt (0);
 }
 
@@ -2159,6 +2163,7 @@ PlanetSide (MENU_STATE *pMS)
 			UnlockMutex (GraphicsLock);
 
 			GLOBAL_SIS (TotalBioMass) += PSD.BiologicalLevel;
+			
 		}
 	}
 

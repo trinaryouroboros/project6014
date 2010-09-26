@@ -102,21 +102,19 @@ GenerateShofixtiCrashSite (BYTE control)
 				old_rand = TFB_SeedRandom (pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]);
 				rand_val = TFB_Random ();
 				
-				pSolarSysState->SysInfo.PlanetInfo.CurPt.x =
-				(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
-				pSolarSysState->SysInfo.PlanetInfo.CurPt.y =
-				(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
+				pSolarSysState->SysInfo.PlanetInfo.CurPt.x = 187;
+				pSolarSysState->SysInfo.PlanetInfo.CurPt.y = MAP_HEIGHT - 16;
 				pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
-				pSolarSysState->SysInfo.PlanetInfo.CurType = 1; // No liftoff on collision
+				pSolarSysState->SysInfo.PlanetInfo.CurType = 0; // Don't pick up upon finding
 				
-				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << 0))
-					&& pSolarSysState->CurNode == (COUNT)~0)
-					pSolarSysState->CurNode = 1;
-				else
+				pSolarSysState->CurNode = 1;
+				
+				if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << 0))
 				{
-					pSolarSysState->CurNode = 0;
-					if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << 0))
-						SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2);
+					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] &= ~(1L << 0);
+					((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
+					SET_GAME_STATE (BLACK_ORB_STATE, 1);
+					SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2);
 				}
 				
 				TFB_SeedRandom (old_rand);

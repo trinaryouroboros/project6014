@@ -14,6 +14,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+// JMS 2010: Added declaration of Lurg cutscene function (At finding black orb & new ship)
+
 #ifndef _FMV_H
 #define _FMV_H
 
@@ -26,6 +28,7 @@ extern void Logo (void);
 extern void SplashScreen (void (* DoProcessing)(DWORD TimeOut));
 extern void Introduction (void);
 extern void Victory (void);
+extern void LurgCutScene (void); // JMS
 
 extern void DoShipSpin (COUNT index, MUSIC_REF hMusic);
 
