@@ -87,6 +87,7 @@ DoConfirmExit (void)
 	static BOOLEAN in_confirm = FALSE;
 	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
 			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
+			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
 			!(LastActivity & CHECK_RESTART))
 		SuspendGameClock ();
 	if (CommData.ConversationPhrases && PlayingTrack ())
@@ -181,6 +182,7 @@ DoConfirmExit (void)
 
 	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
 			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
+			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
 			!(LastActivity & CHECK_RESTART))
 		ResumeGameClock ();
 	if (CommData.ConversationPhrases && PlayingTrack ())

@@ -823,8 +823,7 @@ AlienTalkSegue (COUNT wait_track)
 		{
 			RECT r;
 	
-			if (pMenuState == 0 &&
-					LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE)
+			if (pMenuState == 0 && LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE)
 			{
 				r.corner.x = SIS_ORG_X;
 				r.corner.y = SIS_ORG_Y;
@@ -1542,8 +1541,7 @@ InitCommunication (CONVERSATION which_comm)
 			ReinitQueue (&GLOBAL (npc_built_ship_q));
 
 		SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 0);
-		status = (GET_GAME_STATE (BATTLE_SEGUE)
-				&& GetHeadLink (&GLOBAL (npc_built_ship_q)));
+		status = (GET_GAME_STATE (BATTLE_SEGUE) && GetHeadLink (&GLOBAL (npc_built_ship_q)));
 		if (status)
 		{
 			// Start combat

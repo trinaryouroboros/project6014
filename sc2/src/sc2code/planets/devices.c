@@ -209,7 +209,7 @@ UseCaster (void)
 		}
 		return FALSE;
 	}
-
+	
 	if (LOBYTE (GLOBAL (CurrentActivity)) != IN_INTERPLANETARY
 			|| pSolarSysState == NULL)
 		return FALSE;

@@ -66,36 +66,6 @@ init_probe (void)
 static void
 generate_energy_nodes (void)
 {
-				/* Pluto */
-	// JMS: Removed Fwiffo energy blip from Pluto.
-	
-				/* Earth Moon */
-	
-	// JMS: Removed moonbase.
-	/*if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
-			&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[1]
-			&& !GET_GAME_STATE (MOONBASE_DESTROYED))
-	{
-		pSolarSysState->SysInfo.PlanetInfo.CurPt.x = MAP_WIDTH * 3 / 4;
-		pSolarSysState->SysInfo.PlanetInfo.CurPt.y = MAP_HEIGHT * 1 / 4;
-		pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
-		pSolarSysState->SysInfo.PlanetInfo.CurType = 0;
-		if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-				& (1L << 0))
-				&& pSolarSysState->CurNode == (COUNT)~0)
-			pSolarSysState->CurNode = 1;
-		else
-		{
-			pSolarSysState->CurNode = 0;
-			if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-					& (1L << 0))
-			{
-				SET_GAME_STATE (MOONBASE_DESTROYED, 1);
-				SET_GAME_STATE (MOONBASE_ON_SHIP, 1);
-			}
-		}
-		return;
-	}*/
 	pSolarSysState->CurNode = 0;
 }
 
@@ -296,19 +266,7 @@ generate_orbital (void)
 			case 2: /* moons of EARTH */
 				pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] =
 						rand_val;
-				
-				// JMS: Removed the moonbase gfx and text upon finding it.
-				/*if (!GET_GAME_STATE (MOONBASE_DESTROYED))
-				{
-					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-					pSolarSysState->PlanetSideFrame[1] =
-							CaptureDrawable (
-							LoadGraphic (MOONBASE_MASK_PMAP_ANIM));
-					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-							CaptureStringTable (
-							LoadStringTable (MOONBASE_STRTAB));
-				}*/
-				
+
 				pSolarSysState->SysInfo.PlanetInfo.PlanetDensity = 60;
 				pSolarSysState->SysInfo.PlanetInfo.PlanetRadius = 25;
 				pSolarSysState->SysInfo.PlanetInfo.AxialTilt = 0;

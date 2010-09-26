@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Upon finding black orb & new ship, initiate Lurg cutscene
+
 #include "restart.h"
 
 #include "colors.h"
@@ -357,7 +359,20 @@ RestartMenu (MENU_STATE *pMS)
 	else
 	{
 		TimeOut = ONE_SECOND / 2;
+		
+		// JMS: Upon finding the black orb / new precursor ship, initiate cutscene
+		if (LOBYTE (LastActivity) == BLACK_ORB_CUTSCENE)
+		{
+			GLOBAL (CurrentActivity) = BLACK_ORB_CUTSCENE;
 
+			LurgCutScene ();
+			
+			FreeGameData ();
+			
+			TimeOut = ONE_SECOND / 2;
+			GLOBAL (CurrentActivity) = CHECK_ABORT;
+		}
+		
 		if (LOBYTE (LastActivity) == WON_LAST_BATTLE)
 		{
 			GLOBAL (CurrentActivity) = WON_LAST_BATTLE;

@@ -68,6 +68,7 @@
 #define LANTHANIDE_COLOR_TAB "planet.lanthanide.colortable"
 #define LANTHANIDE_XLAT_TAB "planet.lanthanide.translatetable"
 #define LEFTHURRY_STRTAB "text.lefthurry"
+#define LURGPRES_STRTAB "slides.lurgcutscene"
 #define MAGMA_COLOR_TAB "planet.magma.colortable"
 #define MAGMA_XLAT_TAB "planet.magma.translatetable"
 #define MAGNETIC_COLOR_TAB "planet.magnetic.colortable"

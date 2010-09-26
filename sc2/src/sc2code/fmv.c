@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Added Lurg cutscene
+
 #include "fmv.h"
 
 #include "controls.h"
@@ -185,6 +187,22 @@ Victory (void)
 		
 	xform_buf[0] = FadeAllToBlack;
 	XFormColorMap ((COLORMAPPTR)xform_buf, 0);
+}
+
+// JMS: This displays the Lurg cutscene after finding the black orb & new precursor ship
+void
+LurgCutScene (void)
+{
+	
+	BYTE xform_buf[1];
+	
+	xform_buf[0] = FadeAllToBlack;
+	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
+	
+	ShowPresentation ( CaptureStringTable (LoadStringTable (LURGPRES_STRTAB)));
+	
+	//xform_buf[0] = FadeAllToBlack;
+	//SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
 }
 
 void

@@ -63,7 +63,7 @@ typedef enum
 	DRAW_ORBITAL_FULL,
 	DRAW_ORBITAL_WAIT,
 	DRAW_ORBITAL_UPDATE,
-
+	
 } DRAW_ORBITAL_MODE;
 
 static void

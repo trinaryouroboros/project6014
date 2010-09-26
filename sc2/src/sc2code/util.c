@@ -160,9 +160,10 @@ PauseGame (void)
 		
 	GLOBAL (CurrentActivity) |= CHECK_PAUSE;
 
-	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
-			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE)
-		SuspendGameClock ();
+	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE 
+		&& LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE
+		&& LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE) // JMS
+			SuspendGameClock ();
 	if (CommData.ConversationPhrases && PlayingTrack ())
 		PauseTrack ();
 
@@ -220,8 +221,9 @@ PauseGame (void)
 	WaitForNoInput (ONE_SECOND / 4);
 	FlushInput ();
 
-	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
-			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE)
+	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE 
+			&& LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE
+			&& LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE) // JMS
 		ResumeGameClock ();
 	if (CommData.ConversationPhrases && PlayingTrack ())
 	{

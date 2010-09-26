@@ -18,6 +18,8 @@
 
 // JMS 2010: -Cannot dispatch landers on restricted planets
 //			 -Certain star systems can have more than one energy blip graphics on planet surface simultaneously
+//			 -If black orb is found and the lander returned to Explorer ship, initiate cutscene.
+
 
 #include "build.h"
 #include "cons_res.h"
@@ -763,6 +765,34 @@ PickPlanetSide (MENU_STATE *pMS)
 			if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 				goto ExitPlanetSide;
 
+			// JMS: If black orb is found and the lander returned to Explorer ship, allow initiating cutscene
+			if(GET_GAME_STATE(BLACK_ORB_STATE) == 1)
+			{
+				SET_GAME_STATE(BLACK_ORB_STATE, 2); // Now the black orb is fetched - prevent playing this
+				StopMusic ();
+				pSolarSysState->PauseRotate = 1;
+				LurgCutScene ();
+				
+				BYTE xform_buf[1];
+				xform_buf[0] = FadeAllToBlack;
+				XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2);
+				GLOBAL (CurrentActivity) = CHECK_ABORT;
+				
+				// JMS: Commented the next lines out for the demo.
+				// For the full game remove the GLOBAL (CurrentActivity) = CHECK_ABORT line above
+				// and uncomment the lines below. Also, replace the last Fade to black (FTB) in cinematic
+				// cutscene with (WAIT). (Otherwise the graphics stay black even after the cutscene.)
+				/*LockMutex (GraphicsLock);
+				DrawSISFrame ();
+				DrawSISMessage (NULL);
+				DrawSISTitle (GLOBAL_SIS (PlanetName));
+				DrawStarBackGround (TRUE);
+				DrawPlanet (SIS_SCREEN_WIDTH - MAP_WIDTH + 7, SIS_SCREEN_HEIGHT - MAP_HEIGHT + 10, 0, 0);
+				UnlockMutex (GraphicsLock);
+				pSolarSysState->PauseRotate = 0;
+				PlayMusic (LanderMusic, TRUE, 1);*/
+			}
+			
 			if (GET_GAME_STATE (FOUND_PLUTO_SPATHI) == 1)
 			{
 				/* Create Fwiffo group and go into comm with it */
@@ -799,7 +829,7 @@ PickPlanetSide (MENU_STATE *pMS)
 				SaveFlagshipState ();
 				return (FALSE);
 			}
-
+			
 			if (optWhichCoarseScan == OPT_PC)
 				PrintCoarseScanPC ();
 			else

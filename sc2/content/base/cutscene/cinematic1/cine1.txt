@@ -53,7 +53,7 @@ TVA B
 FONT 1
 
 #(Set ANIM to draw slides from)
-ANI base/cutscene/intro/cine1.ani
+ANI base/cutscene/cinematic1/cine1.ani
 
 #(Set text vertical position; can be T=top, B=bottom, M=middle)
 TVA T

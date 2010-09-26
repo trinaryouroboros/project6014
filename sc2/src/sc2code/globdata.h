@@ -23,6 +23,8 @@
 //			 -Added new device: Black orb
 //			 -Added new device: Temporal wrapper
 //			 -Increased max number of comm screen animations for one race from 20 to 30
+//			 -Added BLACK_ORB_STATE game state for handling the events upon finding the black orb.
+//			 -Added BLACK_ORB_CUTSCENE activity enum for initiating the cutscene
 
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
@@ -1006,6 +1008,12 @@ START_GAME_STATE
 	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
 	ADD_GAME_STATE (CRASH_SITE_UNPROTECTED, 1)
 
+	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
+	ADD_GAME_STATE (BLACK_ORB_STATE, 2)
+		// 0 - Black orb not found yet
+		// 1 - Black orb found, lander enroute to orbit from finding it
+		// 2 - Black orb found, lander back in orbit
+
 END_GAME_STATE
 
 // Values for GAME_STATE.glob_flags:
@@ -1031,6 +1039,8 @@ enum
 	IN_QUASISPACE,
 	IN_PLANET_ORBIT,
 	IN_STARBASE,
+	
+	IN_ORZSPACE,	// JMS: In *below* (Orz space) or not
 
 	CHECK_PAUSE = MAKE_WORD (0, (1 << 0)),
 	IN_BATTLE = MAKE_WORD (0, (1 << 1)),
@@ -1039,8 +1049,7 @@ enum
 	CHECK_LOAD = MAKE_WORD (0, (1 << 4)),
 	CHECK_RESTART = MAKE_WORD (0, (1 << 5)),
 	CHECK_ABORT = MAKE_WORD (0, (1 << 6)),
-	
-	IN_ORZSPACE,	// JMS: In *below* (Orz space) or not
+	BLACK_ORB_CUTSCENE = MAKE_WORD (0, (1 << 7)), // JMS: For initiating cutscene after finding the black orb
 };
 typedef UWORD ACTIVITY;
 

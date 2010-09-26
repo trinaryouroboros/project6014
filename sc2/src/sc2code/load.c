@@ -579,7 +579,7 @@ LoadGame (COUNT which_game, SUMMARY_DESC *SummPtr)
 		log_add (log_Warning, "Warning: Game clock wasn't stopped during "
 				"save, Savegame may be corrupt!\n");
 	GLOBAL (GameClock.TimeCounter) = 0;
-
+	
 	LoadRaceQueue (fh, &GLOBAL (avail_race_q));
 	// START_INTERPLANETARY is only set when saving from Homeworld
 	//   encounter screen. When the game is loaded, GENERATE_ORBITAL will
