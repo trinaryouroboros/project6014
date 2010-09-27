@@ -41,6 +41,9 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 10
 
+#define OIL_DELAY 5
+#define OIL_DELAY_MAX 100
+
 static RACE_DESC lurg_desc =
 {
 	{ /* SHIP_INFO */
@@ -84,9 +87,9 @@ static RACE_DESC lurg_desc =
 			LURGGOB_SML_MASK_PMAP_ANIM,
 		},
 		{
-			NULL_RESOURCE,
-			NULL_RESOURCE,
-			NULL_RESOURCE,
+			OIL_BIG_MASK_PMAP_ANIM,
+			OIL_MED_MASK_PMAP_ANIM,
+			OIL_SML_MASK_PMAP_ANIM,
 		},
 		{
 			LURG_CAPTAIN_MASK_PMAP_ANIM,
@@ -204,66 +207,142 @@ initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 	return (1);
 }
 
+#define SHIP_OFFSET (14 * RESOLUTION_FACTOR) // JMS_GFX
+#define OIL_OFFSET (3 * RESOLUTION_FACTOR) // JMS_GFX
+#define OIL_HITS 3
+#define OIL_DAMAGE 0
+#define OIL_SPEED DISPLAY_TO_WORLD (4*RESOLUTION_FACTOR) // JMS_GFX
+#define OIL_LIFE 250
+
 static void
-lurg_preprocess (ELEMENT *ElementPtr)
+oil_preprocess (ELEMENT *ElementPtr)
+{
+	BYTE thrust_wait, turn_wait;
+
+	thrust_wait = HINIBBLE (ElementPtr->turn_wait);
+	turn_wait = LONIBBLE (ElementPtr->turn_wait);
+	if (thrust_wait > 0)
+		--thrust_wait;
+	else
+	{
+		ElementPtr->next.image.frame =
+				IncFrameIndex (ElementPtr->current.image.frame);
+		ElementPtr->state_flags |= CHANGING;
+
+		thrust_wait = (BYTE)((COUNT)TFB_Random () & 3);
+	}
+
+	if (turn_wait > 0)
+		--turn_wait;
+	else
+	{
+		COUNT facing;
+		SIZE delta_facing;
+
+		facing = NORMALIZE_FACING (ANGLE_TO_FACING (
+				GetVelocityTravelAngle (&ElementPtr->velocity)));
+		if ((delta_facing = TrackShip (ElementPtr, &facing)) == -1)
+			facing = (COUNT)TFB_Random ();
+		else if (delta_facing <= ANGLE_TO_FACING (HALF_CIRCLE))
+			facing += (COUNT)TFB_Random () & (ANGLE_TO_FACING (HALF_CIRCLE) - 1);
+		else
+			facing -= (COUNT)TFB_Random () & (ANGLE_TO_FACING (HALF_CIRCLE) - 1);
+		SetVelocityVector (&ElementPtr->velocity,
+				OIL_SPEED, facing);
+
+#define TRACK_WAIT 2
+		turn_wait = TRACK_WAIT;
+	}
+
+	ElementPtr->turn_wait = MAKE_BYTE (turn_wait, thrust_wait);
+}
+
+static void
+oil_collision (ELEMENT *ElementPtr0, POINT *pPt0,
+		ELEMENT *ElementPtr1, POINT *pPt1)
+{
+#define ENERGY_DRAIN 10
+	collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+	if ((ElementPtr1->state_flags & PLAYER_SHIP)
+			&& (ElementPtr0->state_flags
+			& (GOOD_GUY | BAD_GUY)) !=
+			(ElementPtr1->state_flags
+			& (GOOD_GUY | BAD_GUY)))
+	{
+		STARSHIP *StarShipPtr;
+
+		GetElementStarShip (ElementPtr0, &StarShipPtr);
+		ProcessSound (SetAbsSoundIndex (
+						/* DOGGY_STEALS_ENERGY */
+				StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr0);
+		ElementPtr1->thrust_wait += OIL_DELAY;
+		if (ElementPtr1->thrust_wait > OIL_DELAY_MAX)
+			ElementPtr1->thrust_wait = OIL_DELAY_MAX;
+		ElementPtr1->turn_wait += OIL_DELAY;
+		if (ElementPtr1->turn_wait > OIL_DELAY_MAX)
+			ElementPtr1->turn_wait = OIL_DELAY_MAX;
+	}
+	if (ElementPtr0->thrust_wait <= COLLISION_THRUST_WAIT)
+		ElementPtr0->thrust_wait += COLLISION_THRUST_WAIT << 1;
+}
+
+static void spill_oil (ELEMENT *ShipPtr)
 {
 	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	HELEMENT Missile;
+
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	MissileBlock.cx = ShipPtr->next.location.x;
+	MissileBlock.cy = ShipPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = 0;
+	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
+			| IGNORE_SIMILAR;
+	MissileBlock.pixoffs = SHIP_OFFSET;
+	MissileBlock.speed = OIL_SPEED;
+	MissileBlock.hit_points = OIL_HITS;
+	MissileBlock.damage = OIL_DAMAGE;
+	MissileBlock.life = OIL_LIFE;
+	MissileBlock.preprocess_func = oil_preprocess;
+	MissileBlock.blast_offs = OIL_OFFSET;
+	Missile = initialize_missile (&MissileBlock);
+
+	if (Missile)
+	{
+		ELEMENT *OilPtr;
+
+		LockElement (Missile, &OilPtr);
+		OilPtr->turn_wait = 0;
+		SetElementStarShip (OilPtr, StarShipPtr);
+		OilPtr->collision_func = oil_collision;
+		UnlockElement (Missile);
+		PutElement (Missile);
+	}
+}
+
+static void
+lurg_postprocess (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+	SHIP_INFO *ShipInfoPtr;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
+	ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
 	if ((StarShipPtr->cur_status_flags & SPECIAL)
-/*
-			&& DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST)
-*/
-			)
+			&& ShipInfoPtr->energy_level > 1
+			&& StarShipPtr->special_counter == 0
+			&& DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST))
 	{
-		SIZE add_facing;
+		int i;
+		ProcessSound (SetAbsSoundIndex (
+						/* LAUNCH_FIGHTERS */
+				StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+		for (i = 0; i < 5; i++)
+			spill_oil (ElementPtr);
 
-		add_facing = 0;
-		if (StarShipPtr->cur_status_flags & THRUST)
-		{
-			if (ElementPtr->thrust_wait == 0)
-				++ElementPtr->thrust_wait;
-
-			add_facing = ANGLE_TO_FACING (HALF_CIRCLE);
-		}
-		if (StarShipPtr->cur_status_flags & LEFT)
-		{
-			if (ElementPtr->turn_wait == 0)
-				++ElementPtr->turn_wait;
-
-			if (add_facing)
-				add_facing += ANGLE_TO_FACING (OCTANT);
-			else
-				add_facing = -ANGLE_TO_FACING (QUADRANT);
-		}
-		else if (StarShipPtr->cur_status_flags & RIGHT)
-		{
-			if (ElementPtr->turn_wait == 0)
-				++ElementPtr->turn_wait;
-
-			if (add_facing)
-				add_facing -= ANGLE_TO_FACING (OCTANT);
-			else
-				add_facing = ANGLE_TO_FACING (QUADRANT);
-		}
-
-		if (add_facing)
-		{
-			COUNT facing;
-			STATUS_FLAGS thrust_status;
-
-			facing = StarShipPtr->ShipFacing;
-			StarShipPtr->ShipFacing = NORMALIZE_FACING (
-					facing + add_facing
-					);
-			thrust_status = inertial_thrust (ElementPtr);
-			StarShipPtr->cur_status_flags &=
-					~(SHIP_AT_MAX_SPEED
-					| SHIP_BEYOND_MAX_SPEED
-					| SHIP_IN_GRAVITY_WELL);
-			StarShipPtr->cur_status_flags |= thrust_status;
-			StarShipPtr->ShipFacing = facing;
-		}
+		StarShipPtr->special_counter = SPECIAL_WAIT;
 	}
 }
 
@@ -272,7 +351,7 @@ init_lurg (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	lurg_desc.preprocess_func = lurg_preprocess;
+	lurg_desc.postprocess_func = lurg_postprocess;
 	lurg_desc.init_weapon_func = initialize_horn;
 	lurg_desc.cyborg_control.intelligence_func = lurg_intelligence;
 
