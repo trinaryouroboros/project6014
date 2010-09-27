@@ -1,8 +1,8 @@
 #(SYREENHOME_GREETING1)
-Captain, welcome to Gaia. I am Admarelle Briella 
+Captain, welcome to Gaia. I am Admarelle Briella
 responsible for foreign affairs and first contact for visitors to our beautiful world. 
-It is our pleasure to finally invite you to our planet  
-surface. Make yourself comfortable. 
+It is our pleasure to finally invite you to our planet
+surface. Make yourself comfortable.
 
 #(got_drink)
 Great! Got anything to drink?
@@ -11,52 +11,53 @@ Great! Got anything to drink?
 I don't actually see any seats...
 
 #(thanks_for_hospitality)
-Thank you for your hospitality Briella, its wonderful to be be here.
+Thank you for your hospitality, Briella. It's wonderful to be be here.
 
 #(ill_stand)
 Thanks, but I'll stand. This won't take long.
 
 #(ETHANOL_FLUIDS)
-Captain we do not consume ethanol-based fluid on Gaia. 
-We like to remain fully conscious of and connected to our environment. 
-Besides, we don't usually have any problems relaxing. 
+Captain. We do not consume ethanol-based fluid on Gaia.
+We like to remain fully conscious of and connected to our environment.
+Besides, we don't usually have any problems relaxing.
 What can I do for you otherwise?
 
 #(LOTUS_POSITION)
-We find the lotus position works Captain, among others...
-...providing you are as limber as we are.
+We find the lotus position works, Captain, among others
+providing you are as limber as we are.
 Regardless, What can I do for you?
 
 #(PLEASURE_OURS)
-The pleasure is ours Captain. Now, what can I do for you?
+The pleasure is ours, Captain. Now, what can I do for you?
 
 #(AS_YOU_WISH)
-As you wish Captain. What can I do for you?
+As you wish, Captain. What can I do for you?
 
 #(searching_for_shofixti)
-We're searching for missing Shofixti Scouts. Is there any assistance you can provide? 
+We're searching for missing Shofixti Scouts. Is there any assistance you can provide?
 
 #(where_do_i_start)
-Wow, where do I start...ahem, I mean for a start, where do I get refuelled around here.
+Wow, where do I start...ahem, I mean for a start, where do I get refuelled around here?
 
 #(thats_all)
-That's all for now Briella, until next time.
+That's all for now, Briella. Until next time.
 
 #(NO_INFORMATION)
-We do know of your quest Captain, but there is little we can do for you 
-in the way of infromation. Our Penerator Vessels our confined to our 
-sphere of influence for their own safety. 
+We do know of your quest, Captain, but there is little we can do for you
+in the way of information. Our Penerator vessels are confined to our
+sphere of influence for their own safety.
 Space is still hostile at this time Captain.
 But there are two other ways we can assist.
 Stop by our starbase Captain and you can refuel.
-Also, we furnish you with one Penetrator vessel. Use it well. 
+Also, we furnish you with one Penetrator vessel. Use it well.
 Take care of it and you will be rewarded.
 
 #(REFUEL_AT_STARBASE)
-You can refuell at our Starbase. 
-Also, Captain, we present you with one Penetrator vessel. 
-We have trust in you that you will use it well and sparingly. 
+You can refuel at our Starbase.
+Also, Captain, we present you with one Penetrator vessel.
+We have trust in you that you will use it well and sparingly.
 Take care of it and you will be rewarded.
 
 #(TAKE_CARE)
-Take care captain, please come back soon. There is much more we can do for you here.
+Take care captain, please come back soon
+there is much more we can do for you here.
