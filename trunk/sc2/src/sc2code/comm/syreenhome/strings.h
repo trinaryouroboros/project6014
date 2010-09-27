@@ -22,23 +22,21 @@
 enum
 {
 	NULL_PHRASE,
-	SYREEN_GREETING1,
-	because_we_can,
-	looking_for_artefacts,
-	spacebabes,
-	NICE_TUG,
-	thanks_tug_complement,
-	not_fooled,
-	DOUBLE_WHATNOW, 
-	SURE_I_WAS,
-	ANY_ASSISTANCE,
-	roam_stars,
-	WE_DONT_STRAY,
-	any_news,
-	NO_NEWS,
-	spot_you_later,
-	COME_BACK_ANYTIME,
-
+	SYREENHOME_GREETING1,
+	got_drink,
+	no_seats,
+	thanks_for_hospitality,
+	ill_stand,
+	ETHANOL_FLUIDS,
+	LOTUS_POSITION,
+	PLEASURE_OURS,
+	AS_YOU_WISH,
+	searching_for_shofixti, 
+	where_do_i_start,
+	thats_all,
+	NO_INFORMATION,
+	REFUEL_AT_STARBASE,
+	TAKE_CARE
 };
 
 #endif /* _STRINGS_H */

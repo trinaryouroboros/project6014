@@ -170,7 +170,7 @@ static LOCDATA syreenhome_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	NPCPhrase (COME_BACK_ANYTIME);
+	NPCPhrase (TAKE_CARE);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }
 
@@ -178,87 +178,44 @@ ExitConversation (RESPONSE_REF R)
 static void
 AskMenu1 (RESPONSE_REF R)
 {	
-	/* Alien speech */
-
-
-	if (PLAYER_SAID (R, any_news))
+	if (PLAYER_SAID (R, searching_for_shofixti))
 	{
-		NPCPhrase (NO_NEWS);
-		DISABLE_PHRASE (any_news);
-	}
-	else if (PLAYER_SAID (R, roam_stars))
-	{
-		NPCPhrase (WE_DONT_STRAY);
-		DISABLE_PHRASE (roam_stars);
-	}
-			
-	/* Human speech options */
-	
-	if (PHRASE_ENABLED (any_news))
-	{
-		Response (any_news, AskMenu1);
+		NPCPhrase (NO_INFORMATION);
 	}
 
-    if (PHRASE_ENABLED (roam_stars))
+	else if (PLAYER_SAID (R, where_do_i_start))
 	{
-		Response (roam_stars, AskMenu1);
+		NPCPhrase (REFUEL_AT_STARBASE);
 	}
-	
-	if (PHRASE_ENABLED (spot_you_later))
-	{
-		Response (spot_you_later, ExitConversation);
-	}
-}
-
-
-
-static void
-SyreenResponse1 (RESPONSE_REF R)
-{	
-	if (PLAYER_SAID (R, thanks_tug_complement))
-	{
-		NPCPhrase (SURE_I_WAS);
-	}
-	else if (PLAYER_SAID (R, not_fooled))
-	{
-		NPCPhrase (DOUBLE_WHATNOW);
-	}
-
-	Response (roam_stars, AskMenu1);
-	Response (any_news, AskMenu1);
-	Response (spot_you_later, ExitConversation);
-}
-
-
-static void
-NiceComplement (RESPONSE_REF R)
-{	
-	if (PLAYER_SAID (R, spacebabes))
-	{
-		NPCPhrase (NICE_TUG);
-	}
-	
-	Response (thanks_tug_complement, SyreenResponse1);
-	Response (not_fooled, SyreenResponse1);
-	Response (spot_you_later, ExitConversation);
+		
+	Response (thats_all, ExitConversation);
 }
 
 static void
-AnyAssistance (RESPONSE_REF R)
+Hospitality (RESPONSE_REF R)
 {	
-	if (PLAYER_SAID (R, looking_for_artefacts))
+	if (PLAYER_SAID (R, got_drink))
 	{
-		NPCPhrase (ANY_ASSISTANCE);
+		NPCPhrase (ETHANOL_FLUIDS);
 	}
 
-	else if (PLAYER_SAID (R, because_we_can))
+	else if (PLAYER_SAID (R, no_seats))
 	{
-		NPCPhrase (ANY_ASSISTANCE);
+		NPCPhrase (LOTUS_POSITION);
+	}
+	else if (PLAYER_SAID (R, thanks_for_hospitality))
+	{
+		NPCPhrase (PLEASURE_OURS);
+	}
+	else if (PLAYER_SAID (R, ill_stand))
+	{
+		NPCPhrase (AS_YOU_WISH);
 	}
 
-	Response (roam_stars, AskMenu1);
-	Response (any_news, AskMenu1);
-	Response (spot_you_later, ExitConversation);
+
+	Response (searching_for_shofixti, AskMenu1);
+	Response (where_do_i_start, AskMenu1);
+	Response (thats_all, ExitConversation);
 }
 
 
@@ -270,11 +227,12 @@ Intro (void)
 		SET_GAME_STATE (SYREEN_MET, 1);
 	}
 
-	NPCPhrase (SYREEN_GREETING1);
+	NPCPhrase (SYREENHOME_GREETING1);
 
-	Response (because_we_can, AnyAssistance);
-	Response (looking_for_artefacts, AnyAssistance);
-	Response (spacebabes, NiceComplement);
+	Response (got_drink, Hospitality);
+	Response (no_seats, Hospitality);
+	Response (thanks_for_hospitality, Hospitality);
+	Response (ill_stand, Hospitality);
 }
 
 
