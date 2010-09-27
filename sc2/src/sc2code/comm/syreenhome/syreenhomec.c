@@ -24,6 +24,7 @@
 #include "libs/sound/sound.h"
 
 #include "build.h"
+#include "gameev.h"
 
 
 static LOCDATA syreenhome_desc =
@@ -166,11 +167,27 @@ static LOCDATA syreenhome_desc =
 	NULL,
 };
 
-
 static void
 ExitConversation (RESPONSE_REF R)
 {
 	NPCPhrase (TAKE_CARE);
+	
+	if(GET_GAME_STATE (SYREEN_WILL_GIVE_VESSEL))
+	{
+		BYTE mi, di, yi;
+		
+		mi = GLOBAL (GameClock.month_index);
+		SET_GAME_STATE (SYREEN_SHIP_MONTH, mi);
+		if ((di = GLOBAL (GameClock.day_index)) > 28)
+			di = 28;
+		SET_GAME_STATE (SYREEN_SHIP_DAY, di);
+		yi = (BYTE)(GLOBAL (GameClock.year_index) - START_YEAR) + 1;
+		SET_GAME_STATE (SYREEN_SHIP_YEAR, yi);
+		
+		ActivateStarShip (SYREEN_SHIP, 1);
+		SET_GAME_STATE (SYREEN_WILL_GIVE_VESSEL, 0);
+	}
+	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }
 
@@ -178,14 +195,41 @@ ExitConversation (RESPONSE_REF R)
 static void
 AskMenu1 (RESPONSE_REF R)
 {	
+	SIZE i;
+	BOOLEAN ShipsReadySyreen = !((i = (GLOBAL (GameClock.year_index) - START_YEAR) - GET_GAME_STATE (SYREEN_SHIP_YEAR)) < 0
+									|| ((i == 0 && (i = GLOBAL (GameClock.month_index) - GET_GAME_STATE (SYREEN_SHIP_MONTH)) < 0)
+									|| (i == 0 && GLOBAL (GameClock.day_index) < GET_GAME_STATE (SYREEN_SHIP_DAY))));
+	
 	if (PLAYER_SAID (R, searching_for_shofixti))
 	{
 		NPCPhrase (NO_INFORMATION);
+		
+		if (ActivateStarShip (SYREEN_SHIP, FEASIBILITY_STUDY))
+		{
+			if (ShipsReadySyreen)
+			{
+				NPCPhrase (GIVE_VESSEL_1);
+				SET_GAME_STATE (SYREEN_WILL_GIVE_VESSEL, 1);
+			}
+		}
+		else
+			NPCPhrase (NO_ROOM_FOR_VESSEL);
 	}
 
 	else if (PLAYER_SAID (R, where_do_i_start))
 	{
 		NPCPhrase (REFUEL_AT_STARBASE);
+		
+		if (ActivateStarShip (SYREEN_SHIP, FEASIBILITY_STUDY))
+		{
+			if (ShipsReadySyreen)
+			{
+				NPCPhrase (GIVE_VESSEL_2);
+				SET_GAME_STATE (SYREEN_WILL_GIVE_VESSEL, 1);
+			}
+		}
+		else
+			NPCPhrase (NO_ROOM_FOR_VESSEL);
 	}
 		
 	Response (thats_all, ExitConversation);
@@ -198,7 +242,6 @@ Hospitality (RESPONSE_REF R)
 	{
 		NPCPhrase (ETHANOL_FLUIDS);
 	}
-
 	else if (PLAYER_SAID (R, no_seats))
 	{
 		NPCPhrase (LOTUS_POSITION);
@@ -212,7 +255,6 @@ Hospitality (RESPONSE_REF R)
 		NPCPhrase (AS_YOU_WISH);
 	}
 
-
 	Response (searching_for_shofixti, AskMenu1);
 	Response (where_do_i_start, AskMenu1);
 	Response (thats_all, ExitConversation);
@@ -224,10 +266,11 @@ Intro (void)
 {
 	if (GET_GAME_STATE (SYREEN_MET) == 0)
 	{
+		NPCPhrase (SYREENHOME_GREETING1);
 		SET_GAME_STATE (SYREEN_MET, 1);
 	}
-
-	NPCPhrase (SYREENHOME_GREETING1);
+	else
+		NPCPhrase (SYREENHOME_GREETING2);
 
 	Response (got_drink, Hospitality);
 	Response (no_seats, Hospitality);

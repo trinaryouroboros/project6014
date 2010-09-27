@@ -1,4 +1,4 @@
-﻿#(======== This is the Credit Roll script ================)
+#(======== This is the Credit Roll script ================)
 #(===                                                  ===)
 #( Each text line has the following format:               )
 #(   font-size SP alignment SP text                       )
@@ -70,7 +70,7 @@ PROGRAMMING
 Edmund Horner
 Jaakko Markus Seppälä
 Benjamin Wack
-
+ 
 
 #(Sounds)
 13 C

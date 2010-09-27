@@ -1014,6 +1014,18 @@ START_GAME_STATE
 		// 1 - Black orb found, lander enroute to orbit from finding it
 		// 2 - Black orb found, lander back in orbit
 
+	// JMS: Syreen ship giving states
+	ADD_GAME_STATE (SYREEN_WILL_GIVE_VESSEL, 1)
+	ADD_GAME_STATE (SYREEN_SHIP_MONTH, 4)
+	/* The month in SYREEN_SHIP_YEAR that new ships are available
+	 * from the Syreen. */
+	ADD_GAME_STATE (SYREEN_SHIP_DAY, 5)
+	/* The day of the month in SYREEN_SHIP_MONTH in SYREEN_SHIP_YEAR
+	 * that new ships are available. */
+	ADD_GAME_STATE (SYREEN_SHIP_YEAR, 5)
+	/* The year that new ships are available from the Syreen
+	 * (stored as an offset from the year the game starts). */
+
 END_GAME_STATE
 
 // Values for GAME_STATE.glob_flags:

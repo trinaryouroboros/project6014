@@ -1,8 +1,12 @@
 #(SYREENHOME_GREETING1)
 Captain, welcome to Gaia. I am Admarelle Briella
 responsible for foreign affairs and first contact for visitors to our beautiful world. 
-It is our pleasure to finally invite you to our planet
-surface. Make yourself comfortable.
+It is our pleasure to finally invite you to our
+planet surface. Make yourself comfortable.
+
+#(SYREENHOME_GREETING2)
+Again welcome you to our eden, Captain.
+Make yourself at home.
 
 #(got_drink)
 Great! Got anything to drink?
@@ -17,7 +21,7 @@ Thank you for your hospitality, Briella. It's wonderful to be be here.
 Thanks, but I'll stand. This won't take long.
 
 #(ETHANOL_FLUIDS)
-Captain. We do not consume ethanol-based fluid on Gaia.
+Captain. We do not consume ethanol-based fluids on Gaia.
 We like to remain fully conscious of and connected to our environment.
 Besides, we don't usually have any problems relaxing.
 What can I do for you otherwise?
@@ -47,16 +51,25 @@ We do know of your quest, Captain, but there is little we can do for you
 in the way of information. Our Penerator vessels are confined to our
 sphere of influence for their own safety.
 Space is still hostile at this time Captain.
-But there are two other ways we can assist.
+But there are other ways we can assist.
 Stop by our starbase Captain and you can refuel.
+
+#(GIVE_VESSEL_1)
 Also, we furnish you with one Penetrator vessel. Use it well.
 Take care of it and you will be rewarded.
 
 #(REFUEL_AT_STARBASE)
 You can refuel at our Starbase.
+
+#(GIVE_VESSEL_2)
 Also, Captain, we present you with one Penetrator vessel.
 We have trust in you that you will use it well and sparingly.
 Take care of it and you will be rewarded.
+
+#(NO_ROOM_FOR_VESSEL)
+Also, we would like to present you one of our
+Penetrator vessels. But it seems you don't have
+sufficient space for it on your flagship. Pity.
 
 #(TAKE_CARE)
 Take care captain, please come back soon
