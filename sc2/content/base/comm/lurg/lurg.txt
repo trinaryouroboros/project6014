@@ -54,11 +54,11 @@ If you know us, don't you know we only want peace?
 #(dont_tellus)
 I think I'm done with the questions.
 
-#(URQUAN_ALLIANCE)	LURG_URQUAN_ALLIANCE,ogg
+#(URQUAN_ALLIANCE)	LURG_URQUAN_ALLIANCE.ogg
 The Ur-Quan knew it would be a fatal mistake to fight against us, so
 they did wisely to ignore us.
 
-#(NOT_PEACEFUL)	LURG_NOT_PEACEFUL,ogg
+#(NOT_PEACEFUL)	LURG_NOT_PEACEFUL.ogg
 Humans, peaceful? Is that what you really think?
 When the rest of humanity was locked inside a slave shield
 and had but the meager resources of your Earth
