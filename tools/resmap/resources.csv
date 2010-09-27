@@ -1072,7 +1072,7 @@ TURRET_SML_MASK_PMAP_ANIM,ship.orz.graphics.tur.small,sc2code/ships/orz/igfxres.
 ORZ_CAPTAIN_MASK_PMAP_ANIM,ship.orz.graphics.captain,sc2code/ships/orz/igfxres.h,GFXRES,base/ships/orz/orzcap.ani
 LURG_CODE,ship.lurg.code,sc2code/ships/lurg/icode.h,SHIP,26
 LURG_CODE,ship.lurg.code,sc2code/ships/blackurq/icode.h,SHIP,26
-LURG_VICTORY_SONG,ship.lurg.ditty,sc2code/ships/lurg/imusicre.h,MUSICRES,base/ships/lurg/lurgditty.mod
+LURG_VICTORY_SONG,ship.lurg.ditty,sc2code/ships/lurg/imusicre.h,MUSICRES,base/ships/lurg/lurgditty.ogg
 LURG_RACE_STRINGS,ship.lurg.text,sc2code/ships/lurg/istrtab.h,STRTAB,base/ships/lurg/lurgtext.txt
 LURG_SHIP_SOUNDS,ship.lurg.sounds,sc2code/ships/lurg/isndres.h,SNDRES,base/ships/supox/supsound.snd
 LURG_ICON_MASK_PMAP_ANIM,ship.lurg.icons,sc2code/ships/lurg/igfxres.h,GFXRES,base/ships/lurg/lurgicons.ani

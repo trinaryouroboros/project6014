@@ -346,15 +346,8 @@ init_orz_comm (void)
 	orz_desc.AlienTextBaseline.y = 0;
 	orz_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
-	if (GET_GAME_STATE (ORZ_MANNER) == 3
-			|| LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
-	{
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-	}
-	else
-	{
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	}
+	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	
 	retval = &orz_desc;
 
 	return (retval);

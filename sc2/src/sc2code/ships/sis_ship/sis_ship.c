@@ -822,8 +822,7 @@ confuse_banger_preprocess (ELEMENT *ElementPtr)
 			STARSHIP *StarShipPtr;
 			
 			if (GetFrameIndex (ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame)) == 0)
-				ElementPtr->next.image.frame =
-				SetRelFrameIndex (ElementPtr->next.image.frame, -8);
+				ElementPtr->next.image.frame = SetRelFrameIndex (ElementPtr->next.image.frame, -8);
 			
 			GetElementStarShip (eptr, &StarShipPtr);
 			StarShipPtr->ship_input_state = (StarShipPtr->ship_input_state & ~(LEFT | RIGHT | THRUST)) | ElementPtr->turn_wait;
@@ -854,7 +853,7 @@ confuse_banger_preprocess (ELEMENT *ElementPtr)
 
 #define RECOIL_VELOCITY WORLD_TO_VELOCITY (DISPLAY_TO_WORLD (2))
 #define MAX_RECOIL_VELOCITY (RECOIL_VELOCITY * 3)
-#define CONFUSE_DURATION 20
+#define CONFUSE_DURATION 35
 
 static void
 confuse_banger_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
@@ -885,6 +884,8 @@ confuse_banger_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr
 								   COSINE (angle, MAX_RECOIL_VELOCITY),
 								   SINE (angle, MAX_RECOIL_VELOCITY));
 		}
+		
+		StarShipPtr->ShipFacing = (BYTE)TFB_Random () % 16;
 	}
 	
 	if (ElementPtr1->state_flags & PLAYER_SHIP)
@@ -933,8 +934,7 @@ confuse_banger_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr
 			}
 			
 			ConfusionPtr->life_span = CONFUSE_DURATION;
-			ConfusionPtr->turn_wait =
-			(BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
+			ConfusionPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
 			
 			UnlockElement (hConfusionElement);
 		}
@@ -954,7 +954,7 @@ static COUNT
 initialize_confuse_banger (ELEMENT *ShipPtr, HELEMENT ConfusionArray[])
 {
 #define CMISSILE_SPEED DISPLAY_TO_WORLD (24)
-#define CMISSILE_HITS 4
+#define CMISSILE_HITS 7
 #define CMISSILE_DAMAGE 3
 #define CMISSILE_LIFE 10
 #define CMISSILE_OFFSET 4
