@@ -342,8 +342,8 @@ InitSIS (void)
 	
 	GLOBAL (CurrentActivity) = IN_INTERPLANETARY | START_INTERPLANETARY;
 
-	GLOBAL_SIS (ResUnits) = 0;
-	GLOBAL (CrewCost) = 3;
+	GLOBAL_SIS (ResUnits) = 6500;
+	GLOBAL (CrewCost) = 5;
 	GLOBAL (FuelCost) = 20;
 	GLOBAL (ModuleCost[PLANET_LANDER]) = 500 / MODULE_COST_SCALE;
 	GLOBAL (ModuleCost[FUSION_THRUSTER]) = 500 / MODULE_COST_SCALE;
@@ -362,8 +362,17 @@ InitSIS (void)
 			sizeof (GLOBAL_SIS (CommanderName)),
 			GAME_STRING (NAMING_STRING_BASE + 3));
 
+	// BW: all NAFS ships available but no ship allocated by default
+	ActivateStarShip (ZOQFOTPIK_SHIP, SET_ALLIED);
 	ActivateStarShip (HUMAN_SHIP, SET_ALLIED);
-	CloneShipFragment (HUMAN_SHIP, &GLOBAL (built_ship_q), 0);
+	ActivateStarShip (SYREEN_SHIP, SET_ALLIED);
+	ActivateStarShip (YEHAT_SHIP, SET_ALLIED);
+	ActivateStarShip (SHOFIXTI_SHIP, SET_ALLIED);
+	ActivateStarShip (CHMMR_SHIP, SET_ALLIED);
+	ActivateStarShip (SUPOX_SHIP, SET_ALLIED);
+	ActivateStarShip (UTWIG_SHIP, SET_ALLIED);
+	ActivateStarShip (ORZ_SHIP, SET_ALLIED);
+	//	CloneShipFragment (HUMAN_SHIP, &GLOBAL (built_ship_q), 0);
 
 	// JMS: Start at Procyon
 	GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (PROCYON_X);
