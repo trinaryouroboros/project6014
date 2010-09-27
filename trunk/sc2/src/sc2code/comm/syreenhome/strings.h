@@ -23,6 +23,7 @@ enum
 {
 	NULL_PHRASE,
 	SYREENHOME_GREETING1,
+	SYREENHOME_GREETING2,
 	got_drink,
 	no_seats,
 	thanks_for_hospitality,
@@ -35,7 +36,10 @@ enum
 	where_do_i_start,
 	thats_all,
 	NO_INFORMATION,
+	GIVE_VESSEL_1,
 	REFUEL_AT_STARBASE,
+	GIVE_VESSEL_2,
+	NO_ROOM_FOR_VESSEL,
 	TAKE_CARE
 };
 
