@@ -1,8 +1,8 @@
-#(LURG_HOME_HELLO_1)
+#(LURG_HOME_HELLO_1)	LURG_HOME_HELLO.ogg
 I'm impressed you've made it this far, human-flesh.
 Now leave or be destroyed.
 
-#(LURG_SPACE_HELLO_1)
+#(LURG_SPACE_HELLO_1)	LURG_SPACE_HELLO.ogg
 Well, human-flesh, I see you have finally wandered in this region of space. 
 It was a only a matter of time, but this intrusion into Lurg space cannot be allowed.
 For this, you must die.
@@ -16,10 +16,10 @@ We are on a rescue mission. A distress call was sent by one of our Allies, we mu
 #(suck_vacuum)
 Prepare to suck vacuum, you hideous space slug!
 
-#(CANT_LEAVE)
+#(CANT_LEAVE)	LURG_CANT_LEAVE.ogg
 You cannot be permitted to leave, human. Here you will die.
 
-#(DONT_INSULT_US)
+#(DONT_INSULT_US)	LURG_DONT_INSULT_US.ogg
 Human-flesh, do not insult me. We know exactly who you are
 the famous Vela hero who defeated the Ur-Quan Sa-Matra.
 We know why you are here. You cannot leave alive.
@@ -36,7 +36,7 @@ Before we get to the fighting, can you answer some questions for us?
 #(CANT_PASS)
 You shall not pass.
 
-#(ASK_YOUR_QUESTIONS)
+#(ASK_YOUR_QUESTIONS)	LURG_ASK_YOUR_QUESTIONS.ogg
 Always the curious ape. Ask your questions.
 
 #(tellus_species)
@@ -54,11 +54,11 @@ If you know us, don't you know we only want peace?
 #(dont_tellus)
 I think I'm done with the questions.
 
-#(URQUAN_ALLIANCE)
+#(URQUAN_ALLIANCE)	LURG_URQUAN_ALLIANCE,ogg
 The Ur-Quan knew it would be a fatal mistake to fight against us, so
 they did wisely to ignore us.
 
-#(NOT_PEACEFUL)
+#(NOT_PEACEFUL)	LURG_NOT_PEACEFUL,ogg
 Humans, peaceful? Is that what you really think?
 When the rest of humanity was locked inside a slave shield
 and had but the meager resources of your Earth
@@ -66,17 +66,17 @@ your species practically killed each other fighting over the scraps.
 You would surely have died within two generations
 had you not been emancipated by the Chmmr.
 
-#(OUR_SPECIES)
+#(OUR_SPECIES)	LURG_OUR_SPECIES.ogg
 We are the Lurg. 
 
-#(OUR_SHIP)
+#(OUR_SHIP)	LURG_OUR_SHIP.ogg
 The Lurg Prawn is a lower lifeform, genetically altered
 designed by us to survive in the void of space.
 
 #(you_look_familiar) 
 You look strangely familiar. You have a face I don't think I'd forget.
 
-#(YOU_FEEL_US)
+#(YOU_FEEL_US)	LURG_YOU_FEEL_US.ogg
 You can feel it in the back of your mind, can't you
 somehow, you've always felt we were watching you.
 We know more about you than you can possibly imagine
@@ -91,7 +91,7 @@ Oh. That's not creepy at all.
 #(big_imagination)
 I don't know, I can imagine quite a lot.
 
-#(WE_KNOW_ALL)
+#(WE_KNOW_ALL)	LURG_WE_KNOW_ALL.ogg
 We make it our business to know. Knowledge is power. That is all you need to know.
 
 #(we_kick_ass)
@@ -100,7 +100,7 @@ Look. We kicked the Ur-Quan's butt, well butt equivalent. Why should we be scare
 #(we_are_powerful)
 I warn you. We can be a powerful enemy. Surely there is a peaceful way out of this.
 
-#(EASILY_DESTROYED)
+#(EASILY_DESTROYED)	LURG_EASILY_DESTROYED.ogg
 Human-flesh, you are not as powerful as you'd like to believe.
 If we wanted you dead, we could have let the Mycon
 destroy your world a thousand years ago.
@@ -112,7 +112,7 @@ This is your last chance for a peaceful resolution, Lurg.
 #(lets_fight)
 Okay. Is this the part where we fight now?
 
-#(GOODBYE)
+#(GOODBYE)	LURG_GOODBYE.ogg
 Now it is time for you to die.
 Even if you run, you will help spread our message.
 Too long we have ignored this sector of space.
