@@ -47,8 +47,8 @@ typedef void *(ResourceLoadFileFun) (uio_Stream *fp, DWORD len);
 void *LoadResourceFromPath(const char *pathname, ResourceLoadFileFun fn);
 
 uio_Stream *res_OpenResFile (uio_DirHandle *dir, const char *filename, const char *mode);
-int ReadResFile (void *lpBuf, COUNT size, COUNT count, uio_Stream *fp);
-int WriteResFile (const void *lpBuf, COUNT size, COUNT count, uio_Stream *fp);
+int ReadResFile (void *lpBuf, COUNT size, DWORD count, uio_Stream *fp);
+int WriteResFile (const void *lpBuf, COUNT size, DWORD count, uio_Stream *fp);
 int GetResFileChar (uio_Stream *fp);
 int PutResFileChar (char ch, uio_Stream *fp);
 int PutResFileNewline (uio_Stream *fp);
