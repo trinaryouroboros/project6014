@@ -1,57 +1,62 @@
-#(SYREEN_GREETING1)
-Hail Earthling, welcome to Syreen space. 
-As always we are very pleased to welcome you. What brings you here? 
+#(SYREENHOME_GREETING1)
+Captain, welcome to Gaia. I am Admarelle Briella 
+responsible for foreign affairs and first contact for visitors to our beautiful world. 
+It is our pleasure to finally invite you to our planet  
+surface. Make yourself comfortable. 
 
-#(because_we_can)
-We're here because we can be. Had the opportunity to visit so here we are!
+#(got_drink)
+Great! Got anything to drink?
 
-#(looking_for_artefacts)
-The Chmmr have sent us on a mission to find some missing Shofixti. Who, come to think of it, are nowhere near here.
+#(no_seats)
+I don't actually see any seats...
 
-#(spacebabes)
-We're cruisin' for space-babes!
+#(thanks_for_hospitality)
+Thank you for your hospitality Briella, its wonderful to be be here.
 
-#(NICE_TUG)
-If it's space-babes you're after it's space-babes you'll get I'm sure.
-Nice vessel by the way.
+#(ill_stand)
+Thanks, but I'll stand. This won't take long.
 
-#(thanks_tug_complement)
-Thanks! The Chmmr gave me this one, it's OKAY but not as cool as my old one...
-you are talking about the ship right?
+#(ETHANOL_FLUIDS)
+Captain we do not consume ethanol-based fluid on Gaia. 
+We like to remain fully conscious of and connected to our environment. 
+Besides, we don't usually have any problems relaxing. 
+What can I do for you otherwise?
 
-#(not_fooled)
-I'm not fooled by your dirty Syreen double entendres. Naughty!
+#(LOTUS_POSITION)
+We find the lotus position works Captain, among others...
+...providing you are as limber as we are.
+Regardless, What can I do for you?
 
-#(DOUBLE_WHATNOW) 
-Double what now? Anyway...
+#(PLEASURE_OURS)
+The pleasure is ours Captain. Now, what can I do for you?
 
-#(SURE_I_WAS)
-Sure I was...
+#(AS_YOU_WISH)
+As you wish Captain. What can I do for you?
 
-#(ANY_ASSISTANCE)
-If there is any assistance you or your crew require
-of a practical nature
-you should stop by the starbase at our homeworld Betelgeuse I.
+#(searching_for_shofixti)
+We're searching for missing Shofixti Scouts. Is there any assistance you can provide? 
 
-#(roam_stars)
-It must be good to roam the stars once more.
+#(where_do_i_start)
+Wow, where do I start...ahem, I mean for a start, where do I get refuelled around here.
 
-#(WE_DONT_STRAY)
-Well to be honest, we don't stray far from our homeworld. 
-Our fleet is still rebuilding and there is the risk of running in to rogue Kohr-Ah
-who still plague this part of space. 
-We are grateful to the Chmmr who are diligent in their duty to eradicate these monsters. 
+#(thats_all)
+That's all for now Briella, until next time.
 
-#(any_news)
-Anything exciting going on around here?
+#(NO_INFORMATION)
+We do know of your quest Captain, but there is little we can do for you 
+in the way of infromation. Our Penerator Vessels our confined to our 
+sphere of influence for their own safety. 
+Space is still hostile at this time Captain.
+But there are two other ways we can assist.
+Stop by our starbase Captain and you can refuel.
+Also, we furnish you with one Penetrator vessel. Use it well. 
+Take care of it and you will be rewarded.
 
-#(NO_NEWS)
-Right now we don't get out much, and most of the real activity
-seems to be happening rim-ward of of Chmmr space where the Kohr-Ah are being pursued. 
-We're now at the periphery of current events it seems.
+#(REFUEL_AT_STARBASE)
+You can refuell at our Starbase. 
+Also, Captain, we present you with one Penetrator vessel. 
+We have trust in you that you will use it well and sparingly. 
+Take care of it and you will be rewarded.
 
-#(spot_you_later)
-We'll spot you later.
-
-#(COME_BACK_ANYTIME)
-Come back anytime.
+#(TAKE_CARE)
+Take care captain, please come back soon. There is much more we can do for you here.

@@ -72,16 +72,6 @@ Jaakko Markus Seppälä
 Benjamin Wack
  
 
-#(Ship design)
-13 C
-SHIP DESIGN
-
-#(Ship design fellas)
-13 C
-Eli Dupree
-Cedric Horner
-Jaakko Markus Seppälä
- 
 
 ...A Great big thanks
 to everyone at...
