@@ -34,14 +34,14 @@ as your primary weapon.
 The guns consume your batteries still pretty rapidly, whilst being on the inaccurate side, so
 if I were you, I'd bet my money on the so-called secondary weapon
 the confusion blaster.
-Based on Melnorme technology with a few additions of our own
-the blaster creates a partial stasis field around the enemy ship
+Based on Melnorme technology, with a few additions of our own
+the blaster creates a stasis field around the enemy ship
 which will jam its controls momentarily.
-The shots also carry some momentum, so they will knock
-the target ship around upon impact.
+The shots also carry some momentum, so they will
+knock the target ship around upon impact.
 To get the most out of your weapons, use them in tandem
 approach your target, disable it with the confuser and let 'em have it!
-By then your batteries will be depleted, so then you run like hell.
+By then your batteries will be depleted, so... you run like hell.
 
 #(explorer_run)
 I have to run from a fight? Give me a break.
