@@ -768,12 +768,12 @@ PickPlanetSide (MENU_STATE *pMS)
 			// JMS: If black orb is found and the lander returned to Explorer ship, allow initiating cutscene
 			if(GET_GAME_STATE(BLACK_ORB_STATE) == 1)
 			{
+				BYTE xform_buf[1];
 				SET_GAME_STATE(BLACK_ORB_STATE, 2); // Now the black orb is fetched - prevent playing this
 				StopMusic ();
 				pSolarSysState->PauseRotate = 1;
 				LurgCutScene ();
 				
-				BYTE xform_buf[1];
 				xform_buf[0] = FadeAllToBlack;
 				XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2);
 				GLOBAL (CurrentActivity) = CHECK_ABORT;
