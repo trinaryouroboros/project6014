@@ -201,8 +201,8 @@ LurgCutScene (void)
 	
 	ShowPresentation ( CaptureStringTable (LoadStringTable (LURGPRES_STRTAB)));
 	
-	//xform_buf[0] = FadeAllToBlack;
-	//SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
+	xform_buf[0] = FadeAllToBlack;
+	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
 }
 
 void

@@ -360,19 +360,6 @@ RestartMenu (MENU_STATE *pMS)
 	{
 		TimeOut = ONE_SECOND / 2;
 		
-		// JMS: Upon finding the black orb / new precursor ship, initiate cutscene
-		if (LOBYTE (LastActivity) == BLACK_ORB_CUTSCENE)
-		{
-			GLOBAL (CurrentActivity) = BLACK_ORB_CUTSCENE;
-
-			LurgCutScene ();
-			
-			FreeGameData ();
-			
-			TimeOut = ONE_SECOND / 2;
-			GLOBAL (CurrentActivity) = CHECK_ABORT;
-		}
-		
 		if (LOBYTE (LastActivity) == WON_LAST_BATTLE)
 		{
 			GLOBAL (CurrentActivity) = WON_LAST_BATTLE;

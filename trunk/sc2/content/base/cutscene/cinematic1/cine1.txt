@@ -58,7 +58,7 @@ ANI base/cutscene/cinematic1/cine1.ani
 #(Set text vertical position; can be T=top, B=bottom, M=middle)
 TVA T
 
-#(++++++++++++++++++++ Slide 1 ++++++++++++++++++++++++)
+#(++++++++++++++++++++ Slides 0-2 ++++++++++++++++++++++++)
 
 #(Set text fade in/out color; 0xRRGGBB)
 TFC 1018BC
@@ -84,8 +84,8 @@ DRAW 1
 WAIT 500
 
 #(Text fade-in)
-TFI Transmissions from the Lander crew 
-have ceased.
+TFI While enroute to orbit, the lander
+crew ceases transmissions abruptly.
 #(Wait)
 WAIT 2500
 #(Text fade-out)
@@ -96,8 +96,8 @@ DRAW 1
 WAIT 500
 
 #(Text fade-in)
-TFI You have no idea if your crew below 
-are alive.
+TFI You have no idea what has caused
+the communication breakdown.
 #(Wait)
 WAIT 3000
 #(Text fade-out)
@@ -108,8 +108,8 @@ DRAW 1
 WAIT 500
 
 #(Text fade-in)
-TFI Without additional landers 
-you cannot save them.
+TFI The lander disappears
+from your long-range scanners.
 #(!!! Milestone Sync 2 !!!)
 SYNC 20000
 #(Text fade-out)
@@ -121,8 +121,7 @@ WAIT 1000
 
 #(Text fade-in)
 TFI As your remaining crew debate 
-the best way to rescue
-the lander team.
+what just happened...
 #(Wait)
 WAIT 2500
 #(Text fade-out)
@@ -133,7 +132,7 @@ DRAW 1
 WAIT 1500
 
 #(Text fade-in)
-TFI You get a strange feeling of 
+TFI ...you get a strange feeling of 
 impending doom.
 #(Wait)
 WAIT 2000
@@ -148,9 +147,8 @@ DRAW 2
 WAIT 1500
 
 #(Text fade-in)
-TFI Your Hyperspace engines suddenly 
-go offline. 
-The ship's alarms start ringing. 
+TFI Your Hyperspace engines suddenly go
+offline. The alarms start ringing. 
 #(Wait)
 WAIT 3000
 #(Text fade-out)
@@ -161,7 +159,8 @@ DRAW 2
 WAIT 500
 
 #(Text fade-in)
-TFI Something is coming.
+TFI You can make out faint
+silhouettes of ships closing in.
 #(Wait)
 WAIT 2300
 
@@ -169,7 +168,7 @@ WAIT 2300
 #(Fade slide to black; param1=fade time)
 FTB 700
 
-#(+++++++++++++++++++++ Slide 1 ++++++++++++++++++++++)
+#(+++++++++++++++++++++ Slide 3 ++++++++++++++++++++++)
 
 #(Set text fade in/out color; 0xRRGGBB)
 TFC 707070
@@ -180,7 +179,7 @@ DRAW 3
 FTC 700
 
 #(Text fade-in)
-TFI "You were warned Captain."
+TFI "You were warned, human-flesh."
 #(Wait)
 WAIT 3500
 #(Text fade-out)
@@ -194,7 +193,7 @@ WAIT 500
 #(Fade slide to black; param1=fade time)
 FTB 700
 
-#(+++++++++++++++++++++++ Slide 2 +++++++++++++++++++++++++++)
+#(+++++++++++++++++++++++ Slide 4 +++++++++++++++++++++++++++)
 
 #(Draw slide; param1=ANI index)
 DRAW 4
@@ -206,7 +205,7 @@ WAIT 700
 
 
 #(Text fade-in)
-TFI "There is no running. No escape."
+TFI "There is nowhere to run now..."
 #(Wait)
 WAIT 2000
 #(Text fade-out)
@@ -216,7 +215,7 @@ TFO
 #(Draw slide; param1=ANI index)
 DRAW 4
 #(Text fade-in)
-TFI "Here you die."
+TFI "This is where you die."
 #(Wait)
 WAIT 3500
 #(Text fade-out)
@@ -229,7 +228,7 @@ WAIT 500
 #(Fade slide to White; param1=fade time)
 FTB 500
 
-#(+++++++++++++++++++++++ Slide 3 +++++++++++++++++++++++++++)
+#(+++++++++++++++++++++++ Slide 5 +++++++++++++++++++++++++++)
 
 #(Set text fade in/out color; 0xRRGGBB)
 TFC 707070
@@ -253,7 +252,7 @@ WAIT 1000
 TFO
 
 
-#(+++++++++++++++++++++++ Slide 4 +++++++++++++++++++++++++++)
+#(+++++++++++++++++++++++ Slide 6 +++++++++++++++++++++++++++)
 
 #(Draw slide; param1=ANI index)
 DRAW 6
@@ -264,7 +263,8 @@ FTC 1200
 WAIT 1500
 
 #(Text fade-in)
-TFI Communications are being jammed.
+TFI The viewscreen drowns in noise. Your
+communications are being jammed.
 #(Wait)
 WAIT 1500
 #(Text fade-out)
@@ -273,7 +273,7 @@ TFO
 
 #(Fade slide to White; param1=fade time)
 FTB
-#(+++++++++++++++++++++++ Slide 5 +++++++++++++++++++++++++++)
+#(+++++++++++++++++++++++ Slides 6-10 +++++++++++++++++++++++++++)
 
 #(Draw slide; param1=ANI index)
 DRAW 6
