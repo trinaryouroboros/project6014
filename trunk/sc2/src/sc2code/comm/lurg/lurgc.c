@@ -244,14 +244,14 @@ ExitConversation (RESPONSE_REF R)
 	
 	if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7))
 	{
-		NPCPhrase (LURG_SPACE_HELLO_1);
+		NPCPhrase (CANT_LEAVE);
 	}
 	else
 	{
-		NPCPhrase (LURG_HOME_HELLO_1);
+		NPCPhrase (CANT_LEAVE);
 	}
 	
-	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	SET_GAME_STATE (BATTLE_SEGUE, 1);
 }
 
 static void
@@ -268,7 +268,9 @@ Intro (void)
 		NPCPhrase (LURG_SPACE_HELLO_1);
 	}
 	
-	Response (LURG_SPACE_HELLO_1, ExitConversation);
+	Response (we_mean_no_harm, ExitConversation);
+	Response (distress_call, ExitConversation);
+	Response (suck_vacuum, ExitConversation);
 
 }
 
