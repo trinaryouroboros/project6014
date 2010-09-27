@@ -179,7 +179,7 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 static COUNT
 initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 {
-#define MISSILE_HITS 1
+#define MISSILE_HITS 6
 #define MISSILE_DAMAGE 2
 #define MISSILE_OFFSET 2
 #define LURG_OFFSET 23
