@@ -92,10 +92,10 @@ GenerateShofixtiCrashSite (BYTE control)
 {
 	switch (control)
 	{
+		DWORD rand_val, old_rand;
+			
 		case GENERATE_ENERGY:
 		{
-			DWORD rand_val, old_rand;
-	
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[2]
 				&& (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) != 2) )
 			{
@@ -105,13 +105,16 @@ GenerateShofixtiCrashSite (BYTE control)
 				pSolarSysState->SysInfo.PlanetInfo.CurPt.x = 187;
 				pSolarSysState->SysInfo.PlanetInfo.CurPt.y = MAP_HEIGHT - 16;
 				pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
-				pSolarSysState->SysInfo.PlanetInfo.CurType = 0; // Don't pick up upon finding
+				pSolarSysState->SysInfo.PlanetInfo.CurType = 0; // JMS: Fake picking the blip up upon finding...
 				
 				pSolarSysState->CurNode = 1;
 				
-				if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << 0))
+				// ... which allows us to use this retrieve switch to make things happen
+				if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
+					& (1L << 0))
 				{
-					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] &= ~(1L << 0);
+					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
+					&= ~(1L << 0); // Now we reverse the fake picking up so the blip stays on the planet.
 					((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
 					SET_GAME_STATE (BLACK_ORB_STATE, 1);
 					SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2);
@@ -120,6 +123,7 @@ GenerateShofixtiCrashSite (BYTE control)
 				TFB_SeedRandom (old_rand);
 				break;
 			}
+			
 			pSolarSysState->CurNode = 0;
 			break;
 		}
@@ -176,6 +180,41 @@ GenerateShofixtiCrashSite (BYTE control)
 				pSolarSysState->SysInfo.PlanetInfo.Tectonics = 1;
 			}
 			
+			break;
+		}
+		case GENERATE_MOONS:
+			GenerateRandomIP (GENERATE_MOONS);
+			if (pSolarSysState->pBaseDesc == &pSolarSysState->PlanetDesc[2])
+			{
+				COUNT angle;
+				
+				pSolarSysState->MoonDesc[0].data_index = SELENIC_WORLD;
+				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS
+				+ (MAX_MOONS - 1) * MOON_DELTA;
+				rand_val = TFB_Random ();
+				angle = NORMALIZE_ANGLE (LOWORD (rand_val));
+				pSolarSysState->MoonDesc[0].location.x =
+				COSINE (angle, pSolarSysState->MoonDesc[0].radius);
+				pSolarSysState->MoonDesc[0].location.y =
+				SINE (angle, pSolarSysState->MoonDesc[0].radius);
+			}
+			break;
+		case GENERATE_PLANETS:
+		{
+			COUNT angle;
+			
+			GenerateRandomIP (GENERATE_PLANETS);
+			
+			pSolarSysState->PlanetDesc[2].data_index = MAROON_WORLD;
+			pSolarSysState->PlanetDesc[2].NumPlanets = 1;
+			angle = ARCTAN (
+							pSolarSysState->PlanetDesc[2].location.x,
+							pSolarSysState->PlanetDesc[2].location.y
+							);
+			pSolarSysState->PlanetDesc[2].location.x =
+			COSINE (angle, pSolarSysState->PlanetDesc[2].radius);
+			pSolarSysState->PlanetDesc[2].location.y =
+			SINE (angle, pSolarSysState->PlanetDesc[2].radius);
 			break;
 		}
 		default:
