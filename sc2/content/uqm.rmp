@@ -675,6 +675,7 @@ ship.earthling.text = STRTAB:base/ships/human/humtext.txt
 ship.exp.graphics.con.large = GFXRES:base/ships/explorer/conbig.ani
 ship.exp.graphics.con.medium = GFXRES:base/ships/explorer/conmed.ani
 ship.exp.graphics.con.small = GFXRES:base/ships/explorer/consml.ani
+ship.explorer.ditty = MUSICRES:base/ships/explorer/chmmrexplorerditty.ogg
 ship.explorer.graphics.sis.large = GFXRES:base/ships/explorer/Exp.big
 ship.explorer.graphics.sis.medium = GFXRES:base/ships/explorer/Exp.med
 ship.explorer.graphics.sis.small = GFXRES:base/ships/explorer/Exp.sml
