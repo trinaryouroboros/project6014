@@ -33,14 +33,15 @@ To cope with the lack of batteries, a couple of low energy ion-bolt guns serve
 as your primary weapon.
 The guns consume your batteries still pretty rapidly, whilst being on the inaccurate side, so
 if I were you, I'd bet my money on the so-called secondary weapon
-the shard mines.
-These 'mines' consist of swarms of crystaline nanobots that draw their power
-from gamma radiation. Equipped with an adaptive AI, they are capable of
-estimating the enemy most vulnerable spots in enemy ships.
-They will lock onto these spots and try to penetrate them upon impact.
-So you dispatch the swarms behind you,
-leave them to home in on the enemy ship,
-and run like hell.
+the confusion blaster.
+Based on Melnorme technology with a few additions of our own
+the blaster creates a partial stasis field around the enemy ship
+which will jam its controls momentarily.
+The shots also carry some momentum, so they will knock
+the target ship around upon impact.
+To get the most out of your weapons, use them in tandem
+approach your target, disable it with the confuser and let 'em have it!
+By then your batteries will be depleted, so then you run like hell.
 
 #(explorer_run)
 I have to run from a fight? Give me a break.
