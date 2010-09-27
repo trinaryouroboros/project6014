@@ -27,6 +27,7 @@
 // from the start of the game. Kind of hack, maybe we should just remove the whole starbase_available variable...
 //
 //			 -Changed the starting number of thrusters and turning jets for Chmmr Explorer
+//			 -Game now starts at Procyon
 
 #include "globdata.h"
 
@@ -364,8 +365,9 @@ InitSIS (void)
 	ActivateStarShip (HUMAN_SHIP, SET_ALLIED);
 	CloneShipFragment (HUMAN_SHIP, &GLOBAL (built_ship_q), 0);
 
-	GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (SOL_X);
-	GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (SOL_Y);
+	// JMS: Start at Procyon
+	GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (PROCYON_X);
+	GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (PROCYON_Y);
 	CurStarDescPtr = 0;
 	GLOBAL (autopilot.x) = ~0;
 	GLOBAL (autopilot.y) = ~0;

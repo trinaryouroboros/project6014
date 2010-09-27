@@ -21,6 +21,7 @@
 // JMS 2010:- Added ship damage flags to SHIP_INFO structure and the damage definitions
 //			- Added Slylandro_kohrah ship enums, and all the other relevant stuff
 //			- Added Lurg shipenums, and all the other relevant stuff
+//			- Defined procyon system coords to PROCYON_X and PROCYON_Y for use in game start location, in globdata.c
 
 
 #ifndef _RACES_H
@@ -736,6 +737,11 @@ enum
 // Should be the same as in plandata.c
 #define SOL_X  6752
 #define SOL_Y  7450
+
+// JMS: Hyperspace coordinates of the Procyon system
+// Should be the same as in plandata.c
+#define PROCYON_X  5742
+#define PROCYON_Y  8268
 
 extern BOOLEAN InitKernel (void);
 
