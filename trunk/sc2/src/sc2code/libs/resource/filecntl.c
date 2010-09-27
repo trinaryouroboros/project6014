@@ -61,7 +61,7 @@ DeleteResFile (uio_DirHandle *dir, const char *filename)
 }
 
 int
-ReadResFile (void *lpBuf, COUNT size, COUNT count, uio_Stream *fp)
+ReadResFile (void *lpBuf, COUNT size, DWORD count, uio_Stream *fp)
 {
 	int retval;
 
@@ -71,7 +71,7 @@ ReadResFile (void *lpBuf, COUNT size, COUNT count, uio_Stream *fp)
 }
 
 int
-WriteResFile (const void *lpBuf, COUNT size, COUNT count, uio_Stream *fp)
+WriteResFile (const void *lpBuf, COUNT size, DWORD count, uio_Stream *fp)
 {
 	int retval;
 
