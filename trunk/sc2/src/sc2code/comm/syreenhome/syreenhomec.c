@@ -114,7 +114,7 @@ static LOCDATA syreenhome_desc =
 	  {             // 8 - smiley face
 			53, /* StartIndex */
 			17, /* NumFrames */
-			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			YOYO_ANIM | WAIT_TALKING | FAST_STOP_AT_TALK_START, /* AnimFlags */
 			ONE_SECOND / 10, ONE_SECOND / 20, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
 			(1 << 6) | (1 << 7), /* BlockMask */
