@@ -178,8 +178,8 @@ case "$HOST_SYSTEM" in
 		LIB_vorbisfile_LDFLAGS="-L/usr/local/lib -lvorbisfile -lvorbis"
 		;;
 	MINGW32*|CYGWIN*|cegcc)
-		LIB_vorbisfile_CFLAGS="-I/usr/local/include"
-		LIB_vorbisfile_LDFLAGS="-L/usr/local/lib -lvorbisfile -lvorbis -lm -logg"
+		LIB_vorbisfile_CFLAGS=""
+		LIB_vorbisfile_LDFLAGS="-lvorbisfile -lvorbis -lm -logg"
 		;;
 	Darwin)
 		LIB_vorbisfile_CFLAGS="-D__MACOSX__"
@@ -190,8 +190,8 @@ case "$HOST_SYSTEM" in
 		LIB_vorbisfile_LDFLAGS="-lvorbisfile -lvorbis -logg -lm"
 		;;
 	*)
-		LIB_vorbisfile_CFLAGS="-I/usr/local/include"
-		LIB_vorbisfile_LDFLAGS="-L/usr/local/lib -lvorbisfile -lvorbis -lm -logg"
+		LIB_vorbisfile_CFLAGS=""
+		LIB_vorbisfile_LDFLAGS="-lvorbisfile -lvorbis"
 		;;
 esac
 LIB_vorbisfile_VERSION=""

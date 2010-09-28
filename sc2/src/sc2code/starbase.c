@@ -332,9 +332,12 @@ DoStarBase (MENU_STATE *pMS)
 		
 		// JMS: Procyon starbase has different graphics from Sol and Betelgeuse starbases
 		if (CurStarDescPtr->Index == CHMMR_DEFINED)
-			s.frame = CaptureDrawable (LoadGraphic (STARBASE_PROCYON_ANIM));
+		  s.frame = CaptureDrawable (LoadGraphic (STARBASE_PROCYON_ANIM));
 		else
-			s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
+		  if (CurStarDescPtr->Index == SOL_DEFINED)
+		    s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
+		  else
+		    s.frame = CaptureDrawable (LoadGraphic (STARBASE_GAIA_ANIM));
 			
 		pMS->CurFrame = s.frame;
 		pMS->hMusic = LoadMusic (STARBASE_MUSIC);
