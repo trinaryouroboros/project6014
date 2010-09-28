@@ -16,10 +16,16 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Syreen home planet is now restricted from landing
+// JMS 2010: -Syreen home planet is now restricted from landing
+//			 -Syreen starbase fully operational
 
+#include "build.h"
 #include "encount.h"
+#include "globdata.h"
+#include "nameref.h"
 #include "resinst.h"
+#include "setup.h"
+#include "state.h"
 #include "planets/genall.h"
 
 
@@ -105,9 +111,23 @@ GenerateSyreen (BYTE control)
 			else if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[0]
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 			{
-				pSolarSysState->MenuState.Initialized += 2;
-				InitCommunication (SYREENBASE_CONVERSATION);
-				pSolarSysState->MenuState.Initialized -= 2;
+				// JMS: The Syreen have a fleet in starbase
+				CloneShipFragment (SYREEN_SHIP, &GLOBAL (npc_built_ship_q), INFINITE_FLEET);
+				
+				// JMS: This code summons starbase subroutine. (The global_flags_and_data == ~0
+				// is checked in Starcon2Main function in starcon.c)
+				GLOBAL (CurrentActivity) |= START_ENCOUNTER;
+				SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
+				
+				// JMS: Necessary to empty the NPC ship queue after visit.
+				// Otherwise next encounter with a ship crashes the game.
+				if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
+				{
+					GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
+					ReinitQueue (&GLOBAL (npc_built_ship_q));
+					GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
+				}
+
 				break;
 			}
 		default:
