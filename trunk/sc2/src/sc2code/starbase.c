@@ -18,6 +18,7 @@
 
 // JMS 2010: -Removed unnecessary chmmr_bomb condition related to starbase visiting.
 //			 -Procyon starbase now has different gfx from Sol starbase
+//			 -Added functionality to Betelgeuse starbase. Has the same gfx as sol starbase.
 
 #include "build.h"
 #include "colors.h"
@@ -329,12 +330,12 @@ DoStarBase (MENU_STATE *pMS)
 		s.origin.x = SAFE_X;
 		s.origin.y = SAFE_Y + 4;
 		
-		// JMS: Different graphics for Sol and Procyon starbases. 
-		if (CurStarDescPtr->Index == SOL_DEFINED)
-			s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
-		else
+		// JMS: Procyon starbase has different graphics from Sol and Betelgeuse starbases
+		if (CurStarDescPtr->Index == CHMMR_DEFINED)
 			s.frame = CaptureDrawable (LoadGraphic (STARBASE_PROCYON_ANIM));
-		
+		else
+			s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
+			
 		pMS->CurFrame = s.frame;
 		pMS->hMusic = LoadMusic (STARBASE_MUSIC);
 
@@ -396,9 +397,11 @@ ExitStarBase:
 		{
 			FlushInput ();
 			
-			// JMS: Procyon starbase has Chmmr, Sol naturally humans.
+			// JMS: Procyon starbase has Chmmr, Sol naturally humans, Betelgeuse our sweet Moosy.
 			if (CurStarDescPtr->Index == SOL_DEFINED)
 				InitCommunication (COMMANDER_CONVERSATION);
+			else if (CurStarDescPtr->Index == SYREEN_DEFINED)
+				InitCommunication (SYREENBASE_CONVERSATION);
 			else
 				InitCommunication (CHMMR_CONVERSATION);
 			
