@@ -926,6 +926,7 @@ SIS_CAPTAIN_MASK_PMAP_ANIM,ship.sis_ship.graphics.captain,sc2code/ships/sis_ship
 SIS_HYPER_MASK_PMAP_ANIM,ship.sis_ship.graphics.exphyper,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpHyper.ani
 SIS_QUASI_MASK_PMAP_ANIM,ship.sis_ship.graphics.expquasi,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpQuasi.ani
 SIS_ORZ_MASK_PMAP_ANIM,ship.sis_ship.graphics.exporz,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/ExpOrz.ani
+EXP_VICTORY_SONG,ship.explorer.ditty,sc2code/ships/sis_ship/imusicre.h,MUSICRES,base/ships/explorer/chmmrexplorerditty.ogg
 EXP_SHIP_SOUNDS,ship.explorer.sounds,sc2code/ships/sis_ship/isndres.h,SNDRES,base/ships/explorer/expsound.snd
 EXP_RACE_STRINGS,ship.explorer.text,sc2code/ships/sis_ship/istrtab.h,STRTAB,base/ships/explorer/explorer.txt
 EXP_ICON_MASK_PMAP_ANIM,ship.explorer.icons,sc2code/ships/sis_ship/igfxres.h,GFXRES,base/ships/explorer/Expicons.ani
@@ -1083,6 +1084,9 @@ LURG_SML_MASK_PMAP_ANIM,ship.lurg.graphics.lurg.small,sc2code/ships/lurg/igfxres
 LURGGOB_BIG_MASK_PMAP_ANIM,ship.lurg.graphics.gob.large,sc2code/ships/lurg/igfxres.h,GFXRES,base/ships/lurg/spitbig.ani
 LURGGOB_MED_MASK_PMAP_ANIM,ship.lurg.graphics.gob.medium,sc2code/ships/lurg/igfxres.h,GFXRES,base/ships/lurg/spitmed.ani
 LURGGOB_SML_MASK_PMAP_ANIM,ship.lurg.graphics.gob.small,sc2code/ships/lurg/igfxres.h,GFXRES,base/ships/lurg/spitsml.ani
+OIL_BIG_MASK_PMAP_ANIM,ship.lurg.graphics.oil.large,sc2code/ships/lurg/igfxres.h,GFXRES,base/ships/lurg/oil.big
+OIL_MED_MASK_PMAP_ANIM,ship.lurg.graphics.oil.medium,sc2code/ships/lurg/igfxres.h,GFXRES,base/ships/lurg/oil.med
+OIL_SML_MASK_PMAP_ANIM,ship.lurg.graphics.oil.small,sc2code/ships/lurg/igfxres.h,GFXRES,base/ships/lurg/oil.sml
 LURG_CAPTAIN_MASK_PMAP_ANIM,ship.lurg.graphics.captain,sc2code/ships/lurg/igfxres.h,GFXRES,base/ships/lurg/lurgcap.ani
 PROBE_CODE,ship.probe.code,sc2code/ships/probe/icode.h,SHIP,28
 PROBE_MICON_MASK_PMAP_ANIM,ship.probe.meleeicons,sc2code/ships/probe/igfxres.h,GFXRES,base/ships/probe/promicon.ani
