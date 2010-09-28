@@ -259,7 +259,12 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 				      index += NUM_B_CREATURE_TYPES;
 				  }
 				
-				num_creatures = (BYTE)((HIBYTE (rand_val) % 10) + 1);
+				// BW: Reduce amounts in the NE quadrant
+				if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
+				  num_creatures = (BYTE)((HIBYTE (rand_val) % 3) + 1);
+				else
+				  num_creatures = (BYTE)((HIBYTE (rand_val) % 10) + 1);
+
 				do
 				{
 					rand_val = (UWORD)TFB_Random ();
