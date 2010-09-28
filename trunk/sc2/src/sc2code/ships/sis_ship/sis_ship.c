@@ -57,9 +57,9 @@
 #define BLASTER_SPEED DISPLAY_TO_WORLD (24)
 #define BLASTER_LIFE 7 // JMS: WAS 12
 
-// JMS: These affect CHmmr Explorer in Super Melee
+// JMS: These affect CHmmr Explorer in Super Melee and adventure mode
 #define EXPLORER_MAX_THRUST 36
-#define EXPLORER_THRUST_INCREMENT 9
+#define EXPLORER_THRUST_INCREMENT 4
 #define EXPLORER_TURN_WAIT 1
 #define EXPLORER_THRUST_WAIT 1
 
@@ -194,7 +194,7 @@ static RACE_DESC exp_desc =
 			SIS_CAPTAIN_MASK_PMAP_ANIM,
 			NULL, NULL, NULL, NULL, NULL
 		},
-		SIS_VICTORY_SONG,
+		EXP_VICTORY_SONG,
 		EXP_SHIP_SOUNDS,
 		{ NULL, NULL, NULL },
 		{ NULL, NULL, NULL },
