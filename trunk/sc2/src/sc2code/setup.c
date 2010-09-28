@@ -124,6 +124,8 @@ LoadKernel (int argc, char *argv[])
 
 	loadAddon ("3dovoice"); /* Always try to use voice data */
 
+	loadAddon ("voice"); /* Project 6014 voice files. */
+
 	if (optPrecursorsMusic)
 	{
 		loadAddon ("remix");
