@@ -30,7 +30,7 @@
 #define WEAPON_ENERGY_COST 3
 #define SPECIAL_ENERGY_COST 1
 #define ENERGY_WAIT 4
-#define MAX_THRUST 40
+#define MAX_THRUST 20
 #define THRUST_INCREMENT 8
 #define TURN_WAIT 1
 #define THRUST_WAIT 0
@@ -42,12 +42,12 @@
 #define MISSILE_LIFE 10
 
 #define OIL_DELAY 5
-#define OIL_DELAY_MAX 100
+#define OIL_DELAY_MAX 50
 
 static RACE_DESC lurg_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE,
+		FIRES_FORE | FIRES_AFT | SEEKING_SPECIAL,
 		20, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -121,61 +121,49 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
 
+	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
+
 	GetElementStarShip (ShipPtr, &StarShipPtr);
+	StarShipPtr->ship_input_state &= ~SPECIAL;
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	if (StarShipPtr->special_counter || lpEvalDesc->ObjectPtr == 0)
-		StarShipPtr->ship_input_state &= ~SPECIAL;
-	else
-	{
-		BOOLEAN LinedUp;
-		COUNT direction_angle;
-		SIZE delta_x, delta_y;
-
-		delta_x = lpEvalDesc->ObjectPtr->next.location.x
-				- ShipPtr->next.location.x;
-		delta_y = lpEvalDesc->ObjectPtr->next.location.y
-				- ShipPtr->next.location.y;
-		direction_angle = ARCTAN (delta_x, delta_y);
-
-		LinedUp = (BOOLEAN)(NORMALIZE_ANGLE (NORMALIZE_ANGLE (direction_angle
-				- FACING_TO_ANGLE (StarShipPtr->ShipFacing))
-				+ QUADRANT) <= HALF_CIRCLE);
-
-		if (!LinedUp
-				|| lpEvalDesc->which_turn > 20
-				|| NORMALIZE_ANGLE (
-				lpEvalDesc->facing
-				- (FACING_TO_ANGLE (StarShipPtr->ShipFacing)
-				+ HALF_CIRCLE) + OCTANT
-				) > QUADRANT)
-			StarShipPtr->ship_input_state &= ~SPECIAL;
-		else if (LinedUp && lpEvalDesc->which_turn <= 12)
-			StarShipPtr->ship_input_state |= SPECIAL;
-
-		if (StarShipPtr->ship_input_state & SPECIAL)
-			lpEvalDesc->MoveState = PURSUE;
-	}
-
-	ship_intelligence (ShipPtr,
-			ObjectsOfConcern, ConcernCounter);
-
-	if (StarShipPtr->ship_input_state & SPECIAL)
-		StarShipPtr->ship_input_state |= THRUST | WEAPON;
-
-	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (StarShipPtr->special_counter == 0
 			&& lpEvalDesc->ObjectPtr
-			&& lpEvalDesc->MoveState == AVOID
-			&& ShipPtr->turn_wait == 0)
+			&& lpEvalDesc->which_turn <= 24)
 	{
-		StarShipPtr->ship_input_state &= ~THRUST;
-		StarShipPtr->ship_input_state |= SPECIAL;
-		if (!(StarShipPtr->cur_status_flags & (LEFT | RIGHT)))
-			StarShipPtr->ship_input_state |= 1 << ((BYTE)TFB_Random () & 1);
-		else
-			StarShipPtr->ship_input_state |=
-					StarShipPtr->cur_status_flags & (LEFT | RIGHT);
+		COUNT travel_facing, direction_facing;
+		SIZE delta_x, delta_y;
+
+		travel_facing = NORMALIZE_FACING (
+				ANGLE_TO_FACING (GetVelocityTravelAngle (&ShipPtr->velocity)
+				+ HALF_CIRCLE)
+				);
+		delta_x = lpEvalDesc->ObjectPtr->current.location.x
+				- ShipPtr->current.location.x;
+		delta_y = lpEvalDesc->ObjectPtr->current.location.y
+				- ShipPtr->current.location.y;
+		direction_facing = NORMALIZE_FACING (
+				ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))
+				);
+
+		if (NORMALIZE_FACING (direction_facing
+				- (StarShipPtr->ShipFacing + ANGLE_TO_FACING (HALF_CIRCLE))
+				+ ANGLE_TO_FACING (QUADRANT))
+				<= ANGLE_TO_FACING (HALF_CIRCLE)
+				&& (lpEvalDesc->which_turn <= 8
+				|| NORMALIZE_FACING (direction_facing
+				+ ANGLE_TO_FACING (HALF_CIRCLE)
+				- ANGLE_TO_FACING (GetVelocityTravelAngle (
+						&lpEvalDesc->ObjectPtr->velocity
+						))
+				+ ANGLE_TO_FACING (QUADRANT))
+				<= ANGLE_TO_FACING (HALF_CIRCLE))
+				&& (!(StarShipPtr->cur_status_flags &
+				(SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL))
+				|| NORMALIZE_FACING (direction_facing
+				- travel_facing + ANGLE_TO_FACING (QUADRANT))
+				<= ANGLE_TO_FACING (HALF_CIRCLE)))
+			StarShipPtr->ship_input_state |= SPECIAL;
 	}
 }
 
@@ -183,7 +171,7 @@ static COUNT
 initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 {
 #define MISSILE_HITS 6
-#define MISSILE_DAMAGE 2
+#define MISSILE_DAMAGE 4
 #define MISSILE_OFFSET 2
 #define LURG_OFFSET 23
 	STARSHIP *StarShipPtr;
@@ -207,11 +195,12 @@ initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 	return (1);
 }
 
-#define SHIP_OFFSET (14 * RESOLUTION_FACTOR) // JMS_GFX
+#define SHIP_OFFSET (15 * RESOLUTION_FACTOR) // JMS_GFX
 #define OIL_OFFSET (3 * RESOLUTION_FACTOR) // JMS_GFX
-#define OIL_HITS 3
-#define OIL_DAMAGE 0
-#define OIL_SPEED DISPLAY_TO_WORLD (4*RESOLUTION_FACTOR) // JMS_GFX
+#define OIL_HITS 2
+#define OIL_DAMAGE 1
+#define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR) // JMS_GFX
+#define OIL_INIT_SPEED (OIL_SPEED*10)
 #define OIL_LIFE 250
 
 static void
@@ -229,7 +218,7 @@ oil_preprocess (ELEMENT *ElementPtr)
 				IncFrameIndex (ElementPtr->current.image.frame);
 		ElementPtr->state_flags |= CHANGING;
 
-		thrust_wait = (BYTE)((COUNT)TFB_Random () & 3);
+		thrust_wait = (BYTE)((COUNT)TFB_Random () & 7);
 	}
 
 	if (turn_wait > 0)
@@ -250,7 +239,7 @@ oil_preprocess (ELEMENT *ElementPtr)
 		SetVelocityVector (&ElementPtr->velocity,
 				OIL_SPEED, facing);
 
-#define TRACK_WAIT 2
+#define TRACK_WAIT 4
 		turn_wait = TRACK_WAIT;
 	}
 
@@ -263,8 +252,7 @@ oil_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 {
 #define ENERGY_DRAIN 10
 	collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
-	if ((ElementPtr1->state_flags & PLAYER_SHIP)
-			&& (ElementPtr0->state_flags
+	if ((ElementPtr0->state_flags
 			& (GOOD_GUY | BAD_GUY)) !=
 			(ElementPtr1->state_flags
 			& (GOOD_GUY | BAD_GUY)))
@@ -296,14 +284,15 @@ static void spill_oil (ELEMENT *ShipPtr)
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.face = NORMALIZE_FACING (StarShipPtr->ShipFacing
+			+ ANGLE_TO_FACING (HALF_CIRCLE));
 	MissileBlock.index = 0;
 	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
 	MissileBlock.pixoffs = SHIP_OFFSET;
-	MissileBlock.speed = OIL_SPEED;
+	MissileBlock.speed = OIL_INIT_SPEED;
 	MissileBlock.hit_points = OIL_HITS;
-	MissileBlock.damage = OIL_DAMAGE;
+	MissileBlock.damage = ((COUNT)TFB_Random () & 7) == 1;
 	MissileBlock.life = OIL_LIFE;
 	MissileBlock.preprocess_func = oil_preprocess;
 	MissileBlock.blast_offs = OIL_OFFSET;
