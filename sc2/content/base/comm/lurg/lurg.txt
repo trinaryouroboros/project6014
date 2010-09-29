@@ -63,7 +63,7 @@ Humans, peaceful? Is that what you really think?
 When the rest of humanity was locked inside a slave shield
 and had but the meager resources of your Earth
 your species practically killed each other fighting over the scraps.
-You would surely have died within two generations
+You would have died within two generations
 had you not been emancipated by the Chmmr.
 
 #(OUR_SPECIES)	LURG_OUR_SPECIES.ogg
