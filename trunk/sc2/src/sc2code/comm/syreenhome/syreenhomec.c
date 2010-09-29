@@ -147,7 +147,7 @@ static LOCDATA syreenhome_desc =
 	{ /* AlienTransitionDesc */
 		70, /* StartIndex */
 		9, /* NumFrames */
-		0, /* AnimFlags */
+		WHEN_TALKING, /* AnimFlags */
 		ONE_SECOND / 30, 0, /* FrameRate */
 		0, 0, /* RestartRate */
 		0, /* BlockMask */
