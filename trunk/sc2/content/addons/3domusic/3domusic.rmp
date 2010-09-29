@@ -19,5 +19,6 @@ comm.shofixti.music = MUSICRES:addons/3domusic/shofixti.ogg
 comm.spahome.music = MUSICRES:addons/3domusic/spathi.ogg
 comm.spathi.music = MUSICRES:addons/3domusic/spathi.ogg
 comm.syreen.music = MUSICRES:addons/3domusic/syreen.ogg
+comm.syreenhome.music = MUSICRES:addons/3domusic/syreen.ogg
 comm.vux.music = MUSICRES:addons/3domusic/vux.ogg
 comm.yehat.music = MUSICRES:addons/3domusic/yehat.ogg
