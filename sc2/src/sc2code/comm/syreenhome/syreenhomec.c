@@ -74,7 +74,7 @@ static LOCDATA syreenhome_desc =
 	  {             // 3 - right girl moving pieces
 			14, /* StartIndex */
 			8, /* NumFrames */
-			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
+			CIRCULAR_ANIM | WAIT_TALKING | FAST_STOP_AT_TALK_START, /* AnimFlags */
 			ONE_SECOND / 5, ONE_SECOND / 5, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
 			0, /* BlockMask */
