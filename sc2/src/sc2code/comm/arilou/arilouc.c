@@ -18,12 +18,15 @@
 
 // JMS 2010: -Arilou guard the Orz space portal and won't let the player through
 //			  if he doesn't have the Temporal Wrapper device.
+//			 -Mycon music for orzspaceportal guards just to mess with fans!
 
 #include "comm/commall.h"
 #include "comm/arilou/resinst.h"
 #include "comm/arilou/strings.h"
 
 #include "gameev.h"
+
+#include "../mycon/imusicre.h" // JMS
 
 
 static LOCDATA arilou_desc =
@@ -40,7 +43,7 @@ static LOCDATA arilou_desc =
 	ALIGN_CENTER, /* AlienTextAlign */
 	VALIGN_TOP, /* AlienTextValign */
 	ARILOU_ALT_COLOR_MAP, /* AlienColorMap */
-	NULL_RESOURCE, /* AlienSong */
+	MYCON_MUSIC, /* AlienSong */
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	ARILOU_CONVERSATION_PHRASES, /* PlayerPhrases */

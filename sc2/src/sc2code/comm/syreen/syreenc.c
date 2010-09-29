@@ -104,7 +104,7 @@ static LOCDATA syreen_desc =
 			0, /* BlockMask */
 		},
 		{	// 7 - Close-up eyes blink
-			183, /* StartIndex */
+			182, /* StartIndex */
 			7, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 24, 0, /* FrameRate */
@@ -122,10 +122,10 @@ static LOCDATA syreen_desc =
 	},
 	{ /* AlienTalkDesc */
 		174, /* StartIndex */
-		9, /* NumFrames */
+		8, /* NumFrames */
 		TALK_INTRO, /* AnimFlags */
-		ONE_SECOND / 20, 0, /* FrameRate */
-		ONE_SECOND / 12, 0, /* RestartRate */
+		ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+		ONE_SECOND / 10, 0, /* RestartRate */
 		0, /* BlockMask */
 	},
 	NULL, /* AlienNumberSpeech - none */
