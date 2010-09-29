@@ -26,6 +26,7 @@
 #include "ships/human/icode.h"
 #include "ships/ilwrath/icode.h"
 #include "ships/lastbat/icode.h"
+#include "ships/lurg/icode.h"
 #include "ships/melnorme/icode.h"
 #include "ships/mmrnmhrm/icode.h"
 #include "ships/mycon/icode.h"
