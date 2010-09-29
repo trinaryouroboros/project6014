@@ -16,18 +16,18 @@
 #(we_are_peaceful)
 #(dont_tellus)
 #(URQUAN_ALLIANCE)	5000
-#(NOT_PEACEFUL)	1000,1000,1000,1000,1000
+#(NOT_PEACEFUL)	4000,5000,4000,5500,4500
 #(OUR_SPECIES)
-#(OUR_SHIP)	1000
+#(OUR_SHIP)	4500
 #(you_look_familiar) 
-#(YOU_FEEL_US)	1000,1000,1000
+#(YOU_FEEL_US)	4000,4000,4500
 #(alien_stalkers)
 #(creepy)
 #(big_imagination)
 #(WE_KNOW_ALL)
 #(we_kick_ass)
 #(we_are_powerful)
-#(EASILY_DESTROYED)	1000,1000,1000
+#(EASILY_DESTROYED)	5250,3250,4000
 #(last_chance)
 #(lets_fight)
-#(GOODBYE)	1000,1000,1000
+#(GOODBYE)	3000,5000,3250

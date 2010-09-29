@@ -33,7 +33,7 @@ Please. I implore you. Let us pass peacefully. We mean no harm.
 #(tell_us_stuff)
 Before we get to the fighting, can you answer some questions for us?
 
-#(CANT_PASS)
+#(CANT_PASS)	LURG_CANT_PASS.ogg
 You shall not pass.
 
 #(ASK_YOUR_QUESTIONS)	LURG_ASK_YOUR_QUESTIONS.ogg
@@ -95,7 +95,7 @@ I don't know, I can imagine quite a lot.
 We make it our business to know. Knowledge is power. That is all you need to know.
 
 #(we_kick_ass)
-Look. We kicked the Ur-Quan's butt, well butt equivalent. Why should we be scared of you?
+Look. We kicked the Ur-Quan's butt; well, butt equivalent. Why should we be scared of you?
 
 #(we_are_powerful)
 I warn you. We can be a powerful enemy. Surely there is a peaceful way out of this.

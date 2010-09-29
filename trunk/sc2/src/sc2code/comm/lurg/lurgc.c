@@ -297,7 +297,7 @@ AskQuestions (RESPONSE_REF R)
 {
     if (PLAYER_SAID (R, we_kick_ass) || PLAYER_SAID (R, we_are_powerful))
         NPCPhrase (EASILY_DESTROYED);
-	if (PLAYER_SAID (R, tellus_ship))
+	else if (PLAYER_SAID (R, tellus_ship))
         NPCPhrase (OUR_SHIP);
 	else if (PLAYER_SAID (R, tellus_shielded))
         NPCPhrase (URQUAN_ALLIANCE);
