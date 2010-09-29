@@ -102,7 +102,7 @@ TFO
 #(Wait)
 WAIT 200
 #(Text fade-in)
-TFI Originally Created by
+TFI Based on Star Control 2 Created by
 Fred Ford and Paul Reiche III
 in 1992
 #(Synchronize)
