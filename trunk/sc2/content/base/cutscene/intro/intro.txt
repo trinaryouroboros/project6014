@@ -71,10 +71,20 @@ DRAW 1
 #(Fade-in a slide; param1=fade time)
 FTC 1500
 
-WAIT 1500
+
+#(Wait)
+WAIT 4000
+
+FTC 1500
+
+#(Draw slide; param1=ANI index)
+DRAW 2
+
+
+WAIT 700
 
 #(Fade-in a slide; param1=fade time)
-FTC 3000
+FTC 2000
 #(Synchronize)
 SYNC 5000
 #(Text fade-out)
@@ -84,8 +94,7 @@ WAIT 200
 
 
 
-#(Fade-in a slide; param1=fade time)
-FTC 3000
+
 #(Synchronize)
 SYNC 5000
 #(Text fade-out)
@@ -103,8 +112,9 @@ TFO
 #(Wait)
 WAIT 200
 #(Text fade-in)
-TFI Set free into the Open Source community
-in 2002
+TFI Based on source code of Star Control 2 
+and the Open Soruce Ur-Quan Masters.
+Star control 2 is a trademark of Atari.
 
 #(Synchronize)
 SYNC 16000
@@ -185,7 +195,7 @@ WAIT 1250
 #(Text fade-in)
 TFI You succeeded.
 #(Wait)
-WAIT 750
+WAIT 2000
 
 #(!!! Milestone Sync 2 !!!)
 SYNC 35000
@@ -307,9 +317,12 @@ defensive line...
 WAIT 1500
 #(Text fade-out)
 TFO
+#(Draw slide; param1=ANI index)
+DRAW 4
 
 #(Wait)
 WAIT 1500
+
 
 #(Text fade-in)
 TFI ...Hierarchy battle thralls have
