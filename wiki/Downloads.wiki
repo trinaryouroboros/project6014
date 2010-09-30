@@ -10,18 +10,22 @@ The files are:
 
 || *File* || *Type* || *Size* || *Download* ||
 || Main content || required ||41.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
-|| Voice content || optional || || ||
 || Windows executable || platform specific ||1.3 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
 || OSX (all files) || platform specific ||95 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-OSX10.6-app.zip&can=5&q=  ||
 || Linux executable || platform specific || || ||
 
-For example, if you are on Windows, you want to get the main content and the windows executable.  
+If you are on Windows, you want to get the main content and the windows executable.  
 Once you have the necessary files, you can unzip them into a single directory.  This directory should then contain:
 
    * a content subdirectory
    * an executable (type depending on your platform)
 
 You can run the game by running the executable.
+
+for OSX, both the executable and the content are in the one package. We'll probably split these soon.
+
+The linux exe is not there at present, but should be within 24 hours.
+
 
 ---
 
