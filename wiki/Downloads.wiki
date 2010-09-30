@@ -9,7 +9,7 @@ _To be released 30 September 2010!_
 The files are:
 
 || *File* || *Type* || *Size* || *Download* ||
-|| Main content || required ||41.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
+|| Windows content and executable || required ||41.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
 || Windows executable || platform specific ||1.3 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
 || OSX (all files) || platform specific ||95 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-OSX10.6-app.zip&can=5&q=  ||
 || Linux executable || platform specific || || ||
