@@ -15,8 +15,7 @@ The files are:
 || OSX (all files) || platform specific || ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-OSX10.6-app.zip&can=5&q=  ||
 || Linux executable || platform specific || || ||
 
-For example, if you are on Windows, you want to get the main content and the windows executable.  The voice content is optional -- without it you get the alien subtitles only.
-
+For example, if you are on Windows, you want to get the main content and the windows executable.  
 Once you have the necessary files, you can unzip them into a single directory.  This directory should then contain:
 
    * a content subdirectory
