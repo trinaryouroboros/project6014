@@ -11,7 +11,7 @@ The files are:
 || *File* || *Type* || *Size* || *Download* ||
 || Main content || required || || ||
 || Voice content || optional || || ||
-|| Windows executable || platform specific || || ||
+|| Windows executable || platform specific || ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
 || OSX executable || platform specific || || ||
 || Linux executable || platform specific || || ||
 
