@@ -202,6 +202,7 @@ initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 #define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR) // JMS_GFX
 #define OIL_INIT_SPEED (OIL_SPEED*10)
 #define OIL_LIFE 250
+#define OIL_MULTIPLIER 4
 
 static void
 oil_preprocess (ELEMENT *ElementPtr)
@@ -328,7 +329,7 @@ lurg_postprocess (ELEMENT *ElementPtr)
 		ProcessSound (SetAbsSoundIndex (
 						/* LAUNCH_FIGHTERS */
 				StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
-		for (i = 0; i < 5; i++)
+		for (i = 0; i < OIL_MULTIPLIER; i++)
 			spill_oil (ElementPtr);
 
 		StarShipPtr->special_counter = SPECIAL_WAIT;
