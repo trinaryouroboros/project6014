@@ -73,6 +73,7 @@ enum
 	ZOQFOT_CODE_RES,
 	SLYLANDRO_KOHRAH_CODE_RES,	// JMS
 	LURG_CODE_RES,				// JMS
+    ISD_CODE_RES,
 	
 	SIS_CODE_RES,
 	TRANSPORT_CODE_RES,			// JMS
@@ -146,6 +147,13 @@ enum
 				extern RACE_DESC* init_ilwrath (void);
 
 				RDPtr = init_ilwrath ();
+				break;
+			}
+			case ISD_CODE_RES:
+			{
+				extern RACE_DESC* init_isd (void);
+
+				RDPtr = init_isd ();
 				break;
 			}
 			case MELNORME_CODE_RES:
