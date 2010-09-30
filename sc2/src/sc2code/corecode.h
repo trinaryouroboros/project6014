@@ -25,7 +25,6 @@
 #include "ships/druuge/icode.h"
 #include "ships/human/icode.h"
 #include "ships/ilwrath/icode.h"
-#include "ships/isd/icode.h"
 #include "ships/lastbat/icode.h"
 #include "ships/lurg/icode.h"
 #include "ships/melnorme/icode.h"
