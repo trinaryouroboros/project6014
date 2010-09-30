@@ -11,8 +11,8 @@ The files are:
 || *File* || *Type* || *Size* || *Download* ||
 || Main content || required || ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
 || Voice content || optional || || ||
-|| Windows executable || platform specific || ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
-|| OSX (all files) || platform specific || ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-OSX10.6-app.zip&can=5&q=  ||
+|| Windows executable || platform specific ||1.3 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
+|| OSX (all files) || platform specific ||95 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-OSX10.6-app.zip&can=5&q=  ||
 || Linux executable || platform specific || || ||
 
 For example, if you are on Windows, you want to get the main content and the windows executable.  
