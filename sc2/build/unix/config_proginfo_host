@@ -178,8 +178,8 @@ case "$HOST_SYSTEM" in
 		LIB_vorbisfile_LDFLAGS="-L/usr/local/lib -lvorbisfile -lvorbis"
 		;;
 	MINGW32*|CYGWIN*|cegcc)
-		LIB_vorbisfile_CFLAGS=""
-		LIB_vorbisfile_LDFLAGS="-lvorbisfile -lvorbis -lm -logg"
+		LIB_vorbisfile_CFLAGS="-I/usr/local/include"
+		LIB_vorbisfile_LDFLAGS="-L/usr/local/lib -lvorbisfile -lvorbis -lm -logg"
 		;;
 	Darwin)
 		LIB_vorbisfile_CFLAGS="-D__MACOSX__"
@@ -198,6 +198,9 @@ LIB_vorbisfile_VERSION=""
 case "$HOST_SYSTEM" in
 	ARMV5|WINSCW|GCCE)
 		LIB_vorbisfile_DETECT="false"
+		;;
+	MINGW32*)
+		LIB_vorbisfile_DETECT="true"
 		;;
 	*)
 		LIB_vorbisfile_DETECT="try_pkgconfig_lib vorbisfile vorbisfile"

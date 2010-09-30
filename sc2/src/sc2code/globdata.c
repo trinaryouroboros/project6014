@@ -339,6 +339,14 @@ InitSIS (void)
 
 	// JMS: Starbase is available right from the start!
 	SET_GAME_STATE (STARBASE_AVAILABLE, 1);
+	// BW: Lander is fully shielded from the start
+	SET_GAME_STATE (LANDER_SHIELDS,
+			(1 << EARTHQUAKE_DISASTER) |
+			(1 << BIOLOGICAL_DISASTER) |
+			(1 << LIGHTNING_DISASTER) |
+			(1 << LAVASPOT_DISASTER));
+	
+	SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1); 
 	
 	GLOBAL (CurrentActivity) = IN_INTERPLANETARY | START_INTERPLANETARY;
 
