@@ -72,5 +72,5 @@ Penetrator vessels. But it seems you don't have
 sufficient space for it on your flagship. Pity.
 
 #(TAKE_CARE)
-Take care captain, please come back soon
-there is much more we can do for you here.
+Take care captain, please come back soon.
+There is much more we can do for you here.
