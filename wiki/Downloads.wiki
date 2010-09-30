@@ -9,7 +9,7 @@ _To be released 30 September 2010!_
 The files are:
 
 || *File* || *Type* || *Size* || *Download* ||
-|| Main content || required || || ||
+|| Main content || required || ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
 || Voice content || optional || || ||
 || Windows executable || platform specific || ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
 || OSX (all files) || platform specific || ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-OSX10.6-app.zip&can=5&q=  ||
