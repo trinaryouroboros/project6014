@@ -1,0 +1,359 @@
+#(=========== This is the Demo End =========================)
+# Documentation is all wrong. Modified from the intro.
+
+#(Clear entire screen first; set size...)
+DIMS 320 240
+
+#(... and clear)
+CLS
+
+#(Set sequence dimensions; param1=width; param2=height)
+DIMS 320 200
+#(Everything is drawn within the clipping rect defined by DIMS, from 0, 0)
+
+#(Fade all to black; param1=fade time)
+FTB 0
+
+#(Set text fore color; 0xRRGGBB)
+TC FFFFFF
+#(Set text back color; 0xRRGGBB)
+TBC 000000
+#(Set text effect; Traced, None, others when added)
+TE TRACED
+
+#(Load font to use later)
+FONT 0 base/fonts/starcon.fon
+#(Load font to use later)
+FONT 1 base/fonts/slides.fon
+
+
+#(Play music)
+MUSIC base/cutscene/intro/introx.mod
+
+
+#(+++++++++++ Title 1 +++++++++++++++++++++++++++++++++)
+
+
+
+#(Set font to use)
+FONT 0
+
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 000000
+
+#(Set text vertical position; can be T=top, B=bottom, M=middle)
+TVA B
+
+
+
+#(************* Slides *********************************************)
+
+#(Set font to use)
+FONT 1
+
+#(Set ANIM to draw slides from)
+ANI base/cutscene/cinematic1/cine1.ani
+
+#(Set text vertical position; can be T=top, B=bottom, M=middle)
+TVA T
+
+#(++++++++++++++++++++ Slides 0-2 ++++++++++++++++++++++++)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 1018BC
+
+DRAW 0
+FTC
+
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Fade-in a slide; param1=fade time)
+FTC 700
+#(Text fade-in)
+TFI 
+#(Wait)
+WAIT 3500
+#(Text fade-out)
+TFO
+
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 1
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI While enroute to orbit, the lander
+crew ceases transmissions abruptly.
+#(Wait)
+WAIT 2500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 1
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI You have no idea what has caused
+the communication breakdown.
+#(Wait)
+WAIT 3000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 1
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI The lander disappears
+from your long-range scanners.
+#(!!! Milestone Sync 2 !!!)
+SYNC 20000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 1
+#(Wait)
+WAIT 1000
+
+#(Text fade-in)
+TFI As your remaining crew debate 
+what just happened...
+#(Wait)
+WAIT 2500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 1
+#(Wait)
+WAIT 1500
+
+#(Text fade-in)
+TFI ...you get a strange feeling of 
+impending doom.
+#(Wait)
+WAIT 2000
+
+#(!!! Milestone Sync 2 !!!)
+SYNC 35000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 2
+#(Wait)
+WAIT 1500
+
+#(Text fade-in)
+TFI Your Hyperspace engines suddenly go
+offline. The alarms start ringing. 
+#(Wait)
+WAIT 3000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 2
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI You can make out faint
+silhouettes of ships closing in.
+#(Wait)
+WAIT 2300
+
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(+++++++++++++++++++++ Slide 3 ++++++++++++++++++++++)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 707070
+
+#(Draw slide; param1=ANI index)
+DRAW 3
+#(Fade-in a slide; param1=fade time)
+FTC 700
+
+#(Text fade-in)
+TFI "You were warned, human-flesh."
+#(Wait)
+WAIT 3500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 3
+#(Wait)
+WAIT 500
+
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(+++++++++++++++++++++++ Slide 4 +++++++++++++++++++++++++++)
+
+#(Draw slide; param1=ANI index)
+DRAW 4
+#(Fade-in a slide; param1=fade time)
+FTC 500
+
+#(Wait)
+WAIT 700
+
+
+#(Text fade-in)
+TFI "There is nowhere to run now..."
+#(Wait)
+WAIT 2000
+#(Text fade-out)
+TFO
+
+
+#(Draw slide; param1=ANI index)
+DRAW 4
+#(Text fade-in)
+TFI "This is where you die."
+#(Wait)
+WAIT 3500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 4
+#(Wait)
+WAIT 500
+
+#(Fade slide to White; param1=fade time)
+FTB 500
+
+#(+++++++++++++++++++++++ Slide 5 +++++++++++++++++++++++++++)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 707070
+
+#(Draw slide; param1=ANI index)
+DRAW 5
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+
+#(Draw slide; param1=ANI index)
+DRAW 5
+#(Wait)
+WAIT 500
+
+
+#(Text fade-in)
+TFI You quickly check your radar.
+#(Wait)
+WAIT 1000
+#(Text fade-out)
+TFO
+
+
+#(+++++++++++++++++++++++ Slide 6 +++++++++++++++++++++++++++)
+
+#(Draw slide; param1=ANI index)
+DRAW 6
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+
+#(Wait)
+WAIT 1500
+
+#(Text fade-in)
+TFI The viewscreen drowns in noise. Your
+communications are being jammed.
+#(Wait)
+WAIT 1500
+#(Text fade-out)
+TFO
+
+
+#(Fade slide to White; param1=fade time)
+FTB
+#(+++++++++++++++++++++++ Slides 6-10 +++++++++++++++++++++++++++)
+
+#(Draw slide; param1=ANI index)
+DRAW 6
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+#(Draw slide; param1=ANI index)
+DRAW 6
+
+
+
+#(Draw slide; param1=ANI index)
+DRAW 7
+#(Wait)
+WAIT 800
+
+
+#(Draw slide; param1=ANI index)
+DRAW 8
+#(Wait)
+WAIT 1000
+
+#(Draw slide; param1=ANI index)
+DRAW 9
+#(Wait)
+WAIT 2500
+
+
+#(Fade slide to black; param1=fade time)
+FTB 1500
+
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC FC480C
+
+#(Draw slide; param1=ANI index)
+DRAW 10
+#(Fade-in a slide; param1=fade time)
+FTC 1500
+
+
+#(Text fade-in)
+TFI As you look out the window,
+you briefly wonder...
+#(Wait)
+WAIT 4500
+#(Text fade-out)
+TFO
+
+
+
+#(Draw slide; param1=ANI index)
+DRAW 10
+#(Text fade-in)
+TFI Will you ever see Talana again?
+#(Wait)
+WAIT 4000
+#(Text fade-out)
+TFO
+#(Fade slide to black; param1=fade time)
+FTB 3500
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 707070
+
+#(++++++++lurg. lurg. lurg. ARG!+++++++++++)
+
+#(Draw slide; param1=ANI index)
+DRAW 11
+#(Fade-in a slide; param1=fade time)
+FTC 700
+
+#(Text fade-in)
+TFI 
+#(Wait)
+WAIT 5000
+#(Text fade-out)
+TFO
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+
+#(***************************** The End ********************************)

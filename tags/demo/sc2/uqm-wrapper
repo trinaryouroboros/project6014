@@ -1,0 +1,4 @@
+#!/bin/sh
+# Wrapper script for starting The Ur-Quan Masters
+exec "/usr/local/games/lib/uqm/uqm" "--contentdir=/usr/local/games/share/uqm/content" "$@"
+

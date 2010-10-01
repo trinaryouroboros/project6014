@@ -1,0 +1,2 @@
+comm.lurg.dialogue = CONVERSATION:base/comm/lurg/lurg.txt:addons/voice/lurg/:addons/voice/lurg/lurg.ts
+comm.spathi.dialogue = CONVERSATION:base/comm/spathi/spathi.txt:addons/voice/spathi/:addons/voice/spathi/spathi.ts

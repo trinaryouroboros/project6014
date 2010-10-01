@@ -1,0 +1,29 @@
+#(WHAT_IS_CYPHER)
+What is the secret Spathi Cypher?
+
+#(huffi_muffi_guffi)
+Huffi Muffi Guffi?
+
+#(dont_need_cypher)
+I don't need a Cypher, I'm doing God's work
+
+#(left_cypher_at_home)
+Dammit, I left it at home!
+
+#(CYPHER_OBSOLETE)
+I'm afraid that cypher is obsolete. You are clearly not a Spathi. Goodbye.
+
+#(GOD_KNOWS)
+God would know the cypher, go ask Him or Her.
+
+#(GO_GET_CYPHER)
+You'd better go back and get it.
+
+#(umma_gumma_humma)
+Umma Gumma Humma.
+
+#(UH_OH)
+Uh Oh...
+
+#(what_is_going_on)
+And WHAT is going on here?
