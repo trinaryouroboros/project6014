@@ -20,7 +20,7 @@ Once you have the necessary files, you can unzip them into a single directory.  
    * a content subdirectory
    * an executable (type depending on your platform)
 
-You can run the game by running the executable.
+You can run the game by running the executable. Windows Users may need to run the included .BAT file.
 
 for OSX, both the executable and the content are in the one package. We'll probably split these soon.
 
