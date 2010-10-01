@@ -1,6 +1,6 @@
 HYPERSPACE_MUSIC,music.hyper,sc2code/imusicre.h,MUSICRES,base/nav/hyper.mod
 QUASISPACE_MUSIC,music.arispace,sc2code/imusicre.h,MUSICRES,base/nav/quasispace.mod
-ORZSPACE_MUSIC,music.orzspace,sc2code/imusicre.h,MUSICRES,base/nav/below.ogg
+ORZSPACE_MUSIC,music.orzspace,sc2code/imusicre.h,MUSICRES,base/nav/quasispace.mod
 IP_MUSIC,music.space,sc2code/imusicre.h,MUSICRES,base/nav/space.mod
 ORBIT1_MUSIC,music.orbit1,sc2code/imusicre.h,MUSICRES,base/nav/orbit.mod
 ORBIT2_MUSIC,music.orbit2,sc2code/imusicre.h,MUSICRES,base/nav/orbit.mod
