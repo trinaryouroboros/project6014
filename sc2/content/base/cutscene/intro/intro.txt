@@ -112,8 +112,8 @@ TFO
 #(Wait)
 WAIT 200
 #(Text fade-in)
-TFI Based on source code of Star Control 2 
-and the Open Soruce Ur-Quan Masters.
+TFI Based on the source code of Star Control 2 
+and the Open Source game "The Ur-Quan Masters".
 Star control 2 is a trademark of Atari.
 
 #(Synchronize)
