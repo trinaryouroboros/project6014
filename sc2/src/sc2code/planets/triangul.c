@@ -131,7 +131,7 @@ void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRe
 					TEXT t;
 
 					SetContextForeGroundColor (c);
-					DrawOval (&r, 0);
+					DrawOval (&r, 1);
 
 					SetContextFont (TinyFont);
 					
