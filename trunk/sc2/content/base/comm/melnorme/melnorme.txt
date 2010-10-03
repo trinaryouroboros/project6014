@@ -364,7 +364,7 @@ As you wish.
 I have some data on alien lifeforms.
 
 #(SOLD_LIFE_DATA1)	melno074.ogg
-The  
+The 
 
 #(SOLD_LIFE_DATA2)	melno203.ogg
  units of biological data we downloaded from your ship earn you 
@@ -450,7 +450,7 @@ It has been a pleasure dealing with you, Captain.
 We look forward to your next visit.
 
 #(CREDIT_IS0)
-Your present balance is
+Your present balance is 
 #(CREDIT_IS1)
  Credits.
 
@@ -699,4 +699,3 @@ We will take
 
 #(DEFENSES)	melno171.ogg
  of your Point-Defense Lasers
-

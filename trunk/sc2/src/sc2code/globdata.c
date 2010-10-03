@@ -28,6 +28,7 @@
 //
 //			 -Changed the starting number of thrusters and turning jets for Chmmr Explorer
 //			 -Game now starts at Procyon
+//			 -Show human and Chmmr SoIs right from the start
 
 #include "globdata.h"
 
@@ -381,6 +382,10 @@ InitSIS (void)
 	ActivateStarShip (UTWIG_SHIP, SET_ALLIED);
 	ActivateStarShip (ORZ_SHIP, SET_ALLIED);
 	//	CloneShipFragment (HUMAN_SHIP, &GLOBAL (built_ship_q), 0);
+	
+	// JMS: Show human and Chmmr SoIs right from the start
+	ActivateStarShip (CHMMR_SHIP, SPHERE_TRACKING);
+	ActivateStarShip (HUMAN_SHIP, SPHERE_TRACKING);
 
 	// JMS: Start at Procyon
 	GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (PROCYON_X);
