@@ -106,7 +106,7 @@ The Arilou.
 
 #(ARILOU_INFO_SB)
 As you know, the Arilou vanished again suddenly
-as soon as our victory over the both Ur-Quan races was assured.
+as soon as our victory over both the Ur-Quan races was assured.
 We haven't seen a trace of them since 2161.
 
 #(syreen)
