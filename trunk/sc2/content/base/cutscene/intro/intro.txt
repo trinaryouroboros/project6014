@@ -157,8 +157,8 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI Four years have passed since 
-you travelled the galaxy...
+TFI Four years ago, you
+travelled the galaxy...
 #(Wait)
 WAIT 3000
 #(Text fade-out)
@@ -181,7 +181,7 @@ DRAW 0
 WAIT 500
 
 #(Text fade-in)
-TFI ...to free the human race
+TFI ...striving to free the human race
 from Ur-Quan enslavement.
 #(Wait)
 WAIT 2500
@@ -312,7 +312,7 @@ WAIT 1500
 
 #(Text fade-in)
 TFI For their service to the Ur-Quan
-defensive line...
+defense...
 #(Wait)
 WAIT 1500
 #(Text fade-out)
@@ -581,7 +581,7 @@ WAIT 500
 
 #(Text fade-in)
 TFI As you punch through the fabric
-of truespace, you keep wondering...
+of truespace, you wonder...
 #(Wait)
 WAIT 4000
 #(Text fade-out)
