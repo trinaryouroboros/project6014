@@ -241,15 +241,16 @@ static void
 ExitConversation (RESPONSE_REF R)
 {
 	BYTE NumVisits;
-	
-	if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7))
+    int at_home = GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7);
+    
+    if (at_home && PLAYER_SAID (R, we_mean_no_harm))
 	{
-		NPCPhrase (GOODBYE);
+        // Lurg says nothing, player leaves peacefully.
+		SET_GAME_STATE (BATTLE_SEGUE, 0);
+        return;
 	}
-	else
-	{
-		NPCPhrase (GOODBYE);
-	}
+    
+    NPCPhrase (GOODBYE);
 	
 	SET_GAME_STATE (BATTLE_SEGUE, 1);
 }
@@ -275,58 +276,90 @@ WeKnowAll (RESPONSE_REF R)
 }
 
 static void
-WeAreLurg (RESPONSE_REF R)
+YouFeelUs (RESPONSE_REF R)
 {
-    if (PLAYER_SAID (R, tellus_species))
-    {
-        NPCPhrase (OUR_SPECIES);
-        Response (you_look_familiar, WeAreLurg);
-    }
-    else
-    {
-        NPCPhrase (YOU_FEEL_US);
-        
-        Response (alien_stalkers, WeKnowAll);
-        Response (creepy, WeKnowAll);
-        Response (big_imagination, WeKnowAll);
-    }
+    DISABLE_PHRASE (you_look_familiar);
+    
+    NPCPhrase (YOU_FEEL_US);
+    
+    Response (alien_stalkers, WeKnowAll);
+    Response (creepy, WeKnowAll);
+    Response (big_imagination, WeKnowAll);
 }
 
 void
 AskQuestions (RESPONSE_REF R)
 {
+    int num_left = 0;
+    
     if (PLAYER_SAID (R, we_kick_ass) || PLAYER_SAID (R, we_are_powerful))
+    {
         NPCPhrase (EASILY_DESTROYED);
+    }
+    else if (PLAYER_SAID (R, tellus_species))
+    {
+        DISABLE_PHRASE (tellus_species);
+        NPCPhrase (OUR_SPECIES);
+    }
 	else if (PLAYER_SAID (R, tellus_ship))
+    {
+        DISABLE_PHRASE (tellus_ship);
         NPCPhrase (OUR_SHIP);
+    }
 	else if (PLAYER_SAID (R, tellus_shielded))
+    {
+        DISABLE_PHRASE (tellus_shielded);
         NPCPhrase (URQUAN_ALLIANCE);
+    }
 	else if (PLAYER_SAID (R, we_are_peaceful))
+    {
+        DISABLE_PHRASE (we_are_peaceful);
         NPCPhrase (NOT_PEACEFUL);
+    }
     else
         NPCPhrase (ASK_YOUR_QUESTIONS);
     
-	Response (tellus_species, WeAreLurg);
-	Response (tellus_ship, AskQuestions);
-	Response (tellus_shielded, AskQuestions);
-    Response (we_are_peaceful, AskQuestions);
-    Response (dont_tellus, YouCantPass);
+    if (PHRASE_ENABLED (tellus_species))
+    {
+        Response (tellus_species, AskQuestions);
+        num_left++;
+    }
+    if (PHRASE_ENABLED (tellus_ship))
+    {
+        Response (tellus_ship, AskQuestions);
+        num_left++;
+    }
+    if (PHRASE_ENABLED (tellus_shielded))
+    {
+        Response (tellus_shielded, AskQuestions);
+        num_left++;
+    }
+    if (PHRASE_ENABLED (we_are_peaceful))
+    {
+        Response (we_are_peaceful, AskQuestions);
+        num_left++;
+    }
+    if (PHRASE_ENABLED (you_look_familiar))
+    {
+        Response (you_look_familiar, YouFeelUs);
+        num_left++;
+    }
+    
+    if (num_left > 0)
+        Response (dont_tellus, YouCantPass);
+    else
+        YouCantPass(R);
 }
 
 static void
 YouCantLeave (RESPONSE_REF R)
 {
-    NPCPhrase (CANT_LEAVE);
+	if (PLAYER_SAID (R, we_mean_no_harm))
+        NPCPhrase (CANT_LEAVE);
+    else
+        NPCPhrase (DONT_INSULT_US);
     
 	Response (can_we_pass, YouCantPass);
-    Response (tell_us_stuff, AskQuestions);
-}
-
-static void
-DontInsultUs (RESPONSE_REF R)
-{
-    NPCPhrase (DONT_INSULT_US);
-    
 	Response (let_us_pass, YouCantPass);
 	Response (tell_us_stuff, AskQuestions);
 }
@@ -335,8 +368,9 @@ static void
 Intro (void)
 {
 	BYTE NumVisits;
+    int at_home = GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7);
 
-	if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7))
+	if (at_home)
 	{
 		NPCPhrase (LURG_HOME_HELLO_1);
 	}
@@ -345,9 +379,17 @@ Intro (void)
 		NPCPhrase (LURG_SPACE_HELLO_1);
 	}
 	
-	Response (we_mean_no_harm, YouCantLeave);
-	Response (distress_call, DontInsultUs);
-	Response (suck_vacuum, ExitConversation);
+    if (at_home)
+    {
+    	Response (we_mean_no_harm, ExitConversation);
+        Response (lets_fight, ExitConversation);
+    }
+    else
+    {
+    	Response (we_mean_no_harm, YouCantLeave);
+        Response (distress_call, YouCantLeave);
+        Response (suck_vacuum, ExitConversation);
+    }
 }
 
 static COUNT
