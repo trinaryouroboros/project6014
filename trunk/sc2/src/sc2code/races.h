@@ -595,17 +595,17 @@ enum
 
 #define RACE_HYPERSPACE_PERCENT \
 		13,  /* ARILOU_SHIP */ \
-		60,  /* CHMMR_SHIP */ \
+		50,  /* CHMMR_SHIP */ \
 		30,  /* HUMAN_SHIP */ \
 		20,  /* ORZ_SHIP */ \
 		40,  /* PKUNK_SHIP */ \
 		20,  /* SHOFIXTI_SHIP */ \
 		20,  /* SPATHI_SHIP */ \
-		40,  /* SUPOX_SHIP */ \
-		60,  /* THRADDASH_SHIP */ \
-		40,  /* UTWIG_SHIP */ \
+		 0,  /* SUPOX_SHIP */ \
+		 0,  /* THRADDASH_SHIP */ \
+		 0,  /* UTWIG_SHIP */ \
 		40,  /* VUX_SHIP */ \
-		60,  /* YEHAT_SHIP */ \
+		45,  /* YEHAT_SHIP */ \
 		 0,  /* MELNORME_SHIP */ \
 		30,  /* DRUUGE_SHIP */ \
 		 0,  /* ILWRATH_SHIP */ \
