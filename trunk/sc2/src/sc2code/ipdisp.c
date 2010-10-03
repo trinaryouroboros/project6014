@@ -68,10 +68,9 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 				target_loc = GroupPtr->orbit_pos;
 				GroupPtr->orbit_pos = NORMALIZE_FACING (TFB_Random ());
 #ifdef OLD
-				target_loc = (BYTE)((
-						(COUNT)TFB_Random ()
-						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
+				target_loc = (BYTE)(((COUNT)TFB_Random ()% pSolarSysState->SunDesc[0].NumPlanets) + 1);
 #endif /* OLD */
+				
 				// JMS
 				if (target_loc==0 && GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP)
 				{
@@ -82,14 +81,13 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
 					
 				}
+				
 				if (!(task & REFORM_GROUP))
 				{
 					if ((task & ~IGNORE_FLAGSHIP) != EXPLORE)
 						GroupPtr->group_counter = 0;
 					else
-						GroupPtr->group_counter =
-								((COUNT) TFB_Random () % MAX_REVOLUTIONS)
-								<< FACING_SHIFT;
+						GroupPtr->group_counter = ((COUNT) TFB_Random () % MAX_REVOLUTIONS) << FACING_SHIFT;
 				}
 			}
 			GroupPtr->task = task;

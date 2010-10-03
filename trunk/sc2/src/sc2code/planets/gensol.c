@@ -17,9 +17,10 @@
  */
 
 // JMS 2009: -Don't create Ur-quan probe.
-// JMS 2010: -Removed Fwiffo from Pluto
-//			 -Removed tractors and base from moon
+// JMS 2010: -Removed Fwiffo from Pluto.
+//			 -Removed tractors and base from moon.
 //			 -Earth is now restricted planet meaning it cannot be landed on.
+//			 -If starbase is encountered, the chasing ships turn away.
 
 #include "build.h"
 #include "gamestr.h"
@@ -113,6 +114,9 @@ generate_orbital (void)
 	if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
 			&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 	{
+		// JMS: If starbase is encountered, the chasing ships turn away
+		NotifyOthers (HUMAN_SHIP, (BYTE)~0);
+		
 		PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);
 		ReinitQueue (&GLOBAL (ip_group_q));
 		assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
@@ -120,6 +124,7 @@ generate_orbital (void)
 		EncounterGroup = 0;
 		GLOBAL (CurrentActivity) |= START_ENCOUNTER;
 		SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
+		
 		return;
 	}
 

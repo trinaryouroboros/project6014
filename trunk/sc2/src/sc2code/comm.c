@@ -1475,7 +1475,7 @@ InitCommunication (CONVERSATION which_comm)
 			status = commToShip[which_comm];
 			if (status >= YEHAT_REBEL_SHIP) {
 				/* conversation exception, set to self */
-				status = HUMAN_SHIP;
+				status = YEHAT_REBEL_SHIP;
 			}
 		}
 		ActivateStarShip (status, SPHERE_TRACKING);

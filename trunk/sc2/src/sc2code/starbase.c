@@ -19,6 +19,7 @@
 // JMS 2010: -Removed unnecessary chmmr_bomb condition related to starbase visiting.
 //			 -Procyon starbase now has different gfx from Sol starbase
 //			 -Added functionality to Betelgeuse starbase. Has the same gfx as sol starbase.
+//			 -When the starbase commander is talked to, chasing ships turn away.
 
 #include "build.h"
 #include "colors.h"
@@ -401,12 +402,22 @@ ExitStarBase:
 			FlushInput ();
 			
 			// JMS: Procyon starbase has Chmmr, Sol naturally humans, Betelgeuse our sweet Moosy.
+			// When the starbase commander is talked to, chasing ships turn away.
 			if (CurStarDescPtr->Index == SOL_DEFINED)
+			{
 				InitCommunication (COMMANDER_CONVERSATION);
+				NotifyOthers (HUMAN_SHIP, (BYTE)~0);
+			}
 			else if (CurStarDescPtr->Index == SYREEN_DEFINED)
+			{
 				InitCommunication (SYREENBASE_CONVERSATION);
+				NotifyOthers (SYREEN_SHIP, (BYTE)~0);
+			}
 			else
+			{
 				InitCommunication (CHMMR_CONVERSATION);
+				NotifyOthers (CHMMR_SHIP, (BYTE)~0);
+			}
 			
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
 		}
