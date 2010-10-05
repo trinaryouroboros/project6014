@@ -185,6 +185,7 @@ AllianceInfo (RESPONSE_REF R)
 	{
 		NPCPhrase (WHICH_ALLY);
 		AllianceMask = 0;
+		AllianceMask2 = 0;
 	}
 	else if (PLAYER_SAID (R, chmmr))
 	{
