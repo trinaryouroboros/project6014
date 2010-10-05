@@ -38,7 +38,7 @@ UQM Remixes
 #(CAT_0_OPTS)
 320x240
 640x480
-Surprise?
+Graph_mode_0
 800x600
 1024x768
 Custom
@@ -52,7 +52,7 @@ Available with SDL framebuffer or OpenGL.
 Available with SDL framebuffer or OpenGL.
 
 #(CAT_0_OPT_2_DESC)
-Where be spoilers??
+Graph_mode_0
 
 #(CAT_0_OPT_3_DESC)
 800x600 resolution.

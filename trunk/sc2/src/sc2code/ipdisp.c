@@ -22,6 +22,9 @@
 //			 -More Transport ship mechanics: The ship's status flag is 0 when orbiting a planet, 1 when
 //			  leaving for hyperspace and 2 when arriving from hyperspace.
 //
+//			 -Transport ship tells the intercepting ships in star system that all is well, stop chasing.
+//			  When at sol, it notifies human ships, when at procyon, it notifies chmmr ships.
+//
 //			 -Removed some Ur-Quan probe conditions.
 
 #include "collide.h"
@@ -615,11 +618,21 @@ ip_group_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		EncounterGroup = GroupPtr->group_id;
 
 		// JMS: So long, Ur-Quan probe.
-		//if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
-		if(0)
+		/*if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
 		{
 			GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
 			GroupPtr->dest_loc = 0;
+		}*/
+		
+		// JMS: Transport ship tells the intercepting ships in star system that all is well, stop chasing.
+		if (GroupPtr->race_id == TRANSPORT_SHIP)
+		{
+			GroupPtr->task |= REFORM_GROUP;
+			GroupPtr->group_counter = 100;
+			if (CurStarDescPtr->Index == SOL_DEFINED)
+				NotifyOthers (HUMAN_SHIP, (BYTE)~0);
+			else if (CurStarDescPtr->Index == CHMMR_DEFINED)
+				NotifyOthers (CHMMR_SHIP, (BYTE)~0);
 		}
 		else
 		{

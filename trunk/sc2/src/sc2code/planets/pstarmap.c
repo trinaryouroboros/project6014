@@ -19,6 +19,7 @@
 // JMS 2009: -Orz space starmap colors and star locations
 // JMS 2010: -Do not draw Sphere of Influence for Slylandros riding Kohr-Ah ships
 //			 -Do not draw Sphere of Influence for Kohr-Ahs.
+//			 -Display hint for the player to use the star search facility in the starmap
 
 #include "colors.h"
 #include "controls.h"
@@ -706,8 +707,9 @@ UpdateCursorLocation (MENU_STATE *pMS, int sx, int sy, const POINT *newpt)
 
 static void
 UpdateCursorInfo (MENU_STATE *pMS, UNICODE *prevbuf)
-{
-	UNICODE buf[CURSOR_INFO_BUFSIZE] = "";
+{	
+	// JMS: Display hint for the player to use the star search facility
+	UNICODE buf[CURSOR_INFO_BUFSIZE] = "(Star search: F6)";
 	POINT pt;
 	STAR_DESC *SDPtr;
 	STAR_DESC *BestSDPtr;
