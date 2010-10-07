@@ -25,6 +25,7 @@
 //			 -Increased max number of comm screen animations for one race from 20 to 30
 //			 -Added BLACK_ORB_STATE game state for handling the events upon finding the black orb.
 //			 -Added BLACK_ORB_CUTSCENE activity enum for initiating the cutscene
+//			 -Changed Animflags size from BYTE to COUNT (Possibility to add more flags later on.)
 
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
@@ -72,8 +73,8 @@ typedef struct
 	BYTE NumFrames;
 			// Number of frames in the animation.
 
-	BYTE AnimFlags;
-			// One of RANDOM_ANIM, CIRCULAR_ANIM, or YOYO_ANIM
+	COUNT AnimFlags;
+			// One of RANDOM_ANIM, CIRCULAR_ANIM, or YOYO_ANIM // JMS: Changed from BYTE to COUNT to house more possible flags
 
 	COUNT BaseFrameRate;
 	COUNT RandomFrameRate;
