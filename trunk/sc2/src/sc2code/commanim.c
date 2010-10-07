@@ -501,7 +501,7 @@ ambient_anim_task (void *data)
 				i = CommData.NumAnimations;
 				while (i--)
 				{
-					if (ClearSub || FrameChanged[i])
+				  if ((ClearSub && !(CommData.AlienAmbientArray[i].AnimFlags & WHEN_TALKING)) || FrameChanged[i])
 					{
 						s.frame = AnimFrame[i];
 						DrawStamp (&s);
