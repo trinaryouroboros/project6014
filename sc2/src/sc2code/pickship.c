@@ -99,7 +99,7 @@ DoPickBattleShip (MENU_STATE *pMS)
 			HSTARSHIP hBattleShip, hNextShip;
 			STARSHIP *StarShipPtr;
 			
-			COUNT helper;
+			COUNT num_cols;
 			
 			// JMS: Chmmr Explorer gfx
 			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
@@ -153,14 +153,14 @@ DoPickBattleShip (MENU_STATE *pMS)
 			pMS->first_item.y = new_row;
 			pMS->first_item.x = new_col;
 
+ChangeSelection:
 			// JMS
 			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-				helper=NUM_PICK_SHIP_EXPLORER_COLUMNS;
+				num_cols = NUM_PICK_SHIP_EXPLORER_COLUMNS;
 			else if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==1)
-				helper=NUM_PICK_SHIP_COLUMNS;
+				num_cols = NUM_PICK_SHIP_COLUMNS;
 			
-ChangeSelection:
-			if (pMS->first_item.x == (helper >> 1))
+			if (pMS->first_item.x == (num_cols >> 1))
 			{
 				// JMS: Chmmr Explorer graphics
 				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
@@ -357,7 +357,7 @@ GetArmadaStarShip (void)
 	
 //    MenuSounds = CaptureSound (LoadSound (MENU_SOUNDS));
 
-OldContext = SetContext (SpaceContext);
+	OldContext = SetContext (SpaceContext);
 	DrawArmadaPickShip (FALSE, &pick_r);
 
 	{
@@ -365,7 +365,10 @@ OldContext = SetContext (SpaceContext);
 
 		MenuState.InputFunc = DoPickBattleShip;
 		MenuState.Initialized = FALSE;
-		MenuState.first_item.x = NUM_PICK_SHIP_COLUMNS >> 1;
+		if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+			MenuState.first_item.x = NUM_PICK_SHIP_EXPLORER_COLUMNS >> 1;
+		else
+			MenuState.first_item.x = NUM_PICK_SHIP_COLUMNS >> 1;
 		MenuState.first_item.y = 0;
 		MenuState.flash_task = 0;
 		MenuState.CurFrame = 0;
