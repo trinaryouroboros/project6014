@@ -232,33 +232,24 @@ HowReconstruction (RESPONSE_REF R)
 static void
 SmallTalk2 (RESPONSE_REF R)
 {	
-	static BYTE PatrolInfoState = 0;
-	
 	if (PLAYER_SAID (R, where_patrol))
 	{
 		NPCPhrase (LOST_PATROLS);
 		DISABLE_PHRASE (where_patrol);
-		PatrolInfoState++;
 	}
 	else if (PLAYER_SAID (R, why_not_call))
 	{
 		SET_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1);
 		NPCPhrase (NO_RESOURCES_TO_CALL);
 		DISABLE_PHRASE (why_not_call);
-		PatrolInfoState = 0;
-	}
-	else if (PLAYER_SAID (R, how_goes_reconstruction))
-	{
-		NPCPhrase (NOT_GOOD_RECONSTRUCTION);
-		DISABLE_PHRASE (how_goes_reconstruction);
 	}
 	
-	if (PatrolInfoState == 0 && PHRASE_ENABLED (where_patrol))
+	if (PHRASE_ENABLED (where_patrol))
 	{
 		Response (where_patrol, SmallTalk2);
 	}
 	
-	if (PatrolInfoState == 1 && PHRASE_ENABLED (why_not_call))
+	if (PLAYER_SAID (R, where_patrol) && PHRASE_ENABLED (why_not_call))
 	{
 		Response (why_not_call, SmallTalk2);
 	}
@@ -267,7 +258,6 @@ SmallTalk2 (RESPONSE_REF R)
 	{
 		Response (how_goes_reconstruction, HowReconstruction);
 	}
-
 
 	Response (farewell_shofixti, ExitConversation);
 }
@@ -287,7 +277,7 @@ SmallTalk1 (RESPONSE_REF R)
 	}
 
 	Response (where_patrol, SmallTalk2);
-	Response (how_goes_reconstruction, SmallTalk2);
+	Response (how_goes_reconstruction, HowReconstruction);
 	Response (farewell_shofixti, ExitConversation);
 }
 
