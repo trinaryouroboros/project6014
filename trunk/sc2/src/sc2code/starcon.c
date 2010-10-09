@@ -241,8 +241,6 @@ while (--ac > 0)
 						|| LOBYTE (GLOBAL (CurrentActivity)) == BLACK_ORB_CUTSCENE 	// JMS: End demo at cutscene upon finding black orb.
 						|| GLOBAL_SIS (CrewEnlisted) == (COUNT)~0)) // if died for some reason
 			{
-				if(GLOBAL_SIS (CrewEnlisted) == (COUNT)~0)
-				
 				if (GET_GAME_STATE (KOHR_AH_KILLED_ALL))
 					InitCommunication (BLACKURQ_CONVERSATION);
 						// surrendered to Ur-Quan
