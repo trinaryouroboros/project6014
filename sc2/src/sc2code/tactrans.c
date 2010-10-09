@@ -337,7 +337,7 @@ new_ship (ELEMENT *DeadShipPtr)
 
 			UnlockElement (hElement);
 		}
-
+		DeadShipPtr->state_flags |= DeadShipPtr->turn_wait;
 		DeadShipPtr->life_span =
 				MusicStarted ? (ONE_SECOND * 3) / BATTLE_FRAME_RATE : 1;
 		DeadShipPtr->death_func = new_ship;
