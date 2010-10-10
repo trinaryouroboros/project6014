@@ -1,11 +1,12 @@
 #(SYREENHOME_GREETING1)
 Captain, welcome to Gaia. I am Admarelle Briella
-responsible for foreign affairs and first contact for visitors to our beautiful world. 
+responsible for foreign affairs
+and first contact for visitors to our beautiful world.
 It is our pleasure to finally invite you to our
 planet surface. Make yourself comfortable.
 
 #(SYREENHOME_GREETING2)
-Again welcome you to our eden, Captain.
+Again we welcome you to our Gaia, Captain.
 Make yourself at home.
 
 #(got_drink)
