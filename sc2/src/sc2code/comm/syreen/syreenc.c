@@ -39,7 +39,7 @@ static LOCDATA syreen_desc =
 	{0, 0}, /* AlienTextBaseline */
 	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
 	ALIGN_CENTER, /* AlienTextAlign */
-	VALIGN_TOP, /* AlienTextValign */
+	VALIGN_BOTTOM, /* AlienTextValign */
 	SYREEN_COLOR_MAP, /* AlienColorMap */
 	SYREEN_MUSIC, /* AlienSong */
 	NULL_RESOURCE, /* AlienAltSong */
@@ -233,11 +233,6 @@ AnyAssistance (RESPONSE_REF R)
 static void
 Intro (void)
 {
-	if (GET_GAME_STATE (SYREEN_MET) == 0)
-	{
-		SET_GAME_STATE (SYREEN_MET, 1);
-	}
-
 	NPCPhrase (SYREEN_GREETING1);
 
 	Response (because_we_can, AnyAssistance);
@@ -268,8 +263,8 @@ init_syreen_comm (void)
 	syreen_desc.uninit_encounter_func = uninit_syreen;
 
 	syreen_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreen_desc.AlienTextBaseline.y = 0;
-	syreen_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
+	syreen_desc.AlienTextBaseline.y = 100;
+	syreen_desc.AlienTextWidth = SIS_TEXT_WIDTH - 4;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	retval = &syreen_desc;

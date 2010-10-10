@@ -1,6 +1,7 @@
 #(SYREEN_GREETING1)
 Hail Earthling, welcome to Syreen space. 
-As always we are very pleased to welcome you. What brings you here? 
+As always we are very pleased to welcome you.
+What brings you here?
 
 #(because_we_can)
 We're here because we can be. Had the opportunity to visit so here we are!
@@ -30,13 +31,14 @@ Sure I was...
 #(ANY_ASSISTANCE)
 If there is any assistance you or your crew require
 of a practical nature
-you should stop by the starbase at our homeworld Betelgeuse I.
+you should stop by the starbase at our homeworld
+Betelgeuse I.
 
 #(roam_stars)
 It must be good to roam the stars once more.
 
 #(WE_DONT_STRAY)
-Well to be honest, we don't stray far from our homeworld. 
+To be honest, we don't stray far from our homeworld.
 Our fleet is still rebuilding
 and there is the risk of running into rogue Kohr-Ah
 who still plague this part of space. 
@@ -47,7 +49,7 @@ in their duty to eradicate these monsters.
 Anything exciting going on around here?
 
 #(NO_NEWS)
-Right now we don't get out much, and most of the real activity
+Right now we don't get out much, and most activity
 seems to be happening rim-ward of Chmmr space
 where the Kohr-Ah are being pursued. 
 We're now at the periphery of current events it seems.

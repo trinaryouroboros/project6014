@@ -39,7 +39,7 @@ static LOCDATA syreenhome_desc =
 	{0, 0}, /* AlienTextBaseline */
 	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
 	ALIGN_CENTER, /* AlienTextAlign */
-	VALIGN_TOP, /* AlienTextValign */
+	VALIGN_BOTTOM, /* AlienTextValign */
 	SYREEN_HOME_COLOR_MAP, /* AlienColorMap */
 	SYREEN_HOME_MUSIC, /* AlienSong */
 	NULL_RESOURCE, /* AlienAltSong */
@@ -301,7 +301,7 @@ init_syreenhome_comm (void)
 	syreenhome_desc.uninit_encounter_func = uninit_syreenhome;
 
 	syreenhome_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreenhome_desc.AlienTextBaseline.y = 0;
+	syreenhome_desc.AlienTextBaseline.y = 100;
 	syreenhome_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);

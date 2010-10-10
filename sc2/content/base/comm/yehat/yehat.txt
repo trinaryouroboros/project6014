@@ -37,7 +37,7 @@ Apparently it bore the hall-marks of a Precursor item.
 The group was in hot pursuit and had no chance to investigate.
 
 #(reinstate_veepneep)
-We've decided that the Veep-Neep were okay after-all. We've come to demand you reinstate them, Queen and all, as Yehat royalty!
+We've decided that the Veep-Neep were okay after all. We've come to demand you reinstate them as Yehat royalty!
 
 #(BAD_HUMOUR)
 If that is earthling humour then I suggest ye kit to yourselves.
@@ -61,8 +61,7 @@ How are the Shofixti?
 #(SHOFIXTI_INFO)
 Arrrrrrrk... it saddens me to see them struggle so.
 The Shofixti are eking out a meagre existence in the Gorno constellation.
-With their old homeworld destroyed they are trying to create a new one at Delta Gorno.
-They refuse to go elsewhere to more fertile grounds.
+With their old homeworld destroyed they are in a desperate search for more fertile grounds.
 Also, the Chmmr won't permit the Alliance to direct too much aid into their struggle
 as our resources are needed to eliminate the Kohr-Ah threat.
 
