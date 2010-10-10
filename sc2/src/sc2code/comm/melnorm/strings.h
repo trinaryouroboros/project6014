@@ -200,7 +200,7 @@ enum
 	no_buy_new_tech,
 	done_buying_new_tech,
 	fill_me_up,
-	OK_FILL_YOU_UP,
+	AT_MAXIMUM_CAPACITY,
 	OK_DONE_BUYING_FUEL,
 	CHARITY,
 	STRIP_HEAD,

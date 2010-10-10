@@ -269,8 +269,7 @@ BuyInfoMenu (RESPONSE_REF R)
 		}
 		else
 		{
-			NPCPhrase (OK_BUY_EVENT_2);
-			NPCPhrase (OK_NO_TRADE_NOW_BYE);
+			DeltaCredit (-needed_credit);
 		}
 	}
 	else if (PLAYER_SAID (R, buy_alien_races))
@@ -292,12 +291,111 @@ BuyInfoMenu (RESPONSE_REF R)
 
 
 static void
-BuyFuelMenu (RESPONSE_REF R) //TODO
+BuyFuelMenu (RESPONSE_REF R)
 {
-	if (PLAYER_SAID (R, buy_fuel))
-	{	
-		NPCPhrase (OK_BUY_ALIEN_RACE_1);
-		NPCPhrase (OK_NO_TRADE_NOW_BYE);
+	COUNT credit;
+	SIZE needed_credit;
+	BYTE slot;
+	DWORD capacity;
+	BOOLEAN doNotOfferFuel;
+	
+	credit = MAKE_WORD (GET_GAME_STATE (MELNORME_CREDIT0),GET_GAME_STATE (MELNORME_CREDIT1));
+	capacity = FUEL_RESERVE;
+	slot = NUM_MODULE_SLOTS - 1;
+	doNotOfferFuel = FALSE;
+	
+	if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+	{
+		capacity = EXPLORER_FUEL_CAPACITY;
+	}	
+	else
+	{
+		do
+		{
+			if (GLOBAL_SIS (ModuleSlots[slot]) == FUEL_TANK || GLOBAL_SIS (ModuleSlots[slot]) == HIGHEFF_FUELSYS)
+			{
+				COUNT volume;
+			
+				volume = GLOBAL_SIS (ModuleSlots[slot]) == FUEL_TANK ? FUEL_TANK_CAPACITY : HEFUEL_TANK_CAPACITY;
+				capacity += volume;
+			}
+		} while (slot--);
+	}
+	
+	if (PLAYER_SAID (R, buy_fuel)
+		|| PLAYER_SAID (R, buy_1_fuel)
+		|| PLAYER_SAID (R, buy_5_fuel)
+		|| PLAYER_SAID (R, buy_10_fuel)
+		|| PLAYER_SAID (R, buy_25_fuel)
+		|| PLAYER_SAID (R, fill_me_up))
+	{
+		needed_credit = 0;
+		if (PLAYER_SAID (R, buy_1_fuel))
+			needed_credit = 1;
+		else if (PLAYER_SAID (R, buy_5_fuel))
+			needed_credit = 5;
+		else if (PLAYER_SAID (R, buy_10_fuel))
+			needed_credit = 10;
+		else if (PLAYER_SAID (R, buy_25_fuel))
+			needed_credit = 25;
+		else if (PLAYER_SAID (R, fill_me_up))
+			needed_credit = (capacity - GLOBAL_SIS (FuelOnBoard) + FUEL_TANK_SCALE - 1) / FUEL_TANK_SCALE;
+		
+		if (needed_credit == 0)
+		{
+			if (!GET_GAME_STATE (MELNORME_FUEL_PROCEDURE))
+			{
+				NPCPhrase (BUY_FUEL_INTRO);
+				SET_GAME_STATE (MELNORME_FUEL_PROCEDURE, 1);
+			}
+		}
+		else
+		{
+			if (GLOBAL_SIS (FuelOnBoard) / FUEL_TANK_SCALE + needed_credit > capacity / FUEL_TANK_SCALE)
+			{
+				NPCPhrase (NO_ROOM_FOR_FUEL);
+				goto TryFuelAgain;
+			}
+			
+			if ((int)(needed_credit * (BIO_CREDIT_VALUE / 2)) <= (int)credit)
+			{
+				DWORD f;
+				
+				NPCPhrase (GOT_FUEL);
+				
+				f = (DWORD)needed_credit * FUEL_TANK_SCALE;
+				LockMutex (GraphicsLock);
+				while (f > 0x3FFFL)
+				{
+					DeltaSISGauges (0, 0x3FFF, 0);
+					f -= 0x3FFF;
+				}
+				DeltaSISGauges (0, (SIZE)f, 0);
+				UnlockMutex (GraphicsLock);
+			}
+			needed_credit *= (BIO_CREDIT_VALUE / 2);
+		}
+		if (needed_credit)
+		{
+			DeltaCredit (-needed_credit);
+			if (GLOBAL_SIS (FuelOnBoard) >= capacity)
+			{
+				PurchaseMenu(0);
+				doNotOfferFuel = TRUE;
+			}
+		}
+	TryFuelAgain:
+		if (!doNotOfferFuel)
+		{
+			NPCPhrase (HOW_MUCH_FUEL);
+		
+			Response (buy_1_fuel, BuyFuelMenu);
+			Response (buy_5_fuel, BuyFuelMenu);
+			Response (buy_10_fuel, BuyFuelMenu);
+			Response (buy_25_fuel, BuyFuelMenu);
+			Response (fill_me_up, BuyFuelMenu);
+			Response (done_buying_fuel, PurchaseMenu);
+		}
 	}
 		
 }
@@ -306,16 +404,39 @@ BuyFuelMenu (RESPONSE_REF R) //TODO
 static void
 PurchaseMenu (RESPONSE_REF R)
 {
-	if (PLAYER_SAID (R, make_purchases))
+	BYTE slot;
+	DWORD capacity;
+	
+	capacity = FUEL_RESERVE;
+	slot = NUM_MODULE_SLOTS - 1;
+	
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+		capacity = EXPLORER_FUEL_CAPACITY;
+	else
 	{
-		NPCPhrase (WHAT_TO_BUY);
+		do
+		{
+			if (GLOBAL_SIS (ModuleSlots[slot]) == FUEL_TANK 
+				|| GLOBAL_SIS (ModuleSlots[slot]) == HIGHEFF_FUELSYS)
+			{
+				COUNT volume;
+				volume = GLOBAL_SIS (ModuleSlots[slot]) == FUEL_TANK
+				? FUEL_TANK_CAPACITY : HEFUEL_TANK_CAPACITY;
+				capacity += volume;
+			}
+		} while (slot--);
 	}
-	if (PLAYER_SAID (R, done_buying_info))
-	{
+	/*if (PLAYER_SAID (R, make_purchases)
+		||PLAYER_SAID (R, done_buying_info)
+		||PLAYER_SAID (R, done_buying_fuel))
+	{*/
 		NPCPhrase (WHAT_TO_BUY);
-	}
+	//}
+	
 	Response (buy_info, BuyInfoMenu);
-	Response (buy_fuel, BuyFuelMenu);
+
+	if (GLOBAL_SIS (FuelOnBoard) < capacity)
+		Response (buy_fuel, BuyFuelMenu);
 	Response (done_buying, TradeMenu);
 }
 
@@ -428,9 +549,7 @@ SellMenu (RESPONSE_REF R)
 		}
 	}
 	
-	Response (make_purchases, PurchaseMenu);
-	if (PHRASE_ENABLED (items_to_sell))
-		Response (items_to_sell, SellMenu);
+	Response (done_selling, TradeMenu);
 	Response (no_trade_now, ExitConversation);
 
 }
@@ -439,38 +558,40 @@ SellMenu (RESPONSE_REF R)
 static void
 TradeMenu (RESPONSE_REF R)
 {
-	if (PLAYER_SAID (R, only_joke))
+	if (PLAYER_SAID (R, done_selling))
 	{
-		NPCPhrase (TRADING_INFO2);
-		NPCPhrase (MORE_TRADING_INFO);
-	}
-	else if (PLAYER_SAID (R, i_remember))
-	{
-		NPCPhrase (RIGHT_YOU_ARE);
-	}
-	else if (PLAYER_SAID (R, how_to_trade))
-	{
-		NPCPhrase (TRADING_INFO1);
-		NPCPhrase (MORE_TRADING_INFO);
+		NPCPhrase (OK_DONE_SELLING);
 	}
 	else if (PLAYER_SAID (R, done_buying))
 	{
 		NPCPhrase (OK_DONE_BUYING);
 	}
-	//TODO HELLO_NOW_DOWN_TO_BUSINESS2 if normal,
-	//HELLO_NOW_DOWN_TO_BUSINESS3 if attack last time
-	else if (GET_GAME_STATE (MET_MELNORME) == 0)
+	else 
 	{
-		SET_GAME_STATE (MET_MELNORME, 1);
-		NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS2);
+		if (PLAYER_SAID (R, only_joke))
+		{
+			NPCPhrase (TRADING_INFO2);
+			NPCPhrase (MORE_TRADING_INFO);
+		}
+		else if (PLAYER_SAID (R, i_remember))
+		{
+			NPCPhrase (RIGHT_YOU_ARE);
+		}
+		else if (PLAYER_SAID (R, how_to_trade))
+		{
+			NPCPhrase (TRADING_INFO1);
+			NPCPhrase (MORE_TRADING_INFO);
+		}
+		else if (GET_GAME_STATE (MET_MELNORME) == 1)
+		{
+			NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS2);
+		}
+		
+		NPCPhrase (BUY_OR_SELL);
+		AlienTalkSegue(1);
+		XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
+		AlienTalkSegue((COUNT)~0);
 	}
-	else if (GET_GAME_STATE (MET_MELNORME) == 1)
-	{
-		SET_GAME_STATE (MET_MELNORME, 2);
-		NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS3);
-	}
-
-	NPCPhrase (BUY_OR_SELL);
 
 	Response (make_purchases, PurchaseMenu);
 	if (PHRASE_ENABLED(items_to_sell))
