@@ -185,7 +185,6 @@ You were one of my favourite clients. I'm sure I will find more though.
 As a master trader in the Melnorme merchant fleet, I greet you, Captain.
 News of your species and your unusual vessel has travelled quickly.
 I need not say how eager we are to trade with you and your kind!
-Now, how can I be of service to you?
 
 #(HELLO_NOW_DOWN_TO_BUSINESS3)	melno002.ogg
 Hello again, human space captain.
@@ -455,7 +454,7 @@ Your present balance is
  Credits.
 
 #(NEED_MORE_CREDIT0)	melno084.ogg
-Unfortunately this purchase requires
+Unfortunately this purchase requires 
 #(NEED_MORE_CREDIT1)	melno206.ogg
  additional Credits.
 
@@ -505,6 +504,8 @@ What else would you like to buy?
 What else would you like to buy?
 
 #(OK_BUY_EVENT_1)
+Captain, we only have one current event item for sale
+but boy, what a whopper it is!
 The Alliance high command as well as the Shofixti are in a turmoil
 over a patrol of Shofixti scout vessels that were probably destroyed
 but managed to transmit a distress call before that.
@@ -529,7 +530,7 @@ despite our agents' daily checks on them -- they're just gone.
 
 #(OK_BUY_EVENT_2)	melno092.ogg
 Captain, I recommend you consider contributing to this game. 
-I'm sure it will be worthwhile
+I'm sure it will be worthwhile.
 
 #(OK_BUY_EVENT_3)	melno093.ogg
 
@@ -551,7 +552,7 @@ I'm sure it will be worthwhile
 
 #(OK_BUY_ALIEN_RACE_1)	
 Captain, I recommend you consider contributing to this game. 
-I'm sure it will be worthwhile
+I'm sure it will be worthwhile.
 
 #(OK_BUY_ALIEN_RACE_2)	melno100.ogg
 
@@ -596,13 +597,12 @@ I'm sure it will be worthwhile
 
 
 #(OK_BUY_ALIEN_RACE_16)	melno114.ogg
-
 Captain, you have heard all that we have to say about aliens indigenous to this region.
 Should we learn more in the near future, we shall be certain to sell it to you.
 
 #(OK_BUY_HISTORY_1)	
 Captain, I recommend you consider contributing to this game. 
-I'm sure it will be worthwhile
+I'm sure it will be worthwhile.
 
 #(OK_BUY_HISTORY_2)	melno116.ogg
 
@@ -647,8 +647,8 @@ I do not want to purchase any more technology.
 #(fill_me_up)
 Fill all my fuel tanks to maximum capacity.
 
-#(OK_FILL_YOU_UP)	melno125.ogg
-Yes sir, fill 'er up, right away!
+#(AT_MAXIMUM_CAPACITY)
+It seems like your tanks already are at maximum capacity.
 
 #(OK_DONE_BUYING_FUEL)	melno130.ogg
 Would you like to purchase anything else?
