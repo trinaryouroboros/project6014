@@ -40,11 +40,11 @@
 #define MAX_DEFENSE 8
 
 #define MAX_CREW MAX_CREW_SIZE
-#define MAX_ENERGY MAX_ENERGY_SIZE
+#define MAX_ENERGY 30
 #define ENERGY_REGENERATION 1
 #define WEAPON_ENERGY_COST 1
 #define SPECIAL_ENERGY_COST 0
-#define ENERGY_WAIT 10
+#define ENERGY_WAIT 9
 #define MAX_THRUST 10
 #define THRUST_INCREMENT 4
 #define TURN_WAIT 17
@@ -55,9 +55,9 @@
 #define SHIP_MASS MAX_SHIP_MASS
 
 #define BLASTER_SPEED DISPLAY_TO_WORLD (24)
-#define BLASTER_LIFE 7 // JMS: WAS 12
+#define BLASTER_LIFE 9 // JMS: WAS 12
 
-// JMS: These affect CHmmr Explorer in Super Melee and adventure mode
+// JMS: These affect Chmmr Explorer in Super Melee and adventure mode
 #define EXPLORER_MAX_THRUST 36
 #define EXPLORER_THRUST_INCREMENT 4
 #define EXPLORER_TURN_WAIT 1
@@ -65,8 +65,8 @@
 
 // JMS: Chmmr Explorer has smaller weapon delay and largish special delay
 #define EXPLORER_WEAPON_WAIT 2
-#define EXPLORER_SPECIAL_WAIT 22
-#define EXPLORER_WEAPON_ENERGY_COST 1
+#define EXPLORER_SPECIAL_WAIT 18
+#define EXPLORER_WEAPON_ENERGY_COST 0 // Shiver: Bumped this to 0. Weapon cost is set at "+2" somewhere else.
 
 static RACE_DESC sis_desc =
 {
@@ -143,7 +143,7 @@ static RACE_DESC exp_desc =
 {
 	{ /* SHIP_INFO */
 		0,
-		30, /* Super Melee cost */
+		25, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
 		EXP_RACE_STRINGS,
@@ -791,11 +791,11 @@ spawn_shardmine_missile (ELEMENT *ShipPtr)
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-// Confuser special /////////////////////////////////////////
+// Stunner special /////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 static void
-confuse_banger_preprocess (ELEMENT *ElementPtr)
+stunner_preprocess (ELEMENT *ElementPtr)
 {
 	if (!(ElementPtr->state_flags & NONSOLID))
 	{
@@ -825,7 +825,12 @@ confuse_banger_preprocess (ELEMENT *ElementPtr)
 				ElementPtr->next.image.frame = SetRelFrameIndex (ElementPtr->next.image.frame, -8);
 			
 			GetElementStarShip (eptr, &StarShipPtr);
-			StarShipPtr->ship_input_state = (StarShipPtr->ship_input_state & ~(LEFT | RIGHT | THRUST)) | ElementPtr->turn_wait;
+
+			// Shiver: This if statement below prevents the Androsynth Blazer from losing its energy degeneration.
+			if (!(eptr->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.special))
+				StarShipPtr->energy_counter += 1;
+
+			StarShipPtr->ship_input_state = (StarShipPtr->ship_input_state & ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL));
 			
 			hEffect = AllocElement ();
 			if (hEffect)
@@ -835,7 +840,7 @@ confuse_banger_preprocess (ELEMENT *ElementPtr)
 				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING | (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
 				eptr->life_span = 1;
 				eptr->current = eptr->next = ElementPtr->next;
-				eptr->preprocess_func = confuse_banger_preprocess;
+				eptr->preprocess_func = stunner_preprocess;
 				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
 				
 				GetElementStarShip (ElementPtr, &StarShipPtr);
@@ -851,92 +856,60 @@ confuse_banger_preprocess (ELEMENT *ElementPtr)
 	}
 }
 
-#define RECOIL_VELOCITY WORLD_TO_VELOCITY (DISPLAY_TO_WORLD (2))
-#define MAX_RECOIL_VELOCITY (RECOIL_VELOCITY * 3)
-#define CONFUSE_DURATION 35
+#define STUN_DURATION 72
 
 static void
-confuse_banger_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {	
-	if ((ElementPtr1->state_flags & PLAYER_SHIP)
-		&& ElementPtr1->crew_level
-		&& !GRAVITY_MASS (ElementPtr1->mass_points + 1))
-	{
-		COUNT angle;
-		SIZE cur_delta_x, cur_delta_y;
-		STARSHIP *StarShipPtr;
-		
-		GetElementStarShip (ElementPtr1, &StarShipPtr);
-		StarShipPtr->cur_status_flags &= ~(SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED);
-		
-		angle = FACING_TO_ANGLE (GetFrameIndex (ElementPtr0->next.image.frame) );
-		DeltaVelocityComponents (&ElementPtr1->velocity,
-								 COSINE (angle, RECOIL_VELOCITY),
-								 SINE (angle, RECOIL_VELOCITY));
-		GetCurrentVelocityComponents (&ElementPtr1->velocity,&cur_delta_x, &cur_delta_y);
-	
-		if ((long)cur_delta_x * (long)cur_delta_x
-			+ (long)cur_delta_y * (long)cur_delta_y
-			> (long)MAX_RECOIL_VELOCITY * (long)MAX_RECOIL_VELOCITY)
-		{
-			angle = ARCTAN (cur_delta_x, cur_delta_y);
-			SetVelocityComponents (&ElementPtr1->velocity,
-								   COSINE (angle, MAX_RECOIL_VELOCITY),
-								   SINE (angle, MAX_RECOIL_VELOCITY));
-		}
-		
-		StarShipPtr->ShipFacing = (BYTE)TFB_Random () % 16;
-	}
-	
 	if (ElementPtr1->state_flags & PLAYER_SHIP)
 	{
-		HELEMENT hConfusionElement, hNextElement;
-		ELEMENT *ConfusionPtr;
+		HELEMENT hStunElement, hNextElement;
+		ELEMENT *StunPtr;
 		STARSHIP *StarShipPtr;
 		
 		GetElementStarShip (ElementPtr0, &StarShipPtr);
-		for (hConfusionElement = GetHeadElement ();
-			 hConfusionElement; hConfusionElement = hNextElement)
+		for (hStunElement = GetHeadElement ();
+			 hStunElement; hStunElement = hNextElement)
 		{
-			LockElement (hConfusionElement, &ConfusionPtr);
-			if ((ConfusionPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
+			LockElement (hStunElement, &StunPtr);
+			if ((StunPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
 				(ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY))
-				&& ConfusionPtr->current.image.farray ==
+				&& StunPtr->current.image.farray ==
 				StarShipPtr->RaceDescPtr->ship_data.special
-				&& (ConfusionPtr->state_flags & NONSOLID))
+				&& (StunPtr->state_flags & NONSOLID))
 			{
-				UnlockElement (hConfusionElement);
+				UnlockElement (hStunElement);
 				break;
 			}
-			hNextElement = GetSuccElement (ConfusionPtr);
-			UnlockElement (hConfusionElement);
+			hNextElement = GetSuccElement (StunPtr);
+			UnlockElement (hStunElement);
 		}
 		
-		if (hConfusionElement || (hConfusionElement = AllocElement ()))
+		if (hStunElement || (hStunElement = AllocElement ()))
 		{
-			LockElement (hConfusionElement, &ConfusionPtr);
+			LockElement (hStunElement, &StunPtr);
 			
-			if (ConfusionPtr->state_flags == 0) /* not allocated before */
+			if (StunPtr->state_flags == 0) /* not allocated before */
 			{
-				InsertElement (hConfusionElement, GetHeadElement ());
+				InsertElement (hStunElement, GetHeadElement ());
 				
-				ConfusionPtr->current = ElementPtr0->next;
-				ConfusionPtr->current.image.frame = SetAbsFrameIndex (ConfusionPtr->current.image.frame, 16);
-				ConfusionPtr->next = ConfusionPtr->current;
-				ConfusionPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
+				StunPtr->current = ElementPtr0->next;
+				StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, 16);
+				StunPtr->next = StunPtr->current;
+				StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
 				| (ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY));
-				ConfusionPtr->preprocess_func = confuse_banger_preprocess;
-				SetPrimType ( &(GLOBAL (DisplayArray))[ConfusionPtr->PrimIndex], NO_PRIM);
+				StunPtr->preprocess_func = stunner_preprocess;
+				SetPrimType ( &(GLOBAL (DisplayArray))[StunPtr->PrimIndex], NO_PRIM);
 				
-				SetElementStarShip (ConfusionPtr, StarShipPtr);
+				SetElementStarShip (StunPtr, StarShipPtr);
 				GetElementStarShip (ElementPtr1, &StarShipPtr);
-				ConfusionPtr->hTarget = StarShipPtr->hShip;
+				StunPtr->hTarget = StarShipPtr->hShip;
 			}
 			
-			ConfusionPtr->life_span = CONFUSE_DURATION;
-			ConfusionPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
+			StunPtr->life_span = STUN_DURATION;
+			StunPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
 			
-			UnlockElement (hConfusionElement);
+			UnlockElement (hStunElement);
 		}
 		
 		weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
@@ -951,42 +924,52 @@ confuse_banger_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr
 }
 
 static COUNT
-initialize_confuse_banger (ELEMENT *ShipPtr, HELEMENT ConfusionArray[])
+initialize_stunner (ELEMENT *ShipPtr, HELEMENT StunArray[])
 {
-#define CMISSILE_SPEED DISPLAY_TO_WORLD (24)
-#define CMISSILE_HITS 7
-#define CMISSILE_DAMAGE 3
-#define CMISSILE_LIFE 10
-#define CMISSILE_OFFSET 4
-#define CMISSILE_START_OFFSET 28
+#define SMISSILE_SPEED DISPLAY_TO_WORLD (16)
+#define SMISSILE_HITS 50
+#define SMISSILE_DAMAGE 0
+#define SMISSILE_LIFE 20
+#define SMISSILE_OFFSET 4
+#define SMISSILE_START_OFFSET 28
 	STARSHIP *StarShipPtr;
-	MISSILE_BLOCK ConfusionBlock;
+	MISSILE_BLOCK StunBlock;
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-	ConfusionBlock.cx = ShipPtr->next.location.x;
-	ConfusionBlock.cy = ShipPtr->next.location.y;
-	ConfusionBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	ConfusionBlock.face = StarShipPtr->ShipFacing;
-	ConfusionBlock.index = ConfusionBlock.face;
-	ConfusionBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
+	StunBlock.cx = ShipPtr->next.location.x;
+	StunBlock.cy = ShipPtr->next.location.y;
+	StunBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+	StunBlock.face = StarShipPtr->ShipFacing;
+	StunBlock.index = StunBlock.face;
+	StunBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 	| IGNORE_SIMILAR;
-	ConfusionBlock.pixoffs = CMISSILE_START_OFFSET;
-	ConfusionBlock.speed = CMISSILE_SPEED;
-	ConfusionBlock.hit_points = CMISSILE_HITS;
-	ConfusionBlock.damage = CMISSILE_DAMAGE;
-	ConfusionBlock.life = CMISSILE_LIFE;
-	ConfusionBlock.preprocess_func = confuse_banger_preprocess;
-	ConfusionBlock.blast_offs = CMISSILE_OFFSET;
-	ConfusionArray[0] = initialize_missile (&ConfusionBlock);
+	StunBlock.pixoffs = SMISSILE_START_OFFSET;
+	StunBlock.speed = SMISSILE_SPEED;
+	StunBlock.hit_points = SMISSILE_HITS;
+	StunBlock.damage = SMISSILE_DAMAGE;
+	StunBlock.life = SMISSILE_LIFE;
+	StunBlock.preprocess_func = stunner_preprocess;
+	StunBlock.blast_offs = SMISSILE_OFFSET;
+	StunArray[0] = initialize_missile (&StunBlock);
 	
-	if (ConfusionArray[0])
+	if (StunArray[0])
 	{
-		ELEMENT *CMissilePtr;
+		ELEMENT *SMissilePtr;
+		SIZE dx, dy;
 		
-		LockElement (ConfusionArray[0], &CMissilePtr);
-		CMissilePtr->collision_func = confuse_banger_collision;
-		SetElementStarShip (CMissilePtr, StarShipPtr);
-		UnlockElement (ConfusionArray[0]);
+		LockElement (StunArray[0], &SMissilePtr);
+
+		// Shiver: This pushes the SMissile toward the direction the Explorer is moving.
+		GetCurrentVelocityComponents (&ShipPtr->velocity, &dx, &dy);
+		dx = dx * 3/4;
+		dy = dy * 3/4;
+		DeltaVelocityComponents (&SMissilePtr->velocity, dx, dy);
+		SMissilePtr->current.location.x -= VELOCITY_TO_WORLD (dx);
+		SMissilePtr->current.location.y -= VELOCITY_TO_WORLD (dy);
+
+		SMissilePtr->collision_func = stunner_collision;
+		SetElementStarShip (SMissilePtr, StarShipPtr);
+		UnlockElement (StunArray[0]);
 	}
 	return (1);
 }
@@ -1004,7 +987,7 @@ sis_battle_preprocess (ELEMENT *ElementPtr)
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	
-	// JMS_CONFUSER: Commented these out for the confuse_banger special weapon to work correctly
+	// JMS_CONFUSER: Commented these out for the stunner special weapon to work correctly
 	//
 	// JMS: This is needed to keep track of the number of shard mines with Chmmr Explorer
 	//if (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 0)
@@ -1037,23 +1020,22 @@ sis_battle_postprocess (ELEMENT *ElementPtr)
 		)
 		
 	{
-		// JMS_CONFUSER: Disabled the shard mine related lines...
+		// JMS: Disabled the shard mine related lines...
 		/*spawn_shardmine_missile(ElementPtr);
 		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
-		StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;*/ // JMS: Disabled shardmines and introduced confuser banger
-		
-		// JMS_CONFUSER:... and added these instead!
-		HELEMENT ConfuseBanger;
-		initialize_confuse_banger (ElementPtr, &ConfuseBanger);
-		if (ConfuseBanger)
+		StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;*/
+
+		HELEMENT Stunner;
+		initialize_stunner (ElementPtr, &Stunner);
+		if (Stunner)
 		{
-			ELEMENT *CMissilePtr;
-			LockElement (ConfuseBanger, &CMissilePtr);
+			ELEMENT *SMISSILEPtr;
+			LockElement (Stunner, &SMISSILEPtr);
 			
-			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), CMissilePtr);
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), SMISSILEPtr);
 			
-			UnlockElement (ConfuseBanger);
-			PutElement (ConfuseBanger);
+			UnlockElement (Stunner);
+			PutElement (Stunner);
 			StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;
 		}
 		
@@ -1478,7 +1460,7 @@ InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots)
 		RaceDescPtr->ship_info.max_crew = EXPLORER_CREW_CAPACITY;
 		RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
 		RaceDescPtr->characteristics.weapon_energy_cost += 2;
-		RaceDescPtr->characteristics.special_energy_cost = 4;
+		RaceDescPtr->characteristics.special_energy_cost = 8;
 	}
 	else if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
 	{
@@ -1530,7 +1512,8 @@ InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots)
 	RaceDescPtr->characteristics.weapon_energy_cost += num_trackers * 3;
 	if (RaceDescPtr->characteristics.special_energy_cost)
 	{
-		RaceDescPtr->ship_info.ship_flags |= POINT_DEFENSE;
+		// Shiver: POINT_DEFENSE flag disabled.
+		// RaceDescPtr->ship_info.ship_flags |= POINT_DEFENSE;
 		if (RaceDescPtr->characteristics.special_energy_cost > MAX_DEFENSE)
 			RaceDescPtr->characteristics.special_energy_cost = MAX_DEFENSE;
 	}
