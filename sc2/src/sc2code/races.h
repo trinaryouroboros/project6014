@@ -278,6 +278,8 @@ struct STARSHIP
 			// In battle: frames left before primary weapon can be used
 	BYTE special_counter;
 			// In battle: frames left before special can be used
+	BYTE auxiliary_counter;
+			// In battle: frames left before auxiliary can be used
 	BYTE energy_counter;
 			// In battle: frames left before energy regeneration
 
