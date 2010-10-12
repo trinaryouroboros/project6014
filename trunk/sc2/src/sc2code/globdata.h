@@ -1002,9 +1002,13 @@ START_GAME_STATE
 	// JMS: Set shofixti crash site triangulation spheres visible in starmap
 	ADD_GAME_STATE (TRIANGULATION_SPHERES_CHMMR, 1)
 	ADD_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1)
-
 	// JMS: Once the artifact is found, the spheres are no longer necessary
 	ADD_GAME_STATE (HIDE_TRIANGULATION_SPHERES, 1)
+
+	// JMS: Shofixti patrol that was late has returned home
+	ADD_GAME_STATE (SHOFIXTI_PATROL_RETURNED, 1)
+	// JMS: Player has heard shofixti tell the patrol returned home
+	ADD_GAME_STATE (SHOFIXTI_GREAT_NEWS_HEARD, 1)
 
 	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
 	ADD_GAME_STATE (CRASH_SITE_UNPROTECTED, 1)

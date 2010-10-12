@@ -29,6 +29,7 @@
 //			 -Changed the starting number of thrusters and turning jets for Chmmr Explorer
 //			 -Game now starts at Procyon
 //			 -Show human and Chmmr SoIs right from the start
+//			 -Utwig ships not available for buying at starbases anymore
 
 #include "globdata.h"
 
@@ -372,6 +373,7 @@ InitSIS (void)
 			GAME_STRING (NAMING_STRING_BASE + 3));
 
 	// BW: all NAFS ships available but no ship allocated by default
+	// JMS: Except Utwig. They're all pacifists now!
 	ActivateStarShip (ZOQFOTPIK_SHIP, SET_ALLIED);
 	ActivateStarShip (HUMAN_SHIP, SET_ALLIED);
 	ActivateStarShip (SYREEN_SHIP, SET_ALLIED);
@@ -379,7 +381,7 @@ InitSIS (void)
 	ActivateStarShip (SHOFIXTI_SHIP, SET_ALLIED);
 	ActivateStarShip (CHMMR_SHIP, SET_ALLIED);
 	ActivateStarShip (SUPOX_SHIP, SET_ALLIED);
-	ActivateStarShip (UTWIG_SHIP, SET_ALLIED);
+	// ActivateStarShip (UTWIG_SHIP, SET_ALLIED);
 	ActivateStarShip (ORZ_SHIP, SET_ALLIED);
 	//	CloneShipFragment (HUMAN_SHIP, &GLOBAL (built_ship_q), 0);
 	
