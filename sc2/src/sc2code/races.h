@@ -22,6 +22,7 @@
 //			- Added Slylandro_kohrah ship enums, and all the other relevant stuff
 //			- Added Lurg shipenums, and all the other relevant stuff
 //			- Defined procyon system coords to PROCYON_X and PROCYON_Y for use in game start location, in globdata.c
+//			- Reduced Kohrah and slykohr max taskforce sizes to 2 ships
 
 
 #ifndef _RACES_H
@@ -680,11 +681,11 @@ enum
 		MAKE_BYTE (1, 5),  /* URQUAN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* ZOQFOTPIK_SHIP */ \
 		MAKE_BYTE (1, 5),  /* SYREEN_SHIP */ \
-		MAKE_BYTE (1, 5),  /* BLACK_URQUAN_SHIP */ \
+		MAKE_BYTE (1, 2),  /* JMS: BLACK_URQUAN_SHIP REDUCED TO MAX 2 SHIPS */ \
 		MAKE_BYTE (1, 5),  /* JMS: ANDROSYNTH_SHIP*/ \
 		MAKE_BYTE (1, 5),  /* JMS: CHENJESU_SHIP */\
 		MAKE_BYTE (1, 5),  /* JMS: MMRNMHRM_SHIP */\
-		MAKE_BYTE (1, 5),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
+		MAKE_BYTE (1, 2),  /* JMS: SLYLANDRO_KOHRAH_SHIP REDUCED TO MAX 2 SHIPS */ \
 		MAKE_BYTE (1, 5),  /* JMS: LURG_SHIP */ \
 		MAKE_BYTE (1, 5),  /* YEHAT_REBEL_SHIP */\
 		MAKE_BYTE (1, 1),  /* JMS:TRANSPORT_SHIP */ \

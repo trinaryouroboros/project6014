@@ -227,7 +227,11 @@ EventHandler (BYTE selector)
 		case TRANSPORT_HAS_ARRIVED_AT_DESTINATION_EVENT:
 			if(GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 4)
 				SET_GAME_STATE (TRANSPORT_SHIP_0_STATUS,0);
-			break;	
+			break;
+		case SHOFIXTI_PATROL_RETURNS_HOME_EVENT:
+			SET_GAME_STATE (SHOFIXTI_PATROL_RETURNED, 1);
+			break;
+
 	}
 }
 
@@ -247,7 +251,7 @@ transport_starts_event(void)
 	
 	month_index = GLOBAL (GameClock.month_index) % 12;
 
-	if (day_index==28)
+	if (day_index == 28)
 	{
 		
 		// If december 28th, next transport starts next year.

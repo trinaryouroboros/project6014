@@ -18,6 +18,7 @@
 
 // JMS 2010: -Added viewscreen animu
 //			 -Added some dialogue options
+//			 -Lost shofixti patrols sidequest, one of 3 patrols returns home after 2 months
 
 #include "comm/commall.h"
 #include "comm/shofixt/resinst.h"
@@ -232,24 +233,65 @@ HowReconstruction (RESPONSE_REF R)
 static void
 SmallTalk2 (RESPONSE_REF R)
 {	
-	if (PLAYER_SAID (R, where_patrol))
+	if (PLAYER_SAID (R, where_patrol)
+		|| PLAYER_SAID (R, where_patrol_2))
 	{
+		if (PLAYER_SAID (R, where_patrol_2))
+			NPCPhrase (HERE_GOES);
+			
 		NPCPhrase (LOST_PATROLS);
-		DISABLE_PHRASE (where_patrol);
+		
+		if (GET_GAME_STATE(SHOFIXTI_PATROL_RETURNED))
+			NPCPhrase (TWO_PATROLS_MISSING);
+		else
+			NPCPhrase (THREE_PATROLS_MISSING);
+		
+		if (PLAYER_SAID (R, where_patrol))
+		{
+			DISABLE_PHRASE (where_patrol);
+			DISABLE_PHRASE (where_patrol_2);
+		}
+		else if (PLAYER_SAID (R, where_patrol_2))
+			DISABLE_PHRASE (where_patrol_2);
 	}
 	else if (PLAYER_SAID (R, why_not_call))
 	{
-		SET_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1);
 		NPCPhrase (NO_RESOURCES_TO_CALL);
+		
+		if (GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI))
+			NPCPhrase (YOU_HAVE_COORDINATES);
+		else
+			NPCPhrase (TRANSFER_COORDINATES);
+	
+		if(!(GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI)))
+		{
+			// JMS: Trigger one of the lost patrols to come home after 2 months
+			AddEvent (RELATIVE_EVENT, 2, 0, 0, SHOFIXTI_PATROL_RETURNS_HOME_EVENT);
+			SET_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1);
+		}
+		
+		if (GET_GAME_STATE(SHOFIXTI_PATROL_RETURNED))
+			NPCPhrase (ONLY_TWO_PATROLS);
+		
 		DISABLE_PHRASE (why_not_call);
 	}
+	else if (PLAYER_SAID (R, ask_scar))
+	{
+		NPCPhrase (ANSWER_SCAR);
+		DISABLE_PHRASE (ask_scar);
+	}
 	
-	if (PHRASE_ENABLED (where_patrol))
+	if (PHRASE_ENABLED (where_patrol) && !(GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI)))
 	{
 		Response (where_patrol, SmallTalk2);
 	}
+				 
+	if (PHRASE_ENABLED (where_patrol_2) && GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI))
+	{
+		Response (where_patrol_2, SmallTalk2);
+	}
 	
-	if (PLAYER_SAID (R, where_patrol) && PHRASE_ENABLED (why_not_call))
+	if ( (PLAYER_SAID (R, where_patrol) || PLAYER_SAID (R, where_patrol_2)) && PHRASE_ENABLED (why_not_call))
 	{
 		Response (why_not_call, SmallTalk2);
 	}
@@ -259,6 +301,11 @@ SmallTalk2 (RESPONSE_REF R)
 		Response (how_goes_reconstruction, HowReconstruction);
 	}
 
+	if (PHRASE_ENABLED (ask_scar))
+	{
+		Response (ask_scar, SmallTalk2);
+	}
+	
 	Response (farewell_shofixti, ExitConversation);
 }
 
@@ -276,8 +323,12 @@ SmallTalk1 (RESPONSE_REF R)
 		NPCPhrase (SHARE_NEWS);
 	}
 
-	Response (where_patrol, SmallTalk2);
+	if (!(GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI)))
+		Response (where_patrol, SmallTalk2);
+	else
+		Response (where_patrol_2, SmallTalk2);
 	Response (how_goes_reconstruction, HowReconstruction);
+	Response (ask_scar, SmallTalk2);
 	Response (farewell_shofixti, ExitConversation);
 }
 
@@ -329,18 +380,26 @@ Intro (void)
 	else
 	{
 		NumVisits = GET_GAME_STATE (SHOFIXTI_VISITS);
-		switch (NumVisits++)
+		if (GET_GAME_STATE(SHOFIXTI_PATROL_RETURNED) && !(GET_GAME_STATE(SHOFIXTI_GREAT_NEWS_HEARD)))
 		{
-			case 0:
-				NPCPhrase (SHOFIXTI_GREETING_1);
-				break;
-			case 1:
-				NPCPhrase (SHOFIXTI_GREETING_2);
-				break;
-			case 2:
-				NPCPhrase (SHOFIXTI_GREETING_3);
-				--NumVisits;
-				break;
+			NPCPhrase (GREAT_NEWS);
+			SET_GAME_STATE(SHOFIXTI_GREAT_NEWS_HEARD, 1);
+		}
+		else 
+		{
+			switch (NumVisits++)
+			{
+				case 0:
+					NPCPhrase (SHOFIXTI_GREETING_1);
+					break;
+				case 1:
+					NPCPhrase (SHOFIXTI_GREETING_2);
+					break;
+				case 2:
+					NPCPhrase (SHOFIXTI_GREETING_3);
+					--NumVisits;
+					break;
+			}
 		}
 		
 		SET_GAME_STATE (SHOFIXTI_VISITS, NumVisits);
@@ -381,7 +440,7 @@ init_shofixti_comm (void)
 
 	shofixti_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
 	shofixti_desc.AlienTextBaseline.y = 0;
-	shofixti_desc.AlienTextWidth = SIS_TEXT_WIDTH;
+	shofixti_desc.AlienTextWidth = SIS_TEXT_WIDTH - 4;
 
 	if (GET_GAME_STATE (SHOFIXTI_ANGRY) > 1)
 		SET_GAME_STATE (BATTLE_SEGUE, 1);
