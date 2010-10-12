@@ -107,7 +107,7 @@ debugKeyPressed (void)
 	triangSphereSwitch = !triangSphereSwitch;
 	ToggleTriangulationSpheres(triangSphereSwitch);
 //	forwardToNextEvent (TRUE);
-//	SET_GAME_STATE (MELNORME_CREDIT1, 100);
+	SET_GAME_STATE (MELNORME_CREDIT1, 100);
 //	GLOBAL_SIS (ResUnits) = 100000;
 
 	// Tests

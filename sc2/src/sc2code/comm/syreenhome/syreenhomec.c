@@ -121,23 +121,23 @@ static LOCDATA syreenhome_desc =
 		},
 	  {             // 9 - zoomed left girl turning head
 			79, /* StartIndex */
-			3, /* NumFrames */
+			2, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 2, ONE_SECOND, /* FrameRate */
 			ONE_SECOND * 3, ONE_SECOND * 5, /* RestartRate */
 			(1 << 10), /* BlockMask */
 		},
 	  {             // 10 - zoomed left girl manipulating starmap
-			82, /* StartIndex */
-			8, /* NumFrames */
+			81, /* StartIndex */
+			7, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND * 3, ONE_SECOND * 5, /* RestartRate */
 			(1 << 9), /* BlockMask */
 		},
 	  {             // 11 - zoomed front girl breathing
-			90, /* StartIndex */
-			8, /* NumFrames */
+			88, /* StartIndex */
+			7, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 7, 0, /* FrameRate */
 			ONE_SECOND * 4, ONE_SECOND, /* RestartRate */
@@ -153,7 +153,7 @@ static LOCDATA syreenhome_desc =
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
-		98, /* StartIndex */
+		95, /* StartIndex */
 		59, /* NumFrames */
 		TALK_INTRO, /* AnimFlags */
 		ONE_SECOND / 20, 0, /* FrameRate */

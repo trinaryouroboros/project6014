@@ -123,9 +123,9 @@ TFB_ReInitGraphics (int driver, int flags, int width, int height)
 				togglefullscreen);
 	}
 
-	sprintf (caption, "The Ur-Quan Masters v%d.%d.%d%s",
-			UQM_MAJOR_VERSION, UQM_MINOR_VERSION,
-			UQM_PATCH_VERSION, UQM_EXTRA_VERSION);
+	sprintf (caption, "The Ur-Quan Masters project6014 v%d.%d.%d%s",
+			P6014_MAJOR_VERSION, P6014_MINOR_VERSION,
+			P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
 	SDL_WM_SetCaption (caption, NULL);
 
 	if (flags & TFB_GFXFLAGS_FULLSCREEN)
@@ -166,9 +166,9 @@ TFB_InitGraphics (int driver, int flags, int width, int height)
 		result = TFB_Pure_InitGraphics (driver, flags, width, height);
 	}
 
-	sprintf (caption, "The Ur-Quan Masters v%d.%d.%d%s", 
-			UQM_MAJOR_VERSION, UQM_MINOR_VERSION, 
-			UQM_PATCH_VERSION, UQM_EXTRA_VERSION);
+	sprintf (caption, "The Ur-Quan Masters project6014 v%d.%d.%d%s", 
+			P6014_MAJOR_VERSION, P6014_MINOR_VERSION, 
+			P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
 	SDL_WM_SetCaption (caption, NULL);
 
 	if (flags & TFB_GFXFLAGS_FULLSCREEN)
