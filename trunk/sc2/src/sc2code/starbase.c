@@ -291,6 +291,37 @@ rotate_starbase(void *data)
 	return(0);
 }
 
+static int
+zooming_ships(void *data)
+{
+	DWORD TimeIn;
+	STAMP s;
+	Task task = (Task) data;
+	
+	//s.origin.x = s.origin.y = 0;
+	s.origin.x = SAFE_X;
+	s.origin.y = SAFE_Y + 4;
+	s.frame = IncFrameIndex (pMenuState->CurAmbientFrame);
+	TimeIn = GetTimeCounter ();
+	while (!Task_ReadState (task, TASK_EXIT))
+	{
+		//CONTEXT OldContext;
+		
+		LockMutex (GraphicsLock);
+		DrawStamp (&s);
+		s.frame = IncFrameIndex (s.frame);
+		if (s.frame == pMenuState->CurAmbientFrame)
+			s.frame = IncFrameIndex (s.frame);
+		UnlockMutex (GraphicsLock);
+		
+		SleepThreadUntil (TimeIn + (ONE_SECOND));
+		TimeIn = GetTimeCounter ();
+	}
+
+	FinishTask (task);
+	return(0);
+}
+
 BOOLEAN
 DoStarBase (MENU_STATE *pMS)
 {
@@ -303,7 +334,8 @@ DoStarBase (MENU_STATE *pMS)
 
 	if (!pMS->Initialized)
 	{
-		STAMP s;
+	  STAMP s;
+	  //STAMP t;
 
 		LastActivity &= ~CHECK_LOAD;
 		pMS->InputFunc = DoStarBase;
@@ -323,6 +355,11 @@ DoStarBase (MENU_STATE *pMS)
 			Task_SetState (pMS->flash_task, TASK_EXIT);
 			pMS->flash_task = 0;
 		}
+		//if (pMS->flash_ambient_task)
+		//{
+		//	Task_SetState (pMS->flash_ambient_task, TASK_EXIT);
+		//	pMS->flash_ambient_task = 0;
+		//}
 
 		pMS->Initialized = TRUE;
 		UnlockMutex (GraphicsLock);
@@ -341,6 +378,13 @@ DoStarBase (MENU_STATE *pMS)
 		    s.frame = CaptureDrawable (LoadGraphic (STARBASE_GAIA_ANIM));
 			
 		pMS->CurFrame = s.frame;
+
+		//BW: initialize zooming ships
+		//t.origin.x = SAFE_X;
+		//t.origin.y = SAFE_Y + 4;		
+		//t.frame = CaptureDrawable (LoadGraphic (STARBASE_SHIP_ANIM));
+		//pMS->CurAmbientFrame = t.frame;
+
 		pMS->hMusic = LoadMusic (STARBASE_MUSIC);
 
 		LockMutex (GraphicsLock);
@@ -350,6 +394,7 @@ DoStarBase (MENU_STATE *pMS)
 		SetContextBackGroundColor (BLACK_COLOR);
 		ClearDrawable ();
 		DrawStamp (&s);
+		//DrawStamp (&t);
 		DrawBaseStateStrings ((STARBASE_STATE)~0, pMS->CurState);
 		{
 			RECT r;
@@ -364,6 +409,8 @@ DoStarBase (MENU_STATE *pMS)
 		UnbatchGraphics ();
 		pMS->flash_task = AssignTask (rotate_starbase, 4096,
 				"rotate starbase");
+		//pMS->flash_ambient_task = AssignTask (zooming_ships, 4096,
+		//		"zooming ships");
 		UnlockMutex (GraphicsLock);
 	}
 	// JMS: These lines that are commented out are unnecessary also...
@@ -378,8 +425,15 @@ ExitStarBase:
 			ConcludeTask (pMS->flash_task);
 			pMS->flash_task = 0;
 		}
+		//if (pMS->flash_ambient_task)
+		//{
+		//	ConcludeTask (pMS->flash_ambient_task);
+		//	pMS->flash_ambient_task = 0;
+		//}
 		DestroyDrawable (ReleaseDrawable (pMS->CurFrame));
+		//DestroyDrawable (ReleaseDrawable (pMS->CurAmbientFrame));
 		pMS->CurFrame = 0;
+		//pMS->CurAmbientFrame = 0;
 		StopMusic ();
 		if (pMS->hMusic)
 		{

@@ -283,6 +283,7 @@ graphics.spapluto = GFXRES:base/lander/energy/fwiffo.ani
 graphics.starbase = GFXRES:base/ui/starbase.ani
 graphics.starbase_gaia = GFXRES:base/ui/starbase_gaia.ani
 graphics.starbase_procyon = GFXRES:base/ui/starbase_procyon.ani
+graphics.starbase_ship = GFXRES:base/ui/starbase_ship.ani
 graphics.stars = GFXRES:base/battle/stars.ani
 graphics.status = GFXRES:base/ui/status.ani
 graphics.sundevic = GFXRES:base/lander/energy/sundevice.ani

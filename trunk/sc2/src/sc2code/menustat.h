@@ -33,12 +33,14 @@ typedef struct menu_state
 
 	BYTE CurState;
 	FRAME CurFrame;
+	FRAME CurAmbientFrame;
 	STRING CurString;
 	POINT first_item;
 	SIZE delta_item;
 
 	FRAME ModuleFrame;
 	Task flash_task;
+	Task flash_ambient_task;
 	RECT flash_rect0, flash_rect1;
 	FRAME flash_frame0, flash_frame1;
 

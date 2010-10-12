@@ -170,24 +170,24 @@ main (int argc, char *argv[])
 
 	if (options.runMode == runMode_version)
 	{
- 		printf ("%d.%d.%d%s\n", UQM_MAJOR_VERSION, UQM_MINOR_VERSION,
-				UQM_PATCH_VERSION, UQM_EXTRA_VERSION);
+ 		printf ("%d.%d.%d%s\n", P6014_MAJOR_VERSION, P6014_MINOR_VERSION,
+				P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
 		log_showBox (false, false);
 		return EXIT_SUCCESS;
 	}
 	
-	log_add (log_User, "The Ur-Quan Masters v%d.%d.%d%s (compiled %s %s)\n"
+	log_add (log_User, "The Ur-Quan Masters project6014 v%d.%d.%d%s (compiled %s %s)\n"
 	        "This software comes with ABSOLUTELY NO WARRANTY;\n"
 			"for details see the included 'COPYING' file.\n",
-			UQM_MAJOR_VERSION, UQM_MINOR_VERSION,
-			UQM_PATCH_VERSION, UQM_EXTRA_VERSION,
+			P6014_MAJOR_VERSION, P6014_MINOR_VERSION,
+			P6014_PATCH_VERSION, P6014_EXTRA_VERSION,
 			__DATE__, __TIME__);
 #ifdef NETPLAY
 	log_add (log_User, "Netplay protocol version %d.%d. Minimum required "
-			"remote UQM version is %d.%d.%d.",
+			"remote P6014 version is %d.%d.%d.",
 			NETPLAY_PROTOCOL_VERSION_MAJOR, NETPLAY_PROTOCOL_VERSION_MINOR,
-			NETPLAY_MIN_UQM_VERSION_MAJOR, NETPLAY_MIN_UQM_VERSION_MINOR,
-			NETPLAY_MIN_UQM_VERSION_PATCH);
+			NETPLAY_MIN_P6014_VERSION_MAJOR, NETPLAY_MIN_P6014_VERSION_MINOR,
+			NETPLAY_MIN_P6014_VERSION_PATCH);
 #endif
 
 	if (options.runMode == runMode_usage)

@@ -104,8 +104,8 @@ DrawRestartMenu (BYTE OldState, BYTE NewState, FRAME f)
 	t.baseline.y = SCREEN_HEIGHT - 2;
 	t.align = ALIGN_RIGHT;
 	t.CharCount = (COUNT)~0;
-	sprintf (buf, "v%d.%d.%d%s", UQM_MAJOR_VERSION, UQM_MINOR_VERSION,
-			UQM_PATCH_VERSION, UQM_EXTRA_VERSION);
+	sprintf (buf, "v%d.%d.%d%s", P6014_MAJOR_VERSION, P6014_MINOR_VERSION,
+			P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
 	SetContextForeGroundColor (WHITE_COLOR);
 	font_DrawText (&t);
 

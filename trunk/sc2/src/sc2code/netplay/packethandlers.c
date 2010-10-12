@@ -102,16 +102,16 @@ PacketHandler_Init(NetConnection *conn, const Packet_Init *packet) {
 	}
 
 	if (versionCompare(packet->uqmVersion.major, packet->uqmVersion.minor,
-			packet->uqmVersion.patch, NETPLAY_MIN_UQM_VERSION_MAJOR,
-			NETPLAY_MIN_UQM_VERSION_MINOR, NETPLAY_MIN_UQM_VERSION_PATCH)
+			packet->uqmVersion.patch, NETPLAY_MIN_P6014_VERSION_MAJOR,
+			NETPLAY_MIN_P6014_VERSION_MINOR, NETPLAY_MIN_P6014_VERSION_PATCH)
 			< 0) {
 		sendAbort (conn, AbortReason_versionMismatch);
 		abortFeedback(conn, AbortReason_versionMismatch);
-		log_add(log_Error, "Remote side is running a version of UQM that "
+		log_add(log_Error, "Remote side is running a version of P6014 that "
 				"is too old (%d.%d.%d; %d.%d.%d is required).\n",
 				packet->uqmVersion.major, packet->uqmVersion.minor,
-				packet->uqmVersion.patch, NETPLAY_MIN_UQM_VERSION_MAJOR,
-				NETPLAY_MIN_UQM_VERSION_MINOR, NETPLAY_MIN_UQM_VERSION_PATCH);
+				packet->uqmVersion.patch, NETPLAY_MIN_P6014_VERSION_MAJOR,
+				NETPLAY_MIN_P6014_VERSION_MINOR, NETPLAY_MIN_P6014_VERSION_PATCH);
 		errno = ENOSYS;
 		return -1;
 	}
