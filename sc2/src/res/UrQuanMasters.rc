@@ -21,8 +21,8 @@ LANGUAGE 0x09, 0x01	// LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 
 1   VERSIONINFO
- FILEVERSION UQM_MAJOR_VERSION,UQM_MINOR_VERSION,UQM_PATCH_VERSION,0
- PRODUCTVERSION UQM_MAJOR_VERSION,UQM_MINOR_VERSION,UQM_PATCH_VERSION,0
+ FILEVERSION P6014_MAJOR_VERSION,P6014_MINOR_VERSION,P6014_PATCH_VERSION,0
+ PRODUCTVERSION P6014_MAJOR_VERSION,P6014_MINOR_VERSION,P6014_PATCH_VERSION,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -40,7 +40,7 @@ BEGIN
             VALUE "Comments", "See http://sc2.sourceforge.net\0"
             VALUE "CompanyName", "sc2.sourceforge.net\0"
             VALUE "FileDescription", "The Ur-Quan Masters main executable\0"
-            VALUE "FileVersion", UQM_STRING_VERSION "\0"
+            VALUE "FileVersion", P6014_STRING_VERSION "\0"
             VALUE "InternalName", "uqm\0"
             VALUE "LegalCopyright", "(C) 1992-1993, 2002-2007 by respective authors\0"
 #ifdef _DEBUG
@@ -49,7 +49,7 @@ BEGIN
             VALUE "OriginalFilename", "uqm.exe\0"
 #endif
             VALUE "ProductName", "The Ur-Quan Masters\0"
-            VALUE "ProductVersion", UQM_STRING_VERSION "\0"
+            VALUE "ProductVersion", P6014_STRING_VERSION "\0"
             VALUE "SpecialBuild", "Alpha\0"
         END
     END

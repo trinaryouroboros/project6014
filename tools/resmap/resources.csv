@@ -299,7 +299,6 @@ SHIPYARD_PMAP_ANIM,graphics.shipyard,sc2code/igfxres.h,GFXRES,base/ui/shipyard.a
 STARBASE_ANIM,graphics.starbase,sc2code/igfxres.h,GFXRES,base/ui/starbase.ani
 STARBASE_GAIA_ANIM,graphics.starbase_gaia,sc2code/igfxres.h,GFXRES,base/ui/starbase_gaia.ani
 STARBASE_PROCYON_ANIM,graphics.starbase_procyon,sc2code/igfxres.h,GFXRES,base/ui/starbase_procyon.ani
-STARBASE_SHIP_ANIM,graphics.starbase_ship,sc2code/igfxres.h,GFXRES,base/ui/starbase_ship.ani
 SAMATRA_BIG_MASK_PMAP_ANIM,planet.samatra.large,sc2code/igfxres.h,GFXRES,base/planets/sam__big.ani
 SHIELDED_BIG_MASK_PMAP_ANIM,planet.slaveshield.large,sc2code/igfxres.h,GFXRES,base/planets/shie_big.ani
 SHIELDED_MED_MASK_PMAP_ANIM,planet.slaveshield.medium,sc2code/igfxres.h,GFXRES,base/planets/shie_med.ani
