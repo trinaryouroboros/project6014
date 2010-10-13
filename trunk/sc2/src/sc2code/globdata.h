@@ -187,6 +187,18 @@ typedef struct
 	
 } LOCDATA;
 
+typedef struct
+{
+        RESOURCE StarbaseFrameRes;
+	COUNT NumAnimations;
+	ANIMATION_DESC StarbaseAmbientArray[MAX_ANIMATIONS];
+
+	FRAME StarbaseFrame;
+	COLORMAP StarbaseColorMap;
+	
+} SBDATA;
+
+
 enum
 {
 	PORTAL_SPAWNER_DEVICE = 0,

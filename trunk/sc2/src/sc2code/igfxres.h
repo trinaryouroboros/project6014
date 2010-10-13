@@ -297,7 +297,6 @@
 #define STARBASE_ANIM "graphics.starbase"
 #define STARBASE_GAIA_ANIM "graphics.starbase_gaia"
 #define STARBASE_PROCYON_ANIM "graphics.starbase_procyon"
-#define STARBASE_SHIP_ANIM "graphics.starbase_ship"
 #define STAR_MASK_PMAP_ANIM "graphics.stars"
 #define STATUS_MASK_PMAP_ANIM "graphics.status"
 #define SUN_DEVICE_MASK_PMAP_ANIM "graphics.sundevic"
