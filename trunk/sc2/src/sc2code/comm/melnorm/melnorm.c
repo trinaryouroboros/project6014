@@ -243,7 +243,27 @@ static void
 PurchaseMenu (RESPONSE_REF R);
 
 static void
+SellMenu (RESPONSE_REF R);
+
+static void
 TradeMenu (RESPONSE_REF R);
+
+static void
+ShipMarkSightingsMenu (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, sell_ship_mark_sightings))
+	{
+		NPCPhrase (OFFER_CREDITS_FOR_SHIPMARK_INFO);
+		Response (deal_shipmarks, ShipMarkSightingsMenu);
+		Response (no_deal_shipmarks, SellMenu);
+	}
+	else if (PLAYER_SAID (R, deal_shipmarks))
+	{
+		NPCPhrase (ALTERNATIVE_REWARD_FOR_SHIPMARK_INFO);
+		Response (credits_for_ship_mark_sightings, SellMenu);
+		Response (info_for_ship_mark_sightings, SellMenu);
+	}	
+}
 
 static void
 BuyInfoMenu (RESPONSE_REF R)
@@ -440,7 +460,6 @@ PurchaseMenu (RESPONSE_REF R)
 	Response (done_buying, TradeMenu);
 }
 
-
 static void
 SellMenu (RESPONSE_REF R)
 {
@@ -460,7 +479,11 @@ SellMenu (RESPONSE_REF R)
 		rainbow_mask >>= 1;
 	}
 	
-	if (!PLAYER_SAID (R, items_to_sell))
+	if (PLAYER_SAID (R, no_deal_shipmarks))
+	{
+		NPCPhrase (OK_NO_DEAL_SHIPMARKS);
+	}
+	else if (!PLAYER_SAID (R, items_to_sell))
 	{
 		if (PLAYER_SAID (R, sell_life_data))
 		{
@@ -484,10 +507,7 @@ SellMenu (RESPONSE_REF R)
 			DrawCargoStrings ((BYTE)~0, (BYTE)~0);
 			SleepThread (ONE_SECOND / 2);
 			TimeIn = GetTimeCounter ();
-			DrawCargoStrings (
-							  (BYTE)NUM_ELEMENT_CATEGORIES,
-							  (BYTE)NUM_ELEMENT_CATEGORIES
-							  );
+			DrawCargoStrings ((BYTE)NUM_ELEMENT_CATEGORIES, (BYTE)NUM_ELEMENT_CATEGORIES);
 			do
 			{
 				TimeIn = GetTimeCounter ();
@@ -501,16 +521,25 @@ SellMenu (RESPONSE_REF R)
 					--GLOBAL_SIS (TotalBioMass);
 					DeltaCredit (BIO_CREDIT_VALUE);
 				}
-				DrawCargoStrings (
-								  (BYTE)NUM_ELEMENT_CATEGORIES,
-								  (BYTE)NUM_ELEMENT_CATEGORIES
-								  );
+				DrawCargoStrings ((BYTE)NUM_ELEMENT_CATEGORIES,(BYTE)NUM_ELEMENT_CATEGORIES);
 			} while (GLOBAL_SIS (TotalBioMass));
 			SleepThread (ONE_SECOND / 2);
 			
 			LockMutex (GraphicsLock);
 			ClearSISRect (DRAW_SIS_DISPLAY);
 			UnlockMutex (GraphicsLock);
+		}
+		else if (PLAYER_SAID (R, credits_for_ship_mark_sightings))
+		{
+			added_credit = (50 * BIO_CREDIT_VALUE);
+			NPCPhrase (SHIP_MARK_DEAL);
+			DeltaCredit (added_credit);
+			SET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT, 3);
+		}
+		else if (PLAYER_SAID (R, info_for_ship_mark_sightings))
+		{
+			NPCPhrase (SHIP_MARK_INFORMATION);
+			SET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT, 3);
 		}
 		else /* if (R == sell_rainbow_locations) */
 		{
@@ -530,7 +559,7 @@ SellMenu (RESPONSE_REF R)
 		}
 	}
 	
-	if (GLOBAL_SIS (TotalBioMass) || num_new_rainbows)
+	if (GLOBAL_SIS (TotalBioMass) || num_new_rainbows || GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) == 2)
 	{
 		if (!what_to_sell_queued)
 			NPCPhrase (WHAT_TO_SELL);
@@ -539,6 +568,11 @@ SellMenu (RESPONSE_REF R)
 			Response (sell_life_data, SellMenu);
 		if (num_new_rainbows)
 			Response (sell_rainbow_locations, SellMenu);
+		if (GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) == 2)
+			Response (sell_ship_mark_sightings, ShipMarkSightingsMenu);
+		
+		Response (done_selling, TradeMenu);
+		Response (no_trade_now, ExitConversation);
 	}
 	else
 	{
@@ -546,12 +580,14 @@ SellMenu (RESPONSE_REF R)
 		{
 			NPCPhrase (NOTHING_TO_SELL);
 			DISABLE_PHRASE (items_to_sell);
+			TradeMenu (dummy);
+		}
+		else
+		{
+			Response (done_selling, TradeMenu);
+			Response (no_trade_now, ExitConversation);
 		}
 	}
-	
-	Response (done_selling, TradeMenu);
-	Response (no_trade_now, ExitConversation);
-
 }
 
 
@@ -582,15 +618,20 @@ TradeMenu (RESPONSE_REF R)
 			NPCPhrase (TRADING_INFO1);
 			NPCPhrase (MORE_TRADING_INFO);
 		}
-		else if (GET_GAME_STATE (MET_MELNORME) == 1)
+		else if(PLAYER_SAID (R, dummy))
+		{
+		}
+		else if (GET_GAME_STATE (MET_MELNORME) == 1 && !(PLAYER_SAID (R, dummy)))
 		{
 			NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS2);
 		}
-		
-		NPCPhrase (BUY_OR_SELL);
-		AlienTalkSegue(1);
-		XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
-		AlienTalkSegue((COUNT)~0);
+		if (!(PLAYER_SAID (R, dummy)))
+		{
+			NPCPhrase (BUY_OR_SELL);
+			AlienTalkSegue(1);
+			XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
+			AlienTalkSegue((COUNT)~0);
+		}
 	}
 
 	Response (make_purchases, PurchaseMenu);

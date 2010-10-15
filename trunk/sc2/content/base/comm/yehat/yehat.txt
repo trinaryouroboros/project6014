@@ -30,7 +30,7 @@ We're investigating a case of missing Shofixti patrol. We thought we'd stop by a
 #(PLEASED_TO_SEE_ALLY)
 We're pleased to see our old friend. Missing Shofixti you say.
 We have no news on their patrols, but
-a Terminator scout group reported something interesting in Gamma Janus
+a Terminator scout group reported something interesting on Gamma Janus II
 while chasing a lone Kohr-Ah vessel.
 Ye might consider checking it out.
 Apparently it bore the hall-marks of a Precursor item.

@@ -26,6 +26,7 @@
 //			 -Added BLACK_ORB_STATE game state for handling the events upon finding the black orb.
 //			 -Added BLACK_ORB_CUTSCENE activity enum for initiating the cutscene
 //			 -Changed Animflags size from BYTE to COUNT (Possibility to add more flags later on.)
+//			 -Lots of new game states... see the bottom of the ADD_GAME_STATE list.			
 
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
@@ -1042,6 +1043,13 @@ START_GAME_STATE
 	ADD_GAME_STATE (SYREEN_SHIP_YEAR, 5)
 	/* The year that new ships are available from the Syreen
 	 * (stored as an offset from the year the game starts). */
+
+	// JMS: Yehat Precursor artifact hint at Gamma Janus
+	ADD_GAME_STATE (YEHAT_PRECURSOR_ARTIFACT, 2)
+		// 0 - Precursor artifact not seen or heard of
+		// 1 - Heard about Precursor artifact from the Yehat OR seen it on the planet
+		// 2 - "Precursor artifact" seen on the planet AND heard the Yehat story on it 
+		// 3 - Information on "artifact" dealt to melnorme
 
 END_GAME_STATE
 

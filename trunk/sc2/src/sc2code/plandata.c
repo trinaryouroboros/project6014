@@ -21,6 +21,7 @@
 // JMS 2010: -Added Lurg home system
 //			 -Added shofixti crash site
 //			 -Added system for those who mysteriously vanished in a hurry...
+//			 -Added little something to Gamma Janus
 
 #include "encount.h"
 #include "resinst.h"
@@ -299,7 +300,7 @@ STAR_DESC starmap_array[] =
 {{3398,5840}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 6, 18},
 {{7312,5841}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 3, 33},
 {{3855,5853}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 1, 18},
-{{9388,5863}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 3, 47},
+{{9388,5863}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), HINT2_DEFINED, 3, 47}, // JMS: Gamma Janus, Yehat hint about precursor artifact
 {{6301,5875}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 5, 21},
 {{7398,5889}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 2, 33},
 {{3974,5892}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 4, 18},
