@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: If uqm.cfg is not found (running for the first time), start in full-screen mode to prevent color bug on OSX
+
 #ifdef HAVE_UNISTD_H
 #	include <unistd.h>
 #endif
@@ -257,6 +259,11 @@ main (int argc, char *argv[])
 		options.gfxFlags |= TFB_GFXFLAGS_SCANLINES;
 	}
 	if (res_HasKey ("config.fullscreen") && res_GetBoolean ("config.fullscreen"))
+	{
+		options.gfxFlags |= TFB_GFXFLAGS_FULLSCREEN;
+	}
+	// JMS: Start in full-screen mode to prevent color bug on OSX
+	if (!(res_HasKey ("config.fullscreen")))
 	{
 		options.gfxFlags |= TFB_GFXFLAGS_FULLSCREEN;
 	}
