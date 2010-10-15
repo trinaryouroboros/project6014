@@ -40,11 +40,11 @@
 #define MAX_DEFENSE 8
 
 #define MAX_CREW MAX_CREW_SIZE
-#define MAX_ENERGY 30
+#define MAX_ENERGY 42
 #define ENERGY_REGENERATION 1
 #define WEAPON_ENERGY_COST 1
 #define SPECIAL_ENERGY_COST 0
-#define ENERGY_WAIT 9
+#define ENERGY_WAIT 6
 #define MAX_THRUST 10
 #define THRUST_INCREMENT 4
 #define TURN_WAIT 17
@@ -66,7 +66,7 @@
 // JMS: Chmmr Explorer has smaller weapon delay and largish special delay
 #define EXPLORER_WEAPON_WAIT 2
 #define EXPLORER_SPECIAL_WAIT 18
-#define EXPLORER_WEAPON_ENERGY_COST 0 // Shiver: Bumped this to 0. Weapon cost is set at "+2" somewhere else.
+#define EXPLORER_WEAPON_ENERGY_COST 0 // Shiver: Weapon cost is set at "+3" somewhere else.
 
 static RACE_DESC sis_desc =
 {
@@ -1459,8 +1459,8 @@ InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots)
 	{
 		RaceDescPtr->ship_info.max_crew = EXPLORER_CREW_CAPACITY;
 		RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
-		RaceDescPtr->characteristics.weapon_energy_cost += 2;
-		RaceDescPtr->characteristics.special_energy_cost = 8;
+		RaceDescPtr->characteristics.weapon_energy_cost += 3;
+		RaceDescPtr->characteristics.special_energy_cost = 12;
 	}
 	else if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
 	{
