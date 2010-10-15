@@ -22,6 +22,7 @@
 #include "planets/genall.h"
 #include "libs/mathlib.h"
 
+// JMS 2010: - This is a completely new file.
 
 void
 GenerateHint (BYTE control)
@@ -64,39 +65,7 @@ GenerateHint (BYTE control)
 				TFB_SeedRandom (old_rand);
 				break;
 			}
-			/*else if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[0]
-					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0]
-					&& !GET_GAME_STATE (BURVIXESE_BROADCASTERS))
-			{
-				old_rand = TFB_SeedRandom (
-						pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]
-						);
-
-				rand_val = TFB_Random ();
-				pSolarSysState->SysInfo.PlanetInfo.CurPt.x =
-						(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
-				pSolarSysState->SysInfo.PlanetInfo.CurPt.y =
-						(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
-				pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
-				pSolarSysState->SysInfo.PlanetInfo.CurType = 0;
-				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-						& (1L << 0))
-						&& pSolarSysState->CurNode == (COUNT)~0)
-					pSolarSysState->CurNode = 1;
-				else
-				{
-					pSolarSysState->CurNode = 0;
-					if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-							& (1L << 0))
-					{
-						SET_GAME_STATE (BURVIXESE_BROADCASTERS, 1);
-						SET_GAME_STATE (BURV_BROADCASTERS_ON_SHIP, 1);
-					}
-				}
-
-				TFB_SeedRandom (old_rand);
-				break;
-			}*/
+			
 			pSolarSysState->CurNode = 0;
 			break;
 		}
@@ -192,6 +161,79 @@ GenerateHint (BYTE control)
 				pSolarSysState->SysInfo.PlanetInfo.Tectonics = 0;
 			}
 		
+			LoadPlanet (NULL);
+			break;
+		}
+		default:
+			GenerateRandomIP (control);
+			break;
+	}
+}
+
+
+void
+GenerateHint2 (BYTE control)
+{
+	COUNT i;
+	DWORD rand_val;
+	
+	switch (control)
+	{
+		case GENERATE_ENERGY:
+		{
+			DWORD rand_val, old_rand;
+			
+			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1])
+			{
+				old_rand = TFB_SeedRandom (pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]);
+				
+				rand_val = TFB_Random ();
+				pSolarSysState->SysInfo.PlanetInfo.CurPt.x = (LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
+				pSolarSysState->SysInfo.PlanetInfo.CurPt.y = (HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
+				pSolarSysState->SysInfo.PlanetInfo.CurType = 1;
+				pSolarSysState->SysInfo.PlanetInfo.CurDensity = 0;
+				
+				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << 0)) && pSolarSysState->CurNode == (COUNT)~0)
+					pSolarSysState->CurNode = 1;
+				else
+					pSolarSysState->CurNode = 0;
+				
+				TFB_SeedRandom (old_rand);
+				break;
+			}
+			
+			pSolarSysState->CurNode = 0;
+			break;
+		}
+		case GENERATE_ORBITAL:
+		{
+			rand_val = DoPlanetaryAnalysis (&pSolarSysState->SysInfo, pSolarSysState->pOrbitalDesc);
+			
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] = rand_val;
+			i = (COUNT)~0;
+			rand_val = GenerateLifeForms (&pSolarSysState->SysInfo, &i);
+			
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[MINERAL_SCAN] = rand_val;
+			i = (COUNT)~0;
+			GenerateMineralDeposits (&pSolarSysState->SysInfo, &i);
+			
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN] = rand_val;
+			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1])
+			{
+				LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
+				pSolarSysState->PlanetSideFrame[1] = CaptureDrawable (LoadGraphic (CIRCLES_C_MASK_PMAP_ANIM));
+				pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = CaptureStringTable (LoadStringTable (GAMMAJANUS_STRTAB));
+			}
+			
+			if (GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) > 0)
+			{
+				pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
+				SetRelStringTableIndex (pSolarSysState->SysInfo.PlanetInfo.DiscoveryString,1);
+			}
+			
+			if (GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) < 2)
+				SET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT, 2);
+			
 			LoadPlanet (NULL);
 			break;
 		}

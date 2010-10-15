@@ -1,3 +1,6 @@
+#(dummy)
+This is a hack.
+
 #(ENUMERATE_ONE)	melno172.ogg
 one
 
@@ -106,7 +109,7 @@ We are doing just great! But now I have to sort out some business with a Shofixt
 #(DOING_GOOD_RESPONSE)
 Ah, if it's lost Shofixti that interest you, I have some very valuable information.
 In accordance with our protocols and code of ethics
-this information can be given to you in exchange for credits.
+this information can be given to you in exchange for Credits.
 
 #(doing_average)
 Just about average. How about yourselves?
@@ -134,7 +137,7 @@ Of course we still sell fuel and information.
 Sounds good. Remind me how this works again.
 
 #(TRADING_INFO1)
-Certainly, captain.
+Certainly, Captain.
 
 #(MORE_TRADING_INFO)
 We are interested in purchasing certain items, specifically
@@ -168,7 +171,7 @@ Actually I never really liked how you made me collect all that bio stuff just so
 And I think I'm gonna spank yo ass!
 
 #(UNWISE_CAPTAIN)
-That would be unwise Captain.  Our vessels are very well equipped to deal with pirates.  
+That would be unwise, Captain.  Our vessels are very well equipped to deal with pirates.  
 You surprise me with your aggression. I think I will end this communication.
 
 #(only_joke)
@@ -187,7 +190,7 @@ News of your species and your unusual vessel has travelled quickly.
 I need not say how eager we are to trade with you and your kind!
 
 #(HELLO_NOW_DOWN_TO_BUSINESS3)	melno002.ogg
-Hello again, human space captain.
+Hello again, human space Captain.
 Perhaps during this encounter, we will be able to establish a successful, businesslike relationship.
 
 #(get_on_with_business)
@@ -199,6 +202,71 @@ Goodbye, Trade Master.
 #(OK_NO_TRADE_NOW_BYE)	melno011.ogg
 When you wish to trade with us, seek any supergiant star system.
 We shall be there.
+
+#(sell_ship_mark_sightings)
+Uh, I have info on vanished Precursor artifacts and space ships of unknown origin. Interested?
+
+#(OFFER_CREDITS_FOR_SHIPMARK_INFO)
+Captain
+you arouse my curiosity.
+Anything Precursor-related fetches top price from any Melnorme Trader.
+I am willing to offer you 100 Credits for your information
+should it provide valuable.
+However, as the quality of your merchandise cannot be checked without hearing it first
+it is only natural to decide whether or not it is worth the fee
+only after hearing your story.
+
+#(deal_shipmarks)
+Ok, fair enough. Here's the data on the crop circles we discovered on Gamma Janus II.
+
+#(no_deal_shipmarks)
+Hmm, sounds like a rotten deal to me. Thanks, but no thanks.
+
+#(OK_NO_DEAL_SHIPMARKS)
+Very well, Captain.
+But if you do change your mind, our offer stands.
+
+#(ALTERNATIVE_REWARD_FOR_SHIPMARK_INFO)
+Hmm, let's see
+very interesting.
+Captain, I have a highly unconventional suggestion.
+Looking at your data, it seems you have come across something
+we have additional information on.
+It is our custom to only trade knowledge which we have researched thoroughly
+after all, knowing what you are selling makes it easier to ch-- er, support your customer.
+But in this case I am sure that sharing our partial wisdom would profit us both.
+What I suggest is that instead of you receiving the 100 Credit fee
+we engage in an ancient Melnorme tradition
+of exchanging one valuable fact for another.
+
+#(credits_for_ship_mark_sightings)
+No way, Jose. I'll have my Credits now, thank you.
+
+#(info_for_ship_mark_sightings)
+This might benefit both of us... Let's exchange secrets!
+
+#(SHIP_MARK_DEAL)
+What a pity, Captain.
+You just might have learned where the origin of those ships lies.
+
+#(SHIP_MARK_INFORMATION)
+Captain, once again you have made a wise decision!
+And now, for the story...
+When pursuing the matter of the lost Shofixti patrols further
+our agents set their course deep into the Messier system for more clues.
+There was nothing to be found
+except in one system.
+The second planet of Delta Apollonius at 648.0:397.0
+is littered with imprints similar to the one you found on Janus.
+Also, seems there has been great cities on the planet -- Destroyed?
+No. More like 'taken away'.
+Square miles of the planet terrain is patterned with blueprints of cities.
+However, nothing more stands there, only outlines of the buildings in the soil.
+Who were they? Where did they go? We don't know.
+Our inability to find out the facts behind this mystery is most unnerving
+and not to mention, bad for business.
+Should you find something that sheds more light on this matter
+do let us know. You may expect a remarkable sum in exchange.
 
 #(HELLO_AND_DOWN_TO_BUSINESS1)	melno012.ogg
 Yes, let us get down to business.

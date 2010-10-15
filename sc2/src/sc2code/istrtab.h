@@ -46,6 +46,7 @@
 #define FINALPRES_STRTAB "slides.ending"
 #define FLUORESCENT_COLOR_TAB "planet.fluorescent.colortable"
 #define FLUORESCENT_XLAT_TAB "planet.fluorescent.translatetable"
+#define GAMMAJANUS_STRTAB "text.gammajanus"
 #define GREEN_COLOR_TAB "planet.green.colortable"
 #define GREEN_XLAT_TAB "planet.green.translatetable"
 #define GRN_GAS_COLOR_TAB "planet.greengas.colortable"

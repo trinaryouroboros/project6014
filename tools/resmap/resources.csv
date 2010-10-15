@@ -170,6 +170,7 @@ RUINS_STRTAB,text.ruins,sc2code/istrtab.h,STRTAB,base/lander/energy/ruins.txt
 UMGAH_BCS_STRTAB,text.umgtrans,sc2code/istrtab.h,STRTAB,base/lander/energy/umgahcaster.txt
 SHOFIXTI_CRASH_SITE_STRTAB,text.shocrashsite,sc2code/istrtab.h,STRTAB,base/lander/energy/distressartifact.txt
 LEFTHURRY_STRTAB,text.lefthurry,sc2code/istrtab.h,STRTAB,base/lander/energy/hurry.txt
+GAMMAJANUS_STRTAB,text.gammajanus,sc2code/istrtab.h,STRTAB,base/lander/energy/gammajanus.txt
 IPSUN_COLOR_MAP,colortable.ip_sun,sc2code/istrtab.h,BINTAB,base/nav/truespace.ct
 HANGAR_COLOR_TAB,colortable.hangar,sc2code/istrtab.h,BINTAB,base/ui/hangar.ct
 INTROPRES_STRTAB,slides.intro,sc2code/istrtab.h,STRTAB,base/cutscene/intro/intro.txt
@@ -284,6 +285,7 @@ UMGAH_BCS_MASK_PMAP_ANIM,graphics.umgtrans,sc2code/igfxres.h,GFXRES,base/lander/
 PRECURSOR_BATTLESHIP_MASK_PMAP_ANIM,graphics.precbattleship,sc2code/igfxres.h,GFXRES,base/lander/energy/precursor.ani
 CIRCLES_A_MASK_PMAP_ANIM,graphics.circles_a,sc2code/igfxres.h,GFXRES,base/lander/energy/circles_a.ani
 CIRCLES_B_MASK_PMAP_ANIM,graphics.circles_b,sc2code/igfxres.h,GFXRES,base/lander/energy/circles_b.ani
+CIRCLES_C_MASK_PMAP_ANIM,graphics.circles_c,sc2code/igfxres.h,GFXRES,base/lander/energy/circles_c.ani
 MELEE_SCREEN_PMAP_ANIM,graphics.melebkgd,sc2code/igfxres.h,GFXRES,base/ui/meleebackground.ani
 MELEE_PICK_MASK_PMAP_ANIM,graphics.melee,sc2code/igfxres.h,GFXRES,base/ui/melee.ani
 SEGUE_PMAP_ANIM,graphics.segue,sc2code/igfxres.h,GFXRES,base/ui/segue.ani

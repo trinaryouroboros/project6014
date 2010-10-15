@@ -19,6 +19,7 @@
 // JMS 2009: Function call for initing orz space portal when encountering its enum label
 // JMS 2010: -Function call for initing Lurg home system when encountering its enum label
 //			 -Function call for initing those ones that mysteriously vanished in a hurry
+//			 -Function call for initing Gamma Janus, the supposed precursor artifact
 
 #include "encount.h"
 
@@ -138,7 +139,10 @@ GenerateIP (BYTE Index)
 			break;
 		case HINT_DEFINED:
 			GenFunc = GenerateHint;	 // JMS - hook to generating hint for those ones mysteriously vanished in a hurry
-			break;	
+			break;
+		case HINT2_DEFINED:
+			GenFunc = GenerateHint2; // JMS - hook to generating hint in Gamma Janus for the supposed precursor artifact
+			break;
 		default:
 			GenFunc = GenerateRandomIP;
 			break;
