@@ -955,7 +955,7 @@ START_GAME_STATE
 	ADD_GAME_STATE (ANDROSYNTH_STACK_1, 3)
 	ADD_GAME_STATE (ANDROSYNTH_STACK_2, 1)
 
-	// JMS: Androsynth states
+	// JMS: New Chmmr states
 	ADD_GAME_STATE (CHMMR_SPACE_VISITS, 2)
 
 	// JMS: Human states
@@ -1050,6 +1050,10 @@ START_GAME_STATE
 		// 1 - Heard about Precursor artifact from the Yehat OR seen it on the planet
 		// 2 - "Precursor artifact" seen on the planet AND heard the Yehat story on it 
 		// 3 - Information on "artifact" dealt to melnorme
+
+	// JMS: The location of those that left in a hurry
+	ADD_GAME_STATE (HINT_WORLD_LOCATION, 2)
+
 
 END_GAME_STATE
 

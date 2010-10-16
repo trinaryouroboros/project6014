@@ -539,6 +539,20 @@ SellMenu (RESPONSE_REF R)
 		else if (PLAYER_SAID (R, info_for_ship_mark_sightings))
 		{
 			NPCPhrase (SHIP_MARK_INFORMATION);
+			switch (GET_GAME_STATE(HINT_WORLD_LOCATION)) {
+				case 0:
+					NPCPhrase (HINT_PLANET_0);
+					break;
+				case 1:
+					NPCPhrase (HINT_PLANET_1);
+					break;
+				case 2:
+					NPCPhrase (HINT_PLANET_2);
+					break;
+				default:
+					break;
+			}
+			NPCPhrase (SHIP_MARK_INFORMATION_2);
 			SET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT, 3);
 		}
 		else /* if (R == sell_rainbow_locations) */

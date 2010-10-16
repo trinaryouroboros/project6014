@@ -49,6 +49,7 @@
 #	include "libs/log.h"
 #endif
 
+#include "libs/mathlib.h"
 
 static void CreateRadar (void);
 
@@ -395,6 +396,9 @@ InitSIS (void)
 	CurStarDescPtr = 0;
 	GLOBAL (autopilot.x) = ~0;
 	GLOBAL (autopilot.y) = ~0;
+	
+	// JMS: Vary the possible location of the ones that left in hurry
+	SET_GAME_STATE(HINT_WORLD_LOCATION, ((COUNT)TFB_Random () % 3));
 
 	/* In case the program is exited before the full game is terminated,
 	 * make sure that the temporary files are deleted.
