@@ -94,7 +94,6 @@ hundred
 #(ENUMERATE_THOUSAND)	melno202.ogg
 thousand
 
-
 #(HELLO_NOW_DOWN_TO_BUSINESS1)
 Attention alien vessel, this is Trademaster Greenish of the starship
 `Inevitably Successful In All Circumstances'.
@@ -184,12 +183,12 @@ Only joke. Let's trade!
 You were one of my favourite clients. I'm sure I will find more though.
 {battle screen}
 
-#(HELLO_NOW_DOWN_TO_BUSINESS2)	melno001.ogg
+#(HELLO_NOW_DOWN_TO_BUSINESS2)
 As a master trader in the Melnorme merchant fleet, I greet you, Captain.
 News of your species and your unusual vessel has travelled quickly.
 I need not say how eager we are to trade with you and your kind!
 
-#(HELLO_NOW_DOWN_TO_BUSINESS3)	melno002.ogg
+#(HELLO_NOW_DOWN_TO_BUSINESS3)
 Hello again, human space Captain.
 Perhaps during this encounter, we will be able to establish a successful, businesslike relationship.
 
@@ -199,7 +198,7 @@ Shall we begin trading now?
 #(no_trade_now)
 Goodbye, Trade Master.
 
-#(OK_NO_TRADE_NOW_BYE)	melno011.ogg
+#(OK_NO_TRADE_NOW_BYE)
 When you wish to trade with us, seek any supergiant star system.
 We shall be there.
 
@@ -209,12 +208,11 @@ Uh, I have info on vanished Precursor artifacts and space ships of unknown origi
 #(OFFER_CREDITS_FOR_SHIPMARK_INFO)
 Captain
 you arouse my curiosity.
-Anything Precursor-related fetches top price from any Melnorme Trader.
+You have done well to observe how... eager we are to acquire Precursor-related data.
 I am willing to offer you 100 Credits for your information
 should it provide valuable.
 However, as the quality of your merchandise cannot be checked without hearing it first
-it is only natural to decide whether or not it is worth the fee
-only after hearing your story.
+I can decide if your story is worth the fee only after hearing it.
 
 #(deal_shipmarks)
 Ok, fair enough. Here's the data on the crop circles we discovered on Gamma Janus II.
@@ -256,8 +254,18 @@ When pursuing the matter of the lost Shofixti patrols further
 our agents set their course deep into the Messier system for more clues.
 There was nothing to be found
 except in one system.
-The second planet of Delta Apollonius at 648.0:397.0
-is littered with imprints similar to the one you found on Janus.
+
+#(HINT_PLANET_0)
+The second planet of Beta Messier at 704.5:378.9...
+
+#(HINT_PLANET_1)
+The second planet of Delta Apollonius at 648.0:397.0...
+
+#(HINT_PLANET_2)
+The second planet of Alpha Apollonius at 656.4:418.3...
+
+#(SHIP_MARK_INFORMATION_2)
+...is littered with imprints similar to the one you found on Janus.
 Also, seems there has been great cities on the planet -- Destroyed?
 No. More like 'taken away'.
 Square miles of the planet terrain is patterned with blueprints of cities.
@@ -447,7 +455,7 @@ Your ship's log indicates that you discovered the whereabouts of
 
 #(SOLD_RAINBOW_LOCATIONS2)	melno205.ogg
  of the Rainbow worlds which so fascinate us.
-In exchange, we will give you
+In exchange, we will give you 
 
 #(SOLD_RAINBOW_LOCATIONS3)	melno204.ogg
  Credits.

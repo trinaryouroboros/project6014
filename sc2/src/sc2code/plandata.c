@@ -20,7 +20,7 @@
 //			 -Added a system into Orz space starmap_array
 // JMS 2010: -Added Lurg home system
 //			 -Added shofixti crash site
-//			 -Added system for those who mysteriously vanished in a hurry...
+//			 -Added possible systems for those who mysteriously vanished in a hurry...
 //			 -Added little something to Gamma Janus
 
 #include "encount.h"
@@ -208,7 +208,7 @@ STAR_DESC starmap_array[] =
 {{7610,3744}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 1, 2},
 {{6416,3758}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 2, 66},
 {{2521,3787}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 2, 37},
-{{7045,3789}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 61},
+{{7045,3789}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), HINT_DEFINED, 2, 61},  // JMS: Someone was here, but left in a hurry... possibility #1
 {{6940,3797}, MAKE_STAR (GIANT_STAR, YELLOW_BODY, -1), 0, 1, 61},
 {{7768,3812}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 2},
 {{8892,3813}, MAKE_STAR (GIANT_STAR, RED_BODY, -1), 0, 1, 6},
@@ -221,7 +221,7 @@ STAR_DESC starmap_array[] =
 {{2376,3941}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 6, 37},
 {{3062,3951}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 1, 40},
 {{4942,3957}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 2, 8},
-{{6480,3970}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), HINT_DEFINED, 4, 7}, // JMS: Someone was here, but left in a hurry...
+{{6480,3970}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), HINT_DEFINED, 4, 7}, // JMS: Someone was here, but left in a hurry... possibility #2
 {{1471,4000}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 2, 35},
 {{ 239,4026}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 2, 113},
 {{9142,4075}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 4, 6},
@@ -232,7 +232,7 @@ STAR_DESC starmap_array[] =
 {{6370,4110}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 5, 7},
 {{5855,4125}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 0, 101},
 {{ 441,4172}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 1, 113},
-{{6564,4183}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 1, 7},
+{{6564,4183}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), HINT_DEFINED, 1, 7}, // JMS: Someone was here, but left in a hurry... possibility #3
 {{  87,4190}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 3, 113},
 {{1239,4228}, MAKE_STAR (DWARF_STAR, RED_BODY, -1), 0, 1, 35},
 {{3822,4230}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 1, 112},
