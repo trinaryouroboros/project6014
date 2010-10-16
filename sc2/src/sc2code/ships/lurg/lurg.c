@@ -183,7 +183,7 @@ acid_preprocess (ELEMENT *ElementPtr)
 {
 	COUNT facing;
 
-	facing = GetFrameIndex (ElementPtr->next.image.frame);
+	facing = (GetFrameIndex (ElementPtr->next.image.frame)) % 16; // JMS: Modulo 16 here ensures that the explosion frames are not used in wrong place.
 	
 	if (ElementPtr->thrust_wait == 1) // Left start.
 	{
@@ -239,13 +239,10 @@ acid_preprocess (ELEMENT *ElementPtr)
 		}
 	}
 
-	ElementPtr->next.image.frame =
-		SetAbsFrameIndex (ElementPtr->next.image.frame,
-		facing);
+	ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, facing);
 	ElementPtr->state_flags |= CHANGING;
 	
-	SetVelocityVector (&ElementPtr->velocity,
-		MISSILE_SPEED, facing);
+	SetVelocityVector (&ElementPtr->velocity, MISSILE_SPEED, facing);
 }
 
 static COUNT
