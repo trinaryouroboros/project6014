@@ -38,13 +38,13 @@
 #define WEAPON_WAIT 9
 #define MISSILE_SPEED DISPLAY_TO_WORLD (18)
 #define MISSILE_LIFE 25
-#define MISSILE_HITS 6
+#define MISSILE_HITS 4
 #define MISSILE_DAMAGE 4
 
 #define SPECIAL_ENERGY_COST 2
 #define SPECIAL_WAIT 3
 #define OIL_HITS 2
-#define OIL_DAMAGE 0 // Shiver: Oil inflicts damage in some circumstances.
+#define OIL_DAMAGE 1 // Shiver: Oil inflicts damage only in specific circumstances.
 #define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR) // JMS_GFX
 #define OIL_INIT_SPEED (OIL_SPEED*3)
 #define OIL_LIFE 350
