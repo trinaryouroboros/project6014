@@ -132,41 +132,36 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
 
+	
+	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
+	lpEvalDesc->MoveState = PURSUE;
+	if (lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 8)
+	/* don't want to dodge when you could be spitting */
+		ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
+	
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	StarShipPtr->ship_input_state &= ~SPECIAL;
 
-	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	if (StarShipPtr->special_counter == 0
-			&& lpEvalDesc->ObjectPtr
-			&& lpEvalDesc->which_turn <= 24)
+	if (StarShipPtr->special_counter == 0 && lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 24)
 	{
 		COUNT travel_facing, direction_facing;
 		SIZE delta_x, delta_y;
 
-		travel_facing = NORMALIZE_FACING (
-				ANGLE_TO_FACING (GetVelocityTravelAngle (&ShipPtr->velocity)
-				+ HALF_CIRCLE)
-				);
-		delta_x = lpEvalDesc->ObjectPtr->current.location.x
-				- ShipPtr->current.location.x;
-		delta_y = lpEvalDesc->ObjectPtr->current.location.y
-				- ShipPtr->current.location.y;
-		direction_facing = NORMALIZE_FACING (
-				ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))
-				);
+		travel_facing = NORMALIZE_FACING (ANGLE_TO_FACING (GetVelocityTravelAngle (&ShipPtr->velocity) + HALF_CIRCLE) );
+		delta_x = lpEvalDesc->ObjectPtr->current.location.x - ShipPtr->current.location.x;
+		delta_y = lpEvalDesc->ObjectPtr->current.location.y - ShipPtr->current.location.y;
+		direction_facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
 
-		if (NORMALIZE_FACING (direction_facing
-				- (StarShipPtr->ShipFacing + ANGLE_TO_FACING (HALF_CIRCLE))
+		if (NORMALIZE_FACING (direction_facing - (StarShipPtr->ShipFacing 
+				+ ANGLE_TO_FACING (HALF_CIRCLE)) 
 				+ ANGLE_TO_FACING (QUADRANT))
 				<= ANGLE_TO_FACING (HALF_CIRCLE)
 				&& (lpEvalDesc->which_turn <= 8
 				|| NORMALIZE_FACING (direction_facing
 				+ ANGLE_TO_FACING (HALF_CIRCLE)
-				- ANGLE_TO_FACING (GetVelocityTravelAngle (
-						&lpEvalDesc->ObjectPtr->velocity
-						))
+				- ANGLE_TO_FACING (GetVelocityTravelAngle ( &lpEvalDesc->ObjectPtr->velocity))
 				+ ANGLE_TO_FACING (QUADRANT))
 				<= ANGLE_TO_FACING (HALF_CIRCLE))
 				&& (!(StarShipPtr->cur_status_flags &
@@ -177,43 +172,6 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
 }
-/*
-// JMS: New Lurg intelligence: Blatant rip-off of VUX intelligence...
-static void
-lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-				  COUNT ConcernCounter)
-{
-	EVALUATE_DESC *lpEvalDesc;
-	STARSHIP *StarShipPtr;
-	
-	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	lpEvalDesc->MoveState = PURSUE;
-	if (ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr != 0
-		&& ObjectsOfConcern[ENEMY_WEAPON_INDEX].MoveState == ENTICE)
-	{
-		if ((ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr->state_flags
-			 & FINITE_LIFE)
-			&& !(ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr->state_flags
-				 & CREW_OBJECT))
-			ObjectsOfConcern[ENEMY_WEAPON_INDEX].MoveState = AVOID;
-		else
-			ObjectsOfConcern[ENEMY_WEAPON_INDEX].MoveState = PURSUE;
-	}
-	
-	ship_intelligence (ShipPtr,
-					   ObjectsOfConcern, ConcernCounter);
-	
-	GetElementStarShip (ShipPtr, &StarShipPtr);
-	if (StarShipPtr->special_counter == 0
-		&& lpEvalDesc->ObjectPtr != 0
-		&& lpEvalDesc->which_turn <= 12
-		&& (StarShipPtr->ship_input_state & (LEFT | RIGHT))
-		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >=
-		(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1))
-		StarShipPtr->ship_input_state |= SPECIAL;
-	else
-		StarShipPtr->ship_input_state &= ~SPECIAL;
-}*/
 
 static void
 acid_preprocess (ELEMENT *ElementPtr)
