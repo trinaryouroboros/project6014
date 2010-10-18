@@ -125,6 +125,7 @@ static RACE_DESC lurg_desc =
 	0,
 };
 
+/*
 static void
 lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		COUNT ConcernCounter)
@@ -176,6 +177,43 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				<= ANGLE_TO_FACING (HALF_CIRCLE)))
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
+}*/
+
+// JMS: New Lurg intelligence: Blatant rip-off of VUX intelligence...
+static void
+lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
+				  COUNT ConcernCounter)
+{
+	EVALUATE_DESC *lpEvalDesc;
+	STARSHIP *StarShipPtr;
+	
+	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
+	lpEvalDesc->MoveState = PURSUE;
+	if (ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr != 0
+		&& ObjectsOfConcern[ENEMY_WEAPON_INDEX].MoveState == ENTICE)
+	{
+		if ((ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr->state_flags
+			 & FINITE_LIFE)
+			&& !(ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr->state_flags
+				 & CREW_OBJECT))
+			ObjectsOfConcern[ENEMY_WEAPON_INDEX].MoveState = AVOID;
+		else
+			ObjectsOfConcern[ENEMY_WEAPON_INDEX].MoveState = PURSUE;
+	}
+	
+	ship_intelligence (ShipPtr,
+					   ObjectsOfConcern, ConcernCounter);
+	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	if (StarShipPtr->special_counter == 0
+		&& lpEvalDesc->ObjectPtr != 0
+		&& lpEvalDesc->which_turn <= 12
+		&& (StarShipPtr->ship_input_state & (LEFT | RIGHT))
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >=
+		(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1))
+		StarShipPtr->ship_input_state |= SPECIAL;
+	else
+		StarShipPtr->ship_input_state &= ~SPECIAL;
 }
 
 static void
