@@ -125,7 +125,6 @@ static RACE_DESC lurg_desc =
 	0,
 };
 
-/*
 static void
 lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		COUNT ConcernCounter)
@@ -177,8 +176,8 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				<= ANGLE_TO_FACING (HALF_CIRCLE)))
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
-}*/
-
+}
+/*
 // JMS: New Lurg intelligence: Blatant rip-off of VUX intelligence...
 static void
 lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
@@ -214,7 +213,7 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		StarShipPtr->ship_input_state |= SPECIAL;
 	else
 		StarShipPtr->ship_input_state &= ~SPECIAL;
-}
+}*/
 
 static void
 acid_preprocess (ELEMENT *ElementPtr)
