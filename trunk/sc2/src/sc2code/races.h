@@ -23,6 +23,7 @@
 //			- Added Lurg shipenums, and all the other relevant stuff
 //			- Defined procyon system coords to PROCYON_X and PROCYON_Y for use in game start location, in globdata.c
 //			- Reduced Kohrah and slykohr max taskforce sizes to 2 ships
+//			- Added ISD shipenums, and all the other relevant stuff
 
 
 #ifndef _RACES_H
@@ -108,6 +109,7 @@ typedef enum
 	MMRNMHRM_ID,
 	SLYLANDRO_KOHRAH_ID,	// JMS
 	LURG_ID,				// JMS
+	ISD_ID,					// JMS
 	SIS_SHIP_ID,
 	LAST_MELEE_ID =	SIS_SHIP_ID, // JMS: The last ship to be included in super melee is this one
 	SA_MATRA_ID,
@@ -425,6 +427,7 @@ enum
 	MMRNMHRM_SHIP,
 	SLYLANDRO_KOHRAH_SHIP,	// JMS: Slylandros flying Kohr-ah vessel
 	LURG_SHIP,				// JMS: The fearsome Lurg
+	ISD_SHIP,				// JMS: The mysterious ISD
 	YEHAT_REBEL_SHIP,
 	TRANSPORT_SHIP,			// JMS: Transport replaces Ur-Quan probe
 	SAMATRA_SHIP = TRANSPORT_SHIP,
@@ -460,6 +463,7 @@ enum
 		INVALID_CONVERSATION,      /* JMS: MMRNMHRM_SHIP */ \
 		SLYLANDRO_HOME_CONVERSATION,/* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		LURG_CONVERSATION,			/* JMS: LURG_SHIP */ \
+		INVALID_CONVERSATION,      /* JMS: ISD_SHIP */ \
 		YEHAT_REBEL_CONVERSATION,  /* YEHAT_REBEL_SHIP */ \
 		TRANSPORT_CONVERSATION,    /* JMS: TRANSPORT_SHIP */ \
 		SYREENBASE_CONVERSATION,    /* SYREEN_BASE */ \
@@ -493,10 +497,11 @@ enum
 	MMRNMHRM_SHIP,	   /* JMS: MMRNMHRM_CONVERSATION */ \
 	SLYLANDRO_KOHRAH_SHIP, /* JMS: SLYLANDRO_HOME_CONVERSATION */ \
 	LURG_SHIP,			/* JMS: LURG_CONVERSATION */ \
+	ISD_SHIP,			/* JMS: INVALID_CONVERSATION */ \
 	UMGAH_SHIP,        /* TALKING_PET_CONVERSATION */ \
-	HUMAN_SHIP,    /* TRANSPORT_CONVERSATION */ \
-    SYREEN_SHIP,    /* SYREENBASE_CONVERSATION */ \
-    SYREEN_SHIP,    /* SYREENHOME_CONVERSATION */ \
+	HUMAN_SHIP,			/* TRANSPORT_CONVERSATION */ \
+    SYREEN_SHIP,		/* SYREENBASE_CONVERSATION */ \
+    SYREEN_SHIP,		/* SYREENHOME_CONVERSATION */ \
 	YEHAT_SHIP,        /* YEHAT_REBEL_CONVERSATION */ \
 	YEHAT_SHIP         /* INVALID_CONVERSATION */
 	
@@ -529,6 +534,7 @@ enum
 		1800,  /* JMS: MMRNMHRM_SHIP */ \
 		3000,  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		2000,  /* JMS: LURG_SHIP */ \
+		3000,  /* JMS: ISD_SHIP */ \
 		2300,  /* YEHAT_REBEL_SHIP */
 		 
 
@@ -561,6 +567,7 @@ enum
 		LOG_TO_IP (42),  /* JMS: MMRNMHRM_SHIP */ \
 		LOG_TO_IP (30),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		LOG_TO_IP (40),  /* JMS: LURG_SHIP */ \
+		LOG_TO_IP (20),  /* JMS: ISD_SHIP */ \
 		LOG_TO_IP (30),  /* YEHAT_REBEL_SHIP */ \
 		LOG_TO_IP (24),  /* JMS: TRANSPORT_SHIP */ 
 
@@ -593,6 +600,7 @@ enum
 		LOG_TO_HYPER (42 * RESOLUTION_FACTOR),  /* JMS: MMRNMHRM_SHIP */ \
 		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* JMS LURG_SHIP */ \
+		LOG_TO_HYPER (20 * RESOLUTION_FACTOR),  /* JMS ISD_SHIP */ \
 		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* YEHAT_REBEL_SHIP */ \
 		LOG_TO_HYPER (24 * RESOLUTION_FACTOR),  /* JMS: TRANSPORT_SHIP */ \
 
@@ -624,6 +632,7 @@ enum
 		60,  /* JMS: MMRNMHRM_SHIP */ \
 		15, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		45, /* JMS: LURG_SHIP */ \
+		 0, /* JMS: ISD_SHIP */ \
 		60,  /* YEHAT_REBEL_SHIP */ \
 		 0,  /* JMS: TRANSPORT_SHIP */
 
@@ -655,6 +664,7 @@ enum
 		40,  /* JMS: MMRNMHRM_SHIP */ \
 		25, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		45, /* JMS: LURG_SHIP */ \
+		 0, /* JMS: ISD_SHIP */ \
 		40,  /* YEHAT_REBEL_SHIP */ \
 		 0,  /* TRANSPORT_SHIP */ \
 
@@ -689,6 +699,7 @@ enum
 		MAKE_BYTE (1, 5),  /* JMS: MMRNMHRM_SHIP */\
 		MAKE_BYTE (1, 2),  /* JMS: SLYLANDRO_KOHRAH_SHIP REDUCED TO MAX 2 SHIPS */ \
 		MAKE_BYTE (1, 5),  /* JMS: LURG_SHIP */ \
+		MAKE_BYTE (1, 1),  /* JMS: ISD_SHIP */ \
 		MAKE_BYTE (1, 5),  /* YEHAT_REBEL_SHIP */\
 		MAKE_BYTE (1, 1),  /* JMS:TRANSPORT_SHIP */ \
 
@@ -720,6 +731,7 @@ enum
 		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x4D),  /* JMS: MMRNMHRM_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x02, 0x02, 0x02), 0x39),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x1B, 0x02), 0x4D),  /* JMS: LURG_SHIP */ \
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x1B, 0x02), 0x4D),  /* JMS: ISD_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x2A, 0x00, 0x00), 0x39),  /* YEHAT_REBEL_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x03, 0x1F), 0x39),  /* JMS:TRANSPORT_SHIP */ \
 

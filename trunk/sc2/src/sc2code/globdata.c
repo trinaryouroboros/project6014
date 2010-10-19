@@ -21,7 +21,7 @@
 // the races won't show up in the game AND the defines and enums in races.h will have quirky side-effects.
 //
 // Originally the max number of races was defined by KOHR_AH_ID and some constant numbers.
-// Max num of races is now defined by LURG_ID plus the constant numbers because of the added new races.
+// Max num of races is now defined by ISD_ID plus the constant numbers because of the added new races.
 //
 // JMS 2010: -Added SET_GAME_STATE (STARBASE_AVAILABLE, 1); to InitSIS so starbase is available right
 // from the start of the game. Kind of hack, maybe we should just remove the whole starbase_available variable...
@@ -212,7 +212,7 @@ InitSIS (void)
 		COUNT num_ships;
 		SPECIES_ID s_id = ARILOU_ID;
 
-		num_ships = LURG_ID - s_id + 1	// JMS: LURG_ID now replaces KOHR_AH_ID here
+		num_ships = ISD_ID - s_id + 1	// JMS: ISD_ID now replaces KOHR_AH_ID here
 		+ 2; /* Yehat Rebels and Transport ship */
 		
 		InitQueue (&GLOBAL (avail_race_q), num_ships, sizeof (FLEET_INFO));

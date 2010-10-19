@@ -24,6 +24,7 @@
 // JMS 2010: -Added Transport ship resource pointer, which replaces that of the Ur-Quan Probe.
 //			 -Added resource pointer for Slylandros-riding-kohrah-vessels
 //			 -Added resource pointer for Lurg
+//			 -Added resource pointer for ISD
 
 #include "coderes.h"
 #include "globdata.h"
@@ -73,6 +74,7 @@ enum
 	ZOQFOT_CODE_RES,
 	SLYLANDRO_KOHRAH_CODE_RES,	// JMS
 	LURG_CODE_RES,				// JMS
+	ISD_CODE_RES,				// JMS
 	
 	SIS_CODE_RES,
 	TRANSPORT_CODE_RES,			// JMS
@@ -305,6 +307,14 @@ enum
 				extern RACE_DESC* init_lurg (void);
 				
 				RDPtr = init_lurg ();
+				break;
+			}
+			// JMS: ISD code res
+			case ISD_CODE_RES:
+			{
+				extern RACE_DESC* init_isd (void);
+				
+				RDPtr = init_isd ();
 				break;
 			}
 			default:
