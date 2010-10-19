@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added Slylandros-in-kohrah-vessels and Chmmr Explorer to melee ship list
+// JMS 2010: -Added Slylandros-in-kohrah-vessels and Chmmr Explorer to melee ship list
+//			 -Added Lurg and ISD to the list
 
 #ifndef _MELEE_H
 #define _MELEE_H
@@ -60,6 +61,8 @@ enum
 	MELEE_YEHAT,
 	MELEE_ZOQFOTPIK,
 	MELEE_SLYKOHR,   // JMS
+	MELEE_LURG,		 // JMS
+	MELEE_ISD,		 // JMS
 	MELEE_EXPLORER,  // JMS
 	
 	NUM_MELEE_SHIPS,

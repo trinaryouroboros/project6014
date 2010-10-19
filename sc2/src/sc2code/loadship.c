@@ -16,7 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added code resource for slylandros-riding-kohrah-vessels
+// JMS 2010: -Added code resource for slylandros-riding-kohrah-vessels
+//			 -Added code resource for Lurg
+//			 -Added code resource for ISD
 
 #include "build.h"
 #include "coderes.h"
@@ -54,6 +56,7 @@ static RESOURCE code_resources[] = {
 		MMRNMHRM_CODE,
 		SLYLANDRO_KOHRAH_CODE, // JMS
 		LURG_CODE, // JMS
+		ISD_CODE, // JMS
 		SIS_CODE,
 		SAMATRA_CODE,
 		PROBE_CODE };

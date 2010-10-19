@@ -19,6 +19,7 @@
 // JMS 2010: -Slylandros-in-kohrah-vessel is ruled out from supermelee...
 //			 -...But the Sis ship is added into it
 //			 -Lurg ship likewise!
+//			 -As well as ISD
 
 #include "master.h"
 
@@ -27,6 +28,8 @@
 #include "displist.h"
 #include "melee.h"
 
+
+#define NUM_OF_NEW_SHIPS (LAST_MELEE_ID - MMRNMHRM_ID)
 
 QUEUE master_q;
 
@@ -91,13 +94,20 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 				break;
 		}
 		
-		if(num_entries > 2) // JMS: Deal with other than Slylandro_kohrah ship and sis ship normally.
+		if(num_entries > (NUM_OF_NEW_SHIPS - 1)) // JMS: Deal with original melee ships normally.
 				InsertQueue (&master_q, hBuiltShip, hStarShip);
 		else 
 		{
 			// JMS: Slylandro_kohrah ship goes last.
 			if(BuiltPtr->SpeciesID==SLYLANDRO_KOHRAH_ID)
 				PutQueue (&master_q, hBuiltShip);
+			
+			// JMS: ISD goes before the last.
+			else if(BuiltPtr->SpeciesID==ISD_ID)
+			{
+				hStarShip = GetTailLink (&master_q);			
+				InsertQueue (&master_q, hBuiltShip, hStarShip);
+			}
 			
 			// JMS: Lurg goes before the last.
 			else if(BuiltPtr->SpeciesID==LURG_ID)
