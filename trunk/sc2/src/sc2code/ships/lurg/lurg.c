@@ -134,8 +134,8 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 
 	
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	lpEvalDesc->MoveState = PURSUE;
-	if (lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 8)
+
+	if (lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 6)
 	/* don't want to dodge when you could be spitting */
 		ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
 	
