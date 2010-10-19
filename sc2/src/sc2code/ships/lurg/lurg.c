@@ -389,9 +389,11 @@ oil_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 			& (GOOD_GUY | BAD_GUY)))
 	{
 		STARSHIP *StarShipPtr;
+		STARSHIP *EnemyStarShipPtr;
 
 		GetElementStarShip (ElementPtr0, &StarShipPtr);
-
+		GetElementStarShip (ElementPtr1, &EnemyStarShipPtr);
+		
 		if (ElementPtr1->state_flags & PLAYER_SHIP)
 		{
 			COUNT facing;
@@ -403,8 +405,15 @@ oil_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 			if (ElementPtr1->turn_wait > OIL_DELAY_MAX)
 				ElementPtr1->turn_wait = OIL_DELAY_MAX;
 
-			facing = NORMALIZE_FACING (ANGLE_TO_FACING (
-			GetVelocityTravelAngle (&ElementPtr1->velocity) + HALF_CIRCLE));
+			if(EnemyStarShipPtr->SpeciesID == SUPOX_ID)
+			{
+				EnemyStarShipPtr->special_counter += OIL_DELAY;
+				if (EnemyStarShipPtr->special_counter > OIL_DELAY_MAX)
+					EnemyStarShipPtr->special_counter = OIL_DELAY_MAX;
+			}
+				
+			
+			facing = NORMALIZE_FACING (ANGLE_TO_FACING (GetVelocityTravelAngle (&ElementPtr1->velocity) + HALF_CIRCLE));
 		
 			DeltaVelocityComponents (&ElementPtr1->velocity,
 				COSINE (facing, OIL_SNARE),
