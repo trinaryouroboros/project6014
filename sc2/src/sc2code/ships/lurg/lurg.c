@@ -17,6 +17,9 @@
  */
 
 // JMS 2010 - Totally new file: Lurg ship
+//			- Gave Lurg some more aggressivenes, when enemy ship is close
+//			- Lurg can now use oil as a defense against projectiles, most notably earthling missiles.
+//			- Increased OIL_SNARE from -1 to -2 and OIL_BATCH from 4 to 5 for shits and giggles.
 
 #include "ships/ship.h"
 #include "ships/lurg/resinst.h"
@@ -48,10 +51,10 @@
 #define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR) // JMS_GFX
 #define OIL_INIT_SPEED (OIL_SPEED*3)
 #define OIL_LIFE 350
-#define OIL_BATCH_SIZE 4
+#define OIL_BATCH_SIZE 5 // JMS: Was 4
 #define OIL_DELAY 5
 #define OIL_DELAY_MAX 40
-#define OIL_SNARE WORLD_TO_VELOCITY (-1)
+#define OIL_SNARE WORLD_TO_VELOCITY (-2) // JMS: Was -1
 
 #define REPAIR_WAIT 216
 
@@ -131,12 +134,12 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 {
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
-
+	SIZE OilStatus; // JMS
 	
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
 
+	// JMS: don't want to dodge when the enemy is close enough. Instead fire, fire, fire!
 	if (lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 6)
-	/* don't want to dodge when you could be spitting */
 		ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
 	
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
@@ -170,6 +173,51 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				- travel_facing + ANGLE_TO_FACING (QUADRANT))
 				<= ANGLE_TO_FACING (HALF_CIRCLE)))
 			StarShipPtr->ship_input_state |= SPECIAL;
+	}
+	
+	// JMS: Defensive measure, stolen from yehat.c code. Lurg leaves oil in the way of etc Earthling missiles.
+	OilStatus = -1;
+	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
+	if (lpEvalDesc->ObjectPtr)//&& lpEvalDesc->MoveState == ENTICE)
+	{
+		OilStatus = 0;
+		if (!(lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT)))
+			lpEvalDesc->MoveState = PURSUE;
+		else if (lpEvalDesc->ObjectPtr->mass_points || (lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))
+		{
+			if (!(lpEvalDesc->ObjectPtr->state_flags & FINITE_LIFE))
+				lpEvalDesc->which_turn <<= 1;
+			else
+			{
+				if ((lpEvalDesc->which_turn >>= 1) == 0)
+					lpEvalDesc->which_turn = 1;
+				
+				if (lpEvalDesc->ObjectPtr->mass_points)
+					lpEvalDesc->ObjectPtr = 0;
+				else
+					lpEvalDesc->MoveState = PURSUE;
+			}
+			OilStatus = 1;
+		}
+	}
+	if (StarShipPtr->special_counter == 0) // JMS: Defensive oil code continues...
+	{
+		//StarShipPtr->ship_input_state &= ~SPECIAL;
+		if (OilStatus)
+		{
+			if (ShipPtr->life_span <= NORMAL_LIFE + 1
+				&& (OilStatus > 0 || lpEvalDesc->ObjectPtr)
+				&& lpEvalDesc->which_turn <= 12
+				&& (OilStatus > 0
+					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) // means IMMEDIATE WEAPON
+					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 12, 0))
+				//&& (TFB_Random () & 3)
+				)
+				StarShipPtr->ship_input_state |= SPECIAL;
+			
+			if (lpEvalDesc->ObjectPtr && !(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))
+				lpEvalDesc->ObjectPtr = 0;
+		}
 	}
 }
 
