@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: -Amended Pursue -function: Ur-Quan pursues Earthling slowly but surely. Now it won't turn away mid-chase.
+
 #include "battle.h"
 #include "colors.h"
 #include "collide.h"
@@ -579,6 +581,7 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 	SIZE other_delta_x, other_delta_y;
 	ELEMENT *OtherObjPtr;
 	VELOCITY_DESC ShipVelocity, OtherVelocity;
+	COUNT distance_to_give_up_and_turn; // JMS
 
 	ShipVelocity = ShipPtr->velocity;
 	GetNextVelocityComponents (&ShipVelocity,
@@ -672,9 +675,18 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 				}
 			}
 
+			// JMS: Ur-Quan pursues Earthling slowly but surely. Now it won't turn away mid-chase.
+			if (StarShipPtr->SpeciesID == UR_QUAN_ID
+				&& EnemyStarShipPtr->SpeciesID == EARTHLING_ID 
+				&& !(EnemyStarShipPtr->cur_status_flags &
+					 (SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL)))
+				distance_to_give_up_and_turn = 44;
+			else
+				distance_to_give_up_and_turn = 24;
+			
 			if (desired_thrust_angle != desired_turn_angle
 					&& (other_delta_x || other_delta_y)
-					&& EvalDescPtr->which_turn >= 24
+					&& EvalDescPtr->which_turn >= distance_to_give_up_and_turn
 					&& NORMALIZE_ANGLE (desired_thrust_angle
 					- GetVelocityTravelAngle (&OtherVelocity)
 					+ OCTANT) <= QUADRANT
