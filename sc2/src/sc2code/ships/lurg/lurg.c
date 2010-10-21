@@ -16,12 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010 - Totally new file: Lurg ship
-//			- Gave Lurg some more aggressivenes, when enemy ship is close
-//			- Lurg can now use oil as a defense against projectiles, most notably earthling missiles.
-//			- Lurg also now sprouts oil whenever battery is full and enemy ship far
-//			- Increased OIL_BATCH from 4 to 5 for shits and giggles.
-
 #include "ships/ship.h"
 #include "ships/lurg/resinst.h"
 
@@ -31,7 +25,7 @@
 #define MAX_CREW 20
 #define MAX_ENERGY 16
 #define ENERGY_REGENERATION 1
-#define ENERGY_WAIT 5
+#define ENERGY_WAIT 6 // Shiver: Was 5
 #define MAX_THRUST 20
 #define THRUST_INCREMENT 7
 #define THRUST_WAIT 1
@@ -39,7 +33,7 @@
 #define SHIP_MASS 6
 
 #define WEAPON_ENERGY_COST 3
-#define WEAPON_WAIT 9
+#define WEAPON_WAIT 8 // Shiver: Was 9
 #define MISSILE_SPEED DISPLAY_TO_WORLD (18)
 #define MISSILE_LIFE 25
 #define MISSILE_HITS 4
@@ -51,8 +45,10 @@
 #define OIL_DAMAGE 1 // Shiver: Oil inflicts damage only in specific circumstances.
 #define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR) // JMS_GFX
 #define OIL_INIT_SPEED (OIL_SPEED*3)
+#define OIL_SPREAD_MINIMUM 5
+#define OIL_SPREAD_VARIATION 5
 #define OIL_LIFE 350
-#define OIL_BATCH_SIZE 5 // JMS: Was 4
+#define OIL_BATCH_SIZE 4 // Shiver: Was 5
 #define OIL_DELAY 5
 #define OIL_DELAY_MAX 40
 #define OIL_SNARE WORLD_TO_VELOCITY (-1)
@@ -62,7 +58,7 @@
 static RACE_DESC lurg_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | SEEKING_SPECIAL,
+		FIRES_FORE | SEEKING_SPECIAL | CREW_IMMUNE,
 		20, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -359,6 +355,7 @@ oil_preprocess (ELEMENT *ElementPtr)
 
 	thrust_wait = HINIBBLE (ElementPtr->turn_wait);
 	turn_wait = LONIBBLE (ElementPtr->turn_wait);
+
 	if (thrust_wait > 0)
 		--thrust_wait;
 	else
@@ -375,17 +372,9 @@ oil_preprocess (ELEMENT *ElementPtr)
 	else
 	{
 		COUNT facing;
-		SIZE delta_facing;
 
-		facing = NORMALIZE_FACING (ANGLE_TO_FACING (
-			GetVelocityTravelAngle (&ElementPtr->velocity)));
+		facing = (COUNT)TFB_Random ();
 
-		if ((delta_facing = TrackShip (ElementPtr, &facing)) == -1)
-			facing = (COUNT)TFB_Random ();
-		else if (delta_facing <= ANGLE_TO_FACING (HALF_CIRCLE))
-			facing += (COUNT)TFB_Random () & (ANGLE_TO_FACING (HALF_CIRCLE) - 1);
-		else
-			facing -= (COUNT)TFB_Random () & (ANGLE_TO_FACING (HALF_CIRCLE) - 1);
 		SetVelocityVector (&ElementPtr->velocity,
 				OIL_SPEED, facing);
 
@@ -501,9 +490,9 @@ static void spill_oil (ELEMENT *ShipPtr)
 		ELEMENT *OilPtr;
 
 		LockElement (Missile, &OilPtr);
-		/* Shiver: turn_wait here affects how long the projectile travels at
-			a faster-than-usual speed when deployed. */
-		OilPtr->turn_wait = (((COUNT)TFB_Random () & 5) + 5);
+		/* Shiver: OilPtr->turn_wait here affects how long the projectile travels at
+			OIL_INIT_SPEED speed when deployed. */
+		OilPtr->turn_wait = (((COUNT)TFB_Random () & OIL_SPREAD_VARIATION) + OIL_SPREAD_MINIMUM);
 		SetElementStarShip (OilPtr, StarShipPtr);
 		OilPtr->collision_func = oil_collision;
 		UnlockElement (Missile);
