@@ -24,6 +24,7 @@
 //			- Defined procyon system coords to PROCYON_X and PROCYON_Y for use in game start location, in globdata.c
 //			- Reduced Kohrah and slykohr max taskforce sizes to 2 ships
 //			- Added ISD shipenums, and all the other relevant stuff
+//			- Enable down key in melee (comment tag JMS_KEYS)
 
 
 #ifndef _RACES_H

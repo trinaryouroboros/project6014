@@ -17,6 +17,7 @@
  */
 
 // JMS 2009 - Play Orz space music in Orz space
+// JMS 2010 - Enable Down key in melee (comment tag JMS_KEYS)
 
 #include "battle.h"
 
