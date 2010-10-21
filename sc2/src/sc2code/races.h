@@ -285,7 +285,7 @@ struct STARSHIP
 	BYTE energy_counter;
 			// In battle: frames left before energy regeneration
 
-	BYTE ship_input_state;
+	COUNT ship_input_state; // JMS_KEYS: Was BYTE
 	STATUS_FLAGS cur_status_flags;
 	STATUS_FLAGS old_status_flags;
 	

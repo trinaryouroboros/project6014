@@ -900,6 +900,6 @@ flee_preprocess (ELEMENT *ElementPtr)
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	StarShipPtr->cur_status_flags
-			&= ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
+			&= ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
 	PreProcessStatus (ElementPtr);
 }

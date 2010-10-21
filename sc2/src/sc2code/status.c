@@ -377,7 +377,7 @@ PreProcessStatus (ELEMENT *ShipPtr)
 		old_status_flags ^= cur_status_flags;
 
 		CSPtr = &StarShipPtr->RaceDescPtr->ship_data.captain_control;
-		old_status_flags &= (LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
+		old_status_flags &= (LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
 		if (old_status_flags)
 		{
 			CaptainsWindow (CSPtr,
@@ -408,7 +408,7 @@ PostProcessStatus (ELEMENT *ShipPtr)
 		if (ShipPtr->crew_level == 0)
 		{
 			StarShipPtr->cur_status_flags &=
-					~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
+					~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
 
 			if (StarShipPtr->RaceDescPtr->ship_info.crew_level == 0)
 			{
@@ -548,7 +548,7 @@ PostProcessStatus (ELEMENT *ShipPtr)
 
 		old_status_flags = StarShipPtr->old_status_flags;
 		old_status_flags = (old_status_flags ^ cur_status_flags) &
-				(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | LOW_ON_ENERGY);
+				(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | LOW_ON_ENERGY | DOWN); // JMS_KEYS
 
 		if (old_status_flags)
 		{
@@ -560,7 +560,7 @@ PostProcessStatus (ELEMENT *ShipPtr)
 					DrawCrewFuelString (y, -1);
 			}
 
-			old_status_flags &= (LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
+			old_status_flags &= (LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
 			if (old_status_flags)
 			{
 				CaptainsWindow (

@@ -519,6 +519,7 @@ isd_postprocess (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
+		
 	if ((StarShipPtr->cur_status_flags & SPECIAL)
 			&& ElementPtr->crew_level > 1
 			&& StarShipPtr->special_counter == 0

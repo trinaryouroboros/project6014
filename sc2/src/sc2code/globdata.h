@@ -1025,6 +1025,8 @@ START_GAME_STATE
 
 	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
 	ADD_GAME_STATE (CRASH_SITE_UNPROTECTED, 1)
+	ADD_GAME_STATE (CRASH_SITE_VISITED, 1)
+	ADD_GAME_STATE (CRASH_SITE_LURG_SURVIVORS, 3)
 
 	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
 	ADD_GAME_STATE (BLACK_ORB_STATE, 2)

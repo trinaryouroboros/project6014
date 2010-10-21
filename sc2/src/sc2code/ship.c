@@ -151,10 +151,10 @@ ship_preprocess (ELEMENT *ElementPtr)
 
 	cur_status_flags =
 			StarShipPtr->cur_status_flags
-			& ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
+			& ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
 	if (!(ElementPtr->state_flags & APPEARING))
 		cur_status_flags |= StarShipPtr->ship_input_state
-				& (LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
+				& (LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
 	else
 	{
 		ElementPtr->crew_level = RDPtr->ship_info.crew_level;

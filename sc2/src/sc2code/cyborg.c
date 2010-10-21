@@ -1348,6 +1348,8 @@ StarShipPtr->ship_input_state &= ~SPECIAL;
 			InputState |= BATTLE_WEAPON;
 		if (StarShipPtr->ship_input_state & SPECIAL)
 			InputState |= BATTLE_SPECIAL;
+		if (StarShipPtr->ship_input_state & DOWN) // JMS_KEYS
+			InputState |= BATTLE_DOWN;
 		return (InputState);
 	}
 }
