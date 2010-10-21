@@ -328,7 +328,7 @@ InitSIS (void)
 	GLOBAL_SIS (ModuleSlots[2]) = CREW_POD;
 	GLOBAL_SIS (ModuleSlots[8]) = STORAGE_BAY;
 	GLOBAL_SIS (ModuleSlots[1]) = FUEL_TANK;*/
-	//	GLOBAL_SIS (ModuleSlots[0]) = STORAGE_BAY; // BW: no storage
+	//	GLOBAL_SIS (ModuleSlots[0]) = STORAGE_BAY; // BW: no storage if commented
 	GLOBAL_SIS (CrewEnlisted) = EXPLORER_CREW_CAPACITY;
 	GLOBAL_SIS (FuelOnBoard) = EXPLORER_FUEL_CAPACITY;
 

@@ -98,6 +98,7 @@ enum
 #define NUM_DRIVE_SLOTS 11
 #define NUM_JET_SLOTS 8
 #define NUM_MODULE_SLOTS 0 // 16 - JMS: Explorer can't be modded
+// BW: put this to 1 to have a cargo bay in explorer
 
 #define CREW_POD_CAPACITY 50
 #define STORAGE_BAY_CAPACITY 500 /* km cubed */
