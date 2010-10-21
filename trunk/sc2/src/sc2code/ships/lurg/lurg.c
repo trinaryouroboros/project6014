@@ -19,7 +19,8 @@
 // JMS 2010 - Totally new file: Lurg ship
 //			- Gave Lurg some more aggressivenes, when enemy ship is close
 //			- Lurg can now use oil as a defense against projectiles, most notably earthling missiles.
-//			- Increased OIL_SNARE from -1 to -2 and OIL_BATCH from 4 to 5 for shits and giggles.
+//			- Lurg also now sprouts oil whenever battery is full and enemy ship far
+//			- Increased OIL_BATCH from 4 to 5 for shits and giggles.
 
 #include "ships/ship.h"
 #include "ships/lurg/resinst.h"
@@ -54,7 +55,7 @@
 #define OIL_BATCH_SIZE 5 // JMS: Was 4
 #define OIL_DELAY 5
 #define OIL_DELAY_MAX 40
-#define OIL_SNARE WORLD_TO_VELOCITY (-2) // JMS: Was -1
+#define OIL_SNARE WORLD_TO_VELOCITY (-1)
 
 #define REPAIR_WAIT 216
 
@@ -129,24 +130,42 @@ static RACE_DESC lurg_desc =
 };
 
 static void
-lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-		COUNT ConcernCounter)
+lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
-	SIZE OilStatus; // JMS
+	SIZE OilStatus;
 	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
 
-	// JMS: don't want to dodge when the enemy is close enough. Instead fire, fire, fire!
-	if (lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 6)
-		ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
+	// JMS: Movement behavior additions
+	if (lpEvalDesc->ObjectPtr)
+	{
+		STARSHIP *EnemyStarShipPtr;
+		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
+		
+		// JMS: Avoid ships with seeking weapons when they're far away (Modified from Chenjesu AI).
+		if ((MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control ) <= SLOW_SHIP
+				&& WEAPON_RANGE (&EnemyStarShipPtr->RaceDescPtr->cyborg_control ) >= LONG_RANGE_WEAPON * 3 / 4
+				&& (EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & SEEKING_WEAPON)
+				&& lpEvalDesc->which_turn > 22))
+			lpEvalDesc->MoveState = AVOID;
+		
+		// JMS: don't pay attention to enemy projectiles when the enemy ship is close enough. This makes Lurg fire a bit more.
+		if (lpEvalDesc->which_turn <= 6)
+			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
+	}
 	
+	// Basic ship intelligence is done here
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
-
-	GetElementStarShip (ShipPtr, &StarShipPtr);
 	StarShipPtr->ship_input_state &= ~SPECIAL;
-
+	
+	// JMS: Weapon behavior additions: If enemy ship is close, keep firing even if it isn't perfectly lined up 
+	if (lpEvalDesc->which_turn < 12)
+		StarShipPtr->ship_input_state |= WEAPON;
+	
+	// Special(oil) behavior additions
 	if (StarShipPtr->special_counter == 0 && lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 24)
 	{
 		COUNT travel_facing, direction_facing;
@@ -175,9 +194,15 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
 	
-	// JMS: Defensive measure, stolen from yehat.c code. Lurg leaves oil in the way of etc Earthling missiles.
-	OilStatus = -1;
+	// JMS: Defensive measure 1: Release oil when battery full and enemy ship is not too close.
+	if(StarShipPtr->RaceDescPtr->ship_info.energy_level == StarShipPtr->RaceDescPtr->ship_info.max_energy
+	   && lpEvalDesc->ObjectPtr
+	   && lpEvalDesc->which_turn > 12)
+		StarShipPtr->ship_input_state |= SPECIAL;
+	
+	// JMS: Defensive measure 2: Lurg leaves oil in the way of projectiles closing in. (stolen from yehat.c shield code.)
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
+	OilStatus = -1;
 	if (lpEvalDesc->ObjectPtr)//&& lpEvalDesc->MoveState == ENTICE)
 	{
 		OilStatus = 0;
@@ -200,9 +225,8 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			OilStatus = 1;
 		}
 	}
-	if (StarShipPtr->special_counter == 0) // JMS: Defensive oil code continues...
+	if (StarShipPtr->special_counter == 0) // JMS: Defensive measure 2 continues...
 	{
-		//StarShipPtr->ship_input_state &= ~SPECIAL;
 		if (OilStatus)
 		{
 			if (ShipPtr->life_span <= NORMAL_LIFE + 1

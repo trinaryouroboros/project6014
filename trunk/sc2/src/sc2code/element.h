@@ -258,6 +258,7 @@ typedef UWORD STATUS_FLAGS;
 #define SHIP_AT_MAX_SPEED      (1 << 7)
 #define SHIP_IN_GRAVITY_WELL   (1 << 8)
 #define PLAY_VICTORY_DITTY     (1 << 9)
+#define DOWN				   (1 << 10) // JMS_KEYS
 
 extern STATUS_FLAGS inertial_thrust (ELEMENT *ElementPtr);
 

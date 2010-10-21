@@ -16,8 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Totally new file: Lurg home system
-//			 -Also shofixti crash site
+// JMS 2010: - Totally new file: Lurg home system
+//			 - Also shofixti crash site
+//			 - Now the number of Lurg ships at Shofixti crash site is remembered by the game
 
 #include "build.h"
 #include "encount.h"
@@ -45,8 +46,7 @@ GenerateLurg (BYTE control)
 					ReinitQueue (&GLOBAL (ip_group_q));
 					assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
 
-					CloneShipFragment (LURG_SHIP,
-							&GLOBAL (npc_built_ship_q), INFINITE_FLEET);
+					CloneShipFragment (LURG_SHIP, &GLOBAL (npc_built_ship_q), INFINITE_FLEET);
 
 					pSolarSysState->MenuState.Initialized += 2;
 					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
@@ -65,20 +65,12 @@ GenerateLurg (BYTE control)
 				else
 				{
 					LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-					pSolarSysState->PlanetSideFrame[1] =
-							CaptureDrawable (
-							LoadGraphic (RUINS_MASK_PMAP_ANIM)
-							);
-					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
-							CaptureStringTable (
-									LoadStringTable (RUINS_STRTAB)
-									);
+					pSolarSysState->PlanetSideFrame[1] = CaptureDrawable (LoadGraphic (RUINS_MASK_PMAP_ANIM));
+					pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = CaptureStringTable (LoadStringTable (RUINS_STRTAB));
 					if (!GET_GAME_STATE (ULTRON_CONDITION))
 						pSolarSysState->SysInfo.PlanetInfo.DiscoveryString =
 								SetAbsStringTableIndex (
-								pSolarSysState->SysInfo.PlanetInfo.DiscoveryString,
-								1
-								);
+								pSolarSysState->SysInfo.PlanetInfo.DiscoveryString, 1);
 				}
 			}
 		default:
@@ -110,11 +102,11 @@ GenerateShofixtiCrashSite (BYTE control)
 				pSolarSysState->CurNode = 1;
 				
 				// ... which allows us to use this retrieve switch to make things happen
-				if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-					& (1L << 0))
+				if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << 0))
 				{
-					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN]
-					&= ~(1L << 0); // Now we reverse the fake picking up so the blip stays on the planet.
+					// Now we reverse the fake picking up so the blip stays on the planet.
+					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] &= ~(1L << 0); 
+					
 					((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
 					SET_GAME_STATE (BLACK_ORB_STATE, 1);
 					SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2);
@@ -138,9 +130,18 @@ GenerateShofixtiCrashSite (BYTE control)
 				PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);
 				ReinitQueue (&GLOBAL (ip_group_q));
 				assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
-					
-				for (i = 0; i < 5; ++i)
-					CloneShipFragment (LURG_SHIP, &GLOBAL (npc_built_ship_q), 0);
+				
+				if(!(GET_GAME_STATE(CRASH_SITE_VISITED)))
+				{
+					SET_GAME_STATE(CRASH_SITE_VISITED, 1);
+					for (i = 0; i < 5; ++i)
+						CloneShipFragment (LURG_SHIP, &GLOBAL (npc_built_ship_q), 0);
+				}
+				else
+				{
+					for (i = 0; i < GET_GAME_STATE(CRASH_SITE_LURG_SURVIVORS); ++i)
+						CloneShipFragment (LURG_SHIP, &GLOBAL (npc_built_ship_q), 0);
+				}
 					
 				pSolarSysState->MenuState.Initialized += 2;
 				GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
@@ -149,16 +150,21 @@ GenerateShofixtiCrashSite (BYTE control)
 				pSolarSysState->MenuState.Initialized -= 2;
 					
 				if (GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))
+				{	
+					// JMS: Empty the Lurg ship queue upon quitting so the game won't crash.
+					ReinitQueue (&GLOBAL (npc_built_ship_q));
+					GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
 					break;
+				}
 				else
 				{
 					BOOLEAN LurgSurvivors;
 					LurgSurvivors = GetHeadLink ( &GLOBAL (npc_built_ship_q) ) != 0;
-						
+					SET_GAME_STATE(CRASH_SITE_LURG_SURVIVORS, CountLinks (&GLOBAL (npc_built_ship_q)));
 					GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
 					ReinitQueue (&GLOBAL (npc_built_ship_q));
 					GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
-						
+				
 					if (LurgSurvivors)
 						break;
 						
@@ -189,14 +195,11 @@ GenerateShofixtiCrashSite (BYTE control)
 				COUNT angle;
 				
 				pSolarSysState->MoonDesc[0].data_index = SELENIC_WORLD;
-				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS
-				+ (MAX_MOONS - 1) * MOON_DELTA;
+				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS + (MAX_MOONS - 1) * MOON_DELTA;
 				rand_val = TFB_Random ();
 				angle = NORMALIZE_ANGLE (LOWORD (rand_val));
-				pSolarSysState->MoonDesc[0].location.x =
-				COSINE (angle, pSolarSysState->MoonDesc[0].radius);
-				pSolarSysState->MoonDesc[0].location.y =
-				SINE (angle, pSolarSysState->MoonDesc[0].radius);
+				pSolarSysState->MoonDesc[0].location.x = COSINE (angle, pSolarSysState->MoonDesc[0].radius);
+				pSolarSysState->MoonDesc[0].location.y = SINE (angle, pSolarSysState->MoonDesc[0].radius);
 			}
 			break;
 		case GENERATE_PLANETS:
@@ -207,14 +210,9 @@ GenerateShofixtiCrashSite (BYTE control)
 			
 			pSolarSysState->PlanetDesc[2].data_index = MAROON_WORLD;
 			pSolarSysState->PlanetDesc[2].NumPlanets = 1;
-			angle = ARCTAN (
-							pSolarSysState->PlanetDesc[2].location.x,
-							pSolarSysState->PlanetDesc[2].location.y
-							);
-			pSolarSysState->PlanetDesc[2].location.x =
-			COSINE (angle, pSolarSysState->PlanetDesc[2].radius);
-			pSolarSysState->PlanetDesc[2].location.y =
-			SINE (angle, pSolarSysState->PlanetDesc[2].radius);
+			angle = ARCTAN (pSolarSysState->PlanetDesc[2].location.x, pSolarSysState->PlanetDesc[2].location.y);
+			pSolarSysState->PlanetDesc[2].location.x = COSINE (angle, pSolarSysState->PlanetDesc[2].radius);
+			pSolarSysState->PlanetDesc[2].location.y = SINE (angle, pSolarSysState->PlanetDesc[2].radius);
 			break;
 		}
 		default:
