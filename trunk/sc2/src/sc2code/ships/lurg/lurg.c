@@ -18,39 +18,39 @@
 
 #include "ships/ship.h"
 #include "ships/lurg/resinst.h"
-
 #include "libs/mathlib.h"
 
 
 #define MAX_CREW 20
 #define MAX_ENERGY 16
-#define ENERGY_REGENERATION 1
-#define ENERGY_WAIT 6 // Shiver: Was 5
+#define ENERGY_REGENERATION 2 // Shiver: Was 1
+#define ENERGY_WAIT 12 // Shiver: Was 5
 #define MAX_THRUST 20
 #define THRUST_INCREMENT 7
 #define THRUST_WAIT 1
 #define TURN_WAIT 1
 #define SHIP_MASS 6
 
-#define WEAPON_ENERGY_COST 3
+#define WEAPON_ENERGY_COST 2
 #define WEAPON_WAIT 8 // Shiver: Was 9
 #define MISSILE_SPEED DISPLAY_TO_WORLD (18)
 #define MISSILE_LIFE 25
 #define MISSILE_HITS 4
 #define MISSILE_DAMAGE 4
 
-#define SPECIAL_ENERGY_COST 2
-#define SPECIAL_WAIT 3
+#define SPECIAL_ENERGY_COST 4
+#define SPECIAL_WAIT 10
 #define OIL_HITS 2
 #define OIL_DAMAGE 1 // Shiver: Oil inflicts damage only in specific circumstances.
 #define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR) // JMS_GFX
 #define OIL_INIT_SPEED (OIL_SPEED*3)
 #define OIL_SPREAD_MINIMUM 5
 #define OIL_SPREAD_VARIATION 5
-#define OIL_LIFE 350
-#define OIL_BATCH_SIZE 4 // Shiver: Was 5
-#define OIL_DELAY 5
-#define OIL_DELAY_MAX 40
+#define OIL_LIFE 300 // Shiver: Was 350.
+#define OIL_LIFE_VARIATION 100
+#define OIL_BATCH_SIZE 10
+#define OIL_DELAY 6 // Shiver: Was 5.
+#define OIL_DELAY_MAX 48 // Shiver: Was 40.
 #define OIL_SNARE WORLD_TO_VELOCITY (-1)
 
 #define REPAIR_WAIT 216
@@ -480,7 +480,7 @@ static void spill_oil (ELEMENT *ShipPtr)
 	MissileBlock.speed = OIL_INIT_SPEED;
 	MissileBlock.hit_points = OIL_HITS;
 	MissileBlock.damage = OIL_DAMAGE;
-	MissileBlock.life = OIL_LIFE;
+	MissileBlock.life = OIL_LIFE + (TFB_Random () & OIL_LIFE_VARIATION);
 	MissileBlock.preprocess_func = oil_preprocess;
 	MissileBlock.blast_offs = OIL_OFFSET;
 	Missile = initialize_missile (&MissileBlock);
