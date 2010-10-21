@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Damaged thrusters emit differently colored particles
+// JMS 2010: - Damaged thrusters emit differently colored particles
+//			 - Enable Down key in melee (comment tag JMS_KEYS)
 
 #include "battlecontrols.h"
 #include "build.h"

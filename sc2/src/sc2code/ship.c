@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010 - Enable Down key in melee (comment tag JMS_KEYS)
+
 #include "build.h"
 #include "collide.h"
 #include "colors.h"

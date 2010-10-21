@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added extern declaration of do_instrument_damage
+// JMS 2010: - Added extern declaration of do_instrument_damage
+//			 - Enable Down key in melee (comment tag JMS_KEYS)
 
 #ifndef _ELEMENT_H
 #define _ELEMENT_H
