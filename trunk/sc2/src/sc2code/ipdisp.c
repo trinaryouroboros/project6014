@@ -509,6 +509,8 @@ CheckGetAway:
 				}
 			}
 		}
+		//BW : make IP ships face the direction they're going into
+		ElementPtr->next.image.frame = SetAbsFrameIndex(ElementPtr->next.image.farray[0], 1+NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))));
 	}
 
 	if (group_loc != 0)
