@@ -145,26 +145,52 @@ initialize_fusion (ELEMENT *ShipPtr, HELEMENT FusionArray[])
 #define FIGHTER_LIFE (ONE_WAY_FLIGHT + ONE_WAY_FLIGHT + 150)
 
 #define FIGHTER_WEAPON_WAIT 8
-#define FIGHTER_OFFSET 4
-#define LASER_RANGE DISPLAY_TO_WORLD (40 + FIGHTER_OFFSET)
+
+#define FIGHTER_LASER_SPEED DISPLAY_TO_WORLD (20)
+#define FIGHTER_LASER_HITS 1
+#define FIGHTER_LASER_DAMAGE 1
+#define FIGHTER_LASER_LIFE 10
+#define FIGHTER_LASER_OFFSET 2
+#define FIGHTER_LASER_BLAST_OFFSET 4
+
+#define LASER_RANGE DISPLAY_TO_WORLD (40 + FIGHTER_LASER_OFFSET)
+
+static COUNT
+initialize_fighterlaser (ELEMENT *ElementPtr, HELEMENT LaserArray[])
+{
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	MissileBlock.cx = ElementPtr->next.location.x;
+	MissileBlock.cy = ElementPtr->next.location.y;
+	MissileBlock.face = ElementPtr->thrust_wait;
+	MissileBlock.sender = (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+	MissileBlock.pixoffs = FIGHTER_LASER_OFFSET;
+	
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.speed = FIGHTER_LASER_SPEED;
+	MissileBlock.hit_points = FIGHTER_LASER_HITS;
+	MissileBlock.damage = FIGHTER_LASER_DAMAGE;
+	MissileBlock.life = FIGHTER_LASER_LIFE;
+
+	MissileBlock.preprocess_func = NULL;
+	MissileBlock.blast_offs = FIGHTER_LASER_BLAST_OFFSET;
+	LaserArray[0] = initialize_missile (&MissileBlock);
+	
+	return (1);
+}
 
 static void
 fighter_postprocess (ELEMENT *ElementPtr)
 {
 	HELEMENT Laser;
 	STARSHIP *StarShipPtr;
-	LASER_BLOCK LaserBlock;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
-	LaserBlock.cx = ElementPtr->next.location.x;
-	LaserBlock.cy = ElementPtr->next.location.y;
-	LaserBlock.face = ElementPtr->thrust_wait;
-	LaserBlock.ex = COSINE (FACING_TO_ANGLE (LaserBlock.face), LASER_RANGE);
-	LaserBlock.ey = SINE (FACING_TO_ANGLE (LaserBlock.face), LASER_RANGE);
-	LaserBlock.sender = (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
-	LaserBlock.pixoffs = FIGHTER_OFFSET;
-	LaserBlock.color = BUILD_COLOR (MAKE_RGB15 (0x00, 0x1F, 0x00), 0x0E); // JMS: Green Lazers!
-	Laser = initialize_laser (&LaserBlock);
+	initialize_fighterlaser (ElementPtr, &Laser);
+	
 	if (Laser)
 	{
 		ELEMENT *LaserPtr;
@@ -172,9 +198,7 @@ fighter_postprocess (ELEMENT *ElementPtr)
 		LockElement (Laser, &LaserPtr);
 		SetElementStarShip (LaserPtr, StarShipPtr);
 
-		ProcessSound (SetAbsSoundIndex (
-						/* FIGHTER_ZAP */
-				StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), LaserPtr);
+		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), LaserPtr);
 
 		UnlockElement (Laser);
 		PutElement (Laser);
@@ -426,8 +450,7 @@ spawn_fighters (ELEMENT *ElementPtr)
 }
 
 static void
-isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-		COUNT ConcernCounter)
+isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
 	EVALUATE_DESC *lpEvalDesc;
 	STARSHIP *StarShipPtr;
