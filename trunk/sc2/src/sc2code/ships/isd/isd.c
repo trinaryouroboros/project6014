@@ -117,7 +117,7 @@ initialize_fusion (ELEMENT *ShipPtr, HELEMENT FusionArray[])
 #define MISSILE_HITS 10
 #define MISSILE_DAMAGE 6
 #define MISSILE_OFFSET 8
-#define ISD_OFFSET 32
+#define ISD_OFFSET 42
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -126,8 +126,7 @@ initialize_fusion (ELEMENT *ShipPtr, HELEMENT FusionArray[])
 	MissileBlock.cy = ShipPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 	MissileBlock.face = MissileBlock.index = StarShipPtr->ShipFacing;
-	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
-			| IGNORE_SIMILAR;
+	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
 	MissileBlock.pixoffs = ISD_OFFSET;
 	MissileBlock.speed = MISSILE_SPEED;
 	MissileBlock.hit_points = MISSILE_HITS;
@@ -162,10 +161,9 @@ fighter_postprocess (ELEMENT *ElementPtr)
 	LaserBlock.face = ElementPtr->thrust_wait;
 	LaserBlock.ex = COSINE (FACING_TO_ANGLE (LaserBlock.face), LASER_RANGE);
 	LaserBlock.ey = SINE (FACING_TO_ANGLE (LaserBlock.face), LASER_RANGE);
-	LaserBlock.sender = (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY))
-			| IGNORE_SIMILAR;
+	LaserBlock.sender = (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
 	LaserBlock.pixoffs = FIGHTER_OFFSET;
-	LaserBlock.color = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x0A), 0x0E);
+	LaserBlock.color = BUILD_COLOR (MAKE_RGB15 (0x00, 0x1F, 0x00), 0x0E); // JMS: Green Lazers!
 	Laser = initialize_laser (&LaserBlock);
 	if (Laser)
 	{
@@ -207,25 +205,19 @@ fighter_preprocess (ELEMENT *ElementPtr)
 		delta_x = StarShipPtr->RaceDescPtr->ship_info.crew_level;
 		delta_y = ElementPtr->life_span;
 
-		orig_facing = facing =
-				GetFrameIndex (ElementPtr->current.image.frame);
-		if (((delta_y & 1) || ElementPtr->hTarget
-				|| TrackShip (ElementPtr, &facing) >= 0)
+		orig_facing = facing = GetFrameIndex (ElementPtr->current.image.frame);
+		if (((delta_y & 1) || ElementPtr->hTarget || TrackShip (ElementPtr, &facing) >= 0)
 				&& (delta_x == 0 || delta_y >= ONE_WAY_FLIGHT))
 			ElementPtr->state_flags |= IGNORE_SIMILAR;
 		else if (delta_x)
 		{
 			LockElement (StarShipPtr->hShip, &eptr);
-			delta_x = eptr->current.location.x
-					- ElementPtr->current.location.x;
-			delta_y = eptr->current.location.y
-					- ElementPtr->current.location.y;
+			delta_x = eptr->current.location.x - ElementPtr->current.location.x;
+			delta_y = eptr->current.location.y - ElementPtr->current.location.y;
 			UnlockElement (StarShipPtr->hShip);
 			delta_x = WRAP_DELTA_X (delta_x);
 			delta_y = WRAP_DELTA_Y (delta_y);
-			facing = NORMALIZE_FACING (
-					ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))
-					);
+			facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
 
 #ifdef NEVER
 			if (delta_x < 0)
@@ -245,10 +237,8 @@ fighter_preprocess (ELEMENT *ElementPtr)
 		if (ElementPtr->hTarget)
 		{
 			LockElement (ElementPtr->hTarget, &eptr);
-			delta_x = eptr->current.location.x
-					- ElementPtr->current.location.x;
-			delta_y = eptr->current.location.y
-					- ElementPtr->current.location.y;
+			delta_x = eptr->current.location.x - ElementPtr->current.location.x;
+			delta_y = eptr->current.location.y - ElementPtr->current.location.y;
 			UnlockElement (ElementPtr->hTarget);
 			delta_x = WRAP_DELTA_X (delta_x);
 			delta_y = WRAP_DELTA_Y (delta_y);
@@ -259,10 +249,7 @@ fighter_preprocess (ELEMENT *ElementPtr)
 					&& delta_x * delta_x + delta_y * delta_y <
 					(LASER_RANGE * 3 / 4) * (LASER_RANGE * 3 / 4))
 			{
-				ElementPtr->thrust_wait =
-						(BYTE)NORMALIZE_FACING (
-						ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))
-						);
+				ElementPtr->thrust_wait = (BYTE)NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
 				ElementPtr->postprocess_func = fighter_postprocess;
 			}
 
@@ -271,32 +258,22 @@ fighter_preprocess (ELEMENT *ElementPtr)
 				facing = GetFrameIndex (eptr->current.image.frame);
 				if (ElementPtr->turn_wait & LEFT)
 				{
-					delta_x += COSINE (FACING_TO_ANGLE (facing - 4),
-							DISPLAY_TO_WORLD (30));
-					delta_y += SINE (FACING_TO_ANGLE (facing - 4),
-							DISPLAY_TO_WORLD (30));
+					delta_x += COSINE (FACING_TO_ANGLE (facing - 4), DISPLAY_TO_WORLD (30));
+					delta_y += SINE (FACING_TO_ANGLE (facing - 4), DISPLAY_TO_WORLD (30));
 				}
 				else
 				{
-					delta_x += COSINE (FACING_TO_ANGLE (facing + 4),
-							DISPLAY_TO_WORLD (30));
-					delta_y += SINE (FACING_TO_ANGLE (facing + 4),
-							DISPLAY_TO_WORLD (30));
+					delta_x += COSINE (FACING_TO_ANGLE (facing + 4), DISPLAY_TO_WORLD (30));
+					delta_y += SINE (FACING_TO_ANGLE (facing + 4), DISPLAY_TO_WORLD (30));
 				}
-				facing = NORMALIZE_FACING (
-						ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))
-						);
+				facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
 			}
 		}
 		ElementPtr->state_flags |= CHANGING;
 
 		if (facing != orig_facing)
-			ElementPtr->next.image.frame = SetAbsFrameIndex (
-					ElementPtr->next.image.frame, facing
-					);
-		SetVelocityVector (
-				&ElementPtr->velocity, FIGHTER_SPEED, facing
-				);
+			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, facing);
+		SetVelocityVector (&ElementPtr->velocity, FIGHTER_SPEED, facing);
 	}
 }
 
@@ -322,17 +299,13 @@ fighter_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 			primIndex = FighterElementPtr->PrimIndex;
 			*FighterElementPtr = *ElementPtr0;
 			FighterElementPtr->PrimIndex = primIndex;
-			(GLOBAL (DisplayArray))[primIndex] =
-					(GLOBAL (DisplayArray))[ElementPtr0->PrimIndex];
+			(GLOBAL (DisplayArray))[primIndex] = (GLOBAL (DisplayArray))[ElementPtr0->PrimIndex];
 			FighterElementPtr->state_flags &= ~PRE_PROCESS;
 			FighterElementPtr->state_flags |= CHANGING;
 			FighterElementPtr->next = FighterElementPtr->current;
-			travel_facing = GetVelocityTravelAngle (
-					&FighterElementPtr->velocity
-					);
-			delta_facing = NORMALIZE_ANGLE (
-					ARCTAN (pPt1->x - pPt0->x, pPt1->y - pPt0->y)
-					- travel_facing);
+			travel_facing = GetVelocityTravelAngle (&FighterElementPtr->velocity);
+			delta_facing = NORMALIZE_ANGLE (ARCTAN (pPt1->x - pPt0->x, pPt1->y - pPt0->y)- travel_facing);
+		
 			if (delta_facing == 0)
 			{
 				if (FighterElementPtr->turn_wait & LEFT)
@@ -345,14 +318,10 @@ fighter_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 			else
 				travel_facing += QUADRANT;
 
-			travel_facing = NORMALIZE_FACING (ANGLE_TO_FACING (
-					NORMALIZE_ANGLE (travel_facing)
-					));
+			travel_facing = NORMALIZE_FACING (ANGLE_TO_FACING (NORMALIZE_ANGLE (travel_facing)));
 			FighterElementPtr->next.image.frame =
-					SetAbsFrameIndex (FighterElementPtr->next.image.frame,
-					travel_facing);
-			SetVelocityVector (&FighterElementPtr->velocity,
-					FIGHTER_SPEED, travel_facing);
+					SetAbsFrameIndex (FighterElementPtr->next.image.frame,travel_facing);
+			SetVelocityVector (&FighterElementPtr->velocity, FIGHTER_SPEED, travel_facing);
 			UnlockElement (hFighterElement);
 
 			PutElement (hFighterElement);
@@ -419,8 +388,7 @@ spawn_fighters (ELEMENT *ElementPtr)
 				| FINITE_LIFE | CREW_OBJECT | IGNORE_SIMILAR
 				| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
 		FighterElementPtr->life_span = FIGHTER_LIFE;
-		SetPrimType (&(GLOBAL (DisplayArray))[FighterElementPtr->PrimIndex],
-				STAMP_PRIM);
+		SetPrimType (&(GLOBAL (DisplayArray))[FighterElementPtr->PrimIndex], STAMP_PRIM);
 		{
 			FighterElementPtr->preprocess_func = fighter_preprocess;
 			FighterElementPtr->postprocess_func = 0;
@@ -443,18 +411,15 @@ spawn_fighters (ELEMENT *ElementPtr)
 			FighterElementPtr->current.location.x += delta_x + delta_y;
 			FighterElementPtr->current.location.y += delta_y - delta_x;
 		}
-		sx = COSINE (FACING_TO_ANGLE (fighter_facing),
-				WORLD_TO_VELOCITY (FIGHTER_SPEED));
-		sy = SINE (FACING_TO_ANGLE (fighter_facing),
-				WORLD_TO_VELOCITY (FIGHTER_SPEED));
+		
+		sx = COSINE (FACING_TO_ANGLE (fighter_facing), WORLD_TO_VELOCITY (FIGHTER_SPEED));
+		sy = SINE (FACING_TO_ANGLE (fighter_facing), WORLD_TO_VELOCITY (FIGHTER_SPEED));
 		SetVelocityComponents (&FighterElementPtr->velocity, sx, sy);
 		FighterElementPtr->current.location.x -= VELOCITY_TO_WORLD (sx);
 		FighterElementPtr->current.location.y -= VELOCITY_TO_WORLD (sy);
 
 		FighterElementPtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-		FighterElementPtr->current.image.frame =
-				SetAbsFrameIndex (StarShipPtr->RaceDescPtr->ship_data.special[0],
-				fighter_facing);
+		FighterElementPtr->current.image.frame = SetAbsFrameIndex (StarShipPtr->RaceDescPtr->ship_data.special[0], fighter_facing);
 		SetElementStarShip (FighterElementPtr, StarShipPtr);
 		UnlockElement (hFighterElement);
 	}
@@ -481,8 +446,7 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			&& ObjectsOfConcern[ENEMY_SHIP_INDEX].which_turn > 16)))
 		lpEvalDesc->MoveState = PURSUE;
 
-	ship_intelligence (ShipPtr,
-			ObjectsOfConcern, ConcernCounter);
+	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
 	{
@@ -497,9 +461,7 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				&& !(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
 				& POINT_DEFENSE)
 				&& (StarShipPtr->RaceDescPtr->characteristics.special_wait < 6
-				|| (MANEUVERABILITY (
-						&EnemyStarShipPtr->RaceDescPtr->cyborg_control
-						) <= SLOW_SHIP
+				|| (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control) <= SLOW_SHIP
 				&& !(EnemyStarShipPtr->cur_status_flags & SHIP_BEYOND_MAX_SPEED))
 				|| (lpEvalDesc->which_turn <= 12
 				&& (StarShipPtr->ship_input_state & (LEFT | RIGHT))
@@ -547,4 +509,3 @@ init_isd (void)
 
 	return (RaceDescPtr);
 }
-
