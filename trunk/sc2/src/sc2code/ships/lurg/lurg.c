@@ -142,10 +142,10 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 		
 		// JMS: Avoid ships with seeking weapons when they're far away (Modified from Chenjesu AI).
-		if ((MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control ) <= SLOW_SHIP
+		/*if ((MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control ) <= SLOW_SHIP
 				&& WEAPON_RANGE (&EnemyStarShipPtr->RaceDescPtr->cyborg_control ) >= LONG_RANGE_WEAPON * 3 / 4
 				&& (EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & SEEKING_WEAPON)
-				&& lpEvalDesc->which_turn > 22))
+				&& lpEvalDesc->which_turn > 22))*/
 			lpEvalDesc->MoveState = AVOID;
 		
 		// JMS: don't pay attention to enemy projectiles when the enemy ship is close enough. This makes Lurg fire a bit more.
@@ -190,10 +190,10 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
 	
-	// JMS: Defensive measure 1: Release oil when battery full and enemy ship is not too close.
+	// JMS: Defensive measure 1: Release oil when battery full
 	if(StarShipPtr->RaceDescPtr->ship_info.energy_level == StarShipPtr->RaceDescPtr->ship_info.max_energy
 	   && lpEvalDesc->ObjectPtr
-	   && lpEvalDesc->which_turn > 12)
+	   /*&& lpEvalDesc->which_turn > 12*/) // (and enemy ship is not too close.)
 		StarShipPtr->ship_input_state |= SPECIAL;
 	
 	// JMS: Defensive measure 2: Lurg leaves oil in the way of projectiles closing in. (stolen from yehat.c shield code.)

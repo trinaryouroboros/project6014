@@ -453,7 +453,7 @@ CheckGetAway:
 
 			if (Transition)
 			{
-						/* no collisions during transition */
+				/* no collisions during transition */
 				EPtr->state_flags |= NONSOLID;
 
 				vdx = vdy = 0;
@@ -490,19 +490,12 @@ CheckGetAway:
 				{
 					if (target_loc == GroupPtr->dest_loc)
 					{
-						GroupPtr->orbit_pos = NORMALIZE_FACING (
-								ANGLE_TO_FACING (angle + HALF_CIRCLE));
-						GroupPtr->group_counter =
-								((COUNT)TFB_Random () % MAX_REVOLUTIONS)
-								<< FACING_SHIFT;
+						GroupPtr->orbit_pos = NORMALIZE_FACING (ANGLE_TO_FACING (angle + HALF_CIRCLE));
+						GroupPtr->group_counter = ((COUNT)TFB_Random () % MAX_REVOLUTIONS) << FACING_SHIFT;
 					}
 
-					GroupPtr->loc.x = -(SIZE)((long)COSINE (
-							angle, SIS_SCREEN_WIDTH * 9 / 16
-							) * MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
-					GroupPtr->loc.y = -(SIZE)((long)SINE (
-							angle, SIS_SCREEN_WIDTH * 9 / 16
-							) * MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
+					GroupPtr->loc.x = -(SIZE)((long)COSINE (angle, SIS_SCREEN_WIDTH * 9 / 16) * MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
+					GroupPtr->loc.y = -(SIZE)((long)SINE (angle, SIS_SCREEN_WIDTH * 9 / 16) * MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
 
 					group_loc = target_loc;
 					GroupPtr->sys_loc = target_loc;
@@ -510,7 +503,7 @@ CheckGetAway:
 			}
 		}
 		//BW : make IP ships face the direction they're going into
-		ElementPtr->next.image.frame = SetAbsFrameIndex(ElementPtr->next.image.farray[0], 1+NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))));
+		ElementPtr->next.image.frame = SetAbsFrameIndex(ElementPtr->next.image.farray[0], 1 + NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))));
 	}
 
 	if (group_loc != 0)
