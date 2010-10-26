@@ -19,6 +19,7 @@
 //			 -Some other shit related to ORZ space portal / 0 planet star systems
 // JMS 2010: -Different gfx for ORZ space portal/sun in interplanetary
 //			 -Option to add randomness to interplanetary background stars
+//			 -The flag which controls escaping enemies is zeroed now in uninitsolarsys
 
 #include "colors.h"
 #include "controls.h"
@@ -1572,6 +1573,10 @@ UninitSolarSys (void)
 //FreeLanderData ();
 //FreeIPData ();
 
+	// JMS: Zero the flag which controls escaping enemies.
+	if(GET_GAME_STATE(ENEMY_ESCAPE_OCCURRED))
+		SET_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 0);
+	
 	if (GLOBAL (CurrentActivity) & END_INTERPLANETARY)
 	{
 		GLOBAL (CurrentActivity) &= ~END_INTERPLANETARY;
