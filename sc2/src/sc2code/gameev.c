@@ -263,15 +263,13 @@ transport_starts_event(void)
 		
 		// Next transport starts on the 7th of the correct year and month.
 		AddEvent (ABSOLUTE_EVENT, month_index, 7, year_index, TRANSPORT_STARTS_EVENT);
-		log_add(log_Debug, "next day 7, next month %d, next year %d, status %d", day_index,
-				month_index,year_index,GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS));
+		//log_add(log_Debug, "next day 7, next month %d, next year %d, status %d", month_index, year_index, GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS));
 	}
 	// Dates other than 28th are pretty straightforward: Just add 7 to the current day number.
 	else
 		AddEvent (RELATIVE_EVENT, 0, 7, 0, TRANSPORT_STARTS_EVENT);
 	
-	log_add(log_Debug, "next day %d, next month %d, next year %d, status %d", day_index,
-			month_index,year_index+7,GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS));
+	//log_add(log_Debug, "next day %d, next month %d, next year %d, status %d", day_index, month_index,year_index+7,GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS));
 }
 
 void

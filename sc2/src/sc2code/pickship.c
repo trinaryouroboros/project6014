@@ -104,22 +104,21 @@ DoPickBattleShip (MENU_STATE *pMS)
 			// JMS: Chmmr Explorer gfx
 			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 			{
-				if (new_row==0 && new_col < 0)
+				if (new_row == 0 && new_col < 0)
 					new_col = NUM_PICK_SHIP_EXPLORER_COLUMNS;
-				else if (new_row>0 && new_col <0)
+				else if (new_row > 0 && new_col < 0)
 					new_col = 1;
-				else if (new_row==0 && new_col > NUM_PICK_SHIP_EXPLORER_COLUMNS 
-						 || (new_row>0 && (new_col > 1) ))
+				else if ( (new_row == 0 && new_col > NUM_PICK_SHIP_EXPLORER_COLUMNS) || (new_row > 0 && new_col > 1 ) )
 					new_col = 0;
 				
-				if (new_row==0 && pMS->first_item.x == 1  && pMS->first_item.y == 1)
+				if (new_row == 0 && pMS->first_item.x == 1 && pMS->first_item.y == 1)
 					new_col = 3;
-				else if (new_row==0 && pMS->first_item.x == 0  && pMS->first_item.y == 1)
+				else if (new_row == 0 && pMS->first_item.x == 0 && pMS->first_item.y == 1)
 					new_col = 1;
 				
-				if ((new_row==1 || new_row<0) && pMS->first_item.x < 2  && pMS->first_item.y == 0)
+				if ((new_row == 1 || new_row < 0) && pMS->first_item.x < 2 && pMS->first_item.y == 0)
 					new_col = 0;
-				else if ((new_row==1 || new_row<0) && pMS->first_item.x > 2  && pMS->first_item.y == 0)
+				else if ((new_row == 1 || new_row < 0) && pMS->first_item.x > 2 && pMS->first_item.y == 0)
 					new_col = 1;
 	
 				if (new_row < 0)
