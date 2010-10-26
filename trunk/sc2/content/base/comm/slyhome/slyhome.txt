@@ -22,7 +22,7 @@ Quick! Contact the other ships
 so we may begin the festivities of jumbling eruptions.
 
 #(PANIC_HELLO_1)
-Please, hear us out! We are Slylandro, gas folk,
+Please, hear us out! We are Slylandro, gas folk
 harmless inhabitants of the Source.
 Don't you recognize us?
 

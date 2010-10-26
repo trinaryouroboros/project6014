@@ -474,14 +474,8 @@ CheckGetAway:
 					/* Group completely left the star system */
 					EPtr->life_span = 0;
 					EPtr->state_flags |= DISAPPEARING | NONSOLID;
-					GroupPtr->in_system = 0;
-					
-					// JMS: When one Slylandro-kohrah group has exited the system
-					// it is safe to assume that all groups have been given the FLEE flag.
-					// Thus we can finally zero the game state that tells the sly-kohrs to flee the system.
-					if(GET_GAME_STATE(ENEMY_ESCAPE_OCCURRED))
-						SET_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 0);
-					
+					GroupPtr->in_system = 0;					
+
 					// JMS: Freight Transport ship has left the system.
 					if (GroupPtr->race_id==TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
 						SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 2);
