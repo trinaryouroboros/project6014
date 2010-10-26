@@ -644,7 +644,7 @@ enum
 		20,  /* ORZ_SHIP */ \
 		20,  /* PKUNK_SHIP */ \
 		40,  /* SHOFIXTI_SHIP */ \
-		10,  /* SPATHI_SHIP */ \
+		0,  /* SPATHI_SHIP */ \
 		20,  /* SUPOX_SHIP */ \
 		20,  /* THRADDASH_SHIP */ \
 		20,  /* UTWIG_SHIP */ \

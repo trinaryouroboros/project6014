@@ -16,7 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Release Bullet hole gfx when uniniting kernel
+// JMS 2010: -Release Bullet hole gfx when uniniting kernel
+//			 -Removed unnecessary UninitGameKernel function
 
 #include "battle.h"
 #include "master.h"
@@ -38,7 +39,8 @@ extern void FreeIPData (void);
 
 static void UninitContexts (void);
 static void UninitKernel (BOOLEAN ships);
-static void UninitGameKernel (void);
+
+//static void UninitGameKernel (void); // JMS: This functions seems to be never used
 
 
 void
@@ -101,6 +103,9 @@ FreeGameData (void)
 	FreeHyperData ();
 }
 
+/* JMS: Commented out because it seems all the functionalities contained in this function
+ // are called separately when the program run ends: Freegamedata and Freekernel
+ // (which contains UninitKernel and UninitContexts) are run straight in starcon.c where the program run ends.
 static void
 UninitGameKernel (void)
 {
@@ -112,6 +117,6 @@ UninitGameKernel (void)
 		UninitKernel (FALSE);
 		UninitContexts ();
 	}
-}
+}*/
 
 

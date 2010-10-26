@@ -70,7 +70,7 @@ typedef struct _input_template {
 
 extern INPUT_TEMPLATE input_templates[6];
 
-void prepareContentDir (const char *contentDirName, const char *addonDirName, const char *execFile);
+void prepareContentDir (const char *contentDirName, const char *addonDirName, char *execFile);
 void prepareConfigDir (const char *configDirName);
 void prepareMeleeDir (void);
 void prepareSaveDir (void);
