@@ -16,16 +16,17 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Certain systems have freight transport ships. These ships leave the system for their 
+// JMS 2010: - Certain systems have freight transport ships. These ships leave the system for their 
 //			  supposed freight run on first day of the month + every date divisible with seven thereafter.
 //			 
-//			 -More Transport ship mechanics: The ship's status flag is 0 when orbiting a planet, 1 when
+//			 - More Transport ship mechanics: The ship's status flag is 0 when orbiting a planet, 1 when
 //			  leaving for hyperspace and 2 when arriving from hyperspace.
 //
-//			 -Transport ship tells the intercepting ships in star system that all is well, stop chasing.
+//			 - Transport ship tells the intercepting ships in star system that all is well, stop chasing.
 //			  When at sol, it notifies human ships, when at procyon, it notifies chmmr ships.
 //
-//			 -Removed some Ur-Quan probe conditions.
+//			 - Removed some Ur-Quan probe conditions.
+//			 - Enhanced battle group behavior when they orbit planets: They don't jitter no more when changing facing.
 
 #include "collide.h"
 #include "globdata.h"
@@ -162,8 +163,7 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		if ((task & ~IGNORE_FLAGSHIP) != EXPLORE)
 			GroupPtr->group_counter = 0;
 		else
-			GroupPtr->group_counter = ((COUNT)TFB_Random ()
-					% MAX_REVOLUTIONS) << FACING_SHIFT;
+			GroupPtr->group_counter = ((COUNT)TFB_Random () % MAX_REVOLUTIONS) << FACING_SHIFT;
 	}
 	
 	// JMS: If Slylandro-kohrah battlegroup is fought, all Slylandro battle groups escape from the system
@@ -276,7 +276,8 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		SIZE dx, dy;
 		SIZE delta_x, delta_y;
 		COUNT angle;
-
+		FRAME suggestedFrame; // JMS
+		
 		Transition = FALSE;
 		if (task == FLEE)
 		{
@@ -503,7 +504,20 @@ CheckGetAway:
 			}
 		}
 		//BW : make IP ships face the direction they're going into
-		ElementPtr->next.image.frame = SetAbsFrameIndex(ElementPtr->next.image.farray[0], 1 + NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))));
+		suggestedFrame = SetAbsFrameIndex(ElementPtr->next.image.farray[0], 1 + NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))));
+		
+		// JMS: Direction memory prevents jittering of battle group icons when they are orbiting a planet (and not chasing the player ship).		
+		if (GroupPtr->task == ON_STATION | REFORM_GROUP && target_loc != 0)
+		{
+			// This works because ships always orbit planets clockwise.
+			if (GroupPtr->lastDirection < NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)))
+				|| GroupPtr->lastDirection == 15)
+				ElementPtr->next.image.frame = suggestedFrame;
+		}
+		else
+			ElementPtr->next.image.frame = suggestedFrame;
+		
+		GroupPtr->lastDirection = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
 	}
 
 	if (group_loc != 0)

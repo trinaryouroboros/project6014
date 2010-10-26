@@ -1480,8 +1480,8 @@ InitSolarSys (void)
 		GLOBAL (ShipStamp.origin.y) = SIS_SCREEN_HEIGHT >> 1;
 		
 		// JMS: When exiting Orz space, exit to middle of star
-		if (GET_GAME_STATE(LEAVING_ORZ_SPACE)==1)
-			SET_GAME_STATE(LEAVING_ORZ_SPACE,0);
+		if (GET_GAME_STATE(LEAVING_ORZ_SPACE) == 1)
+			SET_GAME_STATE(LEAVING_ORZ_SPACE, 0);
 		else
 			GLOBAL (ShipStamp.origin.y) += (SIS_SCREEN_HEIGHT >> 1) - 1;
 
