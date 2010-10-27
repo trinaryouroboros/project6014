@@ -64,7 +64,7 @@ static SBDATA sol_desc =
 static SBDATA procyon_desc =
 {
   	STARBASE_PROCYON_ANIM, /* StarbaseFrameRes */
-	2, /* NumAnimations */
+	1, /* NumAnimations */
 	{ /* StarbaseAmbientArray (ambient animations) */
 		{	// 0 - Starbase
 			1, /* StartIndex */
@@ -74,14 +74,14 @@ static SBDATA procyon_desc =
 			0, 0, /* RestartRate */
 			0, /* BlockMask */
 		},
-		{	// 1 - Avatar
-			33, /* StartIndex */
-			47, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, 0, /* FrameRate */
-			ONE_SECOND, ONE_SECOND * 6, /* RestartRate */
-			0, /* BlockMask */
-		},
+// 		{	// 1 - Avatar
+// 			33, /* StartIndex */
+// 			47, /* NumFrames */
+// 			CIRCULAR_ANIM, /* AnimFlags */
+// 			ONE_SECOND / 20, 0, /* FrameRate */
+// 			ONE_SECOND, ONE_SECOND * 6, /* RestartRate */
+// 			0, /* BlockMask */
+// 		},
 	},
   	NULL, /* StarbaseFrame */
   	NULL, /* StarbaseColorMap */
