@@ -146,20 +146,20 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 				&& WEAPON_RANGE (&EnemyStarShipPtr->RaceDescPtr->cyborg_control ) >= LONG_RANGE_WEAPON * 3 / 4
 				&& (EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & SEEKING_WEAPON)
 				&& lpEvalDesc->which_turn > 22))*/
-			lpEvalDesc->MoveState = AVOID;
+		//		lpEvalDesc->MoveState = AVOID;
 		
 		// JMS: don't pay attention to enemy projectiles when the enemy ship is close enough. This makes Lurg fire a bit more.
 		if (lpEvalDesc->which_turn <= 6)
 			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
 	}
 	
+	// JMS: Weapon behavior additions: If enemy ship is not close, avoid it
+	if (lpEvalDesc->which_turn > 10)
+		lpEvalDesc->MoveState = AVOID;
+	
 	// Basic ship intelligence is done here
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 	StarShipPtr->ship_input_state &= ~SPECIAL;
-	
-	// JMS: Weapon behavior additions: If enemy ship is close, keep firing even if it isn't perfectly lined up 
-	if (lpEvalDesc->which_turn < 12)
-		StarShipPtr->ship_input_state |= WEAPON;
 	
 	// Special(oil) behavior additions
 	if (StarShipPtr->special_counter == 0 && lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 24)
