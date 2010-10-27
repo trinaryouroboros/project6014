@@ -1106,5 +1106,5 @@ ISDFIGHTER_BIG_MASK_PMAP_ANIM,ship.isd.graphics.fighter.large,sc2code/ships/isd/
 ISDFIGHTER_MED_MASK_PMAP_ANIM,ship.isd.graphics.fighter.medium,sc2code/ships/isd/igfxres.h,GFXRES,base/ships/isd/fightmed.ani
 ISDFIGHTER_SML_MASK_PMAP_ANIM,ship.isd.graphics.fighter.small,sc2code/ships/isd/igfxres.h,GFXRES,base/ships/isd/fightsml.ani
 ISD_CAPTAIN_MASK_PMAP_ANIM,ship.isd.graphics.captain,sc2code/ships/isd/igfxres.h,GFXRES,base/ships/isd/isdcap.ani
-PROBE_CODE,ship.probe.code,sc2code/ships/probe/icode.h,SHIP,30
+PROBE_CODE,ship.probe.code,sc2code/ships/probe/icode.h,SHIP,29
 PROBE_MICON_MASK_PMAP_ANIM,ship.probe.meleeicons,sc2code/ships/probe/igfxres.h,GFXRES,base/ships/probe/promicon.ani
