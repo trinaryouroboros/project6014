@@ -16,6 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+
 #include "ships/ship.h"
 #include "ships/lurg/resinst.h"
 #include "libs/mathlib.h"
@@ -23,8 +24,8 @@
 
 #define MAX_CREW 20
 #define MAX_ENERGY 16
-#define ENERGY_REGENERATION 2 // Shiver: Was 1
-#define ENERGY_WAIT 12 // Shiver: Was 5
+#define ENERGY_REGENERATION 2
+#define ENERGY_WAIT 13 // Shiver: Was 12.
 #define MAX_THRUST 20
 #define THRUST_INCREMENT 7
 #define THRUST_WAIT 1
@@ -32,7 +33,7 @@
 #define SHIP_MASS 6
 
 #define WEAPON_ENERGY_COST 2
-#define WEAPON_WAIT 8 // Shiver: Was 9
+#define WEAPON_WAIT 9 // Shiver: Was 8.
 #define MISSILE_SPEED DISPLAY_TO_WORLD (18)
 #define MISSILE_LIFE 25
 #define MISSILE_HITS 4
@@ -46,11 +47,11 @@
 #define OIL_INIT_SPEED (OIL_SPEED*3)
 #define OIL_SPREAD_MINIMUM 5
 #define OIL_SPREAD_VARIATION 5
-#define OIL_LIFE 300 // Shiver: Was 350.
+#define OIL_LIFE 300
 #define OIL_LIFE_VARIATION 100
 #define OIL_BATCH_SIZE 10
-#define OIL_DELAY 6 // Shiver: Was 5.
-#define OIL_DELAY_MAX 48 // Shiver: Was 40.
+#define OIL_DELAY 6
+#define OIL_DELAY_MAX 36 // Shiver: Was 48.
 #define OIL_SNARE WORLD_TO_VELOCITY (-1)
 
 #define REPAIR_WAIT 216
@@ -115,7 +116,7 @@ static RACE_DESC lurg_desc =
 	},
 	{
 		0,
-		(MISSILE_SPEED * MISSILE_LIFE) >> 1,
+		(MISSILE_SPEED * MISSILE_LIFE) *  3/4,
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -141,28 +142,26 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 		STARSHIP *EnemyStarShipPtr;
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 		
-		// JMS: Avoid ships with seeking weapons when they're far away (Modified from Chenjesu AI).
-		/*if ((MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control ) <= SLOW_SHIP
-				&& WEAPON_RANGE (&EnemyStarShipPtr->RaceDescPtr->cyborg_control ) >= LONG_RANGE_WEAPON * 3 / 4
-				&& (EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & SEEKING_WEAPON)
-				&& lpEvalDesc->which_turn > 22))*/
-		//		lpEvalDesc->MoveState = AVOID;
-		
 		// JMS: don't pay attention to enemy projectiles when the enemy ship is close enough. This makes Lurg fire a bit more.
-		if (lpEvalDesc->which_turn <= 6)
+		if (lpEvalDesc->which_turn <= 10)
 			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
 	}
 	
-	// JMS: Weapon behavior additions: If enemy ship is not close, avoid it
-	if (lpEvalDesc->which_turn > 10)
+	// Run away unless the enemy is close
+	if (lpEvalDesc->which_turn > 20)
 		lpEvalDesc->MoveState = AVOID;
+	else
+		lpEvalDesc->MoveState = ENTICE;
 	
-	// Basic ship intelligence is done here
+	// Basic ship intelligence
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 	StarShipPtr->ship_input_state &= ~SPECIAL;
 	
-	// Special(oil) behavior additions
-	if (StarShipPtr->special_counter == 0 && lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 24)
+	// Primary oil behavior
+	if (StarShipPtr->special_counter == 0
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >=
+			(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1)
+		&& lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 24)
 	{
 		COUNT travel_facing, direction_facing;
 		SIZE delta_x, delta_y;
@@ -190,53 +189,39 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
 	
-	// JMS: Defensive measure 1: Release oil when battery full
+	// Always drop oil when battery is full
 	if(StarShipPtr->RaceDescPtr->ship_info.energy_level == StarShipPtr->RaceDescPtr->ship_info.max_energy
-	   && lpEvalDesc->ObjectPtr
-	   /*&& lpEvalDesc->which_turn > 12*/) // (and enemy ship is not too close.)
+	   && lpEvalDesc->ObjectPtr)
 		StarShipPtr->ship_input_state |= SPECIAL;
 	
-	// JMS: Defensive measure 2: Lurg leaves oil in the way of projectiles closing in. (stolen from yehat.c shield code.)
+	// Panic Mode; Lurg drops oil in the way of incoming projectiles. This is based on yehat.c shield code.
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	OilStatus = -1;
-	if (lpEvalDesc->ObjectPtr)//&& lpEvalDesc->MoveState == ENTICE)
+	if (lpEvalDesc->ObjectPtr)
 	{
 		OilStatus = 0;
-		if (!(lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT)))
-			lpEvalDesc->MoveState = PURSUE;
-		else if (lpEvalDesc->ObjectPtr->mass_points || (lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))
+		if (lpEvalDesc->ObjectPtr->hit_points < 6 // Shiver: Ignore huge projectiles.
+			&& (lpEvalDesc->ObjectPtr->mass_points
+				|| lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT)))
 		{
-			if (!(lpEvalDesc->ObjectPtr->state_flags & FINITE_LIFE))
-				lpEvalDesc->which_turn <<= 1;
-			else
-			{
-				if ((lpEvalDesc->which_turn >>= 1) == 0)
-					lpEvalDesc->which_turn = 1;
-				
-				if (lpEvalDesc->ObjectPtr->mass_points)
-					lpEvalDesc->ObjectPtr = 0;
-				else
-					lpEvalDesc->MoveState = PURSUE;
-			}
+			if ((lpEvalDesc->which_turn >>= 1) == 0)
+				lpEvalDesc->which_turn = 1;
+
 			OilStatus = 1;
 		}
 	}
-	if (StarShipPtr->special_counter == 0) // JMS: Defensive measure 2 continues...
+	if (StarShipPtr->special_counter == 0) // Panic Mode continues...
 	{
 		if (OilStatus)
 		{
-			if (ShipPtr->life_span <= NORMAL_LIFE + 1
+			if (StarShipPtr->RaceDescPtr->ship_info.energy_level >=
+				(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1)
 				&& (OilStatus > 0 || lpEvalDesc->ObjectPtr)
-				&& lpEvalDesc->which_turn <= 12
+				&& lpEvalDesc->which_turn <= 28
 				&& (OilStatus > 0
-					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) // means IMMEDIATE WEAPON
-					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 12, 0))
-				//&& (TFB_Random () & 3)
-				)
-				StarShipPtr->ship_input_state |= SPECIAL;
-			
-			if (lpEvalDesc->ObjectPtr && !(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))
-				lpEvalDesc->ObjectPtr = 0;
+					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP))) // means IMMEDIATE WEAPON
+					// || PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 28, 0)))
+			StarShipPtr->ship_input_state |= SPECIAL;
 		}
 	}
 }
@@ -246,9 +231,10 @@ acid_preprocess (ELEMENT *ElementPtr)
 {
 	COUNT facing;
 
-	facing = (GetFrameIndex (ElementPtr->next.image.frame)) % 16; // JMS: Modulo 16 here ensures that the explosion frames are not used in wrong place.
+	facing = (GetFrameIndex (ElementPtr->next.image.frame)) % 16;
+	// JMS: Modulo 16 here ensures that the explosion frames are not used in wrong place.
 	
-	if (ElementPtr->thrust_wait == 1) // Left start.
+	if (ElementPtr->thrust_wait == 1) // Left start
 	{
 		if (ElementPtr->turn_wait < 2)
 		{
@@ -262,7 +248,7 @@ acid_preprocess (ELEMENT *ElementPtr)
 		}
 	}
 
-	if (ElementPtr->thrust_wait == 2) // Right start.
+	if (ElementPtr->thrust_wait == 2) // Right start
 	{
 		if (ElementPtr->turn_wait < 2)
 		{
@@ -276,27 +262,27 @@ acid_preprocess (ELEMENT *ElementPtr)
 		}
 	}
 
-	if (ElementPtr->thrust_wait == 0) // Main loop.
+	if (ElementPtr->thrust_wait == 0) // Main loop
 	{
-		if (ElementPtr->turn_wait < 4) // Turn left.
+		if (ElementPtr->turn_wait < 4) // Turn left
 		{
 			--facing;
 			ElementPtr->turn_wait += 1;
 		} 
-		else if (ElementPtr->turn_wait < 6) // Wait.
+		else if (ElementPtr->turn_wait < 6) // Wait
 		{
 			ElementPtr->turn_wait += 1;
 		}
-		else if (ElementPtr->turn_wait < 10) // Turn right.
+		else if (ElementPtr->turn_wait < 10) // Turn right
 		{
 			++facing;
 			ElementPtr->turn_wait += 1;
 		}
-		else if (ElementPtr->turn_wait < 12) // Wait.
+		else if (ElementPtr->turn_wait < 12) // Wait
 		{
 			ElementPtr->turn_wait += 1;
 		}
-		else if (ElementPtr->turn_wait == 12) // Wait and reset the loop.
+		else if (ElementPtr->turn_wait == 12) // Wait and reset the loop
 		{
 			ElementPtr->turn_wait = 0;
 		}
@@ -378,8 +364,7 @@ oil_preprocess (ELEMENT *ElementPtr)
 		SetVelocityVector (&ElementPtr->velocity,
 				OIL_SPEED, facing);
 
-#define TRACK_WAIT 4
-		turn_wait = TRACK_WAIT;
+		turn_wait = 4;
 	}
 
 	ElementPtr->turn_wait = MAKE_BYTE (turn_wait, thrust_wait);
@@ -394,7 +379,7 @@ oil_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 				&& !GRAVITY_MASS (ElementPtr1->mass_points))
 	{
 		ElementPtr0->mass_points = 0;
-		// Shiver: Oil does no damage against asteroids.
+		// Oil does no damage against asteroids
 	}
 	else if ((ElementPtr0->state_flags
 			& (GOOD_GUY | BAD_GUY)) !=
@@ -445,16 +430,13 @@ oil_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 				SIZE xHits;
 				xHits = ElementPtr1->hit_points;
 				ElementPtr0->mass_points = (TFB_Random () & 3) == 1;
-				// Shiver: Oil is ineffective against large projectiles.
+				// Oil is ineffective against large projectiles
 			}
 			else
 				ElementPtr0->mass_points = 1;
-				// Shiver: Do damage full, guaranteed against projectiles otherwise.
+				// Do full, guaranteed damage against small projectiles
 		}
 	}
-
-	if (ElementPtr0->thrust_wait <= COLLISION_THRUST_WAIT)
-		ElementPtr0->thrust_wait += COLLISION_THRUST_WAIT << 1;
 
 	weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
 }
@@ -472,7 +454,7 @@ static void spill_oil (ELEMENT *ShipPtr)
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.face = (COUNT)TFB_Random (); // Shiver: Deploy at random in every direction.
+	MissileBlock.face = (COUNT)TFB_Random (); // Deploy at random in every direction.
 	MissileBlock.index = 0;
 	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
@@ -491,7 +473,7 @@ static void spill_oil (ELEMENT *ShipPtr)
 
 		LockElement (Missile, &OilPtr);
 		/* Shiver: OilPtr->turn_wait here affects how long the projectile travels at
-			OIL_INIT_SPEED speed when deployed. */
+		   OIL_INIT_SPEED speed when deployed. */
 		OilPtr->turn_wait = (((COUNT)TFB_Random () & OIL_SPREAD_VARIATION) + OIL_SPREAD_MINIMUM);
 		SetElementStarShip (OilPtr, StarShipPtr);
 		OilPtr->collision_func = oil_collision;
@@ -526,14 +508,14 @@ lurg_postprocess (ELEMENT *ElementPtr)
 		StarShipPtr->special_counter = SPECIAL_WAIT;
 	}
 
-	// Shiver: Start timer for passive regeneration when damaged.
+	// Start timer for passive regeneration when damaged
 	if (ElementPtr->hit_points < MAX_CREW
 		&& StarShipPtr->auxiliary_counter == 0)
 	{
 		StarShipPtr->auxiliary_counter += REPAIR_WAIT;
 	}
 
-	// Shiver: Slowly regenerate crew.
+	// Slowly regenerate crew
 	if (StarShipPtr->auxiliary_counter == 1
 			&& ElementPtr->hit_points > 0)
 	{
