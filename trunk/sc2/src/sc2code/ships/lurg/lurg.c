@@ -157,7 +157,7 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 	StarShipPtr->ship_input_state &= ~SPECIAL;
 	
-	// Primary oil behavior
+	// Oil behavior
 	if (StarShipPtr->special_counter == 0
 		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >=
 			(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1)
@@ -217,10 +217,10 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 			if (StarShipPtr->RaceDescPtr->ship_info.energy_level >=
 				(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1)
 				&& (OilStatus > 0 || lpEvalDesc->ObjectPtr)
-				&& lpEvalDesc->which_turn <= 28
-				&& (OilStatus > 0
-					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP))) // means IMMEDIATE WEAPON
-					// || PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 28, 0)))
+				&& lpEvalDesc->which_turn <= 28)
+				/*  && (OilStatus > 0
+					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) // means IMMEDIATE WEAPON
+					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 28, 0))) */
 			StarShipPtr->ship_input_state |= SPECIAL;
 		}
 	}

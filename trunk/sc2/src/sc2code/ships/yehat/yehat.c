@@ -154,7 +154,13 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 {
 	SIZE ShieldStatus;
 	STARSHIP *StarShipPtr;
+	STARSHIP *EnemyStarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
+
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+
+	if ((lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX])->ObjectPtr)
+		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 
 	ShieldStatus = -1;
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
@@ -182,7 +188,6 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		}
 	}
 
-	GetElementStarShip (ShipPtr, &StarShipPtr);
 	if (StarShipPtr->special_counter == 0)
 	{
 		StarShipPtr->ship_input_state &= ~SPECIAL;
@@ -196,7 +201,10 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					& PLAYER_SHIP) /* means IMMEDIATE WEAPON */
 					|| PlotIntercept (lpEvalDesc->ObjectPtr,
 					ShipPtr, 2, 0))
-					&& (TFB_Random () & 3))
+					&& (TFB_Random () & 3)
+				// Shiver: AI does not raise shields at Lurg oil blobs.		
+				&& !(EnemyStarShipPtr && EnemyStarShipPtr->SpeciesID == LURG_ID
+					&& lpEvalDesc->ObjectPtr->mass_points < 2))
 				StarShipPtr->ship_input_state |= SPECIAL;
 
 			if (lpEvalDesc->ObjectPtr
@@ -207,13 +215,11 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 
 	if ((lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX])->ObjectPtr)
 	{
-		STARSHIP *EnemyStarShipPtr;
-
-		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
 				& IMMEDIATE_WEAPON))
 			lpEvalDesc->MoveState = PURSUE;
 	}
+
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 /*
 	if (StarShipPtr->RaceDescPtr->ship_info.energy_level <= SPECIAL_ENERGY_COST)
