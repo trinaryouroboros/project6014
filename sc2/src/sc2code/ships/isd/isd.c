@@ -18,33 +18,49 @@
 
 #include "ships/ship.h"
 #include "ships/isd/resinst.h"
-
+#include "libs/mathlib.h"
 #include "globdata.h"
-
 #include <stdlib.h>
 
 
 #define MAX_CREW MAX_CREW_SIZE
 #define MAX_ENERGY MAX_ENERGY_SIZE
-#define ENERGY_REGENERATION 1
-#define WEAPON_ENERGY_COST 6
-#define SPECIAL_ENERGY_COST 8
-#define ENERGY_WAIT 4
+#define ENERGY_REGENERATION 4 // Was 1.
+#define ENERGY_WAIT 14 // Was 4.
 #define MAX_THRUST 30
 #define THRUST_INCREMENT 6
 #define TURN_WAIT 6
 #define THRUST_WAIT 6
-#define WEAPON_WAIT 10
 #define SPECIAL_WAIT 9
-
 #define SHIP_MASS 10
-#define MISSILE_SPEED DISPLAY_TO_WORLD (20)
-#define MISSILE_LIFE 20
+
+#define WEAPON_ENERGY_COST 1 // Was 6.
+#define WEAPON_WAIT 2 // Was 10.
+#define MISSILE_SPEED DISPLAY_TO_WORLD (24) // Was 20.
+#define MISSILE_LIFE 15 // Was 20.
+#define MISSILE_HITS 2 // Was 10.
+#define MISSILE_DAMAGE 2 // Was 6.
+#define MISSILE_OFFSET 8
+#define ISD_OFFSET 42
+
+#define SPECIAL_ENERGY_COST 8
+#define TRACK_THRESHOLD 6
+#define ONE_WAY_FLIGHT 125
+#define FIGHTER_LIFE (ONE_WAY_FLIGHT + ONE_WAY_FLIGHT + 150)
+#define FIGHTER_SPEED DISPLAY_TO_WORLD (8)
+#define FIGHTER_WEAPON_WAIT 8
+#define FIGHTER_LASER_SPEED DISPLAY_TO_WORLD (20)
+#define FIGHTER_LASER_HITS 1
+#define FIGHTER_LASER_DAMAGE 1
+#define FIGHTER_LASER_LIFE 10
+#define FIGHTER_LASER_OFFSET 2
+#define FIGHTER_LASER_BLAST_OFFSET 4
+#define FIGHTER_LASER_RANGE DISPLAY_TO_WORLD (120 + FIGHTER_LASER_OFFSET)
 
 static RACE_DESC isd_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | FIRES_AFT | FIRES_LEFT | FIRES_RIGHT | SEEKING_SPECIAL, // JMS: Can fire in all directions
+		FIRES_FORE | SEEKING_SPECIAL,
 		30, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -112,31 +128,27 @@ static RACE_DESC isd_desc =
 };
 
 static COUNT
-initialize_fusion (ELEMENT *ShipPtr, HELEMENT FusionArray[])
+initialize_turbolaser (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 {
-#define MISSILE_HITS 10
-#define MISSILE_DAMAGE 6
-#define MISSILE_OFFSET 8
-#define ISD_OFFSET 42
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
-	COUNT shot_facing;
+	int turret;
+	// COUNT shot_facing;
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-	MissileBlock.cx = ShipPtr->next.location.x;
-	MissileBlock.cy = ShipPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (StarShipPtr->ShipFacing);
 	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
-	MissileBlock.pixoffs = ISD_OFFSET;
 	MissileBlock.speed = MISSILE_SPEED;
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
 	MissileBlock.preprocess_func = NULL;
 	MissileBlock.blast_offs = MISSILE_OFFSET;
+	MissileBlock.pixoffs = ISD_OFFSET;
 	
-	shot_facing = 0;
-	
+	/* shot_facing = 0;
+
 	if (StarShipPtr->cur_status_flags & THRUST)
 		shot_facing = 0;
 	else if (StarShipPtr->cur_status_flags & LEFT)
@@ -145,27 +157,62 @@ initialize_fusion (ELEMENT *ShipPtr, HELEMENT FusionArray[])
 		shot_facing = 4;
 	else if (StarShipPtr->cur_status_flags & DOWN)
 		shot_facing = 8;
+		
+	MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (StarShipPtr->ShipFacing + shot_facing); */
+
+	turret = TFB_Random () % 8;
+
+	if (turret < 2) // Forward center turret is more likely to fire than the others.
+	{
+		MissileBlock.cx = ShipPtr->next.location.x;
+		MissileBlock.cy = ShipPtr->next.location.y;
+	}
+	else if (turret == 2)
+	{
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 32)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 32)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
+	}
+	else if (turret == 3)
+	{
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -32)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -32)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
+	}
+	else if (turret == 4)
+	{
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 64)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 64)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
+	}
+	else if (turret == 5)
+	{
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -64)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -64)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
+	}
+	else if (turret == 6)
+	{
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 72)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -152);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 72)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -152);
+	}
+	else if (turret == 7)
+	{
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -72)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -152);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -72)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -152);
+	}
 	
-	MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (StarShipPtr->ShipFacing + shot_facing);
-	FusionArray[0] = initialize_missile (&MissileBlock);
+	MissileArray[0] = initialize_missile (&MissileBlock);
 	return (1);
-}	
-
-#define TRACK_THRESHOLD 6
-#define FIGHTER_SPEED DISPLAY_TO_WORLD (8)
-#define ONE_WAY_FLIGHT 125
-#define FIGHTER_LIFE (ONE_WAY_FLIGHT + ONE_WAY_FLIGHT + 150)
-
-#define FIGHTER_WEAPON_WAIT 8
-
-#define FIGHTER_LASER_SPEED DISPLAY_TO_WORLD (20)
-#define FIGHTER_LASER_HITS 1
-#define FIGHTER_LASER_DAMAGE 1
-#define FIGHTER_LASER_LIFE 10
-#define FIGHTER_LASER_OFFSET 2
-#define FIGHTER_LASER_BLAST_OFFSET 4
-
-#define FIGHTER_LASER_RANGE DISPLAY_TO_WORLD (120 + FIGHTER_LASER_OFFSET)
+}
 
 static COUNT
 initialize_fighterlaser (ELEMENT *ElementPtr, HELEMENT LaserArray[])
@@ -510,7 +557,7 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 	StarShipPtr->RaceDescPtr->characteristics.special_wait = 0;
 }
 
-static void
+/* static void
 isd_preprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
@@ -542,7 +589,7 @@ isd_preprocess (ELEMENT *ElementPtr)
 			++StarShipPtr->weapon_counter;
 		}
 	}
-}
+} */
 
 static void
 isd_postprocess (ELEMENT *ElementPtr)
@@ -570,9 +617,9 @@ init_isd (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	isd_desc.preprocess_func = isd_preprocess;
+	// isd_desc.preprocess_func = isd_preprocess;
 	isd_desc.postprocess_func = isd_postprocess;
-	isd_desc.init_weapon_func = initialize_fusion;
+	isd_desc.init_weapon_func = initialize_turbolaser;
 	isd_desc.cyborg_control.intelligence_func = isd_intelligence;
 
 	RaceDescPtr = &isd_desc;
