@@ -16,7 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-
 #include "ships/ship.h"
 #include "ships/lurg/resinst.h"
 #include "libs/mathlib.h"
@@ -38,6 +37,8 @@
 #define MISSILE_LIFE 25
 #define MISSILE_HITS 4
 #define MISSILE_DAMAGE 4
+#define MISSILE_OFFSET 2
+#define LURG_OFFSET 23
 
 #define SPECIAL_ENERGY_COST 4
 #define SPECIAL_WAIT 10
@@ -297,8 +298,6 @@ acid_preprocess (ELEMENT *ElementPtr)
 static COUNT
 initialize_acid (ELEMENT *ShipPtr, HELEMENT AcidArray[])
 {
-#define MISSILE_OFFSET 2
-#define LURG_OFFSET 23
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -459,10 +458,10 @@ static void spill_oil (ELEMENT *ShipPtr)
 	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
 	MissileBlock.pixoffs = SHIP_OFFSET;
+	MissileBlock.life = OIL_LIFE + (TFB_Random () & OIL_LIFE_VARIATION);
 	MissileBlock.speed = OIL_INIT_SPEED;
 	MissileBlock.hit_points = OIL_HITS;
 	MissileBlock.damage = OIL_DAMAGE;
-	MissileBlock.life = OIL_LIFE + (TFB_Random () & OIL_LIFE_VARIATION);
 	MissileBlock.preprocess_func = oil_preprocess;
 	MissileBlock.blast_offs = OIL_OFFSET;
 	Missile = initialize_missile (&MissileBlock);
@@ -472,9 +471,8 @@ static void spill_oil (ELEMENT *ShipPtr)
 		ELEMENT *OilPtr;
 
 		LockElement (Missile, &OilPtr);
-		/* Shiver: OilPtr->turn_wait here affects how long the projectile travels at
-		   OIL_INIT_SPEED speed when deployed. */
-		OilPtr->turn_wait = (((COUNT)TFB_Random () & OIL_SPREAD_VARIATION) + OIL_SPREAD_MINIMUM);
+		// OilPtr->turn_wait affects how long the projectile travels at OIL_INIT_SPEED.
+		OilPtr->turn_wait = OIL_SPREAD_MINIMUM + ((COUNT)TFB_Random () & OIL_SPREAD_VARIATION);
 		SetElementStarShip (OilPtr, StarShipPtr);
 		OilPtr->collision_func = oil_collision;
 		UnlockElement (Missile);
