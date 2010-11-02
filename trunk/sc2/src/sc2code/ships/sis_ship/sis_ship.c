@@ -1387,7 +1387,8 @@ sis_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (lpEvalDesc->ObjectPtr)
 	{
-		if (StarShipPtr->RaceDescPtr->characteristics.special_energy_cost)
+		// JMS: Don't use special anymore in the point defense style
+		/*if (StarShipPtr->RaceDescPtr->characteristics.special_energy_cost)
 		{
 			if (StarShipPtr->special_counter == 0
 					&& ((lpEvalDesc->ObjectPtr
@@ -1399,7 +1400,7 @@ sis_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				StarShipPtr->ship_input_state &= ~SPECIAL;
 			lpEvalDesc->ObjectPtr = NULL;
 		}
-		else if (MANEUVERABILITY (&StarShipPtr->RaceDescPtr->cyborg_control)
+		else*/ if (MANEUVERABILITY (&StarShipPtr->RaceDescPtr->cyborg_control)
 				< MEDIUM_SHIP
 				&& lpEvalDesc->MoveState == ENTICE
 				&& (!(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT)
@@ -1445,6 +1446,32 @@ sis_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				break;
 			}
 		}
+	}
+	
+	// JMS: Use special like Melnorme uses its own special (This could use a little refinement...)
+	StarShipPtr->ship_input_state &= ~SPECIAL;
+	if (StarShipPtr->special_counter == 0 && StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST)
+	{
+		BYTE old_input_state;
+		
+		old_input_state = StarShipPtr->ship_input_state;
+		
+		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_stunner;
+		
+		++ShipPtr->turn_wait;
+		++ShipPtr->thrust_wait;
+		ship_intelligence (ShipPtr, ObjectsOfConcern, ENEMY_SHIP_INDEX + 1);
+		--ShipPtr->thrust_wait;
+		--ShipPtr->turn_wait;
+		
+		if (StarShipPtr->ship_input_state & WEAPON)
+		{
+			StarShipPtr->ship_input_state &= ~WEAPON;
+			StarShipPtr->ship_input_state |= SPECIAL;
+		}
+		
+		StarShipPtr->ship_input_state = (unsigned char)(old_input_state | (StarShipPtr->ship_input_state & SPECIAL));
+		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_explorer_weaponry;
 	}
 }
 

@@ -44,7 +44,7 @@
 static RACE_DESC isd_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | SEEKING_SPECIAL,
+		FIRES_FORE | FIRES_AFT | FIRES_LEFT | FIRES_RIGHT | SEEKING_SPECIAL, // JMS: Can fire in all directions
 		30, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -469,7 +469,7 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 
-	 ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = PURSUE;
+	ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = PURSUE;
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (lpEvalDesc->ObjectPtr
 			&& lpEvalDesc->MoveState == ENTICE
