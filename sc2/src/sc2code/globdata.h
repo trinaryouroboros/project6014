@@ -89,6 +89,21 @@ typedef struct
 
 #define MAX_ANIMATIONS 30 // JMS: Was 20
 
+#define MAX_FEATURE_OPTIONS 5
+
+typedef struct
+{
+	COUNT StartIndex;
+			// Index of the first possible image
+	BYTE NumFrames;
+			// Number of distinct possible images for the feature.
+
+	DWORD BlockMaskArray[MAX_FEATURE_OPTIONS];
+			// Array of the bit masks of indices of all
+			// animations that are incompatible with each
+			// option for this feature.
+} FEATURE_DESC;
+
 // general numbers-speech generator info
 // should accomodate most common base-10 languages
 // many languages require various plural forms
@@ -186,6 +201,9 @@ typedef struct
 	MUSIC_REF AlienSong;
 	STRING ConversationPhrases;
 	
+	COUNT NumFeatures;
+	FEATURE_DESC AlienFeatureArray[MAX_ANIMATIONS];
+	COUNT AlienFeatureChoice[MAX_ANIMATIONS];
 } LOCDATA;
 
 typedef struct
