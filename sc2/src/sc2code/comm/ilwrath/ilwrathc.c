@@ -98,9 +98,9 @@ static LOCDATA ilwrath_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{ /*AlienFeaturesArray (alternative features) */
+	{0 /*AlienFeaturesArray (alternative features) */
 	},
-	{ /* AlienFeatureChoice (will be computed later) */
+	{0 /* AlienFeatureChoice (will be computed later) */
 	},
 };
 
