@@ -131,6 +131,11 @@ static LOCDATA thradd_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
+	0, /* NumFeatures */
+	{ /*AlienFeaturesArray (alternative features) */
+	},
+	{ /* AlienFeatureChoice (will be computed later) */
+	},
 };
 
 static int

@@ -45,7 +45,7 @@ static LOCDATA syreenbase_desc =
 	0, /* AlienSongFlags */
 	SYREEN_BASE_CONVERSATION_PHRASES, /* PlayerPhrases */
 	0, /* NumAnimations */
-	{0 /* AlienAmbientArray (ambient animations) */
+	{ /* AlienAmbientArray (ambient animations) */
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
@@ -68,6 +68,11 @@ static LOCDATA syreenbase_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
+	0, /* NumFeatures */
+	{ /*AlienFeatureArray (alternative features) */
+	},
+	{ /* AlienFeatureChoice (will be computed later) */
+	},
 };
 
 

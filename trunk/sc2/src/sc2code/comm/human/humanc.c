@@ -151,6 +151,17 @@ static LOCDATA human_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
+	1, /* NumFeatures */
+	{ /* AlienFeaturesArray (alternative features) */
+	  { /* Hair colour */
+	    297, /* StartIndex */
+	    3, /* NumFrames */
+	    { /* BlockMaskArray */
+	    },
+	  },
+	},
+	{ /* AlienFeatureChoice (will be computed later) */
+	},
 };
 
 static LOCDATA human_desc2 =
@@ -211,6 +222,8 @@ static LOCDATA human_desc2 =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
+	0, /* NumFeatures */
+	NULL, /*AlienFeatureArray (alternative features) */
 };
 
 static void

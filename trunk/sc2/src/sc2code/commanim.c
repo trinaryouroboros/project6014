@@ -497,6 +497,13 @@ ambient_anim_task (void *data)
 				{
 					s.frame = CommFrame;
 					DrawStamp (&s);
+					// BW: draw the chosen feature for the captain
+					for (i = 0 ; i < CommData.NumFeatures ; i++)
+						{
+							s.frame = SetAbsFrameIndex(s.frame, CommData.AlienFeatureChoice[i]);
+							DrawStamp (&s);
+						}
+					
 				}
 				i = CommData.NumAnimations;
 				while (i--)

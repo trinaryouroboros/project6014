@@ -181,6 +181,11 @@ static LOCDATA spahome_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
+	0, /* NumFeatures */
+	{ /*AlienFeatureArray (alternative features) */
+	},
+	{ /* AlienFeatureChoice (will be computed later) */
+	},
 };
 
 static void

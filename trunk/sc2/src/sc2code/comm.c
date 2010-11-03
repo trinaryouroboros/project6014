@@ -48,6 +48,7 @@
 #include "libs/sound/sound.h"
 #include "libs/sound/trackint.h"
 #include "libs/log.h"
+#include "libs/mathlib.h"
 
 #include <ctype.h>
 
@@ -441,6 +442,15 @@ DrawAlienFrame (FRAME aframe, SEQUENCE *pSeq)
 	
 	BatchGraphics ();
 	DrawStamp (&s);
+
+	// BW: draw the chosen feature for the captain
+	for (i = 0 ; i < CommData.NumFeatures ; i++)
+		{
+			s.frame = SetAbsFrameIndex(s.frame, CommData.AlienFeatureChoice[i]);
+			DrawStamp (&s);
+		}
+	
+
 	i = CommData.NumAnimations;
 	ADPtr = &CommData.AlienAmbientArray[i];
 	while (i--)
@@ -1285,6 +1295,7 @@ DoResponsePhrase (RESPONSE_REF R, RESPONSE_FUNC response_func,
 static void
 HailAlien (void)
 {
+	COUNT i;
 	ENCOUNTER_STATE ES;
 	FONT PlayerFont, OldFont;
 	MUSIC_REF SongRef = 0;
@@ -1312,6 +1323,13 @@ HailAlien (void)
 	CommData.ConversationPhrases = CaptureStringTable (
 			LoadStringTable (CommData.ConversationPhrasesRes));
 
+	// BW: choose the features for the captain
+	for (i = 0 ; i < CommData.NumFeatures ; i++)
+		{
+			CommData.AlienFeatureChoice[i] = CommData.AlienFeatureArray[i].StartIndex;
+			CommData.AlienFeatureChoice[i] += (COUNT)TFB_Random () % CommData.AlienFeatureArray[i].NumFrames ;
+		}
+	
 	SubtitleText.baseline = CommData.AlienTextBaseline;
 	SubtitleText.align = CommData.AlienTextAlign;
 
