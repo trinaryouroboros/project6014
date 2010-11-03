@@ -160,7 +160,7 @@ static LOCDATA human_desc =
 	    },
 	  },
 	},
-	{ /* AlienFeatureChoice (will be computed later) */
+	{0 /* AlienFeatureChoice (will be computed later) */
 	},
 };
 
@@ -223,7 +223,10 @@ static LOCDATA human_desc2 =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	NULL, /*AlienFeatureArray (alternative features) */
+	{0 /*AlienFeatureArray (alternative features) */
+	},
+	{0 /* AlienFeatureChoice (will be computed later) */
+	},
 };
 
 static void

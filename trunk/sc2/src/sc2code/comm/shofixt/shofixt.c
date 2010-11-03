@@ -176,9 +176,9 @@ static LOCDATA shofixti_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{ /*AlienFeatureArray (alternative features) */
+	{0 /*AlienFeatureArray (alternative features) */
 	},
-	{ /* AlienFeatureChoice (will be computed later) */
+	{0 /* AlienFeatureChoice (will be computed later) */
 	},
 };
 
