@@ -51,19 +51,20 @@ typedef HLINK HSTARSHIP;
 #define GOOD_GUY  (1 << 0)
 #define BAD_GUY   (1 << 1)
 */
-#define SEEKING_WEAPON    (1 << 2)
-#define SEEKING_SPECIAL   (1 << 3)
-#define POINT_DEFENSE     (1 << 4)
+#define SEEKING_WEAPON			(1 << 2)
+#define SEEKING_SPECIAL			(1 << 3)
+#define LIGHT_POINT_DEFENSE     (1 << 4)
+#define HEAVY_POINT_DEFENSE     (1 << 5)
 		/* Ship has some point-defense capabilities */
-#define IMMEDIATE_WEAPON  (1 << 5)
-#define CREW_IMMUNE       (1 << 6)
-#define FIRES_FORE        (1 << 7)
-#define FIRES_RIGHT       (1 << 8)
-#define FIRES_AFT         (1 << 9)
-#define FIRES_LEFT        (1 << 10)
-#define SHIELD_DEFENSE    (1 << 11)
-#define DONT_CHASE        (1 << 12)
-#define PLAYER_CAPTAIN    (1 << 13)
+#define IMMEDIATE_WEAPON		(1 << 6)
+#define CREW_IMMUNE				(1 << 7)
+#define FIRES_FORE				(1 << 8)
+#define FIRES_RIGHT				(1 << 9)
+#define FIRES_AFT				(1 << 10)
+#define FIRES_LEFT				(1 << 12)
+#define SHIELD_DEFENSE			(1 << 13)
+#define DONT_CHASE				(1 << 14)
+#define PLAYER_CAPTAIN			(1 << 15)
 		/* The protagonist himself is on board. He gets a different color. */
 
 // JMS: Damage flags for a ship

@@ -44,7 +44,7 @@
 static RACE_DESC utwig_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | POINT_DEFENSE | SHIELD_DEFENSE,
+		FIRES_FORE | SHIELD_DEFENSE,
 		22, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY >> 1, MAX_ENERGY,
@@ -307,7 +307,7 @@ utwig_preprocess (ELEMENT *ElementPtr)
 	{
 		if (!DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST))
 			StarShipPtr->RaceDescPtr->ship_info.ship_flags &=
-					~(POINT_DEFENSE | SHIELD_DEFENSE);
+					~(LIGHT_POINT_DEFENSE | SHIELD_DEFENSE);
 		else if (StarShipPtr->special_counter == 0)
 		{
 			StarShipPtr->special_counter =

@@ -676,8 +676,8 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 				}
 			}
 
-			// JMS: Ur-Quan pursues Earthling slowly but surely. Now it won't turn away mid-chase.
-			if (StarShipPtr->SpeciesID == UR_QUAN_ID
+			// This code prevents Ur-Quan and ISD from turning around mid-chase while pursuing Earthling.
+			if (StarShipPtr->SpeciesID == (UR_QUAN_ID | ISD_ID)
 				&& EnemyStarShipPtr->SpeciesID == EARTHLING_ID 
 				&& !(EnemyStarShipPtr->cur_status_flags &
 					 (SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL)))

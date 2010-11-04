@@ -60,7 +60,7 @@
 static RACE_DESC lurg_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE,
+		FIRES_FORE | LIGHT_POINT_DEFENSE,
 		20, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
