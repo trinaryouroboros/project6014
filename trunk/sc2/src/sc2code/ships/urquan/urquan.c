@@ -495,7 +495,7 @@ urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				&& StarShipPtr->RaceDescPtr->ship_info.crew_level >
 				(StarShipPtr->RaceDescPtr->ship_info.max_crew >> 2)
 				&& !(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
-				& POINT_DEFENSE)
+					& (SHIELD_DEFENSE | LIGHT_POINT_DEFENSE | HEAVY_POINT_DEFENSE))
 				&& (StarShipPtr->RaceDescPtr->characteristics.special_wait < 6
 				|| (MANEUVERABILITY (
 						&EnemyStarShipPtr->RaceDescPtr->cyborg_control

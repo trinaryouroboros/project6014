@@ -18,15 +18,16 @@
 
 #include "ships/ship.h"
 #include "ships/isd/resinst.h"
-#include "libs/mathlib.h"
+#include "colors.h"
 #include "globdata.h"
+#include "libs/mathlib.h"
 #include <stdlib.h>
 
 
 #define MAX_CREW MAX_CREW_SIZE
 #define MAX_ENERGY MAX_ENERGY_SIZE
-#define ENERGY_REGENERATION 4 // Was 1.
-#define ENERGY_WAIT 14 // Was 4.
+#define ENERGY_REGENERATION 3 // Was 1.
+#define ENERGY_WAIT 10 // Was 4.
 #define MAX_THRUST 30
 #define THRUST_INCREMENT 6
 #define TURN_WAIT 6
@@ -36,8 +37,8 @@
 
 #define WEAPON_ENERGY_COST 1 // Was 6.
 #define WEAPON_WAIT 2 // Was 10.
-#define MISSILE_SPEED DISPLAY_TO_WORLD (24) // Was 20.
-#define MISSILE_LIFE 15 // Was 20.
+#define MISSILE_SPEED DISPLAY_TO_WORLD (25) // Was 20.
+#define MISSILE_LIFE 14 // Was 20.
 #define MISSILE_HITS 2 // Was 10.
 #define MISSILE_DAMAGE 2 // Was 6.
 #define MISSILE_OFFSET 8
@@ -57,10 +58,15 @@
 #define FIGHTER_LASER_BLAST_OFFSET 4
 #define FIGHTER_LASER_RANGE DISPLAY_TO_WORLD (120 + FIGHTER_LASER_OFFSET)
 
+#define AUXILIARY_ENERGY_COST 1
+#define AUTOTURRET_RANGE (MISSILE_SPEED * MISSILE_LIFE)
+#define AUTOTURRET_OFFSET 20
+#define AUTOTURRET_WAIT 11
+
 static RACE_DESC isd_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | SEEKING_SPECIAL,
+		FIRES_FORE | LIGHT_POINT_DEFENSE | SEEKING_SPECIAL,
 		30, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -160,54 +166,54 @@ initialize_turbolaser (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 		
 	MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (StarShipPtr->ShipFacing + shot_facing); */
 
-	turret = TFB_Random () % 8;
+	turret = TFB_Random () % 7;
 
-	if (turret < 2) // Forward center turret is more likely to fire than the others.
+	if (turret == 0)
 	{
 		MissileBlock.cx = ShipPtr->next.location.x;
 		MissileBlock.cy = ShipPtr->next.location.y;
 	}
-	else if (turret == 2)
+	else if (turret == 1)
 	{
 		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 32)
 			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
 		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 32)
 			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
 	}
-	else if (turret == 3)
+	else if (turret == 2)
 	{
 		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -32)
 			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
 		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -32)
 			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
 	}
+	else if (turret == 3)
+	{
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 48)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -120);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 48)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -120);
+	}
 	else if (turret == 4)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 64)
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -48)
 			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 64)
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -48)
 			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
 	}
 	else if (turret == 5)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -64)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -64)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 64)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -156);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 64)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -156);
 	}
 	else if (turret == 6)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 72)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -152);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 72)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -152);
-	}
-	else if (turret == 7)
-	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -72)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -152);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -72)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -152);
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -64)
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -156);
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -64)
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -156);
 	}
 	
 	MissileArray[0] = initialize_missile (&MissileBlock);
@@ -511,8 +517,8 @@ spawn_fighters (ELEMENT *ElementPtr)
 static void
 isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
-	EVALUATE_DESC *lpEvalDesc;
 	STARSHIP *StarShipPtr;
+	EVALUATE_DESC *lpEvalDesc;
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 
@@ -535,13 +541,20 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 		STARSHIP *EnemyStarShipPtr;
 
 		if (lpEvalDesc->ObjectPtr)
+		{
 			GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
+
+			/* Don't pay attention to enemy projectiles when the enemy ship is close enough.
+				This makes ISD fire a bit more. */
+			if (lpEvalDesc->which_turn <= 10)
+				ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
+		}
 		if (StarShipPtr->special_counter == 0
 				&& lpEvalDesc->ObjectPtr
 				&& StarShipPtr->RaceDescPtr->ship_info.crew_level >
 				(StarShipPtr->RaceDescPtr->ship_info.max_crew >> 2)
 				&& !(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
-				& POINT_DEFENSE)
+					& (SHIELD_DEFENSE | LIGHT_POINT_DEFENSE | HEAVY_POINT_DEFENSE))
 				&& (StarShipPtr->RaceDescPtr->characteristics.special_wait < 6
 				|| (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control) <= SLOW_SHIP
 				&& !(EnemyStarShipPtr->cur_status_flags & SHIP_BEYOND_MAX_SPEED))
@@ -592,6 +605,137 @@ isd_preprocess (ELEMENT *ElementPtr)
 } */
 
 static void
+initialize_autoturret (ELEMENT *ElementPtr)
+{
+	BYTE weakest;
+	STARSHIP *StarShipPtr;
+	HELEMENT hObject, hNextObject, hBestObject;
+	ELEMENT *ShipPtr, *ObjectPtr;
+	SIZE delta_x, delta_y;
+	long dist, best_dist;
+
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	hBestObject = 0;
+	best_dist = AUTOTURRET_RANGE + 1;
+	weakest = 255;
+	LockElement (StarShipPtr->hShip, &ShipPtr);
+
+	// Is an enemy object within range?
+	for (hObject = GetPredElement (ElementPtr);
+			hObject; hObject = hNextObject)
+	{
+		LockElement (hObject, &ObjectPtr);
+		hNextObject = GetPredElement (ObjectPtr);
+		if (((ObjectPtr->state_flags | ShipPtr->state_flags)
+				& (GOOD_GUY | BAD_GUY)) == (GOOD_GUY | BAD_GUY)
+				&& CollisionPossible (ObjectPtr, ShipPtr)
+				&& !OBJECT_CLOAKED (ObjectPtr))
+		{
+			delta_x = ObjectPtr->next.location.x
+					- ShipPtr->next.location.x;
+			delta_y = ObjectPtr->next.location.y
+					- ShipPtr->next.location.y;
+			if (delta_x < 0)
+				delta_x = -delta_x;
+			if (delta_y < 0)
+				delta_y = -delta_y;
+
+			// Range check.
+			if (delta_x <= AUTOTURRET_RANGE &&
+					delta_y <= AUTOTURRET_RANGE &&
+					(dist =
+					(long)delta_x * delta_x
+					+ (long)delta_y * delta_y) <=
+					(long)AUTOTURRET_RANGE * AUTOTURRET_RANGE)
+			{
+				// The enemy ship is the highest priority target.
+				if (ObjectPtr->state_flags & PLAYER_SHIP)
+				{
+					hBestObject = hObject;
+					best_dist = 0;
+					weakest = 0;
+				}
+				// Otherwise fire on an enemy projectile. Lower hitpoints and closer proximity is preferable.
+				else if (ObjectPtr->hit_points < weakest
+					|| (ObjectPtr->hit_points == weakest
+					&& dist < best_dist))
+				{
+					hBestObject = hObject;
+					best_dist = dist;
+					weakest = ObjectPtr->hit_points;
+				}
+			}
+		}
+		UnlockElement (hObject);
+	}
+
+	// Fire autoturret.
+	if (hBestObject)
+	{
+		COUNT num_frames;
+		HELEMENT hAutoLaser;
+		MISSILE_BLOCK MissileBlock;
+
+		LockElement (hBestObject, &ObjectPtr);
+
+		delta_x = ObjectPtr->current.location.x
+				- ShipPtr->current.location.x;
+		delta_x = WRAP_DELTA_X (delta_x);
+		delta_y = ObjectPtr->current.location.y
+				- ShipPtr->current.location.y;
+		delta_y = WRAP_DELTA_Y (delta_y);
+	
+		num_frames = (square_root ((long)delta_x * delta_x
+				+ (long)delta_y * delta_y)) / MISSILE_SPEED;
+		if (num_frames == 0)
+			num_frames = 1;
+	
+		GetNextVelocityComponents (&ObjectPtr->velocity,
+				&delta_x, &delta_y, num_frames);
+	
+		delta_x = (ObjectPtr->current.location.x + (delta_x / 2))
+				- ShipPtr->current.location.x;
+		delta_y = (ObjectPtr->current.location.y + (delta_y / 2))
+				- ShipPtr->current.location.y;
+
+		MissileBlock.cx = ShipPtr->next.location.x;
+		MissileBlock.cy = ShipPtr->next.location.y;
+		MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+		MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
+		MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+		MissileBlock.pixoffs = AUTOTURRET_OFFSET;
+		MissileBlock.speed = MISSILE_SPEED;
+		MissileBlock.hit_points = MISSILE_HITS;
+		MissileBlock.damage = MISSILE_DAMAGE;
+		MissileBlock.life = MISSILE_LIFE;
+		MissileBlock.preprocess_func = NULL;
+		MissileBlock.blast_offs = MISSILE_OFFSET;
+		
+		hAutoLaser = initialize_missile (&MissileBlock);
+		if (hAutoLaser)
+		{
+			ELEMENT *AutoLaserPtr;
+
+			LockElement (hAutoLaser, &AutoLaserPtr);
+			SetElementStarShip (AutoLaserPtr, StarShipPtr);
+			AutoLaserPtr->hTarget = 0;
+			ProcessSound (SetAbsSoundIndex (
+					/* Primary weapon sound */
+			StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 0), ElementPtr);
+			UnlockElement (hAutoLaser);
+			PutElement (hAutoLaser);
+
+			DeltaEnergy (ElementPtr, -AUXILIARY_ENERGY_COST);
+			StarShipPtr->auxiliary_counter = AUTOTURRET_WAIT;
+		}
+
+		UnlockElement (hBestObject);
+	}
+
+	UnlockElement (StarShipPtr->hShip);
+}
+
+static void
 isd_postprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
@@ -609,6 +753,38 @@ isd_postprocess (ELEMENT *ElementPtr)
 		spawn_fighters (ElementPtr);
 
 		StarShipPtr->special_counter = SPECIAL_WAIT;
+	}
+
+	if (StarShipPtr->auxiliary_counter == 0
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= AUXILIARY_ENERGY_COST)
+	{
+		HELEMENT hDefense;
+
+		hDefense = AllocElement ();
+		if (hDefense)
+		{
+			ELEMENT *DefensePtr;
+			
+			PutElement (hDefense);
+
+			LockElement (hDefense, &DefensePtr);
+			DefensePtr->state_flags = APPEARING | NONSOLID | FINITE_LIFE
+					| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+
+			{
+				ELEMENT *SuccPtr;
+
+				LockElement (GetSuccElement (ElementPtr), &SuccPtr);
+				DefensePtr->hTarget = GetPredElement (SuccPtr);
+				UnlockElement (GetSuccElement (ElementPtr));
+
+				DefensePtr->death_func = initialize_autoturret;
+			}
+
+			SetElementStarShip (DefensePtr, StarShipPtr);
+			
+			UnlockElement (hDefense);
+		}
 	}
 }
 

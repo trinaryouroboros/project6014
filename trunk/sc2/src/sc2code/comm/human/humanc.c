@@ -156,7 +156,7 @@ static LOCDATA human_desc =
 	  { /* Hair colour */
 	    297, /* StartIndex */
 	    3, /* NumFrames */
-	    { /* BlockMaskArray */
+	    {0 /* BlockMaskArray */
 	    },
 	  },
 	},
