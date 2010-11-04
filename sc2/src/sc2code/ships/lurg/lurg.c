@@ -136,23 +136,22 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-
-	// JMS: Movement behavior additions
 	if (lpEvalDesc->ObjectPtr)
 	{
-		STARSHIP *EnemyStarShipPtr;
-		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
-		
-		// JMS: don't pay attention to enemy projectiles when the enemy ship is close enough. This makes Lurg fire a bit more.
-		if (lpEvalDesc->which_turn <= 10)
+		// Run away unless the enemy is close.
+		if (lpEvalDesc->which_turn > 20)
+			lpEvalDesc->MoveState = AVOID;
+		else
+		{
+			lpEvalDesc->MoveState = ENTICE;
+			// Lurg will be more combative at short range if it ignores enemy projectiles.
 			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
+		}
+		
+		// Exaggerate the opponent's hitbox slightly to increase the AI's willingness to shoot.
+		if (ship_weapons (ShipPtr, ObjectsOfConcern->ObjectPtr, DISPLAY_TO_WORLD (5)))
+			StarShipPtr->ship_input_state |= WEAPON;
 	}
-	
-	// Run away unless the enemy is close
-	if (lpEvalDesc->which_turn > 20)
-		lpEvalDesc->MoveState = AVOID;
-	else
-		lpEvalDesc->MoveState = ENTICE;
 	
 	// Basic ship intelligence
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
@@ -190,7 +189,7 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
 	
-	// Always drop oil when battery is full
+	// Always drop oil when battery is full.
 	if(StarShipPtr->RaceDescPtr->ship_info.energy_level == StarShipPtr->RaceDescPtr->ship_info.max_energy
 	   && lpEvalDesc->ObjectPtr)
 		StarShipPtr->ship_input_state |= SPECIAL;
@@ -201,7 +200,7 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 	if (lpEvalDesc->ObjectPtr)
 	{
 		OilStatus = 0;
-		if (lpEvalDesc->ObjectPtr->hit_points < 6 // Shiver: Ignore huge projectiles.
+		if (lpEvalDesc->ObjectPtr->hit_points < 6 // Ignore huge projectiles.
 			&& (lpEvalDesc->ObjectPtr->mass_points
 				|| lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT)))
 		{

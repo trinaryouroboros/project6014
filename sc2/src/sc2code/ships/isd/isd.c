@@ -38,7 +38,7 @@
 #define WEAPON_ENERGY_COST 1 // Was 6.
 #define WEAPON_WAIT 2 // Was 10.
 #define MISSILE_SPEED DISPLAY_TO_WORLD (25) // Was 20.
-#define MISSILE_LIFE 14 // Was 20.
+#define MISSILE_LIFE 15 // Was 20.
 #define MISSILE_HITS 2 // Was 10.
 #define MISSILE_DAMAGE 2 // Was 6.
 #define MISSILE_OFFSET 8
@@ -60,8 +60,8 @@
 
 #define AUXILIARY_ENERGY_COST 1
 #define AUTOTURRET_RANGE (MISSILE_SPEED * MISSILE_LIFE)
-#define AUTOTURRET_OFFSET 20
 #define AUTOTURRET_WAIT 11
+#define AUTOTURRET_OFFSET 20
 
 static RACE_DESC isd_desc =
 {
@@ -524,6 +524,7 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 
 	ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = PURSUE;
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
+
 	if (lpEvalDesc->ObjectPtr
 			&& lpEvalDesc->MoveState == ENTICE
 			&& (!(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT)
@@ -534,6 +535,7 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 			&& ObjectsOfConcern[ENEMY_SHIP_INDEX].which_turn > 16)))
 		lpEvalDesc->MoveState = PURSUE;
 
+	// Basic ship intelligence
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
@@ -544,10 +546,9 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 		{
 			GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 
-			/* Don't pay attention to enemy projectiles when the enemy ship is close enough.
-				This makes ISD fire a bit more. */
-			if (lpEvalDesc->which_turn <= 10)
-				ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
+			// ISD will attack if the enemy is within approximate reach.
+			if (ship_weapons (ShipPtr, ObjectsOfConcern->ObjectPtr, DISPLAY_TO_WORLD (25)))
+				StarShipPtr->ship_input_state |= WEAPON;
 		}
 		if (StarShipPtr->special_counter == 0
 				&& lpEvalDesc->ObjectPtr
