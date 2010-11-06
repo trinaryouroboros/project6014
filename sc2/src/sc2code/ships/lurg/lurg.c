@@ -22,40 +22,42 @@
 
 
 #define MAX_CREW 20
-#define MAX_ENERGY 16
+#define MAX_ENERGY 20
 #define ENERGY_REGENERATION 2
-#define ENERGY_WAIT 13 // Shiver: Was 12.
+#define ENERGY_WAIT 12 // Was 13.
 #define MAX_THRUST 20
-#define THRUST_INCREMENT 7
+#define THRUST_INCREMENT 6 // Was 7.
 #define THRUST_WAIT 1
 #define TURN_WAIT 1
 #define SHIP_MASS 6
 
 #define WEAPON_ENERGY_COST 2
-#define WEAPON_WAIT 9 // Shiver: Was 8.
+#define WEAPON_WAIT 8 // Was 9.
 #define MISSILE_SPEED DISPLAY_TO_WORLD (18)
 #define MISSILE_LIFE 25
-#define MISSILE_HITS 4
-#define MISSILE_DAMAGE 4
+#define MISSILE_HITS 3 // Was 4.
+#define MISSILE_DAMAGE 3 // Was 4.
 #define MISSILE_OFFSET 2
 #define LURG_OFFSET 23
 
-#define SPECIAL_ENERGY_COST 4
-#define SPECIAL_WAIT 10
+#define SPECIAL_ENERGY_COST 1 // Was 4.
+#define SPECIAL_WAIT 1 // Was 10.
 #define OIL_HITS 2
-#define OIL_DAMAGE 1 // Shiver: Oil inflicts damage only in specific circumstances.
-#define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR) // JMS_GFX
-#define OIL_INIT_SPEED (OIL_SPEED*3)
-#define OIL_SPREAD_MINIMUM 5
+#define OIL_DAMAGE 1 // Oil inflicts damage only in specific circumstances.
+#define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR)
+#define OIL_INIT_SPEED DISPLAY_TO_WORLD (6*RESOLUTION_FACTOR)
+#define OIL_SPREAD_MINIMUM 6
 #define OIL_SPREAD_VARIATION 5
 #define OIL_LIFE 300
 #define OIL_LIFE_VARIATION 100
-#define OIL_BATCH_SIZE 10
-#define OIL_DELAY 6
-#define OIL_DELAY_MAX 36 // Shiver: Was 48.
+#define OIL_BATCH_SIZE 3 // Was 10.
+#define OIL_DELAY 6 // Was 6.
+#define OIL_DELAY_MAX 36 // Was 36.
 #define OIL_SNARE WORLD_TO_VELOCITY (-1)
+#define OIL_OFFSET 3
+#define LURG_OFFSET_2 16
 
-#define REPAIR_WAIT 216
+#define REPAIR_WAIT 192 // Was 216.
 
 static RACE_DESC lurg_desc =
 {
@@ -117,7 +119,7 @@ static RACE_DESC lurg_desc =
 	},
 	{
 		0,
-		(MISSILE_SPEED * MISSILE_LIFE) *  3/4,
+		(MISSILE_SPEED * MISSILE_LIFE) *  4/5,
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -132,25 +134,24 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 {
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
-	SIZE OilStatus;
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
 	if (lpEvalDesc->ObjectPtr)
 	{
 		// Run away unless the enemy is close.
-		if (lpEvalDesc->which_turn > 20)
+		if (lpEvalDesc->which_turn > 18)
 			lpEvalDesc->MoveState = AVOID;
 		else
 		{
 			lpEvalDesc->MoveState = ENTICE;
-			// Lurg will be more combative at short range if it ignores enemy projectiles.
+			// Ignore enemy projectiles during short range combat.
 			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
+
+			// Exaggerate the opponent's hitbox slightly to increase the AI's willingness to shoot.
+			if (ship_weapons (ShipPtr, ObjectsOfConcern->ObjectPtr, DISPLAY_TO_WORLD (3)))
+				StarShipPtr->ship_input_state |= WEAPON;
 		}
-		
-		// Exaggerate the opponent's hitbox slightly to increase the AI's willingness to shoot.
-		if (ship_weapons (ShipPtr, ObjectsOfConcern->ObjectPtr, DISPLAY_TO_WORLD (5)))
-			StarShipPtr->ship_input_state |= WEAPON;
 	}
 	
 	// Basic ship intelligence
@@ -189,40 +190,28 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
 	
-	// Always drop oil when battery is full.
-	if(StarShipPtr->RaceDescPtr->ship_info.energy_level == StarShipPtr->RaceDescPtr->ship_info.max_energy
-	   && lpEvalDesc->ObjectPtr)
+	// Drop several batches of oil whenever the battery tops off.
+	if(lpEvalDesc->ObjectPtr
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level == StarShipPtr->RaceDescPtr->ship_info.max_energy
+		|| (StarShipPtr->RaceDescPtr->ship_info.energy_level > (StarShipPtr->RaceDescPtr->ship_info.max_energy - 6)
+			&& StarShipPtr->old_status_flags & SPECIAL))
 		StarShipPtr->ship_input_state |= SPECIAL;
 	
-	// Panic Mode; Lurg drops oil in the way of incoming projectiles. This is based on yehat.c shield code.
+	// Panic Mode; Lurg drops oil in the way of various incoming projectiles.
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
-	OilStatus = -1;
-	if (lpEvalDesc->ObjectPtr)
+	if (lpEvalDesc->ObjectPtr
+		&& StarShipPtr->special_counter == 0
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >=
+			(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1)
+		&& lpEvalDesc->ObjectPtr->hit_points < 6 // Ignore huge projectiles.
+		&& (lpEvalDesc->ObjectPtr->mass_points
+			|| lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT)))
 	{
-		OilStatus = 0;
-		if (lpEvalDesc->ObjectPtr->hit_points < 6 // Ignore huge projectiles.
-			&& (lpEvalDesc->ObjectPtr->mass_points
-				|| lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT)))
-		{
-			if ((lpEvalDesc->which_turn >>= 1) == 0)
-				lpEvalDesc->which_turn = 1;
+		if ((lpEvalDesc->which_turn >>= 1) == 0)
+			lpEvalDesc->which_turn = 1;
 
-			OilStatus = 1;
-		}
-	}
-	if (StarShipPtr->special_counter == 0) // Panic Mode continues...
-	{
-		if (OilStatus)
-		{
-			if (StarShipPtr->RaceDescPtr->ship_info.energy_level >=
-				(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1)
-				&& (OilStatus > 0 || lpEvalDesc->ObjectPtr)
-				&& lpEvalDesc->which_turn <= 28)
-				/*  && (OilStatus > 0
-					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) // means IMMEDIATE WEAPON
-					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 28, 0))) */
+		if (lpEvalDesc->which_turn <= 16)
 			StarShipPtr->ship_input_state |= SPECIAL;
-		}
 	}
 }
 
@@ -236,53 +225,41 @@ acid_preprocess (ELEMENT *ElementPtr)
 	
 	if (ElementPtr->thrust_wait == 1) // Left start
 	{
-		if (ElementPtr->turn_wait < 2)
-		{
-			--facing;
-			ElementPtr->turn_wait += 1;
-		}
-		else
-		{
-			ElementPtr->thrust_wait = 0;
-			ElementPtr->turn_wait = 6;
-		}
+		--facing;
+		ElementPtr->turn_wait += 1;
+		ElementPtr->thrust_wait = 0;
+		ElementPtr->turn_wait = 3;
 	}
 
 	if (ElementPtr->thrust_wait == 2) // Right start
 	{
-		if (ElementPtr->turn_wait < 2)
-		{
-			++facing;
-			ElementPtr->turn_wait += 1;
-		}
-		else
-		{
-			ElementPtr->thrust_wait = 0;
-			ElementPtr->turn_wait = 0;
-		}
+		++facing;
+		ElementPtr->turn_wait += 1;
+		ElementPtr->thrust_wait = 0;
+		ElementPtr->turn_wait = 0;
 	}
 
 	if (ElementPtr->thrust_wait == 0) // Main loop
 	{
-		if (ElementPtr->turn_wait < 4) // Turn left
+		if (ElementPtr->turn_wait < 2) // Turn left
 		{
 			--facing;
 			ElementPtr->turn_wait += 1;
 		} 
-		else if (ElementPtr->turn_wait < 6) // Wait
+		else if (ElementPtr->turn_wait < 3) // Wait
 		{
 			ElementPtr->turn_wait += 1;
 		}
-		else if (ElementPtr->turn_wait < 10) // Turn right
+		else if (ElementPtr->turn_wait < 5) // Turn right
 		{
 			++facing;
 			ElementPtr->turn_wait += 1;
 		}
-		else if (ElementPtr->turn_wait < 12) // Wait
+		else if (ElementPtr->turn_wait < 6) // Wait
 		{
 			ElementPtr->turn_wait += 1;
 		}
-		else if (ElementPtr->turn_wait == 12) // Wait and reset the loop
+		else if (ElementPtr->turn_wait == 6) // Wait and reset the loop
 		{
 			ElementPtr->turn_wait = 0;
 		}
@@ -445,9 +422,6 @@ static void spill_oil (ELEMENT *ShipPtr)
 	MISSILE_BLOCK MissileBlock;
 	HELEMENT Missile;
 
-#define OIL_OFFSET (3 * RESOLUTION_FACTOR) // JMS_GFX
-#define SHIP_OFFSET (15 * RESOLUTION_FACTOR) // JMS_GFX
-
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
@@ -456,7 +430,7 @@ static void spill_oil (ELEMENT *ShipPtr)
 	MissileBlock.index = 0;
 	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
-	MissileBlock.pixoffs = SHIP_OFFSET;
+	MissileBlock.pixoffs = LURG_OFFSET_2;
 	MissileBlock.life = OIL_LIFE + (TFB_Random () & OIL_LIFE_VARIATION);
 	MissileBlock.speed = OIL_INIT_SPEED;
 	MissileBlock.hit_points = OIL_HITS;
