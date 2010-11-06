@@ -473,8 +473,8 @@ starbase_ambient_anim_task (void *data)
 		{
 			--ADPtr;
 			--pSeq;
-			//if (ADPtr->AnimFlags & WHEN_TALKING) // JMS: ANIM_DISABLED has been replaced with WHEN_TALKING to enable zoomed-in ambient anims.
-			//	continue;
+			if (ADPtr->AnimFlags & ANIM_DISABLED)
+				continue;
 			if (pSeq->Direction == NO_DIR)
 			{
 			  pSeq->Direction = UP_DIR;
