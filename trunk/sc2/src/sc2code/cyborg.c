@@ -1257,20 +1257,11 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 								);
 
 						ed.MoveState = ENTICE;
-						if (UltraManeuverable)
-						{
-							if (ed.which_turn == 0)
-								ed.which_turn = 1;
-							else if (ed.which_turn > 16)
-								ed.which_turn = 0;
-						}
-						else if (ed.which_turn == 0)
+
+						if (ed.which_turn == 0)
 							ed.which_turn = 1;
-						else if (ed.which_turn > 16
-								|| (MANEUVERABILITY (
-								&RDPtr->cyborg_control
-								) > MEDIUM_SHIP
-								&& ed.which_turn > 8))
+						// Shiver: which_turn hard cap raised from 16 (sometimes 8) to 32.
+						else if (ed.which_turn > 32)
 							ed.which_turn = 0;
 					}
 				}

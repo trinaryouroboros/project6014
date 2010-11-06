@@ -628,9 +628,9 @@ initialize_autoturret (ELEMENT *ElementPtr)
 		LockElement (hObject, &ObjectPtr);
 		hNextObject = GetPredElement (ObjectPtr);
 		if (((ObjectPtr->state_flags | ShipPtr->state_flags)
-				& (GOOD_GUY | BAD_GUY)) == (GOOD_GUY | BAD_GUY)
-				&& CollisionPossible (ObjectPtr, ShipPtr)
-				&& !OBJECT_CLOAKED (ObjectPtr))
+			& (GOOD_GUY | BAD_GUY)) == (GOOD_GUY | BAD_GUY)
+			&& CollisionPossible (ObjectPtr, ShipPtr)
+			&& !OBJECT_CLOAKED (ObjectPtr))
 		{
 			delta_x = ObjectPtr->next.location.x
 					- ShipPtr->next.location.x;
