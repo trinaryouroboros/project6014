@@ -60,6 +60,7 @@
 #define TALK_DONE (1 << 6)
 
 #define WHEN_TALKING (1L << 7) // JMS
+#define ANIM_DISABLED (1L << 8) // BW (needed for news anchor and animatd background)
 
 #define COLORXFORM_ANIM PAUSE_TALKING
 
