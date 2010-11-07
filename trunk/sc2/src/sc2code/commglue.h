@@ -161,6 +161,8 @@ extern LOCDATA* init_talkpet_comm (void);
 
 extern LOCDATA* init_thradd_comm (void);
 
+extern LOCDATA* init_transport_comm (void); // JMS
+
 extern LOCDATA* init_umgah_comm (void);
 
 extern LOCDATA* init_urquan_comm (void);
