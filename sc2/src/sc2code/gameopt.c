@@ -1181,7 +1181,7 @@ ChangeGameSelection:
 
 				t.baseline.x = r.corner.x + 3 * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1); // JMS_GFX
 				if (((SUMMARY_DESC *)pMS->Extra)[NewState - SHIFT + i].year_index == 0)
-					sprintf (buf, GAME_STRING (SAVEGAME_STRING_BASE + 3)); // "Empty Slot"
+					sprintf (buf, "%s", GAME_STRING (SAVEGAME_STRING_BASE + 3)); // "Empty Slot"
 				else
 				{
 					DateToString (buf2, sizeof buf2,
