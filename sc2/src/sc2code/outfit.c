@@ -642,13 +642,13 @@ DoOutfit (MENU_STATE *pMS)
 			DrawStamp (&s);
 			DestroyDrawable (ReleaseDrawable (s.frame));
 
-			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-			  {
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+			{
 				RedistributeFuel ();
 				DisplayLanders (pMS);
-			  }
+			}
 			else
-			  {
+			{
 				for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
 				{
 					BYTE which_piece;
@@ -695,7 +695,7 @@ DoOutfit (MENU_STATE *pMS)
 					if (ShieldFlags & (1 << LAVASPOT_DISASTER))
 						DrawStamp (&s);
 				}
-			  }
+			}
 
 			UnlockMutex (GraphicsLock);
 			DrawMenuStateStrings (PM_FUEL, pMS->CurState);

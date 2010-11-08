@@ -181,8 +181,7 @@ while (--ac > 0)
 				GLOBAL (CurrentActivity) = NextActivity;
 			
 			if ((GLOBAL (CurrentActivity) & START_ENCOUNTER)
-					|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2
-					|| (GLOBAL (CurrentActivity) & BLACK_ORB_CUTSCENE))
+					|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 			{
 				if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 2
 						&& !GET_GAME_STATE (STARBASE_AVAILABLE))

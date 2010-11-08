@@ -1489,48 +1489,49 @@ InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots)
 		RaceDescPtr->characteristics.weapon_energy_cost += 3;
 		RaceDescPtr->characteristics.special_energy_cost = 12;
 	}
-	else if ((GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
+	else
 	{
 		RaceDescPtr->ship_info.max_crew = 0;
-	}
-
-	num_trackers = 0;
-	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
-	{
-		BYTE which_mod;
-
-		which_mod = ModuleSlots[(NUM_MODULE_SLOTS - 1) - i];
-		switch (which_mod)
+	
+		num_trackers = 0;
+		
+		for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 		{
-			case CREW_POD:
-				RaceDescPtr->ship_info.max_crew += CREW_POD_CAPACITY;
-				break;
-			case GUN_WEAPON:
-			case BLASTER_WEAPON:
-			case CANNON_WEAPON:
-				RaceDescPtr->characteristics.weapon_energy_cost +=
-						(which_mod - GUN_WEAPON + 1) * 2;
-				if (i <= 1)
-					RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
-				else if (i == 2)
-					RaceDescPtr->ship_info.ship_flags |= FIRES_LEFT | FIRES_RIGHT;
-				else
-					RaceDescPtr->ship_info.ship_flags |= FIRES_AFT;
-				break;
-			case TRACKING_SYSTEM:
-				++num_trackers;
-				break;
-			case ANTIMISSILE_DEFENSE:
-				++RaceDescPtr->characteristics.special_energy_cost;
-				break;
-			case SHIVA_FURNACE:
-				++RaceDescPtr->characteristics.energy_regeneration;
-				break;
-			case DYNAMO_UNIT:
-				RaceDescPtr->characteristics.energy_wait -= 2;
-				if (RaceDescPtr->characteristics.energy_wait < 4)
-					RaceDescPtr->characteristics.energy_wait = 4;
-				break;
+			BYTE which_mod;
+			
+			which_mod = ModuleSlots[(NUM_MODULE_SLOTS - 1) - i];
+			switch (which_mod)
+			{
+				case CREW_POD:
+					RaceDescPtr->ship_info.max_crew += CREW_POD_CAPACITY;
+					break;
+				case GUN_WEAPON:
+				case BLASTER_WEAPON:
+				case CANNON_WEAPON:
+					RaceDescPtr->characteristics.weapon_energy_cost +=
+					(which_mod - GUN_WEAPON + 1) * 2;
+					if (i <= 1)
+						RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
+					else if (i == 2)
+						RaceDescPtr->ship_info.ship_flags |= FIRES_LEFT | FIRES_RIGHT;
+					else
+						RaceDescPtr->ship_info.ship_flags |= FIRES_AFT;
+					break;
+				case TRACKING_SYSTEM:
+					++num_trackers;
+					break;
+				case ANTIMISSILE_DEFENSE:
+					++RaceDescPtr->characteristics.special_energy_cost;
+					break;
+				case SHIVA_FURNACE:
+					++RaceDescPtr->characteristics.energy_regeneration;
+					break;
+				case DYNAMO_UNIT:
+					RaceDescPtr->characteristics.energy_wait -= 2;
+					if (RaceDescPtr->characteristics.energy_wait < 4)
+						RaceDescPtr->characteristics.energy_wait = 4;
+					break;
+			}
 		}
 	}
 
