@@ -33,7 +33,7 @@
 #include "libs/sound/sound.h"
 
 
-static void TellMission (RESPONSE_REF R);
+//static void TellMission (RESPONSE_REF R);
 static void SellMinerals (RESPONSE_REF R);
 
 
@@ -104,7 +104,7 @@ static LOCDATA commander_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeatureArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},

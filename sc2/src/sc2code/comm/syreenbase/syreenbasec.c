@@ -45,7 +45,15 @@ static LOCDATA syreenbase_desc =
 	0, /* AlienSongFlags */
 	SYREEN_BASE_CONVERSATION_PHRASES, /* PlayerPhrases */
 	0, /* NumAnimations */
-	{0 /* AlienAmbientArray (ambient animations) */
+	{ /* AlienAmbientArray (ambient animations) */
+		{
+			0, /* StartIndex */
+			0, /* NumFrames */
+			0, /* AnimFlags */
+			0, 0, /* FrameRate */
+			0, 0, /* RestartRate */
+			0, /* BlockMask */
+		}
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
@@ -69,7 +77,7 @@ static LOCDATA syreenbase_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeatureArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -79,6 +87,7 @@ static LOCDATA syreenbase_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {
+	(void) R; // satisfy compiler
 	NPCPhrase (COME_BACK_ANYTIME_MOOSY);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }

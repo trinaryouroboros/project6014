@@ -1300,7 +1300,8 @@ HailAlien (void)
 	FONT PlayerFont, OldFont;
 	MUSIC_REF SongRef = 0;
 	COLOR TextBack;
-
+	DWORD tmpseed;
+	
 	pCurInputState = &ES;
 	memset (pCurInputState, 0, sizeof (*pCurInputState));
 
@@ -1324,11 +1325,18 @@ HailAlien (void)
 			LoadStringTable (CommData.ConversationPhrasesRes));
 
 	// BW: choose the features for the captain
+	// When available, EncounterGroup is used as a seed
+	// so that the same ship always gets the same captain
+	if(LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY)
+		tmpseed = TFB_SeedRandom(EncounterGroup);
 	for (i = 0 ; i < CommData.NumFeatures ; i++)
 		{
 			CommData.AlienFeatureChoice[i] = CommData.AlienFeatureArray[i].StartIndex;
 			CommData.AlienFeatureChoice[i] += (COUNT)TFB_Random () % CommData.AlienFeatureArray[i].NumFrames ;
 		}
+	if(LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY)
+		TFB_SeedRandom(tmpseed);
+	
 	
 	SubtitleText.baseline = CommData.AlienTextBaseline;
 	SubtitleText.align = CommData.AlienTextAlign;

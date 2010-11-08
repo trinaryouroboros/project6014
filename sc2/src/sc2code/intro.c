@@ -85,7 +85,7 @@ typedef struct {
 } SPINANIM_INPUT_STATE;
 
 static BOOLEAN DoPresentation (void *pIS);
-static BOOLEAN DoSpinAnim (void *pIS);
+//static BOOLEAN DoSpinAnim (void *pIS);
 
 BOOLEAN
 DoFMVEx (const char *name, const char *audname, const char *speechname,

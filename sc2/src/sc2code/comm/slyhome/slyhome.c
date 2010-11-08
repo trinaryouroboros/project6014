@@ -171,7 +171,7 @@ static LOCDATA slylandro_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeatureArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -217,7 +217,7 @@ ExitConversation (RESPONSE_REF R)
 static void
 MainTalk (RESPONSE_REF R)
 {
-	BYTE i, stack2temp;
+	BYTE stack2temp;
 	
 	if (PLAYER_SAID(R, close_call))
 	{

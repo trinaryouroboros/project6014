@@ -223,7 +223,7 @@ static LOCDATA human_desc2 =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeatureArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -236,6 +236,7 @@ static void
 ExitConversation (RESPONSE_REF R)
 {
 	BYTE NumVisits;
+	(void) R; // satisfy compiler
 	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	
