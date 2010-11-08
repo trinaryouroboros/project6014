@@ -131,7 +131,7 @@ static RACE_DESC exp_desc =
 	0,
 };
 
-static void InitModuleSlots (RACE_DESC *RaceDescPtr, const BYTE *ModuleSlots);
+static void InitModuleSlots (RACE_DESC *RaceDescPtr);
 static void InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots);
 static void InitJetSlots (RACE_DESC *RaceDescPtr, const BYTE *JetSlots);
 void uninit_exp (RACE_DESC *pRaceDesc);
