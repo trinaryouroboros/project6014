@@ -176,7 +176,7 @@ static LOCDATA shofixti_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeatureArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -218,6 +218,7 @@ ExitConversation (RESPONSE_REF R)
 static void
 ThankYou (RESPONSE_REF R)
 {	
+	(void) R; // satisfy compiler
 	NPCPhrase (THANK_YOU);
 	DISABLE_PHRASE (sorry_to_hear);	
 
@@ -228,6 +229,7 @@ ThankYou (RESPONSE_REF R)
 static void
 HowReconstruction (RESPONSE_REF R)
 {	
+	(void) R; // satisfy compiler
 	NPCPhrase (NOT_GOOD_RECONSTRUCTION);
 	DISABLE_PHRASE (how_goes_reconstruction);	
 
@@ -342,6 +344,7 @@ SmallTalk1 (RESPONSE_REF R)
 static void
 DoShofixtiAngry (RESPONSE_REF R)
 {
+	(void) R; // satisfy compiler
 	NPCPhrase (ANGRY_SHOFIXTI_GREETING_1);
 
 	Response (sorry, ExitConversation);

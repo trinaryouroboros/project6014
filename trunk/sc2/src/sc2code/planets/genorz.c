@@ -295,7 +295,7 @@ GenerateOrz (BYTE control)
 					&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[2]
 					&& !GET_GAME_STATE (TAALO_PROTECTOR)))
 			{
-				COUNT i;
+				//				COUNT i;
 
 				if ((CurStarDescPtr->Index == ORZ_DEFINED
 						|| !GET_GAME_STATE (TAALO_UNPROTECTED))

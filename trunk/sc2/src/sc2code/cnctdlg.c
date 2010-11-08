@@ -329,7 +329,7 @@ OnTextEntryChange (TEXTENTRY_STATE *pTES)
 static BOOLEAN
 OnTextEntryFrame (TEXTENTRY_STATE *pTES)
 {
-	WIDGET_TEXTENTRY *widget = (WIDGET_TEXTENTRY *) pTES->CbParam;
+	//	WIDGET_TEXTENTRY *widget = (WIDGET_TEXTENTRY *) pTES->CbParam;
 
 	DrawConnectDialog ();
 

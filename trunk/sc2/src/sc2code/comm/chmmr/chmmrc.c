@@ -114,7 +114,7 @@ static LOCDATA chmmr_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeaturesArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -123,6 +123,7 @@ static LOCDATA chmmr_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {	
+	(void) R; // satisfy compiler
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	NPCPhrase (GOODBYE_HUMAN1);
 }
@@ -133,6 +134,7 @@ AskMenu (RESPONSE_REF R);
 static void
 WhereKohrah (RESPONSE_REF R)
 {	
+	(void) R; // satisfy compiler
 	NPCPhrase (KOHRAH_ARE);
 	DISABLE_PHRASE (where_kohrah);	
 
@@ -143,6 +145,7 @@ WhereKohrah (RESPONSE_REF R)
 static void
 ProvokeAboutYehat (RESPONSE_REF R)
 {	
+	(void) R; // satisfy compiler
 	NPCPhrase (CHMMR_ARE_AWESOME);
 	DISABLE_PHRASE (yehat_not_impressed);	
 

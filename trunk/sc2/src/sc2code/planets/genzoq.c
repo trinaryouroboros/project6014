@@ -28,7 +28,7 @@
 #include "planets/genall.h"
 #include "libs/mathlib.h"
 
-
+/***
 static void
 check_scout (void)
 {
@@ -50,6 +50,7 @@ check_scout (void)
 		UnlockIpGroup (&GLOBAL (ip_group_q), hGroup);
 	}
 }
+***/
 
 static void
 GenerateScout (BYTE control)

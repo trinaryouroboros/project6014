@@ -30,8 +30,7 @@
 void
 GenerateSpathi (BYTE control)
 {
-	COUNT i, angle;
-	DWORD rand_val;
+	COUNT angle;
 
 	switch (control)
 	{

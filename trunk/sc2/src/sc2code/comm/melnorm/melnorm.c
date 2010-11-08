@@ -109,7 +109,7 @@ static LOCDATA melnorme_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeaturesArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -433,6 +433,7 @@ PurchaseMenu (RESPONSE_REF R)
 	BYTE slot;
 	DWORD capacity;
 	
+	(void) R; // satisfy compiler
 	capacity = FUEL_RESERVE;
 	
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
@@ -701,6 +702,7 @@ HowAreYou (RESPONSE_REF R)
 static void
 DoFirstMeeting (RESPONSE_REF R)
 {
+	(void) R; // satisfy compiler
 	NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS1);
 
 	Response (hi_doing_great, HowAreYou);

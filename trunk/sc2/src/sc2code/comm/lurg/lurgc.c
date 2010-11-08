@@ -236,7 +236,7 @@ static LOCDATA lurg_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeaturesArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -245,7 +245,7 @@ static LOCDATA lurg_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	BYTE NumVisits;
+	//	BYTE NumVisits;
     int at_home = GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7);
     
     if (at_home && PLAYER_SAID (R, we_mean_no_harm))
@@ -262,6 +262,7 @@ ExitConversation (RESPONSE_REF R)
 
 static void YouCantPass (RESPONSE_REF R)
 {
+    (void) R; // satisfy compiler
     NPCPhrase (CANT_PASS);
 	
     Response (last_chance, ExitConversation);
@@ -274,6 +275,7 @@ AskQuestions (RESPONSE_REF R);
 static void
 WeKnowAll (RESPONSE_REF R)
 {
+    (void) R; // satisfy compiler
     NPCPhrase (WE_KNOW_ALL);
     
     Response (we_kick_ass, AskQuestions);
@@ -283,6 +285,7 @@ WeKnowAll (RESPONSE_REF R)
 static void
 YouFeelUs (RESPONSE_REF R)
 {
+    (void) R; // satisfy compiler
     DISABLE_PHRASE (you_look_familiar);
     
     NPCPhrase (YOU_FEEL_US);
@@ -372,7 +375,7 @@ YouCantLeave (RESPONSE_REF R)
 static void
 Intro (void)
 {
-	BYTE NumVisits;
+	//	BYTE NumVisits;
     int at_home = GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7);
 
 	if (at_home)

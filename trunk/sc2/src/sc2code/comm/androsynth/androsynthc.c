@@ -84,7 +84,7 @@ static LOCDATA androsynth_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeaturesArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -115,7 +115,7 @@ ExitConversation (RESPONSE_REF R)
 static void
 FriendlySpaceAndrosynth (RESPONSE_REF R)
 {
-	BYTE NumVisits;
+	//	BYTE NumVisits;
 	
 	if (PLAYER_SAID (R, huh_at_hello))
 	{
@@ -207,7 +207,7 @@ FriendlySpaceAndrosynth (RESPONSE_REF R)
 static void
 Intro (void)
 {
-	BYTE NumVisits;
+	//	BYTE NumVisits;
 	
 	RESPONSE_FUNC  RespFunc;
 	if (GET_GAME_STATE(ORZ_SPACE_SIDE) <= 1) {

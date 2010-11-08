@@ -134,7 +134,7 @@ static LOCDATA syreen_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeaturesArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -144,6 +144,7 @@ static LOCDATA syreen_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {
+	(void) R; // satisfy compiler
 	NPCPhrase (COME_BACK_ANYTIME);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }

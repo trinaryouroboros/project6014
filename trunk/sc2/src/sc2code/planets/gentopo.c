@@ -41,8 +41,8 @@ DeltaTopography (COUNT num_iterations, SBYTE *DepthArray, RECT *pRect,
 	do
 	{
 		SIZE d;
-		COUNT h, w1, w2, w1_b, w2_b;
-		DWORD rand_val, rand_val_b;
+		COUNT h, w1, w2;//, w1_b, w2_b;
+		DWORD rand_val;//, rand_val_b;
 		SBYTE *lpDst;
 
 		depth_delta = ((((SIZE)TFB_Random () & 1) << 1) - 1) * depth_delta;

@@ -232,7 +232,7 @@ static LOCDATA arilou_desc =
 	NULL,
 	NULL,
 	0, /* NumFeatures */
-	{0 /*AlienFeaturesArray (alternative features) */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
 	},
 	{0 /* AlienFeatureChoice (will be computed later) */
 	},
@@ -661,7 +661,7 @@ FriendlySpaceArilou (RESPONSE_REF R)
 static void
 Intro (void)
 {
-	BYTE NumVisits, Manner;
+	//	BYTE NumVisits, Manner;
 
 	if (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
 	{
@@ -686,7 +686,7 @@ Intro (void)
 	
 	else
 	{
-		RESPONSE_FUNC  RespFunc;
+		//		RESPONSE_FUNC  RespFunc;
 		NPCPhrase (TOO_EARLY);
 		return;
 	}
