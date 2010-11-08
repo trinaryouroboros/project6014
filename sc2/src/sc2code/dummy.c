@@ -76,9 +76,9 @@ enum
 	LURG_CODE_RES,				// JMS
 	ISD_CODE_RES,				// JMS
 	
-	SIS_CODE_RES,
+	EXP_CODE_RES,
 	TRANSPORT_CODE_RES,			// JMS
-	SAMATRA_CODE_RES,			// JMS: Moved this under SIS_CODE_RES and TRANSPORT_CODE_RES
+	SAMATRA_CODE_RES,			// JMS: Moved this under EXP_CODE_RES and TRANSPORT_CODE_RES
 };
 
 	BYTE which_res;
@@ -278,11 +278,11 @@ enum
 				RDPtr = init_samatra ();
 				break;
 			}
-			case SIS_CODE_RES:
+			case EXP_CODE_RES:
 			{
-				extern RACE_DESC* init_sis (void);
+				extern RACE_DESC* init_exp (void);
 
-				RDPtr = init_sis ();
+				RDPtr = init_exp ();
 				break;
 			}
 			// JMS: Transport code_res replaces ur-quan probe
