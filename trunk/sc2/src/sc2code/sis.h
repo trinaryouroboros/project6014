@@ -97,8 +97,7 @@ enum
 
 #define NUM_DRIVE_SLOTS 11
 #define NUM_JET_SLOTS 8
-#define NUM_MODULE_SLOTS 0 // 16 - JMS: Explorer can't be modded
-// BW: put this to 1 to have a cargo bay in explorer
+#define NUM_MODULE_SLOTS 16
 
 #define CREW_POD_CAPACITY 50
 #define STORAGE_BAY_CAPACITY 500 /* km cubed */
@@ -115,11 +114,14 @@ enum
 #define CREW_PER_ROW 5
 #define SBAY_MASS_PER_ROW 50
 
+#define EXPLORER_NUM_MODULE_SLOTS 0
+
 #define MAX_FUEL_BARS 10
 #define FUEL_VOLUME_PER_ROW (1 ? (HEFUEL_TANK_CAPACITY*2 / 20) : (HEFUEL_TANK_CAPACITY / MAX_FUEL_BARS))
 #define FUEL_RESERVE FUEL_VOLUME_PER_ROW
 
 #define MAX_COMBAT_SHIPS 6		// No more than 6 companion ships for the Explorer
+/** Capacities for Explorer end **/
 
 #define MAX_BATTLE_GROUPS 32	// Max number of battlegroups in a solar system
 

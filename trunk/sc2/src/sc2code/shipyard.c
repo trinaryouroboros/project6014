@@ -1089,11 +1089,11 @@ DrawBluePrint (MENU_STATE *pMS)
 	DrawFilledStamp (&s);
 
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-	  {
-	  }
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+	{
+	}
 	else
-	  {
+	{
 	    for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
 	      {
 		DrawShipPiece (pMS, GLOBAL_SIS (DriveSlots[num_frames]),
@@ -1124,7 +1124,7 @@ DrawBluePrint (MENU_STATE *pMS)
 		if (pMS->CurState == SHIPYARD && which_piece == CREW_POD)
 			DrawShipPiece (pMS, which_piece, num_frames, TRUE);
 	      }
-	  }
+	}
 	    
 	num_frames = GLOBAL_SIS (CrewEnlisted);
 	GLOBAL_SIS (CrewEnlisted) = 0;

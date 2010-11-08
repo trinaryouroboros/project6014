@@ -582,33 +582,34 @@ DrawFlagshipStats (void)
 
 
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-	  {
+	{
 	    fuel = EXPLORER_FUEL_CAPACITY;
-	  }
+	}
 	else
-	  {
+	{
 	    fuel = 10 * FUEL_TANK_SCALE;
 	    
 	    for (i = 0; i < NUM_MODULE_SLOTS; i++)
-	      {
-		switch (GLOBAL_SIS (ModuleSlots[i])) {
-			case FUEL_TANK:
-				fuel += FUEL_TANK_CAPACITY;
-				break;
-			case HIGHEFF_FUELSYS:
-				fuel += HEFUEL_TANK_CAPACITY;
-				break;
-			case DYNAMO_UNIT:
-				energy_wait -= 2;
-				if (energy_wait < 4)
-					energy_wait = 4;
-				break;
-			case SHIVA_FURNACE:
-				energy_regeneration++;
-				break;
+		{
+			switch (GLOBAL_SIS (ModuleSlots[i])) 
+			{
+				case FUEL_TANK:
+					fuel += FUEL_TANK_CAPACITY;
+					break;
+				case HIGHEFF_FUELSYS:
+					fuel += HEFUEL_TANK_CAPACITY;
+					break;
+				case DYNAMO_UNIT:
+					energy_wait -= 2;
+					if (energy_wait < 4)
+						energy_wait = 4;
+					break;
+				case SHIVA_FURNACE:
+					energy_regeneration++;
+					break;
+			}
 		}
-	      }
-	  }
+	}
 
 	for (i = 0; i < NUM_DRIVE_SLOTS; ++i)
 		if (GLOBAL_SIS (DriveSlots[i]) == FUSION_THRUSTER)
@@ -976,6 +977,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 		}
 		s.origin.y = 1;
 		s.origin.x = 1; // This properly centers the modules.
+			  
 		for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 		{
 			BYTE which_piece;
@@ -1256,32 +1258,28 @@ GetSBayCapacity (POINT *ppt)
 	COORD x;
 	COUNT slot, capacity;
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-	  {
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
 	    x = 39;
-	  }
 	else
-	  {
 	    x = 207 - 8;
-	  }
 	
 	capacity = 0;
 	slot = NUM_MODULE_SLOTS - 1;
 
-	if (NUM_MODULE_SLOTS != 0)
-	  {
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != 0)
+	{
 	    do
-	      {
-		if (GLOBAL_SIS (ModuleSlots[slot]) == STORAGE_BAY)
 		{
-			if (ppt
-					&& capacity < GLOBAL_SIS (TotalElementMass)
-					&& capacity + STORAGE_BAY_CAPACITY >=
-					GLOBAL_SIS (TotalElementMass))
+			if (GLOBAL_SIS (ModuleSlots[slot]) == STORAGE_BAY)
 			{
-				COUNT bay_remainder, which_row;
-				static const COLOR color_bars[] =
+				if (ppt
+						&& capacity < GLOBAL_SIS (TotalElementMass)
+						&& capacity + STORAGE_BAY_CAPACITY >=
+						GLOBAL_SIS (TotalElementMass))
 				{
+					COUNT bay_remainder, which_row;
+					static const COLOR color_bars[] =
+					{
 					 BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F),
 					 BUILD_COLOR (MAKE_RGB15 (0x1C, 0x1C, 0x1C), 0x11),
 					 BUILD_COLOR (MAKE_RGB15 (0x18, 0x18, 0x18), 0x13),
@@ -1292,18 +1290,18 @@ GetSBayCapacity (POINT *ppt)
 					 BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x1D),
 					 BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F),
 					 BUILD_COLOR (MAKE_RGB15 (0x05, 0x05, 0x05), 0x21),
-				};
+					};
 
-				bay_remainder = GLOBAL_SIS (TotalElementMass) - capacity;
-				if ((which_row = bay_remainder / SBAY_MASS_PER_ROW) == 0)
-					SetContextForeGroundColor (BLACK_COLOR);
-				else
-					SetContextForeGroundColor (color_bars[--which_row]);
+					bay_remainder = GLOBAL_SIS (TotalElementMass) - capacity;
+					if ((which_row = bay_remainder / SBAY_MASS_PER_ROW) == 0)
+						SetContextForeGroundColor (BLACK_COLOR);
+					else
+						SetContextForeGroundColor (color_bars[--which_row]);
 
-				ppt->x = x;
+					ppt->x = x;
 
 				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
-				  {
+				{
 				    ppt->y = 27 - which_row;
 				    if (which_row == 9)
 				      {
@@ -1321,10 +1319,10 @@ GetSBayCapacity (POINT *ppt)
 
 		x -= SHIP_PIECE_OFFSET;
 	      } while (slot--);
-	  }
+	}
 	else
-	  {		
-	  }
+	{		
+	}
 
 	return (capacity);
 }

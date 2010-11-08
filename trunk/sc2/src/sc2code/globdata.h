@@ -1096,14 +1096,16 @@ enum
 	IN_INTERPLANETARY,
 	WON_LAST_BATTLE,
 
-	/* The following three are only used when displaying save game
+	/* The following four are only used when displaying save game
 	 * summaries */
 	IN_QUASISPACE,
 	IN_PLANET_ORBIT,
 	IN_STARBASE,
-	
 	IN_ORZSPACE,	// JMS: In *below* (Orz space) or not
-
+	
+	BLACK_ORB_CUTSCENE, // JMS: For initiating cutscene after finding the black orb
+//#define BLACK_ORB_CUTSCENE SUPER_MELEE
+	
 	CHECK_PAUSE = MAKE_WORD (0, (1 << 0)),
 	IN_BATTLE = MAKE_WORD (0, (1 << 1)),
 	START_ENCOUNTER = MAKE_WORD (0, (1 << 2)),
@@ -1111,7 +1113,6 @@ enum
 	CHECK_LOAD = MAKE_WORD (0, (1 << 4)),
 	CHECK_RESTART = MAKE_WORD (0, (1 << 5)),
 	CHECK_ABORT = MAKE_WORD (0, (1 << 6)),
-	BLACK_ORB_CUTSCENE = MAKE_WORD (0, (1 << 7)), // JMS: For initiating cutscene after finding the black orb
 };
 typedef UWORD ACTIVITY;
 

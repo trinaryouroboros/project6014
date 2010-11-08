@@ -819,8 +819,7 @@ RetrySave:
 
 		// Write the memory file to the actual savegame file.
 		sprintf (file, "starcon2.%02u", which_game);
-		log_add (log_Debug, "'%s' is %u bytes long", file,
-				flen + sizeof (*SummPtr));
+		log_add (log_Debug, "'%s' is %u bytes long", file, flen + sizeof (*SummPtr));
 		if (flen && (out_fp = res_OpenResFile (saveDir, file, "wb")))
 		{
 			PrepareSummary (SummPtr);

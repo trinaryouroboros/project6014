@@ -326,7 +326,6 @@ BuyFuelMenu (RESPONSE_REF R)
 	
 	credit = MAKE_WORD (GET_GAME_STATE (MELNORME_CREDIT0),GET_GAME_STATE (MELNORME_CREDIT1));
 	capacity = FUEL_RESERVE;
-	slot = NUM_MODULE_SLOTS - 1;
 	doNotOfferFuel = FALSE;
 	
 	if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
@@ -335,6 +334,8 @@ BuyFuelMenu (RESPONSE_REF R)
 	}	
 	else
 	{
+		slot = NUM_MODULE_SLOTS - 1;
+		
 		do
 		{
 			if (GLOBAL_SIS (ModuleSlots[slot]) == FUEL_TANK || GLOBAL_SIS (ModuleSlots[slot]) == HIGHEFF_FUELSYS)
@@ -433,12 +434,13 @@ PurchaseMenu (RESPONSE_REF R)
 	DWORD capacity;
 	
 	capacity = FUEL_RESERVE;
-	slot = NUM_MODULE_SLOTS - 1;
 	
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
 		capacity = EXPLORER_FUEL_CAPACITY;
 	else
 	{
+		slot = NUM_MODULE_SLOTS - 1;
+		
 		do
 		{
 			if (GLOBAL_SIS (ModuleSlots[slot]) == FUEL_TANK 
