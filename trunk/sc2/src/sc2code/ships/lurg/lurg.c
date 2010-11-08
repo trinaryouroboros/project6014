@@ -24,35 +24,35 @@
 #define MAX_CREW 20
 #define MAX_ENERGY 20
 #define ENERGY_REGENERATION 2
-#define ENERGY_WAIT 12 // Was 13.
+#define ENERGY_WAIT 12
 #define MAX_THRUST 20
-#define THRUST_INCREMENT 6 // Was 7.
+#define THRUST_INCREMENT 6
 #define THRUST_WAIT 1
 #define TURN_WAIT 1
 #define SHIP_MASS 6
 
-#define WEAPON_ENERGY_COST 2
-#define WEAPON_WAIT 8 // Was 9.
+#define WEAPON_ENERGY_COST 3 // Was 2.
+#define WEAPON_WAIT 9
 #define MISSILE_SPEED DISPLAY_TO_WORLD (18)
 #define MISSILE_LIFE 25
-#define MISSILE_HITS 3 // Was 4.
+#define MISSILE_HITS 4
 #define MISSILE_DAMAGE 3 // Was 4.
 #define MISSILE_OFFSET 2
 #define LURG_OFFSET 23
 
-#define SPECIAL_ENERGY_COST 1 // Was 4.
-#define SPECIAL_WAIT 1 // Was 10.
-#define OIL_HITS 2
-#define OIL_DAMAGE 1 // Oil inflicts damage only in specific circumstances.
+#define SPECIAL_ENERGY_COST 2
+#define SPECIAL_WAIT 2
+#define OIL_BATCH_SIZE 5
 #define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR)
 #define OIL_INIT_SPEED DISPLAY_TO_WORLD (6*RESOLUTION_FACTOR)
+#define OIL_HITS 2
+#define OIL_DAMAGE 1 // Oil inflicts damage only in specific circumstances.
 #define OIL_SPREAD_MINIMUM 6
 #define OIL_SPREAD_VARIATION 5
 #define OIL_LIFE 300
 #define OIL_LIFE_VARIATION 100
-#define OIL_BATCH_SIZE 3 // Was 10.
-#define OIL_DELAY 6 // Was 6.
-#define OIL_DELAY_MAX 36 // Was 36.
+#define OIL_DELAY 6
+#define OIL_DELAY_MAX 36
 #define OIL_SNARE WORLD_TO_VELOCITY (-1)
 #define OIL_OFFSET 3
 #define LURG_OFFSET_2 16
@@ -136,83 +136,61 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 	EVALUATE_DESC *lpEvalDesc;
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
+
+	// Don't use the secondary unless specifically told to.
+	StarShipPtr->ship_input_state &= ~SPECIAL;
+	
+	// Maintain defensive posture at all times.
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
 	if (lpEvalDesc->ObjectPtr)
 	{
-		// Run away unless the enemy is close.
-		if (lpEvalDesc->which_turn > 18)
+		if (lpEvalDesc->which_turn > 24)
 			lpEvalDesc->MoveState = AVOID;
 		else
 		{
 			lpEvalDesc->MoveState = ENTICE;
-			// Ignore enemy projectiles during short range combat.
-			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
 
-			// Exaggerate the opponent's hitbox slightly to increase the AI's willingness to shoot.
-			if (ship_weapons (ShipPtr, ObjectsOfConcern->ObjectPtr, DISPLAY_TO_WORLD (3)))
+			// Sometimes take shots which don't line up with the opponent's current trajectory.
+			if (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP
+					&& ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (5))
+					&& (TFB_Random () & 5))
 				StarShipPtr->ship_input_state |= WEAPON;
 		}
 	}
-	
-	// Basic ship intelligence
-	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
-	StarShipPtr->ship_input_state &= ~SPECIAL;
-	
-	// Oil behavior
-	if (StarShipPtr->special_counter == 0
-		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >=
-			(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1)
-		&& lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 24)
-	{
-		COUNT travel_facing, direction_facing;
-		SIZE delta_x, delta_y;
 
-		travel_facing = NORMALIZE_FACING (ANGLE_TO_FACING (GetVelocityTravelAngle (&ShipPtr->velocity) + HALF_CIRCLE) );
-		delta_x = lpEvalDesc->ObjectPtr->current.location.x - ShipPtr->current.location.x;
-		delta_y = lpEvalDesc->ObjectPtr->current.location.y - ShipPtr->current.location.y;
-		direction_facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
-
-		if (NORMALIZE_FACING (direction_facing - (StarShipPtr->ShipFacing 
-				+ ANGLE_TO_FACING (HALF_CIRCLE)) 
-				+ ANGLE_TO_FACING (QUADRANT))
-				<= ANGLE_TO_FACING (HALF_CIRCLE)
-				&& (lpEvalDesc->which_turn <= 8
-				|| NORMALIZE_FACING (direction_facing
-				+ ANGLE_TO_FACING (HALF_CIRCLE)
-				- ANGLE_TO_FACING (GetVelocityTravelAngle ( &lpEvalDesc->ObjectPtr->velocity))
-				+ ANGLE_TO_FACING (QUADRANT))
-				<= ANGLE_TO_FACING (HALF_CIRCLE))
-				&& (!(StarShipPtr->cur_status_flags &
-				(SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL))
-				|| NORMALIZE_FACING (direction_facing
-				- travel_facing + ANGLE_TO_FACING (QUADRANT))
-				<= ANGLE_TO_FACING (HALF_CIRCLE)))
-			StarShipPtr->ship_input_state |= SPECIAL;
-	}
-	
-	// Drop several batches of oil whenever the battery tops off.
-	if(lpEvalDesc->ObjectPtr
-		&& StarShipPtr->RaceDescPtr->ship_info.energy_level == StarShipPtr->RaceDescPtr->ship_info.max_energy
-		|| (StarShipPtr->RaceDescPtr->ship_info.energy_level > (StarShipPtr->RaceDescPtr->ship_info.max_energy - 6)
-			&& StarShipPtr->old_status_flags & SPECIAL))
-		StarShipPtr->ship_input_state |= SPECIAL;
-	
-	// Panic Mode; Lurg drops oil in the way of various incoming projectiles.
+	// Drop oil in the way of various incoming projectiles.
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (lpEvalDesc->ObjectPtr
 		&& StarShipPtr->special_counter == 0
-		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >=
-			(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_energy >> 1)
-		&& lpEvalDesc->ObjectPtr->hit_points < 6 // Ignore huge projectiles.
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= 8
+		&& lpEvalDesc->ObjectPtr->hit_points < 6 // Forget huge projectiles.
 		&& (lpEvalDesc->ObjectPtr->mass_points
-			|| lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT)))
+			|| lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT))
+		// Do not engage in this behavior if the enemy ship is nearby.
+		&& ObjectsOfConcern[ENEMY_SHIP_INDEX].which_turn > 12)
 	{
 		if ((lpEvalDesc->which_turn >>= 1) == 0)
 			lpEvalDesc->which_turn = 1;
 
-		if (lpEvalDesc->which_turn <= 16)
+		if (lpEvalDesc->which_turn <= 9)
 			StarShipPtr->ship_input_state |= SPECIAL;
 	}
+	
+	// Ignore most enemy projectiles otherwise.
+	if (lpEvalDesc->ObjectPtr
+			&& !(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT)
+			&& lpEvalDesc->ObjectPtr->hit_points < 6)
+		ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = NULL;
+	
+	// Basic ship intelligence.
+	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
+	
+	// Drop several batches of oil whenever the battery tops off.
+	if(ObjectsOfConcern[ENEMY_SHIP_INDEX].ObjectPtr
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level == StarShipPtr->RaceDescPtr->ship_info.max_energy
+		|| (StarShipPtr->RaceDescPtr->ship_info.energy_level > (StarShipPtr->RaceDescPtr->ship_info.max_energy - 6)
+			&& StarShipPtr->old_status_flags & SPECIAL))
+		StarShipPtr->ship_input_state |= SPECIAL;
 }
 
 static void
@@ -348,18 +326,14 @@ oil_preprocess (ELEMENT *ElementPtr)
 static void
 oil_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {
-	if (!(ElementPtr1->state_flags
-				& (APPEARING | GOOD_GUY | BAD_GUY
-				| PLAYER_SHIP | FINITE_LIFE))
-				&& !GRAVITY_MASS (ElementPtr1->mass_points))
+	if (!(ElementPtr1->state_flags & (APPEARING | GOOD_GUY | BAD_GUY | PLAYER_SHIP | FINITE_LIFE))
+			&& !GRAVITY_MASS (ElementPtr1->mass_points))
 	{
 		ElementPtr0->mass_points = 0;
 		// Oil does no damage against asteroids
 	}
-	else if ((ElementPtr0->state_flags
-			& (GOOD_GUY | BAD_GUY)) !=
-			(ElementPtr1->state_flags
-			& (GOOD_GUY | BAD_GUY)))
+	else if ((ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY))
+			!= (ElementPtr1->state_flags & (GOOD_GUY | BAD_GUY)))
 	{
 		STARSHIP *StarShipPtr;
 		STARSHIP *EnemyStarShipPtr;
@@ -394,9 +368,9 @@ oil_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 
 			ElementPtr0->mass_points = 0;
 
-			ProcessSound (SetAbsSoundIndex (
+			// ProcessSound (SetAbsSoundIndex (
 					/* Sound effect?? */
-			StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr0);
+			// StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr0);
 		}
 		else
 		{
@@ -463,14 +437,13 @@ lurg_postprocess (ELEMENT *ElementPtr)
 	ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
 	
 	if ((StarShipPtr->cur_status_flags & SPECIAL)
-			&& ShipInfoPtr->energy_level > 1
 			&& StarShipPtr->special_counter == 0
 			&& DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST))
 	{
 		int i;
 
 		ProcessSound (SetAbsSoundIndex (
-						/* Sound effect? */
+						/* Spill oil */
 				StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
 		
 		for (i = 0; i < OIL_BATCH_SIZE; i++)
@@ -493,8 +466,8 @@ lurg_postprocess (ELEMENT *ElementPtr)
 		DeltaCrew (ElementPtr, 1);
 
 		ProcessSound (SetAbsSoundIndex (
-				/* Sound effect? */
-		StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 3), ElementPtr);
+				/* Regenerate */
+		StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr);
 	}
 }
 
