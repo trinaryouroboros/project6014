@@ -994,7 +994,7 @@ sis_battle_preprocess (ELEMENT *ElementPtr)
 	//	StarShipPtr->RaceDescPtr->characteristics.special_wait = 0;
 	
 	if (StarShipPtr->RaceDescPtr->characteristics.special_energy_cost == 0
-		&&(GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
+		&& (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) == 1))
 	{
 		StarShipPtr->cur_status_flags &= ~SPECIAL;
 		StarShipPtr->special_counter = 2;
@@ -1450,7 +1450,8 @@ sis_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	
 	// JMS: Use special like Melnorme uses its own special (This could use a little refinement...)
 	StarShipPtr->ship_input_state &= ~SPECIAL;
-	if (StarShipPtr->special_counter == 0 && StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST)
+	if (StarShipPtr->special_counter == 0 
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= StarShipPtr->RaceDescPtr->characteristics.special_energy_cost)
 	{
 		BYTE old_input_state;
 		
