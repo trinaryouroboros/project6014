@@ -234,7 +234,8 @@ initialize_fighterlaser (ELEMENT *ElementPtr, HELEMENT LaserArray[])
 	MissileBlock.sender = (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
 	MissileBlock.pixoffs = FIGHTER_LASER_OFFSET;
 	
-	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.index = MissileBlock.face + 15; // The fighter laser graphics are after the first 16 frames (which are the fighter hull graphics).
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
 	MissileBlock.speed = FIGHTER_LASER_SPEED;
 	MissileBlock.hit_points = FIGHTER_LASER_HITS;
 	MissileBlock.damage = FIGHTER_LASER_DAMAGE;
@@ -252,7 +253,7 @@ fighter_postprocess (ELEMENT *ElementPtr)
 {
 	HELEMENT Laser;
 	STARSHIP *StarShipPtr;
-
+	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	initialize_fighterlaser (ElementPtr, &Laser);
 	
@@ -269,7 +270,7 @@ fighter_postprocess (ELEMENT *ElementPtr)
 		UnlockElement (Laser);
 		PutElement (Laser);
 	}
-
+	
 	ElementPtr->postprocess_func = 0;
 	ElementPtr->thrust_wait = FIGHTER_WEAPON_WAIT;
 }
