@@ -26,8 +26,8 @@
 
 #define MAX_CREW MAX_CREW_SIZE
 #define MAX_ENERGY MAX_ENERGY_SIZE
-#define ENERGY_REGENERATION 3 // Was 1.
-#define ENERGY_WAIT 10 // Was 4.
+#define ENERGY_REGENERATION 3
+#define ENERGY_WAIT 10
 #define MAX_THRUST 30
 #define THRUST_INCREMENT 6
 #define TURN_WAIT 6
@@ -35,12 +35,12 @@
 #define SPECIAL_WAIT 9
 #define SHIP_MASS 10
 
-#define WEAPON_ENERGY_COST 1 // Was 6.
-#define WEAPON_WAIT 2 // Was 10.
-#define MISSILE_SPEED DISPLAY_TO_WORLD (25) // Was 20.
-#define MISSILE_LIFE 15 // Was 20.
-#define MISSILE_HITS 2 // Was 10.
-#define MISSILE_DAMAGE 2 // Was 6.
+#define WEAPON_ENERGY_COST 1
+#define WEAPON_WAIT 2
+#define MISSILE_SPEED DISPLAY_TO_WORLD (25)
+#define MISSILE_LIFE 15
+#define MISSILE_HITS 2
+#define MISSILE_DAMAGE 2
 #define MISSILE_OFFSET 8
 #define ISD_OFFSET 42
 
@@ -152,19 +152,6 @@ initialize_turbolaser (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	MissileBlock.preprocess_func = NULL;
 	MissileBlock.blast_offs = MISSILE_OFFSET;
 	MissileBlock.pixoffs = ISD_OFFSET;
-	
-	/* shot_facing = 0;
-
-	if (StarShipPtr->cur_status_flags & THRUST)
-		shot_facing = 0;
-	else if (StarShipPtr->cur_status_flags & LEFT)
-		shot_facing = 12;
-	else if (StarShipPtr->cur_status_flags & RIGHT)
-		shot_facing = 4;
-	else if (StarShipPtr->cur_status_flags & DOWN)
-		shot_facing = 8;
-		
-	MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (StarShipPtr->ShipFacing + shot_facing); */
 
 	turret = TFB_Random () % 7;
 
@@ -233,8 +220,8 @@ initialize_fighterlaser (ELEMENT *ElementPtr, HELEMENT LaserArray[])
 	MissileBlock.face = ElementPtr->thrust_wait;
 	MissileBlock.sender = (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
 	MissileBlock.pixoffs = FIGHTER_LASER_OFFSET;
-	
-	MissileBlock.index = MissileBlock.face + 15; // The fighter laser graphics are after the first 16 frames (which are the fighter hull graphics).
+	// The fighter laser graphics are after the first 16 frames (which are the fighter hull graphics).
+	MissileBlock.index = MissileBlock.face + 15;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
 	MissileBlock.speed = FIGHTER_LASER_SPEED;
 	MissileBlock.hit_points = FIGHTER_LASER_HITS;
@@ -309,14 +296,7 @@ fighter_preprocess (ELEMENT *ElementPtr)
 			delta_y = WRAP_DELTA_Y (delta_y);
 			facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
 
-#ifdef NEVER
-			if (delta_x < 0)
-				delta_x = -delta_x;
-			if (delta_y < 0)
-				delta_y = -delta_y;
-			if (delta_x <= FIGHTER_LASER_RANGE && delta_y <= FIGHTER_LASER_RANGE)
-#endif /* NEVER */
-				ElementPtr->state_flags &= ~IGNORE_SIMILAR;
+			ElementPtr->state_flags &= ~IGNORE_SIMILAR;
 
 			Enroute = FALSE;
 		}
@@ -336,10 +316,31 @@ fighter_preprocess (ELEMENT *ElementPtr)
 			if (ElementPtr->thrust_wait == 0
 					&& abs (delta_x) < FIGHTER_LASER_RANGE * 3 / 4
 					&& abs (delta_y) < FIGHTER_LASER_RANGE * 3 / 4
-					&& delta_x * delta_x + delta_y * delta_y < (FIGHTER_LASER_RANGE * 3 / 4) * (FIGHTER_LASER_RANGE * 3 / 4))
+					&& delta_x * delta_x + delta_y * delta_y < 
+						(FIGHTER_LASER_RANGE * 3 / 4) * (FIGHTER_LASER_RANGE * 3 / 4))
 			{
-				ElementPtr->thrust_wait = (BYTE)NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
-				ElementPtr->postprocess_func = fighter_postprocess;
+				HELEMENT Laser;
+
+				ElementPtr->thrust_wait =
+					(BYTE)NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
+
+				initialize_fighterlaser (ElementPtr, &Laser);
+				if (Laser)
+				{
+					ELEMENT *LaserPtr;
+
+					LockElement (Laser, &LaserPtr);
+					SetElementStarShip (LaserPtr, StarShipPtr);
+
+					// FIGHTER ZAP
+					ProcessSound (SetAbsSoundIndex
+						(StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), LaserPtr);
+
+					UnlockElement (Laser);
+					PutElement (Laser);
+				}
+				
+				ElementPtr->thrust_wait = FIGHTER_WEAPON_WAIT;
 			}
 
 			if (Enroute)
@@ -572,40 +573,6 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 	StarShipPtr->RaceDescPtr->characteristics.special_wait = 0;
 }
 
-/* static void
-isd_preprocess (ELEMENT *ElementPtr)
-{
-	STARSHIP *StarShipPtr;
-	
-	GetElementStarShip (ElementPtr, &StarShipPtr);
-
-	if (!(ElementPtr->state_flags & APPEARING))
-	{
-		if (((StarShipPtr->cur_status_flags
-			  | StarShipPtr->old_status_flags) & WEAPON)
-			&& (StarShipPtr->cur_status_flags & (LEFT | RIGHT))
-			&& ElementPtr->turn_wait == 0)
-		{
-			++ElementPtr->turn_wait;
-		}
-		
-		if (((StarShipPtr->cur_status_flags
-			  | StarShipPtr->old_status_flags) & WEAPON)
-			&& (StarShipPtr->cur_status_flags & THRUST)
-			&& ElementPtr->thrust_wait == 0)
-		{
-			++ElementPtr->thrust_wait;
-		}
-		
-		if ((StarShipPtr->cur_status_flags & WEAPON)
-			&& !(StarShipPtr->cur_status_flags & (LEFT | RIGHT | THRUST | DOWN))
-			&& StarShipPtr->weapon_counter == 0)
-		{
-			++StarShipPtr->weapon_counter;
-		}
-	}
-} */
-
 static void
 initialize_autoturret (ELEMENT *ElementPtr)
 {
@@ -695,6 +662,7 @@ initialize_autoturret (ELEMENT *ElementPtr)
 		GetNextVelocityComponents (&ObjectPtr->velocity,
 				&delta_x, &delta_y, num_frames);
 	
+		// This calculation causes the autoturret to lead its target.
 		delta_x = (ObjectPtr->current.location.x + (delta_x / 2))
 				- ShipPtr->current.location.x;
 		delta_y = (ObjectPtr->current.location.y + (delta_y / 2))

@@ -2,12 +2,12 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define BLASTER_BIG_MASK_PMAP_ANIM "ship.sis_ship.graphics.blas.large"
-#define BLASTER_MED_MASK_PMAP_ANIM "ship.sis_ship.graphics.blas.medium"
-#define BLASTER_SML_MASK_PMAP_ANIM "ship.sis_ship.graphics.blas.small"
-#define CONFUSE_BANGER_BIG_MASK_PMAP_ANIM "ship.exp.graphics.con.large"
-#define CONFUSE_BANGER_MED_MASK_PMAP_ANIM "ship.exp.graphics.con.medium"
-#define CONFUSE_BANGER_SML_MASK_PMAP_ANIM "ship.exp.graphics.con.small"
+#define PULSE_BIG_MASK_PMAP_ANIM "ship.explorer.graphics.pulse.large"
+#define PULSE_MED_MASK_PMAP_ANIM "ship.explorer.graphics.pulse.medium"
+#define PULSE_SML_MASK_PMAP_ANIM "ship.explorer.graphics.pulse.small"
+#define STUNNER_BIG_MASK_PMAP_ANIM "ship.explorer.graphics.stunner.large"
+#define STUNNER_MED_MASK_PMAP_ANIM "ship.explorer.graphics.stunner.medium"
+#define STUNNER_SML_MASK_PMAP_ANIM "ship.explorer.graphics.stunner.small"
 #define EXP_BIG_MASK_PMAP_ANIM "ship.explorer.graphics.sis.large"
 #define EXP_ICON_MASK_PMAP_ANIM "ship.explorer.icons"
 #define EXP_MED_MASK_PMAP_ANIM "ship.explorer.graphics.sis.medium"
