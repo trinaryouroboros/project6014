@@ -16,46 +16,50 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2009: -Added Orz space state check to exp_hyper_preprocess
-// JMS 2010: -Red ship gfx in hyperspace, blue in Orz space, green in quasispace
-//			 -Added separate weaponry function for Chmmr Explorer
-//			 -Added some nuts and bolts to make Chmmr Explorer weapons work
-//			 -Modded Chmmr Explorer main weapon as dual alternate side firing ion bolt cannon
-//			 -Chmmr Explorer secondary: Shard mines
-//			 -Autopilot now engages only after coming to full stop first
-//			 -Reduced weapon range (Blaster life) from 12 to 9
-//			 -Changed special weapon to confuse banger. Retained the shardmine code still, but it is disabled. Look for JMS_CONFUSER
-//			 -Removed all the old and unnecessary shit not related to current Explorer configuration
-
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
-
 #include "colors.h"
 #include "controls.h"
 #include "globdata.h"
 #include "libs/mathlib.h"
 #include "libs/log.h"
 
-#define MAX_CREW MAX_CREW_SIZE
+#define MAX_CREW EXPLORER_CREW_CAPACITY
 #define MAX_ENERGY 42
 #define ENERGY_REGENERATION 1
-#define ENERGY_WAIT 6
+#define ENERGY_WAIT 5
+#define SHIP_MASS 10
 
-#define SHIP_MASS MAX_SHIP_MASS
-#define BLASTER_SPEED DISPLAY_TO_WORLD (24)
-#define BLASTER_LIFE 9 // JMS: WAS 12
-
-// These affect Chmmr Explorer in Super Melee and adventure mode
+// These affect Chmmr Explorer in Super Melee and adventure mode.
 #define EXPLORER_MAX_THRUST 36
 #define EXPLORER_THRUST_INCREMENT 4
 #define EXPLORER_TURN_WAIT 1
 #define EXPLORER_THRUST_WAIT 1
 
-// Chmmr Explorer has smaller weapon delay and largish special delay
-#define EXPLORER_WEAPON_WAIT 2
-#define EXPLORER_SPECIAL_WAIT 18
-#define EXPLORER_WEAPON_ENERGY_COST 0 // Weapon cost is set at "+3" in initModuleSlots.
-#define EXPLORER_SPECIAL_ENERGY_COST 0
+#define WEAPON_ENERGY_COST 3
+#define WEAPON_WAIT 2
+#define BLASTER_SPEED DISPLAY_TO_WORLD (24)
+#define BLASTER_LIFE 9
+#define BLASTER_HITS 2
+#define BLASTER_DAMAGE 2
+#define BLASTER_OFFSET 8
+#define EXP_VERT_OFFSET 28
+#define EXP_HORZ_OFFSET 20
+#define EXP_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 * RESOLUTION_FACTOR))
+#define EXP_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5 * RESOLUTION_FACTOR))
+
+#define SPECIAL_ENERGY_COST 15
+#define SPECIAL_WAIT 20
+#define STUNBALL_SPEED DISPLAY_TO_WORLD (16)
+#define STUNBALL_LIFE 20 // Duration is as long as you hold down the button.
+#define STUNBALL_HITS 10
+#define STUNBALL_DAMAGE 0
+#define STUNBALL_START_OFFSET 36
+#define STUNBALL_BLAST_OFFSET 4
+#define SHOCKWAVE_RANGE_MID 85
+#define SHOCKWAVE_RANGE_END 116
+#define FULL_STUN_DURATION 90
+#define PARTIAL_STUN_DURATION 60
 
 #define MAX_THRUST 10		//
 #define TURN_WAIT 17		// JMS: Kept these defines for now since they might have some effect
@@ -64,7 +68,7 @@
 static RACE_DESC exp_desc =
 {
 	{ /* SHIP_INFO */
-		0,
+		FIRES_FORE | LIGHT_POINT_DEFENSE,
 		25, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -83,13 +87,13 @@ static RACE_DESC exp_desc =
 		MAX_THRUST,
 		EXPLORER_THRUST_INCREMENT,
 		ENERGY_REGENERATION,
-		EXPLORER_WEAPON_ENERGY_COST,
-		EXPLORER_SPECIAL_ENERGY_COST,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
 		ENERGY_WAIT,
 		TURN_WAIT,
 		THRUST_WAIT,
-		EXPLORER_WEAPON_WAIT,
-		0,  // Special weapon wait
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
 		SHIP_MASS,
 	},
 	{
@@ -99,14 +103,14 @@ static RACE_DESC exp_desc =
 			EXP_SML_MASK_PMAP_ANIM,
 		},
 		{
-			BLASTER_BIG_MASK_PMAP_ANIM,
-			BLASTER_MED_MASK_PMAP_ANIM,
-			BLASTER_SML_MASK_PMAP_ANIM,
+			PULSE_BIG_MASK_PMAP_ANIM,
+			PULSE_MED_MASK_PMAP_ANIM,
+			PULSE_SML_MASK_PMAP_ANIM,
 		},
 		{
-			CONFUSE_BANGER_BIG_MASK_PMAP_ANIM,
-			CONFUSE_BANGER_MED_MASK_PMAP_ANIM,
-			CONFUSE_BANGER_SML_MASK_PMAP_ANIM,
+			STUNNER_BIG_MASK_PMAP_ANIM,
+			STUNNER_MED_MASK_PMAP_ANIM,
+			STUNNER_SML_MASK_PMAP_ANIM,
 		},
 		{
 			SIS_CAPTAIN_MASK_PMAP_ANIM,
@@ -131,14 +135,13 @@ static RACE_DESC exp_desc =
 	0,
 };
 
-static void InitModuleSlots (RACE_DESC *RaceDescPtr);
+// static void InitModuleSlots (RACE_DESC *RaceDescPtr);
 static void InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots);
 static void InitJetSlots (RACE_DESC *RaceDescPtr, const BYTE *JetSlots);
 void uninit_exp (RACE_DESC *pRaceDesc);
 
-/* Hyperspace movement */
-static void
-exp_hyper_preprocess (ELEMENT *ElementPtr)
+// Hyperspace movement.
+static void exp_hyper_preprocess (ELEMENT *ElementPtr)
 {
 	SIZE udx, udy, dx, dy;
 	SIZE AccelerateDirection;
@@ -309,8 +312,7 @@ LeaveAutoPilot:
 	}
 }
 
-static void
-exp_hyper_postprocess (ELEMENT *ElementPtr)
+static void exp_hyper_postprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 
@@ -327,17 +329,10 @@ exp_hyper_postprocess (ELEMENT *ElementPtr)
 	}
 }
 
-/* Weapons: Stunner special */
-static void
-stunner_preprocess (ELEMENT *ElementPtr)
+// Stunner status effect.
+static void electrify (ELEMENT *ElementPtr)
 {
-	if (!(ElementPtr->state_flags & NONSOLID))
-	{
-		/*ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame,
-			(GetFrameIndex (ElementPtr->current.image.frame) + 1) & 7);*/
-		ElementPtr->state_flags |= CHANGING;
-	}
-	else if (ElementPtr->hTarget == 0)
+	if (ElementPtr->hTarget == 0)
 	{
 		ElementPtr->life_span = 0;
 		ElementPtr->state_flags |= DISAPPEARING;
@@ -347,70 +342,81 @@ stunner_preprocess (ELEMENT *ElementPtr)
 		ELEMENT *eptr;
 		
 		LockElement (ElementPtr->hTarget, &eptr);
-		
+
 		ElementPtr->next.location = eptr->next.location;
-		
+
 		if (ElementPtr->turn_wait)
 		{
 			HELEMENT hEffect;
 			STARSHIP *StarShipPtr;
-			
-			if (GetFrameIndex (ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame)) == 0)
-				ElementPtr->next.image.frame = SetRelFrameIndex (ElementPtr->next.image.frame, -8);
-			
+
+			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+
+			if (GetFrameIndex (ElementPtr->next.image.frame) < 15)
+				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, 15);
+
 			GetElementStarShip (eptr, &StarShipPtr);
 
-			// Shiver: This if statement below prevents the Androsynth Blazer from losing its energy degeneration.
+			// Disable energy regeneration. Do not prevent Androsynth Blazer degeneration.
 			if (!(eptr->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.special))
 				StarShipPtr->energy_counter += 1;
 
-			StarShipPtr->ship_input_state = (StarShipPtr->ship_input_state & ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL));
-			
+			// Disable propulsion and weapons.
+			StarShipPtr->ship_input_state = (StarShipPtr->ship_input_state &
+				~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL));
+
 			hEffect = AllocElement ();
 			if (hEffect)
 			{
 				LockElement (hEffect, &eptr);
-				
-				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING | (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+			
+				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
+						| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
 				eptr->life_span = 1;
-				eptr->current = eptr->next = ElementPtr->next;
-				eptr->preprocess_func = stunner_preprocess;
+				eptr->current = ElementPtr->current;
+				eptr->next = ElementPtr->next;
+				eptr->preprocess_func = electrify;
 				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
-				
+			
 				GetElementStarShip (ElementPtr, &StarShipPtr);
 				SetElementStarShip (eptr, StarShipPtr);
 				eptr->hTarget = ElementPtr->hTarget;
-				
+			
 				UnlockElement (hEffect);
 				PutElement (hEffect);
 			}
 		}
-		
+
 		UnlockElement (ElementPtr->hTarget);
 	}
 }
 
-#define STUN_DURATION 72
+// This is used to fluctuate the blaster weapon. The stunner also has a use for this.
+static void animate (ELEMENT *ElementPtr)
+{
+	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->state_flags |= CHANGING;
+}
 
-static void
-stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
-{	
+// Stun ball collision.
+static void stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+{
 	if (ElementPtr1->state_flags & PLAYER_SHIP)
 	{
 		HELEMENT hStunElement, hNextElement;
 		ELEMENT *StunPtr;
 		STARSHIP *StarShipPtr;
-		
+
 		GetElementStarShip (ElementPtr0, &StarShipPtr);
+
+		// Check to see if the enemy ship is already electrified.
 		for (hStunElement = GetHeadElement ();
-			 hStunElement; hStunElement = hNextElement)
+			hStunElement; hStunElement = hNextElement)
 		{
 			LockElement (hStunElement, &StunPtr);
 			if ((StunPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
 				(ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY))
-				&& StunPtr->current.image.farray ==
-				StarShipPtr->RaceDescPtr->ship_data.special
-				&& (StunPtr->state_flags & NONSOLID))
+				&& (StunPtr->preprocess_func == electrify))
 			{
 				UnlockElement (hStunElement);
 				break;
@@ -418,141 +424,286 @@ stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POIN
 			hNextElement = GetSuccElement (StunPtr);
 			UnlockElement (hStunElement);
 		}
-		
+
 		if (hStunElement || (hStunElement = AllocElement ()))
 		{
 			LockElement (hStunElement, &StunPtr);
-			
-			if (StunPtr->state_flags == 0) /* not allocated before */
+
+			// Put a status effect on the enemy ship if one is not already there.
+			if (StunPtr->state_flags == 0)
 			{
 				InsertElement (hStunElement, GetHeadElement ());
-				
+
 				StunPtr->current = ElementPtr0->next;
-				StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, 16);
+				StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, 15);
 				StunPtr->next = StunPtr->current;
 				StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
-				| (ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY));
-				StunPtr->preprocess_func = stunner_preprocess;
-				SetPrimType ( &(GLOBAL (DisplayArray))[StunPtr->PrimIndex], NO_PRIM);
-				
+						| (ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY));
+				StunPtr->preprocess_func = electrify;
+				SetPrimType (&(GLOBAL (DisplayArray))[StunPtr->PrimIndex],	NO_PRIM);
+
 				SetElementStarShip (StunPtr, StarShipPtr);
 				GetElementStarShip (ElementPtr1, &StarShipPtr);
 				StunPtr->hTarget = StarShipPtr->hShip;
 			}
-			
-			StunPtr->life_span = STUN_DURATION;
-			StunPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
-			
+
+			StunPtr->life_span = FULL_STUN_DURATION;
+			StunPtr->turn_wait = 1;
 			UnlockElement (hStunElement);
 		}
-		
-		weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
-		
+
 		ElementPtr0->hit_points = 0;
 		ElementPtr0->life_span = 0;
 		ElementPtr0->state_flags |= DISAPPEARING | COLLISION | NONSOLID;
-		
 	}
-	(void) pPt0;  /* Satisfying compiler (unused parameter) */
-	(void) pPt1;  /* Satisfying compiler (unused parameter) */
-}
-
-static COUNT
-initialize_stunner (ELEMENT *ShipPtr, HELEMENT StunArray[])
-{
-#define SMISSILE_SPEED DISPLAY_TO_WORLD (16)
-#define SMISSILE_HITS 50
-#define SMISSILE_DAMAGE 0
-#define SMISSILE_LIFE 20
-#define SMISSILE_OFFSET 4
-#define SMISSILE_START_OFFSET 28
-	STARSHIP *StarShipPtr;
-	MISSILE_BLOCK StunBlock;
-	
-	GetElementStarShip (ShipPtr, &StarShipPtr);
-	StunBlock.cx = ShipPtr->next.location.x;
-	StunBlock.cy = ShipPtr->next.location.y;
-	StunBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	StunBlock.face = StarShipPtr->ShipFacing;
-	StunBlock.index = StunBlock.face;
-	StunBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
-	StunBlock.pixoffs = SMISSILE_START_OFFSET;
-	StunBlock.speed = SMISSILE_SPEED;
-	StunBlock.hit_points = SMISSILE_HITS;
-	StunBlock.damage = SMISSILE_DAMAGE;
-	StunBlock.life = SMISSILE_LIFE;
-	StunBlock.preprocess_func = stunner_preprocess;
-	StunBlock.blast_offs = SMISSILE_OFFSET;
-	StunArray[0] = initialize_missile (&StunBlock);
-	
-	if (StunArray[0])
+	// Asteroids and planets break the stun ball.
+	else if (!(ElementPtr1->state_flags & (GOOD_GUY | BAD_GUY)))
 	{
-		ELEMENT *SMissilePtr;
-		SIZE dx, dy;
-		
-		LockElement (StunArray[0], &SMissilePtr);
+		HELEMENT hBlastElement;
 
-		// Shiver: This pushes the SMissile toward the direction the Explorer is moving.
-		GetCurrentVelocityComponents (&ShipPtr->velocity, &dx, &dy);
-		dx = dx * 3/4;
-		dy = dy * 3/4;
-		DeltaVelocityComponents (&SMissilePtr->velocity, dx, dy);
-		SMissilePtr->current.location.x -= VELOCITY_TO_WORLD (dx);
-		SMissilePtr->current.location.y -= VELOCITY_TO_WORLD (dy);
-
-		SMissilePtr->collision_func = stunner_collision;
-		SetElementStarShip (SMissilePtr, StarShipPtr);
-		UnlockElement (StunArray[0]);
-	}
-	return (1);
-}
-
-/* Melee related pre/postprocess */
-static void
-exp_battle_preprocess (ELEMENT *ElementPtr)
-{
-	STARSHIP *StarShipPtr;
-
-	GetElementStarShip (ElementPtr, &StarShipPtr);
-
-	if (!(StarShipPtr->RaceDescPtr->ship_info.ship_flags & (FIRES_FORE | FIRES_RIGHT | FIRES_AFT | FIRES_LEFT)))
-	{
-		StarShipPtr->cur_status_flags &= ~WEAPON;
-		StarShipPtr->weapon_counter = 2;
-	}
-}
-
-static void
-exp_battle_postprocess (ELEMENT *ElementPtr)
-{
-	STARSHIP *StarShipPtr;
-	GetElementStarShip (ElementPtr, &StarShipPtr);
-	
-	if (StarShipPtr->special_counter == 0
-		&& (StarShipPtr->cur_status_flags & SPECIAL)
-		&& (DeltaEnergy (ElementPtr, -(StarShipPtr->RaceDescPtr->characteristics.special_energy_cost)))
-		)
-	{
-		HELEMENT Stunner;
-		initialize_stunner (ElementPtr, &Stunner);
-		if (Stunner)
+		hBlastElement = weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+		if (hBlastElement)
 		{
-			ELEMENT *SMISSILEPtr;
-			LockElement (Stunner, &SMISSILEPtr);
-			
-			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), SMISSILEPtr);
-			
-			UnlockElement (Stunner);
-			PutElement (Stunner);
-			StarShipPtr->special_counter = EXPLORER_SPECIAL_WAIT;
+			ELEMENT *BlastElementPtr;
+
+			LockElement (hBlastElement, &BlastElementPtr);
+			BlastElementPtr->life_span = 9;
+			BlastElementPtr->preprocess_func = animate;
+
+			BlastElementPtr->current.image.farray = ElementPtr0->next.image.farray;
+			BlastElementPtr->current.image.frame =
+				SetAbsFrameIndex (BlastElementPtr->current.image.farray[0], 15);
+
+			ZeroVelocityComponents (&ElementPtr0->velocity);
+
+			UnlockElement (hBlastElement);
 		}
 	}
+	// Pass through enemy weapons. Sustain damage from them upon contact, but do not collide.
 }
 
-/* Weapons: Main weapon */
-#define BLASTER_DAMAGE 2
-static void
-blaster_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+// Stunner explosion.
+static void shockwave (ELEMENT *ElementPtr)
+{
+	ZeroVelocityComponents (&ElementPtr->velocity);
+
+	ElementPtr->state_flags |= (FINITE_LIFE | NONSOLID | CHANGING);
+	
+	ElementPtr->next.image.frame =
+		IncFrameIndex (ElementPtr->current.image.frame);
+
+	if (GetFrameIndex (ElementPtr->next.image.frame) > 14
+			|| GetFrameIndex (ElementPtr->next.image.frame) < 3)
+		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, 3);
+	
+	// A shockwave hit will occur at two different intervals.
+	if (ElementPtr->life_span == 6
+		|| ElementPtr->life_span == 2)
+	{
+		HELEMENT hElement, hNextElement, hTarget;
+		STARSHIP *StarShipPtr, *EnemyStarShipPtr;
+
+		GetElementStarShip (ElementPtr, &StarShipPtr);
+		hTarget = 0;
+
+		// Cycle through all objects in the arena.
+		for (hElement = GetHeadElement ();
+			hElement != 0; hElement = hNextElement)
+		{
+			ELEMENT *ObjPtr;
+
+			LockElement (hElement, &ObjPtr);
+			hNextElement = GetSuccElement (ObjPtr);
+			if (CollidingElement (ObjPtr))
+			{
+				SIZE delta_x, delta_y;
+
+				// Distance check.
+				if ((delta_x = ObjPtr->next.location.x
+						- ElementPtr->next.location.x) < 0)
+					delta_x = -delta_x;
+				if ((delta_y = ObjPtr->next.location.y
+						- ElementPtr->next.location.y) < 0)
+					delta_y = -delta_y;
+				delta_x = WORLD_TO_DISPLAY (delta_x);
+				delta_y = WORLD_TO_DISPLAY (delta_y);
+				
+				// Only pay attention to objects within the shockwave.
+				if ((ElementPtr->life_span == 6
+					&& delta_x <= SHOCKWAVE_RANGE_MID && delta_y <= SHOCKWAVE_RANGE_MID
+						&& ((long)(delta_x * delta_x) + (long)(delta_y * delta_y)) <=
+							(long)(SHOCKWAVE_RANGE_MID * SHOCKWAVE_RANGE_MID))
+				|| (ElementPtr->life_span == 2
+					&& delta_x <= SHOCKWAVE_RANGE_END && delta_y <= SHOCKWAVE_RANGE_END
+						&& ((long)(delta_x * delta_x) + (long)(delta_y * delta_y)) <=
+							(long)(SHOCKWAVE_RANGE_END * SHOCKWAVE_RANGE_END)))
+				{
+					// Enemy ship check.
+					if ((ObjPtr->state_flags & PLAYER_SHIP)
+						&& (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY))
+							!= (ObjPtr->state_flags & (GOOD_GUY | BAD_GUY)))
+					{
+						hTarget = hElement;
+						GetElementStarShip (ObjPtr, &EnemyStarShipPtr);
+					}
+				}
+			}
+
+			UnlockElement (hElement);
+		}
+
+		if (hTarget) // Did the enemy ship get hit?
+		{
+			ELEMENT *StunPtr;
+
+			// Check to see if the enemy ship is already electrified.
+			for (hElement = GetHeadElement ();
+				hElement; hElement = hNextElement)
+			{
+				LockElement (hElement, &StunPtr);
+				if ((StunPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
+					(ElementPtr->state_flags & (GOOD_GUY | BAD_GUY))
+					&& (StunPtr->preprocess_func == electrify))
+				{
+					UnlockElement (hElement);
+					break;
+				}
+				hNextElement = GetSuccElement (StunPtr);
+				UnlockElement (hElement);
+			}
+
+			if (hElement || (hElement = AllocElement ()))
+			{
+				LockElement (hElement, &StunPtr);
+
+				// Put a status effect on the enemy ship if one is not already there.
+				if (StunPtr->state_flags == 0)
+				{
+					InsertElement (hElement, GetHeadElement ());
+				
+					StunPtr->current = ElementPtr->next;
+					StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, 16);
+					StunPtr->next = StunPtr->current;
+					StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
+							| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+					StunPtr->preprocess_func = electrify;
+					StunPtr->collision_func = stunner_collision;
+					SetPrimType (&(GLOBAL (DisplayArray))[StunPtr->PrimIndex], NO_PRIM);
+
+					SetElementStarShip (StunPtr, StarShipPtr);
+					StunPtr->hTarget = EnemyStarShipPtr->hShip;
+				}
+
+				StunPtr->life_span = PARTIAL_STUN_DURATION;
+				StunPtr->turn_wait = 1;
+				UnlockElement (hElement);
+			}
+		}
+
+		UnlockElement (hTarget);
+	}
+}
+
+// This code maintains the stun ball projectile.
+static void stunner_preprocess (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+
+	ElementPtr->next.image.frame =
+		IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->state_flags |= CHANGING;
+	
+	if (GetFrameIndex (ElementPtr->current.image.frame) == 2)
+		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+
+	if (StarShipPtr->cur_status_flags & SPECIAL)
+	{
+		++ElementPtr->life_span; // Keep it going while the key is pressed.
+	}
+	else
+	{
+		// Trigger stunner explosion.
+		ElementPtr->life_span = 13;
+		ElementPtr->preprocess_func = shockwave;
+
+		ProcessSound (SetAbsSoundIndex // Shockwave!
+					(StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr);
+
+		ElementPtr->current.image.frame =
+			SetAbsFrameIndex (ElementPtr->current.image.frame, 3);
+	}
+}
+
+static void initialize_stunner (ELEMENT *ShipPtr)
+{
+	HELEMENT SMissile;
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	MissileBlock.cx = ShipPtr->next.location.x;
+	MissileBlock.cy = ShipPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = 0;
+	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+	MissileBlock.pixoffs = STUNBALL_START_OFFSET;
+	MissileBlock.speed = STUNBALL_SPEED;
+	MissileBlock.hit_points = STUNBALL_HITS;
+	MissileBlock.damage = STUNBALL_DAMAGE;
+	MissileBlock.life = STUNBALL_LIFE;
+	MissileBlock.preprocess_func = stunner_preprocess;
+	MissileBlock.blast_offs = STUNBALL_BLAST_OFFSET;
+	SMissile = initialize_missile (&MissileBlock);
+	
+	if (SMissile)
+	{
+		ELEMENT *StunballPtr;
+		
+		LockElement (SMissile, &StunballPtr);
+		SetElementStarShip (StunballPtr, StarShipPtr);
+		StunballPtr->death_func = NULL;
+		StunballPtr->collision_func = stunner_collision;
+		UnlockElement (SMissile);
+		PutElement (SMissile);
+	}
+}
+
+// Melee-related postprocess.
+/* static void exp_battle_postprocess (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+} */
+
+// Melee-related preprocess.
+static void exp_battle_preprocess (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+
+	// Only let one stun ball out at a time, but allow special_counter to count down as normal.
+	if (StarShipPtr->special_counter == 1
+			&& (StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & SPECIAL))
+		++StarShipPtr->special_counter;
+
+	if ((StarShipPtr->cur_status_flags & SPECIAL)
+		&& StarShipPtr->special_counter == 0
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST)
+	{
+		initialize_stunner (ElementPtr);
+
+		ProcessSound (SetAbsSoundIndex // Launch stunner ball.
+			(StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+
+		DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST);
+		StarShipPtr->special_counter = SPECIAL_WAIT;
+	}
+}
+
+static void blaster_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {
 	HELEMENT hBlastElement;
 
@@ -562,72 +713,17 @@ blaster_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POIN
 		ELEMENT *BlastElementPtr;
 
 		LockElement (hBlastElement, &BlastElementPtr);
-		switch (ElementPtr0->mass_points)
-		{
-			case BLASTER_DAMAGE * 1:
-				BlastElementPtr->life_span = 2;
-				BlastElementPtr->current.image.frame = SetAbsFrameIndex (ElementPtr0->current.image.frame, 0);
-				BlastElementPtr->preprocess_func = NULL;
-				break;
-			case BLASTER_DAMAGE * 2:
-				BlastElementPtr->life_span = 6;
-				BlastElementPtr->current.image.frame = IncFrameIndex (ElementPtr0->current.image.frame);
-				break;
-			case BLASTER_DAMAGE * 3:
-				BlastElementPtr->life_span = 7;
-				BlastElementPtr->current.image.frame = SetAbsFrameIndex (ElementPtr0->current.image.frame, 20);
-				break;
-		}
+		BlastElementPtr->life_span = 2;
+		BlastElementPtr->current.image.farray = ElementPtr0->next.image.farray;
+		BlastElementPtr->current.image.frame = SetAbsFrameIndex (ElementPtr0->current.image.frame, 0);
+		BlastElementPtr->preprocess_func = NULL;
+
 		UnlockElement (hBlastElement);
 	}
 }
 
-static void
-blaster_preprocess (ELEMENT *ElementPtr)
+static COUNT initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 {
-	BYTE wait;
-
-	switch (ElementPtr->mass_points)
-	{
-		case BLASTER_DAMAGE * 1:
-			if (GetFrameIndex (ElementPtr->current.image.frame) < 8)
-			{
-				ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
-				ElementPtr->state_flags |= CHANGING;
-			}
-			break;
-		case BLASTER_DAMAGE * 3:
-			if (GetFrameIndex (ElementPtr->current.image.frame) < 19)
-				ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
-			else
-				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 16);
-			ElementPtr->state_flags |= CHANGING;
-			break;
-	}
-
-	if (LONIBBLE (ElementPtr->turn_wait))
-		--ElementPtr->turn_wait;
-	else if ((wait = HINIBBLE (ElementPtr->turn_wait)))
-	{
-		COUNT facing;
-
-		facing = NORMALIZE_FACING (ANGLE_TO_FACING (GetVelocityTravelAngle (&ElementPtr->velocity)));
-		if (TrackShip (ElementPtr, &facing) > 0)
-			SetVelocityVector (&ElementPtr->velocity, BLASTER_SPEED, facing);
-
-		ElementPtr->turn_wait = MAKE_BYTE (wait, wait);
-	}
-}
-
-static COUNT
-initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
-{
-#define EXP_VERT_OFFSET 28
-#define EXP_HORZ_OFFSET 20
-#define EXP_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 * RESOLUTION_FACTOR))
-#define EXP_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5 * RESOLUTION_FACTOR))
-#define BLASTER_HITS 2
-#define BLASTER_OFFSET 8
 	COUNT num_blasters;
 	
 	BYTE nt;
@@ -640,8 +736,6 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 	static COUNT blaster_side[2]={0,0};
 	COUNT facing, angle;
 	SIZE offs_x, offs_y;
-	
-	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
 	num_blasters = 0;
 	
@@ -686,7 +780,7 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 			| IGNORE_SIMILAR;
 			lpMB->blast_offs = BLASTER_OFFSET;
 			lpMB->speed = BLASTER_SPEED;
-			lpMB->preprocess_func = blaster_preprocess;
+			lpMB->preprocess_func = animate;
 			lpMB->hit_points = BLASTER_HITS * which_gun;
 			lpMB->damage = BLASTER_DAMAGE * which_gun;
 			lpMB->life = BLASTER_LIFE
@@ -743,10 +837,7 @@ initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArray[])
 	return (num_blasters);
 }
 
-/* AI */
-static void
-exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-		COUNT ConcernCounter)
+static void exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
 	EVALUATE_DESC *lpEvalDesc;
 	STARSHIP *StarShipPtr;
@@ -779,7 +870,7 @@ exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		
 		old_input_state = StarShipPtr->ship_input_state;
 		
-		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_stunner;
+		// StarShipPtr->RaceDescPtr->init_weapon_func = initialize_stunner;
 		
 		++ShipPtr->turn_wait;
 		++ShipPtr->thrust_wait;
@@ -798,20 +889,18 @@ exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	}
 }
 
-/* Ship configuration */
-static void
-InitModuleSlots (RACE_DESC *RaceDescPtr)
-{	
-	// JMS: Chmmr Explorer has 50 men max crew complement without modules, precursor vessel 0 as usual
-	// Also: Chmmr Explorer has one front firing gun equipped as default.
-	RaceDescPtr->ship_info.max_crew = EXPLORER_CREW_CAPACITY;
-	RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
-	RaceDescPtr->characteristics.weapon_energy_cost += 3;
-	RaceDescPtr->characteristics.special_energy_cost = 12;
-}
+// Ship configuration.
+/* static void InitModuleSlots (RACE_DESC *RaceDescPtr)
+{       
+        // JMS: Chmmr Explorer has 50 men max crew complement without modules, precursor vessel 0 as usual
+        // Also: Chmmr Explorer has one front firing gun equipped as default.
+        RaceDescPtr->ship_info.max_crew = EXPLORER_CREW_CAPACITY;
+        RaceDescPtr->ship_info.ship_flags |= FIRES_FORE;
+        RaceDescPtr->characteristics.weapon_energy_cost += 3;
+        RaceDescPtr->characteristics.special_energy_cost = 12;
+} */
 
-static void
-InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots)
+static void InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots)
 {
 	COUNT i;
 
@@ -835,8 +924,7 @@ InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots)
 			* RaceDescPtr->characteristics.thrust_increment;
 }
 
-static void
-InitJetSlots (RACE_DESC *RaceDescPtr, const BYTE *JetSlots)
+static void InitJetSlots (RACE_DESC *RaceDescPtr, const BYTE *JetSlots)
 {
 	COUNT i;
 
@@ -851,8 +939,7 @@ InitJetSlots (RACE_DESC *RaceDescPtr, const BYTE *JetSlots)
 	}
 }
 
-RACE_DESC*
-init_exp (void)
+RACE_DESC* init_exp (void)
 {
 	RACE_DESC *RaceDescPtr;
 
@@ -903,13 +990,11 @@ init_exp (void)
 	else 
 	{
 		new_exp_desc.preprocess_func = exp_battle_preprocess;
-		new_exp_desc.postprocess_func = exp_battle_postprocess;
+		// new_exp_desc.postprocess_func = exp_battle_postprocess;
 		new_exp_desc.init_weapon_func = initialize_explorer_weaponry;
 		new_exp_desc.cyborg_control.intelligence_func = exp_intelligence;
-
 	}
 
-	InitModuleSlots(&new_exp_desc);
 	InitDriveSlots(&new_exp_desc, GLOBAL_SIS (DriveSlots));
 	InitJetSlots(&new_exp_desc, GLOBAL_SIS (JetSlots));
 	
@@ -942,8 +1027,7 @@ init_exp (void)
 	return (RaceDescPtr);
 }
 
-void
-uninit_exp (RACE_DESC *pRaceDesc)
+void uninit_exp (RACE_DESC *pRaceDesc)
 {
 	if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
 	{
