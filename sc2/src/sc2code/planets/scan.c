@@ -25,6 +25,7 @@
 #include "cons_res.h"
 #include "controls.h"
 #include "encount.h"
+#include "fmv.h"
 #include "gamestr.h"
 #include "lifeform.h"
 #include "nameref.h"

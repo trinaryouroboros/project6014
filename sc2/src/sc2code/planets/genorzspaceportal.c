@@ -21,6 +21,7 @@
 
 // JMS 2009: Totally new file: Orz space portal
 
+#include "build.h"
 #include "genall.h"
 #include "grpinfo.h"
 #include "races.h"
