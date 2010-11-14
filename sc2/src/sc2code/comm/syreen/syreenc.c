@@ -45,7 +45,7 @@ static LOCDATA syreen_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SYREEN_CONVERSATION_PHRASES, /* PlayerPhrases */
-	8, /* NumAnimations */
+	9, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{	// 0 - Flash eyes
 			1, /* StartIndex */
@@ -109,7 +109,15 @@ static LOCDATA syreen_desc =
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 24, 0, /* FrameRate */
 			ONE_SECOND * 2, ONE_SECOND * 2, /* RestartRate */
-			0, /* BlockMask */
+			(1 << 8), /* BlockMask */
+		},
+		{	// 8 - Close-up eyebrow lift
+			189, /* StartIndex */
+			17, /* NumFrames */
+			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
+			ONE_SECOND / 16, 0, /* FrameRate */
+			ONE_SECOND * 5, ONE_SECOND * 4, /* RestartRate */
+			(1 << 7), /* BlockMask */
 		},
 	},
 	{ /* AlienTransitionDesc */
@@ -124,7 +132,7 @@ static LOCDATA syreen_desc =
 		174, /* StartIndex */
 		8, /* NumFrames */
 		TALK_INTRO, /* AnimFlags */
-		ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+		ONE_SECOND / 16, ONE_SECOND / 30, /* FrameRate */
 		ONE_SECOND / 10, 0, /* RestartRate */
 		0, /* BlockMask */
 	},
