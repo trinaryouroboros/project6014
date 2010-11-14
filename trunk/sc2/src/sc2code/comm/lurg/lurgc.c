@@ -37,7 +37,7 @@ static LOCDATA lurg_desc =
 	{0, 0}, /* AlienTextBaseline */
 	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
 	ALIGN_CENTER, /* AlienTextAlign */
-	VALIGN_TOP, /* AlienTextValign */
+	VALIGN_BOTTOM, /* AlienTextValign */
 	LURG_COLOR_MAP, /* AlienColorMap */
 	LURG_MUSIC, /* AlienSong */
 	NULL_RESOURCE, /* AlienAltSong */
@@ -422,7 +422,7 @@ init_lurg_comm (void)
 	lurg_desc.uninit_encounter_func = uninit_lurg;
 
 	lurg_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	lurg_desc.AlienTextBaseline.y = 0;
+	lurg_desc.AlienTextBaseline.y = 100;
 	lurg_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 1);
