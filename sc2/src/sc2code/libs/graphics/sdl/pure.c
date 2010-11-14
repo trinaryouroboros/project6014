@@ -22,6 +22,19 @@
 #include "scalers.h"
 #include "libs/log.h"
 
+// JMS: Try to fix issues with transparencies on OSX here...
+#if SDL_BYTEORDER == SDL_BIG_ENDIAN
+#define R_MASK 0xff000000
+#define G_MASK 0x00ff0000
+#define B_MASK 0x0000ff00
+#define A_MASK 0x000000ff
+#else
+#define R_MASK 0x000000ff
+#define G_MASK 0x0000ff00
+#define B_MASK 0x00ff0000
+#define A_MASK 0xff000000
+#endif
+
 static SDL_Surface *fade_color_surface = NULL;
 static SDL_Surface *fade_temp = NULL;
 static SDL_Surface *scaled_display = NULL;
@@ -116,8 +129,7 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 
 	/* We'll ask for a 32bpp frame, but it doesn't really matter, because we've set
 	   SDL_ANYFORMAT */
-	SDL_Video = SDL_SetVideoMode (ScreenWidthActual, ScreenHeightActual, 
-		32, videomode_flags);
+	SDL_Video = SDL_SetVideoMode (ScreenWidthActual, ScreenHeightActual, 32, videomode_flags);
 
 	if (SDL_Video == NULL)
 	{
@@ -148,7 +160,10 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 			0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
 	if (temp_surf)
 	{	// acquire a fast compatible format from SDL
-		format_conv_surf = SDL_DisplayFormatAlpha (temp_surf);
+
+		format_conv_surf = SDL_DisplayFormatAlpha (temp_surf); // JMS: Replaced this...
+		//format_conv_surf = SDL_CreateRGBSurface (SDL_SWSURFACE, 0, 0, 32, R_MASK, G_MASK, B_MASK, A_MASK); //...with this
+		
 		if (!format_conv_surf ||
 				format_conv_surf->format->BitsPerPixel != 32)
 		{	// absolute fallback case
