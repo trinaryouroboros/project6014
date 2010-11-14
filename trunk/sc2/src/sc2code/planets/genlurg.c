@@ -134,6 +134,7 @@ GenerateShofixtiCrashSite (BYTE control)
 				if(!(GET_GAME_STATE(CRASH_SITE_VISITED)))
 				{
 					SET_GAME_STATE(CRASH_SITE_VISITED, 1);
+					SET_GAME_STATE(CRASH_SITE_LURG_SURVIVORS, 5);
 					for (i = 0; i < 5; ++i)
 						CloneShipFragment (LURG_SHIP, &GLOBAL (npc_built_ship_q), 0);
 				}
@@ -159,12 +160,13 @@ GenerateShofixtiCrashSite (BYTE control)
 				else
 				{
 					BOOLEAN LurgSurvivors;
-					LurgSurvivors = GetHeadLink ( &GLOBAL (npc_built_ship_q) ) != 0;
+					
+					LurgSurvivors = (GetHeadLink ( &GLOBAL (npc_built_ship_q) ) != 0);
 					SET_GAME_STATE(CRASH_SITE_LURG_SURVIVORS, CountLinks (&GLOBAL (npc_built_ship_q)));
 					GLOBAL (CurrentActivity) &= ~START_INTERPLANETARY;
 					ReinitQueue (&GLOBAL (npc_built_ship_q));
 					GetGroupInfo (GROUPS_RANDOM, GROUP_LOAD_IP);
-				
+					
 					if (LurgSurvivors)
 						break;
 						
