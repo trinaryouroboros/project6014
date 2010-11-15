@@ -262,7 +262,7 @@ case "$HOST_SYSTEM" in
 esac
 LIB_zlib_VERSION=""
 case "$HOST_SYSTEM" in
-	ARMV5|WINSCW|GCCE)
+	ARMV5|WINSCW|GCCE|MINGW32*)
 		LIB_zlib_DETECT="true"
 		;;
 	*)

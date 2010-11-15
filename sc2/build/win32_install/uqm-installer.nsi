@@ -6,10 +6,10 @@ Var MAKEICON
 Var UQMUSERDATA
 
 ; HM NIS Edit Wizard helper defines
-!define PRODUCT_NAME "The Ur-Quan Masters"
-!define PRODUCT_VERSION "0.6.2"
-!define PRODUCT_WEB_SITE "http://sc2.sourceforge.net"
-!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\uqm.exe"
+!define PRODUCT_NAME "The Ur-Quan Masters project6014"
+!define PRODUCT_VERSION "0.1.1"
+!define PRODUCT_WEB_SITE "http://code.google.com/p/project6014/"
+!define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\p6014.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
 !define PRODUCT_STARTMENU_REGVAL "NSIS:StartMenuDir"
@@ -48,7 +48,7 @@ Var UQMUSERDATA
 ; Start menu page
 var ICONS_GROUP
 !define MUI_STARTMENUPAGE_NODISABLE
-!define MUI_STARTMENUPAGE_DEFAULTFOLDER "Games\The Ur-Quan Masters"
+!define MUI_STARTMENUPAGE_DEFAULTFOLDER "Games\The Ur-Quan Masters project6014 demo"
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "${PRODUCT_UNINST_ROOT_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "${PRODUCT_UNINST_KEY}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "${PRODUCT_STARTMENU_REGVAL}"
@@ -59,7 +59,7 @@ var ICONS_GROUP
 !define MUI_FINISHPAGE_RUN_NOTCHECKED
 !define MUI_FINISHPAGE_NOREBOOTSUPPORT
 !define MUI_FINISHPAGE_SHOWREADME "$INSTDIR\README.txt"
-!define MUI_FINISHPAGE_RUN "$INSTDIR\uqm.exe"
+!define MUI_FINISHPAGE_RUN "$INSTDIR\p6014.exe"
 !define MUI_FINISHPAGE_RUN_PARAMETERS $UQMARGS
 !insertmacro MUI_PAGE_FINISH
 
@@ -74,8 +74,8 @@ var ICONS_GROUP
 ; MUI end ------
 
 Name "${PRODUCT_NAME} ${PRODUCT_VERSION}"
-OutFile "uqm-0.6.2-installer.exe"
-InstallDir "$PROGRAMFILES\The Ur-Quan Masters\"
+OutFile "p6014-0.1.1-installer.exe"
+InstallDir "$PROGRAMFILES\The Ur-Quan Masters project6014 demo\"
 InstallDirRegKey HKLM "${PRODUCT_DIR_REGKEY}" ""
 ShowInstDetails show
 ShowUnInstDetails show
@@ -280,19 +280,19 @@ SectionGroup "!UQM" SECGRP01
     SetOverwrite try
     File "AUTHORS.txt"
     File "COPYING.txt"
-    File "libpng12.dll"
+    File "libpng12-0.dll"
     File "Manual.txt"
-    File "ogg.dll"
-    File "OpenAL32.dll"
+    File "libogg-0.dll"
+;    File "OpenAL32.dll"
     File "README.txt"
     File "SDL.dll"
     File "SDL_image.dll"
-    File "SDL_gfx.dll"
-    File "uqm.exe"
-    File "keyjam.exe"
-    File "vorbis.dll"
-    File "vorbisfile.dll"
-    File "WhatsNew.txt"
+;    File "SDL_gfx.dll"
+    File "p6014.exe"
+;    File "keyjam.exe"
+    File "libvorbis-0.dll"
+    File "libvorbisfile-3.dll"
+;    File "WhatsNew.txt"
     File "zlib1.dll"
     SetOverwrite off
     SetOutPath $UQMUSERDATA
