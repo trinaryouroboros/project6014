@@ -1260,8 +1260,9 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 
 						if (ed.which_turn == 0)
 							ed.which_turn = 1;
-						// Shiver: which_turn hard cap raised from 16 (sometimes 8) to 32.
-						else if (ed.which_turn > 32)
+						/* Shiver: The cap on which_turn for seeking weapons raised from 16 to 20.
+							The horrible cap of 8 for medium ships has been obliterated as well. */
+						else if (ed.which_turn > 20)
 							ed.which_turn = 0;
 					}
 				}
