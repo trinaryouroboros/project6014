@@ -1,8 +1,9 @@
-You're looking at the readme for 'The Ur-Quan Masters', a volunteer
-project that intends to bring the classic game 'Star Control II' to
-modern systems.
+You're looking at the readme for 'The Ur-Quan Masters project6014', a
+volunteer project that intends to bring a sequel to the classic game
+'Star Control II'.
 
-The program code that comprises 'The Ur-Quan Masters' was derived from code
+The program code that comprises 'The Ur-Quan Masters project6014' is a
+mod of 'The Ur-Quan Masters', which was itself derived from code
 written by Toys for Bob, Inc. for the 3DO version of 'Star Control II', with
 their permission and encouragement.
 
@@ -10,8 +11,9 @@ If you've got this file from the source tree, you can find everything
 you need to get started in INSTALL (INSTALL.mingw for MinGW) and
 doc/users/unixinstall.
 
-The home page of the project is located at http://sc2.sourceforge.net/
-You can find links to downloads, our bug database, and our forum there.
+The home page of the project is located at
+http://code.google.com/p/project6014/
+You can find links to downloads there.
 
 Have fun!
 
