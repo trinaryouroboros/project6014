@@ -68,7 +68,7 @@
 static RACE_DESC exp_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | LIGHT_POINT_DEFENSE,
+		FIRES_FORE,
 		25, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
