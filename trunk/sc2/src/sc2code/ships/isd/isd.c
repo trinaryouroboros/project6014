@@ -221,7 +221,7 @@ initialize_fighterlaser (ELEMENT *ElementPtr, HELEMENT LaserArray[])
 	MissileBlock.sender = (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
 	MissileBlock.pixoffs = FIGHTER_LASER_OFFSET;
 	// The fighter laser graphics are after the first 16 frames (which are the fighter hull graphics).
-	MissileBlock.index = MissileBlock.face + 15;
+	MissileBlock.index = MissileBlock.face + 16;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
 	MissileBlock.speed = FIGHTER_LASER_SPEED;
 	MissileBlock.hit_points = FIGHTER_LASER_HITS;
