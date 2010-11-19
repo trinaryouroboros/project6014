@@ -34,7 +34,7 @@
 #define WEAPON_ENERGY_COST 4
 #define WEAPON_WAIT 10
 #define MISSILE_SPEED DISPLAY_TO_WORLD (18)
-#define MISSILE_LIFE 25
+#define MISSILE_LIFE 23
 #define MISSILE_HITS 5
 #define MISSILE_DAMAGE 3
 #define MISSILE_OFFSET 2
@@ -132,7 +132,7 @@ static RACE_DESC lurg_desc =
 static void
 lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
-	STARSHIP *StarShipPtr, *EnemyStarShipPtr;
+	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
@@ -143,42 +143,40 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
 	if (lpEvalDesc->ObjectPtr)
 	{
+		STARSHIP *EnemyStarShipPtr;
+
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 
-		// Be aggressive when the enemy is ensnared or at very close range.
-		if (lpEvalDesc->which_turn <= 28
-			&& lpEvalDesc->ObjectPtr->turn_wait >= OIL_DELAY
-			&& lpEvalDesc->ObjectPtr->thrust_wait >= OIL_DELAY
-			&& !(lpEvalDesc->ObjectPtr->state_flags & APPEARING)
-			|| lpEvalDesc->which_turn <= 14)
+		// Be more responsive against slow ships.
+		if (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control) <= SLOW_SHIP)
+			lpEvalDesc->which_turn = lpEvalDesc->which_turn * 4/5;
+
+		// Attack when the enemy is ensnared or at very close range.
+		if (!(lpEvalDesc->ObjectPtr->state_flags & APPEARING)
+			&& (lpEvalDesc->which_turn <= 30
+				&& lpEvalDesc->ObjectPtr->turn_wait >= OIL_DELAY
+				&& lpEvalDesc->ObjectPtr->thrust_wait >= OIL_DELAY
+				|| lpEvalDesc->which_turn <= 15))
 		{
 			lpEvalDesc->MoveState = PURSUE;
 
 			// Disregard enemy weapons in these circumstances.
 			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = NULL;
 		}
-		// Use caution if the enemy is nearby but not ensnared.
-		else if (lpEvalDesc->which_turn <= 24
-			// Approach enemies /w long range weapons while crew is full.
-			|| (WEAPON_RANGE (&EnemyStarShipPtr->RaceDescPtr->cyborg_control)
-					>= LONG_RANGE_WEAPON * 3/5
-				&& StarShipPtr->RaceDescPtr->ship_info.crew_level == MAX_CREW))
-		{
-			lpEvalDesc->MoveState = ENTICE;
-		}
-		// Otherwise stall for time when the enemy is far away.
-		else
+		// Stall for time when the enemy is far away.
+		else if (lpEvalDesc->which_turn > 20)
 		{
 			lpEvalDesc->MoveState = AVOID;
 		}
 
 		// Sometimes take shots which don't line up with the opponent's current trajectory.
-		if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (5))
+		if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (4))
 				&& (TFB_Random () & 7))
 			StarShipPtr->ship_input_state |= WEAPON;
 	}
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
+
 	// Drop oil in the way of various incoming projectiles.
 	if (lpEvalDesc->ObjectPtr
 		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= 8
@@ -203,9 +201,14 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	// Cut thrust when cornered to prevent Lurg from accelerating into its opponent.
-	if (lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 14
-		// Prevent Lurg from sitting completely stationary.
+
+	// Cut thrust when attacking...
+	if (lpEvalDesc->ObjectPtr
+		&& lpEvalDesc->MoveState == PURSUE
+		// ...unless the opponent is ensnared...
+		&& (lpEvalDesc->ObjectPtr->turn_wait < OIL_DELAY
+			|| lpEvalDesc->ObjectPtr->thrust_wait < OIL_DELAY)
+		// ...or the Prawn is completely stationary.
 		&& ShipPtr->next.location.x != ShipPtr->current.location.x
 		&& ShipPtr->next.location.y != ShipPtr->current.location.y)
 	{
