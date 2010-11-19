@@ -1,28 +1,29 @@
 = Downloads =
 
 
-== Project 6014 demo ==
+== Project 6014 demo - the patched version ==
 
-_Released 30 September 2010!_
+_Released 19 November 2010_
 
 
 The files are:
 
 || *File* || *Type* || *Size* || *Download* ||
-|| Windows content and executable || platform specific ||41.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
-|| Windows executable || platform specific ||1.3 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-win.zip&can=1&q= ||
-|| OSX (all files) || platform specific ||95 MB ||http://code.google.com/p/project6014/downloads/detail?name=p6014-demo-alpha-OSX10.6-app.zip&can=5&q=  ||
-|| Linux executable || platform specific || || (in progress) ||
+|| Windows Installer|| platform specific ||1.5 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.1.1_win_installer.exe&can=2&q= ||
+|| Linux Installer|| platform specific ||0.7 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.1.1_Linux-x86.tar.gz&can=2&q= ||
+|| OSX executable || platform specific ||2.3 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.1.1_OSX.7z&can=2&q=  ||
+|| Alien voices package || Content ||3.5 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.1.1-voice.uqm&can=2&q=  ||
+|| High quality music package || Content ||52.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.1.1-3domusic.uqm&can=2&q=  ||
+|| Base content package|| Content ||39.3 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.1.1-content.uqm&can=2&q=  ||
 
-If you are on Windows, you want to get the main content and the windows executable.  
-Once you have the necessary files, you can unzip them into a single directory.  This directory should then contain:
 
-   * a content subdirectory
-   * an executable (type depending on your platform)
+For Windows and Linux, just download the installer. That file will download the content for you.
+
+For OSX, you'll need to download the .exe and the three content packages.
 
 You can run the game by running the executable. Windows Users may need to run the included .BAT file.
 
-For OSX, both the executable and the content are in the one package. We'll probably split these soon.
+Do post to the forums if you have any issues with installation or running the game.
 
 *N.B.* Parts of these files are provided under the terms of the GNU General Public License (version 2); the Creative Commons License (Attribution, Non-Commercial, Share-Alike 2.5); and the Creative Commons License (Attribution 2.0).  These licenses are explained in the file [http://project6014.googlecode.com/svn/trunk/sc2/COPYING COPYING].  This file was inadvertently omitted from some release downloads.
 
