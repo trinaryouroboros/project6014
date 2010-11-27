@@ -391,10 +391,21 @@ static void electrify (ELEMENT *ElementPtr)
 	}
 }
 
-// This is used to fluctuate the blaster weapon. The stunner also has a use for this.
+// This is used to fluctuate the stunner.
 static void animate (ELEMENT *ElementPtr)
 {
 	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->state_flags |= CHANGING;
+}
+
+// This is used to fluctuate the blaster weapon.
+static void animate_blaster (ELEMENT *ElementPtr)
+{
+	if (GetFrameIndex (ElementPtr->current.image.frame) >= 3)
+		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+	else
+		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	
 	ElementPtr->state_flags |= CHANGING;
 }
 
@@ -776,15 +787,13 @@ static COUNT initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArr
 			lpMB->cx = cx + offs_x;
 			lpMB->cy = cy + offs_y;
 			lpMB->farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
-			lpMB->sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
-			| IGNORE_SIMILAR;
+			lpMB->sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
 			lpMB->blast_offs = BLASTER_OFFSET;
 			lpMB->speed = BLASTER_SPEED;
-			lpMB->preprocess_func = animate;
+			lpMB->preprocess_func = animate_blaster;
 			lpMB->hit_points = BLASTER_HITS * which_gun;
 			lpMB->damage = BLASTER_DAMAGE * which_gun;
-			lpMB->life = BLASTER_LIFE
-			+ ((BLASTER_LIFE >> 2) * (which_gun - 1));
+			lpMB->life = BLASTER_LIFE + ((BLASTER_LIFE >> 2) * (which_gun - 1));
 
 			// Which weapon graphics to use
 			if (which_gun == 1)
