@@ -262,11 +262,6 @@ main (int argc, char *argv[])
 	{
 		options.gfxFlags |= TFB_GFXFLAGS_FULLSCREEN;
 	}
-	// JMS: Start in full-screen mode to prevent color bug on OSX
-	if (!(res_HasKey ("config.fullscreen")))
-	{
-		options.gfxFlags |= TFB_GFXFLAGS_FULLSCREEN;
-	}
 	if (res_HasKey ("config.subtitles"))
 	{
 		options.subTitles = res_GetBoolean ("config.subtitles");
