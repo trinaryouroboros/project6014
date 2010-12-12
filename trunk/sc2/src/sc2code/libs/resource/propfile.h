@@ -19,12 +19,12 @@
 #ifndef PROPFILE_H_
 #define PROPFILE_H_
 
-#include "uio.h"
+#include "libs/uio.h"
 
 typedef void (*PROPERTY_HANDLER) (const char *, const char *);
 
-void PropFile_from_string (char *d, PROPERTY_HANDLER handler);
-void PropFile_from_file (uio_Stream *f, PROPERTY_HANDLER handler);
-void PropFile_from_filename (uio_DirHandle *path, const char *fname, PROPERTY_HANDLER handler);
+void PropFile_from_string (char *d, PROPERTY_HANDLER handler, const char *prefix);
+void PropFile_from_file (uio_Stream *f, PROPERTY_HANDLER handler, const char *prefix);
+void PropFile_from_filename (uio_DirHandle *path, const char *fname, PROPERTY_HANDLER handler, const char *prefix);
 
 #endif

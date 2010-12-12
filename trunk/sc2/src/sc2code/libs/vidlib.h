@@ -31,6 +31,8 @@ typedef enum
 
 typedef DWORD VIDEO_REF;
 
+extern BOOLEAN InstallVideoResType (void);
+
 extern BOOLEAN InitVideoPlayer (BOOLEAN UseCDROM);
 extern void UninitVideoPlayer (void);
 
