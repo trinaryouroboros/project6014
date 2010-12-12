@@ -178,7 +178,7 @@ case "$HOST_SYSTEM" in
 		LIB_vorbisfile_LDFLAGS="-L/usr/local/lib -lvorbisfile -lvorbis"
 		;;
 	MINGW32*|CYGWIN*|cegcc)
-		LIB_vorbisfile_CFLAGS="-I/usr/local/include"
+		LIB_vorbisfile_CFLAGS="-I/usr/include:/usr/local/include"
 		LIB_vorbisfile_LDFLAGS="-L/usr/local/lib -lvorbisfile -lvorbis -lm -logg"
 		;;
 	Darwin)
