@@ -55,128 +55,7 @@ res_ClearTables (void)
 	}
 }
 
-BOOLEAN
-res_Remove (const char *key)
-{
-	return CharHashTable_remove (map, key);
-}
-
 /* Type conversion routines. */
-static const char *
-bool2str (BOOLEAN b)
-{
-	return b ? "yes" : "no";
-}
-
-static const char *
-int2str (int i) {
-	char buf[20];
-	sprintf (buf, "%d", i);
-	return StringBank_AddOrFindString (bank, buf);
-}
-
-static int
-str2int (const char *s) {
-	return atoi(s);
-}
-
-static BOOLEAN
-str2bool (const char *s) {
-	if (!strcasecmp (s, "yes") ||
-	    !strcasecmp (s, "true") ||
-	    !strcasecmp (s, "1") )
-		return TRUE;
-	return FALSE;
-}
-
-BOOLEAN
-res_IsBoolean (const char *key)
-{
-	const char *d;
-	check_map_init ();
-
-	d = res_GetString (key);
-	if (!d) return 0;
-		
-	return !strcasecmp (d, "yes") ||
-	       !strcasecmp (d, "no") ||
-	       !strcasecmp (d, "true") ||
-	       !strcasecmp (d, "false") ||
-	       !strcasecmp (d, "0") ||
-	       !strcasecmp (d, "1") ||
-	       !strcasecmp (d, "");
-}
-
-BOOLEAN
-res_IsInteger (const char *key)
-{
-	const char *d;
-	check_map_init ();
-
-	d = res_GetString (key);
-	while (*d) {
-		if (!isdigit (*d))
-			return 0;
-		d++;
-	}
-	return 1;
-}
-
-const char *
-res_GetString (const char *key)
-{
-	check_map_init ();
-	return CharHashTable_find (map, key);
-}
-
-void
-res_PutString (const char *key, const char *value)
-{
-	check_map_init ();
-	
-	value = StringBank_AddOrFindString (bank, value);
-	if (!CharHashTable_add (map, key, (void *)value))
-	{
-		CharHashTable_remove (map, key);
-		CharHashTable_add (map, key, (void *)value);
-	}
-}
-
-int
-res_GetInteger (const char *key)
-{
-	check_map_init ();
-	return str2int (res_GetString (key));
-}
-
-void
-res_PutInteger (const char *key, int value)
-{
-	check_map_init ();
-	res_PutString (key, int2str(value));
-}
-
-BOOLEAN
-res_GetBoolean (const char *key)
-{
-	check_map_init ();
-	return str2bool (res_GetString (key));
-}
-
-void
-res_PutBoolean (const char *key, BOOLEAN value)
-{
-	check_map_init ();
-	res_PutString (key, bool2str(value));
-}
-
-BOOLEAN
-res_HasKey (const char *key)
-{
-	check_map_init ();
-	return (res_GetString (key) != NULL);
-}
-
 void
 res_LoadFile (uio_Stream *s)
 {
@@ -187,7 +66,7 @@ res_LoadFile (uio_Stream *s)
 		return;
 	}
 	
-	PropFile_from_file (s, res_PutString);
+	PropFile_from_file (s, res_PutString, NULL);
 }
 
 void
@@ -200,7 +79,7 @@ res_LoadFilename (uio_DirHandle *path, const char *fname)
 		return;
 	}
 	
-	PropFile_from_filename (path, fname, res_PutString);
+	PropFile_from_filename (path, fname, res_PutString, NULL);
 }
 
 void
