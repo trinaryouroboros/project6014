@@ -67,9 +67,9 @@ static void rebind_control (WIDGET_CONTROLENTRY *widget);
 static void clear_control (WIDGET_CONTROLENTRY *widget);
 
 #ifdef HAVE_OPENGL
-#define RES_OPTS 5
+#define RES_OPTS 5 // JMS_GFX was 4
 #else
-#define RES_OPTS 3
+#define RES_OPTS 3 // JMS_GFX was 2
 #endif
 
 #define MENU_COUNT          8

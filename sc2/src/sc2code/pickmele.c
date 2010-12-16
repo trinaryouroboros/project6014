@@ -453,7 +453,7 @@ DrawPickMeleeFrame (COUNT which_player)
 	oldContext = SetContext (SpaceContext);
 	s.frame = SetAbsFrameIndex (PickMeleeFrame, which_player);
 	s.origin.x = PICK_X_OFFS - 3 * RESOLUTION_FACTOR; // JMS_GFX
-	s.origin.y = PICK_Y_OFFS - 9 * RESOLUTION_FACTOR + ((1 - which_player) * PICK_SIDE_OFFS);
+	s.origin.y = PICK_Y_OFFS - 9 * RESOLUTION_FACTOR + ((1 - which_player) * PICK_SIDE_OFFS); // JMS_GFX
 	DrawStamp (&s);
 			// Draw the selection box to screen.
 	

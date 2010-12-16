@@ -148,24 +148,23 @@ DrawSISTitle (UNICODE *pStr)
 {
 	TEXT t;
 	CONTEXT OldContext;
-
+	RECT r;
+	
 	t.baseline.x = SIS_TITLE_WIDTH >> 1;
-	t.baseline.y = SIS_TITLE_HEIGHT - 2 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
+	t.baseline.y = SIS_TITLE_HEIGHT - 2 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1) * 2; // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
 
 	OldContext = SetContext (OffScreenContext);
-{
-RECT r;
-	r.corner.x = SIS_ORG_X + SIS_SCREEN_WIDTH - 57 * RESOLUTION_FACTOR + 1 * (RESOLUTION_FACTOR); // JMS_GFX
+
+	r.corner.x = SIS_ORG_X + SIS_SCREEN_WIDTH - 57 * RESOLUTION_FACTOR + 1 * RESOLUTION_FACTOR; // JMS_GFX
 	r.corner.y = SIS_ORG_Y - SIS_TITLE_HEIGHT;
 	r.extent.width = SIS_TITLE_WIDTH;
 	r.extent.height = SIS_TITLE_HEIGHT - 1 * RESOLUTION_FACTOR; // JMS_GFX
-SetContextFGFrame (Screen);
-SetContextClipRect (&r);
+	SetContextFGFrame (Screen);
+	SetContextClipRect (&r);
 	
-}
 	SetContextFont (TinyFont);
 
 	BatchGraphics ();
@@ -267,7 +266,7 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 				BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x1B), 0x33));
 	}
 
-	t.baseline.y = SIS_MESSAGE_HEIGHT - 2 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
+	t.baseline.y = SIS_MESSAGE_HEIGHT - 2 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1) * 2; // JMS_GFX
 	t.pStr = pStr;
 	t.CharCount = utf8StringCount(pStr);
 	SetContextFont (TinyFont);
@@ -442,7 +441,7 @@ DrawStatusMessage (const UNICODE *pStr)
 	}
 
 	t.baseline.x = STATUS_MESSAGE_WIDTH >> 1;
-	t.baseline.y = STATUS_MESSAGE_HEIGHT - 1 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1); // JMS_GFX
+	t.baseline.y = STATUS_MESSAGE_HEIGHT - 1 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
@@ -510,7 +509,7 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 
 		r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
 		r.corner.y = 20 * RESOLUTION_FACTOR; // JMS_GFX
-		r.extent.width = SHIP_NAME_WIDTH - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
+		r.extent.width = SHIP_NAME_WIDTH - (RESOLUTION_FACTOR - 1) * 2; // JMS_GFX
 		r.extent.height = SHIP_NAME_HEIGHT;
 
 		t.pStr = GLOBAL_SIS (ShipName);
@@ -858,7 +857,7 @@ GetGaugeRect (RECT *pRect, BOOLEAN IsCrewRect)
 {
 	pRect->extent.width = 24 * RESOLUTION_FACTOR; // JMS_GFX;
 	pRect->corner.x = (STATUS_WIDTH >> 1) - (pRect->extent.width >> 1);
-	pRect->extent.height = 5 * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1) * 1; // JMS_GFX;
+	pRect->extent.height = 5 * RESOLUTION_FACTOR + (RESOLUTION_FACTOR - 1); // JMS_GFX;
 	pRect->corner.y = IsCrewRect ? 117 * RESOLUTION_FACTOR : 38 * RESOLUTION_FACTOR; // JMS_GFX
 }
 

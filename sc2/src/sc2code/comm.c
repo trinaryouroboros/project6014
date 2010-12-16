@@ -205,7 +205,7 @@ add_text (int status, TEXT *pTextIn)
 
 		maxchars = pTextIn->CharCount;
 		locText = *pTextIn;
-		locText.baseline.x -= 8 + (RESOLUTION_FACTOR -1); // JMS_GFX
+		locText.baseline.x -= 8 + (RESOLUTION_FACTOR - 1); // JMS_GFX
 		locText.CharCount = (COUNT)~0;
 		locText.pStr = "*";
 		font_DrawText (&locText);
@@ -1368,8 +1368,8 @@ HailAlien (void)
 		SetContextFGFrame (Screen);
 		GetFrameRect (CommData.AlienFrame, &r);
 		r.extent.width = SIS_SCREEN_WIDTH;
-		CommWndRect.corner.x = SIS_ORG_X; // JMS_GFX
-		CommWndRect.corner.y = SIS_ORG_Y; // JMS_GFX
+		CommWndRect.corner.x = SIS_ORG_X; // JMS_GFX: Added these lines because of the 
+		CommWndRect.corner.y = SIS_ORG_Y; // changed init of CommWndRect in the beginning of comm.c
 		CommWndRect.extent = r.extent;
 		
 		SetTransitionSource (NULL);

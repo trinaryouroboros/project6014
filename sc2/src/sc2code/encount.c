@@ -571,7 +571,7 @@ UninitEncounter (void)
 								DrawStatusMessage ((UNICODE *)~0);
 								
 								ship_s.origin.x = scavenge_r.corner.x + 32 * RESOLUTION_FACTOR; // JMS_GFX
-								ship_s.origin.y = scavenge_r.corner.y + 56;
+								ship_s.origin.y = scavenge_r.corner.y + 56 * RESOLUTION_FACTOR; // JMS_GFX
 								ship_s.frame = IncFrameIndex (FragPtr->icons);
 								DrawStamp (&ship_s);
 								SetContextForeGroundColor (

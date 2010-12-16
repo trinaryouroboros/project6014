@@ -131,33 +131,39 @@ DrawSISFrame (void)
 		r.extent.height = SAFE_Y + 8 * RESOLUTION_FACTOR + 2; // JMS_GFX;
 		r.corner.x = SIS_ORG_X - 1; // JMS_GFX;
 		DrawFilledRectangle (&r);
+		
 		// The same for small blue box
 		r.corner.x = SIS_ORG_X + SIS_SCREEN_WIDTH - 1 - (57 * RESOLUTION_FACTOR); // JMS_GFX;
 		DrawFilledRectangle (&r);
+		
 		// Light grey horizontal line at the bottom of the screen, space window side
 		r.corner.x = 0;
 		r.corner.y = SCREEN_HEIGHT - 1;
 		r.extent.width = SAFE_X + SPACE_WIDTH - 1;
 		r.extent.height = 1;
 		DrawFilledRectangle (&r);
+		
 		// Light grey vertical line at the right side of space window
 		r.corner.x = SAFE_X + SPACE_WIDTH - 2;
 		r.corner.y = 0;
 		r.extent.width = 1;
 		r.extent.height = SCREEN_HEIGHT - 1;
 		DrawFilledRectangle (&r);
+		
 		//??
 		r.corner.x = SCREEN_WIDTH - 1;
 		r.corner.y = 0;
 		r.extent.width = 1;
 		r.extent.height = SAFE_Y + 139 * RESOLUTION_FACTOR; // JMS_GFX;
 		DrawFilledRectangle (&r);
+		
 		// Horizontal line at the bottom of the screen, menu window side
 		r.corner.x = SAFE_X + SPACE_WIDTH;
 		r.corner.y = SCREEN_HEIGHT - 1;
 		r.extent.width = SCREEN_WIDTH - r.corner.x;
 		r.extent.height = 1;
 		DrawFilledRectangle (&r);
+		
 		// Vertical line at the right side of the menu window
 		r.corner.x = SCREEN_WIDTH - 1;
 		r.corner.y = SAFE_Y + 140;
@@ -191,22 +197,25 @@ DrawSISFrame (void)
 		r.corner.x = SIS_ORG_X + (SIS_SCREEN_WIDTH - 69 * RESOLUTION_FACTOR);
 		r.extent.width = (SIS_ORG_X + SIS_SCREEN_WIDTH - 57 * RESOLUTION_FACTOR) - r.corner.x;
 		DrawFilledRectangle (&r);
-
+		//
 		r.corner.x = 0;
 		r.corner.y = 1;
 		r.extent.width = 1;
 		r.extent.height = (SCREEN_HEIGHT - 1) - r.corner.y;
 		DrawFilledRectangle (&r);
+		//
 		r.corner.x = SAFE_X + SPACE_WIDTH;
 		r.corner.y = 0;
 		r.extent.width = 1;
 		r.extent.height = SAFE_Y + 139 * RESOLUTION_FACTOR; // JMS_GFX;
 		DrawFilledRectangle (&r);
+		//
 		r.corner.x = SAFE_X + SPACE_WIDTH + 1;
 		r.corner.y = SAFE_Y + 139 * RESOLUTION_FACTOR; // JMS_GFX;
 		r.extent.width = STATUS_WIDTH - 2;
 		r.extent.height = 1;
 		DrawFilledRectangle (&r);
+		//
 		r.corner.x = SAFE_X + SPACE_WIDTH;
 		r.corner.y = SAFE_Y + 140 * RESOLUTION_FACTOR; // JMS_GFX;
 		r.extent.width = 1;

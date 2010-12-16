@@ -68,7 +68,7 @@ static UNICODE pm_fuel_str[128];
 static void
 DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 {
-#define PC_MENU_HEIGHT 8 * RESOLUTION_FACTOR // JMS_GFX
+#define PC_MENU_HEIGHT (8 * RESOLUTION_FACTOR) // JMS_GFX
 	BYTE pos;
 	COUNT i;
 	int num_items;

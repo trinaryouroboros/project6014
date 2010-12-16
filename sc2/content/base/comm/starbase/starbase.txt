@@ -37,8 +37,6 @@ the confusion blaster.
 Based on Melnorme technology, with a few additions of our own
 the blaster creates a stasis field around the enemy ship
 which will jam its controls momentarily.
-The shots also carry some momentum, so they will
-knock the target ship around upon impact.
 To get the most out of your weapons, use them in tandem
 approach your target, disable it with the confuser and let 'em have it!
 By then your batteries will be depleted, so... you run like hell.
@@ -193,7 +191,7 @@ Who do you need information on?
 The Ur-Quan Kzer-Za.
 
 #(UR_QUAN_INFO_SB)
-After the initial shock of losing Sa-Matra and facing the
+After the initial shock of losing the Sa-Matra and facing the
 combined attack of the new Alliance, both Ur-Quan races were left
 momentarily stupefied. We let them have it with blazing guns.
 The Kzer-Za snapped out of it first. Even with their numbers greatly
