@@ -534,7 +534,7 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 				NotPositional (), NULL, GAME_SOUND_PRIORITY);
 	}
 
-	s.origin.x = (11 + (6 * (crew_delta % NUM_CREW_COLS))) * RESOLUTION_FACTOR - (RESOLUTION_FACTOR-1)*2; // JMS_GFX
+	s.origin.x = (11 + (6 * (crew_delta % NUM_CREW_COLS))) * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1) * 2; // JMS_GFX
 	s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) * RESOLUTION_FACTOR; // JMS_GFX
 
 	OldContext = SetContext (RadarContext);
@@ -573,7 +573,7 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 	}
 
 	s.origin.x = RESOLUTION_FACTOR - 1; // JMS_GFX
-	s.origin.y = (RESOLUTION_FACTOR - 1) * 50 - (int)start_count;
+	s.origin.y = (RESOLUTION_FACTOR - 1) * 50 - (int)start_count; // JMS_GFX
 	if (!(start_count & 1))
 		s.frame = IncFrameIndex (s.frame);
 
@@ -585,7 +585,7 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		else
 			s.frame = DecFrameIndex (s.frame);
 		DrawStamp (&s);
-		s.origin.y-=1*RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.y -= 1 * RESOLUTION_FACTOR; // JMS_GFX
 	}
 	SetContext (OldContext);
 }

@@ -134,7 +134,7 @@ DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr)
 	t.CharCount = (COUNT)~0;
 
 	r.corner.x = t.baseline.x;
-	r.corner.y = t.baseline.y - 5 * RESOLUTION_FACTOR - 1 * (RESOLUTION_FACTOR - 1); // JMS_GFX
+	r.corner.y = t.baseline.y - 5 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1); // JMS_GFX
 	r.extent.width = 6 * MAX_CREW_DIGITS + 6 * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.height = 5 * RESOLUTION_FACTOR; // JMS_GFX
 
@@ -179,9 +179,9 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 			+ ((RDPtr->ship_info.ship_flags & GOOD_GUY) ?
 			GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
 	r.corner.x = CAPTAIN_XOFFS - 2 - (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
-	r.corner.y = y_offs - 4* RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y = y_offs - 4 * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.width = STATUS_WIDTH - CAPTAIN_XOFFS + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
-	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + (2 * RESOLUTION_FACTOR) + 2 * (RESOLUTION_FACTOR-1); // JMS_GFX
+	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + (2 * RESOLUTION_FACTOR) + 2 * (RESOLUTION_FACTOR - 1); // JMS_GFX
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	DrawFilledRectangle (&r);

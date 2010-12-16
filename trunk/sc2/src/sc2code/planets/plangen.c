@@ -93,7 +93,7 @@ extern void getpixelarray (void *map, int Bpp, FRAME FramePtr,
 #define M_DEG2RAD (M_TWOPI / 360.0)
 #endif
 
-// JMS_GFX: Change initialization to constant numbers since DIAMETER is now variably defined
+// JMS_GFX: Changed initialization to constant numbers since DIAMETER is now variably defined
 DWORD light_diff[150][150]; //DWORD light_diff[DIAMETER][DIAMETER];
 
 typedef struct 
@@ -101,7 +101,7 @@ typedef struct
 	POINT p[4];
 	DWORD m[4];
 } MAP3D_POINT;
-// JMS_GFX: Change initialization to constant numbers since DIAMETER is now variably defined
+// JMS_GFX: Changed initialization to constant numbers since DIAMETER is now variably defined
 MAP3D_POINT map_rotate[150][150];//MAP3D_POINT map_rotate[DIAMETER][DIAMETER];
 
 typedef struct

@@ -27,7 +27,7 @@ extern int resolutionFactor; // JMS_GFX
 
 #define SCREEN_WIDTH ScreenWidth
 #define SCREEN_HEIGHT ScreenHeight
-#define RESOLUTION_FACTOR resolutionFactor // JMS_GFX 
+#define RESOLUTION_FACTOR resolutionFactor // JMS_GFX
 
 #define SAFE_X 0
 #define SIS_ORG_X (7 * RESOLUTION_FACTOR + SAFE_X) // JMS_GFX

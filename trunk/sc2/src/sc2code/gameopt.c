@@ -272,7 +272,7 @@ DrawDescriptionString (MENU_STATE *pMS, COUNT which_string, COUNT state)
 		}		
 		
 		if(fonthelper)
-			lf.baseline.y = r.corner.y + r.extent.height - 1 - (RESOLUTION_FACTOR-1) * 2; // JMS_GFX
+			lf.baseline.y = r.corner.y + r.extent.height - 1 - (RESOLUTION_FACTOR - 1) * 2; // JMS_GFX
 		else
 			lf.baseline.y = r.corner.y + r.extent.height - 1; // JMS_GFX
 
