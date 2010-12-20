@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: - Added a special case for collecting the new Precursor ship energy blip.
+//			 - Tweaked hopping hatchling so it is invulnerable whilst inside its egg.
+//			 - Made Wackodemon explode upon dying with 50% chance, dealing damage to other critters and lander.
+
 #include "cons_res.h"
 #include "controls.h"
 #include "colors.h"
@@ -48,7 +52,7 @@
 #define PLANET_SIDE_RATE (ONE_SECOND / 35)
 
 
-FRAME LanderFrame[8];
+FRAME LanderFrame[9]; // JMS: Was 8, added one slot for wackodemon explosion.
 static SOUND LanderSounds;
 MUSIC_REF LanderMusic;
 #define NUM_ORBIT_THEMES 5
@@ -154,6 +158,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Radial Arachnid
 	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 0},
 			// Wackodemon
+#define WACKODEMON_INDEX 47 // If you change Wackodemon's location in this list, change this define also!
 	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 2},
 			// Crabby Octopus
 	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2},
@@ -173,6 +178,7 @@ extern PRIM_LINKS DisplayLinks;
 #define SHIELD_BIT (1 << 7)
 
 #define DEATH_EXPLOSION 0
+#define BIOCRITTER_EXPLOSION 4 // JMS: Chose 4 so it wouldn't mix up with EARTHQUAKE, LIGHTNING and LAVASPOT _DISASTERS.
 
 #define SURFACE_X SIS_ORG_X
 #define SURFACE_Y SIS_ORG_Y
@@ -315,6 +321,13 @@ object_animation (ELEMENT *ElementPtr)
 				if (++pMenuState->CurState >= EXPLOSION_LIFE)
 					pPrim->Object.Stamp.frame =
 							DecFrameIndex (pPrim->Object.Stamp.frame);
+			}
+			// JMS: Since Biocritter explosion doesn't use pMS->Curstate to keep track of which frame the explosion is in,
+			// we must limit the number of explosion frames with a constant number.
+			else if (ElementPtr->mass_points == BIOCRITTER_EXPLOSION)
+			{
+				if (frame_index >= 55)
+					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
 			}
 			else if (ElementPtr->mass_points == EARTHQUAKE_DISASTER)
 			{
@@ -670,8 +683,20 @@ CheckObjectCollision (COUNT index)
 					if (HIBYTE (pMenuState->delta_item) == 0
 							|| pPSD->InTransit)
 						break;
-
-					if (ElementPtr->state_flags & FINITE_LIFE)
+					
+					// JMS: This handles the contact of biocritter explosion with lander.
+					if (ElementPtr->mass_points == BIOCRITTER_EXPLOSION
+						&& ElementPtr->state_flags & FINITE_LIFE)
+					{	
+						if ((BYTE)TFB_Random () < (256 >> 2))
+							DeltaLanderCrew (-1, LANDER_INJURED); // No shield prevents explosion damage.
+						
+						UnlockElement (hElement); 
+						
+						continue;
+					}
+					
+					else if (ElementPtr->state_flags & FINITE_LIFE)
 					{
 						/* A natural disaster */
 						scan = ElementPtr->mass_points;
@@ -688,12 +713,12 @@ CheckObjectCollision (COUNT index)
 						continue;
 					}
 					else if (scan == ENERGY_SCAN)
-					{
+					{	
 						if (ElementPtr->mass_points == 1)
 						{
 							DWORD TimeIn;
 
-							// JMS: Finding the new Precursor ship and black orb. (Was "Ran into Spathi on Pluto".)
+							// JMS: Finding the new Precursor ship and black orb. (This if was "Ran into Spathi on Pluto".)
 							// Currently does nothing, but all kinds of nice crap can be added here.
 							TimeIn = GetTimeCounter ();
 							which_node = 8;
@@ -748,7 +773,7 @@ CheckObjectCollision (COUNT index)
 						UnlockElement (hElement);
 						continue;
 					}
-
+					
 					NumRetrieved = ElementPtr->mass_points;
 				}
 				else if (ElementPtr->state_flags & FINITE_LIFE)
@@ -758,7 +783,7 @@ CheckObjectCollision (COUNT index)
 					continue;
 				}
 				else
-				{
+				{					
 					BYTE value;
 
 					if (scan == ENERGY_SCAN)
@@ -793,11 +818,54 @@ CheckObjectCollision (COUNT index)
 							
 							else if (--ElementPtr->hit_points == 0)
 							{
-								ElementPtr->mass_points = value;
-								DisplayArray[
-										ElementPtr->PrimIndex
-										].Object.Stamp.frame =
-										pSolarSysState->PlanetSideFrame[0];
+								// JMS: Wackodemon may explode when killed!!!
+								if (WhichCreature == WACKODEMON_INDEX)
+								{
+									// JMS: 50% chance of exploding... 
+									if (TFB_Random() % 2)
+									{
+										HELEMENT hExplosionElement;
+									
+										hExplosionElement = AllocElement ();
+										if (hExplosionElement)
+										{
+											ELEMENT *ExplosionElementPtr;
+										
+											LockElement (hExplosionElement, &ExplosionElementPtr);
+										
+											ExplosionElementPtr->mass_points = BIOCRITTER_EXPLOSION;
+											ExplosionElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
+											ExplosionElementPtr->next.location = ElementPtr->next.location;
+											ExplosionElementPtr->preprocess_func = object_animation;
+											ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
+											ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
+										
+											SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
+											DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
+											SetAbsFrameIndex (LanderFrame[8], 46); // JMS: Must use separate LanderFrame instead of LanderFrame[0]
+																				   // Otherwise the game thinks this explosion belongs to lander
+																				   // itself, and it won't collide with lander at all (->no damage).
+											UnlockElement (hExplosionElement);
+											InsertElement (hExplosionElement, GetHeadElement ());
+										
+											PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED), NotPositional (), 
+												   NULL, GAME_SOUND_PRIORITY + 1);
+										
+											ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the critter frame
+											ElementPtr->mass_points = 0;			 // JMS: Make sure critter/explosion doesn't give biodata.
+										}
+									}
+									else // JMS: ...Whew! It didn't blow up this time.
+									{
+										ElementPtr->mass_points = value;
+										DisplayArray[ElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[0];
+									}
+								}
+								else
+								{
+									ElementPtr->mass_points = value;
+									DisplayArray[ElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[0];
+								}
 							}
 							else if (CreatureData[
 									ElementPtr->mass_points
@@ -1094,7 +1162,7 @@ AddGroundDisaster (COUNT which_disaster)
 
 		if (which_disaster == EARTHQUAKE_DISASTER)
 		{
-			SetPrimType (pPrim, STAMP_PRIM); // JMS: was STAMPFILL_PRIM
+			SetPrimType (pPrim, STAMP_PRIM); // JMS: was STAMPFILL_PRIM (this rendered it totally white).
 			pPrim->Object.Stamp.frame = LanderFrame[1];
 			GroundDisasterElementPtr->turn_wait = MAKE_BYTE (2, 2);
 		}
@@ -1747,26 +1815,20 @@ SetVelocityComponents (
 
 					ExplosionElementPtr->mass_points = DEATH_EXPLOSION;
 					ExplosionElementPtr->state_flags = FINITE_LIFE | GOOD_GUY;
-					ExplosionElementPtr->next.location =
-							pSolarSysState->MenuState.first_item;
+					ExplosionElementPtr->next.location = pSolarSysState->MenuState.first_item;
 					ExplosionElementPtr->preprocess_func = object_animation;
 					ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
-					ExplosionElementPtr->life_span =
-							EXPLOSION_LIFE
-							* (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
+					ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
 
 					SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
 					DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
-							SetAbsFrameIndex (
-							LanderFrame[0], 46
-							);
+							SetAbsFrameIndex (LanderFrame[0], 46);
 
 					UnlockElement (hExplosionElement);
 
 					InsertElement (hExplosionElement, GetHeadElement ());
 
-					PlaySound (SetAbsSoundIndex (
-							LanderSounds, LANDER_DESTROYED
+					PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED
 							), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
 				}
 			}
@@ -1930,24 +1992,17 @@ LoadLanderData (void)
 {
 	if (LanderFrame[0] == 0)
 	{
-		LanderFrame[0] =
-				CaptureDrawable (LoadGraphic (LANDER_MASK_PMAP_ANIM));
-		LanderFrame[1] =
-				CaptureDrawable (LoadGraphic (QUAKE_MASK_PMAP_ANIM));
-		LanderFrame[2] =
-				CaptureDrawable (LoadGraphic (LIGHTNING_MASK_ANIM));
-		LanderFrame[3] =
-				CaptureDrawable (LoadGraphic (LAVA_MASK_PMAP_ANIM));
+		LanderFrame[0] = CaptureDrawable (LoadGraphic (LANDER_MASK_PMAP_ANIM));
+		LanderFrame[1] = CaptureDrawable (LoadGraphic (QUAKE_MASK_PMAP_ANIM));
+		LanderFrame[2] = CaptureDrawable (LoadGraphic (LIGHTNING_MASK_ANIM));
+		LanderFrame[3] = CaptureDrawable (LoadGraphic (LAVA_MASK_PMAP_ANIM));
 		LanderFrame[4] = CaptureDrawable (LoadGraphic (LANDER_SHIELD_MASK_ANIM));
-		LanderFrame[5] =
-				CaptureDrawable (LoadGraphic (LANDER_LAUNCH_MASK_PMAP_ANIM));
-		LanderFrame[6] =
-				CaptureDrawable (LoadGraphic (LANDER_RETURN_MASK_PMAP_ANIM));
+		LanderFrame[5] = CaptureDrawable (LoadGraphic (LANDER_LAUNCH_MASK_PMAP_ANIM));
+		LanderFrame[6] = CaptureDrawable (LoadGraphic (LANDER_RETURN_MASK_PMAP_ANIM));
 		LanderSounds = CaptureSound (LoadSound (LANDER_SOUNDS));
-
-		LanderFrame[7] =
-				CaptureDrawable (LoadGraphic (ORBIT_VIEW_ANIM));
-
+		LanderFrame[7] = CaptureDrawable (LoadGraphic (ORBIT_VIEW_ANIM));
+		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDER_MASK_PMAP_ANIM)); // JMS: Added this for Wackodemon explosion.
+		
 		{
 			COUNT i;
 
