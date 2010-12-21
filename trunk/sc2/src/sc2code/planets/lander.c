@@ -18,7 +18,9 @@
 
 // JMS 2010: - Added a special case for collecting the new Precursor ship energy blip.
 //			 - Tweaked hopping hatchling so it is invulnerable whilst inside its egg.
-//			 - Made Wackodemon explode upon dying with 50% chance, dealing damage to other critters and lander.
+//			 - Made Wackodemon explode upon dying with a certain chance, dealing damage to other critters and lander.
+//			 - Increased Wackodemon biovalue since its more hazardous to hunt now.
+//			 - Created a new function which enables the biocritters to shoot projectiles. Quartzerback critter uses this function.
 
 #include "cons_res.h"
 #include "controls.h"
@@ -52,7 +54,7 @@
 #define PLANET_SIDE_RATE (ONE_SECOND / 35)
 
 
-FRAME LanderFrame[9]; // JMS: Was 8, added one slot for wackodemon explosion.
+FRAME LanderFrame[9]; // JMS: Was 8, added one slot for wackodemon explosion frames.
 static SOUND LanderSounds;
 MUSIC_REF LanderMusic;
 #define NUM_ORBIT_THEMES 5
@@ -136,6 +138,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Electroptera
 	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 2},
 			// Quartzerback
+#define QUARTZERBACK_INDEX 36 // If you change Quartzerback's location in this list, change this define also!	
 	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 2},
 			// Tuberus Humungus
 	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 2},
@@ -156,9 +159,11 @@ const LIFEFORM_DESC CreatureData[] =
 			// Dumpy Dweejus
 	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1},
 			// Radial Arachnid
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 0},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (7, 2), 0},
 			// Wackodemon
 #define WACKODEMON_INDEX 47 // If you change Wackodemon's location in this list, change this define also!
+#define DEMON_EXPLOSION_NUMERATOR 3		// These two define the chance at which the wackodemon explodes. (Numer./denom.)
+#define DEMON_EXPLOSION_DENOMINATOR 5	//
 	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 2},
 			// Crabby Octopus
 	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2},
@@ -272,6 +277,48 @@ RepairTopography (ELEMENT *ElementPtr)
 }
 
 static HELEMENT AddGroundDisaster (COUNT which_disaster);
+
+// JMS: This is a new function, which creates a biocritter's shot.
+static void
+AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
+{
+	HELEMENT hWeaponElement;
+	
+	hWeaponElement = AllocElement ();
+	if (hWeaponElement)
+	{
+		ELEMENT *WeaponElementPtr;
+		COUNT shotFrameIndex;
+		
+		// JMS: Get the shot's PNG frame from its angle. Constrain the frame number to 31 since for some reason this crap
+		// went to 32 with this kinda setup, but sometimes went to 15 (too little) if I put a "- 1" there.
+		if ((shotFrameIndex = ANGLE_TO_FACING (NORMALIZE_ANGLE(angle)) + ANGLE_TO_FACING (FULL_CIRCLE)) > 31)
+			shotFrameIndex = 31;
+			
+		LockElement (hWeaponElement, &WeaponElementPtr);
+		
+		WeaponElementPtr->mass_points = BIOCRITTER_EXPLOSION;
+		WeaponElementPtr->life_span = 12;
+		WeaponElementPtr->state_flags = FINITE_LIFE | BAD_GUY; // JMS: Lander's own shots have GOOD_GUY. Baddies have BAD_GUY obviously.
+		WeaponElementPtr->next.location = CritterElementPtr->next.location;
+		
+		SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
+		
+		// JMS: Let's use LanderFrame[8] instead of [0] so the game doesn't think this shot belongs to lander (which uses LanderFrame[0]).
+		DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame =
+			SetAbsFrameIndex (LanderFrame[8], shotFrameIndex); 
+		
+		SetVelocityComponents (&WeaponElementPtr->velocity, 
+							   COSINE (angle, WORLD_TO_VELOCITY (2 * 3)) + speed,
+							   SINE   (angle, WORLD_TO_VELOCITY (2 * 3)) + speed);
+		
+		UnlockElement (hWeaponElement);
+		InsertElement (hWeaponElement, GetHeadElement ());
+		
+		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_SHOOTS), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+		
+	}
+}
 
 void
 object_animation (ELEMENT *ElementPtr)
@@ -389,26 +436,29 @@ object_animation (ELEMENT *ElementPtr)
 
 			index = ElementPtr->mass_points & ~CREATURE_AWARE;
 			speed = CreatureData[index].Attributes & SPEED_MASK;
+			
 			if (speed)
 			{
 				SIZE dx, dy;
 				COUNT old_angle;
 
-				dx = pSolarSysState->MenuState.first_item.x
-						- ElementPtr->next.location.x;
+				dx = pSolarSysState->MenuState.first_item.x - ElementPtr->next.location.x;
+
 				if (dx < 0 && dx < -(MAP_WIDTH << (MAG_SHIFT - 1)))
 					dx += MAP_WIDTH << MAG_SHIFT;
 				else if (dx > (MAP_WIDTH << (MAG_SHIFT - 1)))
 					dx -= MAP_WIDTH << MAG_SHIFT;
-				dy = pSolarSysState->MenuState.first_item.y
-						- ElementPtr->next.location.y;
-				angle = ARCTAN (dx, dy);
+				
+				dy = pSolarSysState->MenuState.first_item.y - ElementPtr->next.location.y;
+				angle = ARCTAN (dx, dy); // At this point, the critter heads straight towards the lander.
+				
 				if (dx < 0)
 					dx = -dx;
 				if (dy < 0)
 					dy = -dy;
 
-				if (dx >= SURFACE_WIDTH || dy >= SURFACE_WIDTH
+				if (dx >= SURFACE_WIDTH 
+						|| dy >= SURFACE_WIDTH
 						|| dx * dx + dy * dy >= SURFACE_WIDTH * SURFACE_WIDTH)
 					ElementPtr->mass_points &= ~CREATURE_AWARE;
 				else if (!(ElementPtr->mass_points & CREATURE_AWARE))
@@ -435,12 +485,11 @@ object_animation (ELEMENT *ElementPtr)
 					}
 				}
 
-				if (ElementPtr->next.location.y == 0
-						|| ElementPtr->next.location.y ==
-						(MAP_HEIGHT << MAG_SHIFT) - 1)
+				if (ElementPtr->next.location.y == 0 || ElementPtr->next.location.y == (MAP_HEIGHT << MAG_SHIFT) - 1)
 					ElementPtr->thrust_wait = 0;
 
 				old_angle = GetVelocityTravelAngle (&ElementPtr->velocity);
+				
 				if (ElementPtr->thrust_wait)
 				{
 					--ElementPtr->thrust_wait;
@@ -466,12 +515,11 @@ object_animation (ELEMENT *ElementPtr)
 					{
 						if (angle & (HALF_CIRCLE - 1))
 							angle = HALF_CIRCLE - angle;
-						else if (old_angle == QUADRANT
-								|| old_angle == (FULL_CIRCLE - QUADRANT))
+						else if (old_angle == QUADRANT || old_angle == (FULL_CIRCLE - QUADRANT))
 							angle = old_angle;
 						else
-							angle = (((COUNT)TFB_Random () & 1)
-										* HALF_CIRCLE) - QUADRANT;
+							angle = (((COUNT)TFB_Random () & 1) * HALF_CIRCLE) - QUADRANT;
+						
 						ElementPtr->thrust_wait = 5;
 					}
 					angle = NORMALIZE_ANGLE (angle + HALF_CIRCLE);
@@ -490,8 +538,18 @@ object_animation (ELEMENT *ElementPtr)
 						break;
 				}
 
-				SetVelocityComponents (&ElementPtr->velocity,
-						COSINE (angle, speed), SINE (angle, speed));
+				SetVelocityComponents (&ElementPtr->velocity, COSINE (angle, speed), SINE (angle, speed));
+				
+				// JMS: Quartzerback will shoot if it is aware of the lander and near enough.
+#define MAX_ENEMYSHOT_DISTANCE (100 * RESOLUTION_FACTOR) // JMS
+				if (index == QUARTZERBACK_INDEX
+					&& (ElementPtr->mass_points & CREATURE_AWARE)
+					&& (dx <= MAX_ENEMYSHOT_DISTANCE 
+					 && dy <= MAX_ENEMYSHOT_DISTANCE
+					 && dx * dx + dy * dy <= MAX_ENEMYSHOT_DISTANCE * MAX_ENEMYSHOT_DISTANCE))
+				{
+					AddEnemyShot(ElementPtr, angle, speed);
+				}
 			}
 		}
 	}
@@ -756,18 +814,12 @@ CheckObjectCollision (COUNT index)
 						{
 							0, 6, 13, 26
 						};
-						int creatureIndex = ElementPtr->mass_points
-								& ~CREATURE_AWARE;
-						int dangerLevel =
-								(CreatureData[creatureIndex].Attributes &
-								DANGER_MASK) >> DANGER_SHIFT;
+						int creatureIndex = ElementPtr->mass_points & ~CREATURE_AWARE;
+						int dangerLevel = (CreatureData[creatureIndex].Attributes & DANGER_MASK) >> DANGER_SHIFT;
 
-						if (((COUNT)TFB_Random () & 127) <
-								danger_vals[dangerLevel])
+						if (((COUNT)TFB_Random () & 127) < danger_vals[dangerLevel])
 						{
-							PlaySound (SetAbsSoundIndex (
-									LanderSounds, BIOLOGICAL_DISASTER
-									), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+							PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 							DeltaLanderCrew (-1, BIOLOGICAL_DISASTER);
 						}
 						UnlockElement (hElement);
@@ -821,8 +873,8 @@ CheckObjectCollision (COUNT index)
 								// JMS: Wackodemon may explode when killed!!!
 								if (WhichCreature == WACKODEMON_INDEX)
 								{
-									// JMS: 50% chance of exploding... 
-									if (TFB_Random() % 2)
+									// JMS: Chance of exploding is drawn here from random number. 
+									if ((TFB_Random() % DEMON_EXPLOSION_DENOMINATOR) < DEMON_EXPLOSION_NUMERATOR)
 									{
 										HELEMENT hExplosionElement;
 									
@@ -842,7 +894,7 @@ CheckObjectCollision (COUNT index)
 										
 											SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
 											DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
-											SetAbsFrameIndex (LanderFrame[8], 46); // JMS: Must use separate LanderFrame instead of LanderFrame[0]
+											SetAbsFrameIndex (LanderFrame[8], 46); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
 																				   // Otherwise the game thinks this explosion belongs to lander
 																				   // itself, and it won't collide with lander at all (->no damage).
 											UnlockElement (hExplosionElement);
@@ -2001,8 +2053,9 @@ LoadLanderData (void)
 		LanderFrame[6] = CaptureDrawable (LoadGraphic (LANDER_RETURN_MASK_PMAP_ANIM));
 		LanderSounds = CaptureSound (LoadSound (LANDER_SOUNDS));
 		LanderFrame[7] = CaptureDrawable (LoadGraphic (ORBIT_VIEW_ANIM));
-		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDER_MASK_PMAP_ANIM)); // JMS: Added this for Wackodemon explosion.
-		
+		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDER_MASK_PMAP_ANIM)); // JMS: Added this for Wackodemon explosion and biocritters' shots.
+																				// XXX We should change the LANDER_MASK_PMAP_ANIM to something else
+																				// once we get the new graphics done.
 		{
 			COUNT i;
 
