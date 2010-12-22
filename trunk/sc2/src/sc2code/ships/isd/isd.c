@@ -66,7 +66,7 @@
 static RACE_DESC isd_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | LIGHT_POINT_DEFENSE | SEEKING_SPECIAL,
+		FIRES_FORE | SEEKING_SPECIAL,
 		30, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -557,7 +557,7 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 				&& StarShipPtr->RaceDescPtr->ship_info.crew_level >
 				(StarShipPtr->RaceDescPtr->ship_info.max_crew >> 2)
 				&& !(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
-					& (SHIELD_DEFENSE | LIGHT_POINT_DEFENSE | HEAVY_POINT_DEFENSE))
+					& (LIGHT_POINT_DEFENSE | HEAVY_POINT_DEFENSE))
 				&& (StarShipPtr->RaceDescPtr->characteristics.special_wait < 6
 				|| (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control) <= SLOW_SHIP
 				&& !(EnemyStarShipPtr->cur_status_flags & SHIP_BEYOND_MAX_SPEED))
@@ -610,12 +610,10 @@ initialize_autoturret (ELEMENT *ElementPtr)
 				delta_y = -delta_y;
 
 			// Range check.
-			if (delta_x <= AUTOTURRET_RANGE &&
-					delta_y <= AUTOTURRET_RANGE &&
-					(dist =
-					(long)delta_x * delta_x
-					+ (long)delta_y * delta_y) <=
-					(long)AUTOTURRET_RANGE * AUTOTURRET_RANGE)
+			if (delta_x <= AUTOTURRET_RANGE
+				&& delta_y <= AUTOTURRET_RANGE
+				&& (dist = (long)delta_x * delta_x + (long)delta_y * delta_y)
+				<= (long)AUTOTURRET_RANGE * AUTOTURRET_RANGE)
 			{
 				// The enemy ship is the highest priority target.
 				if (ObjectPtr->state_flags & PLAYER_SHIP)
@@ -624,7 +622,7 @@ initialize_autoturret (ELEMENT *ElementPtr)
 					best_dist = 0;
 					weakest = 0;
 				}
-				// Otherwise fire on an enemy projectile. Lower hitpoints and closer proximity is preferable.
+				// Otherwise target an enemy projectile. Lower hitpoints and closer proximity are preferable.
 				else if (ObjectPtr->hit_points < weakest
 					|| (ObjectPtr->hit_points == weakest
 					&& dist < best_dist))
