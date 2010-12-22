@@ -25,12 +25,12 @@
 #include "shipcont.h"
 #include "libs/inplib.h"
 #include "libs/mathlib.h"
+#include "assert.h"
 
-
-#define NUM_HISTORY_ITEMS 9
-#define NUM_EVENT_ITEMS 8
-#define NUM_ALIEN_RACE_ITEMS 16
-#define NUM_TECH_ITEMS 13
+#define NUM_HISTORY_ITEMS 0
+#define NUM_EVENT_ITEMS 1
+#define NUM_ALIEN_RACE_ITEMS 0
+#define NUM_TECH_ITEMS 0
 
 static NUMBER_SPEECH_DESC melnorme_numbers_english;
 
@@ -281,36 +281,59 @@ BuyInfoMenu (RESPONSE_REF R)
 #define INFO_COST 75
 	needed_credit = INFO_COST;
 	
-	if (PLAYER_SAID (R, buy_info))
-	{
-		NPCPhrase (BUY_INFO_INTRO);
-	}
 	if (PLAYER_SAID (R, buy_current_events))
 	{
+		BYTE stack = GET_GAME_STATE (MELNORME_EVENTS_INFO_STACK);
+		assert (stack < NUM_EVENT_ITEMS);
 		if ((int)credit >= (int)needed_credit)
 		{
+			/* TODO: If/when we add more current event info for sale, factor out
+			 * a switch on stack here. */
 			NPCPhrase (OK_BUY_EVENT_1);
-			DeltaCredit (-needed_credit);
+			SET_GAME_STATE (MELNORME_EVENTS_INFO_STACK, stack+1);
 		}
-		else
-		{
-			DeltaCredit (-needed_credit);
-		}
+		DeltaCredit (-needed_credit);
 	}
 	else if (PLAYER_SAID (R, buy_alien_races))
 	{
-		NPCPhrase (OK_BUY_ALIEN_RACE_1);
-		NPCPhrase (OK_NO_TRADE_NOW_BYE);
+		BYTE stack = GET_GAME_STATE (MELNORME_ALIEN_INFO_STACK);
+		assert(stack < NUM_ALIEN_RACE_ITEMS);
+		if ((int)credit >= (int)needed_credit)
+		{
+			NPCPhrase (OK_BUY_ALIEN_RACE_1);
+			SET_GAME_STATE (MELNORME_ALIEN_INFO_STACK, stack+1);
+		}
+		DeltaCredit (-needed_credit);
 	}
 	else if (PLAYER_SAID (R, buy_history))
 	{
-		NPCPhrase (OK_BUY_HISTORY_1);
-		NPCPhrase (OK_NO_TRADE_NOW_BYE);
+		BYTE stack = GET_GAME_STATE (MELNORME_HISTORY_INFO_STACK);
+		assert(stack < NUM_HISTORY_ITEMS);
+		if ((int)credit >= (int)needed_credit)
+		{
+			NPCPhrase (OK_BUY_HISTORY_1);
+			SET_GAME_STATE (MELNORME_HISTORY_INFO_STACK, stack+1);
+		}
+		DeltaCredit (-needed_credit);
+	}
+	else if (PLAYER_SAID (R, buy_info))
+	{
+		if (GET_GAME_STATE (MELNORME_INFO_PROCEDURE))
+			NPCPhrase (OK_BUY_INFO);
+		else
+		{
+			NPCPhrase (BUY_INFO_INTRO);
+			SET_GAME_STATE (MELNORME_INFO_PROCEDURE, 1);
+		}
 	}
 
-	Response (buy_current_events, BuyInfoMenu);
-	Response (buy_alien_races, BuyInfoMenu);
-	Response (buy_history, BuyInfoMenu);
+	if (GET_GAME_STATE (MELNORME_EVENTS_INFO_STACK) < NUM_EVENT_ITEMS)
+		Response (buy_current_events, BuyInfoMenu);
+	if (GET_GAME_STATE (MELNORME_ALIEN_INFO_STACK) < NUM_ALIEN_RACE_ITEMS)
+		Response (buy_alien_races, BuyInfoMenu);
+	if (GET_GAME_STATE (MELNORME_HISTORY_INFO_STACK) < NUM_HISTORY_ITEMS)
+		Response (buy_history, BuyInfoMenu);
+
 	Response (done_buying_info, PurchaseMenu);
 }
 
@@ -461,7 +484,12 @@ PurchaseMenu (RESPONSE_REF R)
 		NPCPhrase (WHAT_TO_BUY);
 	//}
 	
-	Response (buy_info, BuyInfoMenu);
+	if (GET_GAME_STATE (MELNORME_EVENTS_INFO_STACK) < NUM_EVENT_ITEMS ||
+			GET_GAME_STATE (MELNORME_ALIEN_INFO_STACK) < NUM_ALIEN_RACE_ITEMS ||
+			GET_GAME_STATE (MELNORME_HISTORY_INFO_STACK) < NUM_HISTORY_ITEMS)
+	{
+		Response (buy_info, BuyInfoMenu);
+	}
 
 	if (GLOBAL_SIS (FuelOnBoard) < capacity)
 		Response (buy_fuel, BuyFuelMenu);
