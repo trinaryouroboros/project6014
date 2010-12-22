@@ -18,7 +18,7 @@
 
 // Shiver: Added this part to help MSVC compile.
 #ifdef _MSC_VER
-#include <WSPiApi.h>
+#include <wspiapi.h>
 #endif
 
 #ifndef _WSPIAPIWRAP_H

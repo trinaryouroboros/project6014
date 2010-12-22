@@ -44,7 +44,7 @@
 static RACE_DESC utwig_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | SHIELD_DEFENSE,
+		FIRES_FORE | SHIELD_DEFENSE | LIGHT_POINT_DEFENSE,
 		22, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY >> 1, MAX_ENERGY,
