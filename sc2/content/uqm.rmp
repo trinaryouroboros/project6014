@@ -195,6 +195,7 @@ graphics.fontgrad = GFXRES:base/fonts/fontgrad.ani
 graphics.hyperstr = GFXRES:base/nav/hyperstr.ani
 graphics.ip_orzspaceportal = GFXRES:base/nav/ip_orzspaceportal.ani
 graphics.ip_sun = GFXRES:base/nav/ip_sun.ani
+graphics.landenemy = GFXRES:base/lander/enemy.ani
 graphics.lander = GFXRES:base/lander/lander.ani
 graphics.landfeff = GFXRES:base/lander/fonteffect.ani
 graphics.launch = GFXRES:base/lander/launch.ani

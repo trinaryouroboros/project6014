@@ -209,6 +209,7 @@ ORBPLAN_MASK_PMAP_ANIM,graphics.orbplan,sc2code/igfxres.h,GFXRES,base/nav/orbpla
 SUN_MASK_PMAP_ANIM,graphics.ip_sun,sc2code/igfxres.h,GFXRES,base/nav/ip_sun.ani
 ORZSPACEPORTAL_MASK_PMAP_ANIM,graphics.ip_orzspaceportal,sc2code/igfxres.h,GFXRES,base/nav/ip_orzspaceportal.ani
 LANDER_MASK_PMAP_ANIM,graphics.lander,sc2code/igfxres.h,GFXRES,base/lander/lander.ani
+LANDENEMY_MASK_PMAP_ANIM,graphics.landenemy,sc2code/igfxres.h,GFXRES,base/lander/enemy.ani
 QUAKE_MASK_PMAP_ANIM,graphics.quake,sc2code/igfxres.h,GFXRES,base/lander/hazard/quake.ani
 LIGHTNING_MASK_ANIM,graphics.lightnin,sc2code/igfxres.h,GFXRES,base/lander/lightning.ani
 LAVA_MASK_PMAP_ANIM,graphics.lavaspot,sc2code/igfxres.h,GFXRES,base/lander/hazard/lavaspot.ani

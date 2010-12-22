@@ -290,10 +290,10 @@ AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 		ELEMENT *WeaponElementPtr;
 		COUNT shotFrameIndex;
 		
-		// JMS: Get the shot's PNG frame from its angle. Constrain the frame number to 31 since for some reason this crap
-		// went to 32 with this kinda setup, but sometimes went to 15 (too little) if I put a "- 1" there.
-		if ((shotFrameIndex = ANGLE_TO_FACING (NORMALIZE_ANGLE(angle)) + ANGLE_TO_FACING (FULL_CIRCLE)) > 31)
-			shotFrameIndex = 31;
+		// JMS: Get the shot's PNG frame from its angle. Constrain the frame number to 15 since for some reason this crap
+		// went to 16 with this kinda setup, but sometimes went to -1 if I subtracted 1 from the result.
+		if ((shotFrameIndex = ANGLE_TO_FACING (NORMALIZE_ANGLE(angle))) > 15)
+			shotFrameIndex = 15;
 			
 		LockElement (hWeaponElement, &WeaponElementPtr);
 		
@@ -373,7 +373,7 @@ object_animation (ELEMENT *ElementPtr)
 			// we must limit the number of explosion frames with a constant number.
 			else if (ElementPtr->mass_points == BIOCRITTER_EXPLOSION)
 			{
-				if (frame_index >= 55)
+				if (frame_index >= 26)
 					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
 			}
 			else if (ElementPtr->mass_points == EARTHQUAKE_DISASTER)
@@ -894,7 +894,7 @@ CheckObjectCollision (COUNT index)
 										
 											SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
 											DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
-											SetAbsFrameIndex (LanderFrame[8], 46); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
+											SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
 																				   // Otherwise the game thinks this explosion belongs to lander
 																				   // itself, and it won't collide with lander at all (->no damage).
 											UnlockElement (hExplosionElement);
@@ -2053,9 +2053,8 @@ LoadLanderData (void)
 		LanderFrame[6] = CaptureDrawable (LoadGraphic (LANDER_RETURN_MASK_PMAP_ANIM));
 		LanderSounds = CaptureSound (LoadSound (LANDER_SOUNDS));
 		LanderFrame[7] = CaptureDrawable (LoadGraphic (ORBIT_VIEW_ANIM));
-		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDER_MASK_PMAP_ANIM)); // JMS: Added this for Wackodemon explosion and biocritters' shots.
-																				// XXX We should change the LANDER_MASK_PMAP_ANIM to something else
-																				// once we get the new graphics done.
+		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDENEMY_MASK_PMAP_ANIM)); // JMS: Added this for Wackodemon explosion and biocritters' shots.
+		
 		{
 			COUNT i;
 

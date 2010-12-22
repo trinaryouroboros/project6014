@@ -29,6 +29,7 @@
 #define FONTGRAD_PMAP_ANIM "graphics.fontgrad"
 #define HYPERSTARS_MASK_PMAP_ANIM "graphics.hyperstr"
 #define IPBKGND_MASK_PMAP_ANIM "graphics.obbkgnd"
+#define LANDENEMY_MASK_PMAP_ANIM "graphics.landenemy"
 #define LANDER_FONTEFF_PMAP_ANIM "graphics.landfeff"
 #define LANDER_LAUNCH_MASK_PMAP_ANIM "graphics.launch"
 #define LANDER_MASK_PMAP_ANIM "graphics.lander"
