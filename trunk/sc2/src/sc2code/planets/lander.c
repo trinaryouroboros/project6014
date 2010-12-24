@@ -21,6 +21,7 @@
 //			 - Made Wackodemon explode upon dying with a certain chance, dealing damage to other critters and lander.
 //			 - Increased Wackodemon biovalue since its more hazardous to hunt now.
 //			 - Created a new function which enables the biocritters to shoot projectiles. Quartzerback critter uses this function.
+//			 - Dumpy Dweejus divides into smaller creatures when "killed".
 
 #include "cons_res.h"
 #include "controls.h"
@@ -154,7 +155,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Vanishing Vermin
 	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 5},
 			// Tripazoid Tumbler
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 2},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 6), 2},
 			// Dumpy Dweejus
 #define DUMPYDWEEJUS_INDEX 45 // If you change Dumpy Dweejus's location in this list, change this define also!
 #define NUM_OF_SMALL_DUMPYDWEEJUSES 3 // How many small copies of itself the dweejus produces when "dying".
@@ -906,10 +907,10 @@ CheckObjectCollision (COUNT index)
 											// This ensures the demon isn't resurrected when visiting the planet next time.
 											temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
 											pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-												(1L << temp_which_node);
-											pSolarSysState->CurNode = (COUNT)~0;
-											(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
-											SET_GAME_STATE (PLANETARY_CHANGE, 1);
+												(1L << temp_which_node); // Mark this bio-blip's state as "collected".
+											pSolarSysState->CurNode = (COUNT)~0; // GenerateLifeForms will update the states of ALL bio-blips when run.
+											(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE)); // Re-run GenerateLifeForms so the changed state takes effect
+											SET_GAME_STATE (PLANETARY_CHANGE, 1); // Save the changes to the file containing the states of all lifeforms.
 										}
 									}
 									else // JMS: ...Whew! It didn't blow up this time.
