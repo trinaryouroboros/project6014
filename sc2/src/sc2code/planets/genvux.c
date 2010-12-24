@@ -209,11 +209,13 @@ GenerateVUX (BYTE control)
 						pSolarSysState->SysInfo.PlanetInfo.CurType = 14;
 					else /* if (i < 12) */
 						pSolarSysState->SysInfo.PlanetInfo.CurType = 18;
+					
 					if (i >= pSolarSysState->CurNode
 							&& !(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN]
 							& (1L << i)))
 						break;
 				} while (++i < 12);
+				
 				pSolarSysState->CurNode = i;
 
 				TFB_SeedRandom (old_rand);
@@ -231,10 +233,9 @@ GenerateVUX (BYTE control)
 				do
 				{
 					rand_val = TFB_Random ();
-					pSolarSysState->SysInfo.PlanetInfo.CurPt.x =
-							(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
-					pSolarSysState->SysInfo.PlanetInfo.CurPt.y =
-							(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
+					pSolarSysState->SysInfo.PlanetInfo.CurPt.x = (LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
+					pSolarSysState->SysInfo.PlanetInfo.CurPt.y = (HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
+					
 					if (i == 0)
 						pSolarSysState->SysInfo.PlanetInfo.CurType = NUM_CREATURE_TYPES + 2;
 					else if (i <= 5)
@@ -243,6 +244,7 @@ GenerateVUX (BYTE control)
 					else /* if (i <= 10) */
 							/* {BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8)}, */
 						pSolarSysState->SysInfo.PlanetInfo.CurType = 8;
+					
 					if (i >= pSolarSysState->CurNode
 							&& !(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN]
 							& (1L << i)))
@@ -264,6 +266,7 @@ GenerateVUX (BYTE control)
 						SET_GAME_STATE (VUX_BEAST_ON_SHIP, 1);
 					}
 				} while (++i < 11);
+				
 				pSolarSysState->CurNode = i;
 
 				TFB_SeedRandom (old_rand);

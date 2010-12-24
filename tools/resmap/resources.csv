@@ -270,6 +270,7 @@ LIFE47_MASK_PMAP_ANIM,graphics.life.47,sc2code/igfxres.h,GFXRES,base/lander/bio/
 LIFE48_MASK_PMAP_ANIM,graphics.life.48,sc2code/igfxres.h,GFXRES,base/lander/bio/lifeww.ani
 LIFE49_MASK_PMAP_ANIM,graphics.life.49,sc2code/igfxres.h,GFXRES,base/lander/bio/lifexx.ani
 LIFE50_MASK_PMAP_ANIM,graphics.life.50,sc2code/igfxres.h,GFXRES,base/lander/bio/lifeyy.ani
+LIFE45SML_MASK_PMAP_ANIM,graphics.life.45sml,sc2code/igfxres.h,GFXRES,base/lander/bio/lifeqqsml.ani
 MOONBASE_MASK_PMAP_ANIM,graphics.moonbase,sc2code/igfxres.h,GFXRES,base/lander/energy/moonbase.ani
 MAIDENS_MASK_PMAP_ANIM,graphics.maidens,sc2code/igfxres.h,GFXRES,base/lander/energy/maidens.ani
 AQUA_MASK_PMAP_ANIM,graphics.aquhelix,sc2code/igfxres.h,GFXRES,base/lander/energy/aquahelix.ani

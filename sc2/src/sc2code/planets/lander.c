@@ -40,7 +40,6 @@
 
 #include "load.h"
 
-
 //define SPIN_ON_LAUNCH to let the planet spin while
 // the lander animation is playing
 #define SPIN_ON_LAUNCH
@@ -54,7 +53,7 @@
 #define PLANET_SIDE_RATE (ONE_SECOND / 35)
 
 
-FRAME LanderFrame[9]; // JMS: Was 8, added one slot for wackodemon explosion frames.
+FRAME LanderFrame[10]; // JMS: Was 8, added one slot for wackodemon explosion frames and one for dividing critter's small frames.
 static SOUND LanderSounds;
 MUSIC_REF LanderMusic;
 #define NUM_ORBIT_THEMES 5
@@ -157,6 +156,9 @@ const LIFEFORM_DESC CreatureData[] =
 			// Tripazoid Tumbler
 	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 2},
 			// Dumpy Dweejus
+#define DUMPYDWEEJUS_INDEX 45 // If you change Dumpy Dweejus's location in this list, change this define also!
+#define NUM_OF_SMALL_DUMPYDWEEJUSES 3 // How many small copies of itself the dweejus produces when "dying".
+#define DIVIDING_CRITTER_LIFESPAN 1
 	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1},
 			// Radial Arachnid
 	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (7, 2), 0},
@@ -325,7 +327,7 @@ object_animation (ELEMENT *ElementPtr)
 {
 	COUNT frame_index, angle;
 	PRIMITIVE *pPrim;
-
+	
 	pPrim = &DisplayArray[ElementPtr->PrimIndex];
 	if (GetPrimType (pPrim) == STAMPFILL_PRIM
 			&& !((ElementPtr->state_flags & FINITE_LIFE)
@@ -340,34 +342,30 @@ object_animation (ELEMENT *ElementPtr)
 			if (ElementPtr->hit_points == 0)
 			{
 				ZeroVelocityComponents (&ElementPtr->velocity);
-				pPrim->Object.Stamp.frame =
-						SetAbsFrameIndex (pPrim->Object.Stamp.frame, 0);
-
-				PlaySound (SetAbsSoundIndex (LanderSounds, LIFEFORM_CANNED),
-						NotPositional (), NULL, GAME_SOUND_PRIORITY);
+				pPrim->Object.Stamp.frame = SetAbsFrameIndex (pPrim->Object.Stamp.frame, 0);
+				PlaySound (SetAbsSoundIndex (LanderSounds, LIFEFORM_CANNED), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 			}
 		}
 
 		SetPrimColor (pPrim, c);
 	}
-
+	
 	frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
+
 	if (LONIBBLE (ElementPtr->turn_wait))
 		--ElementPtr->turn_wait;
 	else
 	{
 		ElementPtr->turn_wait += HINIBBLE (ElementPtr->turn_wait);
-
-		pPrim->Object.Stamp.frame =
-				IncFrameIndex (pPrim->Object.Stamp.frame);
+		pPrim->Object.Stamp.frame = IncFrameIndex (pPrim->Object.Stamp.frame);
+		
 		if (ElementPtr->state_flags & FINITE_LIFE)
 		{
 			/* A natural disaster */
 			if (ElementPtr->mass_points == DEATH_EXPLOSION)
 			{
 				if (++pMenuState->CurState >= EXPLOSION_LIFE)
-					pPrim->Object.Stamp.frame =
-							DecFrameIndex (pPrim->Object.Stamp.frame);
+					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
 			}
 			// JMS: Since Biocritter explosion doesn't use pMS->Curstate to keep track of which frame the explosion is in,
 			// we must limit the number of explosion frames with a constant number.
@@ -415,6 +413,7 @@ object_animation (ELEMENT *ElementPtr)
 					LavaElementPtr->next.location = ElementPtr->next.location;
 					LavaElementPtr->next.location.x += COSINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
 					LavaElementPtr->next.location.y += SINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
+					
 					if (LavaElementPtr->next.location.y < 0)
 						LavaElementPtr->next.location.y = 0;
 					else if (LavaElementPtr->next.location.y >= (MAP_HEIGHT << MAG_SHIFT))
@@ -423,8 +422,8 @@ object_animation (ELEMENT *ElementPtr)
 						LavaElementPtr->next.location.x += MAP_WIDTH << MAG_SHIFT;
 					else
 						LavaElementPtr->next.location.x %= MAP_WIDTH << MAG_SHIFT;
-					LavaElementPtr->facing = NORMALIZE_FACING (
-							ElementPtr->facing + ((COUNT)TFB_Random () % 3) - 1);
+					
+					LavaElementPtr->facing = NORMALIZE_FACING (ElementPtr->facing + ((COUNT)TFB_Random () % 3) - 1);
 					UnlockElement (hLavaElement);
 				}
 			}
@@ -441,7 +440,7 @@ object_animation (ELEMENT *ElementPtr)
 			{
 				SIZE dx, dy;
 				COUNT old_angle;
-
+				
 				dx = pSolarSysState->MenuState.first_item.x - ElementPtr->next.location.x;
 
 				if (dx < 0 && dx < -(MAP_WIDTH << (MAG_SHIFT - 1)))
@@ -545,8 +544,8 @@ object_animation (ELEMENT *ElementPtr)
 				if (index == QUARTZERBACK_INDEX
 					&& (ElementPtr->mass_points & CREATURE_AWARE)
 					&& (dx <= MAX_ENEMYSHOT_DISTANCE 
-					 && dy <= MAX_ENEMYSHOT_DISTANCE
-					 && dx * dx + dy * dy <= MAX_ENEMYSHOT_DISTANCE * MAX_ENEMYSHOT_DISTANCE))
+						&& dy <= MAX_ENEMYSHOT_DISTANCE
+						&& dx * dx + dy * dy <= MAX_ENEMYSHOT_DISTANCE * MAX_ENEMYSHOT_DISTANCE))
 				{
 					AddEnemyShot(ElementPtr, angle, speed);
 				}
@@ -698,8 +697,7 @@ CheckObjectCollision (COUNT index)
 		ElementControl.IntersectStamp = pPrim->Object.Stamp;
 		ElementControl.EndPoint = ElementControl.IntersectStamp.origin;
 
-		if (GetFrameParentDrawable (ElementControl.IntersectStamp.frame)
-				== LanderHandle)
+		if (GetFrameParentDrawable (ElementControl.IntersectStamp.frame) == LanderHandle)
 		{
 			CheckObjectCollision (index);
 			continue;
@@ -723,8 +721,7 @@ CheckObjectCollision (COUNT index)
 				continue;
 			}
 			
-			if (&DisplayArray[ElementPtr->PrimIndex] != pPrim
-					|| !(ElementPtr->state_flags & BAD_GUY))
+			if (&DisplayArray[ElementPtr->PrimIndex] != pPrim || !(ElementPtr->state_flags & BAD_GUY))
 			{
 				UnlockElement (hElement);
 				continue;
@@ -738,8 +735,7 @@ CheckObjectCollision (COUNT index)
 				if (pLanderPrim == 0)
 				{
 					/* Collision of lander with another object */
-					if (HIBYTE (pMenuState->delta_item) == 0
-							|| pPSD->InTransit)
+					if (HIBYTE (pMenuState->delta_item) == 0 || pPSD->InTransit)
 						break;
 					
 					// JMS: This handles the contact of biocritter explosion with lander.
@@ -807,8 +803,7 @@ CheckObjectCollision (COUNT index)
 							continue;
 						}
 					}
-					else if (scan == BIOLOGICAL_SCAN
-							&& ElementPtr->hit_points)
+					else if (scan == BIOLOGICAL_SCAN && ElementPtr->hit_points)
 					{
 						BYTE danger_vals[] =
 						{
@@ -837,9 +832,10 @@ CheckObjectCollision (COUNT index)
 				else
 				{					
 					BYTE value;
-
+	
 					if (scan == ENERGY_SCAN)
 					{
+
 						/* Collision of a stun bolt with an energy node */
 						UnlockElement (hElement);
 						break;
@@ -900,11 +896,17 @@ CheckObjectCollision (COUNT index)
 											UnlockElement (hExplosionElement);
 											InsertElement (hExplosionElement, GetHeadElement ());
 										
-											PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED), NotPositional (), 
-												   NULL, GAME_SOUND_PRIORITY + 1);
+											PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
 										
 											ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the critter frame
 											ElementPtr->mass_points = 0;			 // JMS: Make sure critter/explosion doesn't give biodata.
+											
+											// JMS: This marks the wackodemon "collected". (even though there was no biodata to collect).
+											// This ensures the demon isn't resurrected when visiting the planet next time.
+											pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
+												(1L << (HIBYTE (ElementPtr->scan_node) - 1));
+											pSolarSysState->CurNode = (COUNT)~0;
+											(*pSolarSysState->GenFunc) ((BYTE)(BIOLOGICAL_SCAN + GENERATE_MINERAL));
 										}
 									}
 									else // JMS: ...Whew! It didn't blow up this time.
@@ -912,6 +914,54 @@ CheckObjectCollision (COUNT index)
 										ElementPtr->mass_points = value;
 										DisplayArray[ElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[0];
 									}
+								}
+								// JMS: Dumpy Dweejus divides into smaller versions of itself when it "dies"
+								else if (WhichCreature == DUMPYDWEEJUS_INDEX)
+								{
+									COUNT ii;
+									
+									for(ii = 0; ii < NUM_OF_SMALL_DUMPYDWEEJUSES; ++ii)
+									{
+										HELEMENT hCritterElement;
+										
+										hCritterElement = AllocElement ();
+										if (hCritterElement)
+										{
+											ELEMENT *CritterElementPtr;
+											BYTE CritterIndex;
+											
+											LockElement (hCritterElement, &CritterElementPtr);
+											CritterIndex = (BYTE)43; // JMS XXX: Currently hacked to point to vanishing vermin stats...
+											
+											CritterElementPtr->mass_points = CritterIndex;
+											CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
+											CritterElementPtr->state_flags = BAD_GUY;
+											CritterElementPtr->next.location.x = ElementPtr->next.location.x + (ii - 1) * 5;
+											CritterElementPtr->next.location.y = ElementPtr->next.location.y + (ii - 1) * 2;
+											CritterElementPtr->preprocess_func = object_animation;
+											CritterElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[CritterIndex].FrameRate);
+											CritterElementPtr->thrust_wait = 0;
+											CritterElementPtr->life_span = DIVIDING_CRITTER_LIFESPAN; // JMS XXX: For some reason, we need to have some lifespan here??
+											CritterElementPtr->scan_node = BIOLOGICAL_SCAN; // JMS: This makes the collision check recognize this as bio.
+											
+											SetPrimType (&DisplayArray[CritterElementPtr->PrimIndex], STAMP_PRIM);
+											DisplayArray[CritterElementPtr->PrimIndex].Object.Stamp.frame = 
+												SetAbsFrameIndex (LanderFrame[9], 0);
+											
+											UnlockElement (hCritterElement);
+											InsertElement (hCritterElement, GetHeadElement ());
+	
+											// JMS: Note that the original Dweejus isn't marked "collected" here!
+											// This makes it resurrect as its original, big self when visiting the surface next time.
+										}
+											
+									}
+									
+									PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DEPARTS), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
+									
+									ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the original critter frame
+									ElementPtr->mass_points = 0;			 // JMS: Make sure the original critter doesn't give biodata.
+									
 								}
 								else
 								{
@@ -1040,17 +1090,14 @@ CheckObjectCollision (COUNT index)
 				}
 
 				which_node = HIBYTE (ElementPtr->scan_node) - 1;
-				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] |=
-						(1L << which_node);
+				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] |= (1L << which_node);
 				pSolarSysState->CurNode = (COUNT)~0;
 				(*pSolarSysState->GenFunc) ((BYTE)(scan + GENERATE_MINERAL));
 
-				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] &
-						(1L << which_node)))
+				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] & (1L << which_node)))
 				{
 					/* If our discovery strings have cycled, we're done */
-					if (GetStringTableIndex (
-							pSolarSysState->SysInfo.PlanetInfo.DiscoveryString) == 0)
+					if (GetStringTableIndex (pSolarSysState->SysInfo.PlanetInfo.DiscoveryString) == 0)
 					{
 						if (DestroyStringTable (ReleaseStringTable (
 								pSolarSysState->SysInfo.PlanetInfo.DiscoveryString
@@ -1274,8 +1321,7 @@ BuildObjectList (void)
 
 		LockElement (hElement, &ElementPtr);
 
-		if (ElementPtr->life_span == 0
-				|| (ElementPtr->state_flags & DISAPPEARING))
+		if (ElementPtr->life_span == 0 || (ElementPtr->state_flags & DISAPPEARING))
 		{
 			hNextElement = GetSuccElement (ElementPtr);
 			UnlockElement (hElement);
@@ -2054,7 +2100,7 @@ LoadLanderData (void)
 		LanderSounds = CaptureSound (LoadSound (LANDER_SOUNDS));
 		LanderFrame[7] = CaptureDrawable (LoadGraphic (ORBIT_VIEW_ANIM));
 		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDENEMY_MASK_PMAP_ANIM)); // JMS: Added this for Wackodemon explosion and biocritters' shots.
-		
+		LanderFrame[9] = CaptureDrawable (LoadGraphic (LIFE45SML_MASK_PMAP_ANIM)); // JMS: Added this for dividing critter's small bastards' frames.
 		{
 			COUNT i;
 

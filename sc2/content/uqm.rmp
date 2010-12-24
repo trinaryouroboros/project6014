@@ -241,6 +241,7 @@ graphics.life.42 = GFXRES:base/lander/bio/lifekk.ani
 graphics.life.43 = GFXRES:base/lander/bio/lifell.ani
 graphics.life.44 = GFXRES:base/lander/bio/lifepp.ani
 graphics.life.45 = GFXRES:base/lander/bio/lifeqq.ani
+graphics.life.45sml = GFXRES:base/lander/bio/lifeqqsml.ani
 graphics.life.46 = GFXRES:base/lander/bio/lifeuu.ani
 graphics.life.47 = GFXRES:base/lander/bio/lifevv.ani
 graphics.life.48 = GFXRES:base/lander/bio/lifeww.ani
