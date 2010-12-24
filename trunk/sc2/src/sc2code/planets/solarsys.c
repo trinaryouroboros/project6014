@@ -1640,15 +1640,13 @@ GenerateRandomIP (BYTE control)
 			ReinitQueue (&GLOBAL (ip_group_q));
 			break;
 		case GENERATE_MINERAL:
-			GenerateMineralDeposits (&pSolarSysState->SysInfo,
-					&pSolarSysState->CurNode);
+			GenerateMineralDeposits (&pSolarSysState->SysInfo, &pSolarSysState->CurNode);
 			break;
 		case GENERATE_ENERGY:
 			pSolarSysState->CurNode = 0;
 			break;
 		case GENERATE_LIFE:
-			GenerateLifeForms (&pSolarSysState->SysInfo,
-					&pSolarSysState->CurNode);
+			GenerateLifeForms (&pSolarSysState->SysInfo, &pSolarSysState->CurNode);
 			break;
 		case GENERATE_ORBITAL:
 		{
@@ -1665,21 +1663,17 @@ GenerateRandomIP (BYTE control)
 						pSolarSysState->pOrbitalDesc -
 						pSolarSysState->MoonDesc);
 #endif /* DEBUG_SOLARSYS */
-			rand_val = DoPlanetaryAnalysis (&pSolarSysState->SysInfo,
-					pSolarSysState->pOrbitalDesc);
+			rand_val = DoPlanetaryAnalysis (&pSolarSysState->SysInfo, pSolarSysState->pOrbitalDesc);
 
-			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] =
-					rand_val;
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] = rand_val;
 			i = (COUNT)~0;
 			rand_val = GenerateLifeForms (&pSolarSysState->SysInfo, &i);
 
-			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[MINERAL_SCAN] =
-					rand_val;
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[MINERAL_SCAN] = rand_val;
 			i = (COUNT)~0;
 			GenerateMineralDeposits (&pSolarSysState->SysInfo, &i);
 
-			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN] =
-					rand_val;
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN] = rand_val;
 			LoadPlanet (NULL);
 			break;
 		}
@@ -1700,8 +1694,7 @@ GenerateRandomIP (BYTE control)
 			break;
 		case GENERATE_PLANETS:
 		{
-			FillOrbits (pSolarSysState,
-					(BYTE)~0, &pSolarSysState->PlanetDesc[0], FALSE);
+			FillOrbits (pSolarSysState, (BYTE)~0, &pSolarSysState->PlanetDesc[0], FALSE);
 			GeneratePlanets (pSolarSysState);
 			break;
 		}

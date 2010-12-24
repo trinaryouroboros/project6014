@@ -1335,8 +1335,7 @@ GeneratePlanetSide (void)
 			HELEMENT hNodeElement;
 			ELEMENT *NodeElementPtr;
 
-			if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan]
-					& (1L << num_nodes))
+			if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] & (1L << num_nodes))
 				continue;
 
 			hNodeElement = AllocElement ();
@@ -1350,10 +1349,8 @@ GeneratePlanetSide (void)
 
 			NodeElementPtr->scan_node = MAKE_WORD (scan, num_nodes + 1);
 			NodeElementPtr->state_flags = BAD_GUY;
-			NodeElementPtr->current.location.x =
-					pSolarSysState->SysInfo.PlanetInfo.CurPt.x;
-			NodeElementPtr->current.location.y =
-					pSolarSysState->SysInfo.PlanetInfo.CurPt.y;
+			NodeElementPtr->current.location.x = pSolarSysState->SysInfo.PlanetInfo.CurPt.x;
+			NodeElementPtr->current.location.y = pSolarSysState->SysInfo.PlanetInfo.CurPt.y;
 
 			SetPrimType (&DisplayArray[NodeElementPtr->PrimIndex], STAMP_PRIM);
 			if (scan == MINERAL_SCAN)
@@ -1362,16 +1359,14 @@ GeneratePlanetSide (void)
 
 				EType = pSolarSysState->SysInfo.PlanetInfo.CurType;
 				NodeElementPtr->turn_wait = (BYTE)EType;
-				NodeElementPtr->mass_points = HIBYTE (
-						pSolarSysState->SysInfo.PlanetInfo.CurDensity);
+				NodeElementPtr->mass_points = HIBYTE (pSolarSysState->SysInfo.PlanetInfo.CurDensity);
 				NodeElementPtr->current.image.frame = SetAbsFrameIndex (
 						MiscDataFrame, (NUM_SCANDOT_TRANSITIONS << 1)
 						+ ElementCategory (EType) * 5);
 				NodeElementPtr->next.image.frame = SetRelFrameIndex (
 						NodeElementPtr->current.image.frame, LOBYTE (
 						pSolarSysState->SysInfo.PlanetInfo.CurDensity) + 1);
-				DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame =
-						IncFrameIndex (NodeElementPtr->next.image.frame);
+				DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = IncFrameIndex (NodeElementPtr->next.image.frame);
 			}
 			else
 			{
@@ -1412,10 +1407,8 @@ GeneratePlanetSide (void)
 					if (CreatureData[which_node].Attributes & SPEED_MASK)
 					{
 						i = (COUNT)TFB_Random ();
-						NodeElementPtr->current.location.x =
-								(LOBYTE (i) % (MAP_WIDTH - (8 << 1))) + 8;
-						NodeElementPtr->current.location.y =
-								(HIBYTE (i) % (MAP_HEIGHT - (8 << 1))) + 8;
+						NodeElementPtr->current.location.x = (LOBYTE (i) % (MAP_WIDTH - (8 << 1))) + 8;
+						NodeElementPtr->current.location.y = (HIBYTE (i) % (MAP_HEIGHT - (8 << 1))) + 8;
 					}
 
 					if (pSolarSysState->PlanetSideFrame[0] == 0)
@@ -1431,15 +1424,13 @@ GeneratePlanetSide (void)
 
 						life_init_tab[i] = (BYTE)which_node + 1;
 
-						pSolarSysState->PlanetSideFrame[i + 3] =
-								load_life_form (which_node);
+						pSolarSysState->PlanetSideFrame[i + 3] =load_life_form (which_node);
 						break;
 					}
 
 					NodeElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[which_node].FrameRate);
 					NodeElementPtr->mass_points = (BYTE)which_node;
-					NodeElementPtr->hit_points = HINIBBLE (
-							CreatureData[which_node].ValueAndHitPoints);
+					NodeElementPtr->hit_points = HINIBBLE (CreatureData[which_node].ValueAndHitPoints);
 					DisplayArray[NodeElementPtr->PrimIndex].
 							Object.Stamp.frame = SetAbsFrameIndex (
 							pSolarSysState->PlanetSideFrame[i + 3],
@@ -1447,10 +1438,8 @@ GeneratePlanetSide (void)
 				}
 			}
 
-			NodeElementPtr->next.location.x =
-					NodeElementPtr->current.location.x << MAG_SHIFT;
-			NodeElementPtr->next.location.y =
-					NodeElementPtr->current.location.y << MAG_SHIFT;
+			NodeElementPtr->next.location.x = NodeElementPtr->current.location.x << MAG_SHIFT;
+			NodeElementPtr->next.location.y = NodeElementPtr->current.location.y << MAG_SHIFT;
 			UnlockElement (hNodeElement);
 
 			PutElement (hNodeElement);

@@ -83,19 +83,14 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 			
 			SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (loword) % (MAP_HEIGHT - (8 << 1))) + 8;
 
-			SysInfoPtr->PlanetInfo.CurDensity =
-					MAKE_WORD (
-					deposit_quality_gross, deposit_quality_fine / 10 + 1
-					);
+			SysInfoPtr->PlanetInfo.CurDensity = MAKE_WORD (deposit_quality_gross, deposit_quality_fine / 10 + 1);
 			SysInfoPtr->PlanetInfo.CurType = eptr->ElementType;
 #ifdef DEBUG_SURFACE
 			log_add (log_Debug, "\t\t%d units of %Fs",
 					SysInfoPtr->PlanetInfo.CurDensity,
 					Elements[eptr->ElementType].name);
 #endif /* DEBUG_SURFACE */
-			if ((num_deposits >= which_deposit
-					&& !(SysInfoPtr->PlanetInfo.ScanRetrieveMask[MINERAL_SCAN]
-					& (1L << num_deposits)))
+			if ((num_deposits >= which_deposit && !(SysInfoPtr->PlanetInfo.ScanRetrieveMask[MINERAL_SCAN] & (1L << num_deposits)))
 					|| ++num_deposits == sizeof (DWORD) * 8)
 				goto ExitCalcMinerals;
 		}
@@ -224,7 +219,7 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 			num_types = (BYTE)(((BYTE)TFB_Random () % MAX_LIFE_VARIATION) + 1);
 			do
 			{
-			        BYTE index, num_creatures, range_types;
+				BYTE index, num_creatures, range_types;
 				UWORD rand_val;
 				BOOLEAN zoneA, zoneB, zoneC;
 
@@ -277,9 +272,7 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 					SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (rand_val) % (MAP_HEIGHT - (8 << 1))) + 8; // JMS_GFX
 					SysInfoPtr->PlanetInfo.CurType = index;
 
-					if ((num_life_forms >= which_life
-							&& !(SysInfoPtr->PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN]
-							& (1L << num_life_forms)))
+					if ((num_life_forms >= which_life && !(SysInfoPtr->PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] & (1L << num_life_forms)))
 							|| ++num_life_forms == sizeof (DWORD) * 8)
 					{
 						num_types = 1;
@@ -303,8 +296,7 @@ GenerateLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT *pwhich_life)
 {
 	DWORD old_rand;
 
-	old_rand = TFB_SeedRandom (
-			SysInfoPtr->PlanetInfo.ScanSeed[BIOLOGICAL_SCAN]);
+	old_rand = TFB_SeedRandom (SysInfoPtr->PlanetInfo.ScanSeed[BIOLOGICAL_SCAN]);
 	*pwhich_life = CalcLifeForms (SysInfoPtr, *pwhich_life);
 	return (TFB_SeedRandom (old_rand));
 }

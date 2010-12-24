@@ -81,6 +81,7 @@
 #define LIFE42_MASK_PMAP_ANIM "graphics.life.42"
 #define LIFE43_MASK_PMAP_ANIM "graphics.life.43"
 #define LIFE44_MASK_PMAP_ANIM "graphics.life.44"
+#define LIFE45SML_MASK_PMAP_ANIM "graphics.life.45sml"
 #define LIFE45_MASK_PMAP_ANIM "graphics.life.45"
 #define LIFE46_MASK_PMAP_ANIM "graphics.life.46"
 #define LIFE47_MASK_PMAP_ANIM "graphics.life.47"
