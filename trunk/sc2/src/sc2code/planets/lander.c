@@ -873,6 +873,7 @@ CheckObjectCollision (COUNT index)
 									if ((TFB_Random() % DEMON_EXPLOSION_DENOMINATOR) < DEMON_EXPLOSION_NUMERATOR)
 									{
 										HELEMENT hExplosionElement;
+										SIZE temp_which_node;
 									
 										hExplosionElement = AllocElement ();
 										if (hExplosionElement)
@@ -903,10 +904,12 @@ CheckObjectCollision (COUNT index)
 											
 											// JMS: This marks the wackodemon "collected". (even though there was no biodata to collect).
 											// This ensures the demon isn't resurrected when visiting the planet next time.
+											temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
 											pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-												(1L << (HIBYTE (ElementPtr->scan_node) - 1));
+												(1L << temp_which_node);
 											pSolarSysState->CurNode = (COUNT)~0;
-											(*pSolarSysState->GenFunc) ((BYTE)(BIOLOGICAL_SCAN + GENERATE_MINERAL));
+											(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
+											SET_GAME_STATE (PLANETARY_CHANGE, 1);
 										}
 									}
 									else // JMS: ...Whew! It didn't blow up this time.
@@ -919,6 +922,7 @@ CheckObjectCollision (COUNT index)
 								else if (WhichCreature == DUMPYDWEEJUS_INDEX)
 								{
 									COUNT ii;
+									SIZE temp_which_node;
 									
 									for(ii = 0; ii < NUM_OF_SMALL_DUMPYDWEEJUSES; ++ii)
 									{
@@ -950,9 +954,6 @@ CheckObjectCollision (COUNT index)
 											
 											UnlockElement (hCritterElement);
 											InsertElement (hCritterElement, GetHeadElement ());
-	
-											// JMS: Note that the original Dweejus isn't marked "collected" here!
-											// This makes it resurrect as its original, big self when visiting the surface next time.
 										}
 											
 									}
@@ -961,6 +962,15 @@ CheckObjectCollision (COUNT index)
 									
 									ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the original critter frame
 									ElementPtr->mass_points = 0;			 // JMS: Make sure the original critter doesn't give biodata.
+									
+									// JMS: This marks the Dweejus "collected". (even though there was no biodata to collect).
+									// This ensures the demon isn't resurrected when visiting the planet next time.
+									temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
+									pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
+										(1L << temp_which_node);
+									pSolarSysState->CurNode = (COUNT)~0;
+									(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
+									SET_GAME_STATE (PLANETARY_CHANGE, 1);
 									
 								}
 								else
