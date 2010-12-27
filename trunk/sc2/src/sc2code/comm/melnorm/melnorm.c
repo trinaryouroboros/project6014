@@ -497,6 +497,51 @@ PurchaseMenu (RESPONSE_REF R)
 }
 
 static void
+SayHelloAndDownToBusiness ()
+{
+	BYTE stack;
+
+	stack = (BYTE)(GET_GAME_STATE (MELNORME_YACK_STACK2));
+	switch (stack++)
+	{
+		case 0:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS1);
+			break;
+		case 1:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS2);
+			break;
+		case 2:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS3);
+			break;
+		case 3:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS4);
+			break;
+		case 4:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS5);
+			break;
+		case 5:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS6);
+			break;
+		case 6:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS7);
+			break;
+		case 7:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS8);
+			break;
+		case 8:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS9);
+			break;
+    case 9:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS10);
+			break;
+	}
+	stack = stack % 10;
+	assert(stack >=0 && stack <= 9);
+	SET_GAME_STATE (MELNORME_YACK_STACK2, stack);
+
+}
+
+static void
 SellMenu (RESPONSE_REF R)
 {
 	BYTE num_new_rainbows;
@@ -673,7 +718,7 @@ TradeMenu (RESPONSE_REF R)
 		}
 		else if (GET_GAME_STATE (MET_MELNORME) == 1 && !(PLAYER_SAID (R, dummy)))
 		{
-			NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS2);
+			SayHelloAndDownToBusiness();
 		}
 		if (!(PLAYER_SAID (R, dummy)))
 		{
