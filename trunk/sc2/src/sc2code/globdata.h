@@ -991,6 +991,9 @@ START_GAME_STATE
 	ADD_GAME_STATE (VELA_FACTORY_VISITED, 1)
 
 	// JMS: Which ship is the flagship
+#define CHMMR_EXPLORER_SHIP 0
+#define PRECURSOR_SERVICE_VEHICLE 1
+#define PRECURSOR_BATTLESHIP 2
 	ADD_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2)
 			// 0 - Chmmr Explorer
 			// 1 - Precursor vessel

@@ -245,10 +245,7 @@ Present_GenerateSIS (PRESENTATION_INPUT_STATE* pPIS)
 	s.origin.y = 0;
 	DrawStamp (&s);
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
-	{
-	}
-	else
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != CHMMR_EXPLORER_SHIP)
 	{
 		for (slot = 0; slot < NUM_DRIVE_SLOTS; ++slot)
 		{

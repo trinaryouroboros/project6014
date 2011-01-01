@@ -402,7 +402,7 @@ DoInstallModule (MENU_STATE *pMS)
 			if (NewState >= EMPTY_SLOT && (PulsedInputState.menu[KEY_MENU_UP] || PulsedInputState.menu[KEY_MENU_DOWN]))
 			  {
 			    // BW: Explorer has only lander slots
-			    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+			    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 			      {
 			      }
 			    else
@@ -625,7 +625,7 @@ DoOutfit (MENU_STATE *pMS)
 
 			s.frame = CaptureDrawable (
 					LoadGraphic (OUTFIT_PMAP_ANIM));
-			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 			  {
 				s.frame = SetAbsFrameIndex(s.frame, 1);
 			  }
@@ -642,7 +642,7 @@ DoOutfit (MENU_STATE *pMS)
 			DrawStamp (&s);
 			DestroyDrawable (ReleaseDrawable (s.frame));
 
-			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 			{
 				RedistributeFuel ();
 				DisplayLanders (pMS);

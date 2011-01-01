@@ -89,7 +89,7 @@ GenerateShofixtiCrashSite (BYTE control)
 		case GENERATE_ENERGY:
 		{
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[2]
-				&& (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) != 2) )
+				&& (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) != PRECURSOR_BATTLESHIP) )
 			{
 				old_rand = TFB_SeedRandom (pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]);
 				rand_val = TFB_Random ();
@@ -109,7 +109,7 @@ GenerateShofixtiCrashSite (BYTE control)
 					
 					((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
 					SET_GAME_STATE (BLACK_ORB_STATE, 1);
-					SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2);
+					SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, PRECURSOR_BATTLESHIP);
 				}
 				
 				TFB_SeedRandom (old_rand);

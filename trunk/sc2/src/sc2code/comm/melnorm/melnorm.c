@@ -351,7 +351,7 @@ BuyFuelMenu (RESPONSE_REF R)
 	capacity = FUEL_RESERVE;
 	doNotOfferFuel = FALSE;
 	
-	if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	{
 		capacity = EXPLORER_FUEL_CAPACITY;
 	}	
@@ -459,7 +459,7 @@ PurchaseMenu (RESPONSE_REF R)
 	(void) R; // satisfy compiler
 	capacity = FUEL_RESERVE;
 	
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 		capacity = EXPLORER_FUEL_CAPACITY;
 	else
 	{
