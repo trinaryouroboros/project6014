@@ -1009,7 +1009,7 @@ RACE_DESC* init_exp (void)
 	
 	// JMS: Give the explorer some stats so it won't be slow as fuck in supermelee
 	// and does not depend on the thruster/jet numbers in adventure mode
-	if((GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS))==0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	{
 		new_exp_desc.characteristics.max_thrust = EXPLORER_MAX_THRUST * RESOLUTION_FACTOR;
 		new_exp_desc.characteristics.thrust_wait = EXPLORER_THRUST_WAIT;

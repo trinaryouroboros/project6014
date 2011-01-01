@@ -1089,7 +1089,7 @@ DrawBluePrint (MENU_STATE *pMS)
 	DrawFilledStamp (&s);
 
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	{
 	}
 	else
@@ -1139,7 +1139,7 @@ DrawBluePrint (MENU_STATE *pMS)
 	    ++GLOBAL_SIS (CrewEnlisted);
 	  }
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	  {
 	  RECT r;
 	  

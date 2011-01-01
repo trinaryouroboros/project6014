@@ -323,7 +323,7 @@ InitSIS (void)
 	GLOBAL_SIS (JetSlots[6]) = // JMS
 		GLOBAL_SIS (JetSlots[7]) = TURNING_JETS;
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != 0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != CHMMR_EXPLORER_SHIP)
 		for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 			GLOBAL_SIS (ModuleSlots[i]) = EMPTY_SLOT + 2;
 	/*GLOBAL_SIS (ModuleSlots[15]) = GUN_WEAPON;

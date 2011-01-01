@@ -580,7 +580,7 @@ DrawFlagshipStats (void)
 	turn_wait = TURN_WAIT;
 
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	{
 	    fuel = EXPLORER_FUEL_CAPACITY;
 	}
@@ -932,7 +932,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 		if (optWhichFonts == OPT_PC)
 			DrawPC_SIS();
 
-	    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+	    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	      {
 	      }
 	    else
@@ -1257,7 +1257,7 @@ GetSBayCapacity (POINT *ppt)
 	COORD x;
 	COUNT slot, capacity;
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	    x = 39;
 	else
 	    x = 207 - 8;
@@ -1265,7 +1265,7 @@ GetSBayCapacity (POINT *ppt)
 	capacity = 0;
 	slot = NUM_MODULE_SLOTS - 1;
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != 0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != CHMMR_EXPLORER_SHIP)
 	{
 	    do
 		{
@@ -1299,7 +1299,7 @@ GetSBayCapacity (POINT *ppt)
 
 					ppt->x = x;
 
-				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 				{
 				    ppt->y = 27 - which_row;
 				    if (which_row == 9)
@@ -1357,7 +1357,7 @@ GetFTankCapacity (POINT *ppt)
 		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x18, 0x00), 0x79),
 	      };
 	  
-	    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+	    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	      {
 		which_row = (COUNT)(
 				    (GLOBAL_SIS (FuelOnBoard))
@@ -1437,7 +1437,7 @@ GetFTankCapacity (POINT *ppt)
 					BUILD_COLOR (MAKE_RGB15 (0x1F, 0x18, 0x00), 0x79),
 				};
 
-			      if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+			      if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 				{
 					which_row = (COUNT)(
 							(GLOBAL_SIS (FuelOnBoard))

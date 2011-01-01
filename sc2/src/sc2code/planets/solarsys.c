@@ -366,7 +366,7 @@ LoadSolarSys (void)
 		}
 		
 		// JMS: Chmmr explorer is not dependent from number of thrusters
-		if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+		if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 			pSolarSysState->max_ship_speed = (BYTE)(102);
 		else
 			pSolarSysState->max_ship_speed = (BYTE)((num_thrusters + 5) * IP_SHIP_THRUST_INCREMENT);
@@ -802,7 +802,7 @@ flagship_inertial_thrust (COUNT CurrentAngle)
 		DWORD desired_speed;
 		
 		// JMS: Explorer accelerates at its own slooooow pace
-		if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+		if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 			ip_increment = EXPLORER_IP_SHIP_THRUST_INCREMENT;
 		else
 			ip_increment = IP_SHIP_THRUST_INCREMENT;
