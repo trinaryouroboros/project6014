@@ -227,6 +227,7 @@ DeltaCredit (SIZE delta_credit)
 	return (Credit);
 }
 
+BOOLEAN StripExplorer (COUNT fuel_required);
 
 static void
 ExitConversation (RESPONSE_REF R)
@@ -241,6 +242,33 @@ ExitConversation (RESPONSE_REF R)
 		NPCPhrase (BATTLE_MELNORME);
 		SET_GAME_STATE (BATTLE_SEGUE, 1);
 	}
+	else if (PLAYER_SAID (R, take_it))
+	{
+		switch (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)) {
+			case CHMMR_EXPLORER_SHIP:
+				StripExplorer(0);
+				break;
+			case PRECURSOR_BATTLESHIP:
+				/* TODO: implement... */
+				break;
+		}
+		NPCPhrase (HAPPY_TO_HAVE_RESCUED);
+	}
+	else if (PLAYER_SAID (R, leave_it))
+	{
+		SET_GAME_STATE (MELNORME_RESCUE_REFUSED, 1);
+		NPCPhrase (MAYBE_SEE_YOU_LATER);
+	}
+	else if (PLAYER_SAID (R, no_help))
+	{
+		SET_GAME_STATE (MELNORME_RESCUE_REFUSED, 1);
+		NPCPhrase (GOODBYE_AND_GOODLUCK);
+	}
+	else if (PLAYER_SAID (R, no_changed_mind))
+	{
+		NPCPhrase (GOODBYE_AND_GOODLUCK_AGAIN);
+	}
+
 }
 
 
@@ -477,12 +505,12 @@ PurchaseMenu (RESPONSE_REF R)
 			}
 		} while (slot--);
 	}
-	/*if (PLAYER_SAID (R, make_purchases)
-		||PLAYER_SAID (R, done_buying_info)
-		||PLAYER_SAID (R, done_buying_fuel))
-	{*/
+	if (PLAYER_SAID (R, make_purchases)
+			|| PLAYER_SAID (R, done_buying_info)
+			|| PLAYER_SAID (R, done_buying_fuel))
+	{
 		NPCPhrase (WHAT_TO_BUY);
-	//}
+	}
 	
 	if (GET_GAME_STATE (MELNORME_EVENTS_INFO_STACK) < NUM_EVENT_ITEMS ||
 			GET_GAME_STATE (MELNORME_ALIEN_INFO_STACK) < NUM_ALIEN_RACE_ITEMS ||
@@ -685,10 +713,199 @@ SellMenu (RESPONSE_REF R)
 	}
 }
 
+static COUNT rescue_fuel;
+static SIS_STATE SIS_copy;
+
+BOOLEAN
+StripExplorer (COUNT fuel_required)
+{
+	COUNT worth, total, num_landers_sold;
+	BYTE i, which_module;
+	DWORD capacity;
+
+	if (fuel_required == 0)
+	{
+		/* Player has agreed to rescue offer. */
+		GlobData.SIS_state = SIS_copy;
+		LockMutex (GraphicsLock);
+		DeltaSISGauges (UNDEFINED_DELTA, rescue_fuel, UNDEFINED_DELTA);
+		UnlockMutex (GraphicsLock);
+		return TRUE;
+	}
+
+	assert (fuel_required > 0);
+	
+	/* Offer to trade planet landers for fuel. */
+	SIS_copy = GlobData.SIS_state;
+
+	/* The only thing of value which we can strip from the Explorer is
+	the landers (or perhaps escorts). */
+	capacity = EXPLORER_FUEL_CAPACITY;
+	worth = fuel_required / FUEL_TANK_SCALE;
+	total = 0;
+	num_landers_sold = 0;
+
+	for (i = 0; i < NUM_MODULE_SLOTS && SIS_copy.NumLanders > 0 && total < worth; ++i)
+	{
+		which_module = SIS_copy.ModuleSlots[i];
+		if (which_module != PLANET_LANDER)
+			continue;
+		total += GLOBAL (ModuleCost[which_module]);
+		SIS_copy.NumLanders--;
+		++num_landers_sold;
+		assert(SIS_copy.NumLanders >= 0);
+	}
+
+	if (total == 0)
+	{
+		/* Player has nothing of value, just give them fuel. */
+		NPCPhrase (CHARITY);
+		LockMutex (GraphicsLock);
+		DeltaSISGauges (0, fuel_required, 0);
+		UnlockMutex (GraphicsLock);
+		return (FALSE);
+	}
+	else
+	{
+		/* Offer to sell them fuel for landers. */
+		NPCPhrase (RESCUE_OFFER);
+		rescue_fuel = fuel_required;
+		if (rescue_fuel == capacity)
+			NPCPhrase (RESCUE_TANKS);
+		else
+			NPCPhrase (RESCUE_HOME);
+
+		NPCPhrase (ENUMERATE_ONE + num_landers_sold - 1);
+		NPCPhrase (LANDERS);
+	}
+
+	return (TRUE);
+}
+
+static void
+DoRescue ()
+{
+	SIZE dx, dy;
+	COUNT fuel_required;
+	BOOLEAN s = FALSE;
+
+	dx = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x))
+			- SOL_X;
+	dy = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y))
+			- SOL_Y;
+	fuel_required = square_root (
+			(DWORD)((long)dx * dx + (long)dy * dy)
+			) + (2 * FUEL_TANK_SCALE);
+
+	switch (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)) {
+		case CHMMR_EXPLORER_SHIP:
+			s = StripExplorer(fuel_required);
+			break;
+		case PRECURSOR_BATTLESHIP:
+			/* TODO: implement... */
+			break;
+	}
+
+	if (s)
+	{
+		Response (take_it, ExitConversation);
+		Response (leave_it, ExitConversation);
+	}
+
+}
+
+static void
+DiscussRescue ()
+{
+	if (GET_GAME_STATE (MELNORME_RESCUE_REFUSED))
+	{
+		NPCPhrase (CHANGED_MIND);
+
+		Response (yes_changed_mind, DoRescue);
+		Response (no_changed_mind, ExitConversation);
+	}
+	else
+	{
+		BYTE num_rescues;
+
+		num_rescues = GET_GAME_STATE (MELNORME_RESCUE_COUNT);
+		switch (num_rescues)
+		{
+			case 0:
+				NPCPhrase (RESCUE_EXPLANATION);
+				break;
+			case 1:
+				NPCPhrase (RESCUE_AGAIN_1);
+				break;
+			case 2:
+				NPCPhrase (RESCUE_AGAIN_2);
+				break;
+			case 3:
+				NPCPhrase (RESCUE_AGAIN_3);
+				break;
+			case 4:
+				NPCPhrase (RESCUE_AGAIN_4);
+				break;
+			case 5:
+				NPCPhrase (RESCUE_AGAIN_5);
+				break;
+			}
+
+		if (num_rescues < 5)
+		{
+			++num_rescues;
+			SET_GAME_STATE (MELNORME_RESCUE_COUNT, num_rescues);
+		}
+
+		NPCPhrase (SHOULD_WE_HELP_YOU);
+
+		AlienTalkSegue(1);
+		XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
+		AlienTalkSegue((COUNT)~0);
+
+		Response (yes_help, DoRescue);
+		Response (no_help, ExitConversation);
+	}
+
+}
+
+static BOOLEAN
+PlayerNeedsRescue ()
+{
+	BYTE num_new_rainbows;
+	UWORD rainbow_mask;
+	COUNT Credit = DeltaCredit (0);
+
+	rainbow_mask = MAKE_WORD (
+			GET_GAME_STATE (RAINBOW_WORLD0),
+			GET_GAME_STATE (RAINBOW_WORLD1)
+			);
+	num_new_rainbows = (BYTE)(-GET_GAME_STATE (MELNORME_RAINBOW_COUNT));
+
+	while (rainbow_mask)
+	{
+		if (rainbow_mask & 1)
+			++num_new_rainbows;
+
+		rainbow_mask >>= 1;
+	}
+
+	return GLOBAL_SIS (FuelOnBoard) == 0
+		  && GLOBAL_SIS (TotalBioMass) == 0
+			&& Credit == 0
+			&& num_new_rainbows == 0;
+}
 
 static void
 TradeMenu (RESPONSE_REF R)
 {
+	if (PlayerNeedsRescue())
+	{
+		/* Player needs to be rescued... */
+		DiscussRescue();
+		return;
+	}
+
 	if (PLAYER_SAID (R, done_selling))
 	{
 		NPCPhrase (OK_DONE_SELLING);
@@ -697,38 +914,31 @@ TradeMenu (RESPONSE_REF R)
 	{
 		NPCPhrase (OK_DONE_BUYING);
 	}
-	else 
+	else if (PLAYER_SAID (R, only_joke))
 	{
-		if (PLAYER_SAID (R, only_joke))
-		{
-			NPCPhrase (TRADING_INFO2);
-			NPCPhrase (MORE_TRADING_INFO);
-		}
-		else if (PLAYER_SAID (R, i_remember))
-		{
-			NPCPhrase (RIGHT_YOU_ARE);
-		}
-		else if (PLAYER_SAID (R, how_to_trade))
-		{
-			NPCPhrase (TRADING_INFO1);
-			NPCPhrase (MORE_TRADING_INFO);
-		}
-		else if(PLAYER_SAID (R, dummy))
-		{
-		}
-		else if (GET_GAME_STATE (MET_MELNORME) == 1 && !(PLAYER_SAID (R, dummy)))
-		{
-			SayHelloAndDownToBusiness();
-		}
-		if (!(PLAYER_SAID (R, dummy)))
-		{
-			NPCPhrase (BUY_OR_SELL);
-			AlienTalkSegue(1);
-			XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
-			AlienTalkSegue((COUNT)~0);
-		}
+		NPCPhrase (TRADING_INFO2);
+		NPCPhrase (MORE_TRADING_INFO);
 	}
-
+	else if (PLAYER_SAID (R, i_remember))
+	{
+		NPCPhrase (RIGHT_YOU_ARE);
+	}
+	else if (PLAYER_SAID (R, how_to_trade))
+	{
+		NPCPhrase (TRADING_INFO1);
+		NPCPhrase (MORE_TRADING_INFO);
+	}
+	else if(PLAYER_SAID (R, dummy))
+	{
+	}
+	else if (GET_GAME_STATE (MET_MELNORME) == 1 && !(PLAYER_SAID (R, dummy)))
+	{
+		SayHelloAndDownToBusiness();
+		NPCPhrase (BUY_OR_SELL);
+		AlienTalkSegue(1);
+		XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
+		AlienTalkSegue((COUNT)~0);
+	}
 	Response (make_purchases, PurchaseMenu);
 	if (PHRASE_ENABLED(items_to_sell))
 		Response (items_to_sell, SellMenu);
