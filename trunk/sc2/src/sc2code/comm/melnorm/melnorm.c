@@ -815,6 +815,14 @@ DoRescue ()
 }
 
 static void
+TurnBridgePurple ()
+{
+	AlienTalkSegue((COUNT)~0);
+	XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
+	AlienTalkSegue((COUNT)~0);
+}
+
+static void
 DiscussRescue ()
 {
 	if (GET_GAME_STATE (MELNORME_RESCUE_REFUSED))
@@ -859,9 +867,7 @@ DiscussRescue ()
 
 		NPCPhrase (SHOULD_WE_HELP_YOU);
 
-		AlienTalkSegue(1);
-		XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
-		AlienTalkSegue((COUNT)~0);
+		TurnBridgePurple ();
 
 		Response (yes_help, DoRescue);
 		Response (no_help, ExitConversation);
@@ -918,26 +924,27 @@ TradeMenu (RESPONSE_REF R)
 	{
 		NPCPhrase (TRADING_INFO2);
 		NPCPhrase (MORE_TRADING_INFO);
+		NPCPhrase (BUY_OR_SELL);
+		TurnBridgePurple ();
 	}
 	else if (PLAYER_SAID (R, i_remember))
 	{
 		NPCPhrase (RIGHT_YOU_ARE);
+		NPCPhrase (BUY_OR_SELL);
+		TurnBridgePurple ();
 	}
 	else if (PLAYER_SAID (R, how_to_trade))
 	{
 		NPCPhrase (TRADING_INFO1);
 		NPCPhrase (MORE_TRADING_INFO);
-	}
-	else if(PLAYER_SAID (R, dummy))
-	{
+		NPCPhrase (BUY_OR_SELL);
+		TurnBridgePurple ();
 	}
 	else if (GET_GAME_STATE (MET_MELNORME) == 1 && !(PLAYER_SAID (R, dummy)))
 	{
 		SayHelloAndDownToBusiness();
 		NPCPhrase (BUY_OR_SELL);
-		AlienTalkSegue(1);
-		XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
-		AlienTalkSegue((COUNT)~0);
+		TurnBridgePurple ();
 	}
 	Response (make_purchases, PurchaseMenu);
 	if (PHRASE_ENABLED(items_to_sell))
