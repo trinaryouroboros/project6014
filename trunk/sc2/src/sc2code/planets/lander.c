@@ -22,6 +22,7 @@
 //			 - Increased Wackodemon biovalue since its more hazardous to hunt now.
 //			 - Created a new function which enables the biocritters to shoot projectiles. Quartzerback critter uses this function.
 //			 - Dumpy Dweejus divides into smaller creatures when "killed".
+//			 - Created a new function which handles the exploding and dividing critters upon their death
 
 #include "cons_res.h"
 #include "controls.h"
@@ -121,7 +122,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Flora Flatulensis
 	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 2, INVULNERABLE_PART_TIME},
 			// Hopping Hatchling
-#define HOPPING_HATCHLING_INVULNERABILITY_FRAMES 45 // JMS: XXX: This is still kinda hacky.
+#define HOPPING_HATCHLING_INVULNERABILITY_FRAMES 45 // JMS: XXX, This is still kinda hacky.
 	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 2, NONE},
 			// Dizzy Fnarble
 	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 2, NONE},
@@ -731,8 +732,8 @@ CheckSpecialAttributes (ELEMENT *ElementPtr)
 				CritterElementPtr->mass_points = CritterIndex;
 				CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
 				CritterElementPtr->state_flags = BAD_GUY;
-				CritterElementPtr->next.location.x = ElementPtr->next.location.x + (ii - 1) * 5;
-				CritterElementPtr->next.location.y = ElementPtr->next.location.y + (ii - 1) * 2;
+				CritterElementPtr->next.location.x = ElementPtr->next.location.x + ((TFB_Random() % 24) - 12);
+				CritterElementPtr->next.location.y = ElementPtr->next.location.y + ((TFB_Random() % 24) - 12);
 				CritterElementPtr->preprocess_func = object_animation;
 				CritterElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[CritterIndex].FrameRate);
 				CritterElementPtr->thrust_wait = 0;
