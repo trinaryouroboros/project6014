@@ -66,6 +66,10 @@
 #define WHEN_DYING_EXPLODES (1 << 1)
 #define WHEN_DYING_DIVIDES (1 << 2)
 #define INVULNERABLE_PART_TIME (1 << 3)
+#define INVULNERABLE_TO_BASIC_WEAPON (1 << 4)
+
+#define WHEN_DYING_SPECIALS 0x06 // binary 110
+#define INVULNERABILITY_SPECIALS 0x18 // binary 11000
 
 #define CRITTER_EXPLOSION_PERCENT 60 // JMS: This concerns only WHEN_DYING_EXPLODES critters.
 
