@@ -60,16 +60,31 @@
 
 #define CREATURE_AWARE (BYTE)(1 << 7)
 
+// JMS: The SpecialAttributes of critters:
+#define NONE 0
+#define SHOOTS_BACK (1 << 0)
+#define WHEN_DYING_EXPLODES (1 << 1)
+#define WHEN_DYING_DIVIDES (1 << 2)
+#define INVULNERABLE_PART_TIME (1 << 3)
+
+#define CRITTER_EXPLOSION_PERCENT 60 // JMS: This concerns only WHEN_DYING_EXPLODES critters.
+
+#define DIVIDED_CRITTER_NUMBER 3
+#define DIVIDED_CRITTER_LIFESPAN 1
+
 typedef struct
 {
 	BYTE Attributes, ValueAndHitPoints;
-        COUNT FrameRate;
+        COUNT FrameRate, SpecialAttributes;
 } LIFEFORM_DESC;
 
 // BW: FrameRate is an integer between 0 and 15
 // where (FrameRate+1)/32 is (roughly ?) the number of seconds
 // between two frames when animating the lifeform.
 // This should be defined with ONE_SECOND to comply with the other animations
+//
+// JMS: SpecialAttributes is a 16-bit bitmask which houses all the new
+// skills the creatures might have: shooting back, exploding etc.
 
 extern const LIFEFORM_DESC CreatureData[];
 
