@@ -157,7 +157,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Tripazoid Tumbler
 	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 6), 2, WHEN_DYING_DIVIDES},
 			// Dumpy Dweejus
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1, INVULNERABLE_TO_BASIC_WEAPON},
 			// Radial Arachnid
 	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (7, 2), 0, WHEN_DYING_EXPLODES},
 			// Wackodemon
@@ -655,115 +655,138 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 }
 
 static int
-CheckSpecialAttributes (ELEMENT *ElementPtr)
+CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 {
 	COUNT WhichCreature;
+	COUNT frame_index;
+	PRIMITIVE *pPrim;
 	
 	WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
+	pPrim = &DisplayArray[ElementPtr->PrimIndex];
+	frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
 	
-	// JMS: Some critters may explode when killed!!!
-	if (CreatureData[WhichCreature].SpecialAttributes & WHEN_DYING_EXPLODES)
+	if (WhichSpecial == INVULNERABILITY_SPECIALS)
 	{
-		// JMS: Chance of exploding is drawn here from random number. 
-		if ((TFB_Random() % 100) < CRITTER_EXPLOSION_PERCENT)
+		// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
+		if ((CreatureData[WhichCreature].SpecialAttributes & INVULNERABLE_PART_TIME)
+			&& frame_index < HOPPING_HATCHLING_INVULNERABILITY_FRAMES
+			&& !(GET_GAME_STATE(STRONGER_LANDER_SHOT)))
 		{
-			HELEMENT hExplosionElement;
-			SIZE temp_which_node;
-			
-			hExplosionElement = AllocElement ();
-			if (hExplosionElement)
-			{
-				ELEMENT *ExplosionElementPtr;
-				
-				LockElement (hExplosionElement, &ExplosionElementPtr);
-				
-				ExplosionElementPtr->mass_points = BIOCRITTER_EXPLOSION;
-				ExplosionElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
-				ExplosionElementPtr->next.location = ElementPtr->next.location;
-				ExplosionElementPtr->preprocess_func = object_animation;
-				ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
-				ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
-				
-				SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
-				DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
-				SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
-				// Otherwise the game thinks this explosion belongs to lander
-				// itself, and it won't collide with lander at all (->no damage).
-				UnlockElement (hExplosionElement);
-				InsertElement (hExplosionElement, GetHeadElement ());
-				
-				PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
-				
-				ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the critter frame
-				ElementPtr->mass_points = 0;			 // JMS: Make sure critter/explosion doesn't give biodata.
-				
-				// JMS: This marks the exploded critter "collected". (even though there was no biodata to collect).
-				// This ensures the critter isn't resurrected when visiting the planet next time.
-				temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
-				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-				(1L << temp_which_node); // Mark this bio-blip's state as "collected".
-				pSolarSysState->CurNode = (COUNT)~0; // GenerateLifeForms will update the states of ALL bio-blips when run.
-				(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE)); // Re-run GenerateLifeForms so the changed state takes effect
-				SET_GAME_STATE (PLANETARY_CHANGE, 1); // Save the changes to the file containing the states of all lifeforms.
-			}
-			
-			return (1); // JMS: Return 1 only if the thing exploded. If not, the return (0) at the end of the function is encountered.
+			return (1);
+		}
+		// JMS: Some creatures can only be killed with upgraded weapon.
+		else if (CreatureData[WhichCreature].SpecialAttributes & INVULNERABLE_TO_BASIC_WEAPON
+				 && !(GET_GAME_STATE(STRONGER_LANDER_SHOT)))
+		{
+			return (1);
 		}
 	}
-	// JMS: Divisible critter splits into smaller versions of itself when it "dies".
-	else if (CreatureData[WhichCreature].SpecialAttributes & WHEN_DYING_DIVIDES)
+	else if (WhichSpecial == WHEN_DYING_SPECIALS)
 	{
-		COUNT ii;
-		SIZE temp_which_node;
-		
-		for(ii = 0; ii < DIVIDED_CRITTER_NUMBER; ++ii)
+		// JMS: Some critters may explode when killed!!!
+		if (CreatureData[WhichCreature].SpecialAttributes & WHEN_DYING_EXPLODES)
 		{
-			HELEMENT hCritterElement;
-			
-			hCritterElement = AllocElement ();
-			if (hCritterElement)
+			// JMS: Chance of exploding is drawn here from random number. 
+			if ((TFB_Random() % 100) < CRITTER_EXPLOSION_PERCENT)
 			{
-				ELEMENT *CritterElementPtr;
-				BYTE CritterIndex;
+				HELEMENT hExplosionElement;
+				SIZE temp_which_node;
 				
-				LockElement (hCritterElement, &CritterElementPtr);
-				CritterIndex = (BYTE)43; // JMS XXX: Currently hacked to point to vanishing vermin stats...
+				hExplosionElement = AllocElement ();
+				if (hExplosionElement)
+				{
+					ELEMENT *ExplosionElementPtr;
+					
+					LockElement (hExplosionElement, &ExplosionElementPtr);
+					
+					ExplosionElementPtr->mass_points = BIOCRITTER_EXPLOSION;
+					ExplosionElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
+					ExplosionElementPtr->next.location = ElementPtr->next.location;
+					ExplosionElementPtr->preprocess_func = object_animation;
+					ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
+					ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
+					
+					SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
+					DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
+					SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
+					// Otherwise the game thinks this explosion belongs to lander
+					// itself, and it won't collide with lander at all (->no damage).
+					UnlockElement (hExplosionElement);
+					InsertElement (hExplosionElement, GetHeadElement ());
+					
+					PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
+					
+					ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the critter frame
+					ElementPtr->mass_points = 0;			 // JMS: Make sure critter/explosion doesn't give biodata.
+					
+					// JMS: This marks the exploded critter "collected". (even though there was no biodata to collect).
+					// This ensures the critter isn't resurrected when visiting the planet next time.
+					temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
+					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
+					(1L << temp_which_node); // Mark this bio-blip's state as "collected".
+					pSolarSysState->CurNode = (COUNT)~0; // GenerateLifeForms will update the states of ALL bio-blips when run.
+					(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE)); // Re-run GenerateLifeForms so the changed state takes effect
+					SET_GAME_STATE (PLANETARY_CHANGE, 1); // Save the changes to the file containing the states of all lifeforms.
+				}
 				
-				CritterElementPtr->mass_points = CritterIndex;
-				CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
-				CritterElementPtr->state_flags = BAD_GUY;
-				CritterElementPtr->next.location.x = ElementPtr->next.location.x + ((TFB_Random() % 24) - 12);
-				CritterElementPtr->next.location.y = ElementPtr->next.location.y + ((TFB_Random() % 24) - 12);
-				CritterElementPtr->preprocess_func = object_animation;
-				CritterElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[CritterIndex].FrameRate);
-				CritterElementPtr->thrust_wait = 0;
-				CritterElementPtr->life_span = DIVIDED_CRITTER_LIFESPAN; // JMS XXX: For some reason, we need to have some lifespan here??
-				CritterElementPtr->scan_node = BIOLOGICAL_SCAN; // JMS: This makes the collision check recognize this as bio.
-				
-				SetPrimType (&DisplayArray[CritterElementPtr->PrimIndex], STAMP_PRIM);
-				DisplayArray[CritterElementPtr->PrimIndex].Object.Stamp.frame = 
-				SetAbsFrameIndex (LanderFrame[9], 0);
-				
-				UnlockElement (hCritterElement);
-				InsertElement (hCritterElement, GetHeadElement ());
+				return (1); // JMS: Return (1) only if the thing exploded. If not, the return (0) at the end of the function is encountered.
 			}
 		}
-		
-		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DEPARTS), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
-		
-		ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the original critter frame
-		ElementPtr->mass_points = 0;			 // JMS: Make sure the original critter doesn't give biodata.
-		
-		// JMS: This marks the big divided critter "collected". (even though there was no biodata to collect).
-		// This ensures the big divided critter isn't resurrected when visiting the planet next time.
-		temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
-		pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-		(1L << temp_which_node);
-		pSolarSysState->CurNode = (COUNT)~0;
-		(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
-		SET_GAME_STATE (PLANETARY_CHANGE, 1);
-		
-		return (1);
+		// JMS: Divisible critter splits into smaller versions of itself when it "dies".
+		else if (CreatureData[WhichCreature].SpecialAttributes & WHEN_DYING_DIVIDES)
+		{
+			COUNT ii;
+			SIZE temp_which_node;
+			
+			for(ii = 0; ii < DIVIDED_CRITTER_NUMBER; ++ii)
+			{
+				HELEMENT hCritterElement;
+				
+				hCritterElement = AllocElement ();
+				if (hCritterElement)
+				{
+					ELEMENT *CritterElementPtr;
+					BYTE CritterIndex;
+					
+					LockElement (hCritterElement, &CritterElementPtr);
+					CritterIndex = (BYTE)43; // JMS XXX: Currently hacked to point to vanishing vermin stats...
+					
+					CritterElementPtr->mass_points = CritterIndex;
+					CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
+					CritterElementPtr->state_flags = BAD_GUY;
+					CritterElementPtr->next.location.x = ElementPtr->next.location.x + ((TFB_Random() % 24) - 12);
+					CritterElementPtr->next.location.y = ElementPtr->next.location.y + ((TFB_Random() % 24) - 12);
+					CritterElementPtr->preprocess_func = object_animation;
+					CritterElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[CritterIndex].FrameRate);
+					CritterElementPtr->thrust_wait = 0;
+					CritterElementPtr->life_span = DIVIDED_CRITTER_LIFESPAN; // JMS XXX: For some reason, we need to have some lifespan here??
+					CritterElementPtr->scan_node = BIOLOGICAL_SCAN; // JMS: This makes the collision check recognize this as bio.
+					
+					SetPrimType (&DisplayArray[CritterElementPtr->PrimIndex], STAMP_PRIM);
+					DisplayArray[CritterElementPtr->PrimIndex].Object.Stamp.frame = 
+					SetAbsFrameIndex (LanderFrame[9], 0);
+					
+					UnlockElement (hCritterElement);
+					InsertElement (hCritterElement, GetHeadElement ());
+				}
+			}
+			
+			PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DEPARTS), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
+			
+			ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the original critter frame
+			ElementPtr->mass_points = 0;			 // JMS: Make sure the original critter doesn't give biodata.
+			
+			// JMS: This marks the big divided critter "collected". (even though there was no biodata to collect).
+			// This ensures the big divided critter isn't resurrected when visiting the planet next time.
+			temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
+			pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
+			(1L << temp_which_node);
+			pSolarSysState->CurNode = (COUNT)~0;
+			(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
+			SET_GAME_STATE (PLANETARY_CHANGE, 1);
+			
+			return (1);
+		}
 	}
 	
 	return (0);
@@ -949,23 +972,21 @@ CheckObjectCollision (COUNT index)
 						/* Collision of a stun bolt with a viable creature */
 						if (ElementPtr->hit_points)
 						{
-							COUNT WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
 							COUNT frame_index;
 							PRIMITIVE *pPrim;
 							pPrim = &DisplayArray[ElementPtr->PrimIndex];
 							frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
 							
-							// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
-							if ((CreatureData[WhichCreature].SpecialAttributes & INVULNERABLE_PART_TIME)
-								&& frame_index < HOPPING_HATCHLING_INVULNERABILITY_FRAMES) 
+							// 1) Critter is invulnerable: stop the function here - critter is unharmed.
+							if (CheckSpecialAttributes(ElementPtr, INVULNERABILITY_SPECIALS))
 							{
 								PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 								break;
 							}
-							
+							// 2) Critter dies.
 							else if (--ElementPtr->hit_points == 0)
 							{
-								if (CheckSpecialAttributes(ElementPtr))
+								if (CheckSpecialAttributes(ElementPtr, WHEN_DYING_SPECIALS))
 								{
 									// JMS: The special cases like exploding/dividing creatures are handled in a separate function.
 								}
@@ -975,6 +996,7 @@ CheckObjectCollision (COUNT index)
 									DisplayArray[ElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[0];
 								}
 							}
+							// 3) Critter is weakened.
 							else if (CreatureData[
 									ElementPtr->mass_points
 									& ~CREATURE_AWARE

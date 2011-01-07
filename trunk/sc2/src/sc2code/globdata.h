@@ -1078,6 +1078,9 @@ START_GAME_STATE
 	// JMS: The location of those that left in a hurry
 	ADD_GAME_STATE (HINT_WORLD_LOCATION, 2)
 
+	// JMS: Stronger lander shot is more effective and required for destroying certain enemies.
+	ADD_GAME_STATE (STRONGER_LANDER_SHOT, 1)
+
 
 END_GAME_STATE
 
