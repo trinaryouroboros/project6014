@@ -54,124 +54,117 @@
 #define PLANET_SIDE_RATE (ONE_SECOND / 35)
 
 
-FRAME LanderFrame[10]; // JMS: Was 8, added one slot for wackodemon explosion frames and one for dividing critter's small frames.
+FRAME LanderFrame[10]; // JMS: Was 8, added one slot for critter explosion frames and one for dividing critter's small frames.
 static SOUND LanderSounds;
 MUSIC_REF LanderMusic;
 #define NUM_ORBIT_THEMES 5
 static MUSIC_REF OrbitMusic[NUM_ORBIT_THEMES];
 const LIFEFORM_DESC CreatureData[] =
 {
-  {SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4},
+  {SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4, NONE},
 			// Roto-Dendron
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 4},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 4, NONE},
 			// Macrocillia
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 4},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 4, NONE},
 			// Splort Wort
-	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 4},
+	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 4, NONE},
 			// Whackin' Bush
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 4},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 4, NONE},
 			// Slot Machine Tree
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 4, NONE},
 			// Neon Worm
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 4},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 4, NONE},
 			// Stiletto Urchin
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 4},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 4, NONE},
 			// Deluxe Blob
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 4, NONE},
 			// Glowing Medusa
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 4},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 4, NONE},
 			// Carousel Beast
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 4},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 4, NONE},
 			// Mysterious Bees
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 4},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 4, NONE},
 			// Hopping Blobby
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 4, NONE},
 			// Blood Monkey
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 4},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 4, NONE},
 			// Yompin Yiminy
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 4, NONE},
 			// Amorphous Trandicula
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 4},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 4, NONE},
 			// Crazy Weasel
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4, NONE},
 			// Merry Whumpet
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 4},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 4, NONE},
 			// Fungal Squid
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 4},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 4, NONE},
 			// Penguin Cyclops
-	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (1, 1), 4},
+	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (1, 1), 4, NONE},
 			// Chicken
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 4, NONE},
 			// Bubble Vine
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 4},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 4, NONE},
 			// Bug-Eyed Bait
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 4},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 4, NONE},
 			// Goo Burger
-	{SPEED_MOTIONLESS | DANGER_MONSTROUS, MAKE_BYTE (1, 1), 4},
+	{SPEED_MOTIONLESS | DANGER_MONSTROUS, MAKE_BYTE (1, 1), 4, NONE},
 			// Evil One
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (0, 1), 4},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (0, 1), 4, NONE},
 			// Brainbox Bulldozers
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_MONSTROUS, MAKE_BYTE (15, 15), 4},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_MONSTROUS, MAKE_BYTE (15, 15), 4, NONE},
 			// Zex's Beauty
 
 	// ---- New Critters from here on ----
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 3), 5},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 3), 5, NONE},
 			// Echinosol
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 2},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 2, NONE},
 			// Flora Flatulensis
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 2},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 2, INVULNERABLE_PART_TIME},
 			// Hopping Hatchling
-#define HOPPING_HATCHLING_INDEX 28 // If you change Hopping hatchling's location in this list, change this define also!
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 2},
+#define HOPPING_HATCHLING_INVULNERABILITY_FRAMES 45 // JMS: XXX: This is still kinda hacky.
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 2, NONE},
 			// Dizzy Fnarble
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 2},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 2, NONE},
 			// Flagellum Pest
-	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (2, 1), 1},
+	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (2, 1), 1, NONE},
 			// Flying O'Hairy
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 2},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 2, NONE},
 			// Bobbing Whibbit
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 2},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 2, NONE},
 			// Muddy Morphlegm
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 2},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 2, NONE},
 			// Ultramoeba
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 3},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 3, NONE},
 			// Electroptera
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 2},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 2, SHOOTS_BACK},
 			// Quartzerback
-#define QUARTZERBACK_INDEX 36 // If you change Quartzerback's location in this list, change this define also!	
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 2},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 2, NONE},
 			// Tuberus Humungus
-	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 2},
+	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 2, NONE},
 			// Venus Frytrap
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 5},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 5, NONE},
 			// Watchful Willow
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 1},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 1, NONE},
 			// Xerophytic Autovore
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 3},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 3, NONE},
 			// Migrator Blimp
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 5},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 5, NONE},
 			// Tentacle Du Jour
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 2},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 2, NONE},
 			// Vanishing Vermin
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 5},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 5, NONE},
 			// Tripazoid Tumbler
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 6), 2},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 6), 2, WHEN_DYING_DIVIDES},
 			// Dumpy Dweejus
-#define DUMPYDWEEJUS_INDEX 45 // If you change Dumpy Dweejus's location in this list, change this define also!
-#define NUM_OF_SMALL_DUMPYDWEEJUSES 3 // How many small copies of itself the dweejus produces when "dying".
-#define DIVIDING_CRITTER_LIFESPAN 1
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1, NONE},
 			// Radial Arachnid
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (7, 2), 0},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (7, 2), 0, WHEN_DYING_EXPLODES},
 			// Wackodemon
-#define WACKODEMON_INDEX 47 // If you change Wackodemon's location in this list, change this define also!
-#define DEMON_EXPLOSION_NUMERATOR 3		// These two define the chance at which the wackodemon explodes. (Numer./denom.)
-#define DEMON_EXPLOSION_DENOMINATOR 5	//
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 2},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 2, NONE},
 			// Crabby Octopus
-	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2, NONE},
 			// Blinking Beholder
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 5), 3},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 5), 3, NONE},
 			// Creeping head
 };
 
@@ -293,8 +286,8 @@ AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 		ELEMENT *WeaponElementPtr;
 		COUNT shotFrameIndex;
 		
-		// JMS: Get the shot's PNG frame from its angle. Constrain the frame number to 15 since for some reason this crap
-		// went to 16 with this kinda setup, but sometimes went to -1 if I subtracted 1 from the result.
+		// JMS: Get the shot's PNG frame from its angle. Constrain the frame number to 15, 
+		// since for some reason this crap went to 16 with this kinda setup, but sometimes went to -1 if I subtracted 1 from the result.
 		if ((shotFrameIndex = ANGLE_TO_FACING (NORMALIZE_ANGLE(angle))) > 15)
 			shotFrameIndex = 15;
 			
@@ -319,7 +312,6 @@ AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 		InsertElement (hWeaponElement, GetHeadElement ());
 		
 		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_SHOOTS), NotPositional (), NULL, GAME_SOUND_PRIORITY);
-		
 	}
 }
 
@@ -368,7 +360,7 @@ object_animation (ELEMENT *ElementPtr)
 				if (++pMenuState->CurState >= EXPLOSION_LIFE)
 					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
 			}
-			// JMS: Since Biocritter explosion doesn't use pMS->Curstate to keep track of which frame the explosion is in,
+			// JMS: Since Biocritter explosion doesn't use pMS->Curstate to keep track of which frame the explosion is in (like DEATH_EXPLOSION does),
 			// we must limit the number of explosion frames with a constant number.
 			else if (ElementPtr->mass_points == BIOCRITTER_EXPLOSION)
 			{
@@ -540,9 +532,9 @@ object_animation (ELEMENT *ElementPtr)
 
 				SetVelocityComponents (&ElementPtr->velocity, COSINE (angle, speed), SINE (angle, speed));
 				
-				// JMS: Quartzerback will shoot if it is aware of the lander and near enough.
+				// JMS: Shooting critters will shoot if it is aware of the lander and near enough.
 #define MAX_ENEMYSHOT_DISTANCE (100 * RESOLUTION_FACTOR) // JMS
-				if (index == QUARTZERBACK_INDEX
+				if ((CreatureData[index].SpecialAttributes & SHOOTS_BACK)
 					&& (ElementPtr->mass_points & CREATURE_AWARE)
 					&& (dx <= MAX_ENEMYSHOT_DISTANCE 
 						&& dy <= MAX_ENEMYSHOT_DISTANCE
@@ -661,6 +653,121 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 	SetContext (OldContext);
 }
 
+static int
+CheckSpecialAttributes (ELEMENT *ElementPtr)
+{
+	COUNT WhichCreature;
+	
+	WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
+	
+	// JMS: Some critters may explode when killed!!!
+	if (CreatureData[WhichCreature].SpecialAttributes & WHEN_DYING_EXPLODES)
+	{
+		// JMS: Chance of exploding is drawn here from random number. 
+		if ((TFB_Random() % 100) < CRITTER_EXPLOSION_PERCENT)
+		{
+			HELEMENT hExplosionElement;
+			SIZE temp_which_node;
+			
+			hExplosionElement = AllocElement ();
+			if (hExplosionElement)
+			{
+				ELEMENT *ExplosionElementPtr;
+				
+				LockElement (hExplosionElement, &ExplosionElementPtr);
+				
+				ExplosionElementPtr->mass_points = BIOCRITTER_EXPLOSION;
+				ExplosionElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
+				ExplosionElementPtr->next.location = ElementPtr->next.location;
+				ExplosionElementPtr->preprocess_func = object_animation;
+				ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
+				ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
+				
+				SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
+				DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
+				SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
+				// Otherwise the game thinks this explosion belongs to lander
+				// itself, and it won't collide with lander at all (->no damage).
+				UnlockElement (hExplosionElement);
+				InsertElement (hExplosionElement, GetHeadElement ());
+				
+				PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
+				
+				ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the critter frame
+				ElementPtr->mass_points = 0;			 // JMS: Make sure critter/explosion doesn't give biodata.
+				
+				// JMS: This marks the exploded critter "collected". (even though there was no biodata to collect).
+				// This ensures the critter isn't resurrected when visiting the planet next time.
+				temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
+				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
+				(1L << temp_which_node); // Mark this bio-blip's state as "collected".
+				pSolarSysState->CurNode = (COUNT)~0; // GenerateLifeForms will update the states of ALL bio-blips when run.
+				(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE)); // Re-run GenerateLifeForms so the changed state takes effect
+				SET_GAME_STATE (PLANETARY_CHANGE, 1); // Save the changes to the file containing the states of all lifeforms.
+			}
+			
+			return (1); // JMS: Return 1 only if the thing exploded. If not, the return (0) at the end of the function is encountered.
+		}
+	}
+	// JMS: Divisible critter splits into smaller versions of itself when it "dies".
+	else if (CreatureData[WhichCreature].SpecialAttributes & WHEN_DYING_DIVIDES)
+	{
+		COUNT ii;
+		SIZE temp_which_node;
+		
+		for(ii = 0; ii < DIVIDED_CRITTER_NUMBER; ++ii)
+		{
+			HELEMENT hCritterElement;
+			
+			hCritterElement = AllocElement ();
+			if (hCritterElement)
+			{
+				ELEMENT *CritterElementPtr;
+				BYTE CritterIndex;
+				
+				LockElement (hCritterElement, &CritterElementPtr);
+				CritterIndex = (BYTE)43; // JMS XXX: Currently hacked to point to vanishing vermin stats...
+				
+				CritterElementPtr->mass_points = CritterIndex;
+				CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
+				CritterElementPtr->state_flags = BAD_GUY;
+				CritterElementPtr->next.location.x = ElementPtr->next.location.x + (ii - 1) * 5;
+				CritterElementPtr->next.location.y = ElementPtr->next.location.y + (ii - 1) * 2;
+				CritterElementPtr->preprocess_func = object_animation;
+				CritterElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[CritterIndex].FrameRate);
+				CritterElementPtr->thrust_wait = 0;
+				CritterElementPtr->life_span = DIVIDED_CRITTER_LIFESPAN; // JMS XXX: For some reason, we need to have some lifespan here??
+				CritterElementPtr->scan_node = BIOLOGICAL_SCAN; // JMS: This makes the collision check recognize this as bio.
+				
+				SetPrimType (&DisplayArray[CritterElementPtr->PrimIndex], STAMP_PRIM);
+				DisplayArray[CritterElementPtr->PrimIndex].Object.Stamp.frame = 
+				SetAbsFrameIndex (LanderFrame[9], 0);
+				
+				UnlockElement (hCritterElement);
+				InsertElement (hCritterElement, GetHeadElement ());
+			}
+		}
+		
+		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DEPARTS), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
+		
+		ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the original critter frame
+		ElementPtr->mass_points = 0;			 // JMS: Make sure the original critter doesn't give biodata.
+		
+		// JMS: This marks the big divided critter "collected". (even though there was no biodata to collect).
+		// This ensures the big divided critter isn't resurrected when visiting the planet next time.
+		temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
+		pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
+		(1L << temp_which_node);
+		pSolarSysState->CurNode = (COUNT)~0;
+		(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
+		SET_GAME_STATE (PLANETARY_CHANGE, 1);
+		
+		return (1);
+	}
+	
+	return (0);
+}
+
 static void
 CheckObjectCollision (COUNT index)
 {
@@ -777,13 +884,6 @@ CheckObjectCollision (COUNT index)
 							// Currently does nothing, but all kinds of nice crap can be added here.
 							TimeIn = GetTimeCounter ();
 							which_node = 8;
-							
-							/*do
-							{
-								DeltaLanderCrew (-1, LANDER_INJURED);
-								SleepThreadUntil (TimeIn + ONE_SECOND / 20);
-								TimeIn = GetTimeCounter();
-							} while (HIBYTE (pMenuState->delta_item) && --which_node);*/
 						}
 
 						if (HIBYTE (pMenuState->delta_item)
@@ -794,11 +894,10 @@ CheckObjectCollision (COUNT index)
 							DoDiscoveryReport (MenuSounds);
 							BatchGraphics ();
 						}
+						
 						if (ElementPtr->mass_points == 0)
 						{
-							DestroyStringTable (ReleaseStringTable (
-									pSolarSysState->SysInfo.PlanetInfo.DiscoveryString
-									));
+							DestroyStringTable (ReleaseStringTable (pSolarSysState->SysInfo.PlanetInfo.DiscoveryString));
 							pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = 0;
 							UnlockElement (hElement);
 							continue;
@@ -836,7 +935,6 @@ CheckObjectCollision (COUNT index)
 	
 					if (scan == ENERGY_SCAN)
 					{
-
 						/* Collision of a stun bolt with an energy node */
 						UnlockElement (hElement);
 						break;
@@ -850,129 +948,25 @@ CheckObjectCollision (COUNT index)
 						/* Collision of a stun bolt with a viable creature */
 						if (ElementPtr->hit_points)
 						{
-							int WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
+							COUNT WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
 							COUNT frame_index;
 							PRIMITIVE *pPrim;
 							pPrim = &DisplayArray[ElementPtr->PrimIndex];
 							frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
 							
 							// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
-							if (WhichCreature == HOPPING_HATCHLING_INDEX && frame_index < 45) 
+							if ((CreatureData[WhichCreature].SpecialAttributes & INVULNERABLE_PART_TIME)
+								&& frame_index < HOPPING_HATCHLING_INVULNERABILITY_FRAMES) 
 							{
-								PlaySound (SetAbsSoundIndex (
-										LanderSounds, BIOLOGICAL_DISASTER
-										), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+								PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 								break;
 							}
 							
 							else if (--ElementPtr->hit_points == 0)
 							{
-								// JMS: Wackodemon may explode when killed!!!
-								if (WhichCreature == WACKODEMON_INDEX)
+								if (CheckSpecialAttributes(ElementPtr))
 								{
-									// JMS: Chance of exploding is drawn here from random number. 
-									if ((TFB_Random() % DEMON_EXPLOSION_DENOMINATOR) < DEMON_EXPLOSION_NUMERATOR)
-									{
-										HELEMENT hExplosionElement;
-										SIZE temp_which_node;
-									
-										hExplosionElement = AllocElement ();
-										if (hExplosionElement)
-										{
-											ELEMENT *ExplosionElementPtr;
-										
-											LockElement (hExplosionElement, &ExplosionElementPtr);
-										
-											ExplosionElementPtr->mass_points = BIOCRITTER_EXPLOSION;
-											ExplosionElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
-											ExplosionElementPtr->next.location = ElementPtr->next.location;
-											ExplosionElementPtr->preprocess_func = object_animation;
-											ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
-											ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
-										
-											SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
-											DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
-											SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
-																				   // Otherwise the game thinks this explosion belongs to lander
-																				   // itself, and it won't collide with lander at all (->no damage).
-											UnlockElement (hExplosionElement);
-											InsertElement (hExplosionElement, GetHeadElement ());
-										
-											PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
-										
-											ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the critter frame
-											ElementPtr->mass_points = 0;			 // JMS: Make sure critter/explosion doesn't give biodata.
-											
-											// JMS: This marks the wackodemon "collected". (even though there was no biodata to collect).
-											// This ensures the demon isn't resurrected when visiting the planet next time.
-											temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
-											pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-												(1L << temp_which_node); // Mark this bio-blip's state as "collected".
-											pSolarSysState->CurNode = (COUNT)~0; // GenerateLifeForms will update the states of ALL bio-blips when run.
-											(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE)); // Re-run GenerateLifeForms so the changed state takes effect
-											SET_GAME_STATE (PLANETARY_CHANGE, 1); // Save the changes to the file containing the states of all lifeforms.
-										}
-									}
-									else // JMS: ...Whew! It didn't blow up this time.
-									{
-										ElementPtr->mass_points = value;
-										DisplayArray[ElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[0];
-									}
-								}
-								// JMS: Dumpy Dweejus divides into smaller versions of itself when it "dies"
-								else if (WhichCreature == DUMPYDWEEJUS_INDEX)
-								{
-									COUNT ii;
-									SIZE temp_which_node;
-									
-									for(ii = 0; ii < NUM_OF_SMALL_DUMPYDWEEJUSES; ++ii)
-									{
-										HELEMENT hCritterElement;
-										
-										hCritterElement = AllocElement ();
-										if (hCritterElement)
-										{
-											ELEMENT *CritterElementPtr;
-											BYTE CritterIndex;
-											
-											LockElement (hCritterElement, &CritterElementPtr);
-											CritterIndex = (BYTE)43; // JMS XXX: Currently hacked to point to vanishing vermin stats...
-											
-											CritterElementPtr->mass_points = CritterIndex;
-											CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
-											CritterElementPtr->state_flags = BAD_GUY;
-											CritterElementPtr->next.location.x = ElementPtr->next.location.x + (ii - 1) * 5;
-											CritterElementPtr->next.location.y = ElementPtr->next.location.y + (ii - 1) * 2;
-											CritterElementPtr->preprocess_func = object_animation;
-											CritterElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[CritterIndex].FrameRate);
-											CritterElementPtr->thrust_wait = 0;
-											CritterElementPtr->life_span = DIVIDING_CRITTER_LIFESPAN; // JMS XXX: For some reason, we need to have some lifespan here??
-											CritterElementPtr->scan_node = BIOLOGICAL_SCAN; // JMS: This makes the collision check recognize this as bio.
-											
-											SetPrimType (&DisplayArray[CritterElementPtr->PrimIndex], STAMP_PRIM);
-											DisplayArray[CritterElementPtr->PrimIndex].Object.Stamp.frame = 
-												SetAbsFrameIndex (LanderFrame[9], 0);
-											
-											UnlockElement (hCritterElement);
-											InsertElement (hCritterElement, GetHeadElement ());
-										}
-											
-									}
-									
-									PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DEPARTS), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
-									
-									ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the original critter frame
-									ElementPtr->mass_points = 0;			 // JMS: Make sure the original critter doesn't give biodata.
-									
-									// JMS: This marks the Dweejus "collected". (even though there was no biodata to collect).
-									// This ensures the demon isn't resurrected when visiting the planet next time.
-									temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
-									pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-										(1L << temp_which_node);
-									pSolarSysState->CurNode = (COUNT)~0;
-									(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
-									SET_GAME_STATE (PLANETARY_CHANGE, 1);
-									
+									// JMS: The special cases like exploding/dividing creatures are handled in a separate function.
 								}
 								else
 								{
@@ -2110,7 +2104,7 @@ LoadLanderData (void)
 		LanderFrame[6] = CaptureDrawable (LoadGraphic (LANDER_RETURN_MASK_PMAP_ANIM));
 		LanderSounds = CaptureSound (LoadSound (LANDER_SOUNDS));
 		LanderFrame[7] = CaptureDrawable (LoadGraphic (ORBIT_VIEW_ANIM));
-		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDENEMY_MASK_PMAP_ANIM)); // JMS: Added this for Wackodemon explosion and biocritters' shots.
+		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDENEMY_MASK_PMAP_ANIM)); // JMS: Added this for critter explosion and biocritters' shots.
 		LanderFrame[9] = CaptureDrawable (LoadGraphic (LIFE45SML_MASK_PMAP_ANIM)); // JMS: Added this for dividing critter's small bastards' frames.
 		{
 			COUNT i;
