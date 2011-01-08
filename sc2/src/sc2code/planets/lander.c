@@ -129,7 +129,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Flagellum Pest
 	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (2, 1), 1, NONE},
 			// Flying O'Hairy
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 2, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 2, SHOOTS_LIMPET},
 			// Bobbing Whibbit
 	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 2, NONE},
 			// Muddy Morphlegm
@@ -137,7 +137,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Ultramoeba
 	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 3, NONE},
 			// Electroptera
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 2, SHOOTS_BACK},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 2, SHOOTS_LASER},
 			// Quartzerback
 	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 2, NONE},
 			// Tuberus Humungus
@@ -180,7 +180,9 @@ extern PRIM_LINKS DisplayLinks;
 #define SHIELD_BIT (1 << 7)
 
 #define DEATH_EXPLOSION 0
-#define BIOCRITTER_EXPLOSION 4 // JMS: Chose 4 so it wouldn't mix up with EARTHQUAKE, LIGHTNING and LAVASPOT _DISASTERS.
+
+#define BIOCRITTER_PROJECTILE 4 // JMS: Chose 4 and 5 so they wouldn't mix up with EARTHQUAKE, LIGHTNING and LAVASPOT _DISASTERS.
+#define BIOCRITTER_LIMPET 5
 
 #define SURFACE_X SIS_ORG_X
 #define SURFACE_Y SIS_ORG_Y
@@ -274,8 +276,9 @@ RepairTopography (ELEMENT *ElementPtr)
 }
 
 static HELEMENT AddGroundDisaster (COUNT which_disaster);
+void object_animation (ELEMENT *ElementPtr);
 
-// JMS: This is a new function, which creates a biocritter's shot.
+// JMS: This is a new function, which creates a biocritter's laser shot.
 static void
 AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 {
@@ -294,7 +297,7 @@ AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 			
 		LockElement (hWeaponElement, &WeaponElementPtr);
 		
-		WeaponElementPtr->mass_points = BIOCRITTER_EXPLOSION;
+		WeaponElementPtr->mass_points = BIOCRITTER_PROJECTILE;
 		WeaponElementPtr->life_span = 12;
 		WeaponElementPtr->state_flags = FINITE_LIFE | BAD_GUY; // JMS: Lander's own shots have GOOD_GUY. Baddies have BAD_GUY obviously.
 		WeaponElementPtr->next.location = CritterElementPtr->next.location;
@@ -302,8 +305,7 @@ AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 		SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
 		
 		// JMS: Let's use LanderFrame[8] instead of [0] so the game doesn't think this shot belongs to lander (which uses LanderFrame[0]).
-		DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame =
-			SetAbsFrameIndex (LanderFrame[8], shotFrameIndex); 
+		DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[8], shotFrameIndex); 
 		
 		SetVelocityComponents (&WeaponElementPtr->velocity, 
 							   COSINE (angle, WORLD_TO_VELOCITY (2 * 3)) + speed,
@@ -316,10 +318,49 @@ AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 	}
 }
 
+// JMS: This is a new function, which creates a biocritter's limpet shot.
+static void
+AddEnemyLimpet (ELEMENT *CritterElementPtr, COUNT shot_angle, COUNT critter_angle, COUNT speed)
+{
+	HELEMENT hWeaponElement;
+	
+	hWeaponElement = AllocElement ();
+	if (hWeaponElement)
+	{
+		ELEMENT *WeaponElementPtr;
+		COUNT shotFrameIndex;
+		
+		shotFrameIndex = 26;
+		
+		LockElement (hWeaponElement, &WeaponElementPtr);
+		
+		WeaponElementPtr->mass_points = BIOCRITTER_LIMPET;
+		WeaponElementPtr->life_span = 45;
+		WeaponElementPtr->state_flags = FINITE_LIFE | BAD_GUY; // JMS: Lander's own shots have GOOD_GUY. Baddies have BAD_GUY obviously.
+		WeaponElementPtr->next.location = CritterElementPtr->next.location;
+		WeaponElementPtr->preprocess_func = object_animation;
+		
+		SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
+		
+		// JMS: Let's use LanderFrame[8] instead of [0] so the game doesn't think this shot belongs to lander (which uses LanderFrame[0]).
+		DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[8], shotFrameIndex); 
+		
+		// JMS: The critter's own speed is decreased from the limpet speed to give constant speed for the limpet.
+		SetVelocityComponents (&WeaponElementPtr->velocity, 
+							   COSINE (shot_angle, LIMPET_ACCEL) + COSINE (critter_angle, speed),
+							   SINE   (shot_angle, LIMPET_ACCEL) + SINE   (critter_angle, speed));
+		
+		UnlockElement (hWeaponElement);
+		InsertElement (hWeaponElement, GetHeadElement ());
+		
+		PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+	}
+}
+
 void
 object_animation (ELEMENT *ElementPtr)
 {
-	COUNT frame_index, angle;
+	COUNT frame_index, angle, hunt_angle; // JMS: Added the hunt_angle
 	PRIMITIVE *pPrim;
 	
 	pPrim = &DisplayArray[ElementPtr->PrimIndex];
@@ -362,11 +403,47 @@ object_animation (ELEMENT *ElementPtr)
 					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
 			}
 			// JMS: Since Biocritter explosion doesn't use pMS->Curstate to keep track of which frame the explosion is in (like DEATH_EXPLOSION does),
-			// we must limit the number of explosion frames with a constant number.
-			else if (ElementPtr->mass_points == BIOCRITTER_EXPLOSION)
+			// we must limit the number of explosion frames with a constant number. (Critter laser shots never reach this if)
+			else if (ElementPtr->mass_points == BIOCRITTER_PROJECTILE)
 			{
 				if (frame_index >= 26)
 					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
+			}
+			else if (ElementPtr->mass_points == BIOCRITTER_LIMPET)
+			{
+				SIZE ldx, ldy, oldx, oldy;
+				SIZE current_limpet_speed;
+				COUNT limpet_angle;
+				
+				ldx = pSolarSysState->MenuState.first_item.x - ElementPtr->next.location.x;
+				ldy = pSolarSysState->MenuState.first_item.y - ElementPtr->next.location.y;
+				
+				if (ldx < 0 && ldx < -(MAP_WIDTH << (MAG_SHIFT - 1)))
+					ldx += MAP_WIDTH << MAG_SHIFT;
+				else if (ldx > (MAP_WIDTH << (MAG_SHIFT - 1)))
+					ldx -= MAP_WIDTH << MAG_SHIFT;
+			
+				// Angle is now set straight towards the lander.
+				limpet_angle = ARCTAN (ldx, ldy);
+				
+				// 1. The first possible method for homing projectiles:
+				// Store the old velocity and direction
+				GetCurrentVelocityComponents (&ElementPtr->velocity, &oldx, &oldy);
+				// Accelerate the limpet to a new direction
+				DeltaVelocityComponents (&ElementPtr->velocity, COSINE (limpet_angle, LIMPET_ACCEL),SINE (limpet_angle, LIMPET_ACCEL));
+				// Compare the new velocity to a maximum. If the new velocity is above the limit, revert to old velocity.
+				GetCurrentVelocityComponents (&ElementPtr->velocity, &ldx, &ldy);
+				current_limpet_speed = square_root ((long)ldx * ldx + (long)ldy * ldy);
+				if (current_limpet_speed > LIMPET_MAX_SPEED)
+					SetVelocityComponents (&ElementPtr->velocity, oldx, oldy);
+				//
+				// 2. The second possible method for homing projectiles:
+				// SetVelocityComponents (&ElementPtr->velocity, COSINE (limpet_angle, LIMPET_MAX_SPEED),SINE (limpet_angle, LIMPET_MAX_SPEED));
+				
+				// JMS: Cycle the limpet frames
+				if (frame_index >= 30)
+					pPrim->Object.Stamp.frame = SetAbsFrameIndex (pPrim->Object.Stamp.frame, 26);
+				
 			}
 			else if (ElementPtr->mass_points == EARTHQUAKE_DISASTER)
 			{
@@ -444,6 +521,7 @@ object_animation (ELEMENT *ElementPtr)
 				
 				dy = pSolarSysState->MenuState.first_item.y - ElementPtr->next.location.y;
 				angle = ARCTAN (dx, dy); // At this point, the critter heads straight towards the lander.
+				hunt_angle = angle; // JMS
 				
 				if (dx < 0)
 					dx = -dx;
@@ -532,16 +610,26 @@ object_animation (ELEMENT *ElementPtr)
 				}
 
 				SetVelocityComponents (&ElementPtr->velocity, COSINE (angle, speed), SINE (angle, speed));
-				
-				// JMS: Shooting critters will shoot if it is aware of the lander and near enough.
+
 #define MAX_ENEMYSHOT_DISTANCE (100 * RESOLUTION_FACTOR) // JMS
-				if ((CreatureData[index].SpecialAttributes & SHOOTS_BACK)
-					&& (ElementPtr->mass_points & CREATURE_AWARE)
-					&& (dx <= MAX_ENEMYSHOT_DISTANCE 
-						&& dy <= MAX_ENEMYSHOT_DISTANCE
-						&& dx * dx + dy * dy <= MAX_ENEMYSHOT_DISTANCE * MAX_ENEMYSHOT_DISTANCE))
+				// JMS: Shooting critters may fire now if they're close enough and are at the correct PNG frame.
+				// This way the fire rate can be (a bit hackily) controlled by adding frames to the .ani file.
 				{
-					AddEnemyShot(ElementPtr, angle, speed);
+					BYTE creatureHasWeapon;
+					creatureHasWeapon = CreatureData[index].SpecialAttributes & SHOOTING_SPECIALS;
+					
+					if (creatureHasWeapon
+						&& frame_index == 4
+						&& (ElementPtr->mass_points & CREATURE_AWARE)
+						&& (dx <= MAX_ENEMYSHOT_DISTANCE 
+							&& dy <= MAX_ENEMYSHOT_DISTANCE
+							&& dx * dx + dy * dy <= MAX_ENEMYSHOT_DISTANCE * MAX_ENEMYSHOT_DISTANCE))
+					{
+						if (creatureHasWeapon & SHOOTS_LASER) 
+							AddEnemyShot(ElementPtr, angle, speed);
+						else if (creatureHasWeapon & SHOOTS_LIMPET)
+							AddEnemyLimpet(ElementPtr, hunt_angle, angle, speed);
+					}
 				}
 			}
 		}
@@ -658,15 +746,15 @@ static int
 CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 {
 	COUNT WhichCreature;
-	COUNT frame_index;
-	PRIMITIVE *pPrim;
-	
 	WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
-	pPrim = &DisplayArray[ElementPtr->PrimIndex];
-	frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
 	
 	if (WhichSpecial == INVULNERABILITY_SPECIALS)
 	{
+		COUNT frame_index;
+		PRIMITIVE *pPrim;
+		pPrim = &DisplayArray[ElementPtr->PrimIndex];
+		frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
+		
 		// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
 		if ((CreatureData[WhichCreature].SpecialAttributes & INVULNERABLE_PART_TIME)
 			&& frame_index < HOPPING_HATCHLING_INVULNERABILITY_FRAMES
@@ -699,7 +787,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					
 					LockElement (hExplosionElement, &ExplosionElementPtr);
 					
-					ExplosionElementPtr->mass_points = BIOCRITTER_EXPLOSION;
+					ExplosionElementPtr->mass_points = BIOCRITTER_PROJECTILE;
 					ExplosionElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
 					ExplosionElementPtr->next.location = ElementPtr->next.location;
 					ExplosionElementPtr->preprocess_func = object_animation;
@@ -870,13 +958,22 @@ CheckObjectCollision (COUNT index)
 					if (HIBYTE (pMenuState->delta_item) == 0 || pPSD->InTransit)
 						break;
 					
-					// JMS: This handles the contact of biocritter explosion with lander.
-					if (ElementPtr->mass_points == BIOCRITTER_EXPLOSION
+					// JMS: This handles the contact of biocritter explosion and laser shots with lander.
+					if (ElementPtr->mass_points == BIOCRITTER_PROJECTILE
 						&& ElementPtr->state_flags & FINITE_LIFE)
 					{	
 						if ((BYTE)TFB_Random () < (256 >> 2))
 							DeltaLanderCrew (-1, LANDER_INJURED); // No shield prevents explosion damage.
 						
+						UnlockElement (hElement); 
+						
+						continue;
+					}
+					
+					// JMS: This handles the contact of biocritter limpet with lander.
+					else if (ElementPtr->mass_points == BIOCRITTER_LIMPET
+						&& ElementPtr->state_flags & FINITE_LIFE)
+					{	
 						UnlockElement (hElement); 
 						
 						continue;
