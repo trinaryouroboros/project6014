@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010: Added LimpetLevel variable to Planetside_dexc structure
+
 #ifndef _LANDER_H
 #define _LANDER_H
 
@@ -24,7 +26,6 @@
 #include "libs/gfxlib.h"
 #include "libs/sndlib.h"
 #include "menustat.h"
-
 
 #define NUM_TEXT_FRAMES 32
 
@@ -36,8 +37,7 @@ typedef struct
 
 	SOUND OldMenuSounds;
 
-	COUNT ElementLevel, MaxElementLevel,
-				BiologicalLevel;
+	COUNT ElementLevel, MaxElementLevel, BiologicalLevel;
 	COUNT ElementAmounts[NUM_ELEMENT_CATEGORIES];
 
 	COUNT NumFrames;
@@ -47,6 +47,8 @@ typedef struct
 	COLOR ColorCycle[NUM_TEXT_FRAMES >> 1];
 
 	BYTE TectonicsChance, WeatherChance, FireChance;
+	
+	BYTE LimpetLevel; // JMS: How many limpets have been stuck on lander.
 } PLANETSIDE_DESC;
 
 extern CONTEXT ScanContext;
@@ -57,7 +59,6 @@ extern void DoDiscoveryReport (SOUND ReadOutSounds);
 extern void SetPlanetMusic (BYTE planet_type);
 extern void LoadLanderData (void);
 extern void FreeLanderData (void);
-
 
 #endif /* _LANDER_H */
 

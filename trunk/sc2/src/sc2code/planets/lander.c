@@ -335,7 +335,7 @@ AddEnemyLimpet (ELEMENT *CritterElementPtr, COUNT shot_angle, COUNT critter_angl
 		LockElement (hWeaponElement, &WeaponElementPtr);
 		
 		WeaponElementPtr->mass_points = BIOCRITTER_LIMPET;
-		WeaponElementPtr->life_span = 45;
+		WeaponElementPtr->life_span = LIMPET_LIFESPAN;
 		WeaponElementPtr->state_flags = FINITE_LIFE | BAD_GUY; // JMS: Lander's own shots have GOOD_GUY. Baddies have BAD_GUY obviously.
 		WeaponElementPtr->next.location = CritterElementPtr->next.location;
 		WeaponElementPtr->preprocess_func = object_animation;
@@ -353,7 +353,7 @@ AddEnemyLimpet (ELEMENT *CritterElementPtr, COUNT shot_angle, COUNT critter_angl
 		UnlockElement (hWeaponElement);
 		InsertElement (hWeaponElement, GetHeadElement ());
 		
-		PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_SHOOTS), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 	}
 }
 
@@ -411,7 +411,7 @@ object_animation (ELEMENT *ElementPtr)
 			}
 			else if (ElementPtr->mass_points == BIOCRITTER_LIMPET)
 			{
-				SIZE ldx, ldy, oldx, oldy;
+				SIZE ldx, ldy;
 				SIZE current_limpet_speed;
 				COUNT limpet_angle;
 				
@@ -427,15 +427,17 @@ object_animation (ELEMENT *ElementPtr)
 				limpet_angle = ARCTAN (ldx, ldy);
 				
 				// 1. The first possible method for homing projectiles:
-				// Store the old velocity and direction
-				GetCurrentVelocityComponents (&ElementPtr->velocity, &oldx, &oldy);
 				// Accelerate the limpet to a new direction
 				DeltaVelocityComponents (&ElementPtr->velocity, COSINE (limpet_angle, LIMPET_ACCEL),SINE (limpet_angle, LIMPET_ACCEL));
-				// Compare the new velocity to a maximum. If the new velocity is above the limit, revert to old velocity.
+				// Compare the new velocity to a maximum. Force the velocity to not exceed the limit.
 				GetCurrentVelocityComponents (&ElementPtr->velocity, &ldx, &ldy);
 				current_limpet_speed = square_root ((long)ldx * ldx + (long)ldy * ldy);
 				if (current_limpet_speed > LIMPET_MAX_SPEED)
-					SetVelocityComponents (&ElementPtr->velocity, oldx, oldy);
+				{
+					ldx = (ldx * LIMPET_MAX_SPEED * LIMPET_MAX_SPEED) / (current_limpet_speed * current_limpet_speed);
+					ldy = (ldy * LIMPET_MAX_SPEED * LIMPET_MAX_SPEED) / (current_limpet_speed * current_limpet_speed);
+					SetVelocityComponents (&ElementPtr->velocity, ldx, ldy);
+				}
 				//
 				// 2. The second possible method for homing projectiles:
 				// SetVelocityComponents (&ElementPtr->velocity, COSINE (limpet_angle, LIMPET_MAX_SPEED),SINE (limpet_angle, LIMPET_MAX_SPEED));
@@ -758,7 +760,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 		// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
 		if ((CreatureData[WhichCreature].SpecialAttributes & INVULNERABLE_PART_TIME)
 			&& frame_index < HOPPING_HATCHLING_INVULNERABILITY_FRAMES
-			&& !(GET_GAME_STATE(STRONGER_LANDER_SHOT)))
+			/*&& !(GET_GAME_STATE(STRONGER_LANDER_SHOT))*/)
 		{
 			return (1);
 		}
@@ -958,7 +960,7 @@ CheckObjectCollision (COUNT index)
 					if (HIBYTE (pMenuState->delta_item) == 0 || pPSD->InTransit)
 						break;
 					
-					// JMS: This handles the contact of biocritter explosion and laser shots with lander.
+					// JMS: Collision of lander with biocritter explosion and critters' lasers.
 					if (ElementPtr->mass_points == BIOCRITTER_PROJECTILE
 						&& ElementPtr->state_flags & FINITE_LIFE)
 					{	
@@ -970,12 +972,18 @@ CheckObjectCollision (COUNT index)
 						continue;
 					}
 					
-					// JMS: This handles the contact of biocritter limpet with lander.
+					// JMS: Collision of lander with limpets.
 					else if (ElementPtr->mass_points == BIOCRITTER_LIMPET
 						&& ElementPtr->state_flags & FINITE_LIFE)
 					{	
-						UnlockElement (hElement); 
+						if (pPSD->LimpetLevel < MAX_LIMPETS)
+							(pPSD->LimpetLevel)++;
 						
+						ElementPtr->life_span = 0;
+						PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+						
+						UnlockElement (hElement); 
+
 						continue;
 					}
 					
@@ -1198,18 +1206,12 @@ CheckObjectCollision (COUNT index)
 						case BIOLOGICAL_SCAN:
 							if (pPSD->BiologicalLevel < MAX_SCROUNGED)
 							{
-								if (pPSD->BiologicalLevel
-										+ NumRetrieved > MAX_SCROUNGED)
-									NumRetrieved = (COUNT)(
-											MAX_SCROUNGED
-											- pPSD->BiologicalLevel
-											);
+								if (pPSD->BiologicalLevel+ NumRetrieved > MAX_SCROUNGED)
+									NumRetrieved = (COUNT)(MAX_SCROUNGED - pPSD->BiologicalLevel);
 								FillLanderHold (pPSD, scan, NumRetrieved);
 								break;
 							}
-							PlaySound (SetAbsSoundIndex (
-									LanderSounds, LANDER_FULL
-									), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+							PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_FULL), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 							continue;
 					}
 				}
@@ -1997,19 +1999,19 @@ DoPlanetSide (MENU_STATE *pMS)
 					&GLOBAL (velocity),
 					COSINE (index, WORLD_TO_VELOCITY (2 * 8)) / LANDER_SPEED_DENOM,
 					SINE (index, WORLD_TO_VELOCITY (2 * 8)) / LANDER_SPEED_DENOM
-					);
+					); // JMS
 		else
 			SetVelocityComponents (
 					&GLOBAL (velocity),
 					COSINE (index, WORLD_TO_VELOCITY (2 * 14)) / LANDER_SPEED_DENOM,
 					SINE (index, WORLD_TO_VELOCITY (2 * 14)) / LANDER_SPEED_DENOM
-					);
+					); // JMS
 #ifdef FAST_FAST
 SetVelocityComponents (
 		&GLOBAL (velocity),
-		COSINE (index, WORLD_TO_VELOCITY (48)) / LANDER_SPEED_DENOM,
+		COSINE (index, WORLD_TO_VELOCITY (48l)) / LANDER_SPEED_DENOM,
 		SINE (index, WORLD_TO_VELOCITY (48)) / LANDER_SPEED_DENOM
-		);
+		); // JMS
 #endif
 	}
 	else if (pMS->delta_item == 0
@@ -2062,6 +2064,9 @@ SetVelocityComponents (
 	else
 	{
 		SIZE dx, dy;
+		
+		PLANETSIDE_DESC *pPSD;	// JMS
+		pPSD = (PLANETSIDE_DESC*)pMS->ModuleFrame; // JMS
 
 		if (HIBYTE (pMS->delta_item) == 0)
 			dx = dy = 0;
@@ -2091,21 +2096,21 @@ SetVelocityComponents (
 				if (!GET_GAME_STATE (IMPROVED_LANDER_SPEED))
 					SetVelocityComponents (
 							&GLOBAL (velocity),
-							COSINE (dx, WORLD_TO_VELOCITY (2 * 8)) / LANDER_SPEED_DENOM,
-							SINE (dx, WORLD_TO_VELOCITY (2 * 8)) / LANDER_SPEED_DENOM
-							);
+							COSINE (dx, WORLD_TO_VELOCITY ((2 * 8) - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM,
+							SINE (dx, WORLD_TO_VELOCITY ((2 * 8) - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM
+							); // JMS
 				else
 					SetVelocityComponents (
 							&GLOBAL (velocity),
-							COSINE (dx, WORLD_TO_VELOCITY (2 * 14)) / LANDER_SPEED_DENOM,
-							SINE (dx, WORLD_TO_VELOCITY (2 * 14)) / LANDER_SPEED_DENOM
-							);
+							COSINE (dx, WORLD_TO_VELOCITY ((2 * 14) - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM,
+							SINE (dx, WORLD_TO_VELOCITY ((2 * 14) - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM
+							); // JMS
 #ifdef FAST_FAST
 SetVelocityComponents (
 		&GLOBAL (velocity),
-		COSINE (dx, WORLD_TO_VELOCITY (48)) / LANDER_SPEED_DENOM,
-		SINE (dx, WORLD_TO_VELOCITY (48)) / LANDER_SPEED_DENOM
-		);
+		COSINE (dx, WORLD_TO_VELOCITY (48 - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM,
+		SINE (dx, WORLD_TO_VELOCITY (48 - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM
+		); // JMS
 #endif
 
 				pMS->CurState = MAKE_BYTE (
@@ -2137,26 +2142,19 @@ SetVelocityComponents (
 					WeaponElementPtr->mass_points = 1;
 					WeaponElementPtr->life_span = 12;
 					WeaponElementPtr->state_flags = FINITE_LIFE | GOOD_GUY;
-					WeaponElementPtr->next.location =
-							pSolarSysState->MenuState.first_item;
-					WeaponElementPtr->current.location.x =
-							WeaponElementPtr->next.location.x >> MAG_SHIFT;
-					WeaponElementPtr->current.location.y =
-							WeaponElementPtr->next.location.y >> MAG_SHIFT;
+					WeaponElementPtr->next.location = pSolarSysState->MenuState.first_item;
+					WeaponElementPtr->current.location.x = WeaponElementPtr->next.location.x >> MAG_SHIFT;
+					WeaponElementPtr->current.location.y = WeaponElementPtr->next.location.y >> MAG_SHIFT;
 
 					SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
 					DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame =
-							SetAbsFrameIndex (
-							LanderFrame[0],
-							index + ANGLE_TO_FACING (FULL_CIRCLE)
-							);
+							SetAbsFrameIndex (LanderFrame[0], index + ANGLE_TO_FACING (FULL_CIRCLE));
 
 					if (!CurrentInputState.key[PlayerControls[0]][KEY_UP])
 						wdx = wdy = 0;
 					else
-						GetCurrentVelocityComponents (
-								&GLOBAL (velocity), &wdx, &wdy
-								);
+						GetCurrentVelocityComponents (&GLOBAL (velocity), &wdx, &wdy);
+					
 					index = FACING_TO_ANGLE (index);
 					SetVelocityComponents (
 							&WeaponElementPtr->velocity,
@@ -2168,9 +2166,7 @@ SetVelocityComponents (
 
 					InsertElement (hWeaponElement, GetHeadElement ());
 
-					PlaySound (SetAbsSoundIndex (
-							LanderSounds, LANDER_SHOOTS
-							), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+					PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_SHOOTS), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 
 					wdx = SHUTTLE_FIRE_WAIT;
 					if (GET_GAME_STATE (IMPROVED_LANDER_SHOT))
@@ -2279,11 +2275,10 @@ PlanetSide (MENU_STATE *pMS)
 	memset (&PSD, 0, sizeof (PSD));
 	PSD.InTransit = TRUE;
 
-	PSD.TectonicsChance =
-			TectonicsChanceTab[pSolarSysState->SysInfo.PlanetInfo.Tectonics];
-	PSD.WeatherChance =
-			WeatherChanceTab[pSolarSysState->SysInfo.PlanetInfo.Weather];
+	PSD.TectonicsChance = TectonicsChanceTab[pSolarSysState->SysInfo.PlanetInfo.Tectonics];
+	PSD.WeatherChance = WeatherChanceTab[pSolarSysState->SysInfo.PlanetInfo.Weather];
 	index = pSolarSysState->SysInfo.PlanetInfo.SurfaceTemperature;
+	
 	if (index < 50)
 		PSD.FireChance = FireChanceTab[0];
 	else if (index < 100)
@@ -2301,8 +2296,7 @@ PlanetSide (MENU_STATE *pMS)
 	else
 		PSD.FireChance = FireChanceTab[7];
 
-	PSD.ElementLevel = GetSBayCapacity (NULL)
-			- GLOBAL_SIS (TotalElementMass);
+	PSD.ElementLevel = GetSBayCapacity (NULL) - GLOBAL_SIS (TotalElementMass);
 	PSD.MaxElementLevel = MAX_SCROUNGED;
 	if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
 		PSD.MaxElementLevel <<= 1;
@@ -2319,22 +2313,18 @@ PlanetSide (MENU_STATE *pMS)
 	PSD.ColorCycle[1] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D);
 	PSD.ColorCycle[2] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7B);
 	PSD.ColorCycle[3] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x71);
+	
 	for (index = 4; index < (NUM_TEXT_FRAMES >> 1) - 4; ++index)
 		PSD.ColorCycle[index] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F);
-	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 4] =
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x71);
-	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 3] =
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7B);
-	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 2] =
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D);
-	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 1] =
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7F);
+	
+	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 4] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x71);
+	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 3] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7B);
+	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 2] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D);
+	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 1] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7F);
 	pMS->ModuleFrame = (FRAME)&PSD;
 
 	index = NORMALIZE_FACING ((COUNT)TFB_Random ());
-	LanderFrame[0] = SetAbsFrameIndex (
-			LanderFrame[0], index
-			);
+	LanderFrame[0] = SetAbsFrameIndex (LanderFrame[0], index);
 	pMS->delta_item = 0;
 	pSolarSysState->MenuState.Initialized += 4;
 
@@ -2378,6 +2368,7 @@ PlanetSide (MENU_STATE *pMS)
 		r.corner.y = SIS_ORG_Y;
 		r.extent.width = SIS_SCREEN_WIDTH;
 		r.extent.height = SIS_SCREEN_HEIGHT;
+		
 		if (crew_left == 0)
 		{
 #ifdef NEVER
@@ -2394,8 +2385,7 @@ PlanetSide (MENU_STATE *pMS)
 		else
 		{
 			PSD.InTransit = TRUE;
-			PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_RETURNS),
-					NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
+			PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_RETURNS), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
 
 			TimeIn = GetTimeCounter ();
 			for (index = NUM_LANDING_DELTAS; index >= 0; --index)
@@ -2430,10 +2420,8 @@ PlanetSide (MENU_STATE *pMS)
 			{
 				for (index = 0; index < NUM_ELEMENT_CATEGORIES; ++index)
 				{
-					GLOBAL_SIS (ElementAmounts[index]) +=
-							PSD.ElementAmounts[index];
-					GLOBAL_SIS (TotalElementMass) +=
-							PSD.ElementAmounts[index];
+					GLOBAL_SIS (ElementAmounts[index]) += PSD.ElementAmounts[index];
+					GLOBAL_SIS (TotalElementMass) += PSD.ElementAmounts[index];
 				}
 				DrawStorageBays (FALSE);
 			}
@@ -2441,7 +2429,6 @@ PlanetSide (MENU_STATE *pMS)
 			UnlockMutex (GraphicsLock);
 
 			GLOBAL_SIS (TotalBioMass) += PSD.BiologicalLevel;
-			
 		}
 	}
 
@@ -2524,8 +2511,7 @@ InitLander (BYTE LanderFlags)
 				s.frame = SetAbsFrameIndex (s.frame, 57);
 			else
 			{
-				s.frame = SetAbsFrameIndex (s.frame,
-						(ANGLE_TO_FACING (FULL_CIRCLE) << 1) + 3);
+				s.frame = SetAbsFrameIndex (s.frame, (ANGLE_TO_FACING (FULL_CIRCLE) << 1) + 3);
 				DrawStamp (&s);
 				s.frame = IncFrameIndex (s.frame);
 			}
@@ -2541,18 +2527,17 @@ InitLander (BYTE LanderFlags)
 			if (LanderFlags & (1 << (4 + 2)))
 				s.frame = SetAbsFrameIndex (s.frame, 58);
 			else
-				s.frame = SetAbsFrameIndex (s.frame,
-						(ANGLE_TO_FACING (FULL_CIRCLE) << 1) + 2);
+				s.frame = SetAbsFrameIndex (s.frame, (ANGLE_TO_FACING (FULL_CIRCLE) << 1) + 2);
 			DrawStamp (&s);
 		}
 
 		free_space = GetSBayCapacity (NULL) - GLOBAL_SIS (TotalElementMass);
+		
 		if ((int)free_space < (int)(MAX_SCROUNGED << capacity_shift))
 		{
 			r.corner.x = 1;
 			r.extent.width = 4;
-			r.extent.height = MAX_SCROUNGED
-					- (free_space >> capacity_shift) + 1;
+			r.extent.height = MAX_SCROUNGED - (free_space >> capacity_shift) + 1;
 			SetContextForeGroundColor (BLACK_COLOR);
 			DrawFilledRectangle (&r);
 		}
