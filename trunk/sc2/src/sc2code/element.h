@@ -157,6 +157,8 @@ struct element
 	void *pParent;
 			// The ship this element belongs to.
 	HELEMENT hTarget;
+	
+	int creature_arr_index; //populated by lander.c planetside when creature dies  -DN 29DEC10
 };
 
 #define MAX_DISPLAY_PRIMS 330
