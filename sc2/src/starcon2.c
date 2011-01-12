@@ -237,8 +237,8 @@ main (int argc, char *argv[])
 		/* .addons = */             NULL,
 		/* .numAddons = */          0,
 
-		INIT_CONFIG_OPTION(  opengl,            false ),
-		INIT_CONFIG_OPTION2( resolution,        640, 480 ),
+		INIT_CONFIG_OPTION(  opengl,            true ), //false
+		INIT_CONFIG_OPTION2( resolution,        1024, 768 ), //640, 480
 		INIT_CONFIG_OPTION(  fullscreen,        false ),
 		INIT_CONFIG_OPTION(  scanlines,         false ),
 		INIT_CONFIG_OPTION(  scaler,            0 ),

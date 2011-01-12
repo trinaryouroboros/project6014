@@ -16,14 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: - Added a special case for collecting the new Precursor ship energy blip.
-//			 - Tweaked hopping hatchling so it is invulnerable whilst inside its egg.
-//			 - Made Wackodemon explode upon dying with a certain chance, dealing damage to other critters and lander.
-//			 - Increased Wackodemon biovalue since its more hazardous to hunt now.
-//			 - Created a new function which enables the biocritters to shoot projectiles. Quartzerback critter uses this function.
-//			 - Dumpy Dweejus divides into smaller creatures when "killed".
-//			 - Created a new function which handles the exploding and dividing critters upon their death
-
 #include "cons_res.h"
 #include "controls.h"
 #include "colors.h"
@@ -39,8 +31,9 @@
 #include "element.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
-
+#include "libs/log.h" //added to aid in debugging of new functions DN 29DEC10
 #include "load.h"
+
 
 //define SPIN_ON_LAUNCH to let the planet spin while
 // the lander animation is playing
@@ -55,117 +48,127 @@
 #define PLANET_SIDE_RATE (ONE_SECOND / 35)
 
 
-FRAME LanderFrame[10]; // JMS: Was 8, added one slot for critter explosion frames and one for dividing critter's small frames.
+FRAME LanderFrame[8];
 static SOUND LanderSounds;
 MUSIC_REF LanderMusic;
 #define NUM_ORBIT_THEMES 5
 static MUSIC_REF OrbitMusic[NUM_ORBIT_THEMES];
+
+/*
+ * creature_data_index is populated by the collision detection 
+ * routine and reset back to -1 by the FillLanderHold method. 
+ * this is so we can keep track of what kind of life forms the
+ * player has scooped up. 
+ *
+ * DN 29DEC10
+ */
+int creature_data_index = -1;
 const LIFEFORM_DESC CreatureData[] =
 {
-  {SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4, NONE},
+  {SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4},
 			// Roto-Dendron
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 4, NONE},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 4},
 			// Macrocillia
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 4, NONE},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 4},
 			// Splort Wort
-	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 4, NONE},
+	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 4},
 			// Whackin' Bush
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 4, NONE},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 4},
 			// Slot Machine Tree
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 4, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 4},
 			// Neon Worm
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 4, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 4},
 			// Stiletto Urchin
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 4, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 4},
 			// Deluxe Blob
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 4, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 4},
 			// Glowing Medusa
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 4, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 4},
 			// Carousel Beast
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 4, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 4},
 			// Mysterious Bees
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 4, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 4},
 			// Hopping Blobby
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 4, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 4},
 			// Blood Monkey
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 4, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 4},
 			// Yompin Yiminy
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 4, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 4},
 			// Amorphous Trandicula
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 4, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 4},
 			// Crazy Weasel
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 4},
 			// Merry Whumpet
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 4, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 4},
 			// Fungal Squid
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 4, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 4},
 			// Penguin Cyclops
-	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (1, 1), 4, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (1, 1), 4},
 			// Chicken
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 4, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 4},
 			// Bubble Vine
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 4, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 4},
 			// Bug-Eyed Bait
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 4, NONE},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 4},
 			// Goo Burger
-	{SPEED_MOTIONLESS | DANGER_MONSTROUS, MAKE_BYTE (1, 1), 4, NONE},
+	{SPEED_MOTIONLESS | DANGER_MONSTROUS, MAKE_BYTE (1, 1), 4},
 			// Evil One
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (0, 1), 4, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (0, 1), 4},
 			// Brainbox Bulldozers
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_MONSTROUS, MAKE_BYTE (15, 15), 4, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_MONSTROUS, MAKE_BYTE (15, 15), 4},
 			// Zex's Beauty
 
 	// ---- New Critters from here on ----
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 3), 5, NONE},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 3), 5},
 			// Echinosol
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 2, NONE},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 2},
 			// Flora Flatulensis
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 2, INVULNERABLE_PART_TIME},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (6, 1), 2},
 			// Hopping Hatchling
-#define HOPPING_HATCHLING_INVULNERABILITY_FRAMES 45 // JMS: XXX, This is still kinda hacky.
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 2, NONE},
+#define HOPPING_HATCHLING_INDEX 28 // If you change Hopping hatchling's location in this list, change this define also!
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (8, 5), 2},
 			// Dizzy Fnarble
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 2, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_HARMLESS, MAKE_BYTE (1, 1), 2},
 			// Flagellum Pest
-	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (2, 1), 1, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_LOW | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (2, 1), 1},
 			// Flying O'Hairy
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 2, SHOOTS_LIMPET},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (2, 2), 2},
 			// Bobbing Whibbit
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 2, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_NORMAL, MAKE_BYTE (3, 8), 2},
 			// Muddy Morphlegm
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 2, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (6, 2), 2},
 			// Ultramoeba
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 3, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (3, 1), 3},
 			// Electroptera
-	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 2, SHOOTS_LASER},
+	{BEHAVIOR_HUNT | AWARENESS_HIGH | SPEED_MEDIUM | DANGER_NORMAL, MAKE_BYTE (4, 6), 2},
 			// Quartzerback
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 2, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (3, 3), 2},
 			// Tuberus Humungus
-	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 2, NONE},
+	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 2},
 			// Venus Frytrap
-	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 5, NONE},
+	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 5},
 			// Watchful Willow
-	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 1, NONE},
+	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 1},
 			// Xerophytic Autovore
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 3, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_FAST | DANGER_WEAK, MAKE_BYTE (15, 2), 3},
 			// Migrator Blimp
-	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 5, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_HIGH | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (4, 2), 5},
 			// Tentacle Du Jour
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 2, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_HARMLESS, MAKE_BYTE (2, 1), 2},
 			// Vanishing Vermin
-	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 5, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_SLOW | DANGER_HARMLESS, MAKE_BYTE (1, 2), 5},
 			// Tripazoid Tumbler
-	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 6), 2, WHEN_DYING_DIVIDES},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_MEDIUM | DANGER_MONSTROUS, MAKE_BYTE (9, 12), 2},
 			// Dumpy Dweejus
-	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1, INVULNERABLE_TO_BASIC_WEAPON},
+	{BEHAVIOR_HUNT | AWARENESS_MEDIUM | SPEED_SLOW | DANGER_MONSTROUS, MAKE_BYTE (10, 15), 1},
 			// Radial Arachnid
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (7, 2), 0, WHEN_DYING_EXPLODES},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_SLOW | DANGER_WEAK, MAKE_BYTE (2, 2), 0},
 			// Wackodemon
-	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 2, NONE},
+	{BEHAVIOR_HUNT | AWARENESS_LOW | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (7, 8), 2},
 			// Crabby Octopus
-	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2, NONE},
+	{BEHAVIOR_UNPREDICTABLE | SPEED_FAST | DANGER_NORMAL, MAKE_BYTE (9, 8), 2},
 			// Blinking Beholder
-	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 5), 3, NONE},
+	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 5), 3},
 			// Creeping head
 };
 
@@ -180,9 +183,6 @@ extern PRIM_LINKS DisplayLinks;
 #define SHIELD_BIT (1 << 7)
 
 #define DEATH_EXPLOSION 0
-
-#define BIOCRITTER_PROJECTILE 4 // JMS: Chose 4 and 5 so they wouldn't mix up with EARTHQUAKE, LIGHTNING and LAVASPOT _DISASTERS.
-#define BIOCRITTER_LIMPET 5
 
 #define SURFACE_X SIS_ORG_X
 #define SURFACE_Y SIS_ORG_Y
@@ -276,93 +276,13 @@ RepairTopography (ELEMENT *ElementPtr)
 }
 
 static HELEMENT AddGroundDisaster (COUNT which_disaster);
-void object_animation (ELEMENT *ElementPtr);
-
-// JMS: This is a new function, which creates a biocritter's laser shot.
-static void
-AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
-{
-	HELEMENT hWeaponElement;
-	
-	hWeaponElement = AllocElement ();
-	if (hWeaponElement)
-	{
-		ELEMENT *WeaponElementPtr;
-		COUNT shotFrameIndex;
-		
-		// JMS: Get the shot's PNG frame from its angle. Constrain the frame number to 15, 
-		// since for some reason this crap went to 16 with this kinda setup, but sometimes went to -1 if I subtracted 1 from the result.
-		if ((shotFrameIndex = ANGLE_TO_FACING (NORMALIZE_ANGLE(angle))) > 15)
-			shotFrameIndex = 15;
-			
-		LockElement (hWeaponElement, &WeaponElementPtr);
-		
-		WeaponElementPtr->mass_points = BIOCRITTER_PROJECTILE;
-		WeaponElementPtr->life_span = 12;
-		WeaponElementPtr->state_flags = FINITE_LIFE | BAD_GUY; // JMS: Lander's own shots have GOOD_GUY. Baddies have BAD_GUY obviously.
-		WeaponElementPtr->next.location = CritterElementPtr->next.location;
-		
-		SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
-		
-		// JMS: Let's use LanderFrame[8] instead of [0] so the game doesn't think this shot belongs to lander (which uses LanderFrame[0]).
-		DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[8], shotFrameIndex); 
-		
-		SetVelocityComponents (&WeaponElementPtr->velocity, 
-							   COSINE (angle, WORLD_TO_VELOCITY (2 * 3)) + speed,
-							   SINE   (angle, WORLD_TO_VELOCITY (2 * 3)) + speed);
-		
-		UnlockElement (hWeaponElement);
-		InsertElement (hWeaponElement, GetHeadElement ());
-		
-		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_SHOOTS), NotPositional (), NULL, GAME_SOUND_PRIORITY);
-	}
-}
-
-// JMS: This is a new function, which creates a biocritter's limpet shot.
-static void
-AddEnemyLimpet (ELEMENT *CritterElementPtr, COUNT shot_angle, COUNT critter_angle, COUNT speed)
-{
-	HELEMENT hWeaponElement;
-	
-	hWeaponElement = AllocElement ();
-	if (hWeaponElement)
-	{
-		ELEMENT *WeaponElementPtr;
-		COUNT shotFrameIndex;
-		
-		shotFrameIndex = 26;
-		
-		LockElement (hWeaponElement, &WeaponElementPtr);
-		
-		WeaponElementPtr->mass_points = BIOCRITTER_LIMPET;
-		WeaponElementPtr->life_span = LIMPET_LIFESPAN;
-		WeaponElementPtr->state_flags = FINITE_LIFE | BAD_GUY; // JMS: Lander's own shots have GOOD_GUY. Baddies have BAD_GUY obviously.
-		WeaponElementPtr->next.location = CritterElementPtr->next.location;
-		WeaponElementPtr->preprocess_func = object_animation;
-		
-		SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
-		
-		// JMS: Let's use LanderFrame[8] instead of [0] so the game doesn't think this shot belongs to lander (which uses LanderFrame[0]).
-		DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[8], shotFrameIndex); 
-		
-		// JMS: The critter's own speed is decreased from the limpet speed to give constant speed for the limpet.
-		SetVelocityComponents (&WeaponElementPtr->velocity, 
-							   COSINE (shot_angle, LIMPET_ACCEL) + COSINE (critter_angle, speed),
-							   SINE   (shot_angle, LIMPET_ACCEL) + SINE   (critter_angle, speed));
-		
-		UnlockElement (hWeaponElement);
-		InsertElement (hWeaponElement, GetHeadElement ());
-		
-		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_SHOOTS), NotPositional (), NULL, GAME_SOUND_PRIORITY);
-	}
-}
 
 void
 object_animation (ELEMENT *ElementPtr)
 {
-	COUNT frame_index, angle, hunt_angle; // JMS: Added the hunt_angle
+	COUNT frame_index, angle;
 	PRIMITIVE *pPrim;
-	
+
 	pPrim = &DisplayArray[ElementPtr->PrimIndex];
 	if (GetPrimType (pPrim) == STAMPFILL_PRIM
 			&& !((ElementPtr->state_flags & FINITE_LIFE)
@@ -377,75 +297,34 @@ object_animation (ELEMENT *ElementPtr)
 			if (ElementPtr->hit_points == 0)
 			{
 				ZeroVelocityComponents (&ElementPtr->velocity);
-				pPrim->Object.Stamp.frame = SetAbsFrameIndex (pPrim->Object.Stamp.frame, 0);
-				PlaySound (SetAbsSoundIndex (LanderSounds, LIFEFORM_CANNED), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+				pPrim->Object.Stamp.frame =
+						SetAbsFrameIndex (pPrim->Object.Stamp.frame, 0);
+
+				PlaySound (SetAbsSoundIndex (LanderSounds, LIFEFORM_CANNED),
+						NotPositional (), NULL, GAME_SOUND_PRIORITY);
 			}
 		}
 
 		SetPrimColor (pPrim, c);
 	}
-	
-	frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
 
+	frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
 	if (LONIBBLE (ElementPtr->turn_wait))
 		--ElementPtr->turn_wait;
 	else
 	{
 		ElementPtr->turn_wait += HINIBBLE (ElementPtr->turn_wait);
-		pPrim->Object.Stamp.frame = IncFrameIndex (pPrim->Object.Stamp.frame);
-		
+
+		pPrim->Object.Stamp.frame =
+				IncFrameIndex (pPrim->Object.Stamp.frame);
 		if (ElementPtr->state_flags & FINITE_LIFE)
 		{
 			/* A natural disaster */
 			if (ElementPtr->mass_points == DEATH_EXPLOSION)
 			{
 				if (++pMenuState->CurState >= EXPLOSION_LIFE)
-					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
-			}
-			// JMS: Since Biocritter explosion doesn't use pMS->Curstate to keep track of which frame the explosion is in (like DEATH_EXPLOSION does),
-			// we must limit the number of explosion frames with a constant number. (Critter laser shots never reach this if)
-			else if (ElementPtr->mass_points == BIOCRITTER_PROJECTILE)
-			{
-				if (frame_index >= 26)
-					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
-			}
-			else if (ElementPtr->mass_points == BIOCRITTER_LIMPET)
-			{
-				SIZE ldx, ldy;
-				SIZE current_limpet_speed;
-				COUNT limpet_angle;
-				
-				ldx = pSolarSysState->MenuState.first_item.x - ElementPtr->next.location.x;
-				ldy = pSolarSysState->MenuState.first_item.y - ElementPtr->next.location.y;
-				
-				if (ldx < 0 && ldx < -(MAP_WIDTH << (MAG_SHIFT - 1)))
-					ldx += MAP_WIDTH << MAG_SHIFT;
-				else if (ldx > (MAP_WIDTH << (MAG_SHIFT - 1)))
-					ldx -= MAP_WIDTH << MAG_SHIFT;
-			
-				// Angle is now set straight towards the lander.
-				limpet_angle = ARCTAN (ldx, ldy);
-				
-				// 1. The first possible method for homing projectiles:
-				// Accelerate the limpet to a new direction
-				DeltaVelocityComponents (&ElementPtr->velocity, COSINE (limpet_angle, LIMPET_ACCEL),SINE (limpet_angle, LIMPET_ACCEL));
-				// Compare the new velocity to a maximum. Force the velocity to not exceed the limit.
-				GetCurrentVelocityComponents (&ElementPtr->velocity, &ldx, &ldy);
-				current_limpet_speed = square_root ((long)ldx * ldx + (long)ldy * ldy);
-				if (current_limpet_speed > LIMPET_MAX_SPEED)
-				{
-					ldx = (ldx * LIMPET_MAX_SPEED * LIMPET_MAX_SPEED) / (current_limpet_speed * current_limpet_speed);
-					ldy = (ldy * LIMPET_MAX_SPEED * LIMPET_MAX_SPEED) / (current_limpet_speed * current_limpet_speed);
-					SetVelocityComponents (&ElementPtr->velocity, ldx, ldy);
-				}
-				//
-				// 2. The second possible method for homing projectiles:
-				// SetVelocityComponents (&ElementPtr->velocity, COSINE (limpet_angle, LIMPET_MAX_SPEED),SINE (limpet_angle, LIMPET_MAX_SPEED));
-				
-				// JMS: Cycle the limpet frames
-				if (frame_index >= 30)
-					pPrim->Object.Stamp.frame = SetAbsFrameIndex (pPrim->Object.Stamp.frame, 26);
-				
+					pPrim->Object.Stamp.frame =
+							DecFrameIndex (pPrim->Object.Stamp.frame);
 			}
 			else if (ElementPtr->mass_points == EARTHQUAKE_DISASTER)
 			{
@@ -486,7 +365,6 @@ object_animation (ELEMENT *ElementPtr)
 					LavaElementPtr->next.location = ElementPtr->next.location;
 					LavaElementPtr->next.location.x += COSINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
 					LavaElementPtr->next.location.y += SINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
-					
 					if (LavaElementPtr->next.location.y < 0)
 						LavaElementPtr->next.location.y = 0;
 					else if (LavaElementPtr->next.location.y >= (MAP_HEIGHT << MAG_SHIFT))
@@ -495,8 +373,8 @@ object_animation (ELEMENT *ElementPtr)
 						LavaElementPtr->next.location.x += MAP_WIDTH << MAG_SHIFT;
 					else
 						LavaElementPtr->next.location.x %= MAP_WIDTH << MAG_SHIFT;
-					
-					LavaElementPtr->facing = NORMALIZE_FACING (ElementPtr->facing + ((COUNT)TFB_Random () % 3) - 1);
+					LavaElementPtr->facing = NORMALIZE_FACING (
+							ElementPtr->facing + ((COUNT)TFB_Random () % 3) - 1);
 					UnlockElement (hLavaElement);
 				}
 			}
@@ -508,30 +386,26 @@ object_animation (ELEMENT *ElementPtr)
 
 			index = ElementPtr->mass_points & ~CREATURE_AWARE;
 			speed = CreatureData[index].Attributes & SPEED_MASK;
-			
 			if (speed)
 			{
 				SIZE dx, dy;
 				COUNT old_angle;
-				
-				dx = pSolarSysState->MenuState.first_item.x - ElementPtr->next.location.x;
 
+				dx = pSolarSysState->MenuState.first_item.x
+						- ElementPtr->next.location.x;
 				if (dx < 0 && dx < -(MAP_WIDTH << (MAG_SHIFT - 1)))
 					dx += MAP_WIDTH << MAG_SHIFT;
 				else if (dx > (MAP_WIDTH << (MAG_SHIFT - 1)))
 					dx -= MAP_WIDTH << MAG_SHIFT;
-				
-				dy = pSolarSysState->MenuState.first_item.y - ElementPtr->next.location.y;
-				angle = ARCTAN (dx, dy); // At this point, the critter heads straight towards the lander.
-				hunt_angle = angle; // JMS
-				
+				dy = pSolarSysState->MenuState.first_item.y
+						- ElementPtr->next.location.y;
+				angle = ARCTAN (dx, dy);
 				if (dx < 0)
 					dx = -dx;
 				if (dy < 0)
 					dy = -dy;
 
-				if (dx >= SURFACE_WIDTH 
-						|| dy >= SURFACE_WIDTH
+				if (dx >= SURFACE_WIDTH || dy >= SURFACE_WIDTH
 						|| dx * dx + dy * dy >= SURFACE_WIDTH * SURFACE_WIDTH)
 					ElementPtr->mass_points &= ~CREATURE_AWARE;
 				else if (!(ElementPtr->mass_points & CREATURE_AWARE))
@@ -558,11 +432,12 @@ object_animation (ELEMENT *ElementPtr)
 					}
 				}
 
-				if (ElementPtr->next.location.y == 0 || ElementPtr->next.location.y == (MAP_HEIGHT << MAG_SHIFT) - 1)
+				if (ElementPtr->next.location.y == 0
+						|| ElementPtr->next.location.y ==
+						(MAP_HEIGHT << MAG_SHIFT) - 1)
 					ElementPtr->thrust_wait = 0;
 
 				old_angle = GetVelocityTravelAngle (&ElementPtr->velocity);
-				
 				if (ElementPtr->thrust_wait)
 				{
 					--ElementPtr->thrust_wait;
@@ -588,11 +463,12 @@ object_animation (ELEMENT *ElementPtr)
 					{
 						if (angle & (HALF_CIRCLE - 1))
 							angle = HALF_CIRCLE - angle;
-						else if (old_angle == QUADRANT || old_angle == (FULL_CIRCLE - QUADRANT))
+						else if (old_angle == QUADRANT
+								|| old_angle == (FULL_CIRCLE - QUADRANT))
 							angle = old_angle;
 						else
-							angle = (((COUNT)TFB_Random () & 1) * HALF_CIRCLE) - QUADRANT;
-						
+							angle = (((COUNT)TFB_Random () & 1)
+										* HALF_CIRCLE) - QUADRANT;
 						ElementPtr->thrust_wait = 5;
 					}
 					angle = NORMALIZE_ANGLE (angle + HALF_CIRCLE);
@@ -611,28 +487,8 @@ object_animation (ELEMENT *ElementPtr)
 						break;
 				}
 
-				SetVelocityComponents (&ElementPtr->velocity, COSINE (angle, speed), SINE (angle, speed));
-
-#define MAX_ENEMYSHOT_DISTANCE (100 * RESOLUTION_FACTOR) // JMS
-				// JMS: Shooting critters may fire now if they're close enough and are at the correct PNG frame.
-				// This way the fire rate can be (a bit hackily) controlled by adding frames to the .ani file.
-				{
-					BYTE creatureHasWeapon;
-					creatureHasWeapon = CreatureData[index].SpecialAttributes & SHOOTING_SPECIALS;
-					
-					if (creatureHasWeapon
-						&& frame_index == 4
-						&& (ElementPtr->mass_points & CREATURE_AWARE)
-						&& (dx <= MAX_ENEMYSHOT_DISTANCE 
-							&& dy <= MAX_ENEMYSHOT_DISTANCE
-							&& dx * dx + dy * dy <= MAX_ENEMYSHOT_DISTANCE * MAX_ENEMYSHOT_DISTANCE))
-					{
-						if (creatureHasWeapon & SHOOTS_LASER) 
-							AddEnemyShot(ElementPtr, angle, speed);
-						else if (creatureHasWeapon & SHOOTS_LIMPET)
-							AddEnemyLimpet(ElementPtr, hunt_angle, angle, speed);
-					}
-				}
+				SetVelocityComponents (&ElementPtr->velocity,
+						COSINE (angle, speed), SINE (angle, speed));
 			}
 		}
 	}
@@ -708,6 +564,136 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 
 	if (scan == BIOLOGICAL_SCAN)
 	{
+
+			/* Melnorme Easter Egg stuff
+			 * if the player has not collected a creature of this type before, set a flag
+			 * -DN 04JAN11
+			 */
+		if (creature_data_index == 26 && GET_GAME_STATE(MELNORME_ECHINOSOL_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_ECHINOSOL_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 27 && GET_GAME_STATE(MELNORME_FLORA_FLATULENSIS_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_FLORA_FLATULENSIS_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 28 && GET_GAME_STATE(MELNORME_HOPPING_HATCHLING_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_HOPPING_HATCHLING_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 29 && GET_GAME_STATE(MELNORME_DIZZY_FNARBLE_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_DIZZY_FNARBLE_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 30 && GET_GAME_STATE(MELNORME_FLAGELLUM_PEST_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_FLAGELLUM_PEST_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 31 && GET_GAME_STATE(MELNORME_FLYING_OHAIRY_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_FLYING_OHAIRY_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 32 && GET_GAME_STATE(MELNORME_BOBBING_WHIBBIT_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_BOBBING_WHIBBIT_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 33 && GET_GAME_STATE(MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	
+		if (creature_data_index == 34 && GET_GAME_STATE(MELNORME_ULTRAMOEBA_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_ULTRAMOEBA_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 35 && GET_GAME_STATE(MELNORME_ELECTROPTERA_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_ELECTROPTERA_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 36 && GET_GAME_STATE(MELNORME_QUARTZERBACK_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_QUARTZERBACK_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 37 && GET_GAME_STATE(MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 38 && GET_GAME_STATE(MELNORME_VENUS_FRYTRAP_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_VENUS_FRYTRAP_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 39 && GET_GAME_STATE(MELNORME_WATCHFUL_WILLOW_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_WATCHFUL_WILLOW_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 40 && GET_GAME_STATE(MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 41 && GET_GAME_STATE(MELNORME_MIGRATOR_BLIMP_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_MIGRATOR_BLIMP_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	
+		if (creature_data_index == 42 && GET_GAME_STATE(MELNORME_TENTACLE_DUJOUR_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_TENTACLE_DUJOUR_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 43 && GET_GAME_STATE(MELNORME_VANISHING_VERMIN_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_VANISHING_VERMIN_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 44 && GET_GAME_STATE(MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 45 && GET_GAME_STATE(MELNORME_DUMPY_DWEEJUS_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_DUMPY_DWEEJUS_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 46 && GET_GAME_STATE(MELNORME_RADIAL_ARACHNID_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_RADIAL_ARACHNID_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 47 && GET_GAME_STATE(MELNORME_WACKODEMON_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_WACKODEMON_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 48 && GET_GAME_STATE(MELNORME_CRABBY_OCTOPUS_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_CRABBY_OCTOPUS_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	
+		if (creature_data_index == 49 && GET_GAME_STATE(MELNORME_BLINKING_BEHOLDER_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_BLINKING_BEHOLDER_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	 
+		if (creature_data_index == 50 && GET_GAME_STATE(MELNORME_CREEPING_HEAD_TYPE_FOUND) == 0) {
+			SET_GAME_STATE(MELNORME_CREEPING_HEAD_TYPE_FOUND, 1);
+			creature_data_index = -1;
+		}
+	
 		start_count = (pPSD->BiologicalLevel) * RESOLUTION_FACTOR; // JMS_GFX
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 41);
 
@@ -742,144 +728,6 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		s.origin.y -= 1 * RESOLUTION_FACTOR; // JMS_GFX
 	}
 	SetContext (OldContext);
-}
-
-static int
-CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
-{
-	COUNT WhichCreature;
-	WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;
-	
-	if (WhichSpecial == INVULNERABILITY_SPECIALS)
-	{
-		COUNT frame_index;
-		PRIMITIVE *pPrim;
-		pPrim = &DisplayArray[ElementPtr->PrimIndex];
-		frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
-		
-		// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
-		if ((CreatureData[WhichCreature].SpecialAttributes & INVULNERABLE_PART_TIME)
-			&& frame_index < HOPPING_HATCHLING_INVULNERABILITY_FRAMES
-			/*&& !(GET_GAME_STATE(STRONGER_LANDER_SHOT))*/)
-		{
-			return (1);
-		}
-		// JMS: Some creatures can only be killed with upgraded weapon.
-		else if (CreatureData[WhichCreature].SpecialAttributes & INVULNERABLE_TO_BASIC_WEAPON
-				 && !(GET_GAME_STATE(STRONGER_LANDER_SHOT)))
-		{
-			return (1);
-		}
-	}
-	else if (WhichSpecial == WHEN_DYING_SPECIALS)
-	{
-		// JMS: Some critters may explode when killed!!!
-		if (CreatureData[WhichCreature].SpecialAttributes & WHEN_DYING_EXPLODES)
-		{
-			// JMS: Chance of exploding is drawn here from random number. 
-			if ((TFB_Random() % 100) < CRITTER_EXPLOSION_PERCENT)
-			{
-				HELEMENT hExplosionElement;
-				SIZE temp_which_node;
-				
-				hExplosionElement = AllocElement ();
-				if (hExplosionElement)
-				{
-					ELEMENT *ExplosionElementPtr;
-					
-					LockElement (hExplosionElement, &ExplosionElementPtr);
-					
-					ExplosionElementPtr->mass_points = BIOCRITTER_PROJECTILE;
-					ExplosionElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
-					ExplosionElementPtr->next.location = ElementPtr->next.location;
-					ExplosionElementPtr->preprocess_func = object_animation;
-					ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
-					ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
-					
-					SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
-					DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
-					SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
-					// Otherwise the game thinks this explosion belongs to lander
-					// itself, and it won't collide with lander at all (->no damage).
-					UnlockElement (hExplosionElement);
-					InsertElement (hExplosionElement, GetHeadElement ());
-					
-					PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
-					
-					ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the critter frame
-					ElementPtr->mass_points = 0;			 // JMS: Make sure critter/explosion doesn't give biodata.
-					
-					// JMS: This marks the exploded critter "collected". (even though there was no biodata to collect).
-					// This ensures the critter isn't resurrected when visiting the planet next time.
-					temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
-					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-					(1L << temp_which_node); // Mark this bio-blip's state as "collected".
-					pSolarSysState->CurNode = (COUNT)~0; // GenerateLifeForms will update the states of ALL bio-blips when run.
-					(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE)); // Re-run GenerateLifeForms so the changed state takes effect
-					SET_GAME_STATE (PLANETARY_CHANGE, 1); // Save the changes to the file containing the states of all lifeforms.
-				}
-				
-				return (1); // JMS: Return (1) only if the thing exploded. If not, the return (0) at the end of the function is encountered.
-			}
-		}
-		// JMS: Divisible critter splits into smaller versions of itself when it "dies".
-		else if (CreatureData[WhichCreature].SpecialAttributes & WHEN_DYING_DIVIDES)
-		{
-			COUNT ii;
-			SIZE temp_which_node;
-			
-			for(ii = 0; ii < DIVIDED_CRITTER_NUMBER; ++ii)
-			{
-				HELEMENT hCritterElement;
-				
-				hCritterElement = AllocElement ();
-				if (hCritterElement)
-				{
-					ELEMENT *CritterElementPtr;
-					BYTE CritterIndex;
-					
-					LockElement (hCritterElement, &CritterElementPtr);
-					CritterIndex = (BYTE)43; // JMS XXX: Currently hacked to point to vanishing vermin stats...
-					
-					CritterElementPtr->mass_points = CritterIndex;
-					CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
-					CritterElementPtr->state_flags = BAD_GUY;
-					CritterElementPtr->next.location.x = ElementPtr->next.location.x + ((TFB_Random() % 24) - 12);
-					CritterElementPtr->next.location.y = ElementPtr->next.location.y + ((TFB_Random() % 24) - 12);
-					CritterElementPtr->preprocess_func = object_animation;
-					CritterElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[CritterIndex].FrameRate);
-					CritterElementPtr->thrust_wait = 0;
-					CritterElementPtr->life_span = DIVIDED_CRITTER_LIFESPAN; // JMS XXX: For some reason, we need to have some lifespan here??
-					CritterElementPtr->scan_node = BIOLOGICAL_SCAN; // JMS: This makes the collision check recognize this as bio.
-					
-					SetPrimType (&DisplayArray[CritterElementPtr->PrimIndex], STAMP_PRIM);
-					DisplayArray[CritterElementPtr->PrimIndex].Object.Stamp.frame = 
-					SetAbsFrameIndex (LanderFrame[9], 0);
-					
-					UnlockElement (hCritterElement);
-					InsertElement (hCritterElement, GetHeadElement ());
-				}
-			}
-			
-			PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DEPARTS), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
-			
-			ElementPtr->state_flags |= DISAPPEARING; // JMS: Delete the original critter frame
-			ElementPtr->mass_points = 0;			 // JMS: Make sure the original critter doesn't give biodata.
-			
-			// JMS: This marks the big divided critter "collected". (even though there was no biodata to collect).
-			// This ensures the big divided critter isn't resurrected when visiting the planet next time.
-			temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
-			pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-			(1L << temp_which_node);
-			pSolarSysState->CurNode = (COUNT)~0;
-			(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
-			SET_GAME_STATE (PLANETARY_CHANGE, 1);
-			
-			return (1);
-		}
-	}
-	
-	return (0);
 }
 
 static void
@@ -919,7 +767,8 @@ CheckObjectCollision (COUNT index)
 		ElementControl.IntersectStamp = pPrim->Object.Stamp;
 		ElementControl.EndPoint = ElementControl.IntersectStamp.origin;
 
-		if (GetFrameParentDrawable (ElementControl.IntersectStamp.frame) == LanderHandle)
+		if (GetFrameParentDrawable (ElementControl.IntersectStamp.frame)
+				== LanderHandle)
 		{
 			CheckObjectCollision (index);
 			continue;
@@ -943,7 +792,8 @@ CheckObjectCollision (COUNT index)
 				continue;
 			}
 			
-			if (&DisplayArray[ElementPtr->PrimIndex] != pPrim || !(ElementPtr->state_flags & BAD_GUY))
+			if (&DisplayArray[ElementPtr->PrimIndex] != pPrim
+					|| !(ElementPtr->state_flags & BAD_GUY))
 			{
 				UnlockElement (hElement);
 				continue;
@@ -957,37 +807,11 @@ CheckObjectCollision (COUNT index)
 				if (pLanderPrim == 0)
 				{
 					/* Collision of lander with another object */
-					if (HIBYTE (pMenuState->delta_item) == 0 || pPSD->InTransit)
+					if (HIBYTE (pMenuState->delta_item) == 0
+							|| pPSD->InTransit)
 						break;
-					
-					// JMS: Collision of lander with biocritter explosion and critters' lasers.
-					if (ElementPtr->mass_points == BIOCRITTER_PROJECTILE
-						&& ElementPtr->state_flags & FINITE_LIFE)
-					{	
-						if ((BYTE)TFB_Random () < (256 >> 2))
-							DeltaLanderCrew (-1, LANDER_INJURED); // No shield prevents explosion damage.
-						
-						UnlockElement (hElement); 
-						
-						continue;
-					}
-					
-					// JMS: Collision of lander with limpets.
-					else if (ElementPtr->mass_points == BIOCRITTER_LIMPET
-						&& ElementPtr->state_flags & FINITE_LIFE)
-					{	
-						if (pPSD->LimpetLevel < MAX_LIMPETS)
-							(pPSD->LimpetLevel)++;
-						
-						ElementPtr->life_span = 0;
-						PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
-						
-						UnlockElement (hElement); 
 
-						continue;
-					}
-					
-					else if (ElementPtr->state_flags & FINITE_LIFE)
+					if (ElementPtr->state_flags & FINITE_LIFE)
 					{
 						/* A natural disaster */
 						scan = ElementPtr->mass_points;
@@ -1004,15 +828,22 @@ CheckObjectCollision (COUNT index)
 						continue;
 					}
 					else if (scan == ENERGY_SCAN)
-					{	
+					{
 						if (ElementPtr->mass_points == 1)
 						{
 							DWORD TimeIn;
 
-							// JMS: Finding the new Precursor ship and black orb. (This if was "Ran into Spathi on Pluto".)
+							// JMS: Finding the new Precursor ship and black orb. (Was "Ran into Spathi on Pluto".)
 							// Currently does nothing, but all kinds of nice crap can be added here.
 							TimeIn = GetTimeCounter ();
 							which_node = 8;
+							
+							/*do
+							{
+								DeltaLanderCrew (-1, LANDER_INJURED);
+								SleepThreadUntil (TimeIn + ONE_SECOND / 20);
+								TimeIn = GetTimeCounter();
+							} while (HIBYTE (pMenuState->delta_item) && --which_node);*/
 						}
 
 						if (HIBYTE (pMenuState->delta_item)
@@ -1023,33 +854,41 @@ CheckObjectCollision (COUNT index)
 							DoDiscoveryReport (MenuSounds);
 							BatchGraphics ();
 						}
-						
 						if (ElementPtr->mass_points == 0)
 						{
-							DestroyStringTable (ReleaseStringTable (pSolarSysState->SysInfo.PlanetInfo.DiscoveryString));
+							DestroyStringTable (ReleaseStringTable (
+									pSolarSysState->SysInfo.PlanetInfo.DiscoveryString
+									));
 							pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = 0;
 							UnlockElement (hElement);
 							continue;
 						}
 					}
-					else if (scan == BIOLOGICAL_SCAN && ElementPtr->hit_points)
+					else if (scan == BIOLOGICAL_SCAN
+							&& ElementPtr->hit_points)
 					{
 						BYTE danger_vals[] =
 						{
 							0, 6, 13, 26
 						};
-						int creatureIndex = ElementPtr->mass_points & ~CREATURE_AWARE;
-						int dangerLevel = (CreatureData[creatureIndex].Attributes & DANGER_MASK) >> DANGER_SHIFT;
+						int creatureIndex = ElementPtr->mass_points
+								& ~CREATURE_AWARE;
+						int dangerLevel =
+								(CreatureData[creatureIndex].Attributes &
+								DANGER_MASK) >> DANGER_SHIFT;
 
-						if (((COUNT)TFB_Random () & 127) < danger_vals[dangerLevel])
+						if (((COUNT)TFB_Random () & 127) <
+								danger_vals[dangerLevel])
 						{
-							PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+							PlaySound (SetAbsSoundIndex (
+									LanderSounds, BIOLOGICAL_DISASTER
+									), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 							DeltaLanderCrew (-1, BIOLOGICAL_DISASTER);
 						}
 						UnlockElement (hElement);
 						continue;
 					}
-					
+
 					NumRetrieved = ElementPtr->mass_points;
 				}
 				else if (ElementPtr->state_flags & FINITE_LIFE)
@@ -1059,9 +898,9 @@ CheckObjectCollision (COUNT index)
 					continue;
 				}
 				else
-				{					
+				{
 					BYTE value;
-	
+
 					if (scan == ENERGY_SCAN)
 					{
 						/* Collision of a stun bolt with an energy node */
@@ -1077,31 +916,31 @@ CheckObjectCollision (COUNT index)
 						/* Collision of a stun bolt with a viable creature */
 						if (ElementPtr->hit_points)
 						{
+							int WhichCreature = ElementPtr->mass_points & ~CREATURE_AWARE;	
 							COUNT frame_index;
 							PRIMITIVE *pPrim;
 							pPrim = &DisplayArray[ElementPtr->PrimIndex];
 							frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
 							
-							// 1) Critter is invulnerable: stop the function here - critter is unharmed.
-							if (CheckSpecialAttributes(ElementPtr, INVULNERABILITY_SPECIALS))
+							// JMS: The Hopping Hatchling doesn't suffer damage when eye is in the egg.
+							if (WhichCreature == HOPPING_HATCHLING_INDEX && frame_index < 45) 
 							{
-								PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+								PlaySound (SetAbsSoundIndex (
+										LanderSounds, BIOLOGICAL_DISASTER
+										), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 								break;
 							}
-							// 2) Critter dies.
+							
+							// where the creature dies DN 28DEC10
 							else if (--ElementPtr->hit_points == 0)
 							{
-								if (CheckSpecialAttributes(ElementPtr, WHEN_DYING_SPECIALS))
-								{
-									// JMS: The special cases like exploding/dividing creatures are handled in a separate function.
-								}
-								else
-								{
-									ElementPtr->mass_points = value;
-									DisplayArray[ElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[0];
-								}
+								ElementPtr->mass_points = value;
+								ElementPtr->creature_arr_index = WhichCreature;
+								DisplayArray[
+										ElementPtr->PrimIndex
+										].Object.Stamp.frame =
+										pSolarSysState->PlanetSideFrame[0];																								
 							}
-							// 3) Critter is weakened.
 							else if (CreatureData[
 									ElementPtr->mass_points
 									& ~CREATURE_AWARE
@@ -1206,25 +1045,36 @@ CheckObjectCollision (COUNT index)
 						case BIOLOGICAL_SCAN:
 							if (pPSD->BiologicalLevel < MAX_SCROUNGED)
 							{
-								if (pPSD->BiologicalLevel+ NumRetrieved > MAX_SCROUNGED)
-									NumRetrieved = (COUNT)(MAX_SCROUNGED - pPSD->BiologicalLevel);
+								if (pPSD->BiologicalLevel
+										+ NumRetrieved > MAX_SCROUNGED)
+									NumRetrieved = (COUNT)(
+											MAX_SCROUNGED
+											- pPSD->BiologicalLevel
+											);		
+		
+								creature_data_index = ElementPtr->creature_arr_index; //populate local int with the saved creature index value -DN 29DEC10
 								FillLanderHold (pPSD, scan, NumRetrieved);
 								break;
 							}
-							PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_FULL), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+							PlaySound (SetAbsSoundIndex (
+									LanderSounds, LANDER_FULL
+									), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 							continue;
 					}
 				}
 
 				which_node = HIBYTE (ElementPtr->scan_node) - 1;
-				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] |= (1L << which_node);
+				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] |=
+						(1L << which_node);
 				pSolarSysState->CurNode = (COUNT)~0;
 				(*pSolarSysState->GenFunc) ((BYTE)(scan + GENERATE_MINERAL));
 
-				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] & (1L << which_node)))
+				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] &
+						(1L << which_node)))
 				{
 					/* If our discovery strings have cycled, we're done */
-					if (GetStringTableIndex (pSolarSysState->SysInfo.PlanetInfo.DiscoveryString) == 0)
+					if (GetStringTableIndex (
+							pSolarSysState->SysInfo.PlanetInfo.DiscoveryString) == 0)
 					{
 						if (DestroyStringTable (ReleaseStringTable (
 								pSolarSysState->SysInfo.PlanetInfo.DiscoveryString
@@ -1388,7 +1238,7 @@ AddGroundDisaster (COUNT which_disaster)
 
 		if (which_disaster == EARTHQUAKE_DISASTER)
 		{
-			SetPrimType (pPrim, STAMP_PRIM); // JMS: was STAMPFILL_PRIM (this rendered it totally white).
+			SetPrimType (pPrim, STAMP_PRIM); // JMS: was STAMPFILL_PRIM
 			pPrim->Object.Stamp.frame = LanderFrame[1];
 			GroundDisasterElementPtr->turn_wait = MAKE_BYTE (2, 2);
 		}
@@ -1448,7 +1298,8 @@ BuildObjectList (void)
 
 		LockElement (hElement, &ElementPtr);
 
-		if (ElementPtr->life_span == 0 || (ElementPtr->state_flags & DISAPPEARING))
+		if (ElementPtr->life_span == 0
+				|| (ElementPtr->state_flags & DISAPPEARING))
 		{
 			hNextElement = GetSuccElement (ElementPtr);
 			UnlockElement (hElement);
@@ -1999,19 +1850,19 @@ DoPlanetSide (MENU_STATE *pMS)
 					&GLOBAL (velocity),
 					COSINE (index, WORLD_TO_VELOCITY (2 * 8)) / LANDER_SPEED_DENOM,
 					SINE (index, WORLD_TO_VELOCITY (2 * 8)) / LANDER_SPEED_DENOM
-					); // JMS
+					);
 		else
 			SetVelocityComponents (
 					&GLOBAL (velocity),
 					COSINE (index, WORLD_TO_VELOCITY (2 * 14)) / LANDER_SPEED_DENOM,
 					SINE (index, WORLD_TO_VELOCITY (2 * 14)) / LANDER_SPEED_DENOM
-					); // JMS
+					);
 #ifdef FAST_FAST
 SetVelocityComponents (
 		&GLOBAL (velocity),
-		COSINE (index, WORLD_TO_VELOCITY (48l)) / LANDER_SPEED_DENOM,
+		COSINE (index, WORLD_TO_VELOCITY (48)) / LANDER_SPEED_DENOM,
 		SINE (index, WORLD_TO_VELOCITY (48)) / LANDER_SPEED_DENOM
-		); // JMS
+		);
 #endif
 	}
 	else if (pMS->delta_item == 0
@@ -2040,20 +1891,26 @@ SetVelocityComponents (
 
 					ExplosionElementPtr->mass_points = DEATH_EXPLOSION;
 					ExplosionElementPtr->state_flags = FINITE_LIFE | GOOD_GUY;
-					ExplosionElementPtr->next.location = pSolarSysState->MenuState.first_item;
+					ExplosionElementPtr->next.location =
+							pSolarSysState->MenuState.first_item;
 					ExplosionElementPtr->preprocess_func = object_animation;
 					ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
-					ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
+					ExplosionElementPtr->life_span =
+							EXPLOSION_LIFE
+							* (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
 
 					SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
 					DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
-							SetAbsFrameIndex (LanderFrame[0], 46);
+							SetAbsFrameIndex (
+							LanderFrame[0], 46
+							);
 
 					UnlockElement (hExplosionElement);
 
 					InsertElement (hExplosionElement, GetHeadElement ());
 
-					PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED
+					PlaySound (SetAbsSoundIndex (
+							LanderSounds, LANDER_DESTROYED
 							), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
 				}
 			}
@@ -2064,9 +1921,6 @@ SetVelocityComponents (
 	else
 	{
 		SIZE dx, dy;
-		
-		PLANETSIDE_DESC *pPSD;	// JMS
-		pPSD = (PLANETSIDE_DESC*)pMS->ModuleFrame; // JMS
 
 		if (HIBYTE (pMS->delta_item) == 0)
 			dx = dy = 0;
@@ -2096,21 +1950,21 @@ SetVelocityComponents (
 				if (!GET_GAME_STATE (IMPROVED_LANDER_SPEED))
 					SetVelocityComponents (
 							&GLOBAL (velocity),
-							COSINE (dx, WORLD_TO_VELOCITY ((2 * 8) - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM,
-							SINE (dx, WORLD_TO_VELOCITY ((2 * 8) - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM
-							); // JMS
+							COSINE (dx, WORLD_TO_VELOCITY (2 * 8)) / LANDER_SPEED_DENOM,
+							SINE (dx, WORLD_TO_VELOCITY (2 * 8)) / LANDER_SPEED_DENOM
+							);
 				else
 					SetVelocityComponents (
 							&GLOBAL (velocity),
-							COSINE (dx, WORLD_TO_VELOCITY ((2 * 14) - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM,
-							SINE (dx, WORLD_TO_VELOCITY ((2 * 14) - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM
-							); // JMS
+							COSINE (dx, WORLD_TO_VELOCITY (2 * 14)) / LANDER_SPEED_DENOM,
+							SINE (dx, WORLD_TO_VELOCITY (2 * 14)) / LANDER_SPEED_DENOM
+							);
 #ifdef FAST_FAST
 SetVelocityComponents (
 		&GLOBAL (velocity),
-		COSINE (dx, WORLD_TO_VELOCITY (48 - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM,
-		SINE (dx, WORLD_TO_VELOCITY (48 - pPSD->LimpetLevel)) / LANDER_SPEED_DENOM
-		); // JMS
+		COSINE (dx, WORLD_TO_VELOCITY (48)) / LANDER_SPEED_DENOM,
+		SINE (dx, WORLD_TO_VELOCITY (48)) / LANDER_SPEED_DENOM
+		);
 #endif
 
 				pMS->CurState = MAKE_BYTE (
@@ -2142,19 +1996,26 @@ SetVelocityComponents (
 					WeaponElementPtr->mass_points = 1;
 					WeaponElementPtr->life_span = 12;
 					WeaponElementPtr->state_flags = FINITE_LIFE | GOOD_GUY;
-					WeaponElementPtr->next.location = pSolarSysState->MenuState.first_item;
-					WeaponElementPtr->current.location.x = WeaponElementPtr->next.location.x >> MAG_SHIFT;
-					WeaponElementPtr->current.location.y = WeaponElementPtr->next.location.y >> MAG_SHIFT;
+					WeaponElementPtr->next.location =
+							pSolarSysState->MenuState.first_item;
+					WeaponElementPtr->current.location.x =
+							WeaponElementPtr->next.location.x >> MAG_SHIFT;
+					WeaponElementPtr->current.location.y =
+							WeaponElementPtr->next.location.y >> MAG_SHIFT;
 
 					SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
 					DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame =
-							SetAbsFrameIndex (LanderFrame[0], index + ANGLE_TO_FACING (FULL_CIRCLE));
+							SetAbsFrameIndex (
+							LanderFrame[0],
+							index + ANGLE_TO_FACING (FULL_CIRCLE)
+							);
 
 					if (!CurrentInputState.key[PlayerControls[0]][KEY_UP])
 						wdx = wdy = 0;
 					else
-						GetCurrentVelocityComponents (&GLOBAL (velocity), &wdx, &wdy);
-					
+						GetCurrentVelocityComponents (
+								&GLOBAL (velocity), &wdx, &wdy
+								);
 					index = FACING_TO_ANGLE (index);
 					SetVelocityComponents (
 							&WeaponElementPtr->velocity,
@@ -2166,7 +2027,9 @@ SetVelocityComponents (
 
 					InsertElement (hWeaponElement, GetHeadElement ());
 
-					PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_SHOOTS), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+					PlaySound (SetAbsSoundIndex (
+							LanderSounds, LANDER_SHOOTS
+							), NotPositional (), NULL, GAME_SOUND_PRIORITY);
 
 					wdx = SHUTTLE_FIRE_WAIT;
 					if (GET_GAME_STATE (IMPROVED_LANDER_SHOT))
@@ -2211,17 +2074,24 @@ LoadLanderData (void)
 {
 	if (LanderFrame[0] == 0)
 	{
-		LanderFrame[0] = CaptureDrawable (LoadGraphic (LANDER_MASK_PMAP_ANIM));
-		LanderFrame[1] = CaptureDrawable (LoadGraphic (QUAKE_MASK_PMAP_ANIM));
-		LanderFrame[2] = CaptureDrawable (LoadGraphic (LIGHTNING_MASK_ANIM));
-		LanderFrame[3] = CaptureDrawable (LoadGraphic (LAVA_MASK_PMAP_ANIM));
+		LanderFrame[0] =
+				CaptureDrawable (LoadGraphic (LANDER_MASK_PMAP_ANIM));
+		LanderFrame[1] =
+				CaptureDrawable (LoadGraphic (QUAKE_MASK_PMAP_ANIM));
+		LanderFrame[2] =
+				CaptureDrawable (LoadGraphic (LIGHTNING_MASK_ANIM));
+		LanderFrame[3] =
+				CaptureDrawable (LoadGraphic (LAVA_MASK_PMAP_ANIM));
 		LanderFrame[4] = CaptureDrawable (LoadGraphic (LANDER_SHIELD_MASK_ANIM));
-		LanderFrame[5] = CaptureDrawable (LoadGraphic (LANDER_LAUNCH_MASK_PMAP_ANIM));
-		LanderFrame[6] = CaptureDrawable (LoadGraphic (LANDER_RETURN_MASK_PMAP_ANIM));
+		LanderFrame[5] =
+				CaptureDrawable (LoadGraphic (LANDER_LAUNCH_MASK_PMAP_ANIM));
+		LanderFrame[6] =
+				CaptureDrawable (LoadGraphic (LANDER_RETURN_MASK_PMAP_ANIM));
 		LanderSounds = CaptureSound (LoadSound (LANDER_SOUNDS));
-		LanderFrame[7] = CaptureDrawable (LoadGraphic (ORBIT_VIEW_ANIM));
-		LanderFrame[8] = CaptureDrawable (LoadGraphic (LANDENEMY_MASK_PMAP_ANIM)); // JMS: Added this for critter explosion and biocritters' shots.
-		LanderFrame[9] = CaptureDrawable (LoadGraphic (LIFE45SML_MASK_PMAP_ANIM)); // JMS: Added this for dividing critter's small bastards' frames.
+
+		LanderFrame[7] =
+				CaptureDrawable (LoadGraphic (ORBIT_VIEW_ANIM));
+
 		{
 			COUNT i;
 
@@ -2275,10 +2145,11 @@ PlanetSide (MENU_STATE *pMS)
 	memset (&PSD, 0, sizeof (PSD));
 	PSD.InTransit = TRUE;
 
-	PSD.TectonicsChance = TectonicsChanceTab[pSolarSysState->SysInfo.PlanetInfo.Tectonics];
-	PSD.WeatherChance = WeatherChanceTab[pSolarSysState->SysInfo.PlanetInfo.Weather];
+	PSD.TectonicsChance =
+			TectonicsChanceTab[pSolarSysState->SysInfo.PlanetInfo.Tectonics];
+	PSD.WeatherChance =
+			WeatherChanceTab[pSolarSysState->SysInfo.PlanetInfo.Weather];
 	index = pSolarSysState->SysInfo.PlanetInfo.SurfaceTemperature;
-	
 	if (index < 50)
 		PSD.FireChance = FireChanceTab[0];
 	else if (index < 100)
@@ -2296,7 +2167,8 @@ PlanetSide (MENU_STATE *pMS)
 	else
 		PSD.FireChance = FireChanceTab[7];
 
-	PSD.ElementLevel = GetSBayCapacity (NULL) - GLOBAL_SIS (TotalElementMass);
+	PSD.ElementLevel = GetSBayCapacity (NULL)
+			- GLOBAL_SIS (TotalElementMass);
 	PSD.MaxElementLevel = MAX_SCROUNGED;
 	if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
 		PSD.MaxElementLevel <<= 1;
@@ -2313,18 +2185,22 @@ PlanetSide (MENU_STATE *pMS)
 	PSD.ColorCycle[1] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D);
 	PSD.ColorCycle[2] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7B);
 	PSD.ColorCycle[3] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x71);
-	
 	for (index = 4; index < (NUM_TEXT_FRAMES >> 1) - 4; ++index)
 		PSD.ColorCycle[index] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F);
-	
-	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 4] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x71);
-	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 3] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7B);
-	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 2] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D);
-	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 1] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7F);
+	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 4] =
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x71);
+	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 3] =
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7B);
+	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 2] =
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D);
+	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 1] =
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7F);
 	pMS->ModuleFrame = (FRAME)&PSD;
 
 	index = NORMALIZE_FACING ((COUNT)TFB_Random ());
-	LanderFrame[0] = SetAbsFrameIndex (LanderFrame[0], index);
+	LanderFrame[0] = SetAbsFrameIndex (
+			LanderFrame[0], index
+			);
 	pMS->delta_item = 0;
 	pSolarSysState->MenuState.Initialized += 4;
 
@@ -2368,7 +2244,6 @@ PlanetSide (MENU_STATE *pMS)
 		r.corner.y = SIS_ORG_Y;
 		r.extent.width = SIS_SCREEN_WIDTH;
 		r.extent.height = SIS_SCREEN_HEIGHT;
-		
 		if (crew_left == 0)
 		{
 #ifdef NEVER
@@ -2385,7 +2260,8 @@ PlanetSide (MENU_STATE *pMS)
 		else
 		{
 			PSD.InTransit = TRUE;
-			PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_RETURNS), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
+			PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_RETURNS),
+					NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
 
 			TimeIn = GetTimeCounter ();
 			for (index = NUM_LANDING_DELTAS; index >= 0; --index)
@@ -2420,8 +2296,10 @@ PlanetSide (MENU_STATE *pMS)
 			{
 				for (index = 0; index < NUM_ELEMENT_CATEGORIES; ++index)
 				{
-					GLOBAL_SIS (ElementAmounts[index]) += PSD.ElementAmounts[index];
-					GLOBAL_SIS (TotalElementMass) += PSD.ElementAmounts[index];
+					GLOBAL_SIS (ElementAmounts[index]) +=
+							PSD.ElementAmounts[index];
+					GLOBAL_SIS (TotalElementMass) +=
+							PSD.ElementAmounts[index];
 				}
 				DrawStorageBays (FALSE);
 			}
@@ -2429,6 +2307,7 @@ PlanetSide (MENU_STATE *pMS)
 			UnlockMutex (GraphicsLock);
 
 			GLOBAL_SIS (TotalBioMass) += PSD.BiologicalLevel;
+			
 		}
 	}
 
@@ -2511,7 +2390,8 @@ InitLander (BYTE LanderFlags)
 				s.frame = SetAbsFrameIndex (s.frame, 57);
 			else
 			{
-				s.frame = SetAbsFrameIndex (s.frame, (ANGLE_TO_FACING (FULL_CIRCLE) << 1) + 3);
+				s.frame = SetAbsFrameIndex (s.frame,
+						(ANGLE_TO_FACING (FULL_CIRCLE) << 1) + 3);
 				DrawStamp (&s);
 				s.frame = IncFrameIndex (s.frame);
 			}
@@ -2527,17 +2407,18 @@ InitLander (BYTE LanderFlags)
 			if (LanderFlags & (1 << (4 + 2)))
 				s.frame = SetAbsFrameIndex (s.frame, 58);
 			else
-				s.frame = SetAbsFrameIndex (s.frame, (ANGLE_TO_FACING (FULL_CIRCLE) << 1) + 2);
+				s.frame = SetAbsFrameIndex (s.frame,
+						(ANGLE_TO_FACING (FULL_CIRCLE) << 1) + 2);
 			DrawStamp (&s);
 		}
 
 		free_space = GetSBayCapacity (NULL) - GLOBAL_SIS (TotalElementMass);
-		
 		if ((int)free_space < (int)(MAX_SCROUNGED << capacity_shift))
 		{
 			r.corner.x = 1;
 			r.extent.width = 4;
-			r.extent.height = MAX_SCROUNGED - (free_space >> capacity_shift) + 1;
+			r.extent.height = MAX_SCROUNGED
+					- (free_space >> capacity_shift) + 1;
 			SetContextForeGroundColor (BLACK_COLOR);
 			DrawFilledRectangle (&r);
 		}
