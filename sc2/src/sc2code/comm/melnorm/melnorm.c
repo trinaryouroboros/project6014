@@ -14,13 +14,8 @@
  *  You should have received a copy of the GNU General Public License
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *
- *	-DN DEC10		- added update_biounit_flags(void) that is activated when the 
- *					player sells bio-data to enable the easter egg when the player
- *					finds and sells data on all 25 new lifeform types
  */
-#include "libs/log.h"
+
 #include "comm/commall.h"
 #include "comm/melnorm/resinst.h"
 #include "comm/melnorm/strings.h"
@@ -30,12 +25,12 @@
 #include "shipcont.h"
 #include "libs/inplib.h"
 #include "libs/mathlib.h"
+#include "assert.h"
 
-
-#define NUM_HISTORY_ITEMS 9
-#define NUM_EVENT_ITEMS 8
-#define NUM_ALIEN_RACE_ITEMS 16
-#define NUM_TECH_ITEMS 13
+#define NUM_HISTORY_ITEMS 0
+#define NUM_EVENT_ITEMS 1
+#define NUM_ALIEN_RACE_ITEMS 0
+#define NUM_TECH_ITEMS 0
 
 static NUMBER_SPEECH_DESC melnorme_numbers_english;
 
@@ -232,6 +227,7 @@ DeltaCredit (SIZE delta_credit)
 	return (Credit);
 }
 
+BOOLEAN StripExplorer (COUNT fuel_required);
 
 static void
 ExitConversation (RESPONSE_REF R)
@@ -246,6 +242,33 @@ ExitConversation (RESPONSE_REF R)
 		NPCPhrase (BATTLE_MELNORME);
 		SET_GAME_STATE (BATTLE_SEGUE, 1);
 	}
+	else if (PLAYER_SAID (R, take_it))
+	{
+		switch (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)) {
+			case CHMMR_EXPLORER_SHIP:
+				StripExplorer(0);
+				break;
+			case PRECURSOR_BATTLESHIP:
+				/* TODO: implement... */
+				break;
+		}
+		NPCPhrase (HAPPY_TO_HAVE_RESCUED);
+	}
+	else if (PLAYER_SAID (R, leave_it))
+	{
+		SET_GAME_STATE (MELNORME_RESCUE_REFUSED, 1);
+		NPCPhrase (MAYBE_SEE_YOU_LATER);
+	}
+	else if (PLAYER_SAID (R, no_help))
+	{
+		SET_GAME_STATE (MELNORME_RESCUE_REFUSED, 1);
+		NPCPhrase (GOODBYE_AND_GOODLUCK);
+	}
+	else if (PLAYER_SAID (R, no_changed_mind))
+	{
+		NPCPhrase (GOODBYE_AND_GOODLUCK_AGAIN);
+	}
+
 }
 
 
@@ -286,36 +309,59 @@ BuyInfoMenu (RESPONSE_REF R)
 #define INFO_COST 75
 	needed_credit = INFO_COST;
 	
-	if (PLAYER_SAID (R, buy_info))
-	{
-		NPCPhrase (BUY_INFO_INTRO);
-	}
 	if (PLAYER_SAID (R, buy_current_events))
 	{
+		BYTE stack = GET_GAME_STATE (MELNORME_EVENTS_INFO_STACK);
+		assert (stack < NUM_EVENT_ITEMS);
 		if ((int)credit >= (int)needed_credit)
 		{
+			/* TODO: If/when we add more current event info for sale, factor out
+			 * a switch on stack here. */
 			NPCPhrase (OK_BUY_EVENT_1);
-			DeltaCredit (-needed_credit);
+			SET_GAME_STATE (MELNORME_EVENTS_INFO_STACK, stack+1);
 		}
-		else
-		{
-			DeltaCredit (-needed_credit);
-		}
+		DeltaCredit (-needed_credit);
 	}
 	else if (PLAYER_SAID (R, buy_alien_races))
 	{
-		NPCPhrase (OK_BUY_ALIEN_RACE_1);
-		NPCPhrase (OK_NO_TRADE_NOW_BYE);
+		BYTE stack = GET_GAME_STATE (MELNORME_ALIEN_INFO_STACK);
+		assert(stack < NUM_ALIEN_RACE_ITEMS);
+		if ((int)credit >= (int)needed_credit)
+		{
+			NPCPhrase (OK_BUY_ALIEN_RACE_1);
+			SET_GAME_STATE (MELNORME_ALIEN_INFO_STACK, stack+1);
+		}
+		DeltaCredit (-needed_credit);
 	}
 	else if (PLAYER_SAID (R, buy_history))
 	{
-		NPCPhrase (OK_BUY_HISTORY_1);
-		NPCPhrase (OK_NO_TRADE_NOW_BYE);
+		BYTE stack = GET_GAME_STATE (MELNORME_HISTORY_INFO_STACK);
+		assert(stack < NUM_HISTORY_ITEMS);
+		if ((int)credit >= (int)needed_credit)
+		{
+			NPCPhrase (OK_BUY_HISTORY_1);
+			SET_GAME_STATE (MELNORME_HISTORY_INFO_STACK, stack+1);
+		}
+		DeltaCredit (-needed_credit);
+	}
+	else if (PLAYER_SAID (R, buy_info))
+	{
+		if (GET_GAME_STATE (MELNORME_INFO_PROCEDURE))
+			NPCPhrase (OK_BUY_INFO);
+		else
+		{
+			NPCPhrase (BUY_INFO_INTRO);
+			SET_GAME_STATE (MELNORME_INFO_PROCEDURE, 1);
+		}
 	}
 
-	Response (buy_current_events, BuyInfoMenu);
-	Response (buy_alien_races, BuyInfoMenu);
-	Response (buy_history, BuyInfoMenu);
+	if (GET_GAME_STATE (MELNORME_EVENTS_INFO_STACK) < NUM_EVENT_ITEMS)
+		Response (buy_current_events, BuyInfoMenu);
+	if (GET_GAME_STATE (MELNORME_ALIEN_INFO_STACK) < NUM_ALIEN_RACE_ITEMS)
+		Response (buy_alien_races, BuyInfoMenu);
+	if (GET_GAME_STATE (MELNORME_HISTORY_INFO_STACK) < NUM_HISTORY_ITEMS)
+		Response (buy_history, BuyInfoMenu);
+
 	Response (done_buying_info, PurchaseMenu);
 }
 
@@ -333,7 +379,7 @@ BuyFuelMenu (RESPONSE_REF R)
 	capacity = FUEL_RESERVE;
 	doNotOfferFuel = FALSE;
 	
-	if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	{
 		capacity = EXPLORER_FUEL_CAPACITY;
 	}	
@@ -441,7 +487,7 @@ PurchaseMenu (RESPONSE_REF R)
 	(void) R; // satisfy compiler
 	capacity = FUEL_RESERVE;
 	
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 		capacity = EXPLORER_FUEL_CAPACITY;
 	else
 	{
@@ -459,18 +505,68 @@ PurchaseMenu (RESPONSE_REF R)
 			}
 		} while (slot--);
 	}
-	/*if (PLAYER_SAID (R, make_purchases)
-		||PLAYER_SAID (R, done_buying_info)
-		||PLAYER_SAID (R, done_buying_fuel))
-	{*/
+	if (PLAYER_SAID (R, make_purchases)
+			|| PLAYER_SAID (R, done_buying_info)
+			|| PLAYER_SAID (R, done_buying_fuel))
+	{
 		NPCPhrase (WHAT_TO_BUY);
-	//}
+	}
 	
-	Response (buy_info, BuyInfoMenu);
+	if (GET_GAME_STATE (MELNORME_EVENTS_INFO_STACK) < NUM_EVENT_ITEMS ||
+			GET_GAME_STATE (MELNORME_ALIEN_INFO_STACK) < NUM_ALIEN_RACE_ITEMS ||
+			GET_GAME_STATE (MELNORME_HISTORY_INFO_STACK) < NUM_HISTORY_ITEMS)
+	{
+		Response (buy_info, BuyInfoMenu);
+	}
 
 	if (GLOBAL_SIS (FuelOnBoard) < capacity)
 		Response (buy_fuel, BuyFuelMenu);
 	Response (done_buying, TradeMenu);
+}
+
+static void
+SayHelloAndDownToBusiness ()
+{
+	BYTE stack;
+
+	stack = (BYTE)(GET_GAME_STATE (MELNORME_YACK_STACK2));
+	switch (stack++)
+	{
+		case 0:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS1);
+			break;
+		case 1:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS2);
+			break;
+		case 2:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS3);
+			break;
+		case 3:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS4);
+			break;
+		case 4:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS5);
+			break;
+		case 5:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS6);
+			break;
+		case 6:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS7);
+			break;
+		case 7:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS8);
+			break;
+		case 8:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS9);
+			break;
+    case 9:
+			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS10);
+			break;
+	}
+	stack = stack % 10;
+	assert(stack >=0 && stack <= 9);
+	SET_GAME_STATE (MELNORME_YACK_STACK2, stack);
+
 }
 
 static void
@@ -509,24 +605,6 @@ SellMenu (RESPONSE_REF R)
 			NPCPhrase (SOLD_LIFE_DATA2);
 			NPCPhrase (-(int)added_credit);
 			NPCPhrase (SOLD_LIFE_DATA3);
-
-			
-			update_biounit_flags(); //DN 04JAN11
-			
-			/*
-			 * a check for the MELNORME_ALL_LIFE_TYPE_FOUND
-			 * flag after player sells bio-whatnot to the Melnorme. 
-			 *
-			 * DN 27DEC10
-			 *
-			 */
-			if (GET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND) == 1)
-			{
-				NPCPhrase (ALL_BIO_TYPES_FOUND);
-				SET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND, 2);
-			}
-			
-			
 			// queue WHAT_TO_SELL before talk-segue
 			if (num_new_rainbows)
 			{
@@ -559,7 +637,6 @@ SellMenu (RESPONSE_REF R)
 			LockMutex (GraphicsLock);
 			ClearSISRect (DRAW_SIS_DISPLAY);
 			UnlockMutex (GraphicsLock);
-			
 		}
 		else if (PLAYER_SAID (R, credits_for_ship_mark_sightings))
 		{
@@ -605,8 +682,6 @@ SellMenu (RESPONSE_REF R)
 		}
 	}
 	
-	
-	
 	if (GLOBAL_SIS (TotalBioMass) || num_new_rainbows || GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) == 2)
 	{
 		if (!what_to_sell_queued)
@@ -638,10 +713,205 @@ SellMenu (RESPONSE_REF R)
 	}
 }
 
+static COUNT rescue_fuel;
+static SIS_STATE SIS_copy;
+
+BOOLEAN
+StripExplorer (COUNT fuel_required)
+{
+	COUNT worth, total, num_landers_sold;
+	BYTE i, which_module;
+	DWORD capacity;
+
+	if (fuel_required == 0)
+	{
+		/* Player has agreed to rescue offer. */
+		GlobData.SIS_state = SIS_copy;
+		LockMutex (GraphicsLock);
+		DeltaSISGauges (UNDEFINED_DELTA, rescue_fuel, UNDEFINED_DELTA);
+		UnlockMutex (GraphicsLock);
+		return TRUE;
+	}
+
+	assert (fuel_required > 0);
+	
+	/* Offer to trade planet landers for fuel. */
+	SIS_copy = GlobData.SIS_state;
+
+	/* The only thing of value which we can strip from the Explorer is
+	the landers (or perhaps escorts). */
+	capacity = EXPLORER_FUEL_CAPACITY;
+	worth = fuel_required / FUEL_TANK_SCALE;
+	total = 0;
+	num_landers_sold = 0;
+
+	for (i = 0; i < NUM_MODULE_SLOTS && SIS_copy.NumLanders > 0 && total < worth; ++i)
+	{
+		which_module = SIS_copy.ModuleSlots[i];
+		if (which_module != PLANET_LANDER)
+			continue;
+		total += GLOBAL (ModuleCost[which_module]);
+		SIS_copy.NumLanders--;
+		++num_landers_sold;
+		assert(SIS_copy.NumLanders >= 0);
+	}
+
+	if (total == 0)
+	{
+		/* Player has nothing of value, just give them fuel. */
+		NPCPhrase (CHARITY);
+		LockMutex (GraphicsLock);
+		DeltaSISGauges (0, fuel_required, 0);
+		UnlockMutex (GraphicsLock);
+		return (FALSE);
+	}
+	else
+	{
+		/* Offer to sell them fuel for landers. */
+		NPCPhrase (RESCUE_OFFER);
+		rescue_fuel = fuel_required;
+		if (rescue_fuel == capacity)
+			NPCPhrase (RESCUE_TANKS);
+		else
+			NPCPhrase (RESCUE_HOME);
+
+		NPCPhrase (ENUMERATE_ONE + num_landers_sold - 1);
+		NPCPhrase (LANDERS);
+	}
+
+	return (TRUE);
+}
+
+static void
+DoRescue ()
+{
+	SIZE dx, dy;
+	COUNT fuel_required;
+	BOOLEAN s = FALSE;
+
+	dx = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x))
+			- SOL_X;
+	dy = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y))
+			- SOL_Y;
+	fuel_required = square_root (
+			(DWORD)((long)dx * dx + (long)dy * dy)
+			) + (2 * FUEL_TANK_SCALE);
+
+	switch (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)) {
+		case CHMMR_EXPLORER_SHIP:
+			s = StripExplorer(fuel_required);
+			break;
+		case PRECURSOR_BATTLESHIP:
+			/* TODO: implement... */
+			break;
+	}
+
+	if (s)
+	{
+		Response (take_it, ExitConversation);
+		Response (leave_it, ExitConversation);
+	}
+
+}
+
+static void
+TurnBridgePurple ()
+{
+	AlienTalkSegue((COUNT)~0);
+	XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
+	AlienTalkSegue((COUNT)~0);
+}
+
+static void
+DiscussRescue ()
+{
+	if (GET_GAME_STATE (MELNORME_RESCUE_REFUSED))
+	{
+		NPCPhrase (CHANGED_MIND);
+
+		Response (yes_changed_mind, DoRescue);
+		Response (no_changed_mind, ExitConversation);
+	}
+	else
+	{
+		BYTE num_rescues;
+
+		num_rescues = GET_GAME_STATE (MELNORME_RESCUE_COUNT);
+		switch (num_rescues)
+		{
+			case 0:
+				NPCPhrase (RESCUE_EXPLANATION);
+				break;
+			case 1:
+				NPCPhrase (RESCUE_AGAIN_1);
+				break;
+			case 2:
+				NPCPhrase (RESCUE_AGAIN_2);
+				break;
+			case 3:
+				NPCPhrase (RESCUE_AGAIN_3);
+				break;
+			case 4:
+				NPCPhrase (RESCUE_AGAIN_4);
+				break;
+			case 5:
+				NPCPhrase (RESCUE_AGAIN_5);
+				break;
+			}
+
+		if (num_rescues < 5)
+		{
+			++num_rescues;
+			SET_GAME_STATE (MELNORME_RESCUE_COUNT, num_rescues);
+		}
+
+		NPCPhrase (SHOULD_WE_HELP_YOU);
+
+		TurnBridgePurple ();
+
+		Response (yes_help, DoRescue);
+		Response (no_help, ExitConversation);
+	}
+
+}
+
+static BOOLEAN
+PlayerNeedsRescue ()
+{
+	BYTE num_new_rainbows;
+	UWORD rainbow_mask;
+	COUNT Credit = DeltaCredit (0);
+
+	rainbow_mask = MAKE_WORD (
+			GET_GAME_STATE (RAINBOW_WORLD0),
+			GET_GAME_STATE (RAINBOW_WORLD1)
+			);
+	num_new_rainbows = (BYTE)(-GET_GAME_STATE (MELNORME_RAINBOW_COUNT));
+
+	while (rainbow_mask)
+	{
+		if (rainbow_mask & 1)
+			++num_new_rainbows;
+
+		rainbow_mask >>= 1;
+	}
+
+	return GLOBAL_SIS (FuelOnBoard) == 0
+		  && GLOBAL_SIS (TotalBioMass) == 0
+			&& Credit == 0
+			&& num_new_rainbows == 0;
+}
 
 static void
 TradeMenu (RESPONSE_REF R)
 {
+	if (PlayerNeedsRescue())
+	{
+		/* Player needs to be rescued... */
+		DiscussRescue();
+		return;
+	}
+
 	if (PLAYER_SAID (R, done_selling))
 	{
 		NPCPhrase (OK_DONE_SELLING);
@@ -650,38 +920,32 @@ TradeMenu (RESPONSE_REF R)
 	{
 		NPCPhrase (OK_DONE_BUYING);
 	}
-	else 
+	else if (PLAYER_SAID (R, only_joke))
 	{
-		if (PLAYER_SAID (R, only_joke))
-		{
-			NPCPhrase (TRADING_INFO2);
-			NPCPhrase (MORE_TRADING_INFO);
-		}
-		else if (PLAYER_SAID (R, i_remember))
-		{
-			NPCPhrase (RIGHT_YOU_ARE);
-		}
-		else if (PLAYER_SAID (R, how_to_trade))
-		{
-			NPCPhrase (TRADING_INFO1);
-			NPCPhrase (MORE_TRADING_INFO);
-		}
-		else if(PLAYER_SAID (R, dummy))
-		{
-		}
-		else if (GET_GAME_STATE (MET_MELNORME) == 1 && !(PLAYER_SAID (R, dummy)))
-		{
-			NPCPhrase (HELLO_NOW_DOWN_TO_BUSINESS2);
-		}
-		if (!(PLAYER_SAID (R, dummy)))
-		{
-			NPCPhrase (BUY_OR_SELL);
-			AlienTalkSegue(1);
-			XFormColorMap (GetColorMapAddress (SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
-			AlienTalkSegue((COUNT)~0);
-		}
+		NPCPhrase (TRADING_INFO2);
+		NPCPhrase (MORE_TRADING_INFO);
+		NPCPhrase (BUY_OR_SELL);
+		TurnBridgePurple ();
 	}
-
+	else if (PLAYER_SAID (R, i_remember))
+	{
+		NPCPhrase (RIGHT_YOU_ARE);
+		NPCPhrase (BUY_OR_SELL);
+		TurnBridgePurple ();
+	}
+	else if (PLAYER_SAID (R, how_to_trade))
+	{
+		NPCPhrase (TRADING_INFO1);
+		NPCPhrase (MORE_TRADING_INFO);
+		NPCPhrase (BUY_OR_SELL);
+		TurnBridgePurple ();
+	}
+	else if (GET_GAME_STATE (MET_MELNORME) == 1 && !(PLAYER_SAID (R, dummy)))
+	{
+		SayHelloAndDownToBusiness();
+		NPCPhrase (BUY_OR_SELL);
+		TurnBridgePurple ();
+	}
 	Response (make_purchases, PurchaseMenu);
 	if (PHRASE_ENABLED(items_to_sell))
 		Response (items_to_sell, SellMenu);
@@ -738,7 +1002,6 @@ DoFirstMeeting (RESPONSE_REF R)
 
 static void
 Intro (void) {
-
 	if (GET_GAME_STATE (MET_MELNORME) == 0)
 	{
 		SET_GAME_STATE (MET_MELNORME, 1);
@@ -784,176 +1047,3 @@ init_melnorme_comm (void)
 
 	return (retval);
 }
-
-
-void 
-update_biounit_flags(void) {
-	
-	/*
-	 * stuff for the Melnorme bio-data easter egg
-	 * this sets a flag indicating what types of creature
-	 * have been sold to the Melnorme. Once all types 
-	 * have been found, activate the easter egg! 
-	 * 
-	 * DN 04JAN11
-	 */
-	int all_found_flag = 0;
-
-	if (GET_GAME_STATE(MELNORME_ECHINOSOL_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_ECHINOSOL_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ECHINOSOL_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_FLORA_FLATULENSIS_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_FLORA_FLATULENSIS_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLORA_FLATULENSIS_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_HOPPING_HATCHLING_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_HOPPING_HATCHLING_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_HOPPING_HATCHLING_TYPE_FOUND);
-	
-	
-	if (GET_GAME_STATE(MELNORME_DIZZY_FNARBLE_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_DIZZY_FNARBLE_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_DIZZY_FNARBLE_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_FLAGELLUM_PEST_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_FLAGELLUM_PEST_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLAGELLUM_PEST_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_FLYING_OHAIRY_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_FLYING_OHAIRY_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLYING_OHAIRY_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_BOBBING_WHIBBIT_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_BOBBING_WHIBBIT_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_BOBBING_WHIBBIT_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND);
-	
-	
-	if (GET_GAME_STATE(MELNORME_ULTRAMOEBA_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_ULTRAMOEBA_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ULTRAMOEBA_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_ELECTROPTERA_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_ELECTROPTERA_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ELECTROPTERA_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_QUARTZERBACK_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_QUARTZERBACK_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_QUARTZERBACK_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_VENUS_FRYTRAP_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_VENUS_FRYTRAP_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_VENUS_FRYTRAP_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_WATCHFUL_WILLOW_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_WATCHFUL_WILLOW_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_WATCHFUL_WILLOW_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_MIGRATOR_BLIMP_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_MIGRATOR_BLIMP_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_MIGRATOR_BLIMP_TYPE_FOUND);
-	
-	
-	if (GET_GAME_STATE(MELNORME_TENTACLE_DUJOUR_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_TENTACLE_DUJOUR_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TENTACLE_DUJOUR_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_VANISHING_VERMIN_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_VANISHING_VERMIN_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_VANISHING_VERMIN_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_DUMPY_DWEEJUS_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_DUMPY_DWEEJUS_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_DUMPY_DWEEJUS_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_RADIAL_ARACHNID_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_RADIAL_ARACHNID_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_RADIAL_ARACHNID_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_WACKODEMON_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_WACKODEMON_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_WACKODEMON_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_CRABBY_OCTOPUS_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_CRABBY_OCTOPUS_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_CRABBY_OCTOPUS_TYPE_FOUND);	
-	
-	
-	if (GET_GAME_STATE(MELNORME_BLINKING_BEHOLDER_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_BLINKING_BEHOLDER_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_BLINKING_BEHOLDER_TYPE_FOUND);
- 
- 
-	if (GET_GAME_STATE(MELNORME_CREEPING_HEAD_TYPE_FOUND) == 1) {
-		SET_GAME_STATE(MELNORME_CREEPING_HEAD_TYPE_FOUND, 2);
-	}
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_CREEPING_HEAD_TYPE_FOUND);
-	
-	
-	/*check to see if all bio_unit types have been found*/
-	if (all_found_flag == 50 && GET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND) != 2) {
-		SET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND, 1);
-	}
-	
-}
-
-
