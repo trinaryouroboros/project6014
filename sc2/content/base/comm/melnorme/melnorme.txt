@@ -741,6 +741,8 @@ Please do not make the mistake of thinking of this as a `gift' or act of altruis
 we are merely investing in our relationship with you, the customer.
 We are certain that in the long run, this will prove to be a most profitable investment.
 
+#(ALL_BIO_TYPES_FOUND)
+ALL LIFEFORM TYPES FOUND - REPLACE WITH SOMETHING CLEVER -DN 27DEC10
 
 #(STRIP_HEAD)	melno159.ogg
 We will take
