@@ -39,7 +39,7 @@
 #include "element.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
-
+#include "libs/log.h" //added to aid in debugging of new functions DN 29DEC10
 #include "load.h"
 
 //define SPIN_ON_LAUNCH to let the planet spin while
@@ -54,7 +54,15 @@
 // ONE_SECOND.
 #define PLANET_SIDE_RATE (ONE_SECOND / 35)
 
-
+/*
+ * creature_data_index is populated by the collision detection 
+ * routine and reset back to -1 by the FillLanderHold method. 
+ * this is so we can keep track of what kind of life forms the
+ * player has scooped up. 
+ *
+ * DN 29DEC10
+ */
+int creature_data_index = -1;
 FRAME LanderFrame[10]; // JMS: Was 8, added one slot for critter explosion frames and one for dividing critter's small frames.
 static SOUND LanderSounds;
 MUSIC_REF LanderMusic;
@@ -707,7 +715,40 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 			NotPositional (), NULL, GAME_SOUND_PRIORITY);
 
 	if (scan == BIOLOGICAL_SCAN)
-	{
+	{	
+			/* Melnorme Easter Egg stuff
+			 * -DN 18JAN11
+			 */
+		switch(creature_data_index)
+		{
+			case '26' : SET_GAME_STATE(MELNORME_ECHINOSOL_TYPE_FOUND, 1); break;
+			case '27' : SET_GAME_STATE(MELNORME_FLORA_FLATULENSIS_TYPE_FOUND, 1); break;
+			case '28' : SET_GAME_STATE(MELNORME_HOPPING_HATCHLING_TYPE_FOUND, 1); break;
+			case '29' : SET_GAME_STATE(MELNORME_DIZZY_FNARBLE_TYPE_FOUND, 1); break;
+			case '30' : SET_GAME_STATE(MELNORME_FLAGELLUM_PEST_TYPE_FOUND, 1); break;
+			case '31' : SET_GAME_STATE(MELNORME_FLYING_OHAIRY_TYPE_FOUND, 1); break;
+			case '32' : SET_GAME_STATE(MELNORME_BOBBING_WHIBBIT_TYPE_FOUND, 1); break;
+			case '33' : SET_GAME_STATE(MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND, 1); break;
+			case '34' : SET_GAME_STATE(MELNORME_ULTRAMOEBA_TYPE_FOUND, 1); break;
+			case '35' : SET_GAME_STATE(MELNORME_ELECTROPTERA_TYPE_FOUND, 1); break;
+			case '36' : SET_GAME_STATE(MELNORME_QUARTZERBACK_TYPE_FOUND, 1); break;
+			case '37' : SET_GAME_STATE(MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND, 1); break;
+			case '38' : SET_GAME_STATE(MELNORME_VENUS_FRYTRAP_TYPE_FOUND, 1); break;
+			case '39' : SET_GAME_STATE(MELNORME_WATCHFUL_WILLOW_TYPE_FOUND, 1); break;
+			case '40' : SET_GAME_STATE(MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND, 1); break;
+			case '41' : SET_GAME_STATE(MELNORME_MIGRATOR_BLIMP_TYPE_FOUND, 1); break;
+			case '42' : SET_GAME_STATE(MELNORME_TENTACLE_DUJOUR_TYPE_FOUND, 1); break;
+			case '43' : SET_GAME_STATE(MELNORME_VANISHING_VERMIN_TYPE_FOUND, 1); break;
+			case '44' : SET_GAME_STATE(MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND, 1); break;
+			case '45' : SET_GAME_STATE(MELNORME_DUMPY_DWEEJUS_TYPE_FOUND, 1); break;
+			case '46' : SET_GAME_STATE(MELNORME_RADIAL_ARACHNID_TYPE_FOUND, 1); break;
+			case '47' : SET_GAME_STATE(MELNORME_WACKODEMON_TYPE_FOUND, 1); break;
+			case '48' : SET_GAME_STATE(MELNORME_CRABBY_OCTOPUS_TYPE_FOUND, 1); break;
+			case '49' : SET_GAME_STATE(MELNORME_BLINKING_BEHOLDER_TYPE_FOUND, 1); break;
+			case '50' : SET_GAME_STATE(MELNORME_CREEPING_HEAD_TYPE_FOUND, 1); break;
+		}
+		
+		creature_data_index = -1;	 
 		start_count = (pPSD->BiologicalLevel) * RESOLUTION_FACTOR; // JMS_GFX
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 41);
 

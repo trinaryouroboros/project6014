@@ -19,6 +19,10 @@
 // JMS 2010: - Added extern declaration of do_instrument_damage
 //			 - Enable Down key in melee (comment tag JMS_KEYS)
 
+// DN DEC10: - added int creature_arr_index to keep track of creature type after
+//			   player has subdued it with lander
+
+
 #ifndef _ELEMENT_H
 #define _ELEMENT_H
 
@@ -157,6 +161,9 @@ struct element
 	void *pParent;
 			// The ship this element belongs to.
 	HELEMENT hTarget;
+	
+	int creature_arr_index; //populated by lander.c planetside when creature dies  -DN 29DEC10
+	
 };
 
 #define MAX_DISPLAY_PRIMS 330
