@@ -204,6 +204,53 @@ static NUMBER_SPEECH_DESC melnorme_numbers_english =
 	}
 };
 
+void 
+update_biounit_flags(void) {
+	
+	/*
+	 * stuff for the Melnorme bio-data easter egg
+	 * this sets a flag indicating what types of creature
+	 * have been sold to the Melnorme. Once all types 
+	 * have been found, activate the easter egg! 
+	 * 
+	 * DN 04JAN11
+	 */
+	int all_found_flag = 0;
+
+	//probably should be done with a for loop and an array...  DN18JAN11
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ECHINOSOL_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLORA_FLATULENSIS_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_HOPPING_HATCHLING_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_DIZZY_FNARBLE_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLAGELLUM_PEST_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLYING_OHAIRY_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_BOBBING_WHIBBIT_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ULTRAMOEBA_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ELECTROPTERA_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_QUARTZERBACK_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_VENUS_FRYTRAP_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_WATCHFUL_WILLOW_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_MIGRATOR_BLIMP_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TENTACLE_DUJOUR_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_VANISHING_VERMIN_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_DUMPY_DWEEJUS_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_RADIAL_ARACHNID_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_WACKODEMON_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_CRABBY_OCTOPUS_TYPE_FOUND);	
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_BLINKING_BEHOLDER_TYPE_FOUND);
+	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_CREEPING_HEAD_TYPE_FOUND);
+		
+	/*check to see if all bio_unit types have been found*/
+	if (all_found_flag == 25 && GET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND) != 2) {
+		SET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND, 1);
+	}
+	
+}
+
 static COUNT
 DeltaCredit (SIZE delta_credit)
 {
@@ -569,7 +616,7 @@ SayHelloAndDownToBusiness ()
 			break;
 	}
 	stack = stack % 10;
-	assert(stack >=0 && stack <= 9);
+	// assert(stack >=0 && stack <= 9); //BW: always true, stack is unsigned
 	SET_GAME_STATE (MELNORME_YACK_STACK2, stack);
 
 }
@@ -782,7 +829,7 @@ StripExplorer (COUNT fuel_required)
 		total += GLOBAL (ModuleCost[which_module]);
 		SIS_copy.NumLanders--;
 		++num_landers_sold;
-		assert(SIS_copy.NumLanders >= 0);
+		// assert(SIS_copy.NumLanders >= 0); //BW: always true, NumLanders is unsigned
 	}
 
 	if (total == 0)
@@ -1076,62 +1123,3 @@ init_melnorme_comm (void)
 
 	return (retval);
 }
-
-
-
-
-void 
-update_biounit_flags(void) {
-	
-	/*
-	 * stuff for the Melnorme bio-data easter egg
-	 * this sets a flag indicating what types of creature
-	 * have been sold to the Melnorme. Once all types 
-	 * have been found, activate the easter egg! 
-	 * 
-	 * DN 04JAN11
-	 */
-	int all_found_flag = 0;
-
-	//probably should be done with a for loop and an array...  DN18JAN11
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ECHINOSOL_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLORA_FLATULENSIS_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_HOPPING_HATCHLING_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_DIZZY_FNARBLE_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLAGELLUM_PEST_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_FLYING_OHAIRY_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_BOBBING_WHIBBIT_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ULTRAMOEBA_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_ELECTROPTERA_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_QUARTZERBACK_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_VENUS_FRYTRAP_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_WATCHFUL_WILLOW_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_MIGRATOR_BLIMP_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TENTACLE_DUJOUR_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_VANISHING_VERMIN_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_DUMPY_DWEEJUS_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_RADIAL_ARACHNID_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_WACKODEMON_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_CRABBY_OCTOPUS_TYPE_FOUND);	
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_BLINKING_BEHOLDER_TYPE_FOUND);
-	all_found_flag = all_found_flag + GET_GAME_STATE(MELNORME_CREEPING_HEAD_TYPE_FOUND);
-		
-	/*check to see if all bio_unit types have been found*/
-	if (all_found_flag == 25 && GET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND) != 2) {
-		SET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND, 1);
-	}
-	
-}
-
-
-
-
-
-
-
-
-
