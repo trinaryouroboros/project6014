@@ -615,8 +615,7 @@ SayHelloAndDownToBusiness ()
 			NPCPhrase (HELLO_AND_DOWN_TO_BUSINESS10);
 			break;
 	}
-	stack = stack % 10;
-	// assert(stack >=0 && stack <= 9); //BW: always true, stack is unsigned
+	stack = stack % 10; // Stack must be range [0,9].
 	SET_GAME_STATE (MELNORME_YACK_STACK2, stack);
 
 }
@@ -829,7 +828,6 @@ StripExplorer (COUNT fuel_required)
 		total += GLOBAL (ModuleCost[which_module]);
 		SIS_copy.NumLanders--;
 		++num_landers_sold;
-		// assert(SIS_copy.NumLanders >= 0); //BW: always true, NumLanders is unsigned
 	}
 
 	if (total == 0)
