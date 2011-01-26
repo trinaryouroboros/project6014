@@ -1323,8 +1323,7 @@ GeneratePlanetSide (void)
 		COUNT num_nodes;
 		FRAME f;
 
-		f = SetAbsFrameIndex (MiscDataFrame,
-				NUM_SCANDOT_TRANSITIONS * (scan - ENERGY_SCAN));
+		f = SetAbsFrameIndex (MiscDataFrame, NUM_SCANDOT_TRANSITIONS * (scan - ENERGY_SCAN));
 
 		pSolarSysState->CurNode = (COUNT)~0;
 		(*pSolarSysState->GenFunc) ((BYTE)(scan + GENERATE_MINERAL));
@@ -1415,16 +1414,14 @@ GeneratePlanetSide (void)
 						pSolarSysState->PlanetSideFrame[0] =
 								CaptureDrawable (LoadGraphic (
 								CANNISTER_MASK_PMAP_ANIM));
-					for (i = 0; i < MAX_LIFE_VARIATION
-							&& life_init_tab[i] != (BYTE)(which_node + 1);
-							++i)
+					for (i = 0; i < MAX_LIFE_VARIATION && life_init_tab[i] != (BYTE)(which_node + 1); ++i)
 					{
 						if (life_init_tab[i] != 0)
 							continue;
 
 						life_init_tab[i] = (BYTE)which_node + 1;
 
-						pSolarSysState->PlanetSideFrame[i + 3] =load_life_form (which_node);
+						pSolarSysState->PlanetSideFrame[i + 3] = load_life_form (which_node);
 						break;
 					}
 

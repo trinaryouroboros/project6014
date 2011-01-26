@@ -272,8 +272,9 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 					SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (rand_val) % (MAP_HEIGHT - (8 << 1))) + 8; // JMS_GFX
 					SysInfoPtr->PlanetInfo.CurType = index;
 
-					if ((num_life_forms >= which_life && !(SysInfoPtr->PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] & (1L << num_life_forms)))
-							|| ++num_life_forms == sizeof (DWORD) * 8)
+					if ((num_life_forms >= which_life 
+						&& !(SysInfoPtr->PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] & (1L << num_life_forms)))
+						|| ++num_life_forms == sizeof (DWORD) * 8)
 					{
 						num_types = 1;
 						break;
