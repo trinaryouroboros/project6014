@@ -286,6 +286,47 @@ RepairTopography (ELEMENT *ElementPtr)
 static HELEMENT AddGroundDisaster (COUNT which_disaster);
 void object_animation (ELEMENT *ElementPtr);
 
+// JMS: This is a new function, which adds limpets to the lander status window.
+FRAME
+ModifyLanderSilhouette ()
+{
+	FRAME f;
+	STAMP s;
+	RECT r, or;
+	INTERSECT_CONTROL LanderIntersect, ObjectIntersect;
+	CONTEXT OldContext;
+	
+	f = 0;
+	s.frame = SetAbsFrameIndex (LanderFrame[8], 26); // JMS: first limpet frame
+	ObjectIntersect.IntersectStamp = s;
+	GetFrameRect (ObjectIntersect.IntersectStamp.frame, &or);
+	
+	LanderIntersect.IntersectStamp.frame = SetAbsFrameIndex (LanderFrame[8], 30); // JMS: lander hull frame
+	if (LanderIntersect.IntersectStamp.frame == 0)
+		return (0);
+	GetFrameRect (LanderIntersect.IntersectStamp.frame, &r);
+	
+	LanderIntersect.IntersectStamp.origin.x = 0;
+	LanderIntersect.IntersectStamp.origin.y = 0;
+	LanderIntersect.EndPoint = LanderIntersect.IntersectStamp.origin;
+	
+	do
+	{
+		ObjectIntersect.IntersectStamp.origin.x = ((COUNT)TFB_Random () % (r.extent.width - or.extent.width));
+		ObjectIntersect.IntersectStamp.origin.y = ((COUNT)TFB_Random () % (r.extent.height - or.extent.height));
+		ObjectIntersect.EndPoint = ObjectIntersect.IntersectStamp.origin;
+	} while (!DrawablesIntersect (&ObjectIntersect, &LanderIntersect, MAX_TIME_VALUE));
+		
+	ObjectIntersect.IntersectStamp.origin.x += 23 * RESOLUTION_FACTOR;
+	ObjectIntersect.IntersectStamp.origin.y += 187 * RESOLUTION_FACTOR;
+	
+	OldContext = SetContext (StatusContext);
+	DrawStamp (&ObjectIntersect.IntersectStamp);
+	SetContext (OldContext);
+	
+	return (f);
+}
+
 // JMS: This is a new function, which creates a biocritter's laser shot.
 static void
 AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
@@ -362,6 +403,7 @@ AddEnemyLimpet (ELEMENT *CritterElementPtr, COUNT shot_angle, COUNT critter_angl
 		InsertElement (hWeaponElement, GetHeadElement ());
 		
 		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_SHOOTS), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+		
 	}
 }
 
@@ -838,8 +880,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
 					
 					SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
-					DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame =
-					SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
+					DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
 					// Otherwise the game thinks this explosion belongs to lander
 					// itself, and it won't collide with lander at all (->no damage).
 					UnlockElement (hExplosionElement);
@@ -853,8 +894,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					// JMS: This marks the exploded critter "collected". (even though there was no biodata to collect).
 					// This ensures the critter isn't resurrected when visiting the planet next time.
 					temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
-					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-					(1L << temp_which_node); // Mark this bio-blip's state as "collected".
+					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |= (1L << temp_which_node); // Mark this bio-blip's state as "collected".
 					pSolarSysState->CurNode = (COUNT)~0; // GenerateLifeForms will update the states of ALL bio-blips when run.
 					(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE)); // Re-run GenerateLifeForms so the changed state takes effect
 					SET_GAME_STATE (PLANETARY_CHANGE, 1); // Save the changes to the file containing the states of all lifeforms.
@@ -878,6 +918,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 				{
 					ELEMENT *CritterElementPtr;
 					BYTE CritterIndex;
+					BYTE which_extra_node;
 					
 					LockElement (hCritterElement, &CritterElementPtr);
 					CritterIndex = (BYTE)43; // JMS XXX: Currently hacked to point to vanishing vermin stats...
@@ -894,11 +935,11 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					CritterElementPtr->scan_node = BIOLOGICAL_SCAN; // JMS: This makes the collision check recognize this as bio.
 					
 					SetPrimType (&DisplayArray[CritterElementPtr->PrimIndex], STAMP_PRIM);
-					DisplayArray[CritterElementPtr->PrimIndex].Object.Stamp.frame = 
-					SetAbsFrameIndex (LanderFrame[9], 0);
+					DisplayArray[CritterElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[9], 0);
 					
 					UnlockElement (hCritterElement);
 					InsertElement (hCritterElement, GetHeadElement ());
+					
 				}
 			}
 			
@@ -910,8 +951,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 			// JMS: This marks the big divided critter "collected". (even though there was no biodata to collect).
 			// This ensures the big divided critter isn't resurrected when visiting the planet next time.
 			temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
-			pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |=
-			(1L << temp_which_node);
+			pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |= (1L << temp_which_node);
 			pSolarSysState->CurNode = (COUNT)~0;
 			(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
 			SET_GAME_STATE (PLANETARY_CHANGE, 1);
@@ -1017,11 +1057,20 @@ CheckObjectCollision (COUNT index)
 					else if (ElementPtr->mass_points == BIOCRITTER_LIMPET
 						&& ElementPtr->state_flags & FINITE_LIFE)
 					{	
-						if (pPSD->LimpetLevel < MAX_LIMPETS)
+						BYTE maxlimpets;
+						
+						if (!GET_GAME_STATE (IMPROVED_LANDER_SPEED))
+							maxlimpets = MAX_LIMPETS_LO_SPEED;
+						else
+							maxlimpets = MAX_LIMPETS_HI_SPEED;
+						
+						if (pPSD->LimpetLevel < maxlimpets)
 							(pPSD->LimpetLevel)++;
 						
 						ElementPtr->life_span = 0;
 						PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+						
+						ModifyLanderSilhouette ();
 						
 						UnlockElement (hElement); 
 
@@ -2531,8 +2580,7 @@ InitLander (BYTE LanderFlags)
 
 		s.origin.x = 0; /* set up powered-down lander */
 		s.origin.y = 0;
-		s.frame = SetAbsFrameIndex (LanderFrame[0],
-				ANGLE_TO_FACING (FULL_CIRCLE) << 1);
+		s.frame = SetAbsFrameIndex (LanderFrame[0], ANGLE_TO_FACING (FULL_CIRCLE) << 1);
 		DrawStamp (&s);
 		if (LanderFlags == 0)
 		{

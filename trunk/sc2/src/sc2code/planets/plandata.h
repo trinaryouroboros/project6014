@@ -293,6 +293,7 @@ typedef struct
 	STRING DiscoveryString;
 	FONT LanderFont;
 	FRAME LanderFontEff;
+	
 } PLANET_INFO;
 
 enum

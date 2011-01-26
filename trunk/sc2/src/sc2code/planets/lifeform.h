@@ -76,7 +76,8 @@
 #define LIMPET_ACCEL (WORLD_TO_VELOCITY(1 * RESOLUTION_FACTOR))
 #define LIMPET_MAX_SPEED (WORLD_TO_VELOCITY(3 * RESOLUTION_FACTOR))
 #define LIMPET_LIFESPAN 50
-#define MAX_LIMPETS 16 // JMS: Max number of limpets that can stick on the lander
+#define MAX_LIMPETS_LO_SPEED 16 // JMS: Max number of limpets that can stick on the lander
+#define MAX_LIMPETS_HI_SPEED 28 // JMS: Max number of limpets that can stick on the lander
 
 #define CRITTER_EXPLOSION_PERCENT 60 // JMS: This concerns only WHEN_DYING_EXPLODES critters.
 
