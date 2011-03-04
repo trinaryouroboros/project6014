@@ -30,10 +30,77 @@
 #include "state.h"
 #include "planets/genall.h"
 #include "libs/mathlib.h"
+#include "libs/log.h"
+#include "grpinfo.h"
+
+
+static int
+init_lurg_teaser (void)
+{
+	HIPGROUP hGroup;
+
+	if (!GET_GAME_STATE (PLAYER_VISITED_BETA_NAOS)
+			&& GetGroupInfo (GLOBAL (BattleGroupRef), GROUP_INIT_IP)
+			&& (hGroup = GetHeadLink (&GLOBAL (ip_group_q))))
+	{
+		SET_GAME_STATE (PLAYER_VISITED_BETA_NAOS, 1);
+		IP_GROUP *GroupPtr;
+
+		GroupPtr = LockIpGroup (&GLOBAL (ip_group_q), hGroup);
+		GroupPtr->task = FLEE;
+		GroupPtr->sys_loc = 0; 
+		GroupPtr->dest_loc = 0; 
+		GroupPtr->loc.x = 7500;
+		GroupPtr->loc.y = 7000;
+		GroupPtr->group_counter = 0;
+		UnlockIpGroup (&GLOBAL (ip_group_q), hGroup);
+		return 1;
+	}
+	else
+		return 0;
+}
+
+
+static void
+Generate_lurg_teaser (BYTE control)
+{
+	switch (control)
+	{
+		case INIT_NPCS:
+
+			if (!GET_GAME_STATE (PLAYER_VISITED_BETA_NAOS))
+			{
+				GLOBAL (BattleGroupRef) = GET_GAME_STATE_32 (LURG_GRPOFFS0);
+				if (GLOBAL (BattleGroupRef) == 0)
+				{			
+					CloneShipFragment (LURG_SHIP,
+							&GLOBAL (npc_built_ship_q), 0);
+					GLOBAL (BattleGroupRef) = PutGroupInfo (GROUPS_ADD_NEW, 1);
+					ReinitQueue (&GLOBAL (npc_built_ship_q));
+					SET_GAME_STATE_32 (LURG_GRPOFFS0,
+							GLOBAL (BattleGroupRef));
+				}
+				
+			}
+						
+			if (!init_lurg_teaser ()) {
+				GenerateRandomIP (INIT_NPCS);
+			}
+									
+			break;
+
+		default:
+			GenerateRandomIP (control);
+			break;
+	}
+}
+
+
 
 void
 GenerateLurg (BYTE control)
 {
+
 	switch (control)
 	{
 		case GENERATE_ORBITAL:
@@ -82,6 +149,13 @@ GenerateLurg (BYTE control)
 void
 GenerateShofixtiCrashSite (BYTE control)
 {
+
+	if (CurStarDescPtr->Index == SHOFIXTI_CRASH_SITE_DEFINED)
+	{
+		Generate_lurg_teaser (control);
+		return;
+	}
+	
 	switch (control)
 	{
 		DWORD rand_val, old_rand;

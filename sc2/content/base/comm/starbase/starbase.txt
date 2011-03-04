@@ -399,7 +399,10 @@ they recorded just at the time of the accident.
 They indicate that something resembling strong gravitational lenses
 formed all around this quadrant in a matter of seconds
 and vanished about as quickly.
-Do be careful out there, Captain. This does not sound good to me.
+One more thing. I suspect there are others looking for whatever
+the Shofixti found. Keep an eye out for strange ships when you drop out of Hyperspace.
+If you see one, it's a good bet you've found the Shofixti crash site. 
+Be careful out there, Captain. This does not sound good to me.
 
 #(lame_map_limit_question)
 Why am I confined to this small part of the galaxy? I want to fly wherever I want!
