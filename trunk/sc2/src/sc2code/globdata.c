@@ -342,6 +342,9 @@ InitSIS (void)
 			sizeof (IP_GROUP));
 	InitQueue (&GLOBAL (encounter_q), MAX_ENCOUNTERS, sizeof (ENCOUNTER));
 
+	// DN 27FEB11 INITIALIZE BETA_NAOS FLAG 
+	SET_GAME_STATE (PLAYER_VISITED_BETA_NAOS, 0);
+	
 	// JMS: Starbase is available right from the start!
 	SET_GAME_STATE (STARBASE_AVAILABLE, 1);
 	// BW: Lander is fully shielded from the start

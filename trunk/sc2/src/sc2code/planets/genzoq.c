@@ -27,8 +27,9 @@
 #include "grpinfo.h"
 #include "planets/genall.h"
 #include "libs/mathlib.h"
+#include "libs/log.h"
 
-/***
+/*
 static void
 check_scout (void)
 {
@@ -50,7 +51,7 @@ check_scout (void)
 		UnlockIpGroup (&GLOBAL (ip_group_q), hGroup);
 	}
 }
-***/
+*/
 
 static void
 GenerateScout (BYTE control)
@@ -59,19 +60,21 @@ GenerateScout (BYTE control)
 	{
 		case INIT_NPCS:
 			// JMS: No more scout at Rigel.
-			/*if (!GET_GAME_STATE (MET_ZOQFOT))
+			/*
+			if (!GET_GAME_STATE (MET_ZOQFOT))
 			{
 				GLOBAL (BattleGroupRef) = GET_GAME_STATE_32 (ZOQFOT_GRPOFFS0);
 				if (GLOBAL (BattleGroupRef) == 0)
 				{
-					CloneShipFragment (ZOQFOTPIK_SHIP,
+					CloneShipFragment (CHMMR_SHIP,
 							&GLOBAL (npc_built_ship_q), 0);
 					GLOBAL (BattleGroupRef) = PutGroupInfo (GROUPS_ADD_NEW, 1);
 					ReinitQueue (&GLOBAL (npc_built_ship_q));
 					SET_GAME_STATE_32 (ZOQFOT_GRPOFFS0,
 							GLOBAL (BattleGroupRef));
 				}
-			}*/
+			}
+			*/
 			GenerateRandomIP (INIT_NPCS);
 			break;
 		case REINIT_NPCS:
@@ -88,6 +91,7 @@ GenerateScout (BYTE control)
 void
 GenerateZoqFotPik (BYTE control)
 {
+
 	if (CurStarDescPtr->Index == ZOQ_SCOUT_DEFINED)
 	{
 		GenerateScout (control);
