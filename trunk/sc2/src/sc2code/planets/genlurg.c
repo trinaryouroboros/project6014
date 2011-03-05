@@ -60,43 +60,6 @@ init_lurg_teaser (void)
 		return 0;
 }
 
-
-static void
-Generate_lurg_teaser (BYTE control)
-{
-	switch (control)
-	{
-		case INIT_NPCS:
-
-			if (!GET_GAME_STATE (PLAYER_VISITED_BETA_NAOS))
-			{
-				GLOBAL (BattleGroupRef) = GET_GAME_STATE_32 (LURG_GRPOFFS0);
-				if (GLOBAL (BattleGroupRef) == 0)
-				{			
-					CloneShipFragment (LURG_SHIP,
-							&GLOBAL (npc_built_ship_q), 0);
-					GLOBAL (BattleGroupRef) = PutGroupInfo (GROUPS_ADD_NEW, 1);
-					ReinitQueue (&GLOBAL (npc_built_ship_q));
-					SET_GAME_STATE_32 (LURG_GRPOFFS0,
-							GLOBAL (BattleGroupRef));
-				}
-				
-			}
-						
-			if (!init_lurg_teaser ()) {
-				GenerateRandomIP (INIT_NPCS);
-			}
-									
-			break;
-
-		default:
-			GenerateRandomIP (control);
-			break;
-	}
-}
-
-
-
 void
 GenerateLurg (BYTE control)
 {
@@ -149,13 +112,6 @@ GenerateLurg (BYTE control)
 void
 GenerateShofixtiCrashSite (BYTE control)
 {
-
-	if (CurStarDescPtr->Index == SHOFIXTI_CRASH_SITE_DEFINED)
-	{
-		Generate_lurg_teaser (control);
-		return;
-	}
-	
 	switch (control)
 	{
 		DWORD rand_val, old_rand;
@@ -291,6 +247,24 @@ GenerateShofixtiCrashSite (BYTE control)
 			pSolarSysState->PlanetDesc[2].location.y = SINE (angle, pSolarSysState->PlanetDesc[2].radius);
 			break;
 		}
+		case INIT_NPCS:
+			if (!GET_GAME_STATE (PLAYER_VISITED_BETA_NAOS))
+			{
+				GLOBAL (BattleGroupRef) = GET_GAME_STATE_32 (LURG_GRPOFFS0);
+				
+				if (GLOBAL (BattleGroupRef) == 0)
+				{			
+					CloneShipFragment (LURG_SHIP, &GLOBAL (npc_built_ship_q), 0);
+					GLOBAL (BattleGroupRef) = PutGroupInfo (GROUPS_ADD_NEW, 1);
+					ReinitQueue (&GLOBAL (npc_built_ship_q));
+					SET_GAME_STATE_32 (LURG_GRPOFFS0, GLOBAL (BattleGroupRef));
+				}
+				
+			}
+			if (!init_lurg_teaser ()) 
+				GenerateRandomIP (INIT_NPCS);
+			
+			break;
 		default:
 			GenerateRandomIP (control);
 			break;
