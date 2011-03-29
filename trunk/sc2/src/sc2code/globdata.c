@@ -45,9 +45,7 @@
 #include "gamestr.h"
 
 #include <stdlib.h>
-#ifdef STATE_DEBUG
-#	include "libs/log.h"
-#endif
+#include "libs/log.h"
 
 #include "libs/mathlib.h"
 
@@ -407,6 +405,7 @@ InitSIS (void)
 	
 	// JMS: Vary the possible location of the ones that left in hurry
 	SET_GAME_STATE(HINT_WORLD_LOCATION, ((COUNT)TFB_Random () % 3));
+	log_add (log_Debug, "Hint world location randomly set to %d.", GET_GAME_STATE(HINT_WORLD_LOCATION));
 
 	/* In case the program is exited before the full game is terminated,
 	 * make sure that the temporary files are deleted.
