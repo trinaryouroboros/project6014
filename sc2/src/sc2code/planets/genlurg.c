@@ -43,8 +43,8 @@ init_lurg_teaser (void)
 			&& GetGroupInfo (GLOBAL (BattleGroupRef), GROUP_INIT_IP)
 			&& (hGroup = GetHeadLink (&GLOBAL (ip_group_q))))
 	{
-		SET_GAME_STATE (PLAYER_VISITED_BETA_NAOS, 1);
 		IP_GROUP *GroupPtr;
+		SET_GAME_STATE (PLAYER_VISITED_BETA_NAOS, 1);
 
 		GroupPtr = LockIpGroup (&GLOBAL (ip_group_q), hGroup);
 		GroupPtr->task = FLEE;
