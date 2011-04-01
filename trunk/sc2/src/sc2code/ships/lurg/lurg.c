@@ -21,6 +21,7 @@
 #include "libs/mathlib.h"
 
 
+// Core characteristics
 #define MAX_CREW 20
 #define MAX_ENERGY 20
 #define ENERGY_REGENERATION 1
@@ -31,15 +32,17 @@
 #define TURN_WAIT 1
 #define SHIP_MASS 6
 
+// Primary weapon
 #define WEAPON_ENERGY_COST 4
 #define WEAPON_WAIT 10
 #define MISSILE_SPEED DISPLAY_TO_WORLD (18)
 #define MISSILE_LIFE 23
 #define MISSILE_HITS 5
-#define MISSILE_DAMAGE 3
+#define MISSILE_DAMAGE 4
 #define MISSILE_OFFSET 2
 #define LURG_OFFSET 23
 
+// Secondary weapon
 #define SPECIAL_ENERGY_COST 2
 #define SPECIAL_WAIT 2
 #define OIL_BATCH_SIZE 6
@@ -57,6 +60,7 @@
 #define OIL_OFFSET 3
 #define LURG_OFFSET_2 16
 
+// Bonus ability
 #define REPAIR_WAIT 192 // Was 216.
 
 static RACE_DESC lurg_desc =
@@ -137,13 +141,14 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 
-	// Don't use the secondary unless specifically told to.
+	// Don't use the special unless specifically told to.
 	StarShipPtr->ship_input_state &= ~SPECIAL;
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
 	if (lpEvalDesc->ObjectPtr)
 	{
 		STARSHIP *EnemyStarShipPtr;
+		SIZE EnemyTravelFacing, TestFacing, CurrentEnemySpeed, delta_x, delta_y;
 
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 
@@ -151,12 +156,42 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 		if (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control) <= SLOW_SHIP)
 			lpEvalDesc->which_turn = lpEvalDesc->which_turn * 4/5;
 
-		// Attack when the enemy is ensnared or at very close range.
-		if (!(lpEvalDesc->ObjectPtr->state_flags & APPEARING)
-			&& (lpEvalDesc->which_turn <= 30
-				&& lpEvalDesc->ObjectPtr->turn_wait >= OIL_DELAY
-				&& lpEvalDesc->ObjectPtr->thrust_wait >= OIL_DELAY
-				|| lpEvalDesc->which_turn <= 15))
+		// Start of crazy calculations //
+		// Transform enemy velocity into cute little world units for easy comparison.
+		GetCurrentVelocityComponents (&lpEvalDesc->ObjectPtr->velocity, &delta_x, &delta_y);
+		CurrentEnemySpeed = VELOCITY_TO_WORLD (square_root (VelocitySquared (delta_x, delta_y)));
+
+		// Draw a line from the enemy's current position to the enemy's projected future position.
+		EnemyTravelFacing = ANGLE_TO_FACING (ARCTAN (
+			lpEvalDesc->ObjectPtr->next.location.x	
+				- lpEvalDesc->ObjectPtr->current.location.x,
+			lpEvalDesc->ObjectPtr->next.location.y
+				- lpEvalDesc->ObjectPtr->current.location.y));
+
+		// Draw a line from the Prawn to the enemy.
+		TestFacing = ANGLE_TO_FACING (ARCTAN (
+			lpEvalDesc->ObjectPtr->current.location.x
+				- ShipPtr->current.location.x,
+			lpEvalDesc->ObjectPtr->current.location.y
+				- ShipPtr->current.location.y));
+
+		// Compare enemy's direction of travel to the Prawn's position.
+		TestFacing = NORMALIZE_FACING (TestFacing - EnemyTravelFacing);
+		// End of crazy calculations //
+
+		// Avoid contact when the enemy is warping in or moving directly away.
+		if (lpEvalDesc->ObjectPtr->state_flags & APPEARING
+			|| (TestFacing > 6 && TestFacing < 10
+				&& CurrentEnemySpeed >= 16))
+		{
+			lpEvalDesc->MoveState = AVOID;
+		}
+		// Attack when the enemy is ensnared, attempting an escape sequence or at short range.
+		else if ((lpEvalDesc->which_turn <= 32
+			&& lpEvalDesc->ObjectPtr->turn_wait >= OIL_DELAY
+			&& lpEvalDesc->ObjectPtr->thrust_wait >= OIL_DELAY)
+			|| lpEvalDesc->which_turn <= 15
+			|| lpEvalDesc->ObjectPtr->mass_points > MAX_SHIP_MASS)
 		{
 			lpEvalDesc->MoveState = PURSUE;
 
@@ -164,15 +199,15 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = NULL;
 		}
 		// Stall for time when the enemy is far away.
-		else if (lpEvalDesc->which_turn > 20)
+		else if (lpEvalDesc->which_turn > 20 && lpEvalDesc->which_turn < 47)
 		{
 			lpEvalDesc->MoveState = AVOID;
 		}
-
-		// Sometimes take shots which don't line up with the opponent's current trajectory.
-		if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (4))
-				&& (TFB_Random () & 7))
-			StarShipPtr->ship_input_state |= WEAPON;
+		// Entice rather than retreat when the enemy is very far away.
+		else if (lpEvalDesc->which_turn >= 47)
+		{
+			lpEvalDesc->MoveState = ENTICE;
+		}
 	}
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
@@ -201,29 +236,55 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
+	if (lpEvalDesc->ObjectPtr)
+	{
+		// Cut thrust when attacking...
+		if (lpEvalDesc->MoveState == PURSUE
+			// ...unless the enemy is ensnared...
+			&& (lpEvalDesc->ObjectPtr->turn_wait < OIL_DELAY
+				|| lpEvalDesc->ObjectPtr->thrust_wait < OIL_DELAY)
+			// ...or the enemy is attempting an escape sequence...
+			&& (lpEvalDesc->ObjectPtr->mass_points <= MAX_SHIP_MASS)
+			// ...or the Prawn is completely stationary.
+			&& ShipPtr->next.location.x != ShipPtr->current.location.x
+			&& ShipPtr->next.location.y != ShipPtr->current.location.y)
+		{
+			StarShipPtr->ship_input_state &= ~THRUST;
+		}
 
-	// Cut thrust when attacking...
-	if (lpEvalDesc->ObjectPtr
-		&& lpEvalDesc->MoveState == PURSUE
-		// ...unless the opponent is ensnared...
-		&& (lpEvalDesc->ObjectPtr->turn_wait < OIL_DELAY
-			|| lpEvalDesc->ObjectPtr->thrust_wait < OIL_DELAY)
-		// ...or the Prawn is completely stationary.
-		&& ShipPtr->next.location.x != ShipPtr->current.location.x
-		&& ShipPtr->next.location.y != ShipPtr->current.location.y)
-	{
-		StarShipPtr->ship_input_state &= ~THRUST;
-	}
+		// Don't shoot unless specifically told to OR a particular enemy weapon type is active.
+		if (ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr == NULL)
+		{
+			StarShipPtr->ship_input_state &= ~WEAPON;
+		}
+
+		// Frequently disregard good firing opportunities.
+		if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (10)))
+		{
+			if (TFB_Random () & 3)
+				StarShipPtr->ship_input_state |= WEAPON;
+		}
+		// Sometimes take shots that don't line up with the opponent's current trajectory.
+		else if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (20)))
+		{
+			if (TFB_Random () & 5)
+				StarShipPtr->ship_input_state |= WEAPON;
+		}
+		else if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (30)))
+		{
+			if (TFB_Random () % 11)
+				StarShipPtr->ship_input_state |= WEAPON;
+		}
 		
-	// Drop several batches of oil whenever the battery tops off.
-	if (lpEvalDesc->ObjectPtr
-		&& StarShipPtr->RaceDescPtr->ship_info.energy_level ==
-			StarShipPtr->RaceDescPtr->ship_info.max_energy
-		|| (StarShipPtr->RaceDescPtr->ship_info.energy_level >
-			(StarShipPtr->RaceDescPtr->ship_info.max_energy - 6)
-			&& StarShipPtr->old_status_flags & SPECIAL))
-	{
-		StarShipPtr->ship_input_state |= SPECIAL;
+		// Drop several batches of oil whenever the battery tops off.
+		if ((StarShipPtr->RaceDescPtr->ship_info.energy_level ==
+					StarShipPtr->RaceDescPtr->ship_info.max_energy)
+				|| (StarShipPtr->RaceDescPtr->ship_info.energy_level >
+						StarShipPtr->RaceDescPtr->ship_info.max_energy - 6
+					&& StarShipPtr->old_status_flags & SPECIAL))
+		{
+			StarShipPtr->ship_input_state |= SPECIAL;
+		}
 	}
 }
 
