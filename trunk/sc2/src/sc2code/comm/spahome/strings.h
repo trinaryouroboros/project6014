@@ -29,7 +29,12 @@ enum
 	CYPHER_OBSOLETE,
 	GOD_KNOWS,
 	GO_GET_CYPHER,
-
+    turn_lights_on,
+    LIGHTS_NOW_ON,
+    be_back_later,
+    telling_off,
+    ANYTHING_ELSE,
+    BYE
 };
 
 #endif /* _STRINGS_H */
