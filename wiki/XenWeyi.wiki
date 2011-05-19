@@ -1,0 +1,22 @@
+= Xen-Weyi =
+
+ (These seem a bit throwaway and vague, as if only to serve the purpose of bringing the player terraforming plants. Perhaps get rid of these, and replace them with the Supox? I bet the Supox could help the Shofixti out. -- jorisvddonk)
+
+  * *Connected races:* [Shofixti]
+  * *Connected devices:* [TerraformingPlants], [SlaveShieldBuster]
+
+== Summary info ==
+
+You can hear about the existence of these guys from the [Melnorme].
+
+They had developed a sophisticated culture and reached star-faring capability on their own. But their early broadcasts into space were picked up by the [KohrAh] and Ur-Quan. After the Kohr-Ah had just about wiped them out the Ur-Quan arrived and put them under a slave shield.
+
+Their development took a set-back under the slave shield but they still retained the technology to create terraforming "devices" (to recreate life-giving atmosphere on otherwise dead planets)... which are actually sophisticated, bio-engineered plants. You can get the plants off these guys to make a new homeworld for the Shofixti.
+
+You can use the slave shield buster to free them. In the meantime they have been building military capability to prepare for the return of the Ur-Quan. As soon as you release them, they develop a reasonable Sphere of Influence. 
+
+(I haven’t added these guys to the starmap yet – any idea where they could/should go?)
+
+== Ship ==
+
+Need a ship.

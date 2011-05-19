@@ -1,0 +1,43 @@
+= Lurg =
+
+  * *Connected races:* [VUX], [MasterRace]
+  * *Connected devices:* [PrecursorOrb]
+
+== Summary info ==
+
+The Lurg are bad guys and the most powerful race in this region of space (apart from the [Chmmr]). Early on in the game when investigating the [Shofixti] distress signal at Beta Naos you run into small Lurg taskforce and must fight them. Another Lurg taskforce goes for help and returns with a massive fleet which destroys your first ship.
+    
+ (Do they have any kind of motive? The Ur-Quan were good baddies because they had *really good* reasons for being baddies. Making the Lurg seem like schoolyard bullies just so that they don't get bullied on themselves seems a bit odd, unless played properly throughout the entire game (good luck :P) -- jorisvddonk)
+
+
+The Lurg act belligerently and act like the [UrQuan] were afraid of them. They're lying. (Or are believing in their own lies.) They either slipped under the radar by hiding or the Ur-Quan were going to come back later to finish the job. They just want to give the impression of being more powerful than they really are. They cannot be converted to join the NAFS.
+
+In a similar vein, the Lurg will try to fool you into believing that they're behind all the stuff that the Exotics do, to make them appear more powerful.
+
+These fellas try to thwart NAFS's efforts even after the Exotic menace has started. They'll be swift to ally with races that you’ve mistreated. They're expansionistic and war-mongering! Total bastards. They can't be persuaded on your side But - could there be a way to throw the Lurg under the [Exotics] bus, (like Ilwrath/Thraddash in SC2)?
+
+For instance, the Lurg have already allied with DAX’s VUX army and start raiding [Syreen] and later [Yehat] at some point of the game (although their personality is left unknown until you encounter DAX’s forces at his secret starbase.)
+
+The Lurg will also ally with [MasterRace] if you play your cards that way.
+
+== Detailed info ==
+
+Two major lifeforms roam the deep seas of planet XXX: gigantic, hard-shelled arthropods, which can grow to hundreds of meters in length... and the Lurg. The former are subsentient crustacean creatures that constantly roam the waters for single-celled small sea-creatures to feed on. The latter ones don't bother: the Lurg feed on their hosts... namely, the gigantic subsentient crustacean creatures.
+
+The Lurg are quintessential parasites. They don't only eat the insides of the creatures which they need to protect themselves from the harsh environment, but also control them by growing and intertwining neurophysical connections to their hosts' nervous system. 
+
+In a course of thousands of years, the Lurg have seen no need to leave their unhappy lobster hosts. In fact, they only have refined their semi-biological technology to allow them take their prawns out of their natural habitat, forcing them to live as long as possible – to provide the most benefit. As the Lurg put it " The Prawn is a lower lifeform, genetically altered... designed by us to survive in the void of space."
+
+Intergalactic parasites, they know no pity. Absolutely ruthless and beyond compassion, they excel in manipulating and bending unwary victims to their will. 
+
+== Comms ==
+
+Comm screen (adapted from Alien on SC2 box).
+
+ http://i.imgur.com/b79GB.png
+
+Music has been composed by TheMisterCat.
+
+== Ship ==
+
+Lurg Prawn: Insert detailed description here.

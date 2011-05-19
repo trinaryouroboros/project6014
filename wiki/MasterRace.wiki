@@ -1,0 +1,28 @@
+= MasterRace =
+
+(We need new name for these guys ASAP!)
+
+  * *Connected races:* [SlaveRace]
+  * *Connected devices:*
+
+== Summary info ==
+
+These guys will be very friendly and enthusiastic. Will want to join the NAFS. On closer inspection it’s clear that actually these guys have been dominating another race for their own benefit. A sub-plot will be to emancipate SlaveRace from MasterRace’s control.
+
+ (This reminds me (a bit) of Larry Niven's "Known Space" universe. Specifically, the Thrintun/Slavers (http://en.wikipedia.org/wiki/Thrint) and the Tnuctipun that they controlled (http://en.wikipedia.org/wiki/Tnuctip) -- jorisvddonk)
+
+You can also choose to be evil and ally with MasterRace to crush SlaveRace's rebellion.
+
+You can also choose to be REALLY evil and back both MasterRace and SlaveRace, ensuring the destruction of both. You gain a lot in short term (lot of RU, get to loot the dead planets), but will pay dearly in the end.
+
+If you kill both, at least you have less allies in the end to kill the [Exotics] properly. Or you get some other penalty like from selling slaves to the Druuge in SC2.
+
+If the Master Race joins the NAFS, they could study the slave shield tech (like the Spathi did) and replicate it on the Slave Race's homeworld, locking them in there. You could question it, and they'd retort, "but the NAFS shielded the [VUX] and Mycon?!? Why can't we shield these pesky SlaveRace people?"
+
+You will need certain amount of allies to win the game. Killing both Masterrace and Slaverace won’t yet prevent you from winning the game, but add losing VUX, not gaining [Faz] alliance, [Shofixti] suiciding etc. and you’re running thin.
+
+== Detailed info ==
+
+== Ship ==
+
+These guys need a ship.
