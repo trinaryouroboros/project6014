@@ -55,7 +55,7 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
     * [TemporalWrapper]
     * [TerraformingPlants]
     * [StarPortals] to OrzSpace
-  * Game Play
+  * [GamePlay]
     * [GettingTechnology]
     * [ResourceGathering]
     * [InterstellarTravel]
