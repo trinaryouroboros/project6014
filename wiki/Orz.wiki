@@ -1,7 +1,7 @@
 = Orz =
 
   * *Connected races:* [Ariloulaleelay], [Taalo], [Androsynth]
-  * *Connected devices:* [StarPortal]s to OrzSpace 
+  * *Connected devices:* [StarPortals] to OrzSpace 
 
 == Summary info ==
 

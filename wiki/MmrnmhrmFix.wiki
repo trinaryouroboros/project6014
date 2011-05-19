@@ -1,0 +1,6 @@
+= Chmmr fix from Mmrnmhrm =
+
+  * *Connected races:* [Mmrnmhrm], [Chmmr]
+  * *Connected Devices:* [TaaloFix] for Chmmr
+
+You get this from the Mmrnmhrm to fix the machine part of the broken Chmmr. 
