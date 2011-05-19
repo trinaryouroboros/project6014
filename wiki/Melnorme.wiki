@@ -1,0 +1,31 @@
+= Melnorme =
+
+  * *Connected races:* [Faz], [Slylandro]
+  * *Connected devices:*
+
+== Summary info ==
+
+Continue to purvey information and fuel. The Melnorme will still sell some tech, for instance new shields against new possible planet surface hazards (shooting/exploding critters, vuxlimpet-critters, acid rain / snowstorms).
+
+The Melnorme will play a bigger role in the plot. Their homeworld, Omicron Hygea, will be hidden by a larger star / black hole on the starmap. You can discover the location of Omicron Hygea by talking with the [Taalo] or Faz.
+
+ (Wow, they actually know the homeworld of the Melnorme? The Melnorme were always so secret (unless paid :P) about this! If the Taalo or Faz are giving away this information to you, perhaps have the Melnorme impose some kind of ridiculous penalty on the Taalo or Faz. Could be some sub-plot to have the player fix up the Melnorme-Taalo/Faz relation. -- jorisvddonk)
+
+
+You will discover more of the Melnorme’s old history as the Mael-Num by talking to the Faz: a role in the destruction of the sentient milieu. Perhaps they could've turned the tide of the war if they had stood and fought. But instead, they sold out one of their comrades: They dealt false information to one of the Sentient Milieu races (Yuptar) about the [UrQuan] movements, which allowed the Melnorme to escape, but threw the Yuptar under the bus.
+
+ (What exactly? This has to be juicy/important, as nearly everyone expects them to have been the Mael-Num already. -- jorisvddonk)
+
+The Melnorme will be desperate to keep this knowledge hidden and will go to great lengths to disrupt your communications with the Faz.
+
+We could have Melnorme's guilt be about something we'd find absurd, as opposed to being guilty about the other Yuptar being destroyed. e.g. the Melnorme feel ashamed about the nature of the bargain, not the outcome of the race being destroyed. (Would this be wacky/fun?)
+
+ (Yes, this would be really good. I was already wondering why the Melnorme would lie to the Yuptar in exchange for money. Perhaps make it so that they feel guilty about providing false information in exchange for money. Later on in the same conversation, reveal that they actually feel guilty about the money aspect of the deal: they won't feel guilty when the information was exhanged without any money involved. The Melnorme believe that giving without receiving is bad form, but the deal with the Yuptar was actually the exchange of information on the Melnorme side, with the continued survival of the Melnorme (plus a few credits) on the Yuptar side.
+
+ Having the Melnorme feel guilty about the credits rather than the extinction of the Yuptar would make them seem really alien, which would be a Good Thing (TM). -- jorisvddonk)
+
+Upon discovery of the Melnorme homeworld you will be able to purchase their Trader vessels. But once you piss them off by continuing communications / allying with the Faz, this privilege will cease. Melnorme trading vessels around super giant stars will still cooperate though. (After all, gotta make a buck.)
+
+ (How about, instead, increase the price of Trader vessels the more allied the player is with the Faz? After all, Melnorme really want your money! :) -- jorisvddonk)
+
+== Detailed info ==
