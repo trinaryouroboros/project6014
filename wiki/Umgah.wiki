@@ -1,7 +1,7 @@
 = Umgah =
 
-  * *Connected races:
-  * *Connected devices:
+  * *Connected races:*
+  * *Connected devices:*
 
 == Summary info ==
 
