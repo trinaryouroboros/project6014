@@ -1,3 +1,4 @@
+#labels Wiki
 = Introduction =
 
 This page lists some project development rules.
