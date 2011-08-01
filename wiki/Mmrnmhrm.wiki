@@ -1,3 +1,4 @@
+#labels Races
 = Mmrnmhrm =
 
   * *Connected races:* [Chmmr], [Slylandro]
@@ -5,11 +6,11 @@
 
 == Summary info ==
 
-Yes, the Mmrnmhrm still exist! The Mmrnmhrm’s help will be instrumental in fixing the Chmmr. The [MmrnmhrmMotherArk] can be discovered at the rim-ward edge of the map. Information about the Ark's location can be learned from the Slylandro. The Mother Ark is derelict and out of power. You must re-power the Ark and possibly make another fix for it to get it to produce more Mmrnmhrm.
+Yes, the Mmrnmhrm still exist! The Mmrnmhrmï¿½s help will be instrumental in fixing the Chmmr. The [MmrnmhrmMotherArk] can be discovered at the rim-ward edge of the map. Information about the Ark's location can be learned from the Slylandro. The Mother Ark is derelict and out of power. You must re-power the Ark and possibly make another fix for it to get it to produce more Mmrnmhrm.
 
-The only power source big enough to juice up the Mother Ark is of starbase scale... and those things take years and bazillions of RU to manufacture. The NAFS have several starbases, but understandably you can’t take power cores from them. The solution presents itself once you locate the [VUX] rebel DAX and his secret starbase hideout. When you’ve defeated DAX and his cronies you can ransack the starbase and take its power core.
+The only power source big enough to juice up the Mother Ark is of starbase scale... and those things take years and bazillions of RU to manufacture. The NAFS have several starbases, but understandably you canï¿½t take power cores from them. The solution presents itself once you locate the [VUX] rebel DAX and his secret starbase hideout. When youï¿½ve defeated DAX and his cronies you can ransack the starbase and take its power core.
 
-You can learn some of the Mmrnmhrm’s ancient history and what their original purpose is from the Mother Ark's databases when you've re-powered the Ark. However, years have deteriorated the databases so they're only partially functional. (A clever way to control how much we want to tell the players and how much we want to leave unsaid!)
+You can learn some of the Mmrnmhrmï¿½s ancient history and what their original purpose is from the Mother Ark's databases when you've re-powered the Ark. However, years have deteriorated the databases so they're only partially functional. (A clever way to control how much we want to tell the players and how much we want to leave unsaid!)
 
   (See http://www.star-control.com/community/viewtopic.php?f=8&t=473 for talk vaguely related to this.. -- jorisvddonk)
 
@@ -27,7 +28,7 @@ Your landing party finds out that the Ark and its Mmrnmhrm guards have lost powe
 
 The scientists at Sol discover from the logs that the Mmrnmhrm broadcast wireless power from their ships to power their individuals, and so when the Ark and ships ran out of power, the Mmrnmhrm just went into hibernation. You need to find a power source to restart the Ark.
 
-The only power source big enough to juice up the Mother Ark is of starbase scale... and those things take years and bazillions to manufacture. The NAFS have several starbases, but understandably you can’t take power cores from them. The solution presents itself once you locate the VUX rebel DAX and his secret starbase hideout. When you’ve defeated DAX and his cronies you can ransack the starbase and take its power core.
+The only power source big enough to juice up the Mother Ark is of starbase scale... and those things take years and bazillions to manufacture. The NAFS have several starbases, but understandably you canï¿½t take power cores from them. The solution presents itself once you locate the VUX rebel DAX and his secret starbase hideout. When youï¿½ve defeated DAX and his cronies you can ransack the starbase and take its power core.
 
 Once the Ark powers up, its escorts power up, and you can talk to them. They're generally friendly and sympathetic, interested in the outcome of the war(s), but can't manufacture any more Mmrnmhrm, or weaken the guard on their Mother Ark.
 
