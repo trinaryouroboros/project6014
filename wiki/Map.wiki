@@ -1,3 +1,4 @@
+#labels Gameplay
 = Map =
 
 This is the page for general notes about the map.
