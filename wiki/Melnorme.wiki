@@ -1,3 +1,4 @@
+#labels Races
 = Melnorme =
 
   * *Connected races:* [Faz], [Slylandro]
@@ -12,7 +13,7 @@ The Melnorme will play a bigger role in the plot. Their homeworld, Omicron Hygea
  (Wow, they actually know the homeworld of the Melnorme? The Melnorme were always so secret (unless paid :P) about this! If the Taalo or Faz are giving away this information to you, perhaps have the Melnorme impose some kind of ridiculous penalty on the Taalo or Faz. Could be some sub-plot to have the player fix up the Melnorme-Taalo/Faz relation. -- jorisvddonk)
 
 
-You will discover more of the Melnorme’s old history as the Mael-Num by talking to the Faz: a role in the destruction of the sentient milieu. Perhaps they could've turned the tide of the war if they had stood and fought. But instead, they sold out one of their comrades: They dealt false information to one of the Sentient Milieu races (Yuptar) about the [UrQuan] movements, which allowed the Melnorme to escape, but threw the Yuptar under the bus.
+You will discover more of the Melnormeï¿½s old history as the Mael-Num by talking to the Faz: a role in the destruction of the sentient milieu. Perhaps they could've turned the tide of the war if they had stood and fought. But instead, they sold out one of their comrades: They dealt false information to one of the Sentient Milieu races (Yuptar) about the [UrQuan] movements, which allowed the Melnorme to escape, but threw the Yuptar under the bus.
 
  (What exactly? This has to be juicy/important, as nearly everyone expects them to have been the Mael-Num already. -- jorisvddonk)
 
