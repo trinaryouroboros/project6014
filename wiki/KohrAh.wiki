@@ -1,3 +1,4 @@
+#labels Races
 = Kohr-Ah =
 
   * *Connected races:* [Slylandro]
@@ -14,4 +15,3 @@ Are a constant menace to all races in the sector, and a dangerous thing to bump 
 Can they be finally destroyed and how?? Even though some might find it dissatisfying, we don't actually have to "wrap up" the Kohr-Ah, we can just leave them running around guerrilla style. It's really hard to effectively combat a guerrilla war.
 
 == Detailed info ==
-
