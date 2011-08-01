@@ -1,3 +1,4 @@
+#labels Devices
 = Temporal Wrapper =
 
   * *Connected races:* [Taalo], [Orz], [Ariloulaleelay]
@@ -5,7 +6,7 @@
 
 You need this to enter the Orzspace portals and not die. In the possession of the Arilou.  
 
-It's a device which allows moving in Orz space like Taalo and Arilou can, without getting stuck in *time* or something. You can access Orzspace through the portals without the device but if you do that, you are stuck, the Orz there smell you and it’s game over (with an ominous cutscene). 
+It's a device which allows moving in Orz space like Taalo and Arilou can, without getting stuck in *time* or something. You can access Orzspace through the portals without the device but if you do that, you are stuck, the Orz there smell you and itï¿½s game over (with an ominous cutscene). 
 
 Even if you have the Temporal Wrapper and run into a big black blip (Orz's *finger*) in Orzspace, you die-> The Orz has penetrated your protective barrier.
 
