@@ -1,3 +1,4 @@
+#labels Story
 = How it starts =
 
 The game will start with the Captain (you; Zelnick) in a flash new [ChmmrExplorer] ship at Procyon. You have been tasked with investigating a mysterious Shofixti distress signal: a [Shofixti] patrol that was on a mission to scout out new homeworlds has disappeared.
