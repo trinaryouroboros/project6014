@@ -1,3 +1,4 @@
+#labels Races
 = MasterRace =
 
 (We need new name for these guys ASAP!)
@@ -7,7 +8,7 @@
 
 == Summary info ==
 
-These guys will be very friendly and enthusiastic. Will want to join the NAFS. On closer inspection it’s clear that actually these guys have been dominating another race for their own benefit. A sub-plot will be to emancipate SlaveRace from MasterRace’s control.
+These guys will be very friendly and enthusiastic. Will want to join the NAFS. On closer inspection itï¿½s clear that actually these guys have been dominating another race for their own benefit. A sub-plot will be to emancipate SlaveRace from MasterRaceï¿½s control.
 
  (This reminds me (a bit) of Larry Niven's "Known Space" universe. Specifically, the Thrintun/Slavers (http://en.wikipedia.org/wiki/Thrint) and the Tnuctipun that they controlled (http://en.wikipedia.org/wiki/Tnuctip) -- jorisvddonk)
 
@@ -19,7 +20,7 @@ If you kill both, at least you have less allies in the end to kill the [Exotics]
 
 If the Master Race joins the NAFS, they could study the slave shield tech (like the Spathi did) and replicate it on the Slave Race's homeworld, locking them in there. You could question it, and they'd retort, "but the NAFS shielded the [VUX] and Mycon?!? Why can't we shield these pesky SlaveRace people?"
 
-You will need certain amount of allies to win the game. Killing both Masterrace and Slaverace won’t yet prevent you from winning the game, but add losing VUX, not gaining [Faz] alliance, [Shofixti] suiciding etc. and you’re running thin.
+You will need certain amount of allies to win the game. Killing both Masterrace and Slaverace wonï¿½t yet prevent you from winning the game, but add losing VUX, not gaining [Faz] alliance, [Shofixti] suiciding etc. and youï¿½re running thin.
 
 == Detailed info ==
 
