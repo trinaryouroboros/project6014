@@ -1,3 +1,4 @@
+#labels Races
 = Earthlings =
 
   * *Connected races:*
