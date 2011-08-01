@@ -1,3 +1,4 @@
+#labels Wiki
 = Introduction =
 
 This is the Wiki Home.  All other Wiki pages should be accessible from here.
