@@ -1,3 +1,4 @@
+#labels Races
 = Slylandro =
 
   * *Connected races:* [Mmrnmhrm]
@@ -22,4 +23,3 @@ The Slylandro will find the location of the [MmrnmhrmMotherArk] in their travels
  (But if they're slaughtered, you won't find the Mother Ark, and won't be able to fix the Chmmr. This might break continuity severely, unless some fallback conversation is built. -- jorisvddonk)
 
 == Detailed info ==
-
