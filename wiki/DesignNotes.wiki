@@ -1,3 +1,4 @@
+#labels Wiki
 = Project 6014 =
 
 == Design notes ==
@@ -28,10 +29,10 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
       * Thraddash -- There's not one cigar butt left of the Thraddash 'civilization'. What a bummer.
       * Umgah -- Umgah are left to their own devices and will play no part in this mod. (Except that they were the ones that gave the Slylandro the modded Marauder ships).
       * Utwig -- Associate member of NAFS. Retired to Gamma Aquarii. The Ultron has told the Utwig to become complete pacifists. Thus they won't partake in NAFS operations and you won't be able to build their overly powerful ships. Will play no role in this mod.
-      * Ur-Quan -- Fled this region of space immediately after the Sa-Matra’s destruction. Not included in this mod.
+      * Ur-Quan -- Fled this region of space immediately after the Sa-Matraï¿½s destruction. Not included in this mod.
       * [VUX]
       * [Yehat]
-      * Zoq-Fot-Pik -- Core member of NAFS, but are too busy rebuilding their homeworld and colonies after the Kohr-Ah devastation that they won’t be of any use. In fact they are off the starmap and will play no part in this mod. Their Stinger vessels will be available for construction though.
+      * Zoq-Fot-Pik -- Core member of NAFS, but are too busy rebuilding their homeworld and colonies after the Kohr-Ah devastation that they wonï¿½t be of any use. In fact they are off the starmap and will play no part in this mod. Their Stinger vessels will be available for construction though.
     * New races
       * [Androsynth]
       * [Faz]
