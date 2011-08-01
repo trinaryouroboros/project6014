@@ -1,3 +1,4 @@
+#labels Races
 Taalo
 
   * *Connected races:* [Arilou], [Orz]
@@ -5,9 +6,9 @@ Taalo
 
 == Summary info ==
 
-“The Taalo live!” A bit presumptuous for me to bring them back but might as well. The Taalo were experimenting with IDF when the [UrQuan] started finishing off Milieu members, and that's how some of them escaped into *below*, evading destruction.
+*The Taalo live!* A bit presumptuous for me to bring them back but might as well. The Taalo were experimenting with IDF when the [UrQuan] started finishing off Milieu members, and that's how some of them escaped into *below*, evading destruction.
 
-Taalo will be accessed from Orzspace. Perhaps Orz are still *chasing* Taalo in this dimension. Don’t know. Taalo will be instrumental in fixing the silicon part of the Chmmr. They’ll give you this if you deliver a comatose [Chmmr] to them as a sign of good will and because they're so nice. 
+Taalo will be accessed from Orzspace. Perhaps Orz are still *chasing* Taalo in this dimension. Donï¿½t know. Taalo will be instrumental in fixing the silicon part of the Chmmr. Theyï¿½ll give you this if you deliver a comatose [Chmmr] to them as a sign of good will and because they're so nice. 
 
 The Taalo want you to free them from Orzspace. They aren't in a mortal danger in Orzspace, but they're not home there either. They want to return. You may or may not help them, but if you do, you get them to ally you. You need the Temporal Wrapper device from the Arilou for this, but it alone isn't enough! The truespace [Androsynth] will make a larger version of the Temporal Wrapper in order to help the Androsynth "trapped" in Orzspace. You can use this device to free the Taalo.
 
