@@ -1,3 +1,4 @@
+#labels Races
 = Exotics =
 
 (Yup, not the best possible name... suggestions?)
@@ -9,7 +10,7 @@
 
 Principle antagonists.  Ancient. They manipulate gravity waves naturally as the [Chmmr] do hyperwaves, and are very advanced in gravitational tech. Could be implied that they're composed of dark matter.
 
-An Exotic individual can be discerned as a strong gravity lens from afar... and at close zoom as a shifty, shadowy, “wraithlike” creature. The community of Exotics form a hive mind.
+An Exotic individual can be discerned as a strong gravity lens from afar... and at close zoom as a shifty, shadowy, ï¿½wraithlikeï¿½ creature. The community of Exotics form a hive mind.
 
 During the course of game the Exotics presence starts to show. New stars start appearing, messing up nearby star systems... stars start blowing up transforming into black holes...  hyperspace might go partially haywire too. This is the work of Exotics and you need to stop it before Sol, Procyon etc. are destroyed!
 
@@ -61,7 +62,7 @@ Did the Precursors know of the Exotics? Did the Precursors leave because of them
 
 I definitely want the possibility to communicate with the Exotics with direct dialogue. However, it shouldn't be too straight/understandable... something like the Mycon would be great! The player could try to do guesswork from the bits and pieces of the seemingly incoherent ramblings, but it wouldn't tell much.
 
- (I would advise against this direct communication. Random unintelligeble blabber is already done with the Mycon and Orz, an even more of it would get boring/cliché. Besides, the Exotics are so strange and far removed from any society as we know it, they might not even realize that they're communicating with anyone, and instead figure that whoever is communicating with their hive is a 'bad node' and has to be removed. I suggest having all details of the Exotics be handled through some research party from a collective of NAFS members. -- jorisvddonk)
+ (I would advise against this direct communication. Random unintelligeble blabber is already done with the Mycon and Orz, an even more of it would get boring/clichï¿½. Besides, the Exotics are so strange and far removed from any society as we know it, they might not even realize that they're communicating with anyone, and instead figure that whoever is communicating with their hive is a 'bad node' and has to be removed. I suggest having all details of the Exotics be handled through some research party from a collective of NAFS members. -- jorisvddonk)
 
 Specifics about the star systems they've destroyed: The star in the center of the truespace view could be replaced with a black hole, which sucks your ship in if you venture foolishly too close. Also the planets in the system are destroyed when the Exotics blow up a star.
 
