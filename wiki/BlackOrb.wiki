@@ -1,3 +1,4 @@
+#labels Devices
 = Black Orb =
 
   * *Connected races:* [Exotics], [Lurg]
