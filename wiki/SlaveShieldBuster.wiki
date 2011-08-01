@@ -1,13 +1,14 @@
+#labels Devices
 = Slave shield buster =
 
   * *Connected races:* [Chmmr], [Faz], [VUX], [Spathi], [XenWeyi]
   * *Connected Devices:*
 
-You can use this to free any race under a slave shield. The Faz, VUX and Xen-Weyi want to be freed, the Spathi don’t.
+You can use this to free any race under a slave shield. The Faz, VUX and Xen-Weyi want to be freed, the Spathi donï¿½t.
 
 The slave shield buster is Chmmr technology. When they're awake and functioning they don't want anyone else to have the shield busting tech. But once they've gone comatose, you can ransack their databases and figure out where they stashed it. 
 
-To not make things too easy, the shield buster can’t be simply on Procyon. There could be some sort of cryptic clue in Chmmr databases where it is stored (a la Delta Lyncis’ vux beast). Not that difficulty level though, easier. But anyway, once there, you’ll encounter rebellious VUX forces – DAX's lieutenant (Not DAX himself) and a wing of intruders are present. Fight ‘em off and the buster is yours.
+To not make things too easy, the shield buster canï¿½t be simply on Procyon. There could be some sort of cryptic clue in Chmmr databases where it is stored (a la Delta Lyncisï¿½ vux beast). Not that difficulty level though, easier. But anyway, once there, youï¿½ll encounter rebellious VUX forces ï¿½ DAX's lieutenant (Not DAX himself) and a wing of intruders are present. Fight ï¿½em off and the buster is yours.
 
 The VUX won't contest the shield breaker if you've already killed DAX and his starbase.
 
