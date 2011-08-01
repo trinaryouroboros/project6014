@@ -1,3 +1,4 @@
+#labels Gameplay
 = Introduction =
 
 http://project6014.googlecode.com/svn/trunk/sc2/doc/mod/ChmmrExplorer.jpg
