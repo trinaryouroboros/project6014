@@ -1,3 +1,4 @@
+#labels Races
 = Xen-Weyi =
 
  (These seem a bit throwaway and vague, as if only to serve the purpose of bringing the player terraforming plants. Perhaps get rid of these, and replace them with the Supox? I bet the Supox could help the Shofixti out. -- jorisvddonk)
@@ -15,7 +16,7 @@ Their development took a set-back under the slave shield but they still retained
 
 You can use the slave shield buster to free them. In the meantime they have been building military capability to prepare for the return of the Ur-Quan. As soon as you release them, they develop a reasonable Sphere of Influence. 
 
-(I haven’t added these guys to the starmap yet – any idea where they could/should go?)
+(I havenï¿½t added these guys to the starmap yet ï¿½ any idea where they could/should go?)
 
 == Ship ==
 
