@@ -1136,6 +1136,9 @@ START_GAME_STATE
 	// JMS: Stronger lander shot is more effective and required for destroying certain enemies.
 	ADD_GAME_STATE (STRONGER_LANDER_SHOT, 1)
 
+	// JMS: Stupid joke in Chmmr & Melnorme encounters...
+	ADD_GAME_STATE (TZZRAK_TZON_PICS, 1)
+
 
 END_GAME_STATE
 

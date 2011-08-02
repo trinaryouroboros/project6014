@@ -276,6 +276,12 @@ and not to mention, bad for business.
 Should you find something that sheds more light on this matter
 do let us know. You may expect a remarkable sum in exchange.
 
+#(sell_tzzrak_tzon_pics)
+Interested in some cool pics from the Crystal Caverns of Tzzrak-Tzon?
+	
+#(NO_WAY)
+No.
+
 #(HELLO_AND_DOWN_TO_BUSINESS1)
 Greetings Captain.
 
