@@ -453,11 +453,20 @@ object_animation (ELEMENT *ElementPtr)
 					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
 			}
 			// JMS: Since Biocritter explosion doesn't use pMS->Curstate to keep track of which frame the explosion is in (like DEATH_EXPLOSION does),
-			// we must limit the number of explosion frames with a constant number. (Critter laser shots never reach this if)
+			// we must limit the number of explosion frames with a constant number. (Critter laser shots never reach this 'if'.)
 			else if (ElementPtr->mass_points == BIOCRITTER_PROJECTILE)
 			{
+				int k;
+				
 				if (frame_index >= 26)
 					pPrim->Object.Stamp.frame = DecFrameIndex (pPrim->Object.Stamp.frame);
+				
+				// JMS: Add earthquakes and fire to accompany the explosion just for the heck of it!
+				for (k = 0; k < 2; k++)
+				{
+					AddGroundDisaster (EARTHQUAKE_DISASTER);
+					AddGroundDisaster (LAVASPOT_DISASTER);
+				}
 			}
 			else if (ElementPtr->mass_points == BIOCRITTER_LIMPET)
 			{
@@ -666,6 +675,8 @@ object_animation (ELEMENT *ElementPtr)
 #define MAX_ENEMYSHOT_DISTANCE (100 * RESOLUTION_FACTOR) // JMS
 				// JMS: Shooting critters may fire now if they're close enough and are at the correct PNG frame.
 				// This way the fire rate can be (a bit hackily) controlled by adding frames to the .ani file.
+				//
+				// Also, the critters don't shoot if the lander hasn't yet completely landed on the planet.
 				{
 					BYTE creatureHasWeapon;
 					creatureHasWeapon = CreatureData[index].SpecialAttributes & SHOOTING_SPECIALS;
@@ -673,6 +684,7 @@ object_animation (ELEMENT *ElementPtr)
 					if (creatureHasWeapon
 						&& frame_index == 4
 						&& (ElementPtr->mass_points & CREATURE_AWARE)
+						&& !(((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit)
 						&& (dx <= MAX_ENEMYSHOT_DISTANCE 
 							&& dy <= MAX_ENEMYSHOT_DISTANCE
 							&& dx * dx + dy * dy <= MAX_ENEMYSHOT_DISTANCE * MAX_ENEMYSHOT_DISTANCE))
@@ -880,9 +892,12 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					ExplosionElementPtr->life_span = EXPLOSION_LIFE * (LONIBBLE (ExplosionElementPtr->turn_wait) + 1);
 					
 					SetPrimType (&DisplayArray[ExplosionElementPtr->PrimIndex], STAMP_PRIM);
-					DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[8], 16); // JMS: Must use separate LanderFrame instead of LanderFrame[0]:
+					
+					// JMS: Must use separate LanderFrame instead of LanderFrame[0]:
 					// Otherwise the game thinks this explosion belongs to lander
 					// itself, and it won't collide with lander at all (->no damage).
+					DisplayArray[ExplosionElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[8], 16);
+					
 					UnlockElement (hExplosionElement);
 					InsertElement (hExplosionElement, GetHeadElement ());
 					
