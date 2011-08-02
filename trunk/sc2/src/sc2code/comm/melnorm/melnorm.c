@@ -679,7 +679,6 @@ SellMenu (RESPONSE_REF R)
 				SET_GAME_STATE(MELNORME_ALL_LIFE_TYPE_FOUND, 2);
 			}
 			
-			
 			// queue WHAT_TO_SELL before talk-segue
 			if (num_new_rainbows)
 			{
@@ -739,6 +738,11 @@ SellMenu (RESPONSE_REF R)
 			NPCPhrase (SHIP_MARK_INFORMATION_2);
 			SET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT, 3);
 		}
+		else if (PLAYER_SAID (R, sell_tzzrak_tzon_pics))
+		{
+			NPCPhrase (NO_WAY);
+			SET_GAME_STATE(TZZRAK_TZON_PICS, 0);
+		}
 		else /* if (R == sell_rainbow_locations) */
 		{
 			added_credit = num_new_rainbows * (250 * BIO_CREDIT_VALUE);
@@ -757,7 +761,10 @@ SellMenu (RESPONSE_REF R)
 		}
 	}
 	
-	if (GLOBAL_SIS (TotalBioMass) || num_new_rainbows || GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) == 2)
+	if (GLOBAL_SIS (TotalBioMass) 
+		|| num_new_rainbows
+		|| GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) == 2
+		|| GET_GAME_STATE(TZZRAK_TZON_PICS) == 1)
 	{
 		if (!what_to_sell_queued)
 			NPCPhrase (WHAT_TO_SELL);
@@ -768,6 +775,8 @@ SellMenu (RESPONSE_REF R)
 			Response (sell_rainbow_locations, SellMenu);
 		if (GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) == 2)
 			Response (sell_ship_mark_sightings, ShipMarkSightingsMenu);
+		if (GET_GAME_STATE(TZZRAK_TZON_PICS) == 1)
+			Response (sell_tzzrak_tzon_pics, SellMenu);
 		
 		Response (done_selling, TradeMenu);
 		Response (no_trade_now, ExitConversation);
