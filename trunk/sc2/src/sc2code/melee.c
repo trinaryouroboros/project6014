@@ -552,7 +552,7 @@ DrawPickIcon (COUNT iship, BYTE DrawErase)
 	s.origin.x = r.corner.x + 20 * RESOLUTION_FACTOR + (iship % NUM_PICK_COLS) * 18 * RESOLUTION_FACTOR; // JMS_GFX
 	s.origin.y = r.corner.y +  5 * RESOLUTION_FACTOR + (iship / NUM_PICK_COLS) * 18 * RESOLUTION_FACTOR; // JMS_GFX
 	s.frame = GetShipIconsFromIndex (iship);
-	if(DrawErase && iship != NUM_OF_ALL_SHIPS) // JMS: Don't draw the last ship (It should be slykohr!!) since it is forbidden to be selected anyway.
+	if(DrawErase && s.frame && iship != NUM_OF_ALL_SHIPS) // JMS: Don't draw the last ship (It should be slykohr!!) since it is forbidden to be selected anyway.
 	{	// draw icon
 		DrawStamp (&s);
 	}
