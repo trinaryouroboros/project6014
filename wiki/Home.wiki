@@ -1,16 +1,18 @@
 #labels Wiki
 = Introduction =
 
-This is the Wiki Home.  All other Wiki pages should be accessible from here.
+The Wiki is for general development-related documentation for the game.
+
+This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from here.  Those that aren't can be found via the [http://code.google.com/p/project6014/w/list list of all Wiki pages].
 
 = Contents =
 
 == Game development ==
 
-[ChmmrExplorer]
+[DesignNotes] - current game design (plot, etc.)
+
+[ChmmrExplorer] - early documentation on the first new ship
 
 == Administration ==
 
 Project [Rules]
-
-Tabs: [Wiki] [Issues] [Source]
