@@ -1,16 +1,16 @@
 #labels Races
 = Spathi =
 
-  * *Connected races: [Chmmr]
+  * *Connected races:* [Chmmr]
   * *Connected devices:* [SlaveShieldBuster]
 
 == Summary info ==
 
 Associate member of NAFS. The Spathi were permitted by the Chmmr to remain slave-shielded. However the Chmmr insisted that they erect and maintain a starbase to keep communications open. However, lately, the Spathi haven't been pulling their weight so Hayes or Chmmr send you to check out what the Spathi are up to.
 
-When you turn up to the starbase to say �hi�, the lights are turned off and the Spathi keep pressing you for a password. You can try out different alternatives, but all of them are wrong - there is no real password. You need to exhaust the password dialogue tree to get a new alternative "TURN ON THE LIGHTS NOW, YOU MAGGOTS" or something like that.
+When you turn up to the starbase to say "hi", the lights are turned off and the Spathi keep pressing you for a password. You can try out different alternatives, but all of them are wrong - there is no real password. You need to exhaust the password dialogue tree to get a new alternative "TURN ON THE LIGHTS NOW, YOU MAGGOTS" or something like that.
 
-ALTERNATIVE1: When the lights turn on you discover that they haven�t done very much and have turned the interior of the starbase into a giant fun-time area. 
+ALTERNATIVE1: When the lights turn on you discover that they have not done very much and have turned the interior of the starbase into a giant fun-time area. 
 
 ALTERNATIVE2: The Spathi on the starbase were really trying to fool the Spathi on the homeworld to switch places with them, they would do everything possible to make it SEEM like a party. This would account for why they won't turn on the lights (even for their own people).
 
@@ -19,3 +19,5 @@ Anyway, you set the things straight at the starbase with some selected threats.
 What happens when you bust the Spathi slaveshield??
 
 == Detailed info ==
+
+Issue 22 is for getting the basic Spathi conversation in place.
