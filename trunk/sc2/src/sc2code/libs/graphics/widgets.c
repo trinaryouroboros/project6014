@@ -14,6 +14,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "graphics/gfx_common.h"
 #include "graphics/widgets.h"
 #include "colors.h"
@@ -87,7 +89,7 @@ DrawLabelAsWindow(WIDGET_LABEL *label)
 	int i, win_w, win_h;
 
 	/* Compute the dimensions of the label */
-	win_h = label->height ((WIDGET *)label) + 16;
+	win_h = label->height ((WIDGET *)label) + (16 << RESOLUTION_FACTOR); // JMS_GFX
 	win_w = 0;
 	for (i = 0; i < label->line_count; i++)
 	{
@@ -97,7 +99,7 @@ DrawLabelAsWindow(WIDGET_LABEL *label)
 			win_w = len;
 		}
 	}
-	win_w = (win_w * 6) + 16;
+	win_w = (win_w * (6 << RESOLUTION_FACTOR)) + (16 << RESOLUTION_FACTOR); // JMS_GFX
 
 	BatchGraphics ();
 	r.corner.x = (SCREEN_WIDTH - win_w) >> 1;
@@ -108,14 +110,14 @@ DrawLabelAsWindow(WIDGET_LABEL *label)
 			SHADOWBOX_DARK_COLOR, SHADOWBOX_MEDIUM_COLOR);
 
 	t.baseline.x = r.corner.x + (r.extent.width >> 1);
-	t.baseline.y = r.corner.y + 16;
+	t.baseline.y = r.corner.y + (16 << RESOLUTION_FACTOR); // JMS_GFX
 	for (i = 0; i < label->line_count; i++)
 	{
 		t.pStr = label->lines[i];
 		t.align = ALIGN_CENTER;
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
-		t.baseline.y += 8;
+		t.baseline.y += (8 << RESOLUTION_FACTOR); // JMS_GFX
 	}
 
 	UnbatchGraphics ();
@@ -135,10 +137,10 @@ Widget_DrawToolTips (int numlines, const char **tips)
 	TEXT t;
 	int i;
 
-	r.corner.x = 2;
-	r.corner.y = 2;
-	r.extent.width = SCREEN_WIDTH - 4;
-	r.extent.height = SCREEN_HEIGHT - 4;
+	r.corner.x = 2 * (1 + RESOLUTION_FACTOR); // JMS_GFX
+	r.corner.y = 2 * (1 + RESOLUTION_FACTOR); // JMS_GFX
+	r.extent.width = SCREEN_WIDTH - 4 * (1 + RESOLUTION_FACTOR); // JMS_GFX
+	r.extent.height = SCREEN_HEIGHT - 4 * (1 + RESOLUTION_FACTOR); // JMS_GFX
 
 	t.align = ALIGN_CENTER;
 	t.CharCount = ~0;
@@ -331,7 +333,7 @@ Widget_DrawLabel (WIDGET *_self, int x, int y)
 	{
 		t.pStr = self->lines[i];
 		font_DrawText (&t);
-		t.baseline.y += 8;
+		t.baseline.y += (8 << RESOLUTION_FACTOR); // JMS_GFX
 	}
 	SetContextFontEffect (oldFontEffect);
 	SetContextFont (oldfont);
@@ -617,14 +619,14 @@ int
 Widget_HeightOneLine (WIDGET *_self)
 {
 	(void)_self;
-	return 8;
+	return (8 << RESOLUTION_FACTOR); // JMS_GFX
 }
 
 int
 Widget_HeightLabel (WIDGET *_self)
 {
 	WIDGET_LABEL *self = (WIDGET_LABEL *)_self;
-	return self->line_count * 8;
+	return self->line_count * (8 << RESOLUTION_FACTOR); // JMS_GFX
 }
 
 int

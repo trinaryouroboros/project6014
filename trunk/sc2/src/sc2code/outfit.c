@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "options.h"
 #include "colors.h"
 #include "controls.h"
@@ -137,9 +139,12 @@ RedistributeFuel (void)
 	GLOBAL_SIS (FuelOnBoard) = FuelVolume;
 }
 
-#define LANDER_X 180
-#define LANDER_Y 18
-#define LANDER_WIDTH 15
+//#define LANDER_X 180
+//#define LANDER_Y 18
+
+#define LANDER_X (180 << RESOLUTION_FACTOR) // JMS_GFX
+#define LANDER_Y (18 << RESOLUTION_FACTOR) // JMS_GFX
+#define LANDER_WIDTH (15 << RESOLUTION_FACTOR) // JMS_GFX
 
 static void
 DisplayLanders (MENU_STATE *pMS)

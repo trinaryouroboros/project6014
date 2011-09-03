@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
+
 #include "libs/graphics/gfxintrn.h"
 #include "libs/input/inpintrn.h"
 #include "libs/graphics/gfx_common.h"
@@ -27,7 +29,7 @@ void (*mask_func_array[]) (RECT *pClipRect, PRIMITIVE *PrimPtr)
 		= { 0 };
 
 // JMS_GFX
-int resolutionFactor;
+unsigned int resolutionFactor;
 
 int ScreenWidth;
 int ScreenHeight;

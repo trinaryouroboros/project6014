@@ -16,7 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: Added Lurg cutscene
+// JMS 2010: Added Lurg cutscene.
+
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
 
 #include "fmv.h"
 
@@ -114,10 +116,27 @@ SplashScreen (void (* DoProcessing)(DWORD TimeOut))
 	LockMutex (GraphicsLock);
 	SetContext (ScreenContext);
 	s.origin.x = s.origin.y = 0;
-	if(resolutionFactor == 2)
-		s.frame = CaptureDrawable (LoadGraphic (TITLE_ANIM_HIRES));
-	else
+	
+	//DC: Title Splashscreen.
+	if (resolutionFactor < 1)
+	{
+		printf("Loading 1x Splashscreen\n");
 		s.frame = CaptureDrawable (LoadGraphic (TITLE_ANIM));
+	}
+	
+	else if (resolutionFactor == 1)
+	{
+		printf("Loading 2x Splashscreen\n");
+		s.frame = CaptureDrawable (LoadGraphic (TITLE_2X));
+	}
+	
+	else if(resolutionFactor > 1)
+	{
+		printf("Loading 4x Splashscreen\n");
+		s.frame = CaptureDrawable (LoadGraphic (TITLE_4X));
+	}
+	// DC: End of spashscreen resolutions.
+	
 	DrawStamp (&s);
 	DestroyDrawable (ReleaseDrawable (s.frame));
 	UnlockMutex (GraphicsLock);

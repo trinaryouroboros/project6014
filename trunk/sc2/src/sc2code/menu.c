@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "commglue.h"
 #include "controls.h"
 #include "options.h"
@@ -68,7 +70,7 @@ static UNICODE pm_fuel_str[128];
 static void
 DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 {
-#define PC_MENU_HEIGHT (8 * RESOLUTION_FACTOR) // JMS_GFX
+#define PC_MENU_HEIGHT (RES_STAT_SCALE(8)) // JMS_GFX
 	BYTE pos;
 	COUNT i;
 	int num_items;
@@ -85,39 +87,38 @@ DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 		log_add (log_Error, "Warning, no room for all menu items!");
 	else
 		r->corner.y += (r->extent.height - num_items * PC_MENU_HEIGHT) / 2;
-	r->extent.height = num_items * PC_MENU_HEIGHT + 4; // JMS_GFX
+	r->extent.height = num_items * PC_MENU_HEIGHT + 4;
 	DrawPCMenuFrame (r);
 	OldFont = SetContextFont (StarConFont);
 	t.align = ALIGN_LEFT;
 	t.baseline.x = r->corner.x + 2;
-	t.baseline.y = r->corner.y + PC_MENU_HEIGHT -1;
+	t.baseline.y = r->corner.y + PC_MENU_HEIGHT - (1 << RESOLUTION_FACTOR) - RESOLUTION_FACTOR; // JMS_GFX
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	r->corner.x++;
 	r->extent.width -= 2;
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x00, 0x15, 0x15), 0x00));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x15, 0x15), 0x00));
+	
 	for (i = beg_index; i <= end_index; i++)
 	{
 		utf8StringCopy (buf, sizeof (buf),
 						(i == PM_FUEL) ? pm_fuel_str :
 						(i == PM_CREW) ? pm_crew_str :
 						GAME_STRING (MAINMENU_STRING_BASE + i));
+		
 		if (hilite && pos == i)
 		{
-			SetContextForeGroundColor (
-					BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x00));
-			r->corner.y = t.baseline.y - PC_MENU_HEIGHT + 2;
+			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x00));
+			r->corner.y = t.baseline.y - PC_MENU_HEIGHT + RES_STAT_SCALE(2) + RESOLUTION_FACTOR; // JMS_GFX
 			r->extent.height = PC_MENU_HEIGHT - 1;
 			DrawFilledRectangle (r);
-			SetContextForeGroundColor (
-					BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x00));
+			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x00));
 			font_DrawText (&t);
-			SetContextForeGroundColor (
-					BUILD_COLOR (MAKE_RGB15 (0x00, 0x15, 0x15), 0x00));
+			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x15, 0x15), 0x00));
 		}
 		else
 			font_DrawText (&t);
+		
 		t.baseline.y += PC_MENU_HEIGHT;
 	}
 }
@@ -499,7 +500,7 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 	s.origin.x = RADAR_X - r.corner.x;
 	s.origin.y = RADAR_Y - r.corner.y;
 	r.corner.x = s.origin.x - 1;
-	r.corner.y = s.origin.y - 11;
+	r.corner.y = s.origin.y - 11; // JMS_GFX
 	r.extent.width = RADAR_WIDTH + 2;
 	BatchGraphics ();
 	SetContextForeGroundColor (
@@ -561,20 +562,21 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 					break;
 			}
 		}
-		r.extent.height = RADAR_HEIGHT + 11;
+		r.extent.height = STATUS_HEIGHT - r.corner.y - 2;// RADAR_HEIGHT + 11; // JMS_GFX
 		DrawPCMenu (beg_index, end_index, (BYTE)NewState, hilite, &r);
 		s.frame = 0;
 	}
 	else
 	{
-		if(optWhichMenu == OPT_PC)
+		if (optWhichMenu == OPT_PC)
 		{
 			r.corner.x -= 1;
 			r.extent.width += 1;
-			r.extent.height = RADAR_HEIGHT + 11;
+			r.extent.height =  STATUS_HEIGHT - r.corner.y - 2;// RADAR_HEIGHT + 11; // JMS_GFX
 		}
 		else
 			r.extent.height = 11;
+		
 		DrawFilledRectangle (&r);
 	}
 	if (s.frame)

@@ -73,8 +73,8 @@
 #define WHEN_DYING_SPECIALS 0x0C // binary 1100
 #define INVULNERABILITY_SPECIALS 0x30 // binary 110000
 
-#define LIMPET_ACCEL (WORLD_TO_VELOCITY(1 * RESOLUTION_FACTOR))
-#define LIMPET_MAX_SPEED (WORLD_TO_VELOCITY(3 * RESOLUTION_FACTOR))
+#define LIMPET_ACCEL (WORLD_TO_VELOCITY(1 << RESOLUTION_FACTOR))		// JMS_GFX
+#define LIMPET_MAX_SPEED (WORLD_TO_VELOCITY(3 << RESOLUTION_FACTOR))	// JMS_GFX
 #define LIMPET_LIFESPAN 50
 #define MAX_LIMPETS_LO_SPEED 16 // JMS: Max number of limpets that can stick on the lander
 #define MAX_LIMPETS_HI_SPEED 28 // JMS: Max number of limpets that can stick on the lander

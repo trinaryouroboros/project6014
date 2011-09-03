@@ -18,6 +18,8 @@
 
 // JMS 2010: -Don't draw 4x image of restricted planets since they cannot be landed on anyway.
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "nameref.h"
 #include "resinst.h"
 #include "setup.h"
@@ -61,7 +63,7 @@ extern void getpixelarray (void *map, int Bpp, FRAME FramePtr,
 
 #define NUM_BATCH_POINTS 64
 #define USE_3D_PLANET 1
-#define RADIUS (37 * RESOLUTION_FACTOR) // JMS_GFX
+#define RADIUS RES_CASE(37,74,163) // JMS_GFX
 //2*RADIUS
 #define TWORADIUS (RADIUS << 1)
 //RADIUS^2
@@ -94,15 +96,12 @@ extern void getpixelarray (void *map, int Bpp, FRAME FramePtr,
 #endif
 
 // JMS_GFX: Changed initialization to constant numbers since DIAMETER is now variably defined
-DWORD light_diff[150][150]; //DWORD light_diff[DIAMETER][DIAMETER];
+// The value 330 is the value that's reached at the biggest resolution, 4x.
+DWORD light_diff[330][330]; //DWORD light_diff[DIAMETER][DIAMETER];
 
-typedef struct 
-{
-	POINT p[4];
-	DWORD m[4];
-} MAP3D_POINT;
 // JMS_GFX: Changed initialization to constant numbers since DIAMETER is now variably defined
-MAP3D_POINT map_rotate[150][150];//MAP3D_POINT map_rotate[DIAMETER][DIAMETER];
+// The value 330 is the value that's reached at the biggest resolution, 4x.
+MAP3D_POINT map_rotate[330][330];//MAP3D_POINT map_rotate[DIAMETER][DIAMETER];
 
 typedef struct
 {
@@ -367,23 +366,26 @@ RenderPhongMask (POINT loc)
 //create_aa_points creates weighted averages for
 //  4 points around the 'ideal' point at x,y
 //  the concept is to compute the weight based on the
-//  distance from the integer location points to the ideal point
+//  distance from the integer location points to the ideal point.
+//
+// JMS_GFX: Added 'height' variable, used it to replace MAP_HEIGHT and SPHERE_SPAN_X.
 static void
-create_aa_points (MAP3D_POINT *ppt, double x, double y)
+create_aa_points (MAP3D_POINT *ppt, double x, double y, COUNT height)
 {
 	double deltax, deltay, inv_deltax, inv_deltay;
 	COORD nextx, nexty;
 	COUNT i;
 	double d1, d2, d3, d4, m[4];
+	COUNT spherespanx = height;
 
 	if (x < 0)
 		x = 0;
-	else if (x >= SPHERE_SPAN_X)
-		x = SPHERE_SPAN_X - 1;
+	else if (x >= spherespanx) // was SPHERE_SPAN_X
+		x = spherespanx - 1;
 	if (y < 0)
 		y = 0;
-	else if (y >= MAP_HEIGHT)
-		y = MAP_HEIGHT - 1;
+	else if (y >= height)
+		y = height - 1;
 
 	// get  the integer value of this point
 	ppt->p[0].x = (COORD)x;
@@ -464,32 +466,36 @@ get_avg_rgb (DWORD p1[4], DWORD mult[4], COUNT offset)
 }
 
 // SetPlanetTilt creates 'map_rotate' to map the topo data
-//  for a tilted planet.  It also does the sphere->plane mapping
+//  for a tilted planet.  It also does the sphere->plane mapping.
+//
+// JMS_GFX: Added 'height' and 'radius' to make hi-res work.
 void
-SetPlanetTilt (int angle)
+SetPlanetTilt (int angle, COUNT height, COUNT radius)
 {
 	int x, y;
-	const double multx = ((double)SPHERE_SPAN_X / M_PI);
-	const double multy = ((double)MAP_HEIGHT / M_PI);
-	const double xadj = ((double)SPHERE_SPAN_X / 2.0);
+	COUNT spherespanx = height;							// JMS_GFX
+	COUNT radius_thres = (radius + 1) * (radius + 1);	// JMS_GFX
+	const double multx = ((double)spherespanx / M_PI);
+	const double multy = ((double)height / M_PI);
+	const double xadj = ((double)spherespanx / 2.0);
 	
-	for (y = -RADIUS; y <= RADIUS; y++)
+	for (y = -radius; y <= radius; y++)
 	{
 		int y_2 = y * y;
 
-		for (x = -RADIUS; x <= RADIUS; x++)
+		for (x = -radius; x <= radius; x++)
 		{
 			double dx, dy, newx, newy;
 			double da, rad, rad_2;
 			double xa, ya;
-			MAP3D_POINT *ppt = &map_rotate[y + RADIUS][x + RADIUS];
+			MAP3D_POINT *ppt = &map_rotate[y + radius][x + radius];
 			
 			rad_2 = x * x + y_2;
 
-			if (rad_2 >= RADIUS_THRES)
+			if (rad_2 >= radius_thres)
 			{	// pixel won't be present
-				ppt->p[0].x = x + RADIUS;
-				ppt->p[0].y = y + RADIUS;
+				ppt->p[0].x = x + radius;
+				ppt->p[0].y = y + radius;
 				ppt->m[0] = 0;
 
 				continue;
@@ -497,8 +503,8 @@ SetPlanetTilt (int angle)
 			
 			rad = sqrt (rad_2);
 			// antialiasing goes beyond the actual radius
-			if (rad >= RADIUS)
-				rad = (double)RADIUS - 0.1;
+			if (rad >= radius)
+				rad = (double)radius - 0.1;
 			
 			da = atan2 ((double)y, (double)x);
 			// compute the planet-tilt
@@ -507,8 +513,8 @@ SetPlanetTilt (int angle)
 			dy = rad * sin (da);
 
 			// Map the sphere onto a plane
-			xa = acos (-dx / RADIUS);
-			ya = acos (-dy / RADIUS);
+			xa = acos (-dx / radius);
+			ya = acos (-dy / radius);
 			newx = multx * xa;
 			newy = multy * ya;
 			// Adjust for vertical curvature
@@ -517,7 +523,7 @@ SetPlanetTilt (int angle)
 			else
 				newx = xadj + ((newx - xadj) / sin (ya));
 
-			create_aa_points (ppt, newx, newy);
+			create_aa_points (ppt, newx, newy, height);
 		}
 	}
 }
@@ -556,11 +562,11 @@ init_zoom_array (COUNT *zoom_arr)
 // this routine, but a filter can be applied if desired too.
 
 // HALO rim size
-#define SHIELD_HALO          (7 * RESOLUTION_FACTOR) // JMS_GFX
+#define SHIELD_HALO          (7 << RESOLUTION_FACTOR) // JMS_GFX
 #define SHIELD_RADIUS        (RADIUS + SHIELD_HALO)
 #define SHIELD_DIAM          ((SHIELD_RADIUS << 1) + 1) 
 #define SHIELD_RADIUS_2      (SHIELD_RADIUS * SHIELD_RADIUS)
-#define SHIELD_RADIUS_THRES  ((SHIELD_RADIUS + 1 * RESOLUTION_FACTOR) * (SHIELD_RADIUS + 1 * RESOLUTION_FACTOR)) // JMS_GFX
+#define SHIELD_RADIUS_THRES  ((SHIELD_RADIUS + (1 << RESOLUTION_FACTOR)) * (SHIELD_RADIUS + (1 << RESOLUTION_FACTOR))) // JMS_GFX
 #define SHIELD_HALO_GLOW     (SHIELD_GLOW_COMP + SHIELD_REFLECT_COMP)
 #define SHIELD_HALO_GLOW_MIN (SHIELD_HALO_GLOW >> 2)
 
@@ -912,7 +918,7 @@ RenderLevelMasks (FRAME MaskFrame, int offset, BOOLEAN doThrob)
 static void
 DitherMap (SBYTE *DepthArray)
 {
-	COUNT i;
+	DWORD i;  // JMS_GFX: changed from COUNT to avoid overflow at higher resolutions.
 	SBYTE *lpDst;
 	
 	i = (MAP_WIDTH * MAP_HEIGHT) >> 2;
@@ -939,14 +945,13 @@ DitherMap (SBYTE *DepthArray)
 
 static void
 MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
-		crater_delta, BOOLEAN SetDepth)
+		crater_delta, BOOLEAN SetDepth, COUNT width)
 {
 	COORD x, y, lf_x, rt_x;
 	SIZE A, B;
-	long Asquared, TwoAsquared,
-				Bsquared, TwoBsquared;
-	long d, dx, dy;
-	COUNT TopIndex, BotIndex, rim_pixels;
+	SDWORD Asquared, TwoAsquared, Bsquared, TwoBsquared;// JMS_GFX: Was 'long' - type changed to conform to UQM's own types
+	SDWORD d, dx, dy;									// JMS_GFX: Was 'long' - type changed to conform to UQM's own types
+	DWORD TopIndex, BotIndex, rim_pixels;				// JMS_GFX: Was COUNT - type changed because of overflow at 4x
 	
 	A = pRect->extent.width >> 1;
 	B = pRect->extent.height >> 1;
@@ -965,8 +970,8 @@ MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
 
 	A += pRect->corner.x;
 	B += pRect->corner.y;
-	TopIndex = (B - y) * MAP_WIDTH;
-	BotIndex = (B + y) * MAP_WIDTH;
+	TopIndex = (B - y) * width;
+	BotIndex = (B + y) * width;
 	rim_pixels = 1;
 	while (dx < dy)
 	{
@@ -1018,8 +1023,8 @@ MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
 			}
 		
 			--y;
-			TopIndex += MAP_WIDTH;
-			BotIndex -= MAP_WIDTH;
+			TopIndex += width;
+			BotIndex -= width;
 			dy -= TwoAsquared;
 			d -= dy;
 		}
@@ -1087,8 +1092,8 @@ MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
 
 		rim_pixels = 1;
 		--y;
-		TopIndex += MAP_WIDTH;
-		BotIndex -= MAP_WIDTH;
+		TopIndex += width;
+		BotIndex -= width;
 		dy -= TwoAsquared;
 		d += Asquared - dy;
 	}
@@ -1130,9 +1135,9 @@ MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
 #define NUM_BAND_COLORS 4
 
 static void
-MakeStorms (COUNT storm_count, SBYTE *DepthArray)
+MakeStorms (COUNT storm_count, SBYTE *DepthArray, COUNT width, COUNT height)
 {
-#define MAX_STORMS 8
+#define MAX_STORMS 12 // JMS_GFX: was 8
 	COUNT i;
 	RECT storm_r[MAX_STORMS];
 	RECT *pstorm_r;
@@ -1159,20 +1164,20 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 			{
 				case 0:
 					pstorm_r->extent.height =
-							(LOBYTE (hiword) % (MAP_HEIGHT >> 2))
-							+ (MAP_HEIGHT >> 2);
+							(LOBYTE (hiword) % (ORIGINAL_MAP_HEIGHT >> 2))
+							+ (ORIGINAL_MAP_HEIGHT >> 2);
 					break;
 				case 1:
 				case 2:
 				case 3:
 				case 4:
 					pstorm_r->extent.height =
-							(LOBYTE (hiword) % (MAP_HEIGHT >> 3))
-							+ (MAP_HEIGHT >> 3);
+							(LOBYTE (hiword) % (ORIGINAL_MAP_HEIGHT >> 3))
+							+ (ORIGINAL_MAP_HEIGHT >> 3);
 					break;
 				default:
 					pstorm_r->extent.height =
-							(LOBYTE (hiword) % (MAP_HEIGHT >> 4))
+							(LOBYTE (hiword) % (ORIGINAL_MAP_HEIGHT >> 4))
 							+ 4;
 					break;
 			}
@@ -1184,12 +1189,16 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 			loword = LOWORD (rand_val);
 			hiword = HIWORD (rand_val);
 
-			pstorm_r->extent.width = pstorm_r->extent.height
-					+ (LOBYTE (loword) % pstorm_r->extent.height);
+			pstorm_r->extent.width = pstorm_r->extent.height + (LOBYTE (loword) % pstorm_r->extent.height);
 
 			//pstorm_r->corner.x = HIBYTE (loword) % (MAP_WIDTH - pstorm_r->extent.width);
-			pstorm_r->corner.x = loword % (MAP_WIDTH - pstorm_r->extent.width); // JMS_GFX: changed the previous line to this. BYTE was too small for 640x480 resolution
-			pstorm_r->corner.y = LOBYTE (loword) % (MAP_HEIGHT - pstorm_r->extent.height);
+			pstorm_r->corner.x = loword % (ORIGINAL_MAP_WIDTH - pstorm_r->extent.width); // JMS_GFX: changed the previous line to this. BYTE was too small for 640x480 resolution
+			pstorm_r->corner.y = LOBYTE (loword) % (ORIGINAL_MAP_HEIGHT - pstorm_r->extent.height);
+			
+			pstorm_r->corner.x = pstorm_r->corner.x * width / ORIGINAL_MAP_WIDTH;
+			pstorm_r->extent.width = pstorm_r->extent.width * width / ORIGINAL_MAP_WIDTH;
+			pstorm_r->corner.y = pstorm_r->corner.y * height / ORIGINAL_MAP_HEIGHT;
+			pstorm_r->extent.height = pstorm_r->extent.height * height / ORIGINAL_MAP_HEIGHT;
 			
 			for (j = i + 1; j < storm_count; ++j)
 			{
@@ -1209,7 +1218,7 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 
 		} while (intersect);
 
-		MakeCrater (pstorm_r, DepthArray, 6, 6, FALSE);
+		MakeCrater (pstorm_r, DepthArray, 6, 6, FALSE, width);
 		++pstorm_r->corner.x;
 		++pstorm_r->corner.y;
 		pstorm_r->extent.width -= 2;
@@ -1218,7 +1227,7 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 		band_delta = HIBYTE (loword) & ((3 << RANGE_SHIFT) + 20);
 
 		MakeCrater (pstorm_r, DepthArray,
-				band_delta, band_delta, TRUE);
+				band_delta, band_delta, TRUE, width);
 		++pstorm_r->corner.x;
 		++pstorm_r->corner.y;
 		pstorm_r->extent.width -= 2;
@@ -1228,7 +1237,7 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 		if (pstorm_r->extent.width > 2 && pstorm_r->extent.height > 2)
 		{
 			MakeCrater (pstorm_r, DepthArray,
-					band_delta, band_delta, TRUE);
+					band_delta, band_delta, TRUE, width);
 			++pstorm_r->corner.x;
 			++pstorm_r->corner.y;
 			pstorm_r->extent.width -= 2;
@@ -1239,7 +1248,7 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 		if (pstorm_r->extent.width > 2 && pstorm_r->extent.height > 2)
 		{
 			MakeCrater (pstorm_r, DepthArray,
-					band_delta, band_delta, TRUE);
+					band_delta, band_delta, TRUE, width);
 			++pstorm_r->corner.x;
 			++pstorm_r->corner.y;
 			pstorm_r->extent.width -= 2;
@@ -1248,7 +1257,7 @@ MakeStorms (COUNT storm_count, SBYTE *DepthArray)
 
 		band_delta += 4;
 		MakeCrater (pstorm_r, DepthArray,
-				band_delta, band_delta, TRUE);
+				band_delta, band_delta, TRUE, width);
 	}
 }
 
@@ -1263,8 +1272,11 @@ MakeGasGiant (COUNT num_bands, SBYTE *DepthArray, RECT *pRect, SIZE
 	UWORD loword, hiword;
 	DWORD rand_val;
 	
-	band_height = pRect->extent.height / num_bands;
-	band_bump = pRect->extent.height % num_bands;
+	// band_height = pRect->extent.height / num_bands;
+	band_height = ORIGINAL_MAP_HEIGHT / num_bands;
+	// band_bump = pRect->extent.height % num_bands;
+	band_bump = ORIGINAL_MAP_HEIGHT % num_bands;
+	
 	band_error = num_bands >> 1;
 	lpDst = DepthArray;
 
@@ -1292,12 +1304,12 @@ MakeGasGiant (COUNT num_bands, SBYTE *DepthArray, RECT *pRect, SIZE
 		{
 			RECT r;
 
-			cur_y = next_y
-					+ ((band_height - 2) >> 1)
-					- ((LOBYTE (hiword) % (band_height - 2)) + 1);
+			cur_y = next_y + ((band_height - 2) >> 1) - ((LOBYTE (hiword) % (band_height - 2)) + 1);
+			cur_y = cur_y * pRect->extent.height / ORIGINAL_MAP_HEIGHT;
 			r.corner.x = r.corner.y = 0;
 			r.extent.width = pRect->extent.width;
-			r.extent.height = 5;
+			// r.extent.height = 5;
+			r.extent.height = 5 * pRect->extent.height / ORIGINAL_MAP_HEIGHT;
 			DeltaTopography (50,
 					&DepthArray[(cur_y - 2) * r.extent.width],
 					&r, depth_delta);
@@ -1317,7 +1329,7 @@ MakeGasGiant (COUNT num_bands, SBYTE *DepthArray, RECT *pRect, SIZE
 				& (((1 << RANGE_SHIFT) * NUM_BAND_COLORS) - 1);
 	}
 
-	MakeStorms ((COUNT)(4 + ((COUNT)TFB_Random () & 3) + 1), DepthArray);
+	MakeStorms ((COUNT)(4 + ((COUNT)TFB_Random () & 3) + 1), DepthArray, pRect->extent.width, pRect->extent.height);
 
 	DitherMap (DepthArray);
 }
@@ -1328,7 +1340,7 @@ ValidateMap (SBYTE *DepthArray)
 	BYTE state;
 	BYTE pixel_count[2], lb[2];
 	SBYTE last_byte;
-	COUNT i;
+	DWORD i;  // JMS_GFX: changed from COUNT to avoid overflow at higher resolutions.
 	SBYTE *lpDst;
 	
 	i = MAP_WIDTH - 1;
@@ -1630,7 +1642,7 @@ TopoScale4x (BYTE *pDstTopo, BYTE *pSrcTopo, int num_faults, int fault_var)
 // Lots of pure Voodoo here ;)
 //  the goal is a 3D illusion, not mathematically correct lighting
 
-#define LMAP_AVG_BLOCK    ((MAP_HEIGHT + 4) / 5)
+#define LMAP_AVG_BLOCK    ((75 + 4) / 5) // BW: hacky but this shouldn't really depend on the size of the original map
 #define LMAP_MAX_DIST     ((LMAP_AVG_BLOCK + 1) >> 1)
 #define LMAP_WEIGHT_THRES (LMAP_MAX_DIST * 2 / 3)
 
@@ -1812,8 +1824,7 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	RECT r;
 	DWORD old_seed;
 	const PlanetFrame *PlanDataPtr;
-	COUNT i;
-	DWORD y;
+	DWORD i, y;  // JMS_GFX: changed from COUNT to avoid overflow at higher resolutions.
 	POINT loc;
 	CONTEXT OldContext;
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
@@ -1901,40 +1912,51 @@ GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 					for (i = 0; i < PlanDataPtr->num_blemishes; ++i)
 					{
 						RECT crater_r;
+						DWORD random_value; // JMS_GFX
 						UWORD loword;
 				
-						loword = LOWORD (TFB_Random ());
+						random_value = TFB_Random(); // JMS_GFX
+						loword = LOWORD (random_value); // JMS_GFX: Was loword = LOWORD (TFB_Random ());
 						switch (HIBYTE (loword) & 31)
 						{
 							case 0:
 								crater_r.extent.width =
-										(LOBYTE (loword) % (MAP_HEIGHT >> 2))
-										+ (MAP_HEIGHT >> 2);
+										(LOBYTE (loword) % (ORIGINAL_MAP_HEIGHT >> 2))
+										+ (ORIGINAL_MAP_HEIGHT >> 2);
 								break;
 							case 1:
 							case 2:
 							case 3:
 							case 4:
 								crater_r.extent.width =
-										(LOBYTE (loword) % (MAP_HEIGHT >> 3))
-										+ (MAP_HEIGHT >> 3);
+										(LOBYTE (loword) % (ORIGINAL_MAP_HEIGHT >> 3))
+										+ (ORIGINAL_MAP_HEIGHT >> 3);
 								break;
 							default:
 								crater_r.extent.width =
-										(LOBYTE (loword) % (MAP_HEIGHT >> 4))
+										(LOBYTE (loword) % (ORIGINAL_MAP_HEIGHT >> 4))
 										+ 4;
 								break;
 						}
 					
-						loword = LOWORD (TFB_Random ());
+						random_value = TFB_Random(); // JMS_GFX
+						loword = LOWORD (random_value); // JMS_GFX: Was loword = LOWORD (TFB_Random ());
+						
+						crater_r.extent.height = crater_r.extent.width;	
+						crater_r.corner.x = HIBYTE (loword) % (ORIGINAL_MAP_WIDTH - crater_r.extent.width);
+						// crater_r.corner.x = loword % (MAP_WIDTH - crater_r.extent.width); // JMS_GFX: changed the previous line to this. BYTE was too small for 4x resolution
+						crater_r.corner.y = LOBYTE (loword) % (ORIGINAL_MAP_HEIGHT - crater_r.extent.height);
+						// crater_r.corner.y = hiword % (MAP_HEIGHT - crater_r.extent.height); // JMS_GFX: The same
+						// BW: ... then scale them up
+						crater_r.extent.width = crater_r.extent.width * MAP_WIDTH / ORIGINAL_MAP_WIDTH;
 						crater_r.extent.height = crater_r.extent.width;
-						//crater_r.corner.x = HIBYTE (loword) % (MAP_WIDTH - crater_r.extent.width);
-						crater_r.corner.x = loword % (MAP_WIDTH - crater_r.extent.width); // JMS_GFX: changed the previous line to this. BYTE was too small for 640x480 resolution
-						crater_r.corner.y = LOBYTE (loword) % (MAP_HEIGHT - crater_r.extent.height);
+						crater_r.corner.x = crater_r.corner.x * MAP_WIDTH / ORIGINAL_MAP_WIDTH;
+						crater_r.corner.y = crater_r.corner.y * MAP_HEIGHT / ORIGINAL_MAP_HEIGHT;
+						
 						MakeCrater (&crater_r, Orbit->lpTopoData,
 								PlanDataPtr->fault_depth << 2,
 								-(PlanDataPtr->fault_depth << 2),
-								FALSE);
+								FALSE, MAP_WIDTH);
 					}
 
 					if (PLANALGO (PlanDataPtr->Type) == CRATERED_ALGO)
@@ -2046,13 +2068,13 @@ rotate_planet_task (void *data)
 	BOOLEAN zooming;
 	RECT r, *repair = &r;
 	UBYTE zoom_from;
-	COUNT zoom_arr[50];
+	COUNT zoom_arr[150]; // JMS_GFX: Increased the size of array from 50 to 150 to prevent overflows in 1280x960.
 	COUNT zoom_amt, frame_num = 0, zoom_frames;
 	PLANET_ORBIT *Orbit;
 	FRAME OldShieldFrame = 0;
 	FRAME ShieldFrame = 0;
 	BOOLEAN doThrob = FALSE;
-	COUNT altfi;  // alternating frame index
+	COUNT altfi; // alternating frame index
 
 	r.extent.width = 0;
 	zooming = TRUE;
@@ -2062,15 +2084,14 @@ rotate_planet_task (void *data)
 			!Task_ReadState (task, TASK_EXIT))
 		TaskSwitch ();
 
-	SetPlanetTilt (pSS->SysInfo.PlanetInfo.AxialTilt);
+	SetPlanetTilt (pSS->SysInfo.PlanetInfo.AxialTilt, MAP_HEIGHT, RADIUS);
 	Orbit = &pSolarSysState->Orbit;
 
 	spin_dir = 1 - ((pSS->SysInfo.PlanetInfo.AxialTilt & 1) << 1);
 	init_x = (spin_dir == 1) ? (0) : (MAP_WIDTH - 1);
 	altfi = 0;
 
-	if (optWhichShield == OPT_3DO &&
-			pSolarSysState->pOrbitalDesc->data_index & PLANET_SHIELDED)
+	if (optWhichShield == OPT_3DO && pSolarSysState->pOrbitalDesc->data_index & PLANET_SHIELDED)
 	{	// prepare the shield throb effect
 		doThrob = TRUE;
 
@@ -2089,6 +2110,8 @@ rotate_planet_task (void *data)
 	zoom_from = (UBYTE)TFB_Random () & 0x03;
 	zoom_frames = init_zoom_array (zoom_arr);
 	zoom_amt = zoom_arr[frame_num];
+	
+	log_add (log_Debug, "Zoom frameja %d", zoom_frames);
 
 	// Disable zooming when already in orbit
 	if (LastActivity & CHECK_LOAD)
@@ -2121,16 +2144,13 @@ rotate_planet_task (void *data)
 					pSS->PauseRotate = 1;
 
 				// go to the next frame
-				Orbit->PlanetFrameArray = SetAbsFrameIndex (
-						Orbit->PlanetFrameArray, altfi);
+				Orbit->PlanetFrameArray = SetAbsFrameIndex (Orbit->PlanetFrameArray, altfi);
+				
 				if (doThrob)
-				{
-					Orbit->ObjectFrame = SetAbsFrameIndex (
-							ShieldFrame, altfi);
-				}
+					Orbit->ObjectFrame = SetAbsFrameIndex (ShieldFrame, altfi);
 
 				repair = RotatePlanet (x, SIS_SCREEN_WIDTH >> 1,
-						(148 * RESOLUTION_FACTOR - SIS_ORG_Y) >> 1, zoom_amt, zoom_from, repair); // JMS_GFX
+						((148 << RESOLUTION_FACTOR) - SIS_ORG_Y) >> 1, zoom_amt, zoom_from, repair); // JMS_GFX
 
 				if (!repair && zooming)
 				{
@@ -2147,12 +2167,11 @@ rotate_planet_task (void *data)
 			
 			// Generate the next rotation frame
 			altfi ^= 1;
-			RenderLevelMasks (SetAbsFrameIndex (Orbit->PlanetFrameArray,
-					altfi), x, doThrob);
+			RenderLevelMasks (SetAbsFrameIndex (Orbit->PlanetFrameArray, altfi), x, doThrob);
+			
 			if (doThrob)
 			{	// prepare next throb frame
-				SetShieldThrobEffect (OldShieldFrame, x,
-						SetAbsFrameIndex (ShieldFrame, altfi));
+				SetShieldThrobEffect (OldShieldFrame, x, SetAbsFrameIndex (ShieldFrame, altfi));
 			}
 			
 			if (zooming)
@@ -2168,8 +2187,7 @@ rotate_planet_task (void *data)
 			}
 
 
-			SleepThreadUntil (TimeIn + (ONE_SECOND * ROTATION_TIME) /
-					(MAP_WIDTH));
+			SleepThreadUntil (TimeIn + (ONE_SECOND * ROTATION_TIME) / (MAP_WIDTH));
 			TimeIn = GetTimeCounter ();
 		} while (--view_index && !Task_ReadState (task, TASK_EXIT));
 	}

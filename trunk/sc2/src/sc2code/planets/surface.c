@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "globdata.h"
 #include "lifeform.h"
 #include "planets.h"
@@ -76,13 +78,16 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 			loword = LOWORD (rand_val);
 			hiword = HIWORD (rand_val);
 			
-			if (RESOLUTION_FACTOR == 1)
+			if (RESOLUTION_FACTOR == 0)
 				SysInfoPtr->PlanetInfo.CurPt.x = (LOBYTE (loword) % (MAP_WIDTH - (8 << 1))) + 8;
 			else
 				SysInfoPtr->PlanetInfo.CurPt.x = loword % (MAP_WIDTH - (8 << 1)) + 8; // JMS_GFX: Replaced previous line with this line (BYTE was too small for 640x480 maps.)
 			
-			SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (loword) % (MAP_HEIGHT - (8 << 1))) + 8;
-
+			if (RESOLUTION_FACTOR == 0)
+				SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (loword) % (MAP_HEIGHT - (8 << 1))) + 8;
+			else
+				SysInfoPtr->PlanetInfo.CurPt.y = hiword % (MAP_HEIGHT - (8 << 1)) + 8;  // JMS_GFX: Replaced previous line with this line (BYTE was too small for 1280x960 maps.)
+			
 			SysInfoPtr->PlanetInfo.CurDensity = MAKE_WORD (deposit_quality_gross, deposit_quality_fine / 10 + 1);
 			SysInfoPtr->PlanetInfo.CurType = eptr->ElementType;
 #ifdef DEBUG_SURFACE
@@ -220,15 +225,16 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 			do
 			{
 				BYTE index, num_creatures, range_types;
-				UWORD rand_val;
+				DWORD rand_val; // JMS_GFX: Was UWORD
+				UWORD loword, hiword;
 				BOOLEAN zoneA, zoneB, zoneC;
 
 				rand_val = (UWORD)TFB_Random ();
 				
 				// BW: Compute which life forms should appear				
 				zoneA = (LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) > 9000);
-				zoneB = (LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + 3*LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) < 21000);
-				zoneC = (3*LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) < 19000);
+				zoneB = (LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + 3 * LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) < 21000);
+				zoneC = (3 * LOGX_TO_UNIVERSE(GLOBAL_SIS (log_x)) + LOGY_TO_UNIVERSE(GLOBAL_SIS (log_y)) < 19000);
 				
 				range_types = 0;
 				if (zoneA)
@@ -238,7 +244,8 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 				if (zoneC)
 				  range_types += NUM_C_CREATURE_TYPES;
 
-				index = LOBYTE (rand_val) % range_types;
+				//index = LOBYTE (rand_val) % range_types;
+				index = LOBYTE ((UWORD)rand_val) % range_types; // JMS_GFX
 				
 				// BW: adjust index so that it takes creatures from the correct set.
 				if (!zoneA)
@@ -256,20 +263,35 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 				
 				// BW: Reduce amounts in the NE quadrant
 				if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
-				  num_creatures = (BYTE)((HIBYTE (rand_val) % 3) + 1);
+				  num_creatures = (BYTE)((HIBYTE ((UWORD)rand_val) % 3) + 1);
 				else
-				  num_creatures = (BYTE)((HIBYTE (rand_val) % 10) + 1);
+				  num_creatures = (BYTE)((HIBYTE ((UWORD)rand_val) % 10) + 1);
 
 				do
 				{
 					rand_val = (UWORD)TFB_Random ();
+					loword = LOWORD (rand_val);
+					hiword = HIWORD (rand_val);
 					
-					if (RESOLUTION_FACTOR == 1)
+					/*
+					if (RESOLUTION_FACTOR == 0)
 						SysInfoPtr->PlanetInfo.CurPt.x = (LOBYTE (rand_val) % (MAP_WIDTH - (8 << 1))) + 8;
 					else
 						SysInfoPtr->PlanetInfo.CurPt.x = rand_val % (MAP_WIDTH - (8 << 1)) + 8; // JMS_GFX: Replaced previous line with this line (BYTE was too small for 640x480 maps.)
 					
 					SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE (rand_val) % (MAP_HEIGHT - (8 << 1))) + 8; // JMS_GFX
+					*/
+					
+					if (RESOLUTION_FACTOR == 0)
+						SysInfoPtr->PlanetInfo.CurPt.x = (LOBYTE ((UWORD)rand_val) % (MAP_WIDTH - (8 << 1))) + 8;
+					else
+						SysInfoPtr->PlanetInfo.CurPt.x = loword % (MAP_WIDTH - (8 << 1)) + 8; // JMS_GFX: Replaced previous line with this line (BYTE was too small for 640x480 maps.)
+					
+					if (RESOLUTION_FACTOR == 0)
+						SysInfoPtr->PlanetInfo.CurPt.y = (HIBYTE ((UWORD)rand_val) % (MAP_HEIGHT - (8 << 1))) + 8;
+					else
+						SysInfoPtr->PlanetInfo.CurPt.y = hiword % (MAP_HEIGHT - (8 << 1)) + 8;  // JMS_GFX: Replaced previous line with this line (BYTE was too small for 1280x960 maps.)
+					
 					SysInfoPtr->PlanetInfo.CurType = index;
 
 					if ((num_life_forms >= which_life 

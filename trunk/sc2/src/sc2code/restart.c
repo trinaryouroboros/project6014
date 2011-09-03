@@ -18,6 +18,8 @@
 
 // JMS 2010: Upon finding black orb & new ship, initiate Lurg cutscene
 
+// JMS_GFX: 1x, 2x and 4x restart menu graphics.
+
 #include "restart.h"
 
 #include "colors.h"
@@ -43,7 +45,8 @@
 #include "libs/inplib.h"
 #include "libs/log.h"
 
-
+#include "libs/graphics/sdl/pure.h" // JMS_GFX
+ 
 enum
 {
 	START_NEW_GAME = 0,
@@ -59,7 +62,33 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 	RECT r;
 	STAMP s;
 
-	s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM));
+	//s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM));  //DC: Original 6.9 code
+	
+	//DC: Load the different menus depending on the resolution factor
+	if (resolutionFactor < 1)
+		s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM));
+	if (resolutionFactor == 1)
+		s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM2X));
+	if (resolutionFactor > 1)
+		s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM4X));
+	// DC: End graphics
+	
+	// JMS_GFX: These suckers make the restart menu behave a bit better when changing resolution.
+	if (resFactorWasChanged)
+	{
+		ScreenWidth  = (320 << resolutionFactor);
+		ScreenHeight = (240 << resolutionFactor);
+		if (TFB_Pure_ConfigureVideo (TFB_GFXDRIVER_SDL_PURE, 0, ScreenWidth, ScreenHeight, 0, resolutionFactor))
+		{
+			log_add (log_Fatal, "Could not re-configure video: "
+					 "Something sucks here in restart.c!");
+			exit (EXIT_FAILURE);
+		}
+		Screen = CaptureDrawable (CreateDisplay (WANT_MASK | WANT_PIXMAP, &screen_width, &screen_height)); // JMS_GFX
+		SetContext (ScreenContext); // JMS_GFX
+		SetContextFGFrame (Screen); // JMS_GFX
+	}
+	
 	pMS->CurFrame = s.frame;
 	GetFrameRect (s.frame, &r);
 	s.origin.x = (SCREEN_WIDTH - r.extent.width) >> 1;

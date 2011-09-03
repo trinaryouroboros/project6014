@@ -16,12 +16,14 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
+
 #ifndef PURE_H
 #define PURE_H
 
 #include "libs/graphics/sdl/sdl_common.h"
 
-int TFB_Pure_InitGraphics (int driver, int flags, int width, int height);
-int TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen);
+int TFB_Pure_InitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor);  // JMS_GFX: Added resolutionFactor
+int TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen, unsigned int resolutionFactor);  // JMS_GFX: Added resolutionFactor
 
 #endif

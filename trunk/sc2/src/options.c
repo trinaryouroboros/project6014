@@ -14,6 +14,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
+
 /*
  * Eventually this should include all configuration stuff, 
  * for now there's few options which indicate 3do/pc flavors.
@@ -52,7 +54,7 @@ int optMeleeScale;
 const char **optAddons;
 
 // JMS_GFX
-int resolutionFactor;
+unsigned int resolutionFactor;
 BOOLEAN resFactorWasChanged;
 
 BOOLEAN opt3doMusic;

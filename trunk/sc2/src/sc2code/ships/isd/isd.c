@@ -235,7 +235,7 @@ initialize_fighterlaser (ELEMENT *ElementPtr, HELEMENT LaserArray[])
 	return (1);
 }
 
-static void
+/*static void
 fighter_postprocess (ELEMENT *ElementPtr)
 {
 	HELEMENT Laser;
@@ -260,7 +260,7 @@ fighter_postprocess (ELEMENT *ElementPtr)
 	
 	ElementPtr->postprocess_func = 0;
 	ElementPtr->thrust_wait = FIGHTER_WEAPON_WAIT;
-}
+}*/
 
 static void
 fighter_preprocess (ELEMENT *ElementPtr)

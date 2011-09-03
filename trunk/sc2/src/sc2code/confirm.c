@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "controls.h"
 #include "commglue.h"
 #include "comm.h"
@@ -34,8 +36,8 @@
 #include <stdlib.h>
 
 
-#define CONFIRM_WIN_WIDTH 80
-#define CONFIRM_WIN_HEIGHT 22
+#define CONFIRM_WIN_WIDTH (80 << RESOLUTION_FACTOR) // JMS_GFX
+#define CONFIRM_WIN_HEIGHT (22 << RESOLUTION_FACTOR) // JMS_GFX
 
 static void
 DrawConfirmationWindow (BOOLEAN answer)
@@ -55,12 +57,12 @@ DrawConfirmationWindow (BOOLEAN answer)
 			SHADOWBOX_DARK_COLOR, SHADOWBOX_MEDIUM_COLOR);
 
 	t.baseline.x = r.corner.x + (r.extent.width >> 1);
-	t.baseline.y = r.corner.y + 8;
+	t.baseline.y = r.corner.y + (8 << RESOLUTION_FACTOR); // JMS_GFX
 	t.pStr = GAME_STRING (QUITMENU_STRING_BASE); // "Really Quit?"
 	t.align = ALIGN_CENTER;
 	t.CharCount = (COUNT)~0;
 	font_DrawText (&t);
-	t.baseline.y += 10;
+	t.baseline.y += (10 << RESOLUTION_FACTOR); // JMS_GFX
 	t.baseline.x = r.corner.x + (r.extent.width >> 2);
 	t.pStr = GAME_STRING (QUITMENU_STRING_BASE + 1); // "Yes"
 	SetContextForeGroundColor (answer ? MENU_HIGHLIGHT_COLOR : MENU_TEXT_COLOR);

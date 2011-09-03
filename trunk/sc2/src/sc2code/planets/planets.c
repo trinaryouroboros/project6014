@@ -184,7 +184,7 @@ LoadPlanet (FRAME SurfDefFrame)
 	if (s.frame)
 	{
 		s.origin.x = SIS_SCREEN_WIDTH >> 1;
-		s.origin.y = ((116 * RESOLUTION_FACTOR - SIS_ORG_Y) >> 1) + 2 * RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.y = ((116 << RESOLUTION_FACTOR - SIS_ORG_Y) >> 1) + 2 << RESOLUTION_FACTOR; // JMS_GFX
 		DrawStamp (&s);
 	}
 #endif

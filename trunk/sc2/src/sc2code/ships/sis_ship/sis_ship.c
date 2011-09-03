@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
 #include "colors.h"
@@ -45,8 +47,8 @@
 #define BLASTER_OFFSET 8
 #define EXP_VERT_OFFSET 28
 #define EXP_HORZ_OFFSET 20
-#define EXP_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 * RESOLUTION_FACTOR))
-#define EXP_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5 * RESOLUTION_FACTOR))
+#define EXP_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
+#define EXP_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5 << RESOLUTION_FACTOR))
 
 #define SPECIAL_ENERGY_COST 15
 #define SPECIAL_WAIT 20
@@ -920,7 +922,7 @@ static void InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots)
 		switch (DriveSlots[i])
 		{
 			case FUSION_THRUSTER:
-				RaceDescPtr->characteristics.max_thrust += (2 * RESOLUTION_FACTOR); // JMS_GFX
+				RaceDescPtr->characteristics.max_thrust += 2 << RESOLUTION_FACTOR; // JMS_GFX
 				++RaceDescPtr->characteristics.thrust_wait;
 				break;
 		}
@@ -987,10 +989,10 @@ RACE_DESC* init_exp (void)
 		new_exp_desc.postprocess_func = exp_hyper_postprocess;
 
 		 // JMS_GFX
-		if (RESOLUTION_FACTOR > 1)
+		if (RESOLUTION_FACTOR > 0)
 		{
-			new_exp_desc.characteristics.max_thrust = (10 * RESOLUTION_FACTOR) - (4 * RESOLUTION_FACTOR); // JMS_GFX
-			new_exp_desc.characteristics.thrust_increment *= RESOLUTION_FACTOR;
+			new_exp_desc.characteristics.max_thrust = (10 << RESOLUTION_FACTOR) - (4 << RESOLUTION_FACTOR); // JMS_GFX
+			new_exp_desc.characteristics.thrust_increment <<= RESOLUTION_FACTOR;
 		}
 		else
 			new_exp_desc.characteristics.max_thrust -= 4;
@@ -1011,9 +1013,9 @@ RACE_DESC* init_exp (void)
 	// and does not depend on the thruster/jet numbers in adventure mode
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	{
-		new_exp_desc.characteristics.max_thrust = EXPLORER_MAX_THRUST * RESOLUTION_FACTOR;
+		new_exp_desc.characteristics.max_thrust = EXPLORER_MAX_THRUST << RESOLUTION_FACTOR;
 		new_exp_desc.characteristics.thrust_wait = EXPLORER_THRUST_WAIT;
-		new_exp_desc.characteristics.thrust_increment = EXPLORER_THRUST_INCREMENT * RESOLUTION_FACTOR;
+		new_exp_desc.characteristics.thrust_increment = EXPLORER_THRUST_INCREMENT << RESOLUTION_FACTOR;
 		new_exp_desc.characteristics.turn_wait = EXPLORER_TURN_WAIT;
 	}
 	

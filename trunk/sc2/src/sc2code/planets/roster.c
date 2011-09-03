@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "build.h"
 #include "colors.h"
 #include "controls.h"
@@ -132,8 +134,8 @@ DeltaSupportCrew (SIZE crew_delta)
 		{
 			RECT r;
 
-			r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
-			r.corner.y = 130 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.x = RES_STAT_SCALE(2); // JMS_GFX
+			r.corner.y = RES_STAT_SCALE(130); // JMS_GFX
 			r.extent.width = STATUS_MESSAGE_WIDTH;
 			r.extent.height = STATUS_MESSAGE_HEIGHT;
 			SetContext (StatusContext);
@@ -250,8 +252,8 @@ DoModifyRoster (MENU_STATE *pMS)
 		{
 			RosterCleanup (pMS);
 
-			r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
-			r.corner.y = 130 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.x = RES_STAT_SCALE(2); // JMS_GFX
+			r.corner.y = RES_STAT_SCALE(130); // JMS_GFX
 			r.extent.width = STATUS_MESSAGE_WIDTH;
 			r.extent.height = STATUS_MESSAGE_HEIGHT;
 			SetContext (StatusContext);

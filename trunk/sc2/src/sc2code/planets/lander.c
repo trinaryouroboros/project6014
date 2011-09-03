@@ -24,6 +24,8 @@
 //			 - Dumpy Dweejus divides into smaller creatures when "killed".
 //			 - Created a new function which handles the exploding and dividing critters upon their death
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "cons_res.h"
 #include "controls.h"
 #include "colors.h"
@@ -203,7 +205,7 @@ extern PRIM_LINKS DisplayLinks;
 #define ADD_AT_END (1 << 4)
 #define REPAIR_COUNT (0xf)
 
-#define LANDER_SPEED_DENOM (10 / RESOLUTION_FACTOR) // JMS_GFX
+#define LANDER_SPEED_DENOM (10 >> RESOLUTION_FACTOR) // JMS_GFX
 
 static BYTE lander_flags;
 
@@ -317,8 +319,8 @@ ModifyLanderSilhouette ()
 		ObjectIntersect.EndPoint = ObjectIntersect.IntersectStamp.origin;
 	} while (!DrawablesIntersect (&ObjectIntersect, &LanderIntersect, MAX_TIME_VALUE));
 		
-	ObjectIntersect.IntersectStamp.origin.x += 23 * RESOLUTION_FACTOR;
-	ObjectIntersect.IntersectStamp.origin.y += 187 * RESOLUTION_FACTOR;
+	ObjectIntersect.IntersectStamp.origin.x += 23 << RESOLUTION_FACTOR;
+	ObjectIntersect.IntersectStamp.origin.y += 187 << RESOLUTION_FACTOR;
 	
 	OldContext = SetContext (StatusContext);
 	DrawStamp (&ObjectIntersect.IntersectStamp);
@@ -510,12 +512,8 @@ object_animation (ELEMENT *ElementPtr)
 			{
 				SIZE s;
 				SIZE frame_amount; // JMS_GFX
-				
-				// JMS_GFX
-				if(RESOLUTION_FACTOR == 1)
-					frame_amount = 22;
-				else
-					frame_amount = 14;
+	
+				frame_amount = 14;
 				
 				if (frame_index >= (frame_amount-1))
 					s = 0;
@@ -543,8 +541,8 @@ object_animation (ELEMENT *ElementPtr)
 					angle = FACING_TO_ANGLE (ElementPtr->facing);
 					LockElement (hLavaElement, &LavaElementPtr);
 					LavaElementPtr->next.location = ElementPtr->next.location;
-					LavaElementPtr->next.location.x += COSINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
-					LavaElementPtr->next.location.y += SINE (angle, 4 * RESOLUTION_FACTOR); // JMS_GFX
+					LavaElementPtr->next.location.x += COSINE (angle, 4 << RESOLUTION_FACTOR); // JMS_GFX
+					LavaElementPtr->next.location.y += SINE (angle, 4 << RESOLUTION_FACTOR); // JMS_GFX
 					
 					if (LavaElementPtr->next.location.y < 0)
 						LavaElementPtr->next.location.y = 0;
@@ -672,7 +670,7 @@ object_animation (ELEMENT *ElementPtr)
 
 				SetVelocityComponents (&ElementPtr->velocity, COSINE (angle, speed), SINE (angle, speed));
 
-#define MAX_ENEMYSHOT_DISTANCE (100 * RESOLUTION_FACTOR) // JMS
+#define MAX_ENEMYSHOT_DISTANCE (100 << RESOLUTION_FACTOR) // JMS
 				// JMS: Shooting critters may fire now if they're close enough and are at the correct PNG frame.
 				// This way the fire rate can be (a bit hackily) controlled by adding frames to the .ani file.
 				//
@@ -750,8 +748,8 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 				NotPositional (), NULL, GAME_SOUND_PRIORITY);
 	}
 
-	s.origin.x = (11 + (6 * (crew_delta % NUM_CREW_COLS))) * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1) * 2; // JMS_GFX
-	s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) * RESOLUTION_FACTOR; // JMS_GFX
+	s.origin.x = ((11 + (6 * (crew_delta % NUM_CREW_COLS))) << RESOLUTION_FACTOR) - RESOLUTION_FACTOR  * 2; // JMS_GFX
+	s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) << RESOLUTION_FACTOR; // JMS_GFX
 
 	OldContext = SetContext (RadarContext);
 	DrawStamp (&s);
@@ -803,14 +801,14 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		}
 		
 		creature_data_index = -1;	 
-		start_count = (pPSD->BiologicalLevel) * RESOLUTION_FACTOR; // JMS_GFX
+		start_count = (pPSD->BiologicalLevel) << RESOLUTION_FACTOR; // JMS_GFX
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 41);
 
 		pPSD->BiologicalLevel += NumRetrieved;
 	}
 	else
 	{
-		start_count = (pPSD->ElementLevel) * RESOLUTION_FACTOR; // JMS_GFX
+		start_count = (pPSD->ElementLevel) << RESOLUTION_FACTOR; // JMS_GFX
 		pPSD->ElementLevel += NumRetrieved;
 		if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
 		{
@@ -821,8 +819,8 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 43);
 	}
 
-	s.origin.x = RESOLUTION_FACTOR - 1; // JMS_GFX
-	s.origin.y = (RESOLUTION_FACTOR - 1) * 50 - (int)start_count; // JMS_GFX
+	s.origin.x = RESOLUTION_FACTOR; // JMS_GFX
+	s.origin.y = RESOLUTION_FACTOR * 50 - (int)start_count; // JMS_GFX XXX TODO: Is this right, or should the (RESOLUTION_FACTOR * 50) be deleted
 	if (!(start_count & 1))
 		s.frame = IncFrameIndex (s.frame);
 
@@ -834,7 +832,7 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		else
 			s.frame = DecFrameIndex (s.frame);
 		DrawStamp (&s);
-		s.origin.y -= 1 * RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.y -= RES_STAT_SCALE(1); // JMS_GFX
 	}
 	SetContext (OldContext);
 }
@@ -933,7 +931,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 				{
 					ELEMENT *CritterElementPtr;
 					BYTE CritterIndex;
-					BYTE which_extra_node;
+					//BYTE which_extra_node;
 					
 					LockElement (hCritterElement, &CritterElementPtr);
 					CritterIndex = (BYTE)43; // JMS XXX: Currently hacked to point to vanishing vermin stats...
@@ -1275,8 +1273,8 @@ CheckObjectCollision (COUNT index)
 											- LanderControl.EndPoint.x);
 									pPSD->MineralText[0].baseline.y =
 											(SURFACE_HEIGHT >> 1)
-											+ (ElementControl.EndPoint.y
-											- LanderControl.EndPoint.y) * RESOLUTION_FACTOR; // JMS_GFX;
+											+ ((ElementControl.EndPoint.y
+											- LanderControl.EndPoint.y) << RESOLUTION_FACTOR); // JMS_GFX;
 									pPSD->MineralText[0].CharCount =
 											(COUNT)~0;
 									pPSD->MineralText[1].pStr = pStr;
@@ -1840,10 +1838,10 @@ ScrollPlanetSide (SIZE dx, SIZE dy, SIZE CountDown)
 			pPSD->MineralText[0].baseline.y -= dy;
 			font_DrawText (&pPSD->MineralText[0]);
 			pPSD->MineralText[1].baseline.x = pPSD->MineralText[0].baseline.x;
-			pPSD->MineralText[1].baseline.y = pPSD->MineralText[0].baseline.y + 7 * RESOLUTION_FACTOR; // JMS_GFX
+			pPSD->MineralText[1].baseline.y = pPSD->MineralText[0].baseline.y + (7 << RESOLUTION_FACTOR); // JMS_GFX
 			font_DrawText (&pPSD->MineralText[1]);
 			pPSD->MineralText[2].baseline.x = pPSD->MineralText[1].baseline.x;
-			pPSD->MineralText[2].baseline.y = pPSD->MineralText[1].baseline.y + 7 * RESOLUTION_FACTOR; // JMS_GFX
+			pPSD->MineralText[2].baseline.y = pPSD->MineralText[1].baseline.y + (7 << RESOLUTION_FACTOR); // JMS_GFX
 			font_DrawText (&pPSD->MineralText[2]);
 		}
 	}
@@ -2005,7 +2003,7 @@ InitPlanetSide (void)
 	LockMutex (GraphicsLock);
 #endif
 	// Adjust pSolarSysState->MenuState.first_item by a random jitter.
-#define RANDOM_MISS 64
+#define RANDOM_MISS (64 << RESOLUTION_FACTOR) // JMS_GFX
 	pt = pSolarSysState->MenuState.first_item;
 
 	// Jitter the X landing point.

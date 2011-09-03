@@ -1647,7 +1647,7 @@ dumpStrings(FILE *out) {
 	
 	if (GAMESTR_COUNT != numStrings) {
 		fprintf(stderr, "Warning: GAMESTR_COUNT is %d, but GameStrings "
-				"contains %d strings.\n", GAMESTR_COUNT, numStrings);
+				"contains %d strings.\n", (int)GAMESTR_COUNT, (int)numStrings);
 	}
 
 	categoryI = 0;
@@ -1656,7 +1656,7 @@ dumpStrings(FILE *out) {
 				stringI >= categories[categoryI + 1].base)
 			categoryI++;
 		fprintf(out, "[ %s + %d ]  %s\n", categories[categoryI].name,
-				stringI - categories[categoryI].base, GAME_STRING(stringI));
+				(int)(stringI - categories[categoryI].base), GAME_STRING(stringI));
 	}
 }
 

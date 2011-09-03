@@ -21,6 +21,8 @@
 //			 -Added functionality to Betelgeuse starbase. Has the same gfx as sol starbase.
 //			 -When the starbase commander is talked to, chasing ships turn away.
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "build.h"
 #include "colors.h"
 #include "controls.h"
@@ -114,12 +116,12 @@ DrawBaseStateStrings (STARBASE_STATE OldState, STARBASE_STATE NewState)
 	SetContextFont (StarConFont);
 	SetContextForeGroundColor (BLACK_COLOR);
 
-	t.baseline.x = 73 - 4 + SAFE_X;
+	t.baseline.x = (73 - 4 + SAFE_X) << RESOLUTION_FACTOR; // JMS_GFX
 	t.align = ALIGN_CENTER;
 
 	if (OldState == (STARBASE_STATE)~0)
 	{
-		t.baseline.y = 106 + 28 + (SAFE_Y + 4);
+		t.baseline.y = ((106 + 28) << RESOLUTION_FACTOR) + (SAFE_Y + 4); // JMS_GFX;
 		for (OldState = TALK_COMMANDER; OldState < DEPART_BASE; ++OldState)
 		{
 			if (OldState != NewState)
@@ -128,18 +130,18 @@ DrawBaseStateStrings (STARBASE_STATE OldState, STARBASE_STATE NewState)
 				t.CharCount = (COUNT)~0;
 				font_DrawText (&t);
 			}
-			t.baseline.y += (23 - 4);
+			t.baseline.y += (23 - 4) << RESOLUTION_FACTOR; // JMS_GFX
 		}
 	}
 
-	t.baseline.y = 106 + 28 + (SAFE_Y + 4) + ((23 - 4) * OldState);
+	t.baseline.y = ((106 + 28 + ((23 - 4) * OldState)) << RESOLUTION_FACTOR) + (SAFE_Y + 4); // JMS_GFX
 	t.pStr = GAME_STRING (STARBASE_STRING_BASE + 1 + OldState);
 	t.CharCount = (COUNT)~0;
 	font_DrawText (&t);
 
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x0A), 0x0E));
-	t.baseline.y = 106 + 28 + (SAFE_Y + 4) + ((23 - 4) * NewState);
+	t.baseline.y = ((106 + 28 + ((23 - 4) * NewState)) << RESOLUTION_FACTOR) + (SAFE_Y + 4); // JMS_GFX
 	t.pStr = GAME_STRING (STARBASE_STRING_BASE + 1 + NewState);
 	t.CharCount = (COUNT)~0;
 	font_DrawText (&t);
