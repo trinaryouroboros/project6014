@@ -1838,9 +1838,9 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 	if (RESOLUTION_FACTOR == 0)	// JMS_GFX
 		num_of_stars = 30;		// JMS_GFX
 	if (RESOLUTION_FACTOR == 1)	// JMS_GFX
-		num_of_stars = 100;		// JMS_GFX
+		num_of_stars = 66;		// JMS_GFX
 	if (RESOLUTION_FACTOR == 2)	// JMS_GFX
-		num_of_stars = 200;		// JMS_GFX
+		num_of_stars = 111;		// JMS_GFX
 	
 #define NUM_DIM_PIECES 8
 	s.frame = SpaceJunkFrame;
