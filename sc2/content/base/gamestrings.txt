@@ -2169,11 +2169,11 @@ exit menu
 
 
 #(must restart)
-You have switched from original
-graphic mode to high resolution
-or vice versa.
+Switching to/from high resolution
+graphic mode requires restarting the game.
 
-Please restart the game before proceeding.
+The game will shut down now -
+we apologise for the inconvenience!
 
 
 #(hires_not_done)

@@ -15,6 +15,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
+
 #ifdef GFXMODULE_SDL
 
 #include "pure.h"
@@ -74,9 +76,10 @@ ReInit_Screen (SDL_Surface **screen, SDL_Surface *template, int w, int h)
 }
 
 int
-TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen)
+TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen, unsigned int resolutionFactor)  // JMS_GFX: Added resolutionFactor
 {
-	int i, videomode_flags;
+	int i, videomode_flags, videomode_flags2;
+	int forced_windowed_mode = 0;
 	SDL_Surface *temp_surf;
 	
 	GraphicsDriver = driver;
@@ -93,24 +96,25 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 	else
 	{
 		videomode_flags = SDL_SWSURFACE;
-		ScreenWidthActual = 640;
-		ScreenHeightActual = 480;
+		
+		// JMS_GFX: Resolution is calculated with the help of a Resolution factor.
+		ScreenWidthActual  = (320 << resolutionFactor); //320
+		ScreenHeightActual = (240 << resolutionFactor); //240
 		
 		// JMS_GFX: Scale according to resolution factor. Check sanity of resolution factor.
-		if(resolutionFactor==1)
+		if (resolutionFactor == 0)
+		{
+			ScreenWidthActual = 640;
+			ScreenHeightActual = 480;
 			graphics_backend = &pure_scaled_backend;
-		else if(resolutionFactor==2)
-			graphics_backend = &pure_unscaled_backend; //graphics_backend = &pure_scaled_backend;
+		}
 		else
-			log_add (log_Error, "Resolution factors 1(320x240) and 2(640x480) only are supported!"
-					 "Terminating...");
-		
-		if (width != 640 || height != 480)
-			log_add (log_Error, "Screen resolution of %dx%d not supported "
-					"under pure SDL, using 640x480", width, height);
+			graphics_backend = &pure_unscaled_backend;
 	}
-
+	
 	videomode_flags |= SDL_ANYFORMAT;
+	videomode_flags2 = videomode_flags; // JMS_GFX: Video mode flags without fullscreen flag.
+	
 	if (flags & TFB_GFXFLAGS_FULLSCREEN)
 		videomode_flags |= SDL_FULLSCREEN;
 
@@ -123,7 +127,26 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 		log_add (log_Error, "Couldn't set %ix%i video mode: %s",
 			ScreenWidthActual, ScreenHeightActual,
 			SDL_GetError ());
-		return -1;
+		
+		// JMS_GFX: If video mode cannot be set in fullscreen, try to set it in windowed mode.
+		// This is useful when playing e.g. on laptop with an external monitor connected. The fullscreen
+		// video mode setup only takes into account the smaller laptop monitor and if it's too small
+		// for e.g. 1280x960, you would normally be thrown back to Desktop.
+		// Now, windowed mode is invoked instead of terminating, and you can drag this window to the 
+		// larger screen.
+		log_add (log_Error, "Trying the same resolution now in windowed mode.");
+		SDL_Video = SDL_SetVideoMode (ScreenWidthActual, ScreenHeightActual, 32, videomode_flags2);
+		forced_windowed_mode = 1;
+		
+		// JMS_GFX If even the windowed mode doesn't work, then screw it all. Return.
+		if (SDL_Video == NULL)
+		{
+			log_add (log_Error, "Couldn't set %ix%i mode in windowed mode either: %s",
+					 ScreenWidthActual, ScreenHeightActual,
+					 SDL_GetError ());
+		
+			return -1;
+		}
 	}
 	else
 	{
@@ -198,13 +221,14 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 	{	// no need to scale
 		scaler = NULL;
 	}
-	return 0;
+	return forced_windowed_mode;
 }
 
 int
-TFB_Pure_InitGraphics (int driver, int flags, int width, int height)
+TFB_Pure_InitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor)  // JMS_GFX: Added resolutionFactor
 {
-	char VideoName[256];
+	char	VideoName[256];
+	int		config_video_result = 0;
 
 	log_add (log_Info, "Initializing Pure-SDL graphics.");
 
@@ -219,19 +243,20 @@ TFB_Pure_InitGraphics (int driver, int flags, int width, int height)
 	log_add (log_Info, "Initializing Screen.");
 	
 	// JMS_GFX: Resolution is calculated with the help of a Resolution factor.
-	ScreenWidth  = (320 * resolutionFactor); //320
-	ScreenHeight = (240 * resolutionFactor);//240
-
-	if (TFB_Pure_ConfigureVideo (driver, flags, width, height, 0))
+	ScreenWidth  = (320 << resolutionFactor); // 320
+	ScreenHeight = (240 << resolutionFactor); // 240
+	
+	config_video_result = TFB_Pure_ConfigureVideo (driver, flags, width, height, 0, resolutionFactor);
+	
+	if (config_video_result < 0) // JMS_GFX: Added resolutionFactor. Added check '< 0' since now '1' may be returned and it's not an error.
 	{
-		log_add (log_Fatal, "Could not initialize video: "
-				"no fallback at start of program!");
+		log_add (log_Fatal, "Could not initialize video: " "no fallback at start of program!");
 	}
 
 	// Initialize scalers (let them precompute whatever)
 	Scale_Init ();
 
-	return 0;
+	return config_video_result;
 }
 
 static void

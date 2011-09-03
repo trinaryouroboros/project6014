@@ -22,6 +22,8 @@
 //			-Slaveshield buster replaces Clear spindle
 //			-Disabled sun device's and casters' effect on Chmmr at Procyon orbit.
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "build.h"
 #include "encount.h"
 #include "gamestr.h"
@@ -42,10 +44,28 @@
 // devices the player actually possesses.
 //#define DEBUG_DEVICES
 
+#define DEVICE_ICON_WIDTH  RES_STAT_SCALE(16) // JMS_GFX
+#define DEVICE_ICON_HEIGHT RES_STAT_SCALE(16) // JMS_GFX
+
+#define DEVICE_ORG_Y       RES_STAT_SCALE(33) // JMS_GFX
+#define DEVICE_SPACING_Y   (DEVICE_ICON_HEIGHT + RES_STAT_SCALE(2)) // JMS_GFX
+
+#define DEVICE_COL_0       RES_STAT_SCALE(4) // JMS_GFX
+#define DEVICE_COL_1       RES_STAT_SCALE(40) // JMS_GFX
+
+#define DEVICE_SEL_ORG_X  (DEVICE_COL_0 + DEVICE_ICON_WIDTH)
+#define DEVICE_SEL_WIDTH  (FIELD_WIDTH + RES_STAT_SCALE(1) - DEVICE_SEL_ORG_X + RES_STAT_SCALE(1)) // JMS_GFX
+
+#define ICON_OFS_Y         RES_STAT_SCALE(1) // JMS_GFX
+#define NAME_OFS_Y         RES_STAT_SCALE(2) // JMS_GFX
+#define TEXT_BASELINE      RES_STAT_SCALE(6) // JMS_GFX
+#define TEXT_SPACING_Y     RES_STAT_SCALE(7) // JMS_GFX
+
+#define MAX_VIS_DEVICES    ((RES_STAT_SCALE(129) - DEVICE_ORG_Y) / DEVICE_SPACING_Y) // JMS_GFX
+
 static void
 DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 {
-#define MAX_VIS_DEVICES 5
 	COORD y, cy;
 	TEXT t;
 	RECT r;
@@ -56,8 +76,9 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 	SetContext (StatusContext);
 	SetContextFont (TinyFont);
 
-	y = 41 * RESOLUTION_FACTOR; // JMS_GFX
-	t.baseline.x = 40 * RESOLUTION_FACTOR; // JMS_GFX
+	y = DEVICE_COL_1 + ICON_OFS_Y; // JMS_GFX
+	
+	t.baseline.x = DEVICE_COL_1; // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.CharCount = 3;
 
@@ -69,25 +90,26 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 	{
 		STAMP s;
 
-		r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
-		r.extent.width = FIELD_WIDTH + (1 * RESOLUTION_FACTOR); // JMS_GFX
+		r.corner.x = RES_STAT_SCALE(2); // JMS_GFX
+		r.extent.width = FIELD_WIDTH + ICON_OFS_Y; // JMS_GFX
 
 		if (!(pMS->Initialized & 1))
 		{
-			r.corner.x += 1 * RESOLUTION_FACTOR; // JMS_GFX
-			r.extent.width -= 2 * RESOLUTION_FACTOR; // JMS_GFX
-			r.corner.y = 33 * RESOLUTION_FACTOR; // JMS_GFX
-			r.extent.height = 89 * RESOLUTION_FACTOR; // JMS_GFX
-			SetContextForeGroundColor (
-					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
+			r.corner.x += ICON_OFS_Y; // JMS_GFX
+			r.extent.width -= RES_STAT_SCALE(2); // JMS_GFX
+			r.corner.y = DEVICE_ORG_Y; // JMS_GFX
+			r.extent.height = RES_STAT_SCALE(89); // JMS_GFX
+			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 			DrawFilledRectangle (&r);
 		}
+		
+		// print the "DEVICES" title
 		else
 		{
 			TEXT ct;
 
-			r.corner.y = 20 * RESOLUTION_FACTOR; // JMS_GFX
-			r.extent.height = 109 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.y = RES_STAT_SCALE(20); // JMS_GFX
+			r.extent.height = RES_STAT_SCALE(129) - r.corner.y; // JMS_GFX
 			DrawStarConBox (&r, 1,
 					BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19),
 					BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F),
@@ -95,8 +117,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 
 			SetContextFont (StarConFont);
-			ct.baseline.x = (STATUS_WIDTH >> 1) - (1 * RESOLUTION_FACTOR); // JMS_GFX
-			ct.baseline.y = 27 * RESOLUTION_FACTOR; // JMS_GFX
+			ct.baseline.x = (STATUS_WIDTH >> 1) - ICON_OFS_Y; // JMS_GFX
+			ct.baseline.y = r.corner.y + TEXT_SPACING_Y; // JMS_GFX
 			ct.align = ALIGN_CENTER;
 			ct.pStr = GAME_STRING (DEVICE_STRING_BASE);
 			ct.CharCount = (COUNT)~0;
@@ -112,49 +134,48 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		else if (NewDevice >= (BYTE)(pMS->first_item.y + MAX_VIS_DEVICES))
 			pMS->first_item.y = NewDevice - (MAX_VIS_DEVICES - 1);
 
-		s.origin.x = 4 * RESOLUTION_FACTOR; // JMS_GFX
-		s.origin.y = 34 * RESOLUTION_FACTOR; // JMS_GFX
+		s.origin.x = DEVICE_COL_0; // JMS_GFX
+		s.origin.y = DEVICE_ORG_Y + ICON_OFS_Y; // JMS_GFX
 		cy = y;
 
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
+		
 		for (OldDevice = (BYTE)pMS->first_item.y;
 				OldDevice < (BYTE)(pMS->first_item.y + MAX_VIS_DEVICES)
 				&& OldDevice < (BYTE)pMS->first_item.x;
 				++OldDevice)
 		{
-			s.frame = SetAbsFrameIndex (
-					MiscDataFrame, 77 + pDeviceMap[OldDevice]);
+			s.frame = SetAbsFrameIndex (MiscDataFrame, 77 + pDeviceMap[OldDevice]);
 			DrawStamp (&s);
 
+			// print device name
 			if (OldDevice != NewDevice)
 			{
 				t.baseline.y = cy;
-				t.pStr = GAME_STRING (pDeviceMap[OldDevice] +
-						DEVICE_STRING_BASE + 1);
+				t.pStr = GAME_STRING (pDeviceMap[OldDevice] + DEVICE_STRING_BASE + 1);
 				t.CharCount = utf8StringPos (t.pStr, ' ');
 				font_DrawText (&t);
-				t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
+				t.baseline.y += TEXT_SPACING_Y; // JMS_GFX
 				t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 				t.CharCount = (COUNT)~0;
 				font_DrawText (&t);
 			}
 
-			cy += 18 * RESOLUTION_FACTOR; // JMS_GFX
-			s.origin.y += 18 * RESOLUTION_FACTOR; // JMS_GFX
+			cy += DEVICE_SPACING_Y; // JMS_GFX
+			s.origin.y += DEVICE_SPACING_Y; // JMS_GFX
 		}
 
 		OldDevice = NewDevice;
 	}
 
-	r.extent.width = 41 * RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.height = 14 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.width = DEVICE_SEL_WIDTH; // JMS_GFX
+	r.extent.height = RES_STAT_SCALE(14); // JMS_GFX
 	r.corner.x = t.baseline.x - (r.extent.width >> 1);
 
 	if (OldDevice != NewDevice)
 	{
-		cy = y + ((OldDevice - pMS->first_item.y) * (18 * RESOLUTION_FACTOR)); // JMS_GFX
-		r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
+		cy = y + ((OldDevice - pMS->first_item.y) * DEVICE_SPACING_Y); // JMS_GFX
+		r.corner.y = cy - TEXT_BASELINE; // JMS_GFX
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 		DrawFilledRectangle (&r);
@@ -165,7 +186,7 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		t.pStr = GAME_STRING (pDeviceMap[OldDevice] + DEVICE_STRING_BASE + 1);
 		t.CharCount = utf8StringPos (t.pStr, ' ');
 		font_DrawText (&t);
-		t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y += TEXT_SPACING_Y; // JMS_GFX
 		t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
@@ -173,8 +194,8 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 
 	if (NewDevice < NUM_DEVICES)
 	{
-		cy = y + ((NewDevice - pMS->first_item.y) * (18 * RESOLUTION_FACTOR)); // JMS_GFX
-		r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
+		cy = y + ((NewDevice - pMS->first_item.y) * DEVICE_SPACING_Y); // JMS_GFX
+		r.corner.y = cy - TEXT_BASELINE; // JMS_GFX
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
 		DrawFilledRectangle (&r);
@@ -185,7 +206,7 @@ DrawDevices (MENU_STATE *pMS, BYTE OldDevice, BYTE NewDevice)
 		t.pStr = GAME_STRING (pDeviceMap[NewDevice] + DEVICE_STRING_BASE + 1);
 		t.CharCount = utf8StringPos (t.pStr, ' ');
 		font_DrawText (&t);
-		t.baseline.y += 7 * RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y += TEXT_SPACING_Y; // JMS_GFX
 		t.pStr = skipUTF8Chars (t.pStr, t.CharCount + 1);
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);

@@ -169,8 +169,7 @@ enum
 	FadeSomeToColor
 };
 
-extern BOOLEAN InitGraphics (int argc, char *argv[], COUNT
-		KbytesRequired, int res_factor); // JMS_GFX
+extern BOOLEAN InitGraphics (int argc, char *argv[], COUNT KbytesRequired, int res_factor); // JMS_GFX
 extern void UninitGraphics (void);
 
 extern CONTEXT SetContext (CONTEXT Context);

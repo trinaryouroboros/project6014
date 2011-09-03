@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Since hi-res and original graphic modes use different font frame numbering,
+// I had to make some changes to _GetFontData to make both font numberings work.
+
 #ifdef GFXMODULE_SDL
 
 #ifdef WIN32
@@ -659,8 +662,19 @@ _GetFontData (uio_Stream *fp, DWORD length)
 
 		char_name = GetDirEntryAddress (SetAbsDirEntryTableIndex (
 				fontDir, dirEntryI));
-		if (sscanf (char_name, "%u.", &charIndex) != 1)
-			continue;
+		
+		// JMS_GFX: Since 320x240 still uses old type decimal numbering for font frames,
+		// and hi-res uses hex, we have to make this distinction here.
+		if (resolutionFactor > 0)
+		{
+			if (sscanf (char_name, "%x.", &charIndex) != 1)
+				continue;
+		}
+		else
+		{
+			if (sscanf (char_name, "%u.", &charIndex) != 1)
+				continue;
+		}
 			
 		if (charIndex > 0xffff)
 			continue;

@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolutionFactor stuff from UQM-HD.
+
 #ifdef GFXMODULE_SDL
 
 #include "sdl_common.h"
@@ -34,13 +36,13 @@ int batch_depth = 0;
 
 //Status: Not entirely unimplemented!
 BOOLEAN
-InitGraphics (int argc, char* argv[], COUNT KbytesRequired, int res_factor) //JMS_GFX
+InitGraphics (int argc, char* argv[], COUNT KbytesRequired, int res_factor) // JMS_GFX
 		// Kbytes should only matter if we wanted to port Starcon2 to the
 		// hand-helds...
 {
 	BOOLEAN ret;
 
-	LoadDisplay (&_pCurDisplay, res_factor);
+	LoadDisplay (&_pCurDisplay, res_factor); // JMS_GFX
 	ActivateDisplay ();
 
 	(void) argc;             /* lint */

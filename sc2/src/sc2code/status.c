@@ -18,6 +18,8 @@
 
 // JMS 2010 - Enable Down key in melee (comment tag JMS_KEYS)
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "build.h"
 #include "colors.h"
 #include "globdata.h"
@@ -30,8 +32,7 @@
 
 static void
 CaptainsWindow (CAPTAIN_STUFF *CSPtr, COORD y,
-		STATUS_FLAGS delta_status_flags, STATUS_FLAGS cur_status_flags,
-		COUNT Pass)
+		STATUS_FLAGS delta_status_flags, STATUS_FLAGS cur_status_flags, COUNT Pass)
 {
 	STAMP Stamp;
 
@@ -125,24 +126,22 @@ DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr)
 
 	t.baseline.x = BATTLE_CREW_X + 2;
 	if (optWhichMenu == OPT_PC)
-			t.baseline.x -= 8;
-	t.baseline.y = BATTLE_CREW_Y +
-			((ShipInfoPtr->ship_flags & GOOD_GUY) ?
-			GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
+		t.baseline.x -= 8;
+	
+	t.baseline.y = BATTLE_CREW_Y + ((ShipInfoPtr->ship_flags & GOOD_GUY) ? GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
 	t.align = ALIGN_LEFT;
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
 	r.corner.x = t.baseline.x;
-	r.corner.y = t.baseline.y - 5 * RESOLUTION_FACTOR - (RESOLUTION_FACTOR - 1); // JMS_GFX
-	r.extent.width = 6 * MAX_CREW_DIGITS + 6 * RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.height = 5 * RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y = t.baseline.y - (5 << RESOLUTION_FACTOR) - RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.width = 6 * MAX_CREW_DIGITS + (6 << RESOLUTION_FACTOR); // JMS_GFX
+	r.extent.height = 5 << RESOLUTION_FACTOR; // JMS_GFX
 
 	sprintf (buf, "%u", ShipInfoPtr->crew_level);
 	SetContextFont (StarConFont);
 
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	DrawFilledRectangle (&r);
 	SetContextForeGroundColor (BLACK_COLOR);
 	font_DrawText (&t);
@@ -175,21 +174,17 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 
 	BatchGraphics ();
 	
-	y_offs = CAPTAIN_YOFFS
-			+ ((RDPtr->ship_info.ship_flags & GOOD_GUY) ?
-			GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
-	r.corner.x = CAPTAIN_XOFFS - 2 - (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
-	r.corner.y = y_offs - 4 * RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.width = STATUS_WIDTH - CAPTAIN_XOFFS + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
-	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + (2 * RESOLUTION_FACTOR) + 2 * (RESOLUTION_FACTOR - 1); // JMS_GFX
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
+	y_offs = CAPTAIN_YOFFS + ((RDPtr->ship_info.ship_flags & GOOD_GUY) ? GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
+	r.corner.x = CAPTAIN_XOFFS - RES_STAT_SCALE(4);
+	r.corner.y = y_offs - (4 << RESOLUTION_FACTOR);
+	r.extent.width = STATUS_WIDTH - 2;
+	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + (4 << RESOLUTION_FACTOR); // JMS_GFX
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	DrawFilledRectangle (&r);
 
 	y = y_offs - CAPTAIN_YOFFS;
 
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 	r.corner.x = 1;
 	r.corner.y = SHIP_INFO_HEIGHT + y;
 	r.extent.width = 1;
@@ -199,8 +194,7 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	++r.extent.height;
 	DrawFilledRectangle (&r);
 
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
 	r.corner.x = STATUS_WIDTH - 1;
 	r.corner.y = SHIP_INFO_HEIGHT + y;
 	r.extent.width = 1;
@@ -220,31 +214,29 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 
 	{
 		// Darker grey rectangle at bottom and right of captain's window
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
-		r.corner.x = 59 + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
+		r.corner.x = CAPTAIN_WIDTH + CAPTAIN_XOFFS; // JMS_GFX
 		r.corner.y = y_offs;
 		r.extent.width = 1;
-		r.extent.height = 30;
+		r.extent.height = CAPTAIN_HEIGHT;
 		DrawFilledRectangle (&r);
-		r.corner.x = 3 + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
-		r.corner.y += 30;
-		r.extent.width = 57;
+		r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
+		r.corner.y += CAPTAIN_HEIGHT;
+		r.extent.width = CAPTAIN_WIDTH + 2;
 		r.extent.height = 1;
 		DrawFilledRectangle (&r);
 
 		// Light grey rectangle at top and left of captains window
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
-		r.corner.x = 3 + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
-		r.extent.width = 57;
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
+		r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
+		r.extent.width = CAPTAIN_WIDTH + 2;
 		r.corner.y = y_offs - 1;
 		r.extent.height = 1;
 		DrawFilledRectangle (&r);
-		r.corner.x = 3 + (32 * (RESOLUTION_FACTOR - 1)); // JMS_GFX
+		r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
 		r.extent.width = 1;
 		r.corner.y = y_offs;
-		r.extent.height = 30;
+		r.extent.height = CAPTAIN_HEIGHT;
 		DrawFilledRectangle (&r);
 
 		s.frame = RDPtr->ship_data.captain_control.background;
@@ -414,9 +406,7 @@ PostProcessStatus (ELEMENT *ShipPtr)
 
 			if (StarShipPtr->RaceDescPtr->ship_info.crew_level == 0)
 			{
-#define CAPTAIN_WIDTH 55
-#define CAPTAIN_HEIGHT 30
-				BYTE i;
+				BYTE i, j;
 				COLOR c;
 				RECT r;
 
@@ -464,49 +454,53 @@ PostProcessStatus (ELEMENT *ShipPtr)
 						};
 
 						c = flash_tab1[i];
-						r.corner.x = CAPTAIN_XOFFS + i;
-						r.corner.y = y + CAPTAIN_YOFFS + i;
-						r.extent.width = CAPTAIN_WIDTH - (i << 1);
-						r.extent.height = CAPTAIN_HEIGHT - (i << 1);
+						r.corner.x = CAPTAIN_XOFFS + RES_STAT_SCALE(i);
+						r.corner.y = y + CAPTAIN_YOFFS + RES_STAT_SCALE(i);
+						r.extent.width = CAPTAIN_WIDTH - RES_STAT_SCALE((i << 1));
+						r.extent.height = CAPTAIN_HEIGHT - RES_STAT_SCALE((i << 1));
 						if (r.extent.height == 2)
 							++r.extent.height;
-						DrawRectangle (&r);
-						++r.corner.x;
-						++r.corner.y;
-						r.extent.width -= 2;
-						r.extent.height -= 2;
+						
+						for (j=0 ; j < RES_STAT_SCALE(1); j++)
+						{
+							DrawRectangle (&r);
+							++r.corner.x;
+							++r.corner.y;
+							r.extent.width -= 2;
+							r.extent.height -= 2;
+						}
 					}
 					else if ((i -= 15) <= 4)
 					{
-						r.corner.y = y + (CAPTAIN_YOFFS + 15);
-						r.extent.width = i + 1;
+						r.corner.y = y + (CAPTAIN_YOFFS + RES_STAT_SCALE(15));
+						r.extent.width = RES_STAT_SCALE(i + 1);
 						r.extent.height = 1;
 						switch (i)
 						{
 							case 0:
-								r.corner.x = CAPTAIN_XOFFS + 15;
-								i = CAPTAIN_WIDTH - ((15 + 1) << 1);
+								r.corner.x = CAPTAIN_XOFFS + RES_STAT_SCALE(15);
+								i = CAPTAIN_WIDTH - RES_STAT_SCALE((15 + 1) << 1);
 								c = BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2C);
 								break;
 							case 1:
-								r.corner.x = CAPTAIN_XOFFS + 16;
-								i = CAPTAIN_WIDTH - ((17 + 1) << 1);
+								r.corner.x = CAPTAIN_XOFFS + RES_STAT_SCALE(16);
+								i = CAPTAIN_WIDTH - RES_STAT_SCALE((17 + 1) << 1);
 								c = BUILD_COLOR (MAKE_RGB15 (0x07, 0x00, 0x00), 0x2F);
 								break;
 							case 2:
-								r.corner.x = CAPTAIN_XOFFS + 18;
-								i = CAPTAIN_WIDTH - ((20 + 1) << 1);
+								r.corner.x = CAPTAIN_XOFFS + RES_STAT_SCALE(18);
+								i = CAPTAIN_WIDTH - RES_STAT_SCALE((20 + 1) << 1);
 								c = BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x00), 0x2A);
 								break;
 							case 3:
-								r.corner.x = CAPTAIN_XOFFS + 21;
-								i = CAPTAIN_WIDTH - ((24 + 1) << 1);
+								r.corner.x = CAPTAIN_XOFFS + RES_STAT_SCALE(21);
+								i = CAPTAIN_WIDTH - RES_STAT_SCALE((24 + 1) << 1);
 								c = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x00, 0x00), 0x29);
 								break;
 							case 4:
-								r.corner.x = CAPTAIN_XOFFS + 25;
-								i = 1;
-								r.extent.width = 2;
+								r.corner.x = CAPTAIN_XOFFS + RES_STAT_SCALE(25);
+								i = RES_STAT_SCALE(1);
+								r.extent.width = RES_STAT_SCALE(2);
 								c = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x50, 0x05), 0x28);
 								break;
 							default:
@@ -535,10 +529,8 @@ PostProcessStatus (ELEMENT *ShipPtr)
 
 							c = flash_tab2[i];
 						}
-						r.corner.x = CAPTAIN_XOFFS
-								+ (CAPTAIN_WIDTH >> 1);
-						r.corner.y = y + CAPTAIN_YOFFS
-								 + ((CAPTAIN_HEIGHT + 1) >> 1);
+						r.corner.x = CAPTAIN_XOFFS + (CAPTAIN_WIDTH >> 1);
+						r.corner.y = y + CAPTAIN_YOFFS + ((CAPTAIN_HEIGHT + 1) >> 1);
 						r.extent.width = 1;
 						r.extent.height = 1;
 					}

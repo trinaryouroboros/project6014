@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
+
 #ifndef _BUILD_H
 #define _BUILD_H
 
@@ -23,12 +25,12 @@
 #include "displist.h"
 #include "libs/compiler.h"
 
-#define CREW_XOFFS (4 * RESOLUTION_FACTOR) // JMS_GFX
-#define ENERGY_XOFFS (52 * RESOLUTION_FACTOR) // JMS_GFX
-#define GAUGE_YOFFS (SHIP_INFO_HEIGHT - 10 * RESOLUTION_FACTOR) // JMS_GFX
-#define UNIT_WIDTH 2
+#define CREW_XOFFS RES_STAT_SCALE(4) // JMS_GFX
+#define ENERGY_XOFFS RES_STAT_SCALE(52) // JMS_GFX
+#define GAUGE_YOFFS (SHIP_INFO_HEIGHT - (10 << RESOLUTION_FACTOR)) // JMS_GFX
+#define UNIT_WIDTH RES_STAT_SCALE(2)
 #define UNIT_HEIGHT 1
-#define STAT_WIDTH ((1 + UNIT_WIDTH + 1 + UNIT_WIDTH + 1) * RESOLUTION_FACTOR) // JMS_GFX
+#define STAT_WIDTH (1 + UNIT_WIDTH + 1 + UNIT_WIDTH + 1) // JMS_GFX
 
 #define NAME_OFFSET 5
 #define NUM_CAPTAINS_NAMES 16

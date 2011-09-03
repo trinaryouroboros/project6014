@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolutionFactor stuff from UQM-HD.
+
 #ifdef GFXMODULE_SDL
 
 #include "sdl_common.h"
@@ -77,11 +79,26 @@ static DISPLAY_INTERFACE DisplayInterfaceReal640 =
 	/* .read_display  = */ read_screen,
 };
 
+// JMS_GFX: New function for setting up a1280x960 display layer
+static DISPLAY_INTERFACE DisplayInterfaceReal1280 =
+{
+	/* .DisplayFlags  = */ WANT_MASK,
+	
+	/* .DisplayDepth  = */ 16,
+	/* .DisplayWidth  = */ 1280, // JMS_GFX
+	/* .DisplayHeight = */ 960, // JMS_GFX
+	
+	/* .alloc_image   = */ alloc_image,
+	/* .read_display  = */ read_screen,
+};
+
 void
 LoadDisplay (DISPLAY_INTERFACE **pDisplay, int res_factor)
 {
 	// JMS_GFX: resolution selection
-	if(res_factor==2)
+	if (res_factor == 2)
+		*pDisplay = &DisplayInterfaceReal1280;
+	else if (res_factor == 1)
 		*pDisplay = &DisplayInterfaceReal640;
 	else
 		*pDisplay = &DisplayInterface;

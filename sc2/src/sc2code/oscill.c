@@ -29,7 +29,7 @@ static FRAME scope_frame;
 static int scope_init = 0;
 static TFB_Image *scope_bg = NULL;
 static TFB_Image *scope_surf = NULL;
-static UBYTE scope_data[110];//[RADAR_WIDTH - 2]; // JMS_GFX
+static UBYTE scope_data[192];//[RADAR_WIDTH - 2]; // JMS_GFX
 BOOLEAN oscillDisabled = FALSE;
 
 void
@@ -101,7 +101,7 @@ Oscilloscope (DWORD grab_data)
 				&r, &g, &b);
 		
 		// JMS_GFX
-		if(RESOLUTION_FACTOR > 1)
+		if(RESOLUTION_FACTOR > 0)
 			{r=g=b=0;}
 		
 		for (i = 0; i < RADAR_WIDTH - 3; ++i)

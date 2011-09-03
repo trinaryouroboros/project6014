@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
+
 #include "setupmenu.h"
 
 #include "controls.h"
@@ -67,9 +69,9 @@ static void rebind_control (WIDGET_CONTROLENTRY *widget);
 static void clear_control (WIDGET_CONTROLENTRY *widget);
 
 #ifdef HAVE_OPENGL
-#define RES_OPTS 5 // JMS_GFX was 4
+#define RES_OPTS 7 // JMS_GFX was 4
 #else
-#define RES_OPTS 3 // JMS_GFX was 2
+#define RES_OPTS 5 // JMS_GFX was 2
 #endif
 
 #define MENU_COUNT          8
@@ -1137,7 +1139,7 @@ GetGlobalOptions (GLOBALOPTS *opts)
 		}
 		break;
 	case 640:
-		if (resolutionFactor == 2) // JMS_GFX
+		if (resolutionFactor == 1) // JMS_GFX
 		{
 			opts->res = OPTVAL_REAL_640_480;
 		}
@@ -1178,6 +1180,17 @@ GetGlobalOptions (GLOBALOPTS *opts)
 			opts->res = OPTVAL_1024_768;
 		}		
 		break;
+	case 1280:								 // DC_GFX
+		if (ScreenHeightActual != 960)		 // DC_GFX
+		{									 // DC_GFX
+			opts->res = OPTVAL_CUSTOM;		 // DC_GFX
+		}									 // DC_GFX
+		else								 // DC_GFX
+		{									 // DC_GFX
+			opts->res = OPTVAL_REAL_1280_960;// DC_GFX
+		}									 // DC_GFX
+		break;								 // DC_GFX
+		
 	default:
 		opts->res = OPTVAL_CUSTOM;
 		break;
@@ -1212,8 +1225,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	int NewHeight = ScreenHeightActual;
 	int NewDriver = GraphicsDriver;
 	
-	// JMS_GFX
-	int oldResFactor = resolutionFactor;
+	unsigned int oldResFactor = resolutionFactor; // JMS_GFX
 
 	NewGfxFlags &= ~TFB_GFXFLAGS_SCALE_ANY;
 	
@@ -1226,7 +1238,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 #else
 		NewDriver = TFB_GFXDRIVER_SDL_PURE;
 #endif
-		resolutionFactor=1; // JMS_GFX
+		resolutionFactor = 0;				// JMS_GFX
 		break;
 	case OPTVAL_640_480:
 		NewWidth = 640;
@@ -1236,30 +1248,36 @@ SetGlobalOptions (GLOBALOPTS *opts)
 #else
 		NewDriver = TFB_GFXDRIVER_SDL_PURE;
 #endif
-		resolutionFactor=1; // JMS_GFX
+		resolutionFactor = 0;				// JMS_GFX
 		break;
 	case OPTVAL_800_600:
 		NewWidth = 800;
 		NewHeight = 600;
 		NewDriver = TFB_GFXDRIVER_SDL_OPENGL;
-		resolutionFactor=1; // JMS_GFX
+		resolutionFactor = 0;				// JMS_GFX
 		break;
 	case OPTVAL_1024_768:
 		NewWidth = 1024;
 		NewHeight = 768;
 		NewDriver = TFB_GFXDRIVER_SDL_OPENGL;
-		resolutionFactor=1; // JMS_GFX
+		resolutionFactor = 0;				// JMS_GFX
 		break;
-	case OPTVAL_REAL_640_480: // JMS_GFX
-		NewWidth = 640;
-		NewHeight = 480;
-		NewDriver = TFB_GFXDRIVER_SDL_PURE;
-		resolutionFactor=1; //resolutionFactor=2; // JMS_DEMO
-		DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 36)); // JMS_DEMO
-		break;
+	case OPTVAL_REAL_640_480:				// JMS_GFX
+		NewWidth = 640;						// JMS_GFX
+		NewHeight = 480;					// JMS_GFX
+		NewDriver = TFB_GFXDRIVER_SDL_PURE; // JMS_GFX
+		resolutionFactor = 1;				// JMS_GFX
+		break;								// JMS_GFX
+	case OPTVAL_REAL_1280_960:				// JMS_GFX
+		NewWidth = 1280;					// JMS_GFX
+		NewHeight = 960;					// JMS_GFX
+		NewDriver = TFB_GFXDRIVER_SDL_PURE; // JMS_GFX
+		resolutionFactor = 2;				// JMS_GFX
+		break;								// JMS_GFX
+		
 	default:
 		/* Don't mess with the custom value */
-		resolutionFactor=1; // JMS_GFX
+		resolutionFactor = 0; // JMS_GFX
 		break;
 	}
 

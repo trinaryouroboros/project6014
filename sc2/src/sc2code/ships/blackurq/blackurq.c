@@ -37,13 +37,7 @@
 
 #define SHIP_MASS 10
 #define MISSILE_SPEED 64
-#define MISSILE_LIFE 64 /* actually, it's as long as you
-										 * hold the button down.
-										 */
-
-#define MAX_THRUST_HIRES 60 // JMS_GFX
-#define THRUST_INCREMENT_HIRES 12  // JMS_GFX
-#define MISSILE_SPEED_HIRES 128
+#define MISSILE_LIFE 64 /* actually, it's as long as you hold the button down.*/
 
 static RACE_DESC black_urquan_desc =
 {
@@ -115,8 +109,11 @@ static RACE_DESC black_urquan_desc =
 	0,
 };
 
+#define MAX_THRUST_2XRES 60			// JMS_GFX
+#define THRUST_INCREMENT_2XRES 12	// JMS_GFX
+
 // JMS_GFX
-static RACE_DESC black_urquan_desc_hires =
+static RACE_DESC black_urquan_desc_2xres =
 {
 	{ /* SHIP_INFO */
 		FIRES_FORE,
@@ -135,8 +132,82 @@ static RACE_DESC black_urquan_desc_hires =
 		},
 	},
 	{
-		MAX_THRUST_HIRES,
-		THRUST_INCREMENT_HIRES,
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			KOHR_AH_BIG_MASK_PMAP_ANIM,
+			KOHR_AH_MED_MASK_PMAP_ANIM,
+			KOHR_AH_SML_MASK_PMAP_ANIM,
+		},
+		{
+			BUZZSAW_BIG_MASK_PMAP_ANIM,
+			BUZZSAW_MED_MASK_PMAP_ANIM,
+			BUZZSAW_SML_MASK_PMAP_ANIM,
+		},
+		{
+			GAS_BIG_MASK_PMAP_ANIM,
+			GAS_MED_MASK_PMAP_ANIM,
+			GAS_SML_MASK_PMAP_ANIM,
+		},
+		{
+			KOHR_AH_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		KOHR_AH_VICTORY_SONG,
+		KOHR_AH_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+};
+
+#define MAX_THRUST_4XRES 120		// JMS_GFX
+#define THRUST_INCREMENT_4XRES 24	// JMS_GFX
+
+// JMS_GFX
+static RACE_DESC black_urquan_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		30, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		KOHR_AH_RACE_STRINGS,
+		KOHR_AH_ICON_MASK_PMAP_ANIM,
+		KOHR_AH_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		4000 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			9999,9999,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
 		ENERGY_REGENERATION,
 		WEAPON_ENERGY_COST,
 		SPECIAL_ENERGY_COST,
@@ -245,7 +316,7 @@ buzztrack_preprocess (ELEMENT *ElementPtr)
 		}
 		else
 		{
-#define ACTIVATE_RANGE (224 * RESOLUTION_FACTOR) /* Originally SPACE_WIDTH */ // JMS_GFX
+#define ACTIVATE_RANGE (224 << RESOLUTION_FACTOR) /* Originally SPACE_WIDTH */ // JMS_GFX
 			SIZE delta_x, delta_y;
 			ELEMENT *eptr;
 
@@ -279,7 +350,7 @@ buzztrack_preprocess (ELEMENT *ElementPtr)
 			{
 				ElementPtr->thrust_wait = TRACK_WAIT;
 				SetVelocityVector (&ElementPtr->velocity,
-						DISPLAY_TO_WORLD (2 * RESOLUTION_FACTOR), facing); // JMS_GFX
+						DISPLAY_TO_WORLD (2 << RESOLUTION_FACTOR), facing); // JMS_GFX
 			}
 		}
 	}
@@ -386,8 +457,8 @@ initialize_buzzsaw (ELEMENT *ShipPtr, HELEMENT SawArray[])
 {
 #define MISSILE_HITS 10
 #define MISSILE_DAMAGE 4
-#define MISSILE_OFFSET (9 * RESOLUTION_FACTOR) // JMS_GFX
-#define KOHR_AH_OFFSET (28 * RESOLUTION_FACTOR) // JMS_GFX
+#define MISSILE_OFFSET (9 << RESOLUTION_FACTOR) // JMS_GFX
+#define KOHR_AH_OFFSET (28 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -400,7 +471,7 @@ initialize_buzzsaw (ELEMENT *ShipPtr, HELEMENT SawArray[])
 	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
 	MissileBlock.pixoffs = KOHR_AH_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED * RESOLUTION_FACTOR; // JMS_GFX
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -475,7 +546,7 @@ black_urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 
 					if (!PlotIntercept (BuzzSawPtr,
 							lpEvalDesc->ObjectPtr, BuzzSawPtr->life_span,
-							(FRAGMENT_RANGE * RESOLUTION_FACTOR) / 2)) // JMS_GFX
+							(FRAGMENT_RANGE << RESOLUTION_FACTOR) / 2)) // JMS_GFX
 						StarShipPtr->ship_input_state &= ~WEAPON;
 					else if (StarShipPtr->weapon_counter == 0)
 						StarShipPtr->ship_input_state |= WEAPON;
@@ -493,7 +564,7 @@ black_urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			if (StarShipPtr->old_status_flags & WEAPON)
 				StarShipPtr->ship_input_state &= ~WEAPON;
 			else if (StarShipPtr->weapon_counter == 0
-					&& ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, (FRAGMENT_RANGE * RESOLUTION_FACTOR) / 2)) // JMS_GFX
+					&& ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, (FRAGMENT_RANGE << RESOLUTION_FACTOR) / 2)) // JMS_GFX
 				StarShipPtr->ship_input_state |= WEAPON;
 
 			if (StarShipPtr->special_counter == 0
@@ -541,9 +612,9 @@ gas_cloud_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 static void
 spawn_gas_cloud (ELEMENT *ElementPtr)
 {
-#define GAS_SPEED (16 * RESOLUTION_FACTOR) // JMS_GFX
+#define GAS_SPEED (16 << RESOLUTION_FACTOR) // JMS_GFX
 #define GAS_HITS 100
-#define GAS_OFFSET (2 * RESOLUTION_FACTOR) // JMS_GFX
+#define GAS_OFFSET (2 << RESOLUTION_FACTOR) // JMS_GFX
 #define NUM_GAS_CLOUDS 16
 	SIZE dx, dy;
 	STARSHIP *StarShipPtr;
@@ -557,7 +628,7 @@ spawn_gas_cloud (ELEMENT *ElementPtr)
 	MissileBlock.sender =
 			(ElementPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
-	MissileBlock.pixoffs = 20 * RESOLUTION_FACTOR; // JMS_GFX
+	MissileBlock.pixoffs = 20 << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.speed = GAS_SPEED;
 	MissileBlock.hit_points = GAS_HITS;
 	MissileBlock.damage = GAS_DAMAGE;
@@ -630,7 +701,7 @@ init_black_urquan (void)
 	RACE_DESC *RaceDescPtr;
 
 	// JMS_GFX: A rather clumsy way of giving ship correct max speed at hi-res mode
-	if (RESOLUTION_FACTOR == 1)
+	if (RESOLUTION_FACTOR == 0)
 	{
 		black_urquan_desc.preprocess_func = black_urquan_preprocess;
 		black_urquan_desc.postprocess_func = black_urquan_postprocess;
@@ -638,13 +709,21 @@ init_black_urquan (void)
 		black_urquan_desc.cyborg_control.intelligence_func = black_urquan_intelligence;
 		RaceDescPtr = &black_urquan_desc;
 	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		black_urquan_desc_2xres.preprocess_func = black_urquan_preprocess;
+		black_urquan_desc_2xres.postprocess_func = black_urquan_postprocess;
+		black_urquan_desc_2xres.init_weapon_func = initialize_buzzsaw;
+		black_urquan_desc_2xres.cyborg_control.intelligence_func = black_urquan_intelligence;
+		RaceDescPtr = &black_urquan_desc_2xres;
+	}
 	else
 	{
-		black_urquan_desc_hires.preprocess_func = black_urquan_preprocess;
-		black_urquan_desc_hires.postprocess_func = black_urquan_postprocess;
-		black_urquan_desc_hires.init_weapon_func = initialize_buzzsaw;
-		black_urquan_desc_hires.cyborg_control.intelligence_func = black_urquan_intelligence;
-		RaceDescPtr = &black_urquan_desc_hires;
+		black_urquan_desc_4xres.preprocess_func = black_urquan_preprocess;
+		black_urquan_desc_4xres.postprocess_func = black_urquan_postprocess;
+		black_urquan_desc_4xres.init_weapon_func = initialize_buzzsaw;
+		black_urquan_desc_4xres.cyborg_control.intelligence_func = black_urquan_intelligence;
+		RaceDescPtr = &black_urquan_desc_4xres;
 	}
 	return (RaceDescPtr);
 }

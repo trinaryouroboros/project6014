@@ -32,6 +32,9 @@
 #include "libs/mathlib.h"
 #include "assert.h"
 
+#include "hyper.h"
+// for SOL_X/SOL_Y
+
 #define NUM_HISTORY_ITEMS 0
 #define NUM_EVENT_ITEMS 1
 #define NUM_ALIEN_RACE_ITEMS 0

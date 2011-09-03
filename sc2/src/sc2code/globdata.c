@@ -40,6 +40,7 @@
 #include "resinst.h"
 #include "nameref.h"
 #include "build.h"
+#include "hyper.h"
 #include "state.h"
 #include "grpinfo.h"
 #include "gamestr.h"

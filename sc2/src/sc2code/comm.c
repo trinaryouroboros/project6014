@@ -24,6 +24,8 @@
 //			 -Freight transport ships do not disappear after encountering in hyperspace.
 //			 -Increased maximum number of communication responses from 8 to 10
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #define COMM_INTERNAL
 #include "comm.h"
 
@@ -205,7 +207,7 @@ add_text (int status, TEXT *pTextIn)
 
 		maxchars = pTextIn->CharCount;
 		locText = *pTextIn;
-		locText.baseline.x -= 8 + (RESOLUTION_FACTOR - 1); // JMS_GFX
+		locText.baseline.x -= 8 + RESOLUTION_FACTOR; // JMS_GFX
 		locText.CharCount = (COUNT)~0;
 		locText.pStr = "*";
 		font_DrawText (&locText);
@@ -561,7 +563,7 @@ FeedbackPlayerPhrase (UNICODE *pStr)
 		TEXT ct;
 
 		ct.baseline.x = SIS_SCREEN_WIDTH >> 1;
-		ct.baseline.y = SLIDER_Y + SLIDER_HEIGHT + 13 * RESOLUTION_FACTOR; // JMS_GFX
+		ct.baseline.y = SLIDER_Y + SLIDER_HEIGHT + (13 << RESOLUTION_FACTOR); // JMS_GFX
 		ct.align = ALIGN_CENTER;
 		ct.CharCount = (COUNT)~0;
 
@@ -570,7 +572,7 @@ FeedbackPlayerPhrase (UNICODE *pStr)
 		SetContextForeGroundColor (COMM_RESPONSE_INTRO_TEXT_COLOR);
 		font_DrawText (&ct);
 
-		ct.baseline.y += 16 * RESOLUTION_FACTOR; // JMS_GFX
+		ct.baseline.y += (16 << RESOLUTION_FACTOR); // JMS_GFX
 		SetContextForeGroundColor (COMM_FEEDBACK_TEXT_COLOR);
 		ct.pStr = pStr;
 		add_text (-4, &ct);
@@ -919,9 +921,9 @@ typedef struct summary_state
 static BOOLEAN
 DoConvSummary (SUMMARY_STATE *pSS)
 {
-#define DELTA_Y_SUMMARY (8 * RESOLUTION_FACTOR) // JMS_GFX
+#define DELTA_Y_SUMMARY (8 << RESOLUTION_FACTOR) // JMS_GFX
 #define MAX_SUMM_ROWS ((SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT) \
-			/ DELTA_Y_SUMMARY) - (1 * RESOLUTION_FACTOR) // JMS_GFX
+			/ DELTA_Y_SUMMARY) - (1 << RESOLUTION_FACTOR) // JMS_GFX
 
 	if (!pSS->Initialized)
 	{
@@ -960,7 +962,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		r.corner.x = 0;
 		r.corner.y = 0;
 		r.extent.width = SIS_SCREEN_WIDTH;
-		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - (SLIDER_HEIGHT * RESOLUTION_FACTOR) + (2 * RESOLUTION_FACTOR); // JMS_GFX
+		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + (2 << RESOLUTION_FACTOR); // JMS_GFX
 
 		LockMutex (GraphicsLock);
 		SetContextForeGroundColor (COMM_HISTORY_BACKGROUND_COLOR);
@@ -969,7 +971,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		SetContextForeGroundColor (COMM_HISTORY_TEXT_COLOR);
 
 		r.extent.width -= 2 + 2;
-		t.baseline.x = (2 * RESOLUTION_FACTOR); // JMS_GFX
+		t.baseline.x = 2 << RESOLUTION_FACTOR; // JMS_GFX
 		t.align = ALIGN_LEFT;
 		t.baseline.y = DELTA_Y_SUMMARY;
 		oldFont = SetContextFont (TinyFont);

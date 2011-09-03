@@ -20,6 +20,8 @@
 // JMS 2010		-Also no planet name for the segue screen. Portal gfx instead of planet.
 //				-If enemy escape occurred, don't scavenge debris
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "encount.h"
 
 #include "battle.h"
@@ -224,9 +226,8 @@ InitEncounter (void)
 	s.frame = SegueFrame;
 	DrawStamp (&s);
 
-//    t.baseline.x = SIS_SCREEN_WIDTH >> 1;
 	t.baseline.x = (SIS_SCREEN_WIDTH >> 1) + 1;
-	t.baseline.y = 10 * RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = 10 << RESOLUTION_FACTOR; // JMS_GFX
 	t.align = ALIGN_CENTER;
 
 	SetContextFont (MicroFont);
@@ -238,7 +239,7 @@ InitEncounter (void)
 				// "ENCOUNTER IN"
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
-		t.baseline.y += 12 * RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y += 12 << RESOLUTION_FACTOR; // JMS_GFX
 		if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
 			t.pStr = GAME_STRING (NAVIGATION_STRING_BASE + 6);
 				// JMS: * Below *
@@ -256,12 +257,12 @@ InitEncounter (void)
 				// "ENCOUNTER AT"
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
-		t.baseline.y += 12 * RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y += 12 << RESOLUTION_FACTOR; // JMS_GFX
 		GetClusterName (CurStarDescPtr, buf);
 		t.pStr = buf;
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
-		t.baseline.y += 12 * RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y += 12 << RESOLUTION_FACTOR; // JMS_GFX
 		
 		// JMS: Orz space portal shenanigans. Don't display planet name.
 		if(CurStarDescPtr->Index == ORZ_SPACE_PORTAL_DEFINED)
@@ -296,16 +297,16 @@ InitEncounter (void)
 		HSHIPFRAG hStarShip, hNextShip;
 		POINT display_pt[] =
 		{
-			{ (10 * RESOLUTION_FACTOR),  (51 * RESOLUTION_FACTOR)},
-			{(-10 * RESOLUTION_FACTOR),  (51 * RESOLUTION_FACTOR)},
-			{ (33 * RESOLUTION_FACTOR),  (40 * RESOLUTION_FACTOR)},
-			{(-33 * RESOLUTION_FACTOR),  (40 * RESOLUTION_FACTOR)},
-			{ (49 * RESOLUTION_FACTOR),  (18 * RESOLUTION_FACTOR)},
-			{(-49 * RESOLUTION_FACTOR),  (18 * RESOLUTION_FACTOR)},
-			{ (52 * RESOLUTION_FACTOR),  (-6 * RESOLUTION_FACTOR)},
-			{(-52 * RESOLUTION_FACTOR),  (-6 * RESOLUTION_FACTOR)},
-			{ (44 * RESOLUTION_FACTOR),  (-27 * RESOLUTION_FACTOR)},
-			{(-44 * RESOLUTION_FACTOR),  (-27 * RESOLUTION_FACTOR)},
+			{ 10,  51},
+			{-10,  51},
+			{ 33,  40},
+			{-33,  40},
+			{ 49,  18},
+			{-49,  18},
+			{ 52,  -6},
+			{-52,  -6},
+			{ 44,  -27},
+			{-44,  -27},
 		};
 
 		for (hStarShip = GetHeadLink (&GLOBAL (npc_built_ship_q)), i = 0;
@@ -321,6 +322,9 @@ InitEncounter (void)
 				hNextShip = hStarShip;
 
 			s.origin = display_pt[i % NUM_DISPLAY_PTS];
+			s.origin.x = s.origin.x << RESOLUTION_FACTOR; // JMS_GFX
+			s.origin.y = s.origin.y << RESOLUTION_FACTOR; // JMS_GFX
+			
 			if (i >= NUM_DISPLAY_PTS)
 			{
 				COUNT angle, radius;
@@ -389,13 +393,13 @@ DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in,
 	};
 #define NUM_FADES (sizeof (fade_cycle) / sizeof (fade_cycle[0]))
 
-	t1.baseline.x = pRect->corner.x + 100 * RESOLUTION_FACTOR; // JMS_GFX
-	t1.baseline.y = pRect->corner.y + 45 * RESOLUTION_FACTOR; // JMS_GFX
+	t1.baseline.x = pRect->corner.x + (100 << RESOLUTION_FACTOR); // JMS_GFX
+	t1.baseline.y = pRect->corner.y + (45 << RESOLUTION_FACTOR); // JMS_GFX
 	t1.align = ALIGN_CENTER;
 	t1.pStr = str1;
 	t1.CharCount = (COUNT)~0;
 	t2 = t1;
-	t2.baseline.y += 11 * RESOLUTION_FACTOR; // JMS_GFX
+	t2.baseline.y += 11 << RESOLUTION_FACTOR; // JMS_GFX
 	t2.pStr = str2;
 
 	FlushInput ();
@@ -570,8 +574,8 @@ UninitEncounter (void)
 
 								DrawStatusMessage ((UNICODE *)~0);
 								
-								ship_s.origin.x = scavenge_r.corner.x + 32 * RESOLUTION_FACTOR; // JMS_GFX
-								ship_s.origin.y = scavenge_r.corner.y + 56 * RESOLUTION_FACTOR; // JMS_GFX
+								ship_s.origin.x = scavenge_r.corner.x + (32 << RESOLUTION_FACTOR); // JMS_GFX
+								ship_s.origin.y = scavenge_r.corner.y + (56 << RESOLUTION_FACTOR); // JMS_GFX
 								ship_s.frame = IncFrameIndex (FragPtr->icons);
 								DrawStamp (&ship_s);
 								SetContextForeGroundColor (
@@ -583,13 +587,13 @@ UninitEncounter (void)
 								// XXX: this will not work with UTF-8 strings
 								strupr (buf);
 
-								t.baseline.x = scavenge_r.corner.x + 100 * RESOLUTION_FACTOR; // JMS_GFX
-								t.baseline.y = scavenge_r.corner.y + 68 * RESOLUTION_FACTOR; // JMS_GFX
+								t.baseline.x = scavenge_r.corner.x + (100 << RESOLUTION_FACTOR); // JMS_GFX
+								t.baseline.y = scavenge_r.corner.y + (68 << RESOLUTION_FACTOR); // JMS_GFX
 								t.align = ALIGN_CENTER;
 								t.pStr = buf;
 								t.CharCount = (COUNT)~0;
 								font_DrawText (&t);
-								t.baseline.y += 6 * RESOLUTION_FACTOR; // JMS_GFX
+								t.baseline.y += 6 << RESOLUTION_FACTOR; // JMS_GFX
 								t.pStr = GAME_STRING (
 										ENCOUNTER_STRING_BASE + 3);
 										// "BATTLE GROUP"
@@ -608,15 +612,15 @@ UninitEncounter (void)
 								DrawFadeText (str1, str2, TRUE, &scavenge_r);
 							}
 
-							r.corner.y = scavenge_r.corner.y + 9 * RESOLUTION_FACTOR; // JMS_GFX
-							r.extent.height = 22 * RESOLUTION_FACTOR; // JMS_GFX
+							r.corner.y = scavenge_r.corner.y + (9 << RESOLUTION_FACTOR); // JMS_GFX
+							r.extent.height = 22 << RESOLUTION_FACTOR; // JMS_GFX
 
 							SetContextForeGroundColor (BLACK_COLOR);
 
-							r.extent.width = 34 * RESOLUTION_FACTOR; // JMS_GFX
+							r.extent.width = 34 << RESOLUTION_FACTOR; // JMS_GFX
 							r.corner.x = scavenge_r.corner.x +
 									scavenge_r.extent.width
-									- (10 * RESOLUTION_FACTOR + r.extent.width); // JMS_GFX
+									- ((10 << RESOLUTION_FACTOR) + r.extent.width); // JMS_GFX
 							DrawFilledRectangle (&r);
 
 							/* collect bounty ResUnits */
@@ -624,7 +628,7 @@ UninitEncounter (void)
 							RecycleAmount += j;
 							sprintf (buf, "%u", RecycleAmount);
 							t.baseline.x = r.corner.x + r.extent.width - 1;
-							t.baseline.y = r.corner.y + 14 * RESOLUTION_FACTOR; // JMS_GFX
+							t.baseline.y = r.corner.y + (14 << RESOLUTION_FACTOR); // JMS_GFX
 							t.align = ALIGN_RIGHT;
 							t.pStr = buf;
 							t.CharCount = (COUNT)~0;
@@ -634,17 +638,17 @@ UninitEncounter (void)
 							DeltaSISGauges (0, 0, j);
 
 							if ((VictoryState++ - 1) % MAX_DEAD_DISPLAYED)
-								ship_s.origin.x += 17 * RESOLUTION_FACTOR; // JMS_GFX
+								ship_s.origin.x += 17 << RESOLUTION_FACTOR; // JMS_GFX
 							else
 							{
 								SetContextForeGroundColor (BLACK_COLOR);
 
-								r.corner.x = scavenge_r.corner.x + 10 * RESOLUTION_FACTOR; // JMS_GFX
-								r.extent.width = 104 * RESOLUTION_FACTOR; // JMS_GFX
+								r.corner.x = scavenge_r.corner.x + (10 << RESOLUTION_FACTOR); // JMS_GFX
+								r.extent.width = (104 << RESOLUTION_FACTOR); // JMS_GFX
 								DrawFilledRectangle (&r);
 
-								ship_s.origin.x = r.corner.x + 2 * RESOLUTION_FACTOR; // JMS_GFX
-								ship_s.origin.y = scavenge_r.corner.y + 12 * RESOLUTION_FACTOR; // JMS_GFX
+								ship_s.origin.x = r.corner.x + (2 << RESOLUTION_FACTOR); // JMS_GFX
+								ship_s.origin.y = scavenge_r.corner.y + (12 << RESOLUTION_FACTOR); // JMS_GFX
 							}
 
 							if (Sleepy)
@@ -698,13 +702,13 @@ UninitEncounter (void)
 				if (!CurrentInputState.key[PlayerControls[0]][KEY_ESCAPE])
 				{
 					SetContextForeGroundColor (BLACK_COLOR);
-					r.corner.x = scavenge_r.corner.x + 10 * RESOLUTION_FACTOR; // JMS_GFX
-					r.extent.width = 132 * RESOLUTION_FACTOR; // JMS_GFX
+					r.corner.x = scavenge_r.corner.x + (10 << RESOLUTION_FACTOR); // JMS_GFX
+					r.extent.width = 132 << RESOLUTION_FACTOR; // JMS_GFX
 					DrawFilledRectangle (&r);
 					sprintf (buf, "%u %s", RecycleAmount,
 							GAME_STRING (STATUS_STRING_BASE + 1)); // "RU"
 					t.baseline.x = r.corner.x + (r.extent.width >> 1);
-					t.baseline.y = r.corner.y + 14 * RESOLUTION_FACTOR; // JMS_GFX
+					t.baseline.y = r.corner.y + (14 << RESOLUTION_FACTOR); // JMS_GFX
 					t.align = ALIGN_CENTER;
 					t.pStr = buf;
 					t.CharCount = (COUNT)~0;

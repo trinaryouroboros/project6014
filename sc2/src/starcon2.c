@@ -18,6 +18,8 @@
 
 // JMS 2010: If uqm.cfg is not found (running for the first time), start in full-screen mode to prevent color bug on OSX
 
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
+
 #ifdef HAVE_UNISTD_H
 #	include <unistd.h>
 #endif
@@ -129,6 +131,7 @@ struct options_struct
 	DECL_CONFIG_OPTION(float, sfxVolumeScale);
 	DECL_CONFIG_OPTION(float, speechVolumeScale);
 	DECL_CONFIG_OPTION(bool, safeMode);
+	DECL_CONFIG_OPTION(int, resolutionFactor); // JMS_GFX
 
 #define INIT_CONFIG_OPTION(name, val) \
 	{ val, false }
@@ -248,7 +251,7 @@ main (int argc, char *argv[])
 		INIT_CONFIG_OPTION(  soundDriver,       audio_DRIVER_MIXSDL ),
 		INIT_CONFIG_OPTION(  soundQuality,      audio_QUALITY_MEDIUM ),
 		INIT_CONFIG_OPTION(  use3doMusic,       true ),
-		INIT_CONFIG_OPTION(  usePrecursorsMusic,     false ),
+		INIT_CONFIG_OPTION(  usePrecursorsMusic,false ),
 		INIT_CONFIG_OPTION(  whichCoarseScan,   OPT_PC ),
 		INIT_CONFIG_OPTION(  whichMenu,         OPT_PC ),
 		INIT_CONFIG_OPTION(  whichFonts,        OPT_PC ),
@@ -262,6 +265,7 @@ main (int argc, char *argv[])
 		INIT_CONFIG_OPTION(  sfxVolumeScale,    1.0f ),
 		INIT_CONFIG_OPTION(  speechVolumeScale, 1.0f ),
 		INIT_CONFIG_OPTION(  safeMode,          false ),
+		INIT_CONFIG_OPTION(  resolutionFactor,  0 ),
 	};
 	struct options_struct defaults = options;
 	int optionsResult;
@@ -386,7 +390,7 @@ main (int argc, char *argv[])
 	optAddons = options.addons;
 	
 	// JMS_GFX
-	resolutionFactor = 1; //resolutionFactor = options.resolutionFactor; // JMS_DEMO
+	resolutionFactor = (unsigned int) options.resolutionFactor.value; // JMS_GFX
 	resFactorWasChanged = FALSE;
 	
 	prepareContentDir (options.contentDir, options.addonDir, argv[0]);
@@ -418,8 +422,7 @@ main (int argc, char *argv[])
 		gfxFlags |= TFB_GFXFLAGS_SCANLINES;
 	if (options.showFps.value)
 		gfxFlags |= TFB_GFXFLAGS_SHOWFPS;
-	TFB_InitGraphics (gfxDriver, gfxFlags, options.resolution.width,
-			options.resolution.height);
+	TFB_InitGraphics (gfxDriver, gfxFlags, options.resolution.width, options.resolution.height, resolutionFactor); // JMS_GFX: added resolutionFactor
 	if (options.gamma.set)
 		TFB_SetGamma (options.gamma.value);
 	InitColorMaps ();
@@ -614,6 +617,13 @@ getUserConfigOptions (struct options_struct *options)
 	getVolumeConfigValue (&options->sfxVolumeScale, "config.sfxvol");
 	getVolumeConfigValue (&options->speechVolumeScale, "config.speechvol");
 	
+	// JMS_GFX
+	if (res_IsInteger ("config.resolutionfactor") && !options->resolutionFactor.set)
+	{
+		options->resolutionFactor.value = res_GetInteger ("config.resolutionfactor");
+		options->resolutionFactor.set = true;
+	}
+	
 	if (res_IsInteger ("config.player1control"))
 	{
 		PlayerControls[0] = res_GetInteger ("config.player1control");
@@ -659,6 +669,7 @@ enum
 	NETPORT2_OPT,
 	NETDELAY_OPT,
 #endif
+	RESFACTOR_OPT, // JMS_GFX
 };
 
 static const char *optString = "+r:foc:b:spC:n:?hM:S:T:m:q:ug:l:i:vwxk";
@@ -706,6 +717,7 @@ static struct option longOptions[] =
 	{"netport2", 1, NULL, NETPORT2_OPT},
 	{"netdelay", 1, NULL, NETDELAY_OPT},
 #endif
+	{"resfactor", 1, NULL, RESFACTOR_OPT}, // JMS_GFX
 	{0, 0, 0, 0}
 };
 
@@ -1025,6 +1037,26 @@ parseOptions (int argc, char *argv[], struct options_struct *options)
 				break;
 			}
 #endif
+			// JMS_GFX: Added the whole following case. It checks whether the resolutinfactor value is sane.
+			case RESFACTOR_OPT:
+			{
+				int temp;
+				if (parseIntOption (optarg, &temp, "resolution factor")
+					== -1)
+				{
+					badArg = true;
+					break;
+				}
+				options->resolutionFactor.value = temp;
+				
+				if (options->resolutionFactor.value > 2)
+				{
+					saveError ("Resolution factor has to be 0, 1 or 2.");
+					badArg = true;
+				}
+				options->resolutionFactor.set = true;
+				break;
+			}
 			default:
 				log_add (log_Fatal, "Error: Invalid option '%s' not found.",
 							longOptions[optionIndex].name);

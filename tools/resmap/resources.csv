@@ -183,7 +183,8 @@ MENU_SOUNDS,sounds.menu,sc2code/isndres.h,SNDRES,base/ui/menu.snd
 GAME_SOUNDS,sounds.game,sc2code/isndres.h,SNDRES,base/battle/gamesnd.snd
 LANDER_SOUNDS,sounds.landsnds,sc2code/isndres.h,SNDRES,base/lander/lander.snd
 TITLE_ANIM,graphics.title,sc2code/igfxres.h,GFXRES,base/ui/title.ani
-TITLE_ANIM_HIRES,graphics.title_hires,sc2code/igfxres.h,GFXRES,base/ui/title_hires.ani
+TITLE_2X,graphics.title2x,sc2code/igfxres.h,GFXRES,base/ui/title2x.ani
+TITLE_4X,graphics.title4x,sc2code/igfxres.h,GFXRES,base/ui/title4x.ani
 STATUS_MASK_PMAP_ANIM,graphics.status,sc2code/igfxres.h,GFXRES,base/ui/status.ani
 ACTIVITY_ANIM,graphics.activity,sc2code/igfxres.h,GFXRES,base/ui/activity.ani
 PLAYMENU_ANIM,graphics.playmenu,sc2code/igfxres.h,GFXRES,base/ui/playmenu.ani
@@ -295,6 +296,8 @@ SEGUE_ORZSPACEPORTAL_ANIM,graphics.segue_orzspaceportal,sc2code/igfxres.h,GFXRES
 SC2_PICK_PMAP_ANIM,graphics.pickship,sc2code/igfxres.h,GFXRES,base/ui/pickship.ani
 BULLETHOLES_PMAP_ANIM,graphics.bulletholes,sc2code/igfxres.h,GFXRES,base/ui/bullet.ani
 RESTART_PMAP_ANIM,graphics.newgame,sc2code/igfxres.h,GFXRES,base/ui/newgame.ani
+RESTART_PMAP_ANIM2X,graphics.newgame2x,sc2code/igfxres.h,GFXRES,base/ui/newgame2x.ani
+RESTART_PMAP_ANIM4X,graphics.newgame4x,sc2code/igfxres.h,GFXRES,base/ui/newgame4x.ani
 MODULES_PMAP_ANIM,graphics.modules,sc2code/igfxres.h,GFXRES,base/ui/modules.ani
 SISMODS_MASK_PMAP_ANIM,graphics.sismods,sc2code/igfxres.h,GFXRES,base/ui/sismodules.ani
 OUTFIT_PMAP_ANIM,graphics.outfit,sc2code/igfxres.h,GFXRES,base/ui/outfit.ani

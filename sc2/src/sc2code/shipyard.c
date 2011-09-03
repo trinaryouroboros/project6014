@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "build.h"
 #include "colors.h"
 #include "controls.h"
@@ -37,6 +39,8 @@
 #include "libs/graphics/gfx_common.h"
 #include "libs/inplib.h"
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 static void BeginHangarAnim (MENU_STATE *pMS);
 static void EndHangarAnim (MENU_STATE *pMS);
 
@@ -54,8 +58,8 @@ static const COORD hangar_x_coords[HANGAR_SHIPS_ROW] =
 #else // use PC hangar
 // modified PC 6x2 hangar layout
 #	define HANGAR_SHIPS_ROW  6
-#	define HANGAR_Y          116
-#	define HANGAR_DY         84
+#	define HANGAR_Y          (116 << RESOLUTION_FACTOR) // JMS_GFX
+#	define HANGAR_DY         (84 << RESOLUTION_FACTOR) // JMS_GFX
 
 static const COORD hangar_x_coords[HANGAR_SHIPS_ROW] =
 {
@@ -261,8 +265,8 @@ DrawRaceStrings (BYTE NewRaceItem)
 	UnlockMutex (GraphicsLock);
 }
 
-#define SHIP_WIN_WIDTH 34
-#define SHIP_WIN_HEIGHT (SHIP_WIN_WIDTH + 6)
+#define SHIP_WIN_WIDTH (34 << RESOLUTION_FACTOR) // JMS_GFX
+#define SHIP_WIN_HEIGHT (SHIP_WIN_WIDTH + (6 << RESOLUTION_FACTOR)) // JMS_GFX
 #define SHIP_WIN_FRAMES ((SHIP_WIN_WIDTH >> 1) + 1)
 
 static void
@@ -341,7 +345,7 @@ ShowCombatShip (COUNT which_window, SHIP_FRAGMENT *YankedStarShipPtr)
 		pship_win_info->ship_s.frame = YankedStarShipPtr->melee_icon;
 
 		pship_win_info->finished_s.x = hangar_x_coords[
-				which_window % HANGAR_SHIPS_ROW];
+				which_window % HANGAR_SHIPS_ROW] << RESOLUTION_FACTOR; // JMS_GFX;
 		pship_win_info->finished_s.y = HANGAR_Y + (HANGAR_DY *
 				(which_window / HANGAR_SHIPS_ROW));
 	}
@@ -403,7 +407,7 @@ ShowCombatShip (COUNT which_window, SHIP_FRAGMENT *YankedStarShipPtr)
 
 			which_window = StarShipPtr->index;
 			pship_win_info->finished_s.x = hangar_x_coords[
-					which_window % HANGAR_SHIPS_ROW];
+					which_window % HANGAR_SHIPS_ROW] << RESOLUTION_FACTOR; // JMS_GFX
 			pship_win_info->finished_s.y = HANGAR_Y + (HANGAR_DY *
 					(which_window / HANGAR_SHIPS_ROW));
 			++pship_win_info;
@@ -778,7 +782,7 @@ DoModifyShips (MENU_STATE *pMS)
 							r.corner.y = pMS->flash_rect0.corner.y
 									+ pMS->flash_rect0.extent.height - 6;
 							r.extent.width = SHIP_WIN_WIDTH;
-							r.extent.height = 5;
+							r.extent.height = 5 << RESOLUTION_FACTOR; // JMS_GFX
 							SetContext (SpaceContext);
 							SetFlashRect (&r, (FRAME)0);
 							UnlockMutex (GraphicsLock);
@@ -873,7 +877,7 @@ DoModifyShips (MENU_STATE *pMS)
 						r.corner.y = pMS->flash_rect0.corner.y
 								+ pMS->flash_rect0.extent.height - 6;
 						r.extent.width = SHIP_WIN_WIDTH;
-						r.extent.height = 5;
+						r.extent.height = (5 << RESOLUTION_FACTOR); // JMS_GFX
 						SetContext (SpaceContext);
 						SetFlashRect (&r, (FRAME)0);
 						SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN,
@@ -944,7 +948,7 @@ DoModifyShips (MENU_STATE *pMS)
 								r.corner.y = pMS->flash_rect0.corner.y
 										+ pMS->flash_rect0.extent.height - 6;
 								r.extent.width = SHIP_WIN_WIDTH;
-								r.extent.height = 5;
+								r.extent.height = 5 << RESOLUTION_FACTOR; // JMS_GFX
 								SetContext (SpaceContext);
 								SetFlashRect (&r, (FRAME)0);
 							}
@@ -1007,7 +1011,7 @@ DoModifyShips (MENU_STATE *pMS)
 							r.corner.y = pMS->flash_rect0.corner.y
 									+ pMS->flash_rect0.extent.height - 6;
 							r.extent.width = SHIP_WIN_WIDTH;
-							r.extent.height = 5;
+							r.extent.height = 5 << RESOLUTION_FACTOR; // JMS_GFX
 							SetContext (SpaceContext);
 							SetFlashRect (&r, (FRAME)0);
 						}
@@ -1047,12 +1051,12 @@ ChangeFlashRect:
 					pMS->flash_rect0.corner.x =
 							pMS->flash_rect0.corner.y = 0;
 					pMS->flash_rect0.extent.width = SIS_SCREEN_WIDTH;
-					pMS->flash_rect0.extent.height = 61;
+					pMS->flash_rect0.extent.height = (61 << RESOLUTION_FACTOR); // JMS_GFX
 				}
 				else
 				{
 					pMS->flash_rect0.corner.x = hangar_x_coords[
-							pMS->CurState % HANGAR_SHIPS_ROW];
+							pMS->CurState % HANGAR_SHIPS_ROW] << RESOLUTION_FACTOR; // JMS_GFX
 					pMS->flash_rect0.corner.y = HANGAR_Y + (HANGAR_DY *
 							(pMS->CurState / HANGAR_SHIPS_ROW));
 					pMS->flash_rect0.extent.width = SHIP_WIN_WIDTH;
@@ -1146,8 +1150,8 @@ DrawBluePrint (MENU_STATE *pMS)
 	  num_frames = GLOBAL_SIS (TotalElementMass);
 	  GLOBAL_SIS (TotalElementMass) = 0;
 	  
-	  r.extent.width = 5;
-	  r.extent.height = 1;
+	  r.extent.width = 5 << RESOLUTION_FACTOR; // JMS_GFX
+	  r.extent.height = 1 << RESOLUTION_FACTOR; // JMS_GFX
 	  while (num_frames)
 	    {
 	      COUNT m;
@@ -1158,7 +1162,7 @@ DrawBluePrint (MENU_STATE *pMS)
 	      GetSBayCapacity (&r.corner);
 	      if (r.corner.x == 40)
 		{
-		  r.extent.width = 3;
+		  r.extent.width = 3 << RESOLUTION_FACTOR; // JMS_GFX
 		}
 	      // BW: kinda hacky but the original procedure is not really logical either...
 	      DrawFilledRectangle (&r);
@@ -1172,8 +1176,8 @@ DrawBluePrint (MENU_STATE *pMS)
 	  num_frames = GLOBAL_SIS (TotalElementMass);
 	  GLOBAL_SIS (TotalElementMass) = 0;
 	  
-	  r.extent.width = 9;
-	  r.extent.height = 1;
+	  r.extent.width = 9 << RESOLUTION_FACTOR; // JMS_GFX
+	  r.extent.height = 1 << RESOLUTION_FACTOR; // JMS_GFX
 	  while (num_frames)
 	    {
 	      COUNT m;

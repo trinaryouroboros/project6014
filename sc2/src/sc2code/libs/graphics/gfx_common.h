@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
+
 #ifndef GFX_COMMON_H
 #define GFX_COMMON_H
 
@@ -63,7 +65,7 @@ enum
 extern int GfxFlags;
 
 void TFB_PreInit (void);
-int TFB_InitGraphics (int driver, int flags, int width, int height);
+int TFB_InitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor); // JMS_GFX: Added resolutionFactor
 void TFB_UninitGraphics (void);
 void TFB_ProcessEvents (void);
 
@@ -96,7 +98,7 @@ void TFB_SetGamma (float gamma);
 // Unknown Stuff
 
 // JMS_GFX
-extern int resolutionFactor;
+extern unsigned int resolutionFactor;
 
 extern int ScreenWidth;
 extern int ScreenHeight;

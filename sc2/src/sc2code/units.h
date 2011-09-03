@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #ifndef _UNITS_H
 #define _UNITS_H
 
@@ -23,19 +25,27 @@
 
 extern int ScreenWidth;
 extern int ScreenHeight;
-extern int resolutionFactor; // JMS_GFX
+extern unsigned int resolutionFactor; // JMS_GFX
 
+				/* Most basic resolution units. */
 #define SCREEN_WIDTH ScreenWidth
 #define SCREEN_HEIGHT ScreenHeight
-#define RESOLUTION_FACTOR resolutionFactor // JMS_GFX
+#define RESOLUTION_FACTOR resolutionFactor														// JMS_GFX
+#define RES_CASE(a,b,c) (RESOLUTION_FACTOR == 0 ? (a) : (RESOLUTION_FACTOR == 1 ? (b) : (c)))	// JMS_GFX
+#define RES_STAT_SCALE(a) (RESOLUTION_FACTOR < 2 ? ((a) << RESOLUTION_FACTOR) : ((a) * 3))		// JMS_GFX
 
+				/* Margins. */
 #define SAFE_X 0
-#define SIS_ORG_X (7 * RESOLUTION_FACTOR + SAFE_X) // JMS_GFX
-		/* Left and right screen margin to be left unused */
+	/* Left and right screen margin to be left unused */
 #define SAFE_Y 0
-#define SIS_ORG_Y (10 * RESOLUTION_FACTOR + SAFE_Y) // JMS_GFX
-		/* Top and bottom screen margin to be left unused */
-#define STATUS_WIDTH (64 * RESOLUTION_FACTOR) // JMS_GFX
+	/* Top and bottom screen margin to be left unused */
+#define SIS_ORG_X (7 + SAFE_X)								// JMS_GFX
+	//#define SIS_ORG_X (7 * RESOLUTION_FACTOR + SAFE_X)	// JMS_GFX
+#define SIS_ORG_Y RES_CASE(10, 20, 30)						// DC: top status window. Manually entered in for 4x mode.
+	//#define SIS_ORG_Y (10 * RESOLUTION_FACTOR + SAFE_Y)	// JMS_GFX
+
+				/* Status bar & play area sizes. */
+#define STATUS_WIDTH RES_STAT_SCALE(64)
 		/* Width of the status "window" (the right part of the screen) */
 #define STATUS_HEIGHT (SCREEN_HEIGHT - (SAFE_Y * 2))
 		/* Height of the status "window" (the right part of the screen) */
@@ -43,11 +53,34 @@ extern int resolutionFactor; // JMS_GFX
 		/* Width of the space "window" (the left part of the screen) */
 #define SPACE_HEIGHT (SCREEN_HEIGHT - (SAFE_Y * 2))
 		/* Height of the space "window" (the left part of the screen) */
-#define SIS_SCREEN_WIDTH (SPACE_WIDTH - (14 * RESOLUTION_FACTOR)) // JMS_GFX
+#define SIS_SCREEN_WIDTH (SPACE_WIDTH - 2 * SIS_ORG_X) // DC: Gray area on the right. just a spacer box
 		/* Width of the usable part of the space "window" */
-#define SIS_SCREEN_HEIGHT (SPACE_HEIGHT - (13 * RESOLUTION_FACTOR)) // JMS_GFX
-		/* Height of the usable part of the space "window" */
+#define SIS_SCREEN_HEIGHT (SPACE_HEIGHT - RES_CASE(3,6,6) - RES_CASE(10,20,30)) // JMS_GFX
+		/* Height of the usable part of the space "window": 3, 6, 6 for the grey bottom border and 10, 20, 30 for the title */
 
+				/* Radar. */
+#define RADAR_X (RES_STAT_SCALE(4) + (SCREEN_WIDTH - STATUS_WIDTH - SAFE_X))	// JMS_GFX
+#define RADAR_WIDTH (STATUS_WIDTH - RES_STAT_SCALE(8))							// JMS_GFX
+#define RADAR_HEIGHT RES_STAT_SCALE(53)											// JMS_GFX
+#define RADAR_Y (SIS_ORG_Y + SIS_SCREEN_HEIGHT - (53 << RESOLUTION_FACTOR))		// JMS_GFX
+
+				/* Blue boxes which display messages and the green date box. */
+#define SIS_TITLE_BOX_WIDTH    (57 << RESOLUTION_FACTOR)						// JMS_GFX
+#define SIS_TITLE_WIDTH        (SIS_TITLE_BOX_WIDTH - (2 << RESOLUTION_FACTOR)) // JMS_GFX
+#define SIS_TITLE_HEIGHT       RES_CASE(8,16,22)								// JMS_GFX
+#define SIS_SPACER_BOX_WIDTH   (12 << RESOLUTION_FACTOR)						// JMS_GFX
+
+#define SIS_MESSAGE_BOX_WIDTH  (SIS_SCREEN_WIDTH - SIS_TITLE_BOX_WIDTH - SIS_SPACER_BOX_WIDTH)
+#define SIS_MESSAGE_WIDTH      (SIS_MESSAGE_BOX_WIDTH - 2)
+#define SIS_MESSAGE_HEIGHT     SIS_TITLE_HEIGHT
+
+#define STATUS_MESSAGE_WIDTH   (STATUS_WIDTH - RES_STAT_SCALE(4))				// JMS_GFX
+#define STATUS_MESSAGE_HEIGHT  (7 << RESOLUTION_FACTOR)							// JMS_GFX
+
+#define SHIP_NAME_WIDTH        (STATUS_WIDTH - RES_STAT_SCALE(4))				// JMS_GFX
+#define SHIP_NAME_HEIGHT       RES_STAT_SCALE(7)								// JMS_GFX
+
+				/* A lot of other shit. */
 #define MAX_REDUCTION 3
 #define MAX_VIS_REDUCTION 2
 #define REDUCTION_SHIFT 1
@@ -65,34 +98,95 @@ extern int resolutionFactor; // JMS_GFX
 #define DISPLAY_ALIGN_X(x) ((COORD)((COUNT)(x)%LOG_SPACE_WIDTH)&~(SCALED_ONE-1))
 #define DISPLAY_ALIGN_Y(y) ((COORD)((COUNT)(y)%LOG_SPACE_HEIGHT)&~(SCALED_ONE-1))
 
-#define LOG_SPACE_WIDTH \
-		(DISPLAY_TO_WORLD (SPACE_WIDTH) << MAX_REDUCTION)
-#define LOG_SPACE_HEIGHT \
-		(DISPLAY_TO_WORLD (SPACE_HEIGHT) << MAX_REDUCTION)
-#define TRANSITION_WIDTH \
-		(DISPLAY_TO_WORLD (SPACE_WIDTH) << MAX_VIS_REDUCTION)
-#define TRANSITION_HEIGHT \
-		(DISPLAY_TO_WORLD (SPACE_HEIGHT) << MAX_VIS_REDUCTION)
+#define LOG_SPACE_WIDTH   (DISPLAY_TO_WORLD (SPACE_WIDTH) << MAX_REDUCTION)
+#define LOG_SPACE_HEIGHT  (DISPLAY_TO_WORLD (SPACE_HEIGHT) << MAX_REDUCTION)
+#define TRANSITION_WIDTH  (DISPLAY_TO_WORLD (SPACE_WIDTH) << MAX_VIS_REDUCTION)
+#define TRANSITION_HEIGHT (DISPLAY_TO_WORLD (SPACE_HEIGHT) << MAX_VIS_REDUCTION)
 		
 #define MAX_X_UNIVERSE 9999
 #define MAX_Y_UNIVERSE 9999
 #define MAX_X_LOGICAL \
 		((UNIVERSE_TO_LOGX (MAX_X_UNIVERSE + 1) > UNIVERSE_TO_LOGX (-1) ? \
-				UNIVERSE_TO_LOGX (MAX_X_UNIVERSE + 1) : UNIVERSE_TO_LOGX (-1)) \
-				- 1L)
+				UNIVERSE_TO_LOGX (MAX_X_UNIVERSE + 1) : UNIVERSE_TO_LOGX (-1)) - 1L)
 #define MAX_Y_LOGICAL \
 		((UNIVERSE_TO_LOGY (MAX_Y_UNIVERSE + 1) > UNIVERSE_TO_LOGY (-1) ? \
-				UNIVERSE_TO_LOGY (MAX_Y_UNIVERSE + 1) : UNIVERSE_TO_LOGY (-1)) \
-				- 1L)
-
-// JMS_GFX: Not quite sure what these do... Something to do with the mapping of coordinates from one number system to another
-//
-#define SECTOR_WIDTH (195)
-#define SECTOR_HEIGHT (25)
+				UNIVERSE_TO_LOGY (MAX_Y_UNIVERSE + 1) : UNIVERSE_TO_LOGY (-1)) - 1L)
 
 #define SPHERE_RADIUS_INCREMENT 11
-
 #define MAX_FLEET_STRENGTH (254 * SPHERE_RADIUS_INCREMENT)
+
+// XXX: These corrected for the weird screen aspect ratio on DOS
+//   In part because of them, hyperflight is slower vertically
+#define UNIT_SCREEN_WIDTH ((63 << (COUNT)RESOLUTION_FACTOR) + (COUNT)RESOLUTION_FACTOR * 10) // JMS_GFX
+#define UNIT_SCREEN_HEIGHT ((50 << (COUNT)RESOLUTION_FACTOR) + (COUNT)RESOLUTION_FACTOR * 10) // JMS_GFX
+
+#define NORMALIZED_HYPERSPACE_SPEED // JMS_GFX
+
+// Bug #945: Simplified, these set the speed of SIS in Hyperspace and
+//   Quasispace. The ratio between UNIVERSE_UNITS_ and LOG_UNITS_ is
+//   what sets the speed, and it should be 1:16 to match the original.
+//   The unit factors are reduced to keep the translation math within
+//   32 bits. The original math is unnecessarily complex and depends
+//   on the screen resolution when it should not.
+//   Using the new math will break old savegames.
+#ifdef NORMALIZED_HYPERSPACE_SPEED
+#define LOG_UNITS_X      ((SDWORD)(UNIVERSE_UNITS_X * (16 << RESOLUTION_FACTOR))) // JMS_GFX
+#define LOG_UNITS_Y      ((SDWORD)(UNIVERSE_UNITS_Y * (16 << RESOLUTION_FACTOR))) // JMS_GFX 
+#define UNIVERSE_UNITS_X (((MAX_X_UNIVERSE + 1) >> 4))
+#define UNIVERSE_UNITS_Y (((MAX_Y_UNIVERSE + 1) >> 4))
+#else
+// Original (and now broken) Hyperspace speed factors
+#define SECTOR_WIDTH 195
+#define SECTOR_HEIGHT 25
+
+#define LOG_UNITS_X      ((SDWORD)(LOG_SPACE_WIDTH >> 4) * SECTOR_WIDTH)
+#define LOG_UNITS_Y      ((SDWORD)(LOG_SPACE_HEIGHT >> 4) * SECTOR_HEIGHT)
+#define UNIVERSE_UNITS_X (((MAX_X_UNIVERSE + 1) >> 4) * 10)
+#define UNIVERSE_UNITS_Y (((MAX_Y_UNIVERSE + 1) >> 4))
+#endif
+
+#define ROUNDING_ERROR(div)  ((div) >> 1)
+
+static inline SDWORD
+logxToUniverse (SDWORD lx)
+{
+	return (SDWORD) ((lx * UNIVERSE_UNITS_X + ROUNDING_ERROR(LOG_UNITS_X))
+					 / LOG_UNITS_X);
+}
+#define LOGX_TO_UNIVERSE(lx) \
+logxToUniverse (lx)
+static inline SDWORD
+logyToUniverse (SDWORD ly)
+{
+	return (SDWORD) (MAX_Y_UNIVERSE -
+					 ((ly * UNIVERSE_UNITS_Y + ROUNDING_ERROR(LOG_UNITS_Y))
+					  / LOG_UNITS_Y));
+}
+#define LOGY_TO_UNIVERSE(ly) \
+logyToUniverse (ly)
+static inline SDWORD
+universeToLogx (COORD ux)
+{
+	return (ux * LOG_UNITS_X + ROUNDING_ERROR(UNIVERSE_UNITS_X))
+	/ UNIVERSE_UNITS_X;
+}
+#define UNIVERSE_TO_LOGX(ux) \
+universeToLogx (ux)
+static inline SDWORD
+universeToLogy (COORD uy)
+{
+	return ((MAX_Y_UNIVERSE - uy) * LOG_UNITS_Y
+			+ ROUNDING_ERROR(UNIVERSE_UNITS_Y))
+	/ UNIVERSE_UNITS_Y;
+}
+#define UNIVERSE_TO_LOGY(uy) \
+universeToLogy (uy)
+
+			/* Here be old junk. */
+/*
+// Hyperspace speed factors (JMS: unused??)
+#define SECTOR_WIDTH (195)
+#define SECTOR_HEIGHT (25)
 
 #define UNIT_SCREEN_WIDTH 63
 #define UNIT_SCREEN_HEIGHT 50
@@ -133,6 +227,7 @@ universeToLogy (COORD uy)
 }
 #define UNIVERSE_TO_LOGY(uy) \
 		universeToLogy (uy)
+*/
 
 #define CIRCLE_SHIFT 6
 #define FULL_CIRCLE (1 << CIRCLE_SHIFT)

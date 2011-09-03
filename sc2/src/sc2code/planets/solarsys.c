@@ -21,6 +21,8 @@
 //			 -Option to add randomness to interplanetary background stars
 //			 -The flag which controls escaping enemies is zeroed now in uninitsolarsys
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+
 #include "colors.h"
 #include "controls.h"
 #include "encount.h"
@@ -1820,6 +1822,8 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 	DWORD rand_val;
 	STAMP s;
 	DWORD old_seed;
+	
+	COUNT num_of_stars; // JMS_GFX: Replaced NUM_BRT_DRAWN with this
 
 	SetContext (SpaceContext);
 	SetContextBackGroundColor (BLACK_COLOR);
@@ -1831,6 +1835,13 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 			MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000/*+(GLOBAL (GameClock).tick_count)*/,
 			CurStarDescPtr->star_pt.y - 6000/*+(GLOBAL (GameClock).tick_count <= 0)*/ ));
 
+	if (RESOLUTION_FACTOR == 0)	// JMS_GFX
+		num_of_stars = 30;		// JMS_GFX
+	if (RESOLUTION_FACTOR == 1)	// JMS_GFX
+		num_of_stars = 100;		// JMS_GFX
+	if (RESOLUTION_FACTOR == 2)	// JMS_GFX
+		num_of_stars = 200;		// JMS_GFX
+	
 #define NUM_DIM_PIECES 8
 	s.frame = SpaceJunkFrame;
 	for (i = 0; i < NUM_DIM_PIECES; ++i)
@@ -1849,8 +1860,8 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 #define NUM_BRT_PIECES 8
 	for (i = 0; i < NUM_BRT_PIECES; ++i)
 	{
-#define NUM_BRT_DRAWN 30
-		for (j = 0; j < NUM_BRT_DRAWN; ++j)
+//#define NUM_BRT_DRAWN 30
+		for (j = 0; j < num_of_stars /*NUM_BRT_DRAWN*/; ++j)
 		{
 			rand_val = TFB_Random ();
 			s.origin.x = LOWORD (rand_val) % SIS_SCREEN_WIDTH;

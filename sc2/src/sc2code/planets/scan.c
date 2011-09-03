@@ -20,6 +20,7 @@
 //			 -Certain star systems can have more than one energy blip graphics on planet surface simultaneously
 //			 -If black orb is found and the lander returned to Explorer ship, initiate cutscene.
 
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "build.h"
 #include "cons_res.h"
@@ -73,20 +74,20 @@ static void
 EraseCoarseScan (void)
 {
 	RECT r, tr;
-	const int leftScanWidth   = (80 * RESOLUTION_FACTOR); // JMS_GFX
-	const int rightScanWidth  = (80 * RESOLUTION_FACTOR); // JMS_GFX
-	const int leftScanOffset  = (5 * RESOLUTION_FACTOR); // JMS_GFX
-	const int rightScanOffset = (50 * RESOLUTION_FACTOR); // JMS_GFX
-	const int nameEraseWidth = (SIS_SCREEN_WIDTH - 2 * RESOLUTION_FACTOR); // JMS_GFX
+	const int leftScanWidth   = 80 << RESOLUTION_FACTOR; // JMS_GFX
+	const int rightScanWidth  = 80 << RESOLUTION_FACTOR; // JMS_GFX
+	const int leftScanOffset  = 5 << RESOLUTION_FACTOR; // JMS_GFX
+	const int rightScanOffset = 50 << RESOLUTION_FACTOR; // JMS_GFX
+	const int nameEraseWidth = (SIS_SCREEN_WIDTH - (2 << RESOLUTION_FACTOR)); // JMS_GFX
 
 	LockMutex (GraphicsLock);
 	SetContext (SpaceContext);
 
 	// Erase planet name
 	r.corner.x = (SIS_SCREEN_WIDTH >> 1) - (nameEraseWidth >> 1);
-	r.corner.y = (13 - 10) * RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y = (13 - 10) << RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.width = nameEraseWidth;
-	r.extent.height = 14 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.height = 14 << RESOLUTION_FACTOR; // JMS_GFX
 	RepairBackRect (&r);
 
 	// Erase left side (Orbit, atmo, temp...)
@@ -136,7 +137,7 @@ MakeScanValue (UNICODE *buf, long val, const UNICODE *extra)
 static void
 PrintCoarseScanPC (void)
 {
-#define SCAN_LEADING_PC (14 * RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_LEADING_PC (14 << RESOLUTION_FACTOR) // JMS_GFX
 	SDWORD val;
 	TEXT t;
 	RECT r;
@@ -205,7 +206,7 @@ PrintCoarseScanPC (void)
 
 	t.align = ALIGN_CENTER;
 	t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-	t.baseline.y = 13 * RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = 13 << RESOLUTION_FACTOR; // JMS_GFX
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
@@ -217,9 +218,9 @@ PrintCoarseScanPC (void)
 	SetContextFont (TinyFont);
 	UnlockMutex (GraphicsLock);
 
-#define LEFT_SIDE_BASELINE_X_PC (5 * RESOLUTION_FACTOR) // JMS_GFX
-#define RIGHT_SIDE_BASELINE_X_PC (SIS_SCREEN_WIDTH - (75 * RESOLUTION_FACTOR)) // JMS_GFX
-#define SCAN_BASELINE_Y_PC (40 * RESOLUTION_FACTOR) // JMS_GFX
+#define LEFT_SIDE_BASELINE_X_PC (5 << RESOLUTION_FACTOR) // JMS_GFX
+#define RIGHT_SIDE_BASELINE_X_PC (SIS_SCREEN_WIDTH - (75 << RESOLUTION_FACTOR)) // JMS_GFX
+#define SCAN_BASELINE_Y_PC (40 << RESOLUTION_FACTOR) // JMS_GFX
 
 	t.baseline.y = SCAN_BASELINE_Y_PC;
 	t.align = ALIGN_LEFT;
@@ -378,7 +379,7 @@ PrintCoarseScanPC (void)
 static void
 PrintCoarseScan3DO (void)
 {
-#define SCAN_LEADING (19 * RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_LEADING (19 << RESOLUTION_FACTOR) // JMS_GFX
 	SDWORD val;
 	TEXT t;
 	STAMP s;
@@ -446,7 +447,7 @@ PrintCoarseScan3DO (void)
 
 	t.align = ALIGN_CENTER;
 	t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-	t.baseline.y = 13 * RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = 13 << RESOLUTION_FACTOR; // JMS_GFX
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
@@ -456,15 +457,15 @@ PrintCoarseScan3DO (void)
 	font_DrawText (&t);
 
 	s.origin.x = s.origin.y = 0;
-	s.origin.x = (16 - SAFE_X) * RESOLUTION_FACTOR; // JMS_GFX
+	s.origin.x = (16 - SAFE_X) << RESOLUTION_FACTOR; // JMS_GFX
 	s.frame = SetAbsFrameIndex (SpaceJunkFrame, 20);
 	DrawStamp (&s);
 
 	UnlockMutex (GraphicsLock);
 
-#define LEFT_SIDE_BASELINE_X ((27 + (16 - SAFE_X)) * RESOLUTION_FACTOR) // JMS_GFX
-#define RIGHT_SIDE_BASELINE_X ((SIS_SCREEN_WIDTH - LEFT_SIDE_BASELINE_X) * RESOLUTION_FACTOR) // JMS_GFX
-#define SCAN_BASELINE_Y (25 * RESOLUTION_FACTOR) // JMS_GFX
+#define LEFT_SIDE_BASELINE_X ((27 + (16 - SAFE_X)) << RESOLUTION_FACTOR) // JMS_GFX
+#define RIGHT_SIDE_BASELINE_X ((SIS_SCREEN_WIDTH - LEFT_SIDE_BASELINE_X) << RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_BASELINE_Y (25 << RESOLUTION_FACTOR) // JMS_GFX
 
 	t.baseline.x = LEFT_SIDE_BASELINE_X;
 	t.baseline.y = SCAN_BASELINE_Y;
@@ -856,10 +857,10 @@ ExitPlanetSide:
 
 		new_pt = pSolarSysState->MenuState.first_item;
 
-		if (PulsedInputState.menu[KEY_MENU_LEFT]) dx = -1;
-		if (PulsedInputState.menu[KEY_MENU_RIGHT]) dx = 1;
-		if (PulsedInputState.menu[KEY_MENU_UP]) dy = -1;
-		if (PulsedInputState.menu[KEY_MENU_DOWN]) dy = 1;
+		if (PulsedInputState.menu[KEY_MENU_LEFT]) dx = -(1 + RESOLUTION_FACTOR); // JMS_GFX
+		if (PulsedInputState.menu[KEY_MENU_RIGHT]) dx = (1 + RESOLUTION_FACTOR); // JMS_GFX
+		if (PulsedInputState.menu[KEY_MENU_UP]) dy = -(1 + RESOLUTION_FACTOR);	 // JMS_GFX
+		if (PulsedInputState.menu[KEY_MENU_DOWN]) dy = (1 + RESOLUTION_FACTOR);	 // JMS_GFX
 
 		dx = dx << MAG_SHIFT;
 		if (dx)
@@ -1106,7 +1107,7 @@ DoScan (MENU_STATE *pMS)
 			LockMutex (GraphicsLock);
 			SetContext (SpaceContext);
 			r.corner.x = 0;
-			r.corner.y = t.baseline.y - 10 * RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.y = t.baseline.y - (10 << RESOLUTION_FACTOR); // JMS_GFX
 			r.extent.width = SIS_SCREEN_WIDTH;
 			r.extent.height = t.baseline.y - r.corner.y + 1;
 			RepairBackRect (&r);
@@ -1191,7 +1192,7 @@ DoScan (MENU_STATE *pMS)
 		LockMutex (GraphicsLock);
 		SetContext (SpaceContext);
 		r.corner.x = 0;
-		r.corner.y = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7) - 10 * RESOLUTION_FACTOR; // JMS_GFX;
+		r.corner.y = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7) - (10 << RESOLUTION_FACTOR); // JMS_GFX;
 		r.extent.width = SIS_SCREEN_WIDTH;
 		r.extent.height = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7)
 				- r.corner.y + 1;
