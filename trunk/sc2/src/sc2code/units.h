@@ -78,11 +78,11 @@ extern int resolutionFactor; // JMS_GFX
 #define MAX_Y_UNIVERSE 9999
 #define MAX_X_LOGICAL \
 		((UNIVERSE_TO_LOGX (MAX_X_UNIVERSE + 1) > UNIVERSE_TO_LOGX (-1) ? \
-				UNIVERSE_TO_LOGX (MAX_X_UNIVERSE) : UNIVERSE_TO_LOGX (-1)) \
+				UNIVERSE_TO_LOGX (MAX_X_UNIVERSE + 1) : UNIVERSE_TO_LOGX (-1)) \
 				- 1L)
 #define MAX_Y_LOGICAL \
 		((UNIVERSE_TO_LOGY (MAX_Y_UNIVERSE + 1) > UNIVERSE_TO_LOGY (-1) ? \
-				UNIVERSE_TO_LOGY (MAX_Y_UNIVERSE) : UNIVERSE_TO_LOGY (-1)) \
+				UNIVERSE_TO_LOGY (MAX_Y_UNIVERSE + 1) : UNIVERSE_TO_LOGY (-1)) \
 				- 1L)
 
 // JMS_GFX: Not quite sure what these do... Something to do with the mapping of coordinates from one number system to another
