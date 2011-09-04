@@ -62,43 +62,29 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 	RECT r;
 	STAMP s;
 	
-	//DC: Load the different menus depending on the resolution factor
+	//DC: Load the different menus depending on the resolution factor.
 	if (resolutionFactor < 1)
 		s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM));
 	if (resolutionFactor == 1)
 		s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM2X));
 	if (resolutionFactor > 1)
 		s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM4X));
-	// DC: End graphics
 
-	// JMS_GFX: These suckers make the restart menu behave a bit better when changing resolution.
+	// Re-load the info box font so the text shows in correct size after changing the resolution.
 	if (resFactorWasChanged)
-	{
-		// Tell the game the new screen's size. JMS_GFX: Should use the commented lines, but changing to normal 640x480 mode crashes then...
-		ScreenWidth  = 320 << resolutionFactor; // res_GetInteger ("config.reswidth");
-		ScreenHeight = 240 << resolutionFactor; // res_GetInteger ("config.resheight");
-		
-		// Actually change the resolution.
-		if (TFB_Pure_ConfigureVideo (TFB_GFXDRIVER_SDL_PURE, GfxFlags, ScreenWidth, ScreenHeight, res_GetBoolean ("config.fullscreen"), resolutionFactor) < 0)
-		{
-			log_add (log_Fatal, "Could not re-configure video: ""Something sucks here in restart.c!");
-			exit (EXIT_FAILURE);
-		}
-
-		// Change how big area of the screen is update-able.
-		Screen = CaptureDrawable (CreateDisplay (WANT_MASK | WANT_PIXMAP, &screen_width, &screen_height));
-		SetContext (ScreenContext);
-		SetContextFGFrame (Screen);
-	
-		// Re-load the info box font so it shows in correct size after changing the resolution.
+	{	
 		DestroyFont (StarConFont);
-		StarConFont = LoadFont (FALLBACK_FONT);
+		
+		if (resolutionFactor > 0)
+			StarConFont = LoadFont (FALLBACK_FONT);
+		else
+			StarConFont = LoadFont (STARCON_FONT);
 	}
 	
 	pMS->CurFrame = s.frame;
 	GetFrameRect (s.frame, &r);
-	s.origin.x = 0;//(SCREEN_WIDTH - r.extent.width) >> 1;
-	s.origin.y = 0;//(SCREEN_HEIGHT - r.extent.height) >> 1;
+	s.origin.x = (SCREEN_WIDTH - r.extent.width) >> 1;
+	s.origin.y = (SCREEN_HEIGHT - r.extent.height) >> 1;
 	
 	SetContextBackGroundColor (BLACK_COLOR);
 	BatchGraphics ();
