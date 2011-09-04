@@ -1335,6 +1335,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	if ((NewWidth != ScreenWidthActual) ||
 	    (NewHeight != ScreenHeightActual) ||
 	    (NewDriver != GraphicsDriver) ||
+		(resFactorWasChanged) || // JMS_GFX
 	    (NewGfxFlags != GfxFlags)) 
 	{
 		FlushGraphics ();

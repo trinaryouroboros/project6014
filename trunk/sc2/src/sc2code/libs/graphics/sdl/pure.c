@@ -78,30 +78,22 @@ ReInit_Screen (SDL_Surface **screen, SDL_Surface *template, int w, int h)
 int
 TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen, unsigned int resolutionFactor)  // JMS_GFX: Added resolutionFactor
 {
-	int i, videomode_flags, videomode_flags2;
+	int i, videomode_flags, videomode_flags_windowed;
 	int forced_windowed_mode = 0;
 	SDL_Surface *temp_surf;
 	
 	GraphicsDriver = driver;
 
-	// must use SDL_SWSURFACE, HWSURFACE doesn't work properly
-	// with fades/scaling
+	// JMS_GFX: Normal 320x240 mode.
 	if (width == 320 && height == 240)
 	{
-		videomode_flags = SDL_SWSURFACE;
 		ScreenWidthActual = 320;
 		ScreenHeightActual = 240;
 		graphics_backend = &pure_unscaled_backend;
 	}
 	else
-	{
-		videomode_flags = SDL_SWSURFACE;
-		
-		// JMS_GFX: Resolution is calculated with the help of a Resolution factor.
-		ScreenWidthActual  = (320 << resolutionFactor); //320
-		ScreenHeightActual = (240 << resolutionFactor); //240
-		
-		// JMS_GFX: Scale according to resolution factor. Check sanity of resolution factor.
+	{		
+		// JMS_GFX: Normal 640x480 mode.
 		if (resolutionFactor == 0)
 		{
 			ScreenWidthActual = 640;
@@ -109,11 +101,19 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 			graphics_backend = &pure_scaled_backend;
 		}
 		else
+		{
+			// JMS_GFX: Hi-res modes.
+			ScreenWidthActual  = (320 << resolutionFactor);
+			ScreenHeightActual = (240 << resolutionFactor);
+			
 			graphics_backend = &pure_unscaled_backend;
+		}
 	}
 	
+	// must use SDL_SWSURFACE, HWSURFACE doesn't work properly with fades/scaling
+	videomode_flags = SDL_SWSURFACE;
 	videomode_flags |= SDL_ANYFORMAT;
-	videomode_flags2 = videomode_flags; // JMS_GFX: Video mode flags without fullscreen flag.
+	videomode_flags_windowed = videomode_flags; // JMS_GFX: Video mode flags without fullscreen flag.
 	
 	if (flags & TFB_GFXFLAGS_FULLSCREEN)
 		videomode_flags |= SDL_FULLSCREEN;
@@ -124,9 +124,7 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 
 	if (SDL_Video == NULL)
 	{
-		log_add (log_Error, "Couldn't set %ix%i video mode: %s",
-			ScreenWidthActual, ScreenHeightActual,
-			SDL_GetError ());
+		log_add (log_Error, "Couldn't set %ix%i video mode: %s", ScreenWidthActual, ScreenHeightActual, SDL_GetError ());
 		
 		// JMS_GFX: If video mode cannot be set in fullscreen, try to set it in windowed mode.
 		// This is useful when playing e.g. on laptop with an external monitor connected. The fullscreen
@@ -135,8 +133,9 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 		// Now, windowed mode is invoked instead of terminating, and you can drag this window to the 
 		// larger screen.
 		log_add (log_Error, "Trying the same resolution now in windowed mode.");
-		SDL_Video = SDL_SetVideoMode (ScreenWidthActual, ScreenHeightActual, 32, videomode_flags2);
+		SDL_Video = SDL_SetVideoMode (ScreenWidthActual, ScreenHeightActual, 32, videomode_flags_windowed);
 		forced_windowed_mode = 1;
+		togglefullscreen = 0;
 		
 		// JMS_GFX If even the windowed mode doesn't work, then screw it all. Return.
 		if (SDL_Video == NULL)
@@ -166,32 +165,31 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 		SDL_FreeSurface (format_conv_surf);
 		format_conv_surf = NULL;
 	}
-	temp_surf = SDL_CreateRGBSurface (SDL_SWSURFACE, 0, 0, 32,
-			0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
+	
+	temp_surf = SDL_CreateRGBSurface (SDL_SWSURFACE, 0, 0, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0x00000000);
+	
 	if (temp_surf)
 	{	// acquire a fast compatible format from SDL
 
 		format_conv_surf = SDL_DisplayFormatAlpha (temp_surf);
 		
-		if (!format_conv_surf ||
-				format_conv_surf->format->BitsPerPixel != 32)
+		if (!format_conv_surf || format_conv_surf->format->BitsPerPixel != 32)
 		{	// absolute fallback case
-			format_conv_surf = SDL_CreateRGBSurface (SDL_SWSURFACE, 0, 0, 32,
-					0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
+			format_conv_surf = SDL_CreateRGBSurface (SDL_SWSURFACE, 0, 0, 32, 0x00ff0000, 0x0000ff00, 0x000000ff, 0xff000000);
 		}
+		
 		SDL_FreeSurface (temp_surf);
+
 	}
 	if (!format_conv_surf)
 	{
-		log_add (log_Error, "Couldn't create format_conv_surf: %s",
-				SDL_GetError());
+		log_add (log_Error, "Couldn't create format_conv_surf: %s", SDL_GetError());
 		return -1;
 	}
-	
+
 	for (i = 0; i < TFB_GFX_NUMSCREENS; i++)
 	{
-		if (0 != ReInit_Screen (&SDL_Screens[i], format_conv_surf,
-				ScreenWidth, ScreenHeight))
+		if (0 != ReInit_Screen (&SDL_Screens[i], format_conv_surf, ScreenWidth, ScreenHeight))
 			return -1;
 	}
 
@@ -199,26 +197,26 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 	SDL_Screen = SDL_Screens[0];
 	TransitionScreen = SDL_Screens[2];
 
-	if (0 != ReInit_Screen (&fade_color_surface, format_conv_surf,
-			ScreenWidth, ScreenHeight))
+	if (0 != ReInit_Screen (&fade_color_surface, format_conv_surf,ScreenWidth, ScreenHeight))
 		return -1;
+
 	fade_color = SDL_MapRGB (fade_color_surface->format, 0, 0, 0);
 	SDL_FillRect (fade_color_surface, NULL, fade_color);
 	
-	if (0 != ReInit_Screen (&fade_temp, format_conv_surf,
-			ScreenWidth, ScreenHeight))
+	if (0 != ReInit_Screen (&fade_temp, format_conv_surf, ScreenWidth, ScreenHeight))
 		return -1;
 
-	if (ScreenWidthActual > ScreenWidth || ScreenHeightActual > ScreenHeight)
+	if ((ScreenWidthActual > ScreenWidth || ScreenHeightActual > ScreenHeight) || 
+		(ScreenWidthActual== 640 && ScreenHeightActual == 480 && resolutionFactor == 0)) // JMS_GFX
 	{
-		if (0 != ReInit_Screen (&scaled_display, format_conv_surf,
-				ScreenWidthActual, ScreenHeightActual))
+		if (0 != ReInit_Screen (&scaled_display, format_conv_surf, ScreenWidthActual, ScreenHeightActual))
 			return -1;
 
 		scaler = Scale_PrepPlatform (flags, SDL_Screen->format);
 	}
 	else
 	{	// no need to scale
+
 		scaler = NULL;
 	}
 	return forced_windowed_mode;
@@ -249,9 +247,7 @@ TFB_Pure_InitGraphics (int driver, int flags, int width, int height, unsigned in
 	config_video_result = TFB_Pure_ConfigureVideo (driver, flags, width, height, 0, resolutionFactor);
 	
 	if (config_video_result < 0) // JMS_GFX: Added resolutionFactor. Added check '< 0' since now '1' may be returned and it's not an error.
-	{
 		log_add (log_Fatal, "Could not initialize video: " "no fallback at start of program!");
-	}
 
 	// Initialize scalers (let them precompute whatever)
 	Scale_Init ();
