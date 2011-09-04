@@ -1340,6 +1340,20 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	{
 		FlushGraphics ();
 		UninitVideoPlayer ();
+		
+		// JMS_GFX
+		if (resFactorWasChanged)
+		{
+			// Tell the game the new screen's size.
+			ScreenWidth  = 320 << resolutionFactor; // res_GetInteger ("config.reswidth");
+			ScreenHeight = 240 << resolutionFactor; // res_GetInteger ("config.resheight");
+		
+			// Change how big area of the screen is update-able.
+			Screen = CaptureDrawable (CreateDisplay (WANT_MASK | WANT_PIXMAP, &screen_width, &screen_height));
+			SetContext (ScreenContext);
+			SetContextFGFrame (Screen);
+		}
+		
 		TFB_DrawScreen_ReinitVideo (NewDriver, NewGfxFlags, NewWidth, NewHeight);
 		FlushGraphics ();
 		InitVideoPlayer (TRUE);
