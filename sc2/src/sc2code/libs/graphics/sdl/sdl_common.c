@@ -109,20 +109,17 @@ TFB_ReInitGraphics (int driver, int flags, int width, int height, unsigned int r
 	if (driver == TFB_GFXDRIVER_SDL_OPENGL)
 	{
 #ifdef HAVE_OPENGL
-		result = TFB_GL_ConfigureVideo (driver, flags, width, height,
-				togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
+		result = TFB_GL_ConfigureVideo (driver, flags, width, height, togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
 #else
 		driver = TFB_GFXDRIVER_SDL_PURE;
 		log_add (log_Warning, "OpenGL support not compiled in,"
 				" so using pure SDL driver");
-		result = TFB_Pure_ConfigureVideo (driver, flags, width, height,
-				togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
+		result = TFB_Pure_ConfigureVideo (driver, flags, width, height, togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
 #endif
 	}
 	else
 	{
-		result = TFB_Pure_ConfigureVideo (driver, flags, width, height,
-				togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
+		result = TFB_Pure_ConfigureVideo (driver, flags, width, height, togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
 	}
 	
 	// JMS_GFX: If we forced windowed mode when switching resolution, remove fullscreen from flags.

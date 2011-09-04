@@ -61,8 +61,6 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 {
 	RECT r;
 	STAMP s;
-
-	//s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM));  //DC: Original 6.9 code
 	
 	//DC: Load the different menus depending on the resolution factor
 	if (resolutionFactor < 1)
@@ -72,27 +70,35 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 	if (resolutionFactor > 1)
 		s.frame = CaptureDrawable (LoadGraphic (RESTART_PMAP_ANIM4X));
 	// DC: End graphics
-	
+
 	// JMS_GFX: These suckers make the restart menu behave a bit better when changing resolution.
 	if (resFactorWasChanged)
 	{
-		ScreenWidth  = (320 << resolutionFactor);
-		ScreenHeight = (240 << resolutionFactor);
-		if (TFB_Pure_ConfigureVideo (TFB_GFXDRIVER_SDL_PURE, 0, ScreenWidth, ScreenHeight, 0, resolutionFactor))
+		// Tell the game the new screen's size. JMS_GFX: Should use the commented lines, but changing to normal 640x480 mode crashes then...
+		ScreenWidth  = 320 << resolutionFactor; // res_GetInteger ("config.reswidth");
+		ScreenHeight = 240 << resolutionFactor; // res_GetInteger ("config.resheight");
+		
+		// Actually change the resolution.
+		if (TFB_Pure_ConfigureVideo (TFB_GFXDRIVER_SDL_PURE, GfxFlags, ScreenWidth, ScreenHeight, res_GetBoolean ("config.fullscreen"), resolutionFactor) < 0)
 		{
-			log_add (log_Fatal, "Could not re-configure video: "
-					 "Something sucks here in restart.c!");
+			log_add (log_Fatal, "Could not re-configure video: ""Something sucks here in restart.c!");
 			exit (EXIT_FAILURE);
 		}
-		Screen = CaptureDrawable (CreateDisplay (WANT_MASK | WANT_PIXMAP, &screen_width, &screen_height)); // JMS_GFX
-		SetContext (ScreenContext); // JMS_GFX
-		SetContextFGFrame (Screen); // JMS_GFX
+
+		// Change how big area of the screen is update-able.
+		Screen = CaptureDrawable (CreateDisplay (WANT_MASK | WANT_PIXMAP, &screen_width, &screen_height));
+		SetContext (ScreenContext);
+		SetContextFGFrame (Screen);
+	
+		// Re-load the info box font so it shows in correct size after changing the resolution.
+		DestroyFont (StarConFont);
+		StarConFont = LoadFont (FALLBACK_FONT);
 	}
 	
 	pMS->CurFrame = s.frame;
 	GetFrameRect (s.frame, &r);
-	s.origin.x = (SCREEN_WIDTH - r.extent.width) >> 1;
-	s.origin.y = (SCREEN_HEIGHT - r.extent.height) >> 1;
+	s.origin.x = 0;//(SCREEN_WIDTH - r.extent.width) >> 1;
+	s.origin.y = 0;//(SCREEN_HEIGHT - r.extent.height) >> 1;
 	
 	SetContextBackGroundColor (BLACK_COLOR);
 	BatchGraphics ();

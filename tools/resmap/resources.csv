@@ -15,6 +15,7 @@ BATTLE_MUSIC,music.battle,sc2code/imusicre.h,MUSICRES,base/battle/battle.mod
 CREDITS_MUSIC,music.credits,sc2code/imusicre.h,--,--
 MELEE_MUSIC,music.meleemenu,sc2code/imusicre.h,--,--
 MAINMENU_MUSIC,music.mainmenu,sc2code/imusicre.h,--,--
+FALLBACK_FONT,font.fallback,sc2code/ifontres.h,FONTRES,base/fonts/fallback.fon
 STARCON_FONT,font.starcon,sc2code/ifontres.h,FONTRES,base/fonts/starcon.fon
 TINY_FONT,font.tiny,sc2code/ifontres.h,FONTRES,base/fonts/tiny.fon
 MICRO_FONT,font.micro,sc2code/ifontres.h,FONTRES,base/fonts/micro.fon
