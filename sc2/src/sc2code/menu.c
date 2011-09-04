@@ -92,7 +92,7 @@ DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 	OldFont = SetContextFont (StarConFont);
 	t.align = ALIGN_LEFT;
 	t.baseline.x = r->corner.x + 2;
-	t.baseline.y = r->corner.y + PC_MENU_HEIGHT - (1 << RESOLUTION_FACTOR) - RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = r->corner.y + PC_MENU_HEIGHT - (1 << RESOLUTION_FACTOR);// - RESOLUTION_FACTOR; // JMS_GFX
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	r->corner.x++;
@@ -109,7 +109,7 @@ DrawPCMenu (BYTE beg_index, BYTE end_index, BYTE NewState, BYTE hilite, RECT *r)
 		if (hilite && pos == i)
 		{
 			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x00));
-			r->corner.y = t.baseline.y - PC_MENU_HEIGHT + RES_STAT_SCALE(2) + RESOLUTION_FACTOR; // JMS_GFX
+			r->corner.y = t.baseline.y - PC_MENU_HEIGHT + RES_STAT_SCALE(2);// + RESOLUTION_FACTOR; // JMS_GFX
 			r->extent.height = PC_MENU_HEIGHT - 1;
 			DrawFilledRectangle (r);
 			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x00));
