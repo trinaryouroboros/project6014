@@ -9,7 +9,7 @@ is actually before us!
 How quickly we meet again!
 Let us communicate a while,
 ponder the mysterious nature of the universe
-and the exciting vastness of space.
+and the exciting vastness of the space.
 
 #(HELLO_3)
 The human Traveller!
@@ -49,7 +49,7 @@ How joyous and laughative they were!
 But the most wonderful thing happened when a while later
 they returned and brought with them these ships.
 Somehow, someway, they had constructed a micro-environment
-within these hulls that matched the climate of our gas giant home perfectly.
+within these hulls that match the climate of our gas giant home perfectly.
 They said they wanted to present us the opportunity
 to leave our planet
 explore the vast depths of space

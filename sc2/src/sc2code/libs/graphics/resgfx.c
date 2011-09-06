@@ -34,8 +34,8 @@ GetFontFileData (const char *pathname, RESOURCE_DATA *resdata)
 BOOLEAN
 InstallGraphicResTypes (void)
 {
-	InstallResTypeVectors ("GFXRES", GetCelFileData, _ReleaseCelData, NULL);
-	InstallResTypeVectors ("FONTRES", GetFontFileData, _ReleaseFontData, NULL);
+	InstallResTypeVectors ("GFXRES", GetCelFileData, _ReleaseCelData);
+	InstallResTypeVectors ("FONTRES", GetFontFileData, _ReleaseFontData);
 	return (TRUE);
 }
 

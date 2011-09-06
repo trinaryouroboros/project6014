@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #include "options.h"
 #include "colors.h"
 #include "controls.h"
@@ -139,12 +137,9 @@ RedistributeFuel (void)
 	GLOBAL_SIS (FuelOnBoard) = FuelVolume;
 }
 
-//#define LANDER_X 180
-//#define LANDER_Y 18
-
-#define LANDER_X (180 << RESOLUTION_FACTOR) // JMS_GFX
-#define LANDER_Y (18 << RESOLUTION_FACTOR) // JMS_GFX
-#define LANDER_WIDTH (15 << RESOLUTION_FACTOR) // JMS_GFX
+#define LANDER_X 180
+#define LANDER_Y 18
+#define LANDER_WIDTH 15
 
 static void
 DisplayLanders (MENU_STATE *pMS)
@@ -407,7 +402,7 @@ DoInstallModule (MENU_STATE *pMS)
 			if (NewState >= EMPTY_SLOT && (PulsedInputState.menu[KEY_MENU_UP] || PulsedInputState.menu[KEY_MENU_DOWN]))
 			  {
 			    // BW: Explorer has only lander slots
-			    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+			    if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 			      {
 			      }
 			    else
@@ -630,7 +625,7 @@ DoOutfit (MENU_STATE *pMS)
 
 			s.frame = CaptureDrawable (
 					LoadGraphic (OUTFIT_PMAP_ANIM));
-			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 			  {
 				s.frame = SetAbsFrameIndex(s.frame, 1);
 			  }
@@ -647,7 +642,7 @@ DoOutfit (MENU_STATE *pMS)
 			DrawStamp (&s);
 			DestroyDrawable (ReleaseDrawable (s.frame));
 
-			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+			if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
 			{
 				RedistributeFuel ();
 				DisplayLanders (pMS);

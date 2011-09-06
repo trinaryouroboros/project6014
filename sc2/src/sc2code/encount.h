@@ -21,8 +21,6 @@
 //			- Enum for those guys that have mysteriously vanished
 //			- Enum for Gamma Janus
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #ifndef _ENCOUNT_H
 #define _ENCOUNT_H
 
@@ -141,8 +139,8 @@ enum
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED
 
-#define TEXT_X_OFFS (1 << RESOLUTION_FACTOR) // JMS_GFX
-#define TEXT_Y_OFFS (1 << RESOLUTION_FACTOR) // JMS_GFX
+#define TEXT_X_OFFS (1 * RESOLUTION_FACTOR) // JMS_GFX
+#define TEXT_Y_OFFS (1 * RESOLUTION_FACTOR) // JMS_GFX
 #define SIS_TEXT_WIDTH (SIS_SCREEN_WIDTH - (TEXT_X_OFFS << 1))
 
 extern STAR_DESC *CurStarDescPtr;

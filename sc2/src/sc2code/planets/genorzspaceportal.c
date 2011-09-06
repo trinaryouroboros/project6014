@@ -28,9 +28,6 @@
 #include "state.h"
 #include "../encount.h"
 
-#include "hyper.h"
-// for SOL_X/SOL_Y
-
 void
 GenerateOrzSpacePortal (BYTE control)
 {

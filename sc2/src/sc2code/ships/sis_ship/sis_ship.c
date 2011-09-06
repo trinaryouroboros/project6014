@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #include "ships/ship.h"
 #include "ships/sis_ship/resinst.h"
 #include "colors.h"
@@ -47,8 +45,8 @@
 #define BLASTER_OFFSET 8
 #define EXP_VERT_OFFSET 28
 #define EXP_HORZ_OFFSET 20
-#define EXP_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
-#define EXP_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5 << RESOLUTION_FACTOR))
+#define EXP_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 * RESOLUTION_FACTOR))
+#define EXP_HORZ_OFFSET_3 (DISPLAY_TO_WORLD(-5 * RESOLUTION_FACTOR))
 
 #define SPECIAL_ENERGY_COST 15
 #define SPECIAL_WAIT 20
@@ -393,21 +391,10 @@ static void electrify (ELEMENT *ElementPtr)
 	}
 }
 
-// This is used to fluctuate the stunner.
+// This is used to fluctuate the blaster weapon. The stunner also has a use for this.
 static void animate (ELEMENT *ElementPtr)
 {
 	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
-	ElementPtr->state_flags |= CHANGING;
-}
-
-// This is used to fluctuate the blaster weapon.
-static void animate_blaster (ELEMENT *ElementPtr)
-{
-	if (GetFrameIndex (ElementPtr->current.image.frame) >= 3)
-		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
-	else
-		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
-	
 	ElementPtr->state_flags |= CHANGING;
 }
 
@@ -789,13 +776,15 @@ static COUNT initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArr
 			lpMB->cx = cx + offs_x;
 			lpMB->cy = cy + offs_y;
 			lpMB->farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
-			lpMB->sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+			lpMB->sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
+			| IGNORE_SIMILAR;
 			lpMB->blast_offs = BLASTER_OFFSET;
 			lpMB->speed = BLASTER_SPEED;
-			lpMB->preprocess_func = animate_blaster;
+			lpMB->preprocess_func = animate;
 			lpMB->hit_points = BLASTER_HITS * which_gun;
 			lpMB->damage = BLASTER_DAMAGE * which_gun;
-			lpMB->life = BLASTER_LIFE + ((BLASTER_LIFE >> 2) * (which_gun - 1));
+			lpMB->life = BLASTER_LIFE
+			+ ((BLASTER_LIFE >> 2) * (which_gun - 1));
 
 			// Which weapon graphics to use
 			if (which_gun == 1)
@@ -922,7 +911,7 @@ static void InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots)
 		switch (DriveSlots[i])
 		{
 			case FUSION_THRUSTER:
-				RaceDescPtr->characteristics.max_thrust += 2 << RESOLUTION_FACTOR; // JMS_GFX
+				RaceDescPtr->characteristics.max_thrust += (2 * RESOLUTION_FACTOR); // JMS_GFX
 				++RaceDescPtr->characteristics.thrust_wait;
 				break;
 		}
@@ -989,10 +978,10 @@ RACE_DESC* init_exp (void)
 		new_exp_desc.postprocess_func = exp_hyper_postprocess;
 
 		 // JMS_GFX
-		if (RESOLUTION_FACTOR > 0)
+		if (RESOLUTION_FACTOR > 1)
 		{
-			new_exp_desc.characteristics.max_thrust = (10 << RESOLUTION_FACTOR) - (4 << RESOLUTION_FACTOR); // JMS_GFX
-			new_exp_desc.characteristics.thrust_increment <<= RESOLUTION_FACTOR;
+			new_exp_desc.characteristics.max_thrust = (10 * RESOLUTION_FACTOR) - (4 * RESOLUTION_FACTOR); // JMS_GFX
+			new_exp_desc.characteristics.thrust_increment *= RESOLUTION_FACTOR;
 		}
 		else
 			new_exp_desc.characteristics.max_thrust -= 4;
@@ -1011,11 +1000,11 @@ RACE_DESC* init_exp (void)
 	
 	// JMS: Give the explorer some stats so it won't be slow as fuck in supermelee
 	// and does not depend on the thruster/jet numbers in adventure mode
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+	if((GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS))==0)
 	{
-		new_exp_desc.characteristics.max_thrust = EXPLORER_MAX_THRUST << RESOLUTION_FACTOR;
+		new_exp_desc.characteristics.max_thrust = EXPLORER_MAX_THRUST * RESOLUTION_FACTOR;
 		new_exp_desc.characteristics.thrust_wait = EXPLORER_THRUST_WAIT;
-		new_exp_desc.characteristics.thrust_increment = EXPLORER_THRUST_INCREMENT << RESOLUTION_FACTOR;
+		new_exp_desc.characteristics.thrust_increment = EXPLORER_THRUST_INCREMENT * RESOLUTION_FACTOR;
 		new_exp_desc.characteristics.turn_wait = EXPLORER_TURN_WAIT;
 	}
 	

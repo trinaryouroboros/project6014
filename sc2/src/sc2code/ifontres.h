@@ -2,7 +2,6 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define FALLBACK_FONT "font.fallback"
 #define LANDER_FONT "font.lander"
 #define MICRO_FONT "font.micro"
 #define NANO_FONT "font.nano"

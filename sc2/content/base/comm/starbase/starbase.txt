@@ -37,6 +37,8 @@ the confusion blaster.
 Based on Melnorme technology, with a few additions of our own
 the blaster creates a stasis field around the enemy ship
 which will jam its controls momentarily.
+The shots also carry some momentum, so they will
+knock the target ship around upon impact.
 To get the most out of your weapons, use them in tandem
 approach your target, disable it with the confuser and let 'em have it!
 By then your batteries will be depleted, so... you run like hell.
@@ -191,7 +193,7 @@ Who do you need information on?
 The Ur-Quan Kzer-Za.
 
 #(UR_QUAN_INFO_SB)
-After the initial shock of losing the Sa-Matra and facing the
+After the initial shock of losing Sa-Matra and facing the
 combined attack of the new Alliance, both Ur-Quan races were left
 momentarily stupefied. We let them have it with blazing guns.
 The Kzer-Za snapped out of it first. Even with their numbers greatly
@@ -399,10 +401,7 @@ they recorded just at the time of the accident.
 They indicate that something resembling strong gravitational lenses
 formed all around this quadrant in a matter of seconds
 and vanished about as quickly.
-One more thing. I suspect there are others looking for whatever
-the Shofixti found. Keep an eye out for strange ships when you drop out of Hyperspace.
-If you see one, it's a good bet you've found the Shofixti crash site. 
-Be careful out there, Captain. This does not sound good to me.
+Do be careful out there, Captain. This does not sound good to me.
 
 #(lame_map_limit_question)
 Why am I confined to this small part of the galaxy? I want to fly wherever I want!
@@ -417,32 +416,6 @@ You have experience on all of these matters.
 Having seen by far the most action of all the pilots we have and
 being a natural with first contact situations you have the best chances
 of rescuing the Shofixti or at least finding out what happened to them.
-
-#(lame_landing_question_1)
-My docking computer won't acquire a stable orbit on Earth. Why is that?
-
-#(LAME_LANDING_ANSWER_1)
-I am not exactly sure why, but the Chmmr were insistent
-that the Explorer could not approach homeworlds and colonies.
-Their official explanation is they wish to keep your mission a secret.
-I guess discretion about this sort of stuff cannot really hurt.
-
-#(lame_landing_question_2)
-So I can't land on Alliance homeworlds?
-
-#(LAME_LANDING_ANSWER_2)
-Well, just dock at the starbase. This mission is on a need-to-know basis
-but the top brass on each starbase are in the loop. 
-Most allies still do not have their starbase up and running
-but you'll be able to chat with them on the radio. 
-
-#(lame_landing_question_3)
-But I want to go to Disneyland!
-
-#(LAME_LANDING_ANSWER_3)
-Sorry, captain, but from the closest orbit you're allowed to take
-it would take months to ride the lander to Earth.
-I guess you're stuck with the fun and games on my Starbase.
 
 #(FIRST_HELLO)
 Well, well... look who's coming to town!

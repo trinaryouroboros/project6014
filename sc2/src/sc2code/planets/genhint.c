@@ -25,100 +25,6 @@
 
 // JMS 2010: - This is a completely new file.
 
-static void generate_hintworld_1(BYTE control)
-{
-	COUNT i;
-	DWORD rand_val;
-
-    switch (control)
-    {
-        case GENERATE_MOONS:
-        {
-            GenerateRandomIP (GENERATE_MOONS);
-            if (pSolarSysState->pBaseDesc == &pSolarSysState->PlanetDesc[1])
-            {
-                COUNT angle;
-    
-                pSolarSysState->MoonDesc[0].data_index = PELLUCID_WORLD;
-                pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS * 2;
-                rand_val = TFB_Random ();
-                angle = NORMALIZE_ANGLE (LOWORD (rand_val));
-                pSolarSysState->MoonDesc[0].location.x = COSINE (angle, pSolarSysState->MoonDesc[0].radius);
-                pSolarSysState->MoonDesc[0].location.y = SINE (angle, pSolarSysState->MoonDesc[0].radius);
-            }
-            break;
-        }
-        case GENERATE_PLANETS:
-        {
-            COUNT angle;
-            GenerateRandomIP (GENERATE_PLANETS);
-    
-            pSolarSysState->SunDesc[0].NumPlanets = 2;
-    
-            pSolarSysState->PlanetDesc[0].data_index = METAL_WORLD;
-            pSolarSysState->PlanetDesc[0].radius = EARTH_RADIUS * 64L / 100;
-            angle = ARCTAN (
-                            pSolarSysState->PlanetDesc[0].location.x,
-                            pSolarSysState->PlanetDesc[0].location.y);
-            pSolarSysState->PlanetDesc[0].location.x = COSINE (angle, pSolarSysState->PlanetDesc[0].radius);
-            pSolarSysState->PlanetDesc[0].location.y = SINE (angle, pSolarSysState->PlanetDesc[0].radius);
-    
-            pSolarSysState->PlanetDesc[1].data_index = PRIMORDIAL_WORLD;
-            pSolarSysState->PlanetDesc[1].radius = EARTH_RADIUS * 352L / 100;
-            pSolarSysState->PlanetDesc[1].NumPlanets = 1;
-            angle = ARCTAN (
-                            pSolarSysState->PlanetDesc[1].location.x,
-                            pSolarSysState->PlanetDesc[1].location.y);
-            pSolarSysState->PlanetDesc[1].location.x = COSINE (angle, pSolarSysState->PlanetDesc[1].radius);
-            pSolarSysState->PlanetDesc[1].location.y = SINE (angle, pSolarSysState->PlanetDesc[1].radius);
-        break;
-        }
-        case GENERATE_ORBITAL:
-        {
-            rand_val = DoPlanetaryAnalysis (&pSolarSysState->SysInfo, pSolarSysState->pOrbitalDesc);
-    
-            pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] = rand_val;
-            i = (COUNT)~0;
-            rand_val = GenerateLifeForms (&pSolarSysState->SysInfo, &i);
-    
-            pSolarSysState->SysInfo.PlanetInfo.ScanSeed[MINERAL_SCAN] = rand_val;
-            i = (COUNT)~0;
-            GenerateMineralDeposits (&pSolarSysState->SysInfo, &i);
-    
-            pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN] = rand_val;
-    
-            if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
-                pSolarSysState->SysInfo.PlanetInfo.PlanetToSunDist = EARTH_RADIUS * 64L / 100;
-    
-            if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1])
-            {
-                pSolarSysState->SysInfo.PlanetInfo.PlanetToSunDist = EARTH_RADIUS * 352L / 100;
-                pSolarSysState->SysInfo.PlanetInfo.AtmoDensity = 160;
-                pSolarSysState->SysInfo.PlanetInfo.Weather = 2;
-                pSolarSysState->SysInfo.PlanetInfo.PlanetDensity = 104;
-                pSolarSysState->SysInfo.PlanetInfo.PlanetRadius = 120;
-                pSolarSysState->SysInfo.PlanetInfo.Tectonics = 1;
-                pSolarSysState->SysInfo.PlanetInfo.RotationPeriod = 288;
-                pSolarSysState->SysInfo.PlanetInfo.SurfaceTemperature = -47;
-        
-                LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-                pSolarSysState->PlanetSideFrame[1] = CaptureDrawable (LoadGraphic (CIRCLES_A_MASK_PMAP_ANIM));
-                pSolarSysState->PlanetSideFrame[2] = CaptureDrawable (LoadGraphic (CIRCLES_B_MASK_PMAP_ANIM));
-                pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = CaptureStringTable (LoadStringTable (LEFTHURRY_STRTAB));
-                pSolarSysState->SysInfo.PlanetInfo.Weather = 1;
-                pSolarSysState->SysInfo.PlanetInfo.Tectonics = 1;
-            }
-    
-            LoadPlanet (NULL);
-            break;
-        }
-        default:
-            GenerateRandomIP (control);
-            break;
-    }
-}
-
-
 void
 GenerateHint (BYTE control)
 {
@@ -141,9 +47,97 @@ GenerateHint (BYTE control)
 	if (!(GET_GAME_STATE(HINT_WORLD_LOCATION) == which_hintworld))
 	{
 		if (which_hintworld == 1)
-        {
-            generate_hintworld_1(control);
-        }
+		{
+			switch (control)
+			{
+				case GENERATE_MOONS:
+				{
+					GenerateRandomIP (GENERATE_MOONS);
+					if (pSolarSysState->pBaseDesc == &pSolarSysState->PlanetDesc[1])
+					{
+						COUNT angle;
+			
+						pSolarSysState->MoonDesc[0].data_index = PELLUCID_WORLD;
+						pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS * 2;
+						rand_val = TFB_Random ();
+						angle = NORMALIZE_ANGLE (LOWORD (rand_val));
+						pSolarSysState->MoonDesc[0].location.x = COSINE (angle, pSolarSysState->MoonDesc[0].radius);
+						pSolarSysState->MoonDesc[0].location.y = SINE (angle, pSolarSysState->MoonDesc[0].radius);
+					}
+					break;
+				}
+				case GENERATE_PLANETS:
+				{
+					COUNT angle;
+					GenerateRandomIP (GENERATE_PLANETS);
+			
+					if(which_hintworld == 1)
+					{
+						pSolarSysState->SunDesc[0].NumPlanets = 2;
+				
+						pSolarSysState->PlanetDesc[0].data_index = METAL_WORLD;
+						pSolarSysState->PlanetDesc[0].radius = EARTH_RADIUS * 64L / 100;
+						angle = ARCTAN (
+										pSolarSysState->PlanetDesc[0].location.x,
+										pSolarSysState->PlanetDesc[0].location.y);
+						pSolarSysState->PlanetDesc[0].location.x = COSINE (angle, pSolarSysState->PlanetDesc[0].radius);
+						pSolarSysState->PlanetDesc[0].location.y = SINE (angle, pSolarSysState->PlanetDesc[0].radius);
+				
+						pSolarSysState->PlanetDesc[1].data_index = PRIMORDIAL_WORLD;
+						pSolarSysState->PlanetDesc[1].radius = EARTH_RADIUS * 352L / 100;
+						pSolarSysState->PlanetDesc[1].NumPlanets = 1;
+						angle = ARCTAN (
+										pSolarSysState->PlanetDesc[1].location.x,
+										pSolarSysState->PlanetDesc[1].location.y);
+						pSolarSysState->PlanetDesc[1].location.x = COSINE (angle, pSolarSysState->PlanetDesc[1].radius);
+						pSolarSysState->PlanetDesc[1].location.y = SINE (angle, pSolarSysState->PlanetDesc[1].radius);
+					}
+				break;
+				}
+				case GENERATE_ORBITAL:
+				{
+					rand_val = DoPlanetaryAnalysis (&pSolarSysState->SysInfo, pSolarSysState->pOrbitalDesc);
+			
+					pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] = rand_val;
+					i = (COUNT)~0;
+					rand_val = GenerateLifeForms (&pSolarSysState->SysInfo, &i);
+			
+					pSolarSysState->SysInfo.PlanetInfo.ScanSeed[MINERAL_SCAN] = rand_val;
+					i = (COUNT)~0;
+					GenerateMineralDeposits (&pSolarSysState->SysInfo, &i);
+			
+					pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN] = rand_val;
+			
+					if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[0])
+						pSolarSysState->SysInfo.PlanetInfo.PlanetToSunDist = EARTH_RADIUS * 64L / 100;
+			
+					if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1])
+					{
+						pSolarSysState->SysInfo.PlanetInfo.PlanetToSunDist = EARTH_RADIUS * 352L / 100;
+						pSolarSysState->SysInfo.PlanetInfo.AtmoDensity = 160;
+						pSolarSysState->SysInfo.PlanetInfo.Weather = 2;
+						pSolarSysState->SysInfo.PlanetInfo.PlanetDensity = 104;
+						pSolarSysState->SysInfo.PlanetInfo.PlanetRadius = 120;
+						pSolarSysState->SysInfo.PlanetInfo.Tectonics = 1;
+						pSolarSysState->SysInfo.PlanetInfo.RotationPeriod = 288;
+						pSolarSysState->SysInfo.PlanetInfo.SurfaceTemperature = -47;
+				
+						LoadStdLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
+						pSolarSysState->PlanetSideFrame[1] = CaptureDrawable (LoadGraphic (CIRCLES_A_MASK_PMAP_ANIM));
+						pSolarSysState->PlanetSideFrame[2] = CaptureDrawable (LoadGraphic (CIRCLES_B_MASK_PMAP_ANIM));
+						pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = CaptureStringTable (LoadStringTable (LEFTHURRY_STRTAB));
+						pSolarSysState->SysInfo.PlanetInfo.Weather = 1;
+						pSolarSysState->SysInfo.PlanetInfo.Tectonics = 1;
+					}
+			
+					LoadPlanet (NULL);
+					break;
+				}
+				default:
+					GenerateRandomIP (control);
+					break;
+			}
+		}
 		else
 		{
 			GenerateRandomIP (control);
@@ -157,8 +151,6 @@ GenerateHint (BYTE control)
 			{
 				if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1])
 					pSolarSysState->CurNode = 0;
-                else
-                    GenerateRandomIP (control);
 				break;
 			}
 			case GENERATE_ENERGY:

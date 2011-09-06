@@ -19,8 +19,6 @@
 // JMS 2010: - Damaged thrusters emit differently colored particles
 //			 - Enable Down key in melee (comment tag JMS_KEYS)
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #include "battlecontrols.h"
 #include "build.h"
 #include "collide.h"
@@ -785,7 +783,7 @@ ship_transition (ELEMENT *ElementPtr)
 		}
 		else if ((hShipImage = AllocElement ()))
 		{
-#define TRANSITION_SPEED DISPLAY_TO_WORLD (40 << RESOLUTION_FACTOR) // JMS_GFX
+#define TRANSITION_SPEED DISPLAY_TO_WORLD (40 * RESOLUTION_FACTOR) // JMS_GFX
 #define TRANSITION_LIFE 1
 			COUNT angle;
 

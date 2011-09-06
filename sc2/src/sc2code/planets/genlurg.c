@@ -30,40 +30,10 @@
 #include "state.h"
 #include "planets/genall.h"
 #include "libs/mathlib.h"
-#include "libs/log.h"
-#include "grpinfo.h"
-
-
-static int
-init_lurg_teaser (void)
-{
-	HIPGROUP hGroup;
-
-	if (!GET_GAME_STATE (PLAYER_VISITED_BETA_NAOS)
-			&& GetGroupInfo (GLOBAL (BattleGroupRef), GROUP_INIT_IP)
-			&& (hGroup = GetHeadLink (&GLOBAL (ip_group_q))))
-	{
-		IP_GROUP *GroupPtr;
-		SET_GAME_STATE (PLAYER_VISITED_BETA_NAOS, 1);
-
-		GroupPtr = LockIpGroup (&GLOBAL (ip_group_q), hGroup);
-		GroupPtr->task = FLEE;
-		GroupPtr->sys_loc = 0; 
-		GroupPtr->dest_loc = 0; 
-		GroupPtr->loc.x = 7500;
-		GroupPtr->loc.y = 7000;
-		GroupPtr->group_counter = 0;
-		UnlockIpGroup (&GLOBAL (ip_group_q), hGroup);
-		return 1;
-	}
-	else
-		return 0;
-}
 
 void
 GenerateLurg (BYTE control)
 {
-
 	switch (control)
 	{
 		case GENERATE_ORBITAL:
@@ -119,7 +89,7 @@ GenerateShofixtiCrashSite (BYTE control)
 		case GENERATE_ENERGY:
 		{
 			if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[2]
-				&& (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) != PRECURSOR_BATTLESHIP) )
+				&& (GET_GAME_STATE (WHICH_SHIP_PLAYER_HAS) != 2) )
 			{
 				old_rand = TFB_SeedRandom (pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]);
 				rand_val = TFB_Random ();
@@ -139,7 +109,7 @@ GenerateShofixtiCrashSite (BYTE control)
 					
 					((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
 					SET_GAME_STATE (BLACK_ORB_STATE, 1);
-					SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, PRECURSOR_BATTLESHIP);
+					SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2);
 				}
 				
 				TFB_SeedRandom (old_rand);
@@ -247,24 +217,6 @@ GenerateShofixtiCrashSite (BYTE control)
 			pSolarSysState->PlanetDesc[2].location.y = SINE (angle, pSolarSysState->PlanetDesc[2].radius);
 			break;
 		}
-		case INIT_NPCS:
-			if (!GET_GAME_STATE (PLAYER_VISITED_BETA_NAOS))
-			{
-				GLOBAL (BattleGroupRef) = GET_GAME_STATE_32 (LURG_GRPOFFS0);
-				
-				if (GLOBAL (BattleGroupRef) == 0)
-				{			
-					CloneShipFragment (LURG_SHIP, &GLOBAL (npc_built_ship_q), 0);
-					GLOBAL (BattleGroupRef) = PutGroupInfo (GROUPS_ADD_NEW, 1);
-					ReinitQueue (&GLOBAL (npc_built_ship_q));
-					SET_GAME_STATE_32 (LURG_GRPOFFS0, GLOBAL (BattleGroupRef));
-				}
-				
-			}
-			if (!init_lurg_teaser ()) 
-				GenerateRandomIP (INIT_NPCS);
-			
-			break;
 		default:
 			GenerateRandomIP (control);
 			break;

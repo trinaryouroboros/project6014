@@ -18,8 +18,6 @@
 
 // JMS 2010: Added definition of PLANET_RESTRICTED. Restricted planets cannot be landed on.
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #ifndef _PLANETS_H
 #define _PLANETS_H
 
@@ -52,9 +50,7 @@ enum
 };
 
 #define MAP_WIDTH SIS_SCREEN_WIDTH
-#define MAP_HEIGHT RES_CASE(75,150,330) // JMS_GFX
-#define ORIGINAL_MAP_WIDTH 242			// JMS_GFX
-#define ORIGINAL_MAP_HEIGHT 75			// JMS_GFX
+#define MAP_HEIGHT (75 * RESOLUTION_FACTOR - SAFE_Y) // JMS_GFX
 
 enum
 {
@@ -111,15 +107,15 @@ enum
 #define MIN_ZOOM_RADIUS (MAX_ZOOM_RADIUS>>3)
 #define EARTH_RADIUS SCALE_RADIUS(8)
 
-#define MIN_PLANET_RADIUS SCALE_RADIUS (4 << RESOLUTION_FACTOR) // JMS_GFX
+#define MIN_PLANET_RADIUS SCALE_RADIUS (4 * RESOLUTION_FACTOR) // JMS_GFX
 #define MAX_PLANET_RADIUS SCALE_RADIUS (124)
 
 #define DISPLAY_FACTOR ((SIS_SCREEN_WIDTH >> 1) - 8)
 
 #define NUM_SCANDOT_TRANSITIONS 4
 
-#define MIN_MOON_RADIUS (35 << RESOLUTION_FACTOR) // JMS_GFX
-#define MOON_DELTA (20 << RESOLUTION_FACTOR) // JMS_GFX
+#define MIN_MOON_RADIUS (35 * RESOLUTION_FACTOR) // JMS_GFX
+#define MOON_DELTA (20  * RESOLUTION_FACTOR) // JMS_GFX
 
 #define PLANET_SHIELDED (1 << 7)
 
@@ -165,12 +161,6 @@ typedef struct
 #include "sundata.h"
 
 typedef void (*PLAN_GEN_FUNC) (BYTE control);
-
-typedef struct 
-{
-	POINT p[4];
-	DWORD m[4];
-} MAP3D_POINT;
 
 typedef struct planet_orbit
 {
@@ -276,7 +266,7 @@ extern void IP_frame (void);
 
 extern RECT* RotatePlanet (int x, int dx, int dy, COUNT scale_amt,
 		UBYTE zoom_from, RECT *r);
-extern void SetPlanetTilt (int da, COUNT height, COUNT radius);
+extern void SetPlanetTilt (int da);
 extern void DrawScannedObjects (BOOLEAN Reversed);
 extern void GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame);
 extern void DeltaTopography (COUNT num_iterations, SBYTE *DepthArray,

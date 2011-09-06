@@ -40,13 +40,14 @@
 #include "resinst.h"
 #include "nameref.h"
 #include "build.h"
-#include "hyper.h"
 #include "state.h"
 #include "grpinfo.h"
 #include "gamestr.h"
 
 #include <stdlib.h>
-#include "libs/log.h"
+#ifdef STATE_DEBUG
+#	include "libs/log.h"
+#endif
 
 #include "libs/mathlib.h"
 
@@ -322,7 +323,7 @@ InitSIS (void)
 	GLOBAL_SIS (JetSlots[6]) = // JMS
 		GLOBAL_SIS (JetSlots[7]) = TURNING_JETS;
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != CHMMR_EXPLORER_SHIP)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != 0)
 		for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 			GLOBAL_SIS (ModuleSlots[i]) = EMPTY_SLOT + 2;
 	/*GLOBAL_SIS (ModuleSlots[15]) = GUN_WEAPON;
@@ -341,9 +342,6 @@ InitSIS (void)
 			sizeof (IP_GROUP));
 	InitQueue (&GLOBAL (encounter_q), MAX_ENCOUNTERS, sizeof (ENCOUNTER));
 
-	// DN 27FEB11 INITIALIZE BETA_NAOS FLAG 
-	SET_GAME_STATE (PLAYER_VISITED_BETA_NAOS, 0);
-	
 	// JMS: Starbase is available right from the start!
 	SET_GAME_STATE (STARBASE_AVAILABLE, 1);
 	// BW: Lander is fully shielded from the start
@@ -352,11 +350,8 @@ InitSIS (void)
 			(1 << BIOLOGICAL_DISASTER) |
 			(1 << LIGHTNING_DISASTER) |
 			(1 << LAVASPOT_DISASTER));
-	// JMS: Lander currently has "stronger" shot from the beginning. 
-	// Currently it does nothing else than enables killing the critters marked with INVULNERABLE_TO_BASIC_WEAPON.
-	SET_GAME_STATE (STRONGER_LANDER_SHOT, 1);
 	
-	SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1);
+	SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1); 
 	
 	GLOBAL (CurrentActivity) = IN_INTERPLANETARY | START_INTERPLANETARY;
 
@@ -406,7 +401,6 @@ InitSIS (void)
 	
 	// JMS: Vary the possible location of the ones that left in hurry
 	SET_GAME_STATE(HINT_WORLD_LOCATION, ((COUNT)TFB_Random () % 3));
-	log_add (log_Debug, "Hint world location randomly set to %d.", GET_GAME_STATE(HINT_WORLD_LOCATION));
 
 	/* In case the program is exited before the full game is terminated,
 	 * make sure that the temporary files are deleted.

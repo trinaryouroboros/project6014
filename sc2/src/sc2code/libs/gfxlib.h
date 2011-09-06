@@ -40,12 +40,6 @@ typedef UWORD TIME_VALUE;
 typedef SWORD COORD;
 typedef DWORD COLOR;
 
-// Transform a 5-bits color component to an 8-bits color component.
-// Form 1, calculates '(r5 / 31.0) * 255.0, highest value is 0xff:
-#define CC5TO8(c) (((c) << 3) | ((c) >> 2))
-// Form 2, calculates '(r5 / 32.0) * 256.0, highest value is 0xf8:
-//#define CC5TO8(c) ((c) << 3) 
-
 #define BUILD_COLOR(c32k,c256) \
 	(COLOR)(((DWORD)(c32k)<<8)|(BYTE)(c256))
 		// BUILD_COLOR combines a 15-bit RGB color tripple with a
@@ -169,7 +163,8 @@ enum
 	FadeSomeToColor
 };
 
-extern BOOLEAN InitGraphics (int argc, char *argv[], COUNT KbytesRequired, int res_factor); // JMS_GFX
+extern BOOLEAN InitGraphics (int argc, char *argv[], COUNT
+		KbytesRequired, int res_factor); // JMS_GFX
 extern void UninitGraphics (void);
 
 extern CONTEXT SetContext (CONTEXT Context);

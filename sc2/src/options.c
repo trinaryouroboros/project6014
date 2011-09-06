@@ -14,8 +14,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
-
 /*
  * Eventually this should include all configuration stuff, 
  * for now there's few options which indicate 3do/pc flavors.
@@ -54,7 +52,7 @@ int optMeleeScale;
 const char **optAddons;
 
 // JMS_GFX
-unsigned int resolutionFactor;
+int resolutionFactor;
 BOOLEAN resFactorWasChanged;
 
 BOOLEAN opt3doMusic;
@@ -486,7 +484,7 @@ loadIndices (uio_DirHandle *dir)
 		for (i = 0; i < indices->numNames; i++)
 		{
 			log_add (log_Debug, "Loading resouce index '%s'", indices->names[i]);
-			LoadResourceIndex (dir, indices->names[i], NULL);
+			LoadResourceIndex (dir, indices->names[i]);
 			numLoaded++;
 		}			
 	}

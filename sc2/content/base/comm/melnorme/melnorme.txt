@@ -276,14 +276,8 @@ and not to mention, bad for business.
 Should you find something that sheds more light on this matter
 do let us know. You may expect a remarkable sum in exchange.
 
-#(sell_tzzrak_tzon_pics)
-Might I tempt you with high quality imagery of the Crystal Caverns of Tzzrak-Tzon?
-	
-#(NO_WAY)
-No.
-
-#(HELLO_AND_DOWN_TO_BUSINESS1)
-Greetings Captain.
+#(HELLO_AND_DOWN_TO_BUSINESS1)	melno012.ogg
+Yes, let us get down to business.
 
 #(HELLO_AND_DOWN_TO_BUSINESS2)	melno013.ogg
 How nice to see you again, Captain.
@@ -291,42 +285,41 @@ How nice to see you again, Captain.
 #(HELLO_AND_DOWN_TO_BUSINESS3)	melno014.ogg
 I had itchy pods this morning, Captain, and here you are!
 
-#(HELLO_AND_DOWN_TO_BUSINESS4)
-It's your lucky day Captain.
-My crew and I have just finished reciting
-the traditional Melnorme hymn of the Mutually Beneficial Transaction.
-I'm sure you'll find this encounter most rewarding.
+#(HELLO_AND_DOWN_TO_BUSINESS4)	melno015.ogg
+What a coincidence! I was just talking about you with a Keel-Verezy captain.
+They expressed great interest in your explorations and struggles against the Ur-Quan
+but, like all Verezy, I'm afraid they were hesitant to introduce themselves for fear of
+well, frightening you.
+In any event, it is our pleasure to meet you once again.
 
 #(HELLO_AND_DOWN_TO_BUSINESS5)	melno016.ogg
 Once again we meet to exchange valuable tangibles.
 Isn't this fun?!
 
-#(HELLO_AND_DOWN_TO_BUSINESS6)
-Why Captain, what a pleasant surpise!
-I was looking at my ledger of this month's transactions,
-and feeling somewhat depressed,
-and then here you are!
-How fortuitous!
+#(HELLO_AND_DOWN_TO_BUSINESS6)	melno017.ogg
+Your arrival was predicted by our Tzo crystal's vibrations.
+We already know why you are here and what you need from us; however
+etiquette requires that we act as though we are ignorant of your desires.
 
 #(HELLO_AND_DOWN_TO_BUSINESS7)	melno018.ogg
 This very morning, I was just saying to subordinate Ochre
 `Fe-Fi-Fo-Fum! I smell the feet of a Hu-Hu-Man!'
 We laughed and laughed. What a synchronicity!
 
-#(HELLO_AND_DOWN_TO_BUSINESS8)
-I must warn you Captain,
-I am in training for the annual Melnorme Bargaining Cup.
-If I drive a particularly hard bargain today,
-please consider it a complement.
+#(HELLO_AND_DOWN_TO_BUSINESS8)	melno019.ogg
+I must warn you, Captain
+this is the time of the month we Melnorme drive exceptionally hard bargains.
+Beware!
 
-#(HELLO_AND_DOWN_TO_BUSINESS9)
-Whoa Captain!
-Not another close call with a Keel-Verezy vessel!
-One of these days we really must furnish you with an Eydron scanner,
-so you can stop being such a menace to the Keel-Verezy.
-They're some of our best customers.
+#(HELLO_AND_DOWN_TO_BUSINESS9)	melno020.ogg
+LOOK OUT!
+Hoy! What a close call!
+Captain, why did you try to run down that Keel-Verezy vessel!?
+You almost smashed it into flinders!
+What!? You didn't see it? Surely you -- oh
+Never mind.
 
-#(HELLO_AND_DOWN_TO_BUSINESS10)	melno021.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS10) melno021.ogg
 Welcome back, Captain! You are our favorite customer.
 
 #(whats_my_credit)
@@ -610,10 +603,6 @@ the one that was tasked with the Messier system is actually missing
 and probably destroyed.
 Two months ago, the patrol just vanished somewhere near the Messier system
 despite our agents' daily checks on them -- they're just gone.
-Captain, that was the only useful piece of information
-regarding current events that we have for sale.
-If we obtain any information which will prove useful to you in future,
-we will be sure to inform you.
 
 #(OK_BUY_EVENT_2)	melno092.ogg
 Captain, I recommend you consider contributing to this game. 
@@ -747,8 +736,6 @@ Please do not make the mistake of thinking of this as a `gift' or act of altruis
 we are merely investing in our relationship with you, the customer.
 We are certain that in the long run, this will prove to be a most profitable investment.
 
-#(ALL_BIO_TYPES_FOUND)
-ALL LIFEFORM TYPES FOUND - REPLACE WITH SOMETHING CLEVER -DN 27DEC10
 
 #(STRIP_HEAD)	melno159.ogg
 We will take

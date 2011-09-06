@@ -44,7 +44,7 @@
 static RACE_DESC utwig_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | SHIELD_DEFENSE | LIGHT_POINT_DEFENSE,
+		FIRES_FORE | SHIELD_DEFENSE,
 		22, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY >> 1, MAX_ENERGY,
@@ -189,9 +189,13 @@ utwig_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 {
 	SIZE ShieldStatus;
 	STARSHIP *StarShipPtr;
+	STARSHIP *EnemyStarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
+
+	if ((lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX])->ObjectPtr)
+		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (StarShipPtr->RaceDescPtr->ship_info.energy_level == 0)
@@ -201,20 +205,11 @@ utwig_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		ShieldStatus = -1;
 		if (lpEvalDesc->ObjectPtr && lpEvalDesc->MoveState == ENTICE)
 		{
-			STARSHIP *WeaponStarShipPtr;
-		
-			GetElementStarShip (lpEvalDesc->ObjectPtr, &WeaponStarShipPtr);
-
 			ShieldStatus = 0;
-			if (!(lpEvalDesc->ObjectPtr->state_flags & FINITE_LIFE)
-				// Shiver: AI does not raise shields at Lurg oil blobs.		
-				&& !(WeaponStarShipPtr && WeaponStarShipPtr->SpeciesID == LURG_ID
-					&& lpEvalDesc->ObjectPtr->mass_points < 2))
-			{
+			if (!(lpEvalDesc->ObjectPtr->state_flags & FINITE_LIFE))
 				lpEvalDesc->MoveState = PURSUE;
-			}
 			else if (lpEvalDesc->ObjectPtr->mass_points
-				|| lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT)
+				|| (lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))
 			{
 				if ((lpEvalDesc->which_turn >>= 1) == 0)
 					lpEvalDesc->which_turn = 1;
@@ -234,12 +229,16 @@ utwig_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		if (ShieldStatus)
 		{
 			if ((ShieldStatus > 0 || lpEvalDesc->ObjectPtr)
-				&& lpEvalDesc->which_turn <= 2
-				&& (ShieldStatus > 0
-				|| (lpEvalDesc->ObjectPtr->state_flags
-						& PLAYER_SHIP) // means IMMEDIATE_WEAPON.
-				|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 2, 0))
-				&& (TFB_Random () & 3))
+					&& lpEvalDesc->which_turn <= 2
+					&& (ShieldStatus > 0
+					|| (lpEvalDesc->ObjectPtr->state_flags
+					& PLAYER_SHIP) /* means IMMEDIATE WEAPON */
+					|| PlotIntercept (lpEvalDesc->ObjectPtr,
+					ShipPtr, 2, 0))
+					&& (TFB_Random () & 3)
+				// Shiver: AI does not raise shields at Lurg oil blobs.		
+				&& !(EnemyStarShipPtr && EnemyStarShipPtr->SpeciesID == LURG_ID
+					&& lpEvalDesc->ObjectPtr->mass_points < 2))
 			{
 				StarShipPtr->ship_input_state |= SPECIAL;
 				StarShipPtr->ship_input_state &= ~WEAPON;
@@ -249,17 +248,12 @@ utwig_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		}
 	}
 
-	if ((lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX])->ObjectPtr)
+	if (StarShipPtr->RaceDescPtr->ship_info.energy_level
+			&& (lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX])->ObjectPtr)
 	{
-		STARSHIP *EnemyStarShipPtr;
-
-		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
-		
-		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON)
-				&& StarShipPtr->RaceDescPtr->ship_info.energy_level)
-		{
+		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
+				& IMMEDIATE_WEAPON))
 			lpEvalDesc->MoveState = PURSUE;
-		}
 	}
 
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
@@ -275,15 +269,13 @@ utwig_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 	GetElementStarShip (ElementPtr1, &EnemyStarShipPtr);
 
 	if (ElementPtr0->life_span > NORMAL_LIFE
-			&& (ElementPtr1->state_flags & FINITE_LIFE)
-			&& ElementPtr1->mass_points
-			// Prevent Chmmr satellites from charging up Utwig's battery during collision.
-			&& !(EnemyStarShipPtr->SpeciesID == CHMMR_ID && ElementPtr1->mass_points == 10)
-			// Do not gain energy from Lurg blobs; these inflict no damage against ships.
-			&& !(EnemyStarShipPtr->SpeciesID == LURG_ID && ElementPtr1->mass_points < 2))
-	{
+		&& (ElementPtr1->state_flags & FINITE_LIFE)
+		&& ElementPtr1->mass_points
+		// Prevent Chmmr satellites from charging up Utwig's battery during collision.
+		&& !(EnemyStarShipPtr->SpeciesID == CHMMR_ID && ElementPtr1->mass_points == 10)
+		// Do not gain energy from Lurg blobs; these inflict no damage against ships.
+		&& !(EnemyStarShipPtr->SpeciesID == LURG_ID && ElementPtr1->mass_points < 2))
 		ElementPtr0->life_span += ElementPtr1->mass_points;
-	}
 
 	collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
 }

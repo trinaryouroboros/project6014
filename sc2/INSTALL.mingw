@@ -1,4 +1,4 @@
-Instructions for building P6014 in Windows with MinGW and MSYS
+Instructions for building UQM in Windows with MinGW and MSYS
 ============================================================
 
 First, download and install the latest version of MinGW and then MSYS.

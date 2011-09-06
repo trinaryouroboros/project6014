@@ -21,8 +21,6 @@
 //			 -Option to add randomness to interplanetary background stars
 //			 -The flag which controls escaping enemies is zeroed now in uninitsolarsys
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #include "colors.h"
 #include "controls.h"
 #include "encount.h"
@@ -368,7 +366,7 @@ LoadSolarSys (void)
 		}
 		
 		// JMS: Chmmr explorer is not dependent from number of thrusters
-		if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+		if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
 			pSolarSysState->max_ship_speed = (BYTE)(102);
 		else
 			pSolarSysState->max_ship_speed = (BYTE)((num_thrusters + 5) * IP_SHIP_THRUST_INCREMENT);
@@ -804,7 +802,7 @@ flagship_inertial_thrust (COUNT CurrentAngle)
 		DWORD desired_speed;
 		
 		// JMS: Explorer accelerates at its own slooooow pace
-		if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+		if(GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == 0)
 			ip_increment = EXPLORER_IP_SHIP_THRUST_INCREMENT;
 		else
 			ip_increment = IP_SHIP_THRUST_INCREMENT;
@@ -1642,13 +1640,15 @@ GenerateRandomIP (BYTE control)
 			ReinitQueue (&GLOBAL (ip_group_q));
 			break;
 		case GENERATE_MINERAL:
-			GenerateMineralDeposits (&pSolarSysState->SysInfo, &pSolarSysState->CurNode);
+			GenerateMineralDeposits (&pSolarSysState->SysInfo,
+					&pSolarSysState->CurNode);
 			break;
 		case GENERATE_ENERGY:
 			pSolarSysState->CurNode = 0;
 			break;
 		case GENERATE_LIFE:
-			GenerateLifeForms (&pSolarSysState->SysInfo, &pSolarSysState->CurNode);
+			GenerateLifeForms (&pSolarSysState->SysInfo,
+					&pSolarSysState->CurNode);
 			break;
 		case GENERATE_ORBITAL:
 		{
@@ -1665,17 +1665,21 @@ GenerateRandomIP (BYTE control)
 						pSolarSysState->pOrbitalDesc -
 						pSolarSysState->MoonDesc);
 #endif /* DEBUG_SOLARSYS */
-			rand_val = DoPlanetaryAnalysis (&pSolarSysState->SysInfo, pSolarSysState->pOrbitalDesc);
+			rand_val = DoPlanetaryAnalysis (&pSolarSysState->SysInfo,
+					pSolarSysState->pOrbitalDesc);
 
-			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] = rand_val;
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[BIOLOGICAL_SCAN] =
+					rand_val;
 			i = (COUNT)~0;
 			rand_val = GenerateLifeForms (&pSolarSysState->SysInfo, &i);
 
-			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[MINERAL_SCAN] = rand_val;
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[MINERAL_SCAN] =
+					rand_val;
 			i = (COUNT)~0;
 			GenerateMineralDeposits (&pSolarSysState->SysInfo, &i);
 
-			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN] = rand_val;
+			pSolarSysState->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN] =
+					rand_val;
 			LoadPlanet (NULL);
 			break;
 		}
@@ -1696,7 +1700,8 @@ GenerateRandomIP (BYTE control)
 			break;
 		case GENERATE_PLANETS:
 		{
-			FillOrbits (pSolarSysState, (BYTE)~0, &pSolarSysState->PlanetDesc[0], FALSE);
+			FillOrbits (pSolarSysState,
+					(BYTE)~0, &pSolarSysState->PlanetDesc[0], FALSE);
 			GeneratePlanets (pSolarSysState);
 			break;
 		}
@@ -1822,8 +1827,6 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 	DWORD rand_val;
 	STAMP s;
 	DWORD old_seed;
-	
-	COUNT num_of_stars; // JMS_GFX: Replaced NUM_BRT_DRAWN with this
 
 	SetContext (SpaceContext);
 	SetContextBackGroundColor (BLACK_COLOR);
@@ -1835,13 +1838,6 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 			MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000/*+(GLOBAL (GameClock).tick_count)*/,
 			CurStarDescPtr->star_pt.y - 6000/*+(GLOBAL (GameClock).tick_count <= 0)*/ ));
 
-	if (RESOLUTION_FACTOR == 0)	// JMS_GFX
-		num_of_stars = 30;		// JMS_GFX
-	if (RESOLUTION_FACTOR == 1)	// JMS_GFX
-		num_of_stars = 66;		// JMS_GFX
-	if (RESOLUTION_FACTOR == 2)	// JMS_GFX
-		num_of_stars = 111;		// JMS_GFX
-	
 #define NUM_DIM_PIECES 8
 	s.frame = SpaceJunkFrame;
 	for (i = 0; i < NUM_DIM_PIECES; ++i)
@@ -1860,8 +1856,8 @@ DrawStarBackGround (BOOLEAN ForPlanet)
 #define NUM_BRT_PIECES 8
 	for (i = 0; i < NUM_BRT_PIECES; ++i)
 	{
-//#define NUM_BRT_DRAWN 30
-		for (j = 0; j < num_of_stars /*NUM_BRT_DRAWN*/; ++j)
+#define NUM_BRT_DRAWN 30
+		for (j = 0; j < NUM_BRT_DRAWN; ++j)
 		{
 			rand_val = TFB_Random ();
 			s.origin.x = LOWORD (rand_val) % SIS_SCREEN_WIDTH;

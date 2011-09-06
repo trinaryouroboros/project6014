@@ -41,7 +41,6 @@ extern const char *_cur_resfile_name;
 
 typedef void (ResourceLoadFun) (const char *pathname, RESOURCE_DATA *resdata);
 typedef BOOLEAN (ResourceFreeFun) (void *handle);
-typedef void (ResourceStringFun) (RESOURCE_DATA *handle, char *buf, unsigned int size);
 				  
 typedef void *(ResourceLoadFileFun) (uio_Stream *fp, DWORD len);
 
@@ -59,31 +58,28 @@ long LengthResFile (uio_Stream *fp);
 BOOLEAN res_CloseResFile (uio_Stream *fp);
 BOOLEAN DeleteResFile (uio_DirHandle *dir, const char *filename);
 
-RESOURCE_INDEX InitResourceSystem (void);
+RESOURCE_INDEX InitResourceSystem ();
 void UninitResourceSystem (void);
-BOOLEAN InstallResTypeVectors (const char *res_type, ResourceLoadFun *loadFun, ResourceFreeFun *freeFun, ResourceStringFun *stringFun);
+BOOLEAN InstallResTypeVectors (const char *res_type, ResourceLoadFun *loadFun, ResourceFreeFun *freeFun);
 void *res_GetResource (RESOURCE res);
 void *res_DetachResource (RESOURCE res);
-void res_FreeResource (RESOURCE res);
+BOOLEAN FreeResource (RESOURCE res);
 COUNT CountResourceTypes (void);
 DWORD res_GetIntResource (RESOURCE res);
 BOOLEAN res_GetBooleanResource (RESOURCE res);
-const char *res_GetResourceType (RESOURCE res);
 
-void LoadResourceIndex (uio_DirHandle *dir, const char *filename, const char *prefix);
-void SaveResourceIndex (uio_DirHandle *dir, const char *rmpfile, const char *root, BOOLEAN strip_root);
+void LoadResourceIndex (uio_DirHandle *dir, const char *filename);
 
 void *GetResourceData (uio_Stream *fp, DWORD length);
 
 #define AllocResourceData HMalloc
 BOOLEAN FreeResourceData (void *);
 
-#include "libs/strlib.h"
-#include "libs/gfxlib.h"
-		// For Color
+#include "strlib.h"
 
 typedef STRING_TABLE DIRENTRY_REF;
 typedef STRING DIRENTRY;
+typedef STRINGPTR DIRENTRYPTR;
 
 extern DIRENTRY_REF LoadDirEntryTable (uio_DirHandle *dirHandle,
 		const char *path, const char *pattern, match_MatchType matchType);
@@ -97,8 +93,10 @@ extern DIRENTRY_REF LoadDirEntryTable (uio_DirHandle *dirHandle,
 #define SetRelDirEntryTableIndex SetRelStringTableIndex
 #define GetDirEntryLength GetStringLengthBin
 #define GetDirEntryAddress GetStringAddress
+#define GetDirEntryContents GetStringContents
 
 /* Key-Value resources */
+void res_ClearTables (void);
 
 void res_LoadFilename (uio_DirHandle *path, const char *fname);
 void res_SaveFilename (uio_DirHandle *path, const char *fname, const char *root);
@@ -108,7 +106,6 @@ void res_SaveFile (uio_Stream *fname, const char *root);
 
 BOOLEAN res_HasKey (const char *key);
 
-BOOLEAN res_IsString (const char *key);
 const char *res_GetString (const char *key);
 void res_PutString (const char *key, const char *value);
 

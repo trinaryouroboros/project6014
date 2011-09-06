@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #include "colors.h"
 #include "controls.h"
 #include "gamestr.h"
@@ -26,19 +24,6 @@
 #include "sounds.h"
 #include "util.h"
 
-#define ELEMENT_ORG_Y      RES_STAT_SCALE(35) // JMS_GFX
-#define FREE_ORG_Y         (ELEMENT_ORG_Y + (NUM_ELEMENT_CATEGORIES * ELEMENT_SPACING_Y))
-#define BIO_ORG_Y          RES_STAT_SCALE(119) // JMS_GFX
-#define ELEMENT_SPACING_Y  RES_STAT_SCALE(9) // JMS_GFX
-
-#define ELEMENT_COL_0      RES_STAT_SCALE(7) // JMS_GFX
-#define ELEMENT_COL_1      RES_STAT_SCALE(32) // JMS_GFX
-#define ELEMENT_COL_2      RES_STAT_SCALE(58) // JMS_GFX
-
-#define ELEMENT_SEL_ORG_X  (ELEMENT_COL_0 + RES_STAT_SCALE(7 + 5)) // JMS_GFX
-#define ELEMENT_SEL_WIDTH  (ELEMENT_COL_2 - ELEMENT_SEL_ORG_X + RES_STAT_SCALE(1)) // JMS_GFX
-
-#define TEXT_BASELINE      RES_STAT_SCALE(6) // JMS_GFX
 
 void
 ShowRemainingCapacity (void)
@@ -51,26 +36,26 @@ ShowRemainingCapacity (void)
 	OldContext = SetContext (StatusContext);
 	SetContextFont (TinyFont);
 
-	sprintf (rt_amount_buf, "%u", GetSBayCapacity (NULL) - GLOBAL_SIS (TotalElementMass));
-	
-	r.corner.x = RES_STAT_SCALE(40); // JMS_GFX
-	r.corner.y = FREE_ORG_Y; // JMS_GFX
-	
-	rt.baseline.x = ELEMENT_COL_2 + RES_STAT_SCALE(1); // JMS_GFX
-	rt.baseline.y = r.corner.y + TEXT_BASELINE;
+	sprintf (rt_amount_buf, "%u",
+			GetSBayCapacity (NULL)
+			- GLOBAL_SIS (TotalElementMass));
+	rt.baseline.x = 59 * RESOLUTION_FACTOR; // JMS_GFX
+	rt.baseline.y = 113 * RESOLUTION_FACTOR; // JMS_GFX
 	rt.align = ALIGN_RIGHT;
 	rt.pStr = rt_amount_buf;
 	rt.CharCount = (COUNT)~0;
 
-	r.extent.width = rt.baseline.x - r.corner.x + RES_STAT_SCALE(1); // JMS_GFX
-	r.extent.height = ELEMENT_SPACING_Y - RES_STAT_SCALE(2); // JMS_GFX
+	r.corner.x = 40 * RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y = rt.baseline.y - (6 * RESOLUTION_FACTOR); // JMS_GFX
+	r.extent.width = rt.baseline.x - r.corner.x + (1 * RESOLUTION_FACTOR); // JMS_GFX)
+	r.extent.height = 7 * RESOLUTION_FACTOR; // JMS_GFX
 
 	BatchGraphics ();
-	// erase previous free amount
-	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
+	SetContextForeGroundColor (
+			BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 	DrawFilledRectangle (&r);
-	// print the new free amount
-	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
+	SetContextForeGroundColor (
+			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
 	font_DrawText (&rt);
 	UnbatchGraphics ();
 	
@@ -93,7 +78,7 @@ DrawCargoStrings (BYTE OldElement, BYTE NewElement)
 
 	BatchGraphics ();
 
-	y = RES_STAT_SCALE(41); // JMS_GFX
+	y = 41 * RESOLUTION_FACTOR; // JMS_GFX
 	rt.align = ALIGN_RIGHT;
 	rt.pStr = rt_amount_buf;
 
@@ -101,123 +86,124 @@ DrawCargoStrings (BYTE OldElement, BYTE NewElement)
 	{
 		STAMP s;
 
-		r.corner.x = RES_STAT_SCALE(2); // JMS_GFX
-		r.extent.width = FIELD_WIDTH + RES_STAT_SCALE(1); // JMS_GFX
+		r.corner.x = 2 * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width = FIELD_WIDTH + (1 * RESOLUTION_FACTOR); // JMS_GFX
 
 		{
 			TEXT ct;
 
-			r.corner.y = RES_STAT_SCALE(20); // JMS_GFX
-			r.extent.height = RES_STAT_SCALE(129) - r.corner.y; // JMS_GFX
+			r.corner.y = 20 * RESOLUTION_FACTOR; // JMS_GFX
+			r.extent.height = 109 * RESOLUTION_FACTOR; // JMS_GFX
 			DrawStarConBox (&r, 1,
 					BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19),
 					BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F),
 					TRUE,
 					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 
-			// draw the "CARGO" title
 			SetContextFont (StarConFont);
-			ct.baseline.x = (STATUS_WIDTH >> 1) - RES_STAT_SCALE(1); // JMS_GFX
-			ct.baseline.y = RES_STAT_SCALE(27); // JMS_GFX
+			ct.baseline.x = (STATUS_WIDTH >> 1) - 1 * RESOLUTION_FACTOR; // JMS_GFX
+			ct.baseline.y = 27 * RESOLUTION_FACTOR; // JMS_GFX
 			ct.align = ALIGN_CENTER;
 			ct.pStr = GAME_STRING (CARGO_STRING_BASE);
 			ct.CharCount = (COUNT)~0;
-			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x0B));
+			SetContextForeGroundColor (
+					BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x0B));
 			font_DrawText (&ct);
 
 			SetContextFont (TinyFont);
 		}
 
-		r.corner.x = ELEMENT_COL_0;			// JMS_GFX
-		r.extent.width = ELEMENT_COL_0;		// JMS_GFX
-		r.extent.height = ELEMENT_COL_0;	// JMS_GFX
+		r.corner.x = 7 * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width = 7 * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.height = 7 * RESOLUTION_FACTOR; // JMS_GFX
 
 		s.origin.x = r.corner.x + (r.extent.width >> 1);
-		s.frame = SetAbsFrameIndex (MiscDataFrame, (NUM_SCANDOT_TRANSITIONS << 1) + 3);
-		
-		if (RESOLUTION_FACTOR == 2)
-			s.frame = SetRelFrameIndex (s.frame, -1); // JMS_GFX
-		
-		cy = ELEMENT_ORG_Y;
+		s.frame = SetAbsFrameIndex (
+				MiscDataFrame,
+				(NUM_SCANDOT_TRANSITIONS << 1) + 3
+				);
+		cy = y;
 
-		rt.baseline.y = cy - RES_STAT_SCALE(1); // JMS_GFX
+		rt.baseline.y = cy - 7 * RESOLUTION_FACTOR; // JMS_GFX
 		rt.CharCount = 1;
 
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
-		
-		rt.baseline.x = ELEMENT_COL_1; // JMS_GFX
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
+		rt.baseline.x = 32 * RESOLUTION_FACTOR; // JMS_GFX
 		rt_amount_buf[0] = '$';
 		font_DrawText (&rt);
 
-		rt.baseline.x = ELEMENT_COL_2; // JMS_GFX
+		rt.baseline.x = 58 * RESOLUTION_FACTOR; // JMS_GFX
 		rt_amount_buf[0] = '#';
 		font_DrawText (&rt);
 
-		for (OldElement = 0; OldElement < NUM_ELEMENT_CATEGORIES; ++OldElement)
+		for (OldElement = 0;
+				OldElement < NUM_ELEMENT_CATEGORIES; ++OldElement)
 		{
-			// erase background under an element icon
 			SetContextForeGroundColor (BLACK_COLOR);
-			r.corner.y = cy; // JMS_GFX
+			r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
 			DrawFilledRectangle (&r);
 
-			// draw an element icon
 			s.origin.y = r.corner.y + (r.extent.height >> 1);
 			DrawStamp (&s);
 			s.frame = SetRelFrameIndex (s.frame, 5);
 
 			if (OldElement != NewElement)
 			{
-				rt.baseline.y = cy + TEXT_BASELINE;
+				rt.baseline.y = cy;
 
-				SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
-				rt.baseline.x = ELEMENT_COL_1; // JMS_GFX
-				sprintf (rt_amount_buf, "%u", GLOBAL (ElementWorth[OldElement]));
+				SetContextForeGroundColor (
+						BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
+				rt.baseline.x = 32 * RESOLUTION_FACTOR; // JMS_GFX
+				sprintf (rt_amount_buf, "%u",
+						GLOBAL (ElementWorth[OldElement]));
 				rt.CharCount = (COUNT)~0;
 				font_DrawText (&rt);
 
-				SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
-				rt.baseline.x = ELEMENT_COL_2; // JMS_GFX
-				sprintf (rt_amount_buf, "%u", GLOBAL_SIS (ElementAmounts[OldElement]));
+				SetContextForeGroundColor (
+						BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
+				rt.baseline.x = 58 * RESOLUTION_FACTOR; // JMS_GFX
+				sprintf (rt_amount_buf, "%u",
+						GLOBAL_SIS (ElementAmounts[OldElement]));
 				rt.CharCount = (COUNT)~0;
 				font_DrawText (&rt);
 			}
 
-			cy += ELEMENT_SPACING_Y; // JMS_GFX
+			cy += 9 * RESOLUTION_FACTOR; // JMS_GFX
 		}
 
 		OldElement = NewElement;
 
-		// erase background under the Bio icon
+		rt.baseline.y = 125 * RESOLUTION_FACTOR; // JMS_GFX
+
 		SetContextForeGroundColor (BLACK_COLOR);
-		r.corner.y = BIO_ORG_Y; // JMS_GFX
+		r.corner.y = rt.baseline.y - 6 * RESOLUTION_FACTOR; // JMS_GFX
 		DrawFilledRectangle (&r);
 
-		// draw the Bio icon
 		s.origin.y = r.corner.y + (r.extent.height >> 1);
 		s.frame = SetAbsFrameIndex (s.frame, 68);
 		DrawStamp (&s);
 
-		// print the Bio amount
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
-		rt.baseline.x = ELEMENT_COL_2; // JMS_GFX
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
+		rt.baseline.x = 58 * RESOLUTION_FACTOR; // JMS_GFX
 		sprintf (rt_amount_buf, "%u", GLOBAL_SIS (TotalBioMass));
 		rt.CharCount = (COUNT)~0;
 		font_DrawText (&rt);
 
-		// draw the line over the Bio amount
-		r.corner.x = RES_STAT_SCALE(4); // JMS_GFX
-		r.corner.y = BIO_ORG_Y - RES_STAT_SCALE(2); // JMS_GFX
-		r.extent.width = FIELD_WIDTH - RES_STAT_SCALE(3); // JMS_GFX
+		r.corner.x = 4 * RESOLUTION_FACTOR; // JMS_GFX
+		r.corner.y = 117 * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width = 56 * RESOLUTION_FACTOR; // JMS_GFX
 		r.extent.height = 1;
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
 		DrawFilledRectangle (&r);
 
-		// print "Free"
 		{
 			TEXT lt;
 			
-			lt.baseline.x = RES_STAT_SCALE(5); // JMS_GFX
-			lt.baseline.y = FREE_ORG_Y + TEXT_BASELINE; // JMS_GFX
+			lt.baseline.x = 5 * RESOLUTION_FACTOR; // JMS_GFX
+			lt.baseline.y = 113 * RESOLUTION_FACTOR; // JMS_GFX
 			lt.align = ALIGN_LEFT;
 			lt.pStr = GAME_STRING (CARGO_STRING_BASE + 1);
 			lt.CharCount = (COUNT)~0;
@@ -227,42 +213,39 @@ DrawCargoStrings (BYTE OldElement, BYTE NewElement)
 		ShowRemainingCapacity ();
 	}
 
-	r.corner.x = ELEMENT_SEL_ORG_X; // JMS_GFX
-	r.extent.width = ELEMENT_SEL_WIDTH; // JMS_GFX
-	r.extent.height = ELEMENT_SPACING_Y - RES_STAT_SCALE(2); // JMS_GFX
+	r.corner.x = 19 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.width = 40 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.height = 7 * RESOLUTION_FACTOR; // JMS_GFX
 
 	if (OldElement != NewElement)
 	{
 		if (OldElement == NUM_ELEMENT_CATEGORIES)
-			r.corner.y = BIO_ORG_Y; // JMS_GFX
+			cy = 125 * RESOLUTION_FACTOR; // JMS_GFX
 		else
-			r.corner.y = ELEMENT_ORG_Y + (OldElement * ELEMENT_SPACING_Y); // JMS_GFX
-
-		// draw line background
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
+			cy = y + (OldElement * (9 * RESOLUTION_FACTOR));
+		r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 		DrawFilledRectangle (&r);
 
-		rt.baseline.y = r.corner.y + TEXT_BASELINE;
+		rt.baseline.y = cy;
 
 		if (OldElement == NUM_ELEMENT_CATEGORIES)
-		{
-			// Bio
 			sprintf (rt_amount_buf, "%u", GLOBAL_SIS (TotalBioMass));
-		}
 		else
-		{	// Element
-			// print element's worth
-			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
-			rt.baseline.x = ELEMENT_COL_1; // JMS_GFX
+		{
+			SetContextForeGroundColor (
+					BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
+			rt.baseline.x = 32 * RESOLUTION_FACTOR; // JMS_GFX
 			sprintf (rt_amount_buf, "%u", GLOBAL (ElementWorth[OldElement]));
 			rt.CharCount = (COUNT)~0;
 			font_DrawText (&rt);
 			sprintf (rt_amount_buf, "%u", GLOBAL_SIS (ElementAmounts[OldElement]));
 		}
 
-		// print the element/bio amount
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
-		rt.baseline.x = ELEMENT_COL_2; // JMS_GFX
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
+		rt.baseline.x = 58 * RESOLUTION_FACTOR; // JMS_GFX
 		rt.CharCount = (COUNT)~0;
 		font_DrawText (&rt);
 	}
@@ -270,35 +253,32 @@ DrawCargoStrings (BYTE OldElement, BYTE NewElement)
 	if (NewElement != (BYTE)~0)
 	{
 		if (NewElement == NUM_ELEMENT_CATEGORIES)
-			r.corner.y = BIO_ORG_Y; // JMS_GFX
+			cy = 125 * RESOLUTION_FACTOR; // JMS_GFX
 		else
-			r.corner.y = ELEMENT_ORG_Y + (NewElement * ELEMENT_SPACING_Y); // JMS_GFX
-		
-		// draw line background
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
+			cy = y + (NewElement * (9 * RESOLUTION_FACTOR));
+		r.corner.y = cy - 6 * RESOLUTION_FACTOR; // JMS_GFX
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09));
 		DrawFilledRectangle (&r);
 
-		rt.baseline.y = r.corner.y + TEXT_BASELINE;
+		rt.baseline.y = cy;
 
 		if (NewElement == NUM_ELEMENT_CATEGORIES)
-		{
-			// Bio
 			sprintf (rt_amount_buf, "%u", GLOBAL_SIS (TotalBioMass));
-		}
 		else
-		{	// Element
-			// print element's worth
-			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
-			rt.baseline.x = ELEMENT_COL_1; // JMS_GFX
+		{
+			SetContextForeGroundColor (
+					BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03));
+			rt.baseline.x = 32 * RESOLUTION_FACTOR; // JMS_GFX
 			sprintf (rt_amount_buf, "%u", GLOBAL (ElementWorth[NewElement]));
 			rt.CharCount = (COUNT)~0;
 			font_DrawText (&rt);
 			sprintf (rt_amount_buf, "%u", GLOBAL_SIS (ElementAmounts[NewElement]));
 		}
 
-		// print the element/bio amount
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x0B));
-		rt.baseline.x = ELEMENT_COL_2; // JMS_GFX
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x0B));
+		rt.baseline.x = 58 * RESOLUTION_FACTOR; // JMS_GFX
 		rt.CharCount = (COUNT)~0;
 		font_DrawText (&rt);
 	}

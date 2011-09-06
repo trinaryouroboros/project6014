@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
-
 #ifndef _SETUPMENU_H
 #define _SETUPMENU_H
 
@@ -45,10 +43,9 @@ typedef enum {
 typedef enum {
 	OPTVAL_320_240,
 	OPTVAL_640_480,
+	OPTVAL_REAL_640_480, // JMS_GFX
 	OPTVAL_800_600,
 	OPTVAL_1024_768,
-	OPTVAL_REAL_640_480, // JMS_GFX
-	OPTVAL_REAL_1280_960, // DC_GFX
 	OPTVAL_CUSTOM
 } OPT_RESTYPE;
 

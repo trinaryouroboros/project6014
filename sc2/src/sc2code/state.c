@@ -251,11 +251,13 @@ GetPlanetInfo (void)
 		DWORD offset;
 
 		star_index = (COUNT)(CurStarDescPtr - star_array);
-		planet_index = (COUNT)(pSolarSysState->pBaseDesc->pPrevDesc - pSolarSysState->PlanetDesc);
+		planet_index = (COUNT)(pSolarSysState->pBaseDesc->pPrevDesc
+				- pSolarSysState->PlanetDesc);
 		if (pSolarSysState->pOrbitalDesc->pPrevDesc == pSolarSysState->SunDesc)
 			moon_index = 0;
 		else
-			moon_index = (COUNT)(pSolarSysState->pOrbitalDesc - pSolarSysState->MoonDesc + 1);
+			moon_index = (COUNT)(pSolarSysState->pOrbitalDesc
+					- pSolarSysState->MoonDesc + 1);
 
 		SeekStateFile (fp, star_index * OFFSET_SIZE, SEEK_SET);
 		sread_32 (fp, &offset);
@@ -266,13 +268,15 @@ GetPlanetInfo (void)
 
 			// Skip scan records for all preceeding planets to the one we need
 			for (i = 0; i < planet_index; ++i)
-				offset += (pSolarSysState->PlanetDesc[i].NumPlanets + 1) * SCAN_RECORD_SIZE;
+				offset += (pSolarSysState->PlanetDesc[i].NumPlanets + 1) *
+						SCAN_RECORD_SIZE;
 				
 			// Skip scan records for all preceeding moons to the one we need
 			offset += moon_index * SCAN_RECORD_SIZE;
 
 			SeekStateFile (fp, offset, SEEK_SET);
-			sread_a32 (fp, pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask, NUM_SCAN_TYPES);
+			sread_a32 (fp, pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask,
+					NUM_SCAN_TYPES);
 		}
 
 		CloseStateFile (fp);

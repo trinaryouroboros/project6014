@@ -17,19 +17,17 @@
  */
 
 #include "resintrn.h"
-#include "libs/memlib.h"
+#include "misc.h"
 #include "options.h"
+#include "nameref.h"
 #include "types.h"
 #include "libs/log.h"
 #include "libs/gfxlib.h"
-#include "libs/reslib.h"
 #include "libs/sndlib.h"
-#include "libs/vidlib.h"
+#include "coderes.h"
 #include "propfile.h"
 #include <ctype.h>
 #include <stdlib.h>
-// XXX: we should not include anything from uqm/ inside libs/
-#include "coderes.h"
 
 static RESOURCE_INDEX
 allocResourceIndex (void) {
@@ -106,7 +104,6 @@ newResourceDesc (const char *res_id, const char *resval)
 	strncpy (result->fname, path, pathlen);
 	result->fname[pathlen] = '\0';
 	result->vtable = vtable;
-	result->refcount = 0;
 	
 	if (vtable->freeFun == NULL)
 	{
@@ -129,25 +126,36 @@ process_resource_desc (const char *key, const char *value)
 	{
 		if (!CharHashTable_add (map, key, newDesc))
 		{
-			res_Remove (key);
+			ResourceDesc *oldDesc = (ResourceDesc *)CharHashTable_find (map, key);
+			if (oldDesc != NULL)
+			{
+				if (newDesc->resdata.ptr != NULL)
+				{
+					/* XXX: It might be nice to actually clean it up properly */
+					log_add (log_Warning, "LEAK WARNING: Replaced '%s' while it was live", key);
+				}
+				HFree (oldDesc->fname);
+				HFree (oldDesc);
+			}
+			CharHashTable_remove (map, key);
 			CharHashTable_add (map, key, newDesc);
 		}
 	}
 }
 
-static void
+void
 UseDescriptorAsRes (const char *descriptor, RESOURCE_DATA *resdata)
 {
 	resdata->ptr = (void *)descriptor;
 }
 
-static void
+void
 DescriptorToInt (const char *descriptor, RESOURCE_DATA *resdata)
 {
 	resdata->num = atoi (descriptor);
 }
 
-static void
+void
 DescriptorToBoolean (const char *descriptor, RESOURCE_DATA *resdata)
 {
 	if (!strcasecmp (descriptor, "true"))
@@ -160,191 +168,17 @@ DescriptorToBoolean (const char *descriptor, RESOURCE_DATA *resdata)
 	}
 }
 
-static inline size_t
-skipWhiteSpace (const char *start)
-{
-	const char *ptr = start;
-	while (isspace (*ptr))
-		ptr++;
-	return (ptr - start);
-}
-
-// On success, resdata->num will be filled with a 32-bits RGBA value.
-static void
-DescriptorToColor (const char *descriptor, RESOURCE_DATA *resdata)
-{
-	int bytesParsed;
-	int componentBits;
-	int maxComponentValue;
-	size_t componentCount;
-	size_t compI;
-	int comps[4];
-			// One element for each of r, g, b, a.
-
-	descriptor += skipWhiteSpace (descriptor);
-
-#if 0
-	// Can't use this; '#' starts a comment.
-	if (*descriptor == '#')
-	{
-		// "#rrggbb"
-		int i;
-		DWORD value = 0;
-
-		descriptor++;
-		for (i = 0; i < 6; i++)
-		{
-			BYTE nibbleValue;
-			if (*descriptor >= '0' && *descriptor <= '9')
-				nibbleValue = *descriptor - '0';
-			else if (*descriptor >= 'a' && *descriptor <= 'f')
-				nibbleValue = 0xa + *descriptor - 'a';
-			else if (*descriptor >= 'A' && *descriptor <= 'F')
-				nibbleValue = 0xa + *descriptor - 'A';
-			else
-				goto fail;
-
-			value = (value * 16) + nibbleValue;
-			descriptor++;
-		}
-	
-		descriptor += skipWhiteSpace (descriptor);
-
-		if (*descriptor != '\0')
-			log_add (log_Warning, "Junk after color resource string.");
-
-		resdata->num = (value << 8) | 0xff;
-		return;
-	}
-#endif
-	
-	// Color is of the form "rgb(r, g, b)", "rgba(r, g, b, a)",
-	// or "rgb15(r, g, b)".
-
-	if (sscanf (descriptor, "rgb ( %i , %i , %i ) %n",
-				&comps[0], &comps[1], &comps[2], &bytesParsed) >= 3)
-	{
-		componentBits = 8;
-		componentCount = 3;
-		comps[3] = 0xff;
-	}
-	else if (sscanf (descriptor, "rgba ( %i , %i , %i , %i ) %n",
-			&comps[0], &comps[1], &comps[2], &comps[3], &bytesParsed) >= 4)
-	{
-		componentBits = 8;
-		componentCount = 4;
-	}
-	else if (sscanf (descriptor, "rgb15 ( %i , %i , %i ) %n",
-				&comps[0], &comps[1], &comps[2], &bytesParsed) >= 3)
-	{
-		componentBits = 5;
-		componentCount = 3;
-		comps[3] = 0xff;
-	}
-	else
-		goto fail;
-
-	if (descriptor[bytesParsed] != '\0')
-		log_add (log_Warning, "Junk after color resource string.");
-	
-	maxComponentValue = (1 << componentBits) - 1;
-
-	// Check the range of the components.
-	for (compI = 0; compI < componentCount; compI++)
-	{
-		if (comps[compI] < 0)
-		{
-			comps[compI] = 0;
-			log_add (log_Warning, "Color component value too small; "
-					"value clipped.");
-		}
-		
-		if (comps[compI] > (long) maxComponentValue)
-		{
-			comps[compI] = maxComponentValue;
-			log_add (log_Warning, "Color component value too large; "
-					"value clipped.");
-		}
-	}
-
-	if (componentBits == 5)
-		resdata->num = ((CC5TO8 (comps[0]) << 24) |
-				(CC5TO8 (comps[1]) << 16) | (CC5TO8 (comps[2]) << 8) |
-				comps[3]);
-	else
-		resdata->num = ((comps[0] << 24) | (comps[1] << 16) |
-				(comps[2] << 8) | comps[3]);
-
-	return;
-
-fail:
-	log_add (log_Error, "Invalid color description string for resource.\n");
-	resdata->num = 0x00000000;
-}
-
-static void
-RawDescriptor (RESOURCE_DATA *resdata, char *buf, unsigned int size)
-{
-	snprintf (buf, size, "%s", (char *)resdata->ptr);
-}
-
-static void
-IntToString (RESOURCE_DATA *resdata, char *buf, unsigned int size)
-{
-	snprintf (buf, size, "%d", resdata->num);
-}
-
-
-static void
-BooleanToString (RESOURCE_DATA *resdata, char *buf, unsigned int size)
-{
-	snprintf (buf, size, "%s", resdata->num ? "true" : "false");
-}
-
-static void
-ColorToString (RESOURCE_DATA *resdata, char *buf, unsigned int size)
-{
-	if ((resdata->num & 0xff) == 0xff)
-	{
-		// Opaque color, save as "rgb".
-		snprintf (buf, size, "rgb(0x%02x, 0x%02x, 0x%02x)",
-				(resdata->num >> 24), (resdata->num >> 16) & 0xff,
-				(resdata->num >> 8) & 0xff);
-	}
-	else
-	{
-		// (Partially) transparent color, save as "rgba".
-		snprintf (buf, size, "rgba(0x%02x, 0x%02x, 0x%02x, 0x%02x)",
-				(resdata->num >> 24), (resdata->num >> 16) & 0xff,
-				(resdata->num >> 8) & 0xff, resdata->num & 0xff);
-	}
-}
-
-static RESOURCE_INDEX curResourceIndex;
-
-void
-_set_current_index_header (RESOURCE_INDEX newResourceIndex)
-{
-	curResourceIndex = newResourceIndex;
-}
-
 RESOURCE_INDEX
 InitResourceSystem (void)
 {
-	RESOURCE_INDEX ndx;
-	if (curResourceIndex) {
-		return curResourceIndex;
-	}
-	ndx = allocResourceIndex ();
+	RESOURCE_INDEX ndx = allocResourceIndex ();
 	
 	_set_current_index_header (ndx);
 
-	InstallResTypeVectors ("UNKNOWNRES", UseDescriptorAsRes, NULL, NULL);
-	InstallResTypeVectors ("STRING", UseDescriptorAsRes, NULL, RawDescriptor);
-	InstallResTypeVectors ("INT32", DescriptorToInt, NULL, IntToString);
-	InstallResTypeVectors ("BOOLEAN", DescriptorToBoolean, NULL,
-			BooleanToString);
-	InstallResTypeVectors ("COLOR", DescriptorToColor, NULL, ColorToString);
+	InstallResTypeVectors ("UNKNOWNRES", UseDescriptorAsRes, NULL);
+	InstallResTypeVectors ("STRING", UseDescriptorAsRes, NULL);
+	InstallResTypeVectors ("INT32", DescriptorToInt, NULL);
+	InstallResTypeVectors ("BOOLEAN", DescriptorToBoolean, NULL);
 	InstallGraphicResTypes ();
 	InstallStringTableResType ();
 	InstallAudioResTypes ();
@@ -353,65 +187,10 @@ InitResourceSystem (void)
 	return ndx;
 }
 
-RESOURCE_INDEX
-_get_current_index_header (void)
-{
-	if (!curResourceIndex) {
-		InitResourceSystem ();
-	}
-	return curResourceIndex;
-}
-
 void
-LoadResourceIndex (uio_DirHandle *dir, const char *rmpfile, const char *prefix)
+LoadResourceIndex (uio_DirHandle *dir, const char *rmpfile)
 {
-	PropFile_from_filename (dir, rmpfile, process_resource_desc, prefix);
-}
-
-void
-SaveResourceIndex (uio_DirHandle *dir, const char *rmpfile, const char *root, BOOLEAN strip_root)
-{
-	uio_Stream *f;
-	CharHashTable_Iterator *it;
-	unsigned int prefix_len;
-	
-	f = res_OpenResFile (dir, rmpfile, "wb");
-	if (!f) {
-		/* TODO: Warning message */
-		return;
-	}
-	prefix_len = root ? strlen (root) : 0;
-	for (it = CharHashTable_getIterator (_get_current_index_header ()->map);
-	     !CharHashTable_iteratorDone (it);
-	     it = CharHashTable_iteratorNext (it)) {
-		char *key = CharHashTable_iteratorKey (it);
-		if (!root || !strncmp (root, key, prefix_len)) {
-			ResourceDesc *value = CharHashTable_iteratorValue (it);
-			if (!value) {
-				log_add(log_Warning, "Resource %s had no value", key);
-			} else if (!value->vtable) {
-				log_add(log_Warning, "Resource %s had no type", key);
-			} else if (value->vtable->toString) {
-				char buf[256];
-				value->vtable->toString (&value->resdata, buf, 256);
-				buf[255]=0;
-				if (root && strip_root) {
-					WriteResFile (key+prefix_len, 1, strlen (key) - prefix_len, f);
-				} else {
-					WriteResFile (key, 1, strlen (key), f);
-				}
-				PutResFileChar(' ', f);
-				PutResFileChar('=', f);
-				PutResFileChar(' ', f);
-				WriteResFile (value->vtable->resType, 1, strlen (value->vtable->resType), f);
-				PutResFileChar(':', f);
-				WriteResFile (buf, 1, strlen (buf), f);
-				PutResFileNewline(f);
-			}
-		}
-	}
-	res_CloseResFile (f);
-	CharHashTable_freeIterator (it);
+	PropFile_from_filename (dir, rmpfile, process_resource_desc);
 }
 
 void
@@ -423,7 +202,7 @@ UninitResourceSystem (void)
 
 BOOLEAN
 InstallResTypeVectors (const char *resType, ResourceLoadFun *loadFun,
-		ResourceFreeFun *freeFun, ResourceStringFun *stringFun)
+		ResourceFreeFun *freeFun)
 {
 	ResourceHandlers *handlers;
 	ResourceDesc *result;
@@ -442,7 +221,6 @@ InstallResTypeVectors (const char *resType, ResourceLoadFun *loadFun,
 	}
 	handlers->loadFun = loadFun;
 	handlers->freeFun = freeFun;
-	handlers->toString = stringFun;
 	handlers->resType = resType;
 	
 	result = HMalloc (sizeof (ResourceDesc));
@@ -457,160 +235,4 @@ InstallResTypeVectors (const char *resType, ResourceLoadFun *loadFun,
 
 	map = _get_current_index_header ()->map;
 	return CharHashTable_add (map, key, result) != 0;
-}
-
-/* These replace the mapres.c calls and probably should be split out at some point. */
-BOOLEAN
-res_IsString (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	return desc && !strcmp(desc->vtable->resType, "STRING");
-}
-
-const char *
-res_GetString (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	if (!desc || !desc->resdata.ptr || strcmp(desc->vtable->resType, "STRING"))
-		return "";
-	/* TODO: Work out exact STRING semantics, specifically, the lifetime of
-	 *   the returned value. If caller is allowed to reference the returned
-	 *   value forever, STRING has to be ref-counted. */
-	return (const char *)desc->resdata.ptr;
-}
-
-void
-res_PutString (const char *key, const char *value)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	int srclen, dstlen;
-	if (!desc || !desc->resdata.ptr || strcmp(desc->vtable->resType, "STRING"))
-	{
-		/* TODO: This is kind of roundabout. We can do better by refactoring newResourceDesc */
-		process_resource_desc(key, "STRING:undefined");
-		desc = lookupResourceDesc (idx, key);
-	}
-	srclen = strlen (value);
-	dstlen = strlen (desc->resdata.ptr);
-	if (srclen > dstlen) {
-		char *newValue = HMalloc(srclen + 1);
-		char *oldValue = desc->fname;
-		log_add(log_Warning, "Reallocating string space for '%s'", key);
-		strncpy (newValue, value, srclen + 1);
-		desc->resdata.ptr = newValue;
-		desc->fname = newValue;
-		HFree (oldValue);
-	} else {
-		strncpy (desc->resdata.ptr, value, srclen + 1);
-	}
-}
-
-BOOLEAN
-res_IsInteger (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	return desc && !strcmp(desc->vtable->resType, "INT32");
-}
-
-int
-res_GetInteger (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	if (!desc || strcmp(desc->vtable->resType, "INT32"))
-	{
-		// TODO: Better error handling
-		return 0;
-	}
-	return desc->resdata.num;
-}
-
-void
-res_PutInteger (const char *key, int value)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	if (!desc || strcmp(desc->vtable->resType, "INT32"))
-	{
-		/* TODO: This is kind of roundabout. We can do better by refactoring newResourceDesc */
-		process_resource_desc(key, "INT32:0");
-		desc = lookupResourceDesc (idx, key);
-	}
-	desc->resdata.num = value;
-}
-
-BOOLEAN
-res_IsBoolean (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	return desc && !strcmp(desc->vtable->resType, "BOOLEAN");
-}
-
-BOOLEAN
-res_GetBoolean (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	if (!desc || strcmp(desc->vtable->resType, "BOOLEAN"))
-	{
-		// TODO: Better error handling
-		return FALSE;
-	}
-	return desc->resdata.num ? TRUE : FALSE;
-}
-
-void
-res_PutBoolean (const char *key, BOOLEAN value)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	if (!desc || strcmp(desc->vtable->resType, "BOOLEAN"))
-	{
-		/* TODO: This is kind of roundabout. We can do better by refactoring newResourceDesc */
-		process_resource_desc(key, "BOOLEAN:false");
-		desc = lookupResourceDesc (idx, key);
-	}
-	desc->resdata.num = value;
-}
-
-BOOLEAN
-res_IsColor (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	return desc && !strcmp(desc->vtable->resType, "COLOR");
-}
-
-BOOLEAN
-res_HasKey (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	return (lookupResourceDesc(idx, key) != NULL);
-}
-
-BOOLEAN
-res_Remove (const char *key)
-{
-	CharHashTable_HashTable *map = _get_current_index_header ()->map;
-	ResourceDesc *oldDesc = (ResourceDesc *)CharHashTable_find (map, key);
-	if (oldDesc != NULL)
-	{
-		if (oldDesc->resdata.ptr != NULL)
-		{
-			if (oldDesc->refcount > 0)
-				log_add (log_Warning, "WARNING: Replacing '%s' while it is live", key);
-			if (oldDesc->vtable && oldDesc->vtable->freeFun)
-			{
-				oldDesc->vtable->freeFun(oldDesc->resdata.ptr);
-			}
-		}
-		HFree (oldDesc->fname);
-		HFree (oldDesc);
-	}
-	return CharHashTable_remove (map, key);
 }

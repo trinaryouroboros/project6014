@@ -60,43 +60,16 @@
 
 #define CREATURE_AWARE (BYTE)(1 << 7)
 
-// JMS: The SpecialAttributes of critters:
-#define NONE 0
-#define SHOOTS_LASER (1 << 0)
-#define SHOOTS_LIMPET (1 << 1)
-#define WHEN_DYING_EXPLODES (1 << 2)
-#define WHEN_DYING_DIVIDES (1 << 3)
-#define INVULNERABLE_PART_TIME (1 << 4)
-#define INVULNERABLE_TO_BASIC_WEAPON (1 << 5)
-
-#define SHOOTING_SPECIALS 0x03 // binary 11
-#define WHEN_DYING_SPECIALS 0x0C // binary 1100
-#define INVULNERABILITY_SPECIALS 0x30 // binary 110000
-
-#define LIMPET_ACCEL (WORLD_TO_VELOCITY(1 << RESOLUTION_FACTOR))		// JMS_GFX
-#define LIMPET_MAX_SPEED (WORLD_TO_VELOCITY(3 << RESOLUTION_FACTOR))	// JMS_GFX
-#define LIMPET_LIFESPAN 50
-#define MAX_LIMPETS_LO_SPEED 16 // JMS: Max number of limpets that can stick on the lander
-#define MAX_LIMPETS_HI_SPEED 28 // JMS: Max number of limpets that can stick on the lander
-
-#define CRITTER_EXPLOSION_PERCENT 60 // JMS: This concerns only WHEN_DYING_EXPLODES critters.
-
-#define DIVIDED_CRITTER_NUMBER 3
-#define DIVIDED_CRITTER_LIFESPAN 1
-
 typedef struct
 {
 	BYTE Attributes, ValueAndHitPoints;
-        COUNT FrameRate, SpecialAttributes;
+        COUNT FrameRate;
 } LIFEFORM_DESC;
 
 // BW: FrameRate is an integer between 0 and 15
 // where (FrameRate+1)/32 is (roughly ?) the number of seconds
 // between two frames when animating the lifeform.
 // This should be defined with ONE_SECOND to comply with the other animations
-//
-// JMS: SpecialAttributes is a 16-bit bitmask which houses all the new
-// skills the creatures might have: shooting back, exploding etc.
 
 extern const LIFEFORM_DESC CreatureData[];
 

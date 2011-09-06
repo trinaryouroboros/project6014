@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
-
 #include "setupmenu.h"
 
 #include "controls.h"
@@ -69,9 +67,9 @@ static void rebind_control (WIDGET_CONTROLENTRY *widget);
 static void clear_control (WIDGET_CONTROLENTRY *widget);
 
 #ifdef HAVE_OPENGL
-#define RES_OPTS 7 // JMS_GFX was 4
+#define RES_OPTS 5
 #else
-#define RES_OPTS 5 // JMS_GFX was 2
+#define RES_OPTS 3
 #endif
 
 #define MENU_COUNT          8
@@ -1139,7 +1137,7 @@ GetGlobalOptions (GLOBALOPTS *opts)
 		}
 		break;
 	case 640:
-		if (resolutionFactor == 1) // JMS_GFX
+		if (resolutionFactor == 2) // JMS_GFX
 		{
 			opts->res = OPTVAL_REAL_640_480;
 		}
@@ -1180,17 +1178,6 @@ GetGlobalOptions (GLOBALOPTS *opts)
 			opts->res = OPTVAL_1024_768;
 		}		
 		break;
-	case 1280:								 // DC_GFX
-		if (ScreenHeightActual != 960)		 // DC_GFX
-		{									 // DC_GFX
-			opts->res = OPTVAL_CUSTOM;		 // DC_GFX
-		}									 // DC_GFX
-		else								 // DC_GFX
-		{									 // DC_GFX
-			opts->res = OPTVAL_REAL_1280_960;// DC_GFX
-		}									 // DC_GFX
-		break;								 // DC_GFX
-		
 	default:
 		opts->res = OPTVAL_CUSTOM;
 		break;
@@ -1225,7 +1212,8 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	int NewHeight = ScreenHeightActual;
 	int NewDriver = GraphicsDriver;
 	
-	unsigned int oldResFactor = resolutionFactor; // JMS_GFX
+	// JMS_GFX
+	int oldResFactor = resolutionFactor;
 
 	NewGfxFlags &= ~TFB_GFXFLAGS_SCALE_ANY;
 	
@@ -1238,7 +1226,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 #else
 		NewDriver = TFB_GFXDRIVER_SDL_PURE;
 #endif
-		resolutionFactor = 0;				// JMS_GFX
+		resolutionFactor=1; // JMS_GFX
 		break;
 	case OPTVAL_640_480:
 		NewWidth = 640;
@@ -1248,36 +1236,30 @@ SetGlobalOptions (GLOBALOPTS *opts)
 #else
 		NewDriver = TFB_GFXDRIVER_SDL_PURE;
 #endif
-		resolutionFactor = 0;				// JMS_GFX
+		resolutionFactor=1; // JMS_GFX
 		break;
 	case OPTVAL_800_600:
 		NewWidth = 800;
 		NewHeight = 600;
 		NewDriver = TFB_GFXDRIVER_SDL_OPENGL;
-		resolutionFactor = 0;				// JMS_GFX
+		resolutionFactor=1; // JMS_GFX
 		break;
 	case OPTVAL_1024_768:
 		NewWidth = 1024;
 		NewHeight = 768;
 		NewDriver = TFB_GFXDRIVER_SDL_OPENGL;
-		resolutionFactor = 0;				// JMS_GFX
+		resolutionFactor=1; // JMS_GFX
 		break;
-	case OPTVAL_REAL_640_480:				// JMS_GFX
-		NewWidth = 640;						// JMS_GFX
-		NewHeight = 480;					// JMS_GFX
-		NewDriver = TFB_GFXDRIVER_SDL_PURE; // JMS_GFX
-		resolutionFactor = 1;				// JMS_GFX
-		break;								// JMS_GFX
-	case OPTVAL_REAL_1280_960:				// JMS_GFX
-		NewWidth = 1280;					// JMS_GFX
-		NewHeight = 960;					// JMS_GFX
-		NewDriver = TFB_GFXDRIVER_SDL_PURE; // JMS_GFX
-		resolutionFactor = 2;				// JMS_GFX
-		break;								// JMS_GFX
-		
+	case OPTVAL_REAL_640_480: // JMS_GFX
+		NewWidth = 640;
+		NewHeight = 480;
+		NewDriver = TFB_GFXDRIVER_SDL_PURE;
+		resolutionFactor=1; //resolutionFactor=2; // JMS_DEMO
+		DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 36)); // JMS_DEMO
+		break;
 	default:
 		/* Don't mess with the custom value */
-		resolutionFactor = 0; // JMS_GFX
+		resolutionFactor=1; // JMS_GFX
 		break;
 	}
 
@@ -1335,25 +1317,10 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	if ((NewWidth != ScreenWidthActual) ||
 	    (NewHeight != ScreenHeightActual) ||
 	    (NewDriver != GraphicsDriver) ||
-		(resFactorWasChanged) || // JMS_GFX
 	    (NewGfxFlags != GfxFlags)) 
 	{
 		FlushGraphics ();
 		UninitVideoPlayer ();
-		
-		// JMS_GFX
-		if (resFactorWasChanged)
-		{
-			// Tell the game the new screen's size.
-			ScreenWidth  = 320 << resolutionFactor; // res_GetInteger ("config.reswidth");
-			ScreenHeight = 240 << resolutionFactor; // res_GetInteger ("config.resheight");
-		
-			// Change how big area of the screen is update-able.
-			Screen = CaptureDrawable (CreateDisplay (WANT_MASK | WANT_PIXMAP, &screen_width, &screen_height));
-			SetContext (ScreenContext);
-			SetContextFGFrame (Screen);
-		}
-		
 		TFB_DrawScreen_ReinitVideo (NewDriver, NewGfxFlags, NewWidth, NewHeight);
 		FlushGraphics ();
 		InitVideoPlayer (TRUE);
@@ -1432,6 +1399,6 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	res_PutString ("keys.5.name", input_templates[4].name);
 	res_PutString ("keys.6.name", input_templates[5].name);
 
-	SaveResourceIndex (configDir, "uqm.cfg", "config.", TRUE);
+	res_SaveFilename (configDir, "uqm.cfg", "config.");
 	SaveKeyConfiguration (configDir, "flight.cfg");
 }

@@ -20,7 +20,6 @@
 //			 -Certain star systems can have more than one energy blip graphics on planet surface simultaneously
 //			 -If black orb is found and the lander returned to Explorer ship, initiate cutscene.
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "build.h"
 #include "cons_res.h"
@@ -74,20 +73,20 @@ static void
 EraseCoarseScan (void)
 {
 	RECT r, tr;
-	const int leftScanWidth   = 80 << RESOLUTION_FACTOR; // JMS_GFX
-	const int rightScanWidth  = 80 << RESOLUTION_FACTOR; // JMS_GFX
-	const int leftScanOffset  = 5 << RESOLUTION_FACTOR; // JMS_GFX
-	const int rightScanOffset = 50 << RESOLUTION_FACTOR; // JMS_GFX
-	const int nameEraseWidth = (SIS_SCREEN_WIDTH - (2 << RESOLUTION_FACTOR)); // JMS_GFX
+	const int leftScanWidth   = (80 * RESOLUTION_FACTOR); // JMS_GFX
+	const int rightScanWidth  = (80 * RESOLUTION_FACTOR); // JMS_GFX
+	const int leftScanOffset  = (5 * RESOLUTION_FACTOR); // JMS_GFX
+	const int rightScanOffset = (50 * RESOLUTION_FACTOR); // JMS_GFX
+	const int nameEraseWidth = (SIS_SCREEN_WIDTH - 2 * RESOLUTION_FACTOR); // JMS_GFX
 
 	LockMutex (GraphicsLock);
 	SetContext (SpaceContext);
 
 	// Erase planet name
 	r.corner.x = (SIS_SCREEN_WIDTH >> 1) - (nameEraseWidth >> 1);
-	r.corner.y = (13 - 10) << RESOLUTION_FACTOR; // JMS_GFX
+	r.corner.y = (13 - 10) * RESOLUTION_FACTOR; // JMS_GFX
 	r.extent.width = nameEraseWidth;
-	r.extent.height = 14 << RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.height = 14 * RESOLUTION_FACTOR; // JMS_GFX
 	RepairBackRect (&r);
 
 	// Erase left side (Orbit, atmo, temp...)
@@ -137,7 +136,7 @@ MakeScanValue (UNICODE *buf, long val, const UNICODE *extra)
 static void
 PrintCoarseScanPC (void)
 {
-#define SCAN_LEADING_PC (14 << RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_LEADING_PC (14 * RESOLUTION_FACTOR) // JMS_GFX
 	SDWORD val;
 	TEXT t;
 	RECT r;
@@ -206,7 +205,7 @@ PrintCoarseScanPC (void)
 
 	t.align = ALIGN_CENTER;
 	t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-	t.baseline.y = 13 << RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = 13 * RESOLUTION_FACTOR; // JMS_GFX
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
@@ -218,9 +217,9 @@ PrintCoarseScanPC (void)
 	SetContextFont (TinyFont);
 	UnlockMutex (GraphicsLock);
 
-#define LEFT_SIDE_BASELINE_X_PC (5 << RESOLUTION_FACTOR) // JMS_GFX
-#define RIGHT_SIDE_BASELINE_X_PC (SIS_SCREEN_WIDTH - (75 << RESOLUTION_FACTOR)) // JMS_GFX
-#define SCAN_BASELINE_Y_PC (40 << RESOLUTION_FACTOR) // JMS_GFX
+#define LEFT_SIDE_BASELINE_X_PC (5 * RESOLUTION_FACTOR) // JMS_GFX
+#define RIGHT_SIDE_BASELINE_X_PC (SIS_SCREEN_WIDTH - (75 * RESOLUTION_FACTOR)) // JMS_GFX
+#define SCAN_BASELINE_Y_PC (40 * RESOLUTION_FACTOR) // JMS_GFX
 
 	t.baseline.y = SCAN_BASELINE_Y_PC;
 	t.align = ALIGN_LEFT;
@@ -379,7 +378,7 @@ PrintCoarseScanPC (void)
 static void
 PrintCoarseScan3DO (void)
 {
-#define SCAN_LEADING (19 << RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_LEADING (19 * RESOLUTION_FACTOR) // JMS_GFX
 	SDWORD val;
 	TEXT t;
 	STAMP s;
@@ -447,7 +446,7 @@ PrintCoarseScan3DO (void)
 
 	t.align = ALIGN_CENTER;
 	t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-	t.baseline.y = 13 << RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = 13 * RESOLUTION_FACTOR; // JMS_GFX
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 
@@ -457,15 +456,15 @@ PrintCoarseScan3DO (void)
 	font_DrawText (&t);
 
 	s.origin.x = s.origin.y = 0;
-	s.origin.x = (16 - SAFE_X) << RESOLUTION_FACTOR; // JMS_GFX
+	s.origin.x = (16 - SAFE_X) * RESOLUTION_FACTOR; // JMS_GFX
 	s.frame = SetAbsFrameIndex (SpaceJunkFrame, 20);
 	DrawStamp (&s);
 
 	UnlockMutex (GraphicsLock);
 
-#define LEFT_SIDE_BASELINE_X ((27 + (16 - SAFE_X)) << RESOLUTION_FACTOR) // JMS_GFX
-#define RIGHT_SIDE_BASELINE_X ((SIS_SCREEN_WIDTH - LEFT_SIDE_BASELINE_X) << RESOLUTION_FACTOR) // JMS_GFX
-#define SCAN_BASELINE_Y (25 << RESOLUTION_FACTOR) // JMS_GFX
+#define LEFT_SIDE_BASELINE_X ((27 + (16 - SAFE_X)) * RESOLUTION_FACTOR) // JMS_GFX
+#define RIGHT_SIDE_BASELINE_X ((SIS_SCREEN_WIDTH - LEFT_SIDE_BASELINE_X) * RESOLUTION_FACTOR) // JMS_GFX
+#define SCAN_BASELINE_Y (25 * RESOLUTION_FACTOR) // JMS_GFX
 
 	t.baseline.x = LEFT_SIDE_BASELINE_X;
 	t.baseline.y = SCAN_BASELINE_Y;
@@ -857,10 +856,10 @@ ExitPlanetSide:
 
 		new_pt = pSolarSysState->MenuState.first_item;
 
-		if (PulsedInputState.menu[KEY_MENU_LEFT]) dx = -(1 + RESOLUTION_FACTOR); // JMS_GFX
-		if (PulsedInputState.menu[KEY_MENU_RIGHT]) dx = (1 + RESOLUTION_FACTOR); // JMS_GFX
-		if (PulsedInputState.menu[KEY_MENU_UP]) dy = -(1 + RESOLUTION_FACTOR);	 // JMS_GFX
-		if (PulsedInputState.menu[KEY_MENU_DOWN]) dy = (1 + RESOLUTION_FACTOR);	 // JMS_GFX
+		if (PulsedInputState.menu[KEY_MENU_LEFT]) dx = -1;
+		if (PulsedInputState.menu[KEY_MENU_RIGHT]) dx = 1;
+		if (PulsedInputState.menu[KEY_MENU_UP]) dy = -1;
+		if (PulsedInputState.menu[KEY_MENU_DOWN]) dy = 1;
 
 		dx = dx << MAG_SHIFT;
 		if (dx)
@@ -1107,7 +1106,7 @@ DoScan (MENU_STATE *pMS)
 			LockMutex (GraphicsLock);
 			SetContext (SpaceContext);
 			r.corner.x = 0;
-			r.corner.y = t.baseline.y - (10 << RESOLUTION_FACTOR); // JMS_GFX
+			r.corner.y = t.baseline.y - 10 * RESOLUTION_FACTOR; // JMS_GFX
 			r.extent.width = SIS_SCREEN_WIDTH;
 			r.extent.height = t.baseline.y - r.corner.y + 1;
 			RepairBackRect (&r);
@@ -1192,7 +1191,7 @@ DoScan (MENU_STATE *pMS)
 		LockMutex (GraphicsLock);
 		SetContext (SpaceContext);
 		r.corner.x = 0;
-		r.corner.y = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7) - (10 << RESOLUTION_FACTOR); // JMS_GFX;
+		r.corner.y = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7) - 10 * RESOLUTION_FACTOR; // JMS_GFX;
 		r.extent.width = SIS_SCREEN_WIDTH;
 		r.extent.height = (SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7)
 				- r.corner.y + 1;
@@ -1324,7 +1323,8 @@ GeneratePlanetSide (void)
 		COUNT num_nodes;
 		FRAME f;
 
-		f = SetAbsFrameIndex (MiscDataFrame, NUM_SCANDOT_TRANSITIONS * (scan - ENERGY_SCAN));
+		f = SetAbsFrameIndex (MiscDataFrame,
+				NUM_SCANDOT_TRANSITIONS * (scan - ENERGY_SCAN));
 
 		pSolarSysState->CurNode = (COUNT)~0;
 		(*pSolarSysState->GenFunc) ((BYTE)(scan + GENERATE_MINERAL));
@@ -1335,7 +1335,8 @@ GeneratePlanetSide (void)
 			HELEMENT hNodeElement;
 			ELEMENT *NodeElementPtr;
 
-			if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] & (1L << num_nodes))
+			if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan]
+					& (1L << num_nodes))
 				continue;
 
 			hNodeElement = AllocElement ();
@@ -1349,8 +1350,10 @@ GeneratePlanetSide (void)
 
 			NodeElementPtr->scan_node = MAKE_WORD (scan, num_nodes + 1);
 			NodeElementPtr->state_flags = BAD_GUY;
-			NodeElementPtr->current.location.x = pSolarSysState->SysInfo.PlanetInfo.CurPt.x;
-			NodeElementPtr->current.location.y = pSolarSysState->SysInfo.PlanetInfo.CurPt.y;
+			NodeElementPtr->current.location.x =
+					pSolarSysState->SysInfo.PlanetInfo.CurPt.x;
+			NodeElementPtr->current.location.y =
+					pSolarSysState->SysInfo.PlanetInfo.CurPt.y;
 
 			SetPrimType (&DisplayArray[NodeElementPtr->PrimIndex], STAMP_PRIM);
 			if (scan == MINERAL_SCAN)
@@ -1359,14 +1362,16 @@ GeneratePlanetSide (void)
 
 				EType = pSolarSysState->SysInfo.PlanetInfo.CurType;
 				NodeElementPtr->turn_wait = (BYTE)EType;
-				NodeElementPtr->mass_points = HIBYTE (pSolarSysState->SysInfo.PlanetInfo.CurDensity);
+				NodeElementPtr->mass_points = HIBYTE (
+						pSolarSysState->SysInfo.PlanetInfo.CurDensity);
 				NodeElementPtr->current.image.frame = SetAbsFrameIndex (
 						MiscDataFrame, (NUM_SCANDOT_TRANSITIONS << 1)
 						+ ElementCategory (EType) * 5);
 				NodeElementPtr->next.image.frame = SetRelFrameIndex (
 						NodeElementPtr->current.image.frame, LOBYTE (
 						pSolarSysState->SysInfo.PlanetInfo.CurDensity) + 1);
-				DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = IncFrameIndex (NodeElementPtr->next.image.frame);
+				DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame =
+						IncFrameIndex (NodeElementPtr->next.image.frame);
 			}
 			else
 			{
@@ -1407,28 +1412,34 @@ GeneratePlanetSide (void)
 					if (CreatureData[which_node].Attributes & SPEED_MASK)
 					{
 						i = (COUNT)TFB_Random ();
-						NodeElementPtr->current.location.x = (LOBYTE (i) % (MAP_WIDTH - (8 << 1))) + 8;
-						NodeElementPtr->current.location.y = (HIBYTE (i) % (MAP_HEIGHT - (8 << 1))) + 8;
+						NodeElementPtr->current.location.x =
+								(LOBYTE (i) % (MAP_WIDTH - (8 << 1))) + 8;
+						NodeElementPtr->current.location.y =
+								(HIBYTE (i) % (MAP_HEIGHT - (8 << 1))) + 8;
 					}
 
 					if (pSolarSysState->PlanetSideFrame[0] == 0)
 						pSolarSysState->PlanetSideFrame[0] =
 								CaptureDrawable (LoadGraphic (
 								CANNISTER_MASK_PMAP_ANIM));
-					for (i = 0; i < MAX_LIFE_VARIATION && life_init_tab[i] != (BYTE)(which_node + 1); ++i)
+					for (i = 0; i < MAX_LIFE_VARIATION
+							&& life_init_tab[i] != (BYTE)(which_node + 1);
+							++i)
 					{
 						if (life_init_tab[i] != 0)
 							continue;
 
 						life_init_tab[i] = (BYTE)which_node + 1;
 
-						pSolarSysState->PlanetSideFrame[i + 3] = load_life_form (which_node);
+						pSolarSysState->PlanetSideFrame[i + 3] =
+								load_life_form (which_node);
 						break;
 					}
 
 					NodeElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[which_node].FrameRate);
 					NodeElementPtr->mass_points = (BYTE)which_node;
-					NodeElementPtr->hit_points = HINIBBLE (CreatureData[which_node].ValueAndHitPoints);
+					NodeElementPtr->hit_points = HINIBBLE (
+							CreatureData[which_node].ValueAndHitPoints);
 					DisplayArray[NodeElementPtr->PrimIndex].
 							Object.Stamp.frame = SetAbsFrameIndex (
 							pSolarSysState->PlanetSideFrame[i + 3],
@@ -1436,8 +1447,10 @@ GeneratePlanetSide (void)
 				}
 			}
 
-			NodeElementPtr->next.location.x = NodeElementPtr->current.location.x << MAG_SHIFT;
-			NodeElementPtr->next.location.y = NodeElementPtr->current.location.y << MAG_SHIFT;
+			NodeElementPtr->next.location.x =
+					NodeElementPtr->current.location.x << MAG_SHIFT;
+			NodeElementPtr->next.location.y =
+					NodeElementPtr->current.location.y << MAG_SHIFT;
 			UnlockElement (hNodeElement);
 
 			PutElement (hNodeElement);
