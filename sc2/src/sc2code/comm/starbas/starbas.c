@@ -33,7 +33,7 @@
 #include "libs/sound/sound.h"
 
 
-//static void TellMission (RESPONSE_REF R);
+static void TellMission (RESPONSE_REF R);
 static void SellMinerals (RESPONSE_REF R);
 
 
@@ -103,11 +103,6 @@ static LOCDATA commander_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	0, /* NumFeatures */
-	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 static DWORD CurBulletinMask;
@@ -190,7 +185,6 @@ AllianceInfo (RESPONSE_REF R)
 	{
 		NPCPhrase (WHICH_ALLY);
 		AllianceMask = 0;
-		AllianceMask2 = 0;
 	}
 	else if (PLAYER_SAID (R, chmmr))
 	{
@@ -727,7 +721,6 @@ static void
 NormalStarbase (RESPONSE_REF R)
 {	
 	static BYTE ExplorerInfoState = 0;
-	static BYTE LandingInfoState = 0;
 	static BYTE NewsState = 0;
 	
 	if (R == 0)
@@ -791,24 +784,6 @@ NormalStarbase (RESPONSE_REF R)
 	if (PLAYER_SAID (R, enough_info_races))
 		NPCPhrase (ENOUGH_INFO_RACES_OK);
 	
-	// Answer about landing on alliance home planets.
-	else if (PLAYER_SAID (R, lame_landing_question_1))
-	{
-		NPCPhrase (LAME_LANDING_ANSWER_1);
-		++LandingInfoState;
-	}
-	else if (PLAYER_SAID (R, lame_landing_question_2))
-	{
-		NPCPhrase (LAME_LANDING_ANSWER_2);
-		++LandingInfoState;
-	}
-	else if (PLAYER_SAID (R, lame_landing_question_3))
-	{
-		NPCPhrase (LAME_LANDING_ANSWER_3);
-		DISABLE_PHRASE(lame_landing_question_1);
-		LandingInfoState = 0;
-	}
-	
 	// Answer about ship
 	else if (PLAYER_SAID (R, explorer_info))
 	{
@@ -850,10 +825,6 @@ NormalStarbase (RESPONSE_REF R)
 	else if (NewsState==1 && PHRASE_ENABLED (lame_map_limit_question))
 		Response (lame_map_limit_question, NormalStarbase);
 	
-	// Minerals to offload
-	if (GLOBAL_SIS (TotalElementMass))
-		Response (have_minerals, SellMinerals);
-	
 	// Ask about ship
 	if (ExplorerInfoState == 0 && PHRASE_ENABLED (explorer_info))
 		Response (explorer_info, NormalStarbase);
@@ -862,13 +833,9 @@ NormalStarbase (RESPONSE_REF R)
 	else if (ExplorerInfoState == 2)
 		Response (explorer_run, NormalStarbase);
 	
-	// Ask about landing on alliance home planets
-	if (LandingInfoState == 0 && PHRASE_ENABLED (lame_landing_question_1))
-		Response (lame_landing_question_1, NormalStarbase);
-	else if (LandingInfoState == 1)
-		Response (lame_landing_question_2, NormalStarbase);
-	else if (LandingInfoState == 2)
-		Response (lame_landing_question_3, NormalStarbase);
+	// Minerals to offload
+	if (GLOBAL_SIS (TotalElementMass))
+		Response (have_minerals, SellMinerals);
 	
 	// Devices
 	//if (DiscussDevices (FALSE))

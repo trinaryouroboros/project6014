@@ -156,26 +156,15 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
 
-	GetElementStarShip (ShipPtr, &StarShipPtr);
-
 	ShieldStatus = -1;
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (lpEvalDesc->ObjectPtr && lpEvalDesc->MoveState == ENTICE)
 	{
-		STARSHIP *WeaponStarShipPtr;
-		
-		GetElementStarShip (lpEvalDesc->ObjectPtr, &WeaponStarShipPtr);
-
 		ShieldStatus = 0;
-		if (!(lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT))
-			// Shiver: AI does not raise shields at Lurg oil blobs.		
-			&& !(WeaponStarShipPtr && WeaponStarShipPtr->SpeciesID == LURG_ID
-				&& lpEvalDesc->ObjectPtr->mass_points < 2))
-		{
+		if (!(lpEvalDesc->ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT)))
 			lpEvalDesc->MoveState = PURSUE;
-		}
 		else if (lpEvalDesc->ObjectPtr->mass_points
-			|| lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT)
+				|| (lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))
 		{
 			if (!(lpEvalDesc->ObjectPtr->state_flags & FINITE_LIFE))
 				lpEvalDesc->which_turn <<= 1;
@@ -193,6 +182,7 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		}
 	}
 
+	GetElementStarShip (ShipPtr, &StarShipPtr);
 	if (StarShipPtr->special_counter == 0)
 	{
 		StarShipPtr->ship_input_state &= ~SPECIAL;
@@ -203,8 +193,9 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					&& lpEvalDesc->which_turn <= 2
 					&& (ShieldStatus > 0
 					|| (lpEvalDesc->ObjectPtr->state_flags
-							& PLAYER_SHIP) // means IMMEDIATE_WEAPON.
-					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 2, 0))
+					& PLAYER_SHIP) /* means IMMEDIATE WEAPON */
+					|| PlotIntercept (lpEvalDesc->ObjectPtr,
+					ShipPtr, 2, 0))
 					&& (TFB_Random () & 3))
 				StarShipPtr->ship_input_state |= SPECIAL;
 
@@ -219,12 +210,10 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		STARSHIP *EnemyStarShipPtr;
 
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
-
 		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
 				& IMMEDIATE_WEAPON))
 			lpEvalDesc->MoveState = PURSUE;
 	}
-
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 /*
 	if (StarShipPtr->RaceDescPtr->ship_info.energy_level <= SPECIAL_ENERGY_COST)

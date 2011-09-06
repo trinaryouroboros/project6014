@@ -1,5 +1,5 @@
 This file describes step-by-step how to use Microsoft Visual C++ to build
-Project 6014. It assumes you want to install the Microsoft Visual C++
+The Ur-Quan Masters. It assumes you want to install the Microsoft Visual C++
 Express Edition, which can be downloaded for free from Microsoft.
 If you already have another version of MSVC++ installed, you can skip step 1,
 and you do not need to add the Platform SDK paths to the include and library

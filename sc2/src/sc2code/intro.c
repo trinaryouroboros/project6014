@@ -85,7 +85,7 @@ typedef struct {
 } SPINANIM_INPUT_STATE;
 
 static BOOLEAN DoPresentation (void *pIS);
-//static BOOLEAN DoSpinAnim (void *pIS);
+static BOOLEAN DoSpinAnim (void *pIS);
 
 BOOLEAN
 DoFMVEx (const char *name, const char *audname, const char *speechname,
@@ -245,45 +245,48 @@ Present_GenerateSIS (PRESENTATION_INPUT_STATE* pPIS)
 	s.origin.y = 0;
 	DrawStamp (&s);
 
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != CHMMR_EXPLORER_SHIP)
-	{
-		for (slot = 0; slot < NUM_DRIVE_SLOTS; ++slot)
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)==0)
+	  {
+	  }
+	else
+	  {
+	    for (slot = 0; slot < NUM_DRIVE_SLOTS; ++slot)
+	      {
+		piece = GLOBAL_SIS (DriveSlots[slot]);
+		if (piece < EMPTY_SLOT)
 		{
-			piece = GLOBAL_SIS (DriveSlots[slot]);
-			if (piece < EMPTY_SLOT)
-			{
-				s.origin.x = DRIVE_TOP_X;
-				s.origin.y = DRIVE_TOP_Y_P;
-				s.origin.x += slot * SHIP_PIECE_OFFSET;
-				s.frame = SetAbsFrameIndex (ModuleFrame, piece);
-				DrawStamp (&s);
-			}
+			s.origin.x = DRIVE_TOP_X;
+			s.origin.y = DRIVE_TOP_Y_P;
+			s.origin.x += slot * SHIP_PIECE_OFFSET;
+			s.frame = SetAbsFrameIndex (ModuleFrame, piece);
+			DrawStamp (&s);
 		}
+	      }
 	    for (slot = 0; slot < NUM_JET_SLOTS; ++slot)
+	      {
+		piece = GLOBAL_SIS (JetSlots[slot]);
+		if (piece < EMPTY_SLOT)
 		{
-			piece = GLOBAL_SIS (JetSlots[slot]);
-			if (piece < EMPTY_SLOT)
-			{
-				s.origin.x = JET_TOP_X;
-				s.origin.y = JET_TOP_Y_P;
-				s.origin.x += slot * SHIP_PIECE_OFFSET;
-				s.frame = SetAbsFrameIndex (ModuleFrame, piece);
-				DrawStamp (&s);
-			}
+			s.origin.x = JET_TOP_X;
+			s.origin.y = JET_TOP_Y_P;
+			s.origin.x += slot * SHIP_PIECE_OFFSET;
+			s.frame = SetAbsFrameIndex (ModuleFrame, piece);
+			DrawStamp (&s);
 		}
+	      }
 	    for (slot = 0; slot < NUM_MODULE_SLOTS; ++slot)
+	      {
+		piece = GLOBAL_SIS (ModuleSlots[slot]);
+		if (piece < EMPTY_SLOT)
 		{
-			piece = GLOBAL_SIS (ModuleSlots[slot]);
-			if (piece < EMPTY_SLOT)
-			{
-				s.origin.x = MODULE_TOP_X;
-				s.origin.y = MODULE_TOP_Y_P;
-				s.origin.x += slot * SHIP_PIECE_OFFSET;
-				s.frame = SetAbsFrameIndex (ModuleFrame, piece);
-				DrawStamp (&s);
-			}
+			s.origin.x = MODULE_TOP_X;
+			s.origin.y = MODULE_TOP_Y_P;
+			s.origin.x += slot * SHIP_PIECE_OFFSET;
+			s.frame = SetAbsFrameIndex (ModuleFrame, piece);
+			DrawStamp (&s);
 		}
-	}
+	      }
+	  }
 
 	DestroyDrawable (ReleaseDrawable (SkelFrame));
 	DestroyDrawable (ReleaseDrawable (ModuleFrame));

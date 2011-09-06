@@ -90,9 +90,9 @@ Packet_Init_create(void) {
 	packet->protoVersion.major = NETPLAY_PROTOCOL_VERSION_MAJOR;
 	packet->protoVersion.minor = NETPLAY_PROTOCOL_VERSION_MINOR;
 	packet->padding0 = 0;
-	packet->uqmVersion.major = P6014_MAJOR_VERSION;
-	packet->uqmVersion.minor = P6014_MINOR_VERSION;
-	packet->uqmVersion.patch = P6014_PATCH_VERSION;
+	packet->uqmVersion.major = UQM_MAJOR_VERSION;
+	packet->uqmVersion.minor = UQM_MINOR_VERSION;
+	packet->uqmVersion.patch = UQM_PATCH_VERSION;
 	packet->padding1 = 0;
 	return packet;
 }

@@ -24,7 +24,6 @@
 // JMS 2010: -Added Transport ship resource pointer, which replaces that of the Ur-Quan Probe.
 //			 -Added resource pointer for Slylandros-riding-kohrah-vessels
 //			 -Added resource pointer for Lurg
-//			 -Added resource pointer for ISD
 
 #include "coderes.h"
 #include "globdata.h"
@@ -74,11 +73,10 @@ enum
 	ZOQFOT_CODE_RES,
 	SLYLANDRO_KOHRAH_CODE_RES,	// JMS
 	LURG_CODE_RES,				// JMS
-	ISD_CODE_RES,				// JMS
 	
-	EXP_CODE_RES,
+	SIS_CODE_RES,
 	TRANSPORT_CODE_RES,			// JMS
-	SAMATRA_CODE_RES,			// JMS: Moved this under EXP_CODE_RES and TRANSPORT_CODE_RES
+	SAMATRA_CODE_RES,			// JMS: Moved this under SIS_CODE_RES and TRANSPORT_CODE_RES
 };
 
 	BYTE which_res;
@@ -278,11 +276,11 @@ enum
 				RDPtr = init_samatra ();
 				break;
 			}
-			case EXP_CODE_RES:
+			case SIS_CODE_RES:
 			{
-				extern RACE_DESC* init_exp (void);
+				extern RACE_DESC* init_sis (void);
 
-				RDPtr = init_exp ();
+				RDPtr = init_sis ();
 				break;
 			}
 			// JMS: Transport code_res replaces ur-quan probe
@@ -307,14 +305,6 @@ enum
 				extern RACE_DESC* init_lurg (void);
 				
 				RDPtr = init_lurg ();
-				break;
-			}
-			// JMS: ISD code res
-			case ISD_CODE_RES:
-			{
-				extern RACE_DESC* init_isd (void);
-				
-				RDPtr = init_isd ();
 				break;
 			}
 			default:
@@ -352,7 +342,7 @@ BOOLEAN
 InstallCodeResType ()
 {
 	return (InstallResTypeVectors ("SHIP",
-				       GetCodeResData, _ReleaseCodeResData, NULL));
+			GetCodeResData, _ReleaseCodeResData));
 }
 
 

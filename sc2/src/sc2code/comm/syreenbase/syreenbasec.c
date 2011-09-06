@@ -38,22 +38,14 @@ static LOCDATA syreenbase_desc =
 	{0, 0}, /* AlienTextBaseline */
 	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
 	ALIGN_CENTER, /* AlienTextAlign */
-	VALIGN_BOTTOM, /* AlienTextValign */
+	VALIGN_TOP, /* AlienTextValign */
 	SYREEN_BASE_COLOR_MAP, /* AlienColorMap */
 	SYREEN_BASE_MUSIC, /* AlienSong */
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SYREEN_BASE_CONVERSATION_PHRASES, /* PlayerPhrases */
 	0, /* NumAnimations */
-	{ /* AlienAmbientArray (ambient animations) */
-		{
-			0, /* StartIndex */
-			0, /* NumFrames */
-			0, /* AnimFlags */
-			0, 0, /* FrameRate */
-			0, 0, /* RestartRate */
-			0, /* BlockMask */
-		}
+	{0 /* AlienAmbientArray (ambient animations) */
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
@@ -76,18 +68,12 @@ static LOCDATA syreenbase_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	0, /* NumFeatures */
-	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	(void) R; // satisfy compiler
 	NPCPhrase (COME_BACK_ANYTIME_MOOSY);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }
@@ -218,7 +204,7 @@ init_syreenbase_comm (void)
 	syreenbase_desc.uninit_encounter_func = uninit_syreen;
 
 	syreenbase_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreenbase_desc.AlienTextBaseline.y = 100;
+	syreenbase_desc.AlienTextBaseline.y = 0;
 	syreenbase_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);

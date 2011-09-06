@@ -67,7 +67,6 @@ PROGRAMMING
 
 #(Programming guys)
 13 C
-Tristan Glaeser
 Edmund Horner
 Jaakko Markus Seppälä
 Benjamin Wack
@@ -80,25 +79,7 @@ MUSIC AND SOUND EFFECTS
 #(Musicians)
 13 C
 Mark McGill-Smith (The Mister Cat)
- 
 
-#(Shipdesign)
-13 C
-SHIP DESIGN
-
-#(Ship designers)
-13 C
-Tristan Glaeser
- 
-
-#(Linuxstuff)
-13 C
-LINUX STUFF
-
-#(Linuxers)
-13 C
-Joris van de Donk 
- 
 
 ...A Great big thanks
 to everyone at...

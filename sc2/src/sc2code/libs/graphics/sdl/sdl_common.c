@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Added resolutionfactor to TFB_reInitGraphics and TFB_InitGraphics definitions and calls.
-
 #ifdef GFXMODULE_SDL
 
 #include "sdl_common.h"
@@ -91,7 +89,7 @@ TFB_PreInit (void)
 }
 
 int
-TFB_ReInitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor) // JMS_GFX: Added resolutionFactor
+TFB_ReInitGraphics (int driver, int flags, int width, int height)
 {
 	int result;
 	int togglefullscreen = 0;
@@ -109,29 +107,25 @@ TFB_ReInitGraphics (int driver, int flags, int width, int height, unsigned int r
 	if (driver == TFB_GFXDRIVER_SDL_OPENGL)
 	{
 #ifdef HAVE_OPENGL
-		result = TFB_GL_ConfigureVideo (driver, flags, width, height, togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
+		result = TFB_GL_ConfigureVideo (driver, flags, width, height,
+				togglefullscreen);
 #else
 		driver = TFB_GFXDRIVER_SDL_PURE;
 		log_add (log_Warning, "OpenGL support not compiled in,"
 				" so using pure SDL driver");
-		result = TFB_Pure_ConfigureVideo (driver, flags, width, height, togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
+		result = TFB_Pure_ConfigureVideo (driver, flags, width, height,
+				togglefullscreen);
 #endif
 	}
 	else
 	{
-		result = TFB_Pure_ConfigureVideo (driver, flags, width, height, togglefullscreen, resolutionFactor); // JMS_GFX: Added resolutionFactor
-	}
-	
-	// JMS_GFX: If we forced windowed mode when switching resolution, remove fullscreen from flags.
-	if (result == 1)
-	{
-		flags &= ~TFB_GFXFLAGS_FULLSCREEN;
-		GfxFlags = flags;
+		result = TFB_Pure_ConfigureVideo (driver, flags, width, height,
+				togglefullscreen);
 	}
 
-	sprintf (caption, "The Ur-Quan Masters project6014 v%d.%d.%d%s",
-			P6014_MAJOR_VERSION, P6014_MINOR_VERSION,
-			P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
+	sprintf (caption, "The Ur-Quan Masters v%d.%d.%d%s",
+			UQM_MAJOR_VERSION, UQM_MINOR_VERSION,
+			UQM_PATCH_VERSION, UQM_EXTRA_VERSION);
 	SDL_WM_SetCaption (caption, NULL);
 
 	if (flags & TFB_GFXFLAGS_FULLSCREEN)
@@ -143,7 +137,7 @@ TFB_ReInitGraphics (int driver, int flags, int width, int height, unsigned int r
 }
 
 int
-TFB_InitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor) // JMS_GFX: added resolutionFactor
+TFB_InitGraphics (int driver, int flags, int width, int height)
 {
 	int result, i;
 	char caption[200];
@@ -159,30 +153,23 @@ TFB_InitGraphics (int driver, int flags, int width, int height, unsigned int res
 	if (driver == TFB_GFXDRIVER_SDL_OPENGL)
 	{
 #ifdef HAVE_OPENGL
-		result = TFB_GL_InitGraphics (driver, flags, width, height, resolutionFactor); // JMS_GFX: added resolutionFactor
+		result = TFB_GL_InitGraphics (driver, flags, width, height);
 #else
 		driver = TFB_GFXDRIVER_SDL_PURE;
 		log_add (log_Warning, "OpenGL support not compiled in,"
 				" so using pure SDL driver");
-		result = TFB_Pure_InitGraphics (driver, flags, width, height, resolutionFactor); // JMS_GFX: added resolutionFactor
+		result = TFB_Pure_InitGraphics (driver, flags, width, height);
 #endif
 	}
 	else
 	{
-		result = TFB_Pure_InitGraphics (driver, flags, width, height, resolutionFactor); // JMS_GFX: added resolutionFactor
+		result = TFB_Pure_InitGraphics (driver, flags, width, height);
 	}
 
-	sprintf (caption, "The Ur-Quan Masters project6014 v%d.%d.%d%s", 
-			P6014_MAJOR_VERSION, P6014_MINOR_VERSION, 
-			P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
+	sprintf (caption, "The Ur-Quan Masters v%d.%d.%d%s", 
+			UQM_MAJOR_VERSION, UQM_MINOR_VERSION, 
+			UQM_PATCH_VERSION, UQM_EXTRA_VERSION);
 	SDL_WM_SetCaption (caption, NULL);
-	
-	// JMS_GFX: If we forced windowed mode when switching resolution, remove fullscreen from flags.
-	if (result == 1)
-	{
-		flags &= ~TFB_GFXFLAGS_FULLSCREEN;
-		GfxFlags = flags;
-	}
 
 	if (flags & TFB_GFXFLAGS_FULLSCREEN)
 		SDL_ShowCursor (SDL_DISABLE);
@@ -245,7 +232,8 @@ TFB_ProcessEvents ()
 	{
 		int flags = GfxFlags ^ TFB_GFXFLAGS_FULLSCREEN;
 		FlushInput ();
-		TFB_ReInitGraphics (GraphicsDriver, flags, ScreenWidthActual, ScreenHeightActual, resolutionFactor); // JMS_GFX: Added resolutionFactor
+		TFB_ReInitGraphics (GraphicsDriver, flags, ScreenWidthActual,
+				ScreenHeightActual);
 		TFB_SwapBuffers (TFB_REDRAW_YES);
 	}
 
@@ -900,27 +888,23 @@ TFB_FlushGraphics (void) // Only call from main thread!!
 		case TFB_DRAWCOMMANDTYPE_REINITVIDEO:
 			{
 				int oldDriver = GraphicsDriver;
-				int initGraphicsResult = TFB_ReInitGraphics (DC.data.reinitvideo.driver,
-															 DC.data.reinitvideo.flags,
-															 DC.data.reinitvideo.width, DC.data.reinitvideo.height, resolutionFactor);
-															// JMS_GFX: Added resolutionFactor
-				if (initGraphicsResult < 0) 
+				if (TFB_ReInitGraphics (DC.data.reinitvideo.driver,
+						DC.data.reinitvideo.flags,
+						DC.data.reinitvideo.width, DC.data.reinitvideo.height))
 				{
-					log_add (log_Error, "Could not provide requested mode: " "reverting to last known driver.");
+					log_add (log_Error, "Could not provide requested mode: "
+							"reverting to last known driver.");
 					if (TFB_ReInitGraphics (oldDriver,
 							DC.data.reinitvideo.flags,
 							DC.data.reinitvideo.width,
-							DC.data.reinitvideo.height, resolutionFactor)) // JMS_GFX: Added resolutionFactor
+							DC.data.reinitvideo.height))
 					{
-						log_add (log_Fatal, "Couldn't reinit at that point either. " "Your video has been somehow tied in knots.");
+						log_add (log_Fatal,
+								"Couldn't reinit at that point either. "
+								"Your video has been somehow tied in knots.");
 						exit (EXIT_FAILURE);
 					}
 				}
-				if (initGraphicsResult == 1)
-				{
-					DC.data.reinitvideo.flags &= ~TFB_GFXFLAGS_FULLSCREEN;
-				}
-				
 				break;
 			}
 		case TFB_DRAWCOMMANDTYPE_CALLBACK:

@@ -21,12 +21,12 @@
 #include <ctype.h>
 #include "libs/log.h"
 #include "propfile.h"
-#include "libs/reslib.h"
+#include "reslib.h"
 
 void
-PropFile_from_string (char *d, PROPERTY_HANDLER handler, const char *prefix)
+PropFile_from_string (char *d, PROPERTY_HANDLER handler)
 {
-	int len, i;
+        int len, i;
 
 	len = strlen(d);
 	i = 0;
@@ -84,19 +84,12 @@ PropFile_from_string (char *d, PROPERTY_HANDLER handler, const char *prefix)
 		   make a new map entry. */
 		d[key_end] = '\0';
 		d[value_end] = '\0';
-		if (prefix) {
-			char buf[256];
-			snprintf(buf, 255, "%s%s", prefix, d+key_start);
-			buf[255]=0;
-			handler(buf, d+value_start);
-		} else {
-			handler (d+key_start, d+value_start);
-		}
+		handler (d+key_start, d+value_start);
 	}
 }
 
 void
-PropFile_from_file (uio_Stream *f, PROPERTY_HANDLER handler, const char *prefix)
+PropFile_from_file (uio_Stream *f, PROPERTY_HANDLER handler)
 {
 	long flen;
 	char *data;
@@ -111,17 +104,17 @@ PropFile_from_file (uio_Stream *f, PROPERTY_HANDLER handler, const char *prefix)
 	flen = ReadResFile (data, 1, flen, f);
 	data[flen] = '\0';
 
-	PropFile_from_string (data, handler, prefix);
+	PropFile_from_string (data, handler);
 	free (data);
 }
 
 void
-PropFile_from_filename (uio_DirHandle *path, const char *fname, PROPERTY_HANDLER handler, const char *prefix)
+PropFile_from_filename (uio_DirHandle *path, const char *fname, PROPERTY_HANDLER handler)
 {
 	uio_Stream *f = res_OpenResFile (path, fname, "rt");
 	if (!f) {
 		return;
 	}
-	PropFile_from_file (f, handler, prefix);
+	PropFile_from_file (f, handler);
 	res_CloseResFile(f);
 }

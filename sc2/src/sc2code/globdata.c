@@ -21,15 +21,13 @@
 // the races won't show up in the game AND the defines and enums in races.h will have quirky side-effects.
 //
 // Originally the max number of races was defined by KOHR_AH_ID and some constant numbers.
-// Max num of races is now defined by ISD_ID plus the constant numbers because of the added new races.
+// Max num of races is now defined by LURG_ID plus the constant numbers because of the added new races.
 //
 // JMS 2010: -Added SET_GAME_STATE (STARBASE_AVAILABLE, 1); to InitSIS so starbase is available right
 // from the start of the game. Kind of hack, maybe we should just remove the whole starbase_available variable...
 //
 //			 -Changed the starting number of thrusters and turning jets for Chmmr Explorer
 //			 -Game now starts at Procyon
-//			 -Show human and Chmmr SoIs right from the start
-//			 -Utwig ships not available for buying at starbases anymore
 
 #include "globdata.h"
 
@@ -40,15 +38,15 @@
 #include "resinst.h"
 #include "nameref.h"
 #include "build.h"
-#include "hyper.h"
 #include "state.h"
 #include "grpinfo.h"
 #include "gamestr.h"
 
 #include <stdlib.h>
-#include "libs/log.h"
+#ifdef STATE_DEBUG
+#	include "libs/log.h"
+#endif
 
-#include "libs/mathlib.h"
 
 static void CreateRadar (void);
 
@@ -211,7 +209,7 @@ InitSIS (void)
 		COUNT num_ships;
 		SPECIES_ID s_id = ARILOU_ID;
 
-		num_ships = ISD_ID - s_id + 1	// JMS: ISD_ID now replaces KOHR_AH_ID here
+		num_ships = LURG_ID - s_id + 1	// JMS: LURG_ID now replaces KOHR_AH_ID here
 		+ 2; /* Yehat Rebels and Transport ship */
 		
 		InitQueue (&GLOBAL (avail_race_q), num_ships, sizeof (FLEET_INFO));
@@ -321,15 +319,13 @@ InitSIS (void)
 	GLOBAL_SIS (JetSlots[5]) = // JMS
 	GLOBAL_SIS (JetSlots[6]) = // JMS
 		GLOBAL_SIS (JetSlots[7]) = TURNING_JETS;
-
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != CHMMR_EXPLORER_SHIP)
-		for (i = 0; i < NUM_MODULE_SLOTS; ++i)
-			GLOBAL_SIS (ModuleSlots[i]) = EMPTY_SLOT + 2;
+	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
+		GLOBAL_SIS (ModuleSlots[i]) = EMPTY_SLOT + 2;
 	/*GLOBAL_SIS (ModuleSlots[15]) = GUN_WEAPON;
 	GLOBAL_SIS (ModuleSlots[2]) = CREW_POD;
 	GLOBAL_SIS (ModuleSlots[8]) = STORAGE_BAY;
 	GLOBAL_SIS (ModuleSlots[1]) = FUEL_TANK;*/
-	//	GLOBAL_SIS (ModuleSlots[0]) = STORAGE_BAY; // BW: no storage if commented
+	//	GLOBAL_SIS (ModuleSlots[0]) = STORAGE_BAY; // BW: no storage
 	GLOBAL_SIS (CrewEnlisted) = EXPLORER_CREW_CAPACITY;
 	GLOBAL_SIS (FuelOnBoard) = EXPLORER_FUEL_CAPACITY;
 
@@ -341,9 +337,6 @@ InitSIS (void)
 			sizeof (IP_GROUP));
 	InitQueue (&GLOBAL (encounter_q), MAX_ENCOUNTERS, sizeof (ENCOUNTER));
 
-	// DN 27FEB11 INITIALIZE BETA_NAOS FLAG 
-	SET_GAME_STATE (PLAYER_VISITED_BETA_NAOS, 0);
-	
 	// JMS: Starbase is available right from the start!
 	SET_GAME_STATE (STARBASE_AVAILABLE, 1);
 	// BW: Lander is fully shielded from the start
@@ -352,11 +345,8 @@ InitSIS (void)
 			(1 << BIOLOGICAL_DISASTER) |
 			(1 << LIGHTNING_DISASTER) |
 			(1 << LAVASPOT_DISASTER));
-	// JMS: Lander currently has "stronger" shot from the beginning. 
-	// Currently it does nothing else than enables killing the critters marked with INVULNERABLE_TO_BASIC_WEAPON.
-	SET_GAME_STATE (STRONGER_LANDER_SHOT, 1);
 	
-	SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1);
+	SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1); 
 	
 	GLOBAL (CurrentActivity) = IN_INTERPLANETARY | START_INTERPLANETARY;
 
@@ -381,7 +371,6 @@ InitSIS (void)
 			GAME_STRING (NAMING_STRING_BASE + 3));
 
 	// BW: all NAFS ships available but no ship allocated by default
-	// JMS: Except Utwig. They're all pacifists now!
 	ActivateStarShip (ZOQFOTPIK_SHIP, SET_ALLIED);
 	ActivateStarShip (HUMAN_SHIP, SET_ALLIED);
 	ActivateStarShip (SYREEN_SHIP, SET_ALLIED);
@@ -389,13 +378,9 @@ InitSIS (void)
 	ActivateStarShip (SHOFIXTI_SHIP, SET_ALLIED);
 	ActivateStarShip (CHMMR_SHIP, SET_ALLIED);
 	ActivateStarShip (SUPOX_SHIP, SET_ALLIED);
-	// ActivateStarShip (UTWIG_SHIP, SET_ALLIED);
+	ActivateStarShip (UTWIG_SHIP, SET_ALLIED);
 	ActivateStarShip (ORZ_SHIP, SET_ALLIED);
 	//	CloneShipFragment (HUMAN_SHIP, &GLOBAL (built_ship_q), 0);
-	
-	// JMS: Show human and Chmmr SoIs right from the start
-	ActivateStarShip (CHMMR_SHIP, SPHERE_TRACKING);
-	ActivateStarShip (HUMAN_SHIP, SPHERE_TRACKING);
 
 	// JMS: Start at Procyon
 	GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (PROCYON_X);
@@ -403,10 +388,6 @@ InitSIS (void)
 	CurStarDescPtr = 0;
 	GLOBAL (autopilot.x) = ~0;
 	GLOBAL (autopilot.y) = ~0;
-	
-	// JMS: Vary the possible location of the ones that left in hurry
-	SET_GAME_STATE(HINT_WORLD_LOCATION, ((COUNT)TFB_Random () % 3));
-	log_add (log_Debug, "Hint world location randomly set to %d.", GET_GAME_STATE(HINT_WORLD_LOCATION));
 
 	/* In case the program is exited before the full game is terminated,
 	 * make sure that the temporary files are deleted.

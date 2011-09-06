@@ -290,7 +290,6 @@ BuildGroups (void)
 		
 		0,					/* JMS: SLYLANDRO_KOHRAH_SHIP */
 		LURG_SHIP,			/* JMS: LURG_SHIP */
-		0,					/* JMS: ISD_SHIP */
 		0,					/* YEHAT_REBEL_SHIP */
 	};
 	BYTE EncounterPercent[] =

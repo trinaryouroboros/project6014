@@ -195,11 +195,6 @@ static LOCDATA talkpet_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	0, /* NumFeatures */
-	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 #define STROBE_RATE   15

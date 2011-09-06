@@ -17,7 +17,6 @@
  */
 
 // JMS 2009 - Play Orz space music in Orz space
-// JMS 2010 - Enable Down key in melee (comment tag JMS_KEYS)
 
 #include "battle.h"
 
@@ -206,8 +205,6 @@ ProcessInput (void)
 						CyborgDescPtr->ship_input_state |= WEAPON;
 					if (InputState & BATTLE_SPECIAL)
 						CyborgDescPtr->ship_input_state |= SPECIAL;
-					if (InputState & BATTLE_DOWN)
-						CyborgDescPtr->ship_input_state |= DOWN; // JMS_KEYS: Down key is now in use!
 
 					if (CanRunAway && cur_player == 0 &&
 							(InputState & BATTLE_ESCAPE))

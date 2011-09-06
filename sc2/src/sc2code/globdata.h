@@ -25,10 +25,6 @@
 //			 -Increased max number of comm screen animations for one race from 20 to 30
 //			 -Added BLACK_ORB_STATE game state for handling the events upon finding the black orb.
 //			 -Added BLACK_ORB_CUTSCENE activity enum for initiating the cutscene
-//			 -Changed Animflags size from BYTE to COUNT (Possibility to add more flags later on.)
-//			 -Lots of new game states... see the bottom of the ADD_GAME_STATE list.			
-//
-// DN DEC10		-added game state flags for Melnorme Bio-Data easter egg
 
 #ifndef _GLOBDATA_H
 #define _GLOBDATA_H
@@ -62,7 +58,6 @@
 #define TALK_DONE (1 << 6)
 
 #define WHEN_TALKING (1L << 7) // JMS
-#define ANIM_DISABLED (1L << 8) // BW (needed for news anchor and animatd background)
 
 #define COLORXFORM_ANIM PAUSE_TALKING
 
@@ -77,8 +72,8 @@ typedef struct
 	BYTE NumFrames;
 			// Number of frames in the animation.
 
-	COUNT AnimFlags;
-			// One of RANDOM_ANIM, CIRCULAR_ANIM, or YOYO_ANIM // JMS: Changed from BYTE to COUNT to house more possible flags
+	BYTE AnimFlags;
+			// One of RANDOM_ANIM, CIRCULAR_ANIM, or YOYO_ANIM
 
 	COUNT BaseFrameRate;
 	COUNT RandomFrameRate;
@@ -91,21 +86,6 @@ typedef struct
 } ANIMATION_DESC;
 
 #define MAX_ANIMATIONS 30 // JMS: Was 20
-
-#define MAX_FEATURE_OPTIONS 5
-
-typedef struct
-{
-	COUNT StartIndex;
-			// Index of the first possible image
-	BYTE NumFrames;
-			// Number of distinct possible images for the feature.
-
-	DWORD BlockMaskArray[MAX_FEATURE_OPTIONS];
-			// Array of the bit masks of indices of all
-			// animations that are incompatible with each
-			// option for this feature.
-} FEATURE_DESC;
 
 // general numbers-speech generator info
 // should accomodate most common base-10 languages
@@ -204,22 +184,7 @@ typedef struct
 	MUSIC_REF AlienSong;
 	STRING ConversationPhrases;
 	
-	COUNT NumFeatures;
-	FEATURE_DESC AlienFeatureArray[MAX_ANIMATIONS];
-	COUNT AlienFeatureChoice[MAX_ANIMATIONS];
 } LOCDATA;
-
-typedef struct
-{
-        RESOURCE StarbaseFrameRes;
-	COUNT NumAnimations;
-	ANIMATION_DESC StarbaseAmbientArray[MAX_ANIMATIONS];
-
-	FRAME StarbaseFrame;
-	COLORMAP StarbaseColorMap;
-	
-} SBDATA;
-
 
 enum
 {
@@ -262,57 +227,6 @@ enum
 #define END_GAME_STATE NUM_GAME_STATE_BITS };
 
 START_GAME_STATE
-		/*
-		 * PLAYER VISITED BETA NAOS? DN 27FEB11
-		 */
-	ADD_GAME_STATE (PLAYER_VISITED_BETA_NAOS, 1)
-		 
-		/* Melnorme Easter Egg stuff DN 04JAN11 */
-		
-		/*
-		 * 0 - not collected
-		 * 1 - collected but not sold to Melnorme
-		 * 2 - collected AND sold to Melnorme
-		 *
-		 * DN 04JAN11
-		 */
-	ADD_GAME_STATE (MELNORME_ECHINOSOL_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_FLORA_FLATULENSIS_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_HOPPING_HATCHLING_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_DIZZY_FNARBLE_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_FLAGELLUM_PEST_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_FLYING_OHAIRY_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_BOBBING_WHIBBIT_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_MUDDY_MORPHLEGM_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_ULTRAMOEBA_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_ELECTROPTERA_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_QUARTZERBACK_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_TUBERUS_HUMUNGUS_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_VENUS_FRYTRAP_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_WATCHFUL_WILLOW_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_XEROPHYTIC_AUTOVORE_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_MIGRATOR_BLIMP_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_TENTACLE_DUJOUR_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_VANISHING_VERMIN_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_TRIPAZOID_TUMBLER_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_DUMPY_DWEEJUS_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_RADIAL_ARACHNID_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_WACKODEMON_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_CRABBY_OCTOPUS_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_BLINKING_BEHOLDER_TYPE_FOUND, 2)
-	ADD_GAME_STATE (MELNORME_CREEPING_HEAD_TYPE_FOUND, 2)
-	
-		/* 
-		 * Melnorme all life form types found flag
-		 * 0 = false
-		 * 1 = true
-		 * 2 = true and already accounted for
-		 * DN 27DEC10
-		 */
-	ADD_GAME_STATE (MELNORME_ALL_LIFE_TYPE_FOUND, 2)	
-
-
-
 		/* Shofixti states */
 	ADD_GAME_STATE (SHOFIXTI_VISITS, 3)
 	ADD_GAME_STATE (SHOFIXTI_STACK1, 2)
@@ -395,8 +309,6 @@ START_GAME_STATE
 
 	ADD_GAME_STATE (LANDER_SHIELDS, 4)
 
-	ADD_GAME_STATE (LURG_GRPOFFS0, 8)
-	
 	ADD_GAME_STATE (SHOFIXTI_GRPOFFS0, 8)
 	ADD_GAME_STATE (SHOFIXTI_GRPOFFS1, 8)
 	ADD_GAME_STATE (SHOFIXTI_GRPOFFS2, 8)
@@ -1029,7 +941,7 @@ START_GAME_STATE
 	ADD_GAME_STATE (ANDROSYNTH_STACK_1, 3)
 	ADD_GAME_STATE (ANDROSYNTH_STACK_2, 1)
 
-	// JMS: New Chmmr states
+	// JMS: Androsynth states
 	ADD_GAME_STATE (CHMMR_SPACE_VISITS, 2)
 
 	// JMS: Human states
@@ -1046,9 +958,6 @@ START_GAME_STATE
 	ADD_GAME_STATE (VELA_FACTORY_VISITED, 1)
 
 	// JMS: Which ship is the flagship
-#define CHMMR_EXPLORER_SHIP 0
-#define PRECURSOR_SERVICE_VEHICLE 1
-#define PRECURSOR_BATTLESHIP 2
 	ADD_GAME_STATE (WHICH_SHIP_PLAYER_HAS, 2)
 			// 0 - Chmmr Explorer
 			// 1 - Precursor vessel
@@ -1092,18 +1001,12 @@ START_GAME_STATE
 	// JMS: Set shofixti crash site triangulation spheres visible in starmap
 	ADD_GAME_STATE (TRIANGULATION_SPHERES_CHMMR, 1)
 	ADD_GAME_STATE (TRIANGULATION_SPHERES_SHOFIXTI, 1)
+
 	// JMS: Once the artifact is found, the spheres are no longer necessary
 	ADD_GAME_STATE (HIDE_TRIANGULATION_SPHERES, 1)
 
-	// JMS: Shofixti patrol that was late has returned home
-	ADD_GAME_STATE (SHOFIXTI_PATROL_RETURNED, 1)
-	// JMS: Player has heard shofixti tell the patrol returned home
-	ADD_GAME_STATE (SHOFIXTI_GREAT_NEWS_HEARD, 1)
-
 	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
 	ADD_GAME_STATE (CRASH_SITE_UNPROTECTED, 1)
-	ADD_GAME_STATE (CRASH_SITE_VISITED, 1)
-	ADD_GAME_STATE (CRASH_SITE_LURG_SURVIVORS, 3)
 
 	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
 	ADD_GAME_STATE (BLACK_ORB_STATE, 2)
@@ -1122,23 +1025,6 @@ START_GAME_STATE
 	ADD_GAME_STATE (SYREEN_SHIP_YEAR, 5)
 	/* The year that new ships are available from the Syreen
 	 * (stored as an offset from the year the game starts). */
-
-	// JMS: Yehat Precursor artifact hint at Gamma Janus
-	ADD_GAME_STATE (YEHAT_PRECURSOR_ARTIFACT, 2)
-		// 0 - Precursor artifact not seen or heard of
-		// 1 - Heard about Precursor artifact from the Yehat OR seen it on the planet
-		// 2 - "Precursor artifact" seen on the planet AND heard the Yehat story on it 
-		// 3 - Information on "artifact" dealt to melnorme
-
-	// JMS: The location of those that left in a hurry
-	ADD_GAME_STATE (HINT_WORLD_LOCATION, 2)
-
-	// JMS: Stronger lander shot is more effective and required for destroying certain enemies.
-	ADD_GAME_STATE (STRONGER_LANDER_SHOT, 1)
-
-	// JMS: Stupid joke in Chmmr & Melnorme encounters...
-	ADD_GAME_STATE (TZZRAK_TZON_PICS, 1)
-
 
 END_GAME_STATE
 
@@ -1160,16 +1046,14 @@ enum
 	IN_INTERPLANETARY,
 	WON_LAST_BATTLE,
 
-	/* The following four are only used when displaying save game
+	/* The following three are only used when displaying save game
 	 * summaries */
 	IN_QUASISPACE,
 	IN_PLANET_ORBIT,
 	IN_STARBASE,
+	
 	IN_ORZSPACE,	// JMS: In *below* (Orz space) or not
-	
-	BLACK_ORB_CUTSCENE, // JMS: For initiating cutscene after finding the black orb
-//#define BLACK_ORB_CUTSCENE SUPER_MELEE
-	
+
 	CHECK_PAUSE = MAKE_WORD (0, (1 << 0)),
 	IN_BATTLE = MAKE_WORD (0, (1 << 1)),
 	START_ENCOUNTER = MAKE_WORD (0, (1 << 2)),
@@ -1177,6 +1061,7 @@ enum
 	CHECK_LOAD = MAKE_WORD (0, (1 << 4)),
 	CHECK_RESTART = MAKE_WORD (0, (1 << 5)),
 	CHECK_ABORT = MAKE_WORD (0, (1 << 6)),
+	BLACK_ORB_CUTSCENE = MAKE_WORD (0, (1 << 7)), // JMS: For initiating cutscene after finding the black orb
 };
 typedef UWORD ACTIVITY;
 

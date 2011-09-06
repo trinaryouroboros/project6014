@@ -18,8 +18,6 @@
 
 // JMS 2010: Bullet hole gfx frames for melee.
 
-// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
-
 #include "setup.h"
 
 #include "coderes.h"
@@ -134,19 +132,11 @@ LoadKernel (int argc, char *argv[])
 	}
 	
 	// JMS_GFX
-	if (resolutionFactor == 1)
+	if (resolutionFactor==2)
 	{
-		loadAddon ("hires2x");
-		printf ("loading addon hires2x\n");
-		
+		loadAddon ("hires");
 	}
-	else if (resolutionFactor == 2)
-	{
-		loadAddon ("hires4x");
-		printf ("loading addon hires4x\n");
-	}
-	// END JMS_GFX
-	
+
 	/* Now load the rest of the addons, in order. */
 	prepareAddons (optAddons);
 

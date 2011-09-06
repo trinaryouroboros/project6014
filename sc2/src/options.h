@@ -14,8 +14,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
-
 /*
  * Eventually this should include all configuration stuff, 
  * for now there's few options which indicate 3do/pc flavors.
@@ -41,7 +39,7 @@ extern int optSmoothScroll;
 extern int optMeleeScale;
 
 // JMS_GFX
-extern unsigned int resolutionFactor;
+extern int resolutionFactor;
 extern BOOLEAN resFactorWasChanged;
 
 extern BOOLEAN opt3doMusic;
@@ -72,7 +70,7 @@ typedef struct _input_template {
 
 extern INPUT_TEMPLATE input_templates[6];
 
-void prepareContentDir (const char *contentDirName, const char *addonDirName, char *execFile);
+void prepareContentDir (const char *contentDirName, const char *addonDirName, const char *execFile);
 void prepareConfigDir (const char *configDirName);
 void prepareMeleeDir (void);
 void prepareSaveDir (void);

@@ -19,9 +19,6 @@
 // JMS 2009 - Portal to Orz space enum
 // JMS 2010 - Lurg home system enum
 //			- Enum for those guys that have mysteriously vanished
-//			- Enum for Gamma Janus
-
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #ifndef _ENCOUNT_H
 #define _ENCOUNT_H
@@ -136,13 +133,12 @@ enum
 	MELNORME_HOME_DEFINED,          // Also generates deflection shield in hyperspace
 	ORZ_SPACE_PORTAL_DEFINED,		// JMS: Portal to ORZ space
 	HINT_DEFINED,					// JMS: Those guys that have mysteriously vanished
-	HINT2_DEFINED,					// JMS: Gamma Janus, the supposed precursor artifact that Yehat tell player about
 };
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED
 
-#define TEXT_X_OFFS (1 << RESOLUTION_FACTOR) // JMS_GFX
-#define TEXT_Y_OFFS (1 << RESOLUTION_FACTOR) // JMS_GFX
+#define TEXT_X_OFFS (1 * RESOLUTION_FACTOR) // JMS_GFX
+#define TEXT_Y_OFFS (1 * RESOLUTION_FACTOR) // JMS_GFX
 #define SIS_TEXT_WIDTH (SIS_SCREEN_WIDTH - (TEXT_X_OFFS << 1))
 
 extern STAR_DESC *CurStarDescPtr;
@@ -199,7 +195,6 @@ extern void GenerateOrzSpacePortal (BYTE control);		// JMS
 extern void GenerateLurg (BYTE control);				// JMS
 extern void GenerateShofixtiCrashSite (BYTE control);	// JMS
 extern void GenerateHint (BYTE control);				// JMS
-extern void GenerateHint2 (BYTE control);				// JMS
 
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;

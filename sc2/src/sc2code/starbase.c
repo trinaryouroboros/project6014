@@ -19,9 +19,6 @@
 // JMS 2010: -Removed unnecessary chmmr_bomb condition related to starbase visiting.
 //			 -Procyon starbase now has different gfx from Sol starbase
 //			 -Added functionality to Betelgeuse starbase. Has the same gfx as sol starbase.
-//			 -When the starbase commander is talked to, chasing ships turn away.
-
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "build.h"
 #include "colors.h"
@@ -40,71 +37,7 @@
 #include "libs/inplib.h"
 #include "libs/log.h"
 
-
-#define STARBASE_AMBIENT_ANIM_RATE   40
-
 MENU_STATE *pMenuState;
-SBDATA StarbaseData;
-
-static SBDATA sol_desc =
-{
-  	STARBASE_ANIM, /* StarbaseFrameRes */
-	1, /* NumAnimations */
-	{ /* StarbaseAmbientArray (ambient animations) */
-		{	// 0 - Starbase
-			1, /* StartIndex */
-			32, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, 0, /* FrameRate */
-			0, 0, /* RestartRate */
-			0, /* BlockMask */
-		},
-	},
-  	NULL, /* StarbaseFrame */
-  	NULL, /* StarbaseColorMap */
-};
-static SBDATA procyon_desc =
-{
-  	STARBASE_PROCYON_ANIM, /* StarbaseFrameRes */
-	1, /* NumAnimations */
-	{ /* StarbaseAmbientArray (ambient animations) */
-		{	// 0 - Starbase
-			1, /* StartIndex */
-			32, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, 0, /* FrameRate */
-			0, 0, /* RestartRate */
-			0, /* BlockMask */
-		},
-// 		{	// 1 - Avatar
-// 			33, /* StartIndex */
-// 			47, /* NumFrames */
-// 			CIRCULAR_ANIM, /* AnimFlags */
-// 			ONE_SECOND / 20, 0, /* FrameRate */
-// 			ONE_SECOND, ONE_SECOND * 6, /* RestartRate */
-// 			0, /* BlockMask */
-// 		},
-	},
-  	NULL, /* StarbaseFrame */
-  	NULL, /* StarbaseColorMap */
-};
-static SBDATA gaia_desc =
-{
-  	STARBASE_GAIA_ANIM, /* StarbaseFrameRes */
-	1, /* NumAnimations */
-	{ /* StarbaseAmbientArray (ambient animations) */
-		{	// 0 - Starbase
-			1, /* StartIndex */
-			32, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, 0, /* FrameRate */
-			0, 0, /* RestartRate */
-			0, /* BlockMask */
-		},
-	},
-  	NULL, /* StarbaseFrame */
-  	NULL, /* StarbaseColorMap */
-};
 
 static void
 DrawBaseStateStrings (STARBASE_STATE OldState, STARBASE_STATE NewState)
@@ -116,12 +49,12 @@ DrawBaseStateStrings (STARBASE_STATE OldState, STARBASE_STATE NewState)
 	SetContextFont (StarConFont);
 	SetContextForeGroundColor (BLACK_COLOR);
 
-	t.baseline.x = (73 - 4 + SAFE_X) << RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.x = 73 - 4 + SAFE_X;
 	t.align = ALIGN_CENTER;
 
 	if (OldState == (STARBASE_STATE)~0)
 	{
-		t.baseline.y = ((106 + 28) << RESOLUTION_FACTOR) + (SAFE_Y + 4); // JMS_GFX;
+		t.baseline.y = 106 + 28 + (SAFE_Y + 4);
 		for (OldState = TALK_COMMANDER; OldState < DEPART_BASE; ++OldState)
 		{
 			if (OldState != NewState)
@@ -130,18 +63,18 @@ DrawBaseStateStrings (STARBASE_STATE OldState, STARBASE_STATE NewState)
 				t.CharCount = (COUNT)~0;
 				font_DrawText (&t);
 			}
-			t.baseline.y += (23 - 4) << RESOLUTION_FACTOR; // JMS_GFX
+			t.baseline.y += (23 - 4);
 		}
 	}
 
-	t.baseline.y = ((106 + 28 + ((23 - 4) * OldState)) << RESOLUTION_FACTOR) + (SAFE_Y + 4); // JMS_GFX
+	t.baseline.y = 106 + 28 + (SAFE_Y + 4) + ((23 - 4) * OldState);
 	t.pStr = GAME_STRING (STARBASE_STRING_BASE + 1 + OldState);
 	t.CharCount = (COUNT)~0;
 	font_DrawText (&t);
 
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x0A), 0x0E));
-	t.baseline.y = ((106 + 28 + ((23 - 4) * NewState)) << RESOLUTION_FACTOR) + (SAFE_Y + 4); // JMS_GFX
+	t.baseline.y = 106 + 28 + (SAFE_Y + 4) + ((23 - 4) * NewState);
 	t.pStr = GAME_STRING (STARBASE_STRING_BASE + 1 + NewState);
 	t.CharCount = (COUNT)~0;
 	font_DrawText (&t);
@@ -326,7 +259,6 @@ DrawShipPiece (MENU_STATE *pMS, COUNT which_piece, COUNT which_slot,
 	}
 }
 
-/***
 static int
 rotate_starbase(void *data)
 {
@@ -357,250 +289,6 @@ rotate_starbase(void *data)
 	FinishTask (task);
 	return(0);
 }
-***/
-
-static void
-SetUpSBSequence (SEQUENCE *pSeq)
-{
-	COUNT i;
-	ANIMATION_DESC *ADPtr;
-
-	i = StarbaseData.NumAnimations;
-	pSeq = &pSeq[i];
-	ADPtr = &StarbaseData.StarbaseAmbientArray[i];
-	while (i--)
-	{
-		--ADPtr;
-		--pSeq;
-
-		if (ADPtr->AnimFlags & COLORXFORM_ANIM)
-			pSeq->AnimType = COLOR_ANIM;
-		else
-			pSeq->AnimType = PICTURE_ANIM;
-		pSeq->Direction = UP_DIR;
-		pSeq->FramesLeft = ADPtr->NumFrames;
-		if (pSeq->AnimType == COLOR_ANIM)
-			pSeq->AnimObj.CurCMap = SetAbsColorMapIndex (
-					StarbaseData.StarbaseColorMap, ADPtr->StartIndex);
-		else
-			pSeq->AnimObj.CurFrame = SetAbsFrameIndex (
-					StarbaseData.StarbaseFrame, ADPtr->StartIndex);
-
-		if (ADPtr->AnimFlags & RANDOM_ANIM)
-		{
-			if (pSeq->AnimType == COLOR_ANIM)
-				pSeq->AnimObj.CurCMap =
-						SetRelColorMapIndex (pSeq->AnimObj.CurCMap,
-						(COUNT)((COUNT)TFB_Random () % pSeq->FramesLeft));
-			else
-				pSeq->AnimObj.CurFrame =
-						SetRelFrameIndex (pSeq->AnimObj.CurFrame,
-						(COUNT)((COUNT)TFB_Random () % pSeq->FramesLeft));
-		}
-		else if (ADPtr->AnimFlags & YOYO_ANIM)
-		{
-			--pSeq->FramesLeft;
-			if (pSeq->AnimType == COLOR_ANIM)
-				pSeq->AnimObj.CurCMap =
-						SetRelColorMapIndex (pSeq->AnimObj.CurCMap, 1);
-			else
-				pSeq->AnimObj.CurFrame =
-						IncFrameIndex (pSeq->AnimObj.CurFrame);
-		}
-
-		pSeq->Alarm = ADPtr->BaseRestartRate
-				+ ((COUNT)TFB_Random () % (ADPtr->RandomRestartRate + 1)) + 1;
-	}
-}
-
-static int
-starbase_ambient_anim_task (void *data)
-{
-	FRAME AnimFrame[MAX_ANIMATIONS];
-	COUNT i;
-	DWORD LastTime;
-	FRAME StarbaseFrame;
-	SEQUENCE Sequencer[MAX_ANIMATIONS];
-	SEQUENCE *pSeq;
-	ANIMATION_DESC *ADPtr;
-	DWORD ActiveMask;
-			// Bit mask of all animations that are currently active.
-			// Bit 'i' is set if the animation with index 'i' is active.
-	Task task = (Task) data;
-	BOOLEAN ColorChange = FALSE;
-
-	while ((StarbaseFrame = StarbaseData.StarbaseFrame) == 0
-			&& !Task_ReadState (task, TASK_EXIT))
-		TaskSwitch ();
-
-	LockMutex (GraphicsLock);
-	memset (&DisplayArray[0], 0, sizeof (DisplayArray));
-	SetUpSBSequence (Sequencer);
-	UnlockMutex (GraphicsLock);
-
-	ActiveMask = 0;
-	LastTime = GetTimeCounter ();
-	memset (AnimFrame, 0, sizeof (AnimFrame));
-	for (i = 0; i < StarbaseData.NumAnimations; i++)
-	{
-		COUNT nextIndex;
-
-		if (StarbaseData.StarbaseAmbientArray[i].AnimFlags & YOYO_ANIM)
-			nextIndex = StarbaseData.StarbaseAmbientArray[i].StartIndex;
-		else
-			nextIndex = (StarbaseData.StarbaseAmbientArray[i].StartIndex
-					+ StarbaseData.StarbaseAmbientArray[i].NumFrames - 1);
-		AnimFrame[i] = SetAbsFrameIndex (StarbaseFrame, nextIndex);
-	}
-
-	while (!Task_ReadState (task, TASK_EXIT))
-	{
-		BOOLEAN Change;
-		DWORD CurTime, ElapsedTicks;
-
-		SleepThreadUntil (LastTime + ONE_SECOND / STARBASE_AMBIENT_ANIM_RATE);
-
-		LockMutex (GraphicsLock);
-		BatchGraphics ();
-		CurTime = GetTimeCounter ();
-		ElapsedTicks = CurTime - LastTime;
-		LastTime = CurTime;
-
-		Change = FALSE;
-		i = StarbaseData.NumAnimations;
-
-		pSeq = &Sequencer[i];
-		ADPtr = &StarbaseData.StarbaseAmbientArray[i];
-		while (i-- && !Task_ReadState (task, TASK_EXIT))
-		{
-			--ADPtr;
-			--pSeq;
-			if (ADPtr->AnimFlags & ANIM_DISABLED)
-				continue;
-			if (pSeq->Direction == NO_DIR)
-			{
-			  pSeq->Direction = UP_DIR;
-			}
-			else if ((DWORD)pSeq->Alarm > ElapsedTicks)
-				pSeq->Alarm -= (COUNT)ElapsedTicks;
-			else
-			{
-				if (!(ActiveMask & ADPtr->BlockMask)
-						&& (--pSeq->FramesLeft
-						|| ((ADPtr->AnimFlags & YOYO_ANIM)
-						&& pSeq->Direction == UP_DIR)))
-				{
-					ActiveMask |= 1L << i;
-					pSeq->Alarm = ADPtr->BaseFrameRate
-							+ ((COUNT)TFB_Random ()
-							% (ADPtr->RandomFrameRate + 1)) + 1;
-				}
-				else
-				{
-					ActiveMask &= ~(1L << i);
-					pSeq->Alarm = ADPtr->BaseRestartRate
-							+ ((COUNT)TFB_Random ()
-							% (ADPtr->RandomRestartRate + 1)) + 1;
-					if (ActiveMask & ADPtr->BlockMask)
-						continue;
-				}
-
-				if (pSeq->AnimType == COLOR_ANIM)
-				{
-					XFormColorMap (GetColorMapAddress (pSeq->AnimObj.CurCMap),
-							(COUNT) (pSeq->Alarm - 1));
-				}
-				else
-				{
-					Change = TRUE;
-					AnimFrame[i] = pSeq->AnimObj.CurFrame;
-				}
-
-				if (pSeq->FramesLeft == 0)
-				{
-					pSeq->FramesLeft = (BYTE)(ADPtr->NumFrames - 1);
-
-					if (pSeq->Direction == DOWN_DIR)
-						pSeq->Direction = UP_DIR;
-					else if (ADPtr->AnimFlags & YOYO_ANIM)
-						pSeq->Direction = DOWN_DIR;
-					else
-					{
-						++pSeq->FramesLeft;
-						if (pSeq->AnimType == COLOR_ANIM)
-							pSeq->AnimObj.CurCMap = SetRelColorMapIndex (
-									pSeq->AnimObj.CurCMap,
-									(SWORD) (-pSeq->FramesLeft));
-						else
-						{
-							pSeq->AnimObj.CurFrame = SetRelFrameIndex (
-									pSeq->AnimObj.CurFrame,
-									(SWORD) (-pSeq->FramesLeft));
-						}
-					}
-				}
-
-				if (ADPtr->AnimFlags & RANDOM_ANIM)
-				{
-					COUNT nextIndex = ADPtr->StartIndex +
-							(TFB_Random () % ADPtr->NumFrames);
-
-					if (pSeq->AnimType == COLOR_ANIM)
-						pSeq->AnimObj.CurCMap = SetAbsColorMapIndex (
-								pSeq->AnimObj.CurCMap, nextIndex);
-					else
-						pSeq->AnimObj.CurFrame = SetAbsFrameIndex (
-								pSeq->AnimObj.CurFrame, nextIndex);
-				}
-				else if (pSeq->AnimType == COLOR_ANIM)
-				{
-					if (pSeq->Direction == UP_DIR)
-						pSeq->AnimObj.CurCMap = SetRelColorMapIndex (
-								pSeq->AnimObj.CurCMap, 1);
-					else
-						pSeq->AnimObj.CurCMap = SetRelColorMapIndex (
-								pSeq->AnimObj.CurCMap, -1);
-				}
-				else
-				{
-					if (pSeq->Direction == UP_DIR)
-						pSeq->AnimObj.CurFrame =
-								IncFrameIndex (pSeq->AnimObj.CurFrame);
-					else
-						pSeq->AnimObj.CurFrame =
-								DecFrameIndex (pSeq->AnimObj.CurFrame);
-				}
-			}
-		}
-
-		if (Change)
-		  {
-		    STAMP s;
-		    s.origin.x = SAFE_X;
-		    s.origin.y = SAFE_Y + 4;
-		    s.frame = StarbaseFrame;
-		    DrawStamp (&s);
-		    i = StarbaseData.NumAnimations;
-		    while (i--)
-		      {
-			if (ActiveMask & (1L << i))
-			  {
-			    s.frame = AnimFrame[i];
-			    DrawStamp (&s);
-			  }
-		      }
-		    DrawBaseStateStrings ((STARBASE_STATE)~0, pMenuState->CurState);
-		    Change = FALSE;
-		  }
-		
-		UnbatchGraphics ();
-		UnlockMutex (GraphicsLock);
-		ColorChange = XFormColorMap_step ();
-	}
-	FinishTask (task);
-	return 0;
-}
-
 
 BOOLEAN
 DoStarBase (MENU_STATE *pMS)
@@ -614,7 +302,7 @@ DoStarBase (MENU_STATE *pMS)
 
 	if (!pMS->Initialized)
 	{
-	  STAMP s;
+		STAMP s;
 
 		LastActivity &= ~CHECK_LOAD;
 		pMS->InputFunc = DoStarBase;
@@ -644,17 +332,14 @@ DoStarBase (MENU_STATE *pMS)
 		
 		// JMS: Procyon starbase has different graphics from Sol and Betelgeuse starbases
 		if (CurStarDescPtr->Index == CHMMR_DEFINED)
-		  StarbaseData = procyon_desc;
+		  s.frame = CaptureDrawable (LoadGraphic (STARBASE_PROCYON_ANIM));
 		else
 		  if (CurStarDescPtr->Index == SOL_DEFINED)
-		    StarbaseData = sol_desc;
+		    s.frame = CaptureDrawable (LoadGraphic (STARBASE_ANIM));
 		  else
-		    StarbaseData = gaia_desc;
-		
-		StarbaseData.StarbaseFrame = CaptureDrawable (LoadGraphic (StarbaseData.StarbaseFrameRes));
-
-		s.frame = StarbaseData.StarbaseFrame;
-
+		    s.frame = CaptureDrawable (LoadGraphic (STARBASE_GAIA_ANIM));
+			
+		pMS->CurFrame = s.frame;
 		pMS->hMusic = LoadMusic (STARBASE_MUSIC);
 
 		LockMutex (GraphicsLock);
@@ -676,8 +361,8 @@ DoStarBase (MENU_STATE *pMS)
 		}
 		PlayMusic (pMS->hMusic, TRUE, 1);
 		UnbatchGraphics ();
-
-		pMS->flash_task = AssignTask (starbase_ambient_anim_task, 3072, "starbase ambient animations");
+		pMS->flash_task = AssignTask (rotate_starbase, 4096,
+				"rotate starbase");
 		UnlockMutex (GraphicsLock);
 	}
 	// JMS: These lines that are commented out are unnecessary also...
@@ -692,7 +377,7 @@ ExitStarBase:
 			ConcludeTask (pMS->flash_task);
 			pMS->flash_task = 0;
 		}
-		DestroyDrawable (ReleaseDrawable (StarbaseData.StarbaseFrame));
+		DestroyDrawable (ReleaseDrawable (pMS->CurFrame));
 		pMS->CurFrame = 0;
 		StopMusic ();
 		if (pMS->hMusic)
@@ -716,22 +401,12 @@ ExitStarBase:
 			FlushInput ();
 			
 			// JMS: Procyon starbase has Chmmr, Sol naturally humans, Betelgeuse our sweet Moosy.
-			// When the starbase commander is talked to, chasing ships turn away.
 			if (CurStarDescPtr->Index == SOL_DEFINED)
-			{
 				InitCommunication (COMMANDER_CONVERSATION);
-				NotifyOthers (HUMAN_SHIP, (BYTE)~0);
-			}
 			else if (CurStarDescPtr->Index == SYREEN_DEFINED)
-			{
 				InitCommunication (SYREENBASE_CONVERSATION);
-				NotifyOthers (SYREEN_SHIP, (BYTE)~0);
-			}
 			else
-			{
 				InitCommunication (CHMMR_CONVERSATION);
-				NotifyOthers (CHMMR_SHIP, (BYTE)~0);
-			}
 			
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
 		}

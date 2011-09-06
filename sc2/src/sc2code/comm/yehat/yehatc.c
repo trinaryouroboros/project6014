@@ -191,35 +191,34 @@ static LOCDATA yehat_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	0, /* NumFeatures */
-	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	(void) R; // satisfy compiler
 	NPCPhrase (GOODBYE_EARTHLING);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
+
 }
+
 
 static void
 AskMenu (RESPONSE_REF R)
 {	
 	/* Alien speech */
+
+
+
 	if (PLAYER_SAID (R, investigating_precursors))
 	{
 		NPCPhrase (PLEASED_TO_SEE_ALLY);
-		if (GET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT) == 0)
-			SET_GAME_STATE(YEHAT_PRECURSOR_ARTIFACT, 1);
 	}
 	else if (PLAYER_SAID (R, reinstate_veepneep))
 	{
 		NPCPhrase (BAD_HUMOUR);
 	}
+	
+	
 	if (PLAYER_SAID (R, how_are_you))
 	{
 		NPCPhrase (YEHAT_DOING_GOOD);

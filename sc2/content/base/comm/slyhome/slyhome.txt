@@ -9,7 +9,7 @@ is actually before us!
 How quickly we meet again!
 Let us communicate a while,
 ponder the mysterious nature of the universe
-and the exciting vastness of space.
+and the exciting vastness of the space.
 
 #(HELLO_3)
 The human Traveller!
@@ -22,7 +22,7 @@ Quick! Contact the other ships
 so we may begin the festivities of jumbling eruptions.
 
 #(PANIC_HELLO_1)
-Please, hear us out! We are Slylandro, gas folk
+Please, hear us out! We are Slylandro, gas folk,
 harmless inhabitants of the Source.
 Don't you recognize us?
 
@@ -49,7 +49,7 @@ How joyous and laughative they were!
 But the most wonderful thing happened when a while later
 they returned and brought with them these ships.
 Somehow, someway, they had constructed a micro-environment
-within these hulls that matched the climate of our gas giant home perfectly.
+within these hulls that match the climate of our gas giant home perfectly.
 They said they wanted to present us the opportunity
 to leave our planet
 explore the vast depths of space
@@ -95,7 +95,7 @@ You better leave fast. Our allies will attack those ships of yours at sight.
 #(NO_GO_BACK)
 Go back? But we cannot do that!
 Not when we have got the taste of freedom
-for the first time in our history.
+for the first time in so many a Drahn.
 Not when we have so many exciting new worlds
 right under our gas bags so to speak.
 On the other hand

@@ -294,7 +294,8 @@ orz_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				&& !(StarShipPtr->ship_input_state & WEAPON)
 				&& StarShipPtr->RaceDescPtr->ship_info.crew_level >
 				(BYTE)(StarShipPtr->RaceDescPtr->ship_info.max_crew >> 2)
-				&& !(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & HEAVY_POINT_DEFENSE)
+				&& !(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
+				& POINT_DEFENSE)
 				&& (MANEUVERABILITY (
 						&EnemyStarShipPtr->RaceDescPtr->cyborg_control
 						) < SLOW_SHIP

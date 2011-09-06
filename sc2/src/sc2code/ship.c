@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010 - Enable Down key in melee (comment tag JMS_KEYS)
-
 #include "build.h"
 #include "collide.h"
 #include "colors.h"
@@ -153,10 +151,10 @@ ship_preprocess (ELEMENT *ElementPtr)
 
 	cur_status_flags =
 			StarShipPtr->cur_status_flags
-			& ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
+			& ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
 	if (!(ElementPtr->state_flags & APPEARING))
 		cur_status_flags |= StarShipPtr->ship_input_state
-				& (LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
+				& (LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
 	else
 	{
 		ElementPtr->crew_level = RDPtr->ship_info.crew_level;
@@ -344,9 +342,6 @@ ship_postprocess (ELEMENT *ElementPtr)
 	if (StarShipPtr->special_counter)
 		--StarShipPtr->special_counter;
 
-	if (StarShipPtr->auxiliary_counter)
-		--StarShipPtr->auxiliary_counter;
-
 	if (RDPtr->postprocess_func)
 		(*RDPtr->postprocess_func) (ElementPtr);
 
@@ -416,7 +411,6 @@ spawn_ship (STARSHIP *StarShipPtr)
 	StarShipPtr->energy_counter = 0;
 	StarShipPtr->weapon_counter = 0;
 	StarShipPtr->special_counter = 0;
-	StarShipPtr->auxiliary_counter = 0;
 
 	hShip = StarShipPtr->hShip;
 	if (hShip == 0)

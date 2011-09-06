@@ -44,7 +44,7 @@
 static RACE_DESC chmmr_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | IMMEDIATE_WEAPON | SEEKING_SPECIAL | HEAVY_POINT_DEFENSE,
+		FIRES_FORE | IMMEDIATE_WEAPON | SEEKING_SPECIAL | POINT_DEFENSE,
 		30, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -467,7 +467,7 @@ satellite_preprocess (ELEMENT *ElementPtr)
 		SIZE dx, dy;
 		ELEMENT *ShipPtr;
 
-		StarShipPtr->RaceDescPtr->ship_info.ship_flags |= HEAVY_POINT_DEFENSE;
+		StarShipPtr->RaceDescPtr->ship_info.ship_flags |= POINT_DEFENSE;
 
 		LockElement (StarShipPtr->hShip, &ShipPtr);
 
@@ -655,7 +655,7 @@ satellite_death (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
-	StarShipPtr->RaceDescPtr->ship_info.ship_flags &= ~HEAVY_POINT_DEFENSE;
+	StarShipPtr->RaceDescPtr->ship_info.ship_flags &= ~POINT_DEFENSE;
 
 	ElementPtr->state_flags &= ~DISAPPEARING;
 	ElementPtr->state_flags |= NONSOLID | FINITE_LIFE | CHANGING;

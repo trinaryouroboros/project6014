@@ -20,10 +20,6 @@
 #define _STARBASE_H
 
 #include "menustat.h"
-#include "globdata.h"
-#define COMM_INTERNAL
-#include "commanim.h"
-#include "libs/mathlib.h"
 
 enum
 {
@@ -34,7 +30,6 @@ enum
 };
 typedef BYTE STARBASE_STATE;
 
-extern SBDATA StarbaseData;
 
 extern void InstallBombAtEarth (void);
 extern void VisitStarBase (void);

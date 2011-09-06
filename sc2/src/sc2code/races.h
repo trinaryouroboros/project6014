@@ -21,11 +21,7 @@
 // JMS 2010:- Added ship damage flags to SHIP_INFO structure and the damage definitions
 //			- Added Slylandro_kohrah ship enums, and all the other relevant stuff
 //			- Added Lurg shipenums, and all the other relevant stuff
-//			- Reduced Kohrah and slykohr max taskforce sizes to 2 ships
-//			- Added ISD shipenums, and all the other relevant stuff
-//			- Enable down key in melee (comment tag JMS_KEYS)
-
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+//			- Defined procyon system coords to PROCYON_X and PROCYON_Y for use in game start location, in globdata.c
 
 
 #ifndef _RACES_H
@@ -52,20 +48,19 @@ typedef HLINK HSTARSHIP;
 #define GOOD_GUY  (1 << 0)
 #define BAD_GUY   (1 << 1)
 */
-#define SEEKING_WEAPON			(1 << 2)
-#define SEEKING_SPECIAL			(1 << 3)
-#define LIGHT_POINT_DEFENSE     (1 << 4)
-#define HEAVY_POINT_DEFENSE     (1 << 5)
+#define SEEKING_WEAPON    (1 << 2)
+#define SEEKING_SPECIAL   (1 << 3)
+#define POINT_DEFENSE     (1 << 4)
 		/* Ship has some point-defense capabilities */
-#define IMMEDIATE_WEAPON		(1 << 6)
-#define CREW_IMMUNE				(1 << 7)
-#define FIRES_FORE				(1 << 8)
-#define FIRES_RIGHT				(1 << 9)
-#define FIRES_AFT				(1 << 10)
-#define FIRES_LEFT				(1 << 12)
-#define SHIELD_DEFENSE			(1 << 13)
-#define DONT_CHASE				(1 << 14)
-#define PLAYER_CAPTAIN			(1 << 15)
+#define IMMEDIATE_WEAPON  (1 << 5)
+#define CREW_IMMUNE       (1 << 6)
+#define FIRES_FORE        (1 << 7)
+#define FIRES_RIGHT       (1 << 8)
+#define FIRES_AFT         (1 << 9)
+#define FIRES_LEFT        (1 << 10)
+#define SHIELD_DEFENSE    (1 << 11)
+#define DONT_CHASE        (1 << 12)
+#define PLAYER_CAPTAIN    (1 << 13)
 		/* The protagonist himself is on board. He gets a different color. */
 
 // JMS: Damage flags for a ship
@@ -112,7 +107,6 @@ typedef enum
 	MMRNMHRM_ID,
 	SLYLANDRO_KOHRAH_ID,	// JMS
 	LURG_ID,				// JMS
-	ISD_ID,					// JMS
 	SIS_SHIP_ID,
 	LAST_MELEE_ID =	SIS_SHIP_ID, // JMS: The last ship to be included in super melee is this one
 	SA_MATRA_ID,
@@ -283,12 +277,10 @@ struct STARSHIP
 			// In battle: frames left before primary weapon can be used
 	BYTE special_counter;
 			// In battle: frames left before special can be used
-	BYTE auxiliary_counter;
-			// In battle: frames left before auxiliary can be used
 	BYTE energy_counter;
 			// In battle: frames left before energy regeneration
 
-	COUNT ship_input_state; // JMS_KEYS: Was BYTE
+	BYTE ship_input_state;
 	STATUS_FLAGS cur_status_flags;
 	STATUS_FLAGS old_status_flags;
 	
@@ -430,7 +422,6 @@ enum
 	MMRNMHRM_SHIP,
 	SLYLANDRO_KOHRAH_SHIP,	// JMS: Slylandros flying Kohr-ah vessel
 	LURG_SHIP,				// JMS: The fearsome Lurg
-	ISD_SHIP,				// JMS: The mysterious ISD
 	YEHAT_REBEL_SHIP,
 	TRANSPORT_SHIP,			// JMS: Transport replaces Ur-Quan probe
 	SAMATRA_SHIP = TRANSPORT_SHIP,
@@ -466,7 +457,6 @@ enum
 		INVALID_CONVERSATION,      /* JMS: MMRNMHRM_SHIP */ \
 		SLYLANDRO_HOME_CONVERSATION,/* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		LURG_CONVERSATION,			/* JMS: LURG_SHIP */ \
-		INVALID_CONVERSATION,      /* JMS: ISD_SHIP */ \
 		YEHAT_REBEL_CONVERSATION,  /* YEHAT_REBEL_SHIP */ \
 		TRANSPORT_CONVERSATION,    /* JMS: TRANSPORT_SHIP */ \
 		SYREENBASE_CONVERSATION,    /* SYREEN_BASE */ \
@@ -500,13 +490,10 @@ enum
 	MMRNMHRM_SHIP,	   /* JMS: MMRNMHRM_CONVERSATION */ \
 	SLYLANDRO_KOHRAH_SHIP, /* JMS: SLYLANDRO_HOME_CONVERSATION */ \
 	LURG_SHIP,			/* JMS: LURG_CONVERSATION */ \
-	ISD_SHIP,			/* JMS: INVALID_CONVERSATION */ \
 	UMGAH_SHIP,        /* TALKING_PET_CONVERSATION */ \
-	HUMAN_SHIP,			/* TRANSPORT_CONVERSATION */ \
-    SYREEN_SHIP,		/* SYREENBASE_CONVERSATION */ \
-    SYREEN_SHIP,		/* SYREENHOME_CONVERSATION */ \
+	TRANSPORT_SHIP,    /* TRANSPORT_CONVERSATION */ \
 	YEHAT_SHIP,        /* YEHAT_REBEL_CONVERSATION */ \
-	YEHAT_SHIP         /* INVALID_CONVERSATION */
+	HUMAN_SHIP         /* INVALID_CONVERSATION */
 	
  
 #define RACE_SHIP_COST \
@@ -537,7 +524,6 @@ enum
 		1800,  /* JMS: MMRNMHRM_SHIP */ \
 		3000,  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		2000,  /* JMS: LURG_SHIP */ \
-		3000,  /* JMS: ISD_SHIP */ \
 		2300,  /* YEHAT_REBEL_SHIP */
 		 
 
@@ -570,56 +556,54 @@ enum
 		LOG_TO_IP (42),  /* JMS: MMRNMHRM_SHIP */ \
 		LOG_TO_IP (30),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		LOG_TO_IP (40),  /* JMS: LURG_SHIP */ \
-		LOG_TO_IP (20),  /* JMS: ISD_SHIP */ \
 		LOG_TO_IP (30),  /* YEHAT_REBEL_SHIP */ \
 		LOG_TO_IP (24),  /* JMS: TRANSPORT_SHIP */ 
 
 #define LOG_TO_HYPER(s) (WORLD_TO_VELOCITY (s) >> 1)
 #define RACE_HYPER_SPEED \
-		LOG_TO_HYPER (40 << RESOLUTION_FACTOR),  /* ARILOU_SHIP */ \
-		LOG_TO_HYPER (30 << RESOLUTION_FACTOR),  /* CHMMR_SHIP */ \
-		LOG_TO_HYPER (24 << RESOLUTION_FACTOR),  /* HUMAN_SHIP */ \
-		LOG_TO_HYPER (40 << RESOLUTION_FACTOR),  /* ORZ_SHIP */ \
-		LOG_TO_HYPER (40 << RESOLUTION_FACTOR),  /* PKUNK_SHIP */ \
-		LOG_TO_HYPER (35 << RESOLUTION_FACTOR),  /* SHOFIXTI_SHIP */ \
-		LOG_TO_HYPER (48 << RESOLUTION_FACTOR),  /* SPATHI_SHIP */ \
-		LOG_TO_HYPER (40 << RESOLUTION_FACTOR),  /* SUPOX_SHIP */ \
-		LOG_TO_HYPER (50 << RESOLUTION_FACTOR),  /* THRADDASH_SHIP */ \
-		LOG_TO_HYPER (30 << RESOLUTION_FACTOR),  /* UTWIG_SHIP */ \
-		LOG_TO_HYPER (21 << RESOLUTION_FACTOR),  /* VUX_SHIP */ \
-		LOG_TO_HYPER (30 << RESOLUTION_FACTOR),  /* YEHAT_SHIP */ \
-		LOG_TO_HYPER (40 << RESOLUTION_FACTOR),  /* MELNORME_SHIP */ \
-		LOG_TO_HYPER (20 << RESOLUTION_FACTOR),  /* DRUUGE_SHIP */ \
-		LOG_TO_HYPER (25 << RESOLUTION_FACTOR),  /* ILWRATH_SHIP */ \
-		LOG_TO_HYPER (27 << RESOLUTION_FACTOR),  /* MYCON_SHIP */ \
-		LOG_TO_HYPER (60 << RESOLUTION_FACTOR),  /* SLYLANDRO_SHIP */ \
-		LOG_TO_HYPER (18 << RESOLUTION_FACTOR),  /* UMGAH_SHIP */ \
-		LOG_TO_HYPER (30 << RESOLUTION_FACTOR),  /* URQUAN_SHIP */ \
-		LOG_TO_HYPER (40 << RESOLUTION_FACTOR),  /* ZOQFOTPIK_SHIP */ \
-		LOG_TO_HYPER (36 << RESOLUTION_FACTOR),  /* SYREEN_SHIP */ \
-		LOG_TO_HYPER (30 << RESOLUTION_FACTOR),  /* BLACK_URQUAN_SHIP */ \
-		LOG_TO_HYPER (40 << RESOLUTION_FACTOR),  /* JMS: ANDROSYNTH_SHIP */ \
-		LOG_TO_HYPER (30 << RESOLUTION_FACTOR),  /* JMS: CHENJESU_SHIP */ \
-		LOG_TO_HYPER (42 << RESOLUTION_FACTOR),  /* JMS: MMRNMHRM_SHIP */ \
-		LOG_TO_HYPER (30 << RESOLUTION_FACTOR),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
-		LOG_TO_HYPER (40 << RESOLUTION_FACTOR),  /* JMS LURG_SHIP */ \
-		LOG_TO_HYPER (20 << RESOLUTION_FACTOR),  /* JMS ISD_SHIP */ \
-		LOG_TO_HYPER (30 << RESOLUTION_FACTOR),  /* YEHAT_REBEL_SHIP */ \
-		LOG_TO_HYPER (24 << RESOLUTION_FACTOR),  /* JMS: TRANSPORT_SHIP */ \
+		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* ARILOU_SHIP */ \
+		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* CHMMR_SHIP */ \
+		LOG_TO_HYPER (24 * RESOLUTION_FACTOR),  /* HUMAN_SHIP */ \
+		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* ORZ_SHIP */ \
+		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* PKUNK_SHIP */ \
+		LOG_TO_HYPER (35 * RESOLUTION_FACTOR),  /* SHOFIXTI_SHIP */ \
+		LOG_TO_HYPER (48 * RESOLUTION_FACTOR),  /* SPATHI_SHIP */ \
+		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* SUPOX_SHIP */ \
+		LOG_TO_HYPER (50 * RESOLUTION_FACTOR),  /* THRADDASH_SHIP */ \
+		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* UTWIG_SHIP */ \
+		LOG_TO_HYPER (21 * RESOLUTION_FACTOR),  /* VUX_SHIP */ \
+		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* YEHAT_SHIP */ \
+		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* MELNORME_SHIP */ \
+		LOG_TO_HYPER (20 * RESOLUTION_FACTOR),  /* DRUUGE_SHIP */ \
+		LOG_TO_HYPER (25 * RESOLUTION_FACTOR),  /* ILWRATH_SHIP */ \
+		LOG_TO_HYPER (27 * RESOLUTION_FACTOR),  /* MYCON_SHIP */ \
+		LOG_TO_HYPER (60 * RESOLUTION_FACTOR),  /* SLYLANDRO_SHIP */ \
+		LOG_TO_HYPER (18 * RESOLUTION_FACTOR),  /* UMGAH_SHIP */ \
+		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* URQUAN_SHIP */ \
+		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* ZOQFOTPIK_SHIP */ \
+		LOG_TO_HYPER (36 * RESOLUTION_FACTOR),  /* SYREEN_SHIP */ \
+		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* BLACK_URQUAN_SHIP */ \
+		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* JMS: ANDROSYNTH_SHIP */ \
+		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* JMS: CHENJESU_SHIP */ \
+		LOG_TO_HYPER (42 * RESOLUTION_FACTOR),  /* JMS: MMRNMHRM_SHIP */ \
+		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
+		LOG_TO_HYPER (40 * RESOLUTION_FACTOR),  /* JMS LURG_SHIP */ \
+		LOG_TO_HYPER (30 * RESOLUTION_FACTOR),  /* YEHAT_REBEL_SHIP */ \
+		LOG_TO_HYPER (24 * RESOLUTION_FACTOR),  /* JMS: TRANSPORT_SHIP */ \
 
 #define RACE_HYPERSPACE_PERCENT \
 		13,  /* ARILOU_SHIP */ \
-		50,  /* CHMMR_SHIP */ \
+		60,  /* CHMMR_SHIP */ \
 		30,  /* HUMAN_SHIP */ \
 		20,  /* ORZ_SHIP */ \
 		40,  /* PKUNK_SHIP */ \
 		20,  /* SHOFIXTI_SHIP */ \
 		20,  /* SPATHI_SHIP */ \
-		 0,  /* SUPOX_SHIP */ \
-		 0,  /* THRADDASH_SHIP */ \
-		 0,  /* UTWIG_SHIP */ \
+		40,  /* SUPOX_SHIP */ \
+		60,  /* THRADDASH_SHIP */ \
+		40,  /* UTWIG_SHIP */ \
 		40,  /* VUX_SHIP */ \
-		45,  /* YEHAT_SHIP */ \
+		60,  /* YEHAT_SHIP */ \
 		 0,  /* MELNORME_SHIP */ \
 		30,  /* DRUUGE_SHIP */ \
 		 0,  /* ILWRATH_SHIP */ \
@@ -635,7 +619,6 @@ enum
 		60,  /* JMS: MMRNMHRM_SHIP */ \
 		15, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		45, /* JMS: LURG_SHIP */ \
-		 0, /* JMS: ISD_SHIP */ \
 		60,  /* YEHAT_REBEL_SHIP */ \
 		 0,  /* JMS: TRANSPORT_SHIP */
 
@@ -646,7 +629,7 @@ enum
 		20,  /* ORZ_SHIP */ \
 		20,  /* PKUNK_SHIP */ \
 		40,  /* SHOFIXTI_SHIP */ \
-		0,  /* SPATHI_SHIP */ \
+		10,  /* SPATHI_SHIP */ \
 		20,  /* SUPOX_SHIP */ \
 		20,  /* THRADDASH_SHIP */ \
 		20,  /* UTWIG_SHIP */ \
@@ -667,7 +650,6 @@ enum
 		40,  /* JMS: MMRNMHRM_SHIP */ \
 		25, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		45, /* JMS: LURG_SHIP */ \
-		 0, /* JMS: ISD_SHIP */ \
 		40,  /* YEHAT_REBEL_SHIP */ \
 		 0,  /* TRANSPORT_SHIP */ \
 
@@ -696,13 +678,12 @@ enum
 		MAKE_BYTE (1, 5),  /* URQUAN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* ZOQFOTPIK_SHIP */ \
 		MAKE_BYTE (1, 5),  /* SYREEN_SHIP */ \
-		MAKE_BYTE (1, 2),  /* JMS: BLACK_URQUAN_SHIP REDUCED TO MAX 2 SHIPS */ \
+		MAKE_BYTE (1, 5),  /* BLACK_URQUAN_SHIP */ \
 		MAKE_BYTE (1, 5),  /* JMS: ANDROSYNTH_SHIP*/ \
 		MAKE_BYTE (1, 5),  /* JMS: CHENJESU_SHIP */\
 		MAKE_BYTE (1, 5),  /* JMS: MMRNMHRM_SHIP */\
-		MAKE_BYTE (1, 2),  /* JMS: SLYLANDRO_KOHRAH_SHIP REDUCED TO MAX 2 SHIPS */ \
+		MAKE_BYTE (1, 5),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		MAKE_BYTE (1, 5),  /* JMS: LURG_SHIP */ \
-		MAKE_BYTE (1, 1),  /* JMS: ISD_SHIP */ \
 		MAKE_BYTE (1, 5),  /* YEHAT_REBEL_SHIP */\
 		MAKE_BYTE (1, 1),  /* JMS:TRANSPORT_SHIP */ \
 
@@ -734,9 +715,33 @@ enum
 		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x4D),  /* JMS: MMRNMHRM_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x02, 0x02, 0x02), 0x39),  /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x1B, 0x02), 0x4D),  /* JMS: LURG_SHIP */ \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x1B, 0x02), 0x4D),  /* JMS: ISD_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x2A, 0x00, 0x00), 0x39),  /* YEHAT_REBEL_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x03, 0x1F), 0x39),  /* JMS:TRANSPORT_SHIP */ \
+
+#define RADAR_SCAN_WIDTH (UNIT_SCREEN_WIDTH * NUM_RADAR_SCREENS)
+#define RADAR_SCAN_HEIGHT (UNIT_SCREEN_HEIGHT * NUM_RADAR_SCREENS)
+
+// Hyperspace coordinates of the naturally occuring portal into QuasiSpace
+#define ARILOU_SPACE_X   438
+#define ARILOU_SPACE_Y  6372
+
+// QuasiSpace coordinates of the same portal
+#define QUASI_SPACE_X  5000
+#define QUASI_SPACE_Y  5000
+
+// QuasiSpace coordinates of the Arilou home world
+#define ARILOU_HOME_X  (QUASI_SPACE_X + ((RADAR_SCAN_WIDTH >> 1) * 3))
+#define ARILOU_HOME_Y  (QUASI_SPACE_Y + ((RADAR_SCAN_HEIGHT >> 1) * 3))
+
+// Hyperspace coordinates of the Sol system
+// Should be the same as in plandata.c
+#define SOL_X  6752
+#define SOL_Y  7450
+
+// JMS: Hyperspace coordinates of the Procyon system
+// Should be the same as in plandata.c
+#define PROCYON_X  5742
+#define PROCYON_Y  8268
 
 extern BOOLEAN InitKernel (void);
 

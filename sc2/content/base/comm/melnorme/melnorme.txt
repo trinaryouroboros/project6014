@@ -1,6 +1,3 @@
-#(dummy)
-This is a hack.
-
 #(ENUMERATE_ONE)	melno172.ogg
 one
 
@@ -94,6 +91,7 @@ hundred
 #(ENUMERATE_THOUSAND)	melno202.ogg
 thousand
 
+
 #(HELLO_NOW_DOWN_TO_BUSINESS1)
 Attention alien vessel, this is Trademaster Greenish of the starship
 `Inevitably Successful In All Circumstances'.
@@ -108,7 +106,7 @@ We are doing just great! But now I have to sort out some business with a Shofixt
 #(DOING_GOOD_RESPONSE)
 Ah, if it's lost Shofixti that interest you, I have some very valuable information.
 In accordance with our protocols and code of ethics
-this information can be given to you in exchange for Credits.
+this information can be given to you in exchange for credits.
 
 #(doing_average)
 Just about average. How about yourselves?
@@ -136,7 +134,7 @@ Of course we still sell fuel and information.
 Sounds good. Remind me how this works again.
 
 #(TRADING_INFO1)
-Certainly, Captain.
+Certainly, captain.
 
 #(MORE_TRADING_INFO)
 We are interested in purchasing certain items, specifically
@@ -170,7 +168,7 @@ Actually I never really liked how you made me collect all that bio stuff just so
 And I think I'm gonna spank yo ass!
 
 #(UNWISE_CAPTAIN)
-That would be unwise, Captain.  Our vessels are very well equipped to deal with pirates.  
+That would be unwise Captain.  Our vessels are very well equipped to deal with pirates.  
 You surprise me with your aggression. I think I will end this communication.
 
 #(only_joke)
@@ -183,13 +181,14 @@ Only joke. Let's trade!
 You were one of my favourite clients. I'm sure I will find more though.
 {battle screen}
 
-#(HELLO_NOW_DOWN_TO_BUSINESS2)
+#(HELLO_NOW_DOWN_TO_BUSINESS2)	melno001.ogg
 As a master trader in the Melnorme merchant fleet, I greet you, Captain.
 News of your species and your unusual vessel has travelled quickly.
 I need not say how eager we are to trade with you and your kind!
+Now, how can I be of service to you?
 
-#(HELLO_NOW_DOWN_TO_BUSINESS3)
-Hello again, human space Captain.
+#(HELLO_NOW_DOWN_TO_BUSINESS3)	melno002.ogg
+Hello again, human space captain.
 Perhaps during this encounter, we will be able to establish a successful, businesslike relationship.
 
 #(get_on_with_business)
@@ -198,92 +197,12 @@ Shall we begin trading now?
 #(no_trade_now)
 Goodbye, Trade Master.
 
-#(OK_NO_TRADE_NOW_BYE)
+#(OK_NO_TRADE_NOW_BYE)	melno011.ogg
 When you wish to trade with us, seek any supergiant star system.
 We shall be there.
 
-#(sell_ship_mark_sightings)
-Uh, I have info on vanished Precursor artifacts and space ships of unknown origin. Interested?
-
-#(OFFER_CREDITS_FOR_SHIPMARK_INFO)
-Captain
-you arouse my curiosity.
-You have done well to observe how... eager we are to acquire Precursor-related data.
-I am willing to offer you 100 Credits for your information
-should it provide valuable.
-However, as the quality of your merchandise cannot be checked without hearing it first
-I can decide if your story is worth the fee only after hearing it.
-
-#(deal_shipmarks)
-Ok, fair enough. Here's the data on the crop circles we discovered on Gamma Janus II.
-
-#(no_deal_shipmarks)
-Hmm, sounds like a rotten deal to me. Thanks, but no thanks.
-
-#(OK_NO_DEAL_SHIPMARKS)
-Very well, Captain.
-But if you do change your mind, our offer stands.
-
-#(ALTERNATIVE_REWARD_FOR_SHIPMARK_INFO)
-Hmm, let's see
-very interesting.
-Captain, I have a highly unconventional suggestion.
-Looking at your data, it seems you have come across something
-we have additional information on.
-It is our custom to only trade knowledge which we have researched thoroughly
-after all, knowing what you are selling makes it easier to ch-- er, support your customer.
-But in this case I am sure that sharing our partial wisdom would profit us both.
-What I suggest is that instead of you receiving the 100 Credit fee
-we engage in an ancient Melnorme tradition
-of exchanging one valuable fact for another.
-
-#(credits_for_ship_mark_sightings)
-No way, Jose. I'll have my Credits now, thank you.
-
-#(info_for_ship_mark_sightings)
-This might benefit both of us... Let's exchange secrets!
-
-#(SHIP_MARK_DEAL)
-What a pity, Captain.
-You just might have learned where the origin of those ships lies.
-
-#(SHIP_MARK_INFORMATION)
-Captain, once again you have made a wise decision!
-And now, for the story...
-When pursuing the matter of the lost Shofixti patrols further
-our agents set their course deep into the Messier system for more clues.
-There was nothing to be found
-except in one system.
-
-#(HINT_PLANET_0)
-The second planet of Beta Messier at 704.5:378.9...
-
-#(HINT_PLANET_1)
-The second planet of Delta Apollonius at 648.0:397.0...
-
-#(HINT_PLANET_2)
-The second planet of Alpha Apollonius at 656.4:418.3...
-
-#(SHIP_MARK_INFORMATION_2)
-...is littered with imprints similar to the one you found on Janus.
-Also, seems there has been great cities on the planet -- Destroyed?
-No. More like 'taken away'.
-Square miles of the planet terrain is patterned with blueprints of cities.
-However, nothing more stands there, only outlines of the buildings in the soil.
-Who were they? Where did they go? We don't know.
-Our inability to find out the facts behind this mystery is most unnerving
-and not to mention, bad for business.
-Should you find something that sheds more light on this matter
-do let us know. You may expect a remarkable sum in exchange.
-
-#(sell_tzzrak_tzon_pics)
-Might I tempt you with high quality imagery of the Crystal Caverns of Tzzrak-Tzon?
-	
-#(NO_WAY)
-No.
-
-#(HELLO_AND_DOWN_TO_BUSINESS1)
-Greetings Captain.
+#(HELLO_AND_DOWN_TO_BUSINESS1)	melno012.ogg
+Yes, let us get down to business.
 
 #(HELLO_AND_DOWN_TO_BUSINESS2)	melno013.ogg
 How nice to see you again, Captain.
@@ -291,42 +210,41 @@ How nice to see you again, Captain.
 #(HELLO_AND_DOWN_TO_BUSINESS3)	melno014.ogg
 I had itchy pods this morning, Captain, and here you are!
 
-#(HELLO_AND_DOWN_TO_BUSINESS4)
-It's your lucky day Captain.
-My crew and I have just finished reciting
-the traditional Melnorme hymn of the Mutually Beneficial Transaction.
-I'm sure you'll find this encounter most rewarding.
+#(HELLO_AND_DOWN_TO_BUSINESS4)	melno015.ogg
+What a coincidence! I was just talking about you with a Keel-Verezy captain.
+They expressed great interest in your explorations and struggles against the Ur-Quan
+but, like all Verezy, I'm afraid they were hesitant to introduce themselves for fear of
+well, frightening you.
+In any event, it is our pleasure to meet you once again.
 
 #(HELLO_AND_DOWN_TO_BUSINESS5)	melno016.ogg
 Once again we meet to exchange valuable tangibles.
 Isn't this fun?!
 
-#(HELLO_AND_DOWN_TO_BUSINESS6)
-Why Captain, what a pleasant surpise!
-I was looking at my ledger of this month's transactions,
-and feeling somewhat depressed,
-and then here you are!
-How fortuitous!
+#(HELLO_AND_DOWN_TO_BUSINESS6)	melno017.ogg
+Your arrival was predicted by our Tzo crystal's vibrations.
+We already know why you are here and what you need from us; however
+etiquette requires that we act as though we are ignorant of your desires.
 
 #(HELLO_AND_DOWN_TO_BUSINESS7)	melno018.ogg
 This very morning, I was just saying to subordinate Ochre
 `Fe-Fi-Fo-Fum! I smell the feet of a Hu-Hu-Man!'
 We laughed and laughed. What a synchronicity!
 
-#(HELLO_AND_DOWN_TO_BUSINESS8)
-I must warn you Captain,
-I am in training for the annual Melnorme Bargaining Cup.
-If I drive a particularly hard bargain today,
-please consider it a complement.
+#(HELLO_AND_DOWN_TO_BUSINESS8)	melno019.ogg
+I must warn you, Captain
+this is the time of the month we Melnorme drive exceptionally hard bargains.
+Beware!
 
-#(HELLO_AND_DOWN_TO_BUSINESS9)
-Whoa Captain!
-Not another close call with a Keel-Verezy vessel!
-One of these days we really must furnish you with an Eydron scanner,
-so you can stop being such a menace to the Keel-Verezy.
-They're some of our best customers.
+#(HELLO_AND_DOWN_TO_BUSINESS9)	melno020.ogg
+LOOK OUT!
+Hoy! What a close call!
+Captain, why did you try to run down that Keel-Verezy vessel!?
+You almost smashed it into flinders!
+What!? You didn't see it? Surely you -- oh
+Never mind.
 
-#(HELLO_AND_DOWN_TO_BUSINESS10)	melno021.ogg
+#(HELLO_AND_DOWN_TO_BUSINESS10) melno021.ogg
 Welcome back, Captain! You are our favorite customer.
 
 #(whats_my_credit)
@@ -446,7 +364,7 @@ As you wish.
 I have some data on alien lifeforms.
 
 #(SOLD_LIFE_DATA1)	melno074.ogg
-The 
+The  
 
 #(SOLD_LIFE_DATA2)	melno203.ogg
  units of biological data we downloaded from your ship earn you 
@@ -462,7 +380,7 @@ Your ship's log indicates that you discovered the whereabouts of
 
 #(SOLD_RAINBOW_LOCATIONS2)	melno205.ogg
  of the Rainbow worlds which so fascinate us.
-In exchange, we will give you 
+In exchange, we will give you
 
 #(SOLD_RAINBOW_LOCATIONS3)	melno204.ogg
  Credits.
@@ -532,12 +450,12 @@ It has been a pleasure dealing with you, Captain.
 We look forward to your next visit.
 
 #(CREDIT_IS0)
-Your present balance is 
+Your present balance is
 #(CREDIT_IS1)
  Credits.
 
 #(NEED_MORE_CREDIT0)	melno084.ogg
-Unfortunately this purchase requires 
+Unfortunately this purchase requires
 #(NEED_MORE_CREDIT1)	melno206.ogg
  additional Credits.
 
@@ -587,8 +505,6 @@ What else would you like to buy?
 What else would you like to buy?
 
 #(OK_BUY_EVENT_1)
-Captain, we only have one current event item for sale
-but boy, what a whopper it is!
 The Alliance high command as well as the Shofixti are in a turmoil
 over a patrol of Shofixti scout vessels that were probably destroyed
 but managed to transmit a distress call before that.
@@ -602,7 +518,7 @@ How we know this all?
 Usually it is not in our custom to reveal sources of information
 but in this case, it is relevant to the very fact we are selling.
 While enroute to Archytas, one of our 'agents' was able to intercept the signal near
-the Naos constellation, the primary star of which is at 469.9:578.0.
+the Naos constellation.
 We also have news on the other Shofixti patrols.
 Whilst we have recently had sightings of the patrol
 that was dispatched near the Angstrom system
@@ -610,14 +526,10 @@ the one that was tasked with the Messier system is actually missing
 and probably destroyed.
 Two months ago, the patrol just vanished somewhere near the Messier system
 despite our agents' daily checks on them -- they're just gone.
-Captain, that was the only useful piece of information
-regarding current events that we have for sale.
-If we obtain any information which will prove useful to you in future,
-we will be sure to inform you.
 
 #(OK_BUY_EVENT_2)	melno092.ogg
 Captain, I recommend you consider contributing to this game. 
-I'm sure it will be worthwhile.
+I'm sure it will be worthwhile
 
 #(OK_BUY_EVENT_3)	melno093.ogg
 
@@ -639,7 +551,7 @@ I'm sure it will be worthwhile.
 
 #(OK_BUY_ALIEN_RACE_1)	
 Captain, I recommend you consider contributing to this game. 
-I'm sure it will be worthwhile.
+I'm sure it will be worthwhile
 
 #(OK_BUY_ALIEN_RACE_2)	melno100.ogg
 
@@ -684,12 +596,13 @@ I'm sure it will be worthwhile.
 
 
 #(OK_BUY_ALIEN_RACE_16)	melno114.ogg
+
 Captain, you have heard all that we have to say about aliens indigenous to this region.
 Should we learn more in the near future, we shall be certain to sell it to you.
 
 #(OK_BUY_HISTORY_1)	
 Captain, I recommend you consider contributing to this game. 
-I'm sure it will be worthwhile.
+I'm sure it will be worthwhile
 
 #(OK_BUY_HISTORY_2)	melno116.ogg
 
@@ -734,8 +647,8 @@ I do not want to purchase any more technology.
 #(fill_me_up)
 Fill all my fuel tanks to maximum capacity.
 
-#(AT_MAXIMUM_CAPACITY)
-It seems like your tanks already are at maximum capacity.
+#(OK_FILL_YOU_UP)	melno125.ogg
+Yes sir, fill 'er up, right away!
 
 #(OK_DONE_BUYING_FUEL)	melno130.ogg
 Would you like to purchase anything else?
@@ -747,8 +660,6 @@ Please do not make the mistake of thinking of this as a `gift' or act of altruis
 we are merely investing in our relationship with you, the customer.
 We are certain that in the long run, this will prove to be a most profitable investment.
 
-#(ALL_BIO_TYPES_FOUND)
-ALL LIFEFORM TYPES FOUND - REPLACE WITH SOMETHING CLEVER -DN 27DEC10
 
 #(STRIP_HEAD)	melno159.ogg
 We will take
@@ -788,3 +699,4 @@ We will take
 
 #(DEFENSES)	melno171.ogg
  of your Point-Defense Lasers
+

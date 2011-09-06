@@ -199,6 +199,9 @@ case "$HOST_SYSTEM" in
 	ARMV5|WINSCW|GCCE)
 		LIB_vorbisfile_DETECT="false"
 		;;
+	MINGW32*)
+		LIB_vorbisfile_DETECT="true"
+		;;
 	*)
 		LIB_vorbisfile_DETECT="try_pkgconfig_lib vorbisfile vorbisfile"
 		LIB_vorbisfile_DEPEND_DETECT_BIN="pkgconfig"
@@ -248,7 +251,6 @@ LIB_zlib_NAME="zlib"
 LIB_zlib_CFLAGS=""
 case "$HOST_SYSTEM" in
 	MINGW32*|CYGWIN*|cegcc)
-		LIB_zlib_CFLAGS="-I/usr/include"
 		LIB_zlib_LDFLAGS="-lzdll"
 		;;
 	ARMV5|WINSCW|GCCE)

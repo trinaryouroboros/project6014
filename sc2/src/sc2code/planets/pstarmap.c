@@ -19,9 +19,6 @@
 // JMS 2009: -Orz space starmap colors and star locations
 // JMS 2010: -Do not draw Sphere of Influence for Slylandros riding Kohr-Ah ships
 //			 -Do not draw Sphere of Influence for Kohr-Ahs.
-//			 -Display hint for the player to use the star search facility in the starmap
-
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "colors.h"
 #include "controls.h"
@@ -43,7 +40,7 @@
 #include "libs/mathlib.h"
 
 #include "triangul.h"
-#include "hyper.h" // for SOL_X/SOL_Y
+
 
 #define UNIVERSE_TO_DISPX(ux) \
 		(COORD)(((((long)(ux) - pMenuState->flash_rect1.corner.x) \
@@ -590,7 +587,7 @@ EraseCursor (COORD curs_x, COORD curs_y)
 static void
 ZoomStarMap (SIZE dir)
 {
-#define MAX_ZOOM_SHIFT (BYTE)(4 - RESOLUTION_FACTOR)
+#define MAX_ZOOM_SHIFT 4
 	if (dir > 0)
 	{
 		if (LOBYTE (pMenuState->delta_item) < MAX_ZOOM_SHIFT)
@@ -709,9 +706,8 @@ UpdateCursorLocation (MENU_STATE *pMS, int sx, int sy, const POINT *newpt)
 
 static void
 UpdateCursorInfo (MENU_STATE *pMS, UNICODE *prevbuf)
-{	
-	// JMS: Display hint for the player to use the star search facility
-	UNICODE buf[CURSOR_INFO_BUFSIZE] = "(Star search: F6)";
+{
+	UNICODE buf[CURSOR_INFO_BUFSIZE] = "";
 	POINT pt;
 	STAR_DESC *SDPtr;
 	STAR_DESC *BestSDPtr;
@@ -1222,9 +1218,6 @@ DoMoveCursor (MENU_STATE *pMS)
 #define MAX_ACCEL_DELAY (ONE_SECOND / 8)
 #define STEP_ACCEL_DELAY (ONE_SECOND / 120)
 	static UNICODE last_buf[CURSOR_INFO_BUFSIZE];
-	DWORD TimeIn = GetTimeCounter ();
-	static COUNT moveRepeats;
-	BOOLEAN isMove = FALSE;	
 
 	pMS->MenuRepeatDelay = (COUNT)pMS->CurState;
 	if (!pMS->Initialized)
@@ -1329,30 +1322,13 @@ DoMoveCursor (MENU_STATE *pMS)
 		if (PulsedInputState.menu[KEY_MENU_UP])      sy =   -1;
 		if (PulsedInputState.menu[KEY_MENU_DOWN])    sy =    1;
 
-		if (moveRepeats > 20)
-		{
-			sx *= 1 << RESOLUTION_FACTOR;
-			sy *= 1 << RESOLUTION_FACTOR;
-		}
-		// BW: we need to go through this because 4x only checks for
-		// input every ONE_SECOND/40 or so, thus reducing
-		// MIN_ACCEL_STEP is of no use. In practice it's similar.
-		
 		if (sx != 0 || sy != 0)
 		{
 			UpdateCursorLocation (pMS, sx, sy, NULL);
 			UpdateCursorInfo (pMS, last_buf);
 			UpdateFuelRequirement (pMS);
-			isMove = TRUE;
 		}
-	
-		SleepThreadUntil (TimeIn + MIN_ACCEL_DELAY);
 	}
-	
-	if (isMove)
-		++moveRepeats;
-	else
-		moveRepeats = 0;
 
 	{
 		BOOLEAN result = !(GLOBAL (CurrentActivity & CHECK_ABORT));

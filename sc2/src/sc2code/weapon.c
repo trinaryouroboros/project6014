@@ -177,7 +177,6 @@ weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt,
 			COUNT angle, num_blast_frames;
 			ELEMENT *BlastElementPtr;
 			extern FRAME blast[];
-			STARSHIP *StarShipPtr; // JMS: Added for the ISD fighter lasers
 
 			PutElement (hBlastElement);
 			LockElement (hBlastElement, &BlastElementPtr);
@@ -204,14 +203,7 @@ weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt,
 
 			num_blast_frames =
 					GetFrameCount (WeaponElementPtr->next.image.frame);
-			
-			GetElementStarShip (WeaponElementPtr, &StarShipPtr); // JMS: Added for the ISD fighter lasers
-			
-			// JMS: Added the ISD clause to allow its fighters to have own graphics for their lasers.
-			// Without this clause the collision effect of the fighter lasers would be buggy.
-			//
-			// Currently, this does prevent ISD's main laser from having separate collision graphics.
-			if (num_blast_frames <= ANGLE_TO_FACING (FULL_CIRCLE) || StarShipPtr->SpeciesID == ISD_ID)
+			if (num_blast_frames <= ANGLE_TO_FACING (FULL_CIRCLE))
 			{
 				BlastElementPtr->life_span = 2;
 				BlastElementPtr->current.image.farray = blast;

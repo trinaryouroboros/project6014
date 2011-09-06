@@ -16,14 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: - Added extern declaration of do_instrument_damage
-//			 - Enable Down key in melee (comment tag JMS_KEYS)
-
-// DN DEC10: - added int creature_arr_index to keep track of creature type after
-//			   player has subdued it with lander
-
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
+// JMS 2010: Added extern declaration of do_instrument_damage
 
 #ifndef _ELEMENT_H
 #define _ELEMENT_H
@@ -36,19 +29,16 @@
 
 #define BATTLE_FRAME_RATE (ONE_SECOND / 24)
 
-#define SHIP_INFO_HEIGHT (65 << RESOLUTION_FACTOR)					// JMS_GFX
-#define CAPTAIN_WIDTH RES_STAT_SCALE(55)							// JMS_GFX
-#define CAPTAIN_HEIGHT RES_STAT_SCALE(30)							// JMS_GFX
-#define CAPTAIN_XOFFS ((STATUS_WIDTH - CAPTAIN_WIDTH) >> 1)			// JMS_GFX
-#define CAPTAIN_YOFFS (SHIP_INFO_HEIGHT + (4 << RESOLUTION_FACTOR)) // JMS_GFX
-
+#define SHIP_INFO_HEIGHT (65 * RESOLUTION_FACTOR) // JMS_GFX
+#define CAPTAIN_XOFFS (4 + (32 * (RESOLUTION_FACTOR-1))) // JMS_GFX
+#define CAPTAIN_YOFFS (SHIP_INFO_HEIGHT + 4 * RESOLUTION_FACTOR) // JMS_GFX
 #define SHIP_STATUS_HEIGHT (STATUS_HEIGHT >> 1)
 #define BAD_GUY_YOFFS 0
 #define GOOD_GUY_YOFFS SHIP_STATUS_HEIGHT
-#define STARCON_TEXT_HEIGHT (7 << RESOLUTION_FACTOR)				// JMS_GFX
-#define TINY_TEXT_HEIGHT (9 << RESOLUTION_FACTOR)					// JMS_GFX
-#define BATTLE_CREW_X RES_STAT_SCALE(10)
-#define BATTLE_CREW_Y ((64 - SAFE_Y) << RESOLUTION_FACTOR)
+#define STARCON_TEXT_HEIGHT (7 * RESOLUTION_FACTOR) // JMS_GFX
+#define TINY_TEXT_HEIGHT (9 * RESOLUTION_FACTOR) // JMS_GFX
+#define BATTLE_CREW_X 10
+#define BATTLE_CREW_Y (64 - SAFE_Y)
 
 #define NORMAL_LIFE 1
 
@@ -166,9 +156,6 @@ struct element
 	void *pParent;
 			// The ship this element belongs to.
 	HELEMENT hTarget;
-	
-	int creature_arr_index; //populated by lander.c planetside when creature dies  -DN 29DEC10
-	
 };
 
 #define MAX_DISPLAY_PRIMS 330
@@ -271,7 +258,6 @@ typedef UWORD STATUS_FLAGS;
 #define SHIP_AT_MAX_SPEED      (1 << 7)
 #define SHIP_IN_GRAVITY_WELL   (1 << 8)
 #define PLAY_VICTORY_DITTY     (1 << 9)
-#define DOWN				   (1 << 10) // JMS_KEYS
 
 extern STATUS_FLAGS inertial_thrust (ELEMENT *ElementPtr);
 

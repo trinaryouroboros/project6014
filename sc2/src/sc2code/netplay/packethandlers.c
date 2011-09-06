@@ -102,16 +102,16 @@ PacketHandler_Init(NetConnection *conn, const Packet_Init *packet) {
 	}
 
 	if (versionCompare(packet->uqmVersion.major, packet->uqmVersion.minor,
-			packet->uqmVersion.patch, NETPLAY_MIN_P6014_VERSION_MAJOR,
-			NETPLAY_MIN_P6014_VERSION_MINOR, NETPLAY_MIN_P6014_VERSION_PATCH)
+			packet->uqmVersion.patch, NETPLAY_MIN_UQM_VERSION_MAJOR,
+			NETPLAY_MIN_UQM_VERSION_MINOR, NETPLAY_MIN_UQM_VERSION_PATCH)
 			< 0) {
 		sendAbort (conn, AbortReason_versionMismatch);
 		abortFeedback(conn, AbortReason_versionMismatch);
-		log_add(log_Error, "Remote side is running a version of P6014 that "
+		log_add(log_Error, "Remote side is running a version of UQM that "
 				"is too old (%d.%d.%d; %d.%d.%d is required).\n",
 				packet->uqmVersion.major, packet->uqmVersion.minor,
-				packet->uqmVersion.patch, NETPLAY_MIN_P6014_VERSION_MAJOR,
-				NETPLAY_MIN_P6014_VERSION_MINOR, NETPLAY_MIN_P6014_VERSION_PATCH);
+				packet->uqmVersion.patch, NETPLAY_MIN_UQM_VERSION_MAJOR,
+				NETPLAY_MIN_UQM_VERSION_MINOR, NETPLAY_MIN_UQM_VERSION_PATCH);
 		errno = ENOSYS;
 		return -1;
 	}
@@ -249,7 +249,7 @@ PacketHandler_Fleet(NetConnection *conn, const Packet_Fleet *packet) {
 		// There is not enough room in the packet to contain all
 		// the ships it says it contains.
 		log_add(log_Warning, "Invalid fleet size. Specified size is %d, "
-				"actual size = %lu\n",
+				"actual size = %d\n",
 				numShips, (len - sizeof packet) / sizeof(packet->ships[0]));
 		errno = EBADMSG;
 		return -1;
@@ -612,7 +612,7 @@ PacketHandler_Checksum(NetConnection *conn, const Packet_Checksum *packet) {
 	if (frameNr % interval != 0) {
 		log_add(log_Warning, "NETPLAY: [%d] <== Received checksum "
 				"for frame %u, while we only expect checksums on frames "
-				"divisable by %zu -- discarding.\n", conn->player,
+				"divisable by %u -- discarding.\n", conn->player,
 				(unsigned int) frameNr, interval);
 		return 0;
 				// No need to close the connection; checksums are not
@@ -627,7 +627,7 @@ PacketHandler_Checksum(NetConnection *conn, const Packet_Checksum *packet) {
 	if (frameNr > battleFrameCount + delay + 1) {
 		log_add(log_Warning, "NETPLAY: [%d] <== Received checksum "
 				"for a frame too far in the future (frame %u, current "
-				"is %u, input delay is %zu) -- discarding.\n", conn->player,
+				"is %u, input delay is %u) -- discarding.\n", conn->player,
 				(unsigned int) frameNr, battleFrameCount, delay);
 		return 0;
 				// No need to close the connection; checksums are not
@@ -644,7 +644,7 @@ PacketHandler_Checksum(NetConnection *conn, const Packet_Checksum *packet) {
 	if (frameNr + delay < battleFrameCount) {
 		log_add(log_Warning, "NETPLAY: [%d] <== Received checksum "
 				"for a frame too far in the past (frame %u, current "
-				"is %u, input delay is %zu) -- discarding.\n", conn->player,
+				"is %u, input delay is %u) -- discarding.\n", conn->player,
 				(unsigned int) frameNr, battleFrameCount, delay);
 		return 0;
 				// No need to close the connection; checksums are not

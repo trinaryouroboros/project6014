@@ -18,8 +18,6 @@
 
 // See doc/devel/planettopo for details.
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #include "gfxlib.h"
 #include "mathlib.h"
 #include "planets.h"
@@ -43,8 +41,8 @@ DeltaTopography (COUNT num_iterations, SBYTE *DepthArray, RECT *pRect,
 	do
 	{
 		SIZE d;
-		COUNT h, w1, w2;//, w1_b, w2_b;
-		DWORD rand_val;//, rand_val_b;
+		COUNT h, w1, w2, w1_b, w2_b;
+		DWORD rand_val, rand_val_b;
 		SBYTE *lpDst;
 
 		depth_delta = ((((SIZE)TFB_Random () & 1) << 1) - 1) * depth_delta;
@@ -53,14 +51,11 @@ DeltaTopography (COUNT num_iterations, SBYTE *DepthArray, RECT *pRect,
 		w1 = LOWORD (rand_val);
 		w2 = HIWORD (rand_val);
 
-		LineDDA0.x_top = (LOBYTE (w1) % ORIGINAL_MAP_WIDTH) * width / ORIGINAL_MAP_WIDTH;
-		LineDDA0.x_bot = (HIBYTE (w1) % ORIGINAL_MAP_WIDTH) * width / ORIGINAL_MAP_WIDTH;
+		//LineDDA0.x_top = LOBYTE (w1) % width;
+		//LineDDA0.x_bot = HIBYTE (w1) % width;
 		
-		//LineDDA0.x_top = w1 % width; // JMS_GFX: Replaced previous lines with these: BYTE is too small for 640x480 sized maps.
-		//LineDDA0.x_bot = w2 % width; // Using w1 and w2 to get difference between top and bottom.
-		// BW: reinstate previous method and adapt it for higher res.
-		// Overusing w1 and w2 was hampering randomness.
-		// Now planets will look the same no matter what the res is.
+		LineDDA0.x_top = w1 % width; // JMS_GFX: Replaced previous lines with these: BYTE is too small for 640x480 sized maps.
+		LineDDA0.x_bot = w2 % width; // Using w1 and w2 to get difference between top and bottom.
 		
 		LineDDA0.delta_x = (LineDDA0.x_bot - LineDDA0.x_top) << 1;
 		if (LineDDA0.delta_x >= 0)
@@ -75,13 +70,12 @@ DeltaTopography (COUNT num_iterations, SBYTE *DepthArray, RECT *pRect,
 		else
 			LineDDA0.error_term = -(delta_y >> 1);
 
-		LineDDA1.x_top = (LOBYTE (w2) % (ORIGINAL_MAP_WIDTH - 1)) * width / ORIGINAL_MAP_WIDTH + LineDDA0.x_top + 1;
-		LineDDA1.x_bot = (HIBYTE (w2) % (ORIGINAL_MAP_WIDTH - 1)) * width / ORIGINAL_MAP_WIDTH + LineDDA0.x_bot + 1;
+		//LineDDA1.x_top = (LOBYTE (w2) % (width - 1)) + LineDDA0.x_top + 1;
+		//LineDDA1.x_bot = (HIBYTE (w2) % (width - 1)) + LineDDA0.x_bot + 1;
 		
 		// JMS_GFX: Replaced previous lines with these: BYTE is too small for 640x480 sized maps.
-		//LineDDA1.x_top = (w2 % (width - 1)) + LineDDA0.x_top + 1;
-		//LineDDA1.x_bot = (w1 % (width - 1)) + LineDDA0.x_bot + 1;
-		// BW: the same as above
+		LineDDA1.x_top = (w2 % (width - 1)) + LineDDA0.x_top + 1;
+		LineDDA1.x_bot = (w1 % (width - 1)) + LineDDA0.x_bot + 1;
 		
 		LineDDA1.delta_x = (LineDDA1.x_bot - LineDDA1.x_top) << 1;
 		if (LineDDA1.delta_x >= 0)

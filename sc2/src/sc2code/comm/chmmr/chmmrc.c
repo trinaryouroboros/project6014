@@ -113,17 +113,11 @@ static LOCDATA chmmr_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	0, /* NumFeatures */
-	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 static void
 ExitConversation (RESPONSE_REF R)
 {	
-	(void) R; // satisfy compiler
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	NPCPhrase (GOODBYE_HUMAN1);
 }
@@ -134,7 +128,6 @@ AskMenu (RESPONSE_REF R);
 static void
 WhereKohrah (RESPONSE_REF R)
 {	
-	(void) R; // satisfy compiler
 	NPCPhrase (KOHRAH_ARE);
 	DISABLE_PHRASE (where_kohrah);	
 
@@ -145,7 +138,6 @@ WhereKohrah (RESPONSE_REF R)
 static void
 ProvokeAboutYehat (RESPONSE_REF R)
 {	
-	(void) R; // satisfy compiler
 	NPCPhrase (CHMMR_ARE_AWESOME);
 	DISABLE_PHRASE (yehat_not_impressed);	
 
@@ -156,8 +148,7 @@ ProvokeAboutYehat (RESPONSE_REF R)
 static void
 AskMenu (RESPONSE_REF R)
 {	
-	static BYTE distressInfoState	= 0;
-	static BYTE chmmrLandInfoState	= 0;
+	static BYTE distressInfoState = 0;
 	
 	/* Alien speech */
 	if (PLAYER_SAID (R, better_starship))
@@ -165,14 +156,12 @@ AskMenu (RESPONSE_REF R)
 		NPCPhrase (NO_BETTER_STARSHIP);
 		DISABLE_PHRASE (better_starship);
 	}
-	
 	else if (PLAYER_SAID (R, how_you_heard_call))
 	{
 		NPCPhrase (HEARD_CALL_SO);
 		DISABLE_PHRASE (how_you_heard_call);
 		distressInfoState++;
 	}
-	
 	else if (PLAYER_SAID (R, where_distress_site))
 	{
 		// Can give location at procyon
@@ -190,26 +179,6 @@ AskMenu (RESPONSE_REF R)
 			DISABLE_PHRASE (where_distress_site);
 		}
 	}
-	
-	// Answer about landing on alliance home planets.
-	else if (PLAYER_SAID (R, lame_landing_question_1))
-	{
-		NPCPhrase (LAME_LANDING_ANSWER_1);
-		++chmmrLandInfoState;
-	}
-	else if (PLAYER_SAID (R, lame_landing_question_2))
-	{
-		NPCPhrase (LAME_LANDING_ANSWER_2);
-		++chmmrLandInfoState;
-	}
-	else if (PLAYER_SAID (R, lame_landing_question_3))
-	{
-		NPCPhrase (LAME_LANDING_ANSWER_3);
-		DISABLE_PHRASE(lame_landing_question_1);
-		SET_GAME_STATE(TZZRAK_TZON_PICS, 1);
-		chmmrLandInfoState = 0;
-	}
-	
 	else if (PLAYER_SAID (R, where_urquan))
 	{
 		NPCPhrase (URQUAN_ARE);
@@ -265,14 +234,6 @@ AskMenu (RESPONSE_REF R)
 	{
 		Response (yehat_not_impressed, ProvokeAboutYehat);
 	}
-	
-	// Ask about landing on alliance home planets only at the starbase
-	if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) == (BYTE)~0 && chmmrLandInfoState == 0 && PHRASE_ENABLED (lame_landing_question_1))
-		Response (lame_landing_question_1, AskMenu);
-	else if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) == (BYTE)~0 && chmmrLandInfoState == 1)
-		Response (lame_landing_question_2, AskMenu);
-	else if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) == (BYTE)~0 && chmmrLandInfoState == 2)
-		Response (lame_landing_question_3, AskMenu);
 
 	Response (on_our_way, ExitConversation);
 }

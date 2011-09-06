@@ -172,7 +172,7 @@ typedef unsigned short mode_t;
 // String formatting
 #ifdef _MSC_VER
 #define snprintf _snprintf
-// #define vsnprintf _vsnprintf 
+//#define vsnprintf _vsnprintf
 #endif
 
 

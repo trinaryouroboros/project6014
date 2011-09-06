@@ -16,57 +16,38 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2010 - Totally new file: Lurg ship
+
 #include "ships/ship.h"
 #include "ships/lurg/resinst.h"
+
 #include "libs/mathlib.h"
 
 
-// Core characteristics
 #define MAX_CREW 20
-#define MAX_ENERGY 20
+#define MAX_ENERGY 16
 #define ENERGY_REGENERATION 1
-#define ENERGY_WAIT 6
+#define WEAPON_ENERGY_COST 3
+#define SPECIAL_ENERGY_COST 1
+#define ENERGY_WAIT 4
 #define MAX_THRUST 20
-#define THRUST_INCREMENT 6
-#define THRUST_WAIT 1
+#define THRUST_INCREMENT 8
 #define TURN_WAIT 1
-#define SHIP_MASS 6
-
-// Primary weapon
-#define WEAPON_ENERGY_COST 4
+#define THRUST_WAIT 0
 #define WEAPON_WAIT 10
-#define MISSILE_SPEED DISPLAY_TO_WORLD (18)
-#define MISSILE_LIFE 23
-#define MISSILE_HITS 5
-#define MISSILE_DAMAGE 4
-#define MISSILE_OFFSET 2
-#define LURG_OFFSET 23
+#define SPECIAL_WAIT 0
 
-// Secondary weapon
-#define SPECIAL_ENERGY_COST 2
-#define SPECIAL_WAIT 2
-#define OIL_BATCH_SIZE 6
-#define OIL_SPEED DISPLAY_TO_WORLD (2 << RESOLUTION_FACTOR) // JMS_GFX
-#define OIL_INIT_SPEED DISPLAY_TO_WORLD (6 << RESOLUTION_FACTOR) // JMS_GFX
-#define OIL_HITS 3
-#define OIL_DAMAGE 1 // Oil inflicts damage only in specific circumstances.
-#define OIL_SPREAD_MINIMUM 6
-#define OIL_SPREAD_VARIATION 4
-#define OIL_LIFE 300
-#define OIL_LIFE_VARIATION 100
-#define OIL_DELAY 6
-#define OIL_DELAY_MAX 36
-#define OIL_SNARE WORLD_TO_VELOCITY (-1)
-#define OIL_OFFSET 3
-#define LURG_OFFSET_2 16
+#define SHIP_MASS 4
+#define MISSILE_SPEED DISPLAY_TO_WORLD (30)
+#define MISSILE_LIFE 10
 
-// Bonus ability
-#define REPAIR_WAIT 192 // Was 216.
+#define OIL_DELAY 5
+#define OIL_DELAY_MAX 50
 
 static RACE_DESC lurg_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | SEEKING_SPECIAL | LIGHT_POINT_DEFENSE,
+		FIRES_FORE | FIRES_AFT | SEEKING_SPECIAL,
 		20, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -123,7 +104,7 @@ static RACE_DESC lurg_desc =
 	},
 	{
 		0,
-		(MISSILE_SPEED * MISSILE_LIFE) *  4/5,
+		(MISSILE_SPEED * MISSILE_LIFE) >> 1,
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -134,219 +115,65 @@ static RACE_DESC lurg_desc =
 };
 
 static void
-lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
+lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
+		COUNT ConcernCounter)
 {
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
-	
-	GetElementStarShip (ShipPtr, &StarShipPtr);
 
-	// Don't use the special unless specifically told to.
+	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
+
+	GetElementStarShip (ShipPtr, &StarShipPtr);
 	StarShipPtr->ship_input_state &= ~SPECIAL;
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	if (lpEvalDesc->ObjectPtr)
+	if (StarShipPtr->special_counter == 0
+			&& lpEvalDesc->ObjectPtr
+			&& lpEvalDesc->which_turn <= 24)
 	{
-		STARSHIP *EnemyStarShipPtr;
-		SIZE EnemyTravelFacing, TestFacing, CurrentEnemySpeed, delta_x, delta_y;
+		COUNT travel_facing, direction_facing;
+		SIZE delta_x, delta_y;
 
-		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
+		travel_facing = NORMALIZE_FACING (
+				ANGLE_TO_FACING (GetVelocityTravelAngle (&ShipPtr->velocity)
+				+ HALF_CIRCLE)
+				);
+		delta_x = lpEvalDesc->ObjectPtr->current.location.x
+				- ShipPtr->current.location.x;
+		delta_y = lpEvalDesc->ObjectPtr->current.location.y
+				- ShipPtr->current.location.y;
+		direction_facing = NORMALIZE_FACING (
+				ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))
+				);
 
-		// Be more responsive against slow ships.
-		if (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control) <= SLOW_SHIP)
-			lpEvalDesc->which_turn = lpEvalDesc->which_turn * 4/5;
-
-		// Start of crazy calculations //
-		// Transform enemy velocity into cute little world units for easy comparison.
-		GetCurrentVelocityComponents (&lpEvalDesc->ObjectPtr->velocity, &delta_x, &delta_y);
-		CurrentEnemySpeed = VELOCITY_TO_WORLD (square_root (VelocitySquared (delta_x, delta_y)));
-
-		// Draw a line from the enemy's current position to the enemy's projected future position.
-		EnemyTravelFacing = ANGLE_TO_FACING (ARCTAN (
-			lpEvalDesc->ObjectPtr->next.location.x	
-				- lpEvalDesc->ObjectPtr->current.location.x,
-			lpEvalDesc->ObjectPtr->next.location.y
-				- lpEvalDesc->ObjectPtr->current.location.y));
-
-		// Draw a line from the Prawn to the enemy.
-		TestFacing = ANGLE_TO_FACING (ARCTAN (
-			lpEvalDesc->ObjectPtr->current.location.x
-				- ShipPtr->current.location.x,
-			lpEvalDesc->ObjectPtr->current.location.y
-				- ShipPtr->current.location.y));
-
-		// Compare enemy's direction of travel to the Prawn's position.
-		TestFacing = NORMALIZE_FACING (TestFacing - EnemyTravelFacing);
-		// End of crazy calculations //
-
-		// Avoid contact when the enemy is warping in or moving directly away.
-		if (lpEvalDesc->ObjectPtr->state_flags & APPEARING
-			|| (TestFacing > 6 && TestFacing < 10
-				&& CurrentEnemySpeed >= 16))
-		{
-			lpEvalDesc->MoveState = AVOID;
-		}
-		// Attack when the enemy is ensnared, attempting an escape sequence or at short range.
-		else if ((lpEvalDesc->which_turn <= 32
-			&& lpEvalDesc->ObjectPtr->turn_wait >= OIL_DELAY
-			&& lpEvalDesc->ObjectPtr->thrust_wait >= OIL_DELAY)
-			|| lpEvalDesc->which_turn <= 15
-			|| lpEvalDesc->ObjectPtr->mass_points > MAX_SHIP_MASS)
-		{
-			lpEvalDesc->MoveState = PURSUE;
-
-			// Disregard enemy weapons in these circumstances.
-			ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = NULL;
-		}
-		// Stall for time when the enemy is far away.
-		else if (lpEvalDesc->which_turn > 20 && lpEvalDesc->which_turn < 47)
-		{
-			lpEvalDesc->MoveState = AVOID;
-		}
-		// Entice rather than retreat when the enemy is very far away.
-		else if (lpEvalDesc->which_turn >= 47)
-		{
-			lpEvalDesc->MoveState = ENTICE;
-		}
-	}
-
-	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
-
-	// Drop oil in the way of various incoming projectiles.
-	if (lpEvalDesc->ObjectPtr
-		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= 8
-		&& lpEvalDesc->ObjectPtr->hit_points < 4 // Forget high HP projectiles.
-		&& (lpEvalDesc->ObjectPtr->mass_points
-			|| lpEvalDesc->ObjectPtr->state_flags & (CREW_OBJECT | FINITE_LIFE))
-		&& lpEvalDesc->which_turn <= 10)
-	{
-		StarShipPtr->ship_input_state |= SPECIAL;
-	}
-	
-	// Otherwise disregard all enemy weapons unless there's a crew weapon or huge weapon present.
-	if (lpEvalDesc->ObjectPtr
-			&& !(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT)
-			&& !(lpEvalDesc->ObjectPtr->hit_points >= 6)
-			&& !(lpEvalDesc->ObjectPtr->mass_points >= 6))
-	{
-		ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = NULL;
-	}
-	
-	// Basic ship intelligence.
-	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
-
-	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	if (lpEvalDesc->ObjectPtr)
-	{
-		// Cut thrust when attacking...
-		if (lpEvalDesc->MoveState == PURSUE
-			// ...unless the enemy is ensnared...
-			&& (lpEvalDesc->ObjectPtr->turn_wait < OIL_DELAY
-				|| lpEvalDesc->ObjectPtr->thrust_wait < OIL_DELAY)
-			// ...or the enemy is attempting an escape sequence...
-			&& (lpEvalDesc->ObjectPtr->mass_points <= MAX_SHIP_MASS)
-			// ...or the Prawn is completely stationary.
-			&& ShipPtr->next.location.x != ShipPtr->current.location.x
-			&& ShipPtr->next.location.y != ShipPtr->current.location.y)
-		{
-			StarShipPtr->ship_input_state &= ~THRUST;
-		}
-
-		// Don't shoot unless specifically told to OR a particular enemy weapon type is active.
-		if (ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr == NULL)
-		{
-			StarShipPtr->ship_input_state &= ~WEAPON;
-		}
-
-		// Frequently disregard good firing opportunities.
-		if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (10)))
-		{
-			if (TFB_Random () & 3)
-				StarShipPtr->ship_input_state |= WEAPON;
-		}
-		// Sometimes take shots that don't line up with the opponent's current trajectory.
-		else if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (20)))
-		{
-			if (TFB_Random () & 5)
-				StarShipPtr->ship_input_state |= WEAPON;
-		}
-		else if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (30)))
-		{
-			if (TFB_Random () % 11)
-				StarShipPtr->ship_input_state |= WEAPON;
-		}
-		
-		// Drop several batches of oil whenever the battery tops off.
-		if ((StarShipPtr->RaceDescPtr->ship_info.energy_level ==
-					StarShipPtr->RaceDescPtr->ship_info.max_energy)
-				|| (StarShipPtr->RaceDescPtr->ship_info.energy_level >
-						StarShipPtr->RaceDescPtr->ship_info.max_energy - 6
-					&& StarShipPtr->old_status_flags & SPECIAL))
-		{
+		if (NORMALIZE_FACING (direction_facing
+				- (StarShipPtr->ShipFacing + ANGLE_TO_FACING (HALF_CIRCLE))
+				+ ANGLE_TO_FACING (QUADRANT))
+				<= ANGLE_TO_FACING (HALF_CIRCLE)
+				&& (lpEvalDesc->which_turn <= 8
+				|| NORMALIZE_FACING (direction_facing
+				+ ANGLE_TO_FACING (HALF_CIRCLE)
+				- ANGLE_TO_FACING (GetVelocityTravelAngle (
+						&lpEvalDesc->ObjectPtr->velocity
+						))
+				+ ANGLE_TO_FACING (QUADRANT))
+				<= ANGLE_TO_FACING (HALF_CIRCLE))
+				&& (!(StarShipPtr->cur_status_flags &
+				(SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL))
+				|| NORMALIZE_FACING (direction_facing
+				- travel_facing + ANGLE_TO_FACING (QUADRANT))
+				<= ANGLE_TO_FACING (HALF_CIRCLE)))
 			StarShipPtr->ship_input_state |= SPECIAL;
-		}
 	}
-}
-
-static void
-acid_preprocess (ELEMENT *ElementPtr)
-{
-	COUNT facing;
-
-	facing = (GetFrameIndex (ElementPtr->next.image.frame)) % 16;
-	// JMS: Modulo 16 here ensures that the explosion frames are not used in wrong place.
-	
-	if (ElementPtr->thrust_wait == 1) // Left start.
-	{
-		--facing;
-		ElementPtr->turn_wait += 1;
-		ElementPtr->thrust_wait = 0;
-		ElementPtr->turn_wait = 3;
-	}
-
-	if (ElementPtr->thrust_wait == 2) // Right start.
-	{
-		++facing;
-		ElementPtr->turn_wait += 1;
-		ElementPtr->thrust_wait = 0;
-		ElementPtr->turn_wait = 0;
-	}
-
-	if (ElementPtr->thrust_wait == 0) // Main loop.
-	{
-		if (ElementPtr->turn_wait < 2) // Turn left.
-		{
-			--facing;
-			ElementPtr->turn_wait += 1;
-		} 
-		else if (ElementPtr->turn_wait < 3) // Wait.
-		{
-			ElementPtr->turn_wait += 1;
-		}
-		else if (ElementPtr->turn_wait < 5) // Turn right.
-		{
-			++facing;
-			ElementPtr->turn_wait += 1;
-		}
-		else if (ElementPtr->turn_wait < 6) // Wait.
-		{
-			ElementPtr->turn_wait += 1;
-		}
-		else if (ElementPtr->turn_wait == 6) // Wait and reset the loop.
-		{
-			ElementPtr->turn_wait = 0;
-		}
-	}
-
-	ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, facing);
-	ElementPtr->state_flags |= CHANGING;
-	
-	SetVelocityVector (&ElementPtr->velocity, MISSILE_SPEED, facing);
 }
 
 static COUNT
-initialize_acid (ELEMENT *ShipPtr, HELEMENT AcidArray[])
+initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 {
+#define MISSILE_HITS 6
+#define MISSILE_DAMAGE 4
+#define MISSILE_OFFSET 2
+#define LURG_OFFSET 23
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -362,25 +189,19 @@ initialize_acid (ELEMENT *ShipPtr, HELEMENT AcidArray[])
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
+	MissileBlock.preprocess_func = NULL;
 	MissileBlock.blast_offs = MISSILE_OFFSET;
-	MissileBlock.preprocess_func = acid_preprocess;
-
-	AcidArray[0] = initialize_missile (&MissileBlock);
-	
-	if (AcidArray[0])
-	{
-		ELEMENT *AcidPtr;
-
-		LockElement (AcidArray[0], &AcidPtr);
-		if ((BYTE)TFB_Random () & 1) // Left or right?
-			AcidPtr->thrust_wait = 1;
-		else
-			AcidPtr->thrust_wait = 2;
-		UnlockElement (AcidArray[0]);
-	}
-	
+	HornArray[0] = initialize_missile (&MissileBlock);
 	return (1);
 }
+
+#define SHIP_OFFSET (15 * RESOLUTION_FACTOR) // JMS_GFX
+#define OIL_OFFSET (3 * RESOLUTION_FACTOR) // JMS_GFX
+#define OIL_HITS 2
+#define OIL_DAMAGE 1
+#define OIL_SPEED DISPLAY_TO_WORLD (2*RESOLUTION_FACTOR) // JMS_GFX
+#define OIL_INIT_SPEED (OIL_SPEED*10)
+#define OIL_LIFE 250
 
 static void
 oil_preprocess (ELEMENT *ElementPtr)
@@ -389,7 +210,6 @@ oil_preprocess (ELEMENT *ElementPtr)
 
 	thrust_wait = HINIBBLE (ElementPtr->turn_wait);
 	turn_wait = LONIBBLE (ElementPtr->turn_wait);
-
 	if (thrust_wait > 0)
 		--thrust_wait;
 	else
@@ -406,84 +226,52 @@ oil_preprocess (ELEMENT *ElementPtr)
 	else
 	{
 		COUNT facing;
+		SIZE delta_facing;
 
-		facing = (COUNT)TFB_Random ();
-
+		facing = NORMALIZE_FACING (ANGLE_TO_FACING (
+				GetVelocityTravelAngle (&ElementPtr->velocity)));
+		if ((delta_facing = TrackShip (ElementPtr, &facing)) == -1)
+			facing = (COUNT)TFB_Random ();
+		else if (delta_facing <= ANGLE_TO_FACING (HALF_CIRCLE))
+			facing += (COUNT)TFB_Random () & (ANGLE_TO_FACING (HALF_CIRCLE) - 1);
+		else
+			facing -= (COUNT)TFB_Random () & (ANGLE_TO_FACING (HALF_CIRCLE) - 1);
 		SetVelocityVector (&ElementPtr->velocity,
 				OIL_SPEED, facing);
 
-		turn_wait = 4;
+#define TRACK_WAIT 4
+		turn_wait = TRACK_WAIT;
 	}
 
 	ElementPtr->turn_wait = MAKE_BYTE (turn_wait, thrust_wait);
 }
 
 static void
-oil_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+oil_collision (ELEMENT *ElementPtr0, POINT *pPt0,
+		ELEMENT *ElementPtr1, POINT *pPt1)
 {
-	if (!(ElementPtr1->state_flags & (APPEARING | GOOD_GUY | BAD_GUY | PLAYER_SHIP | FINITE_LIFE))
-			&& !GRAVITY_MASS (ElementPtr1->mass_points))
-	{
-		ElementPtr0->mass_points = 0;
-		// Oil does no damage against asteroids
-	}
-	else if ((ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY))
-			!= (ElementPtr1->state_flags & (GOOD_GUY | BAD_GUY)))
+#define ENERGY_DRAIN 10
+	collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+	if ((ElementPtr0->state_flags
+			& (GOOD_GUY | BAD_GUY)) !=
+			(ElementPtr1->state_flags
+			& (GOOD_GUY | BAD_GUY)))
 	{
 		STARSHIP *StarShipPtr;
-		STARSHIP *EnemyStarShipPtr;
 
 		GetElementStarShip (ElementPtr0, &StarShipPtr);
-		GetElementStarShip (ElementPtr1, &EnemyStarShipPtr);
-		
-		if (ElementPtr1->state_flags & PLAYER_SHIP)
-		{
-			COUNT facing;
-
-			ElementPtr1->thrust_wait += OIL_DELAY;
-			if (ElementPtr1->thrust_wait > OIL_DELAY_MAX)
-				ElementPtr1->thrust_wait = OIL_DELAY_MAX;
-			ElementPtr1->turn_wait += OIL_DELAY;
-			if (ElementPtr1->turn_wait > OIL_DELAY_MAX)
-				ElementPtr1->turn_wait = OIL_DELAY_MAX;
-
-			if(EnemyStarShipPtr->SpeciesID == SUPOX_ID)
-			{
-				EnemyStarShipPtr->special_counter += OIL_DELAY;
-				if (EnemyStarShipPtr->special_counter > OIL_DELAY_MAX)
-					EnemyStarShipPtr->special_counter = OIL_DELAY_MAX;
-			}
-				
-			
-			facing = NORMALIZE_FACING (
-				ANGLE_TO_FACING (GetVelocityTravelAngle (&ElementPtr1->velocity) + HALF_CIRCLE));
-		
-			DeltaVelocityComponents (&ElementPtr1->velocity,
-				COSINE (facing, OIL_SNARE),
-				SINE (facing, OIL_SNARE));
-
-			ElementPtr0->mass_points = 0;
-
-			// ProcessSound (SetAbsSoundIndex (
-					/* Sound effect?? */
-			// StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr0);
-		}
-		else
-		{
-			if (ElementPtr1->hit_points > 3)
-			{
-				SIZE xHits;
-				xHits = ElementPtr1->hit_points;
-				ElementPtr0->mass_points = (TFB_Random () & 3) == 1;
-				// Oil is ineffective against large projectiles
-			}
-			else
-				ElementPtr0->mass_points = 1;
-				// Do full, guaranteed damage against small projectiles
-		}
+		ProcessSound (SetAbsSoundIndex (
+						/* DOGGY_STEALS_ENERGY */
+				StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr0);
+		ElementPtr1->thrust_wait += OIL_DELAY;
+		if (ElementPtr1->thrust_wait > OIL_DELAY_MAX)
+			ElementPtr1->thrust_wait = OIL_DELAY_MAX;
+		ElementPtr1->turn_wait += OIL_DELAY;
+		if (ElementPtr1->turn_wait > OIL_DELAY_MAX)
+			ElementPtr1->turn_wait = OIL_DELAY_MAX;
 	}
-
-	weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+	if (ElementPtr0->thrust_wait <= COLLISION_THRUST_WAIT)
+		ElementPtr0->thrust_wait += COLLISION_THRUST_WAIT << 1;
 }
 
 static void spill_oil (ELEMENT *ShipPtr)
@@ -496,15 +284,16 @@ static void spill_oil (ELEMENT *ShipPtr)
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.face = (COUNT)TFB_Random (); // Deploy at random in every direction.
+	MissileBlock.face = NORMALIZE_FACING (StarShipPtr->ShipFacing
+			+ ANGLE_TO_FACING (HALF_CIRCLE));
 	MissileBlock.index = 0;
 	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
 			| IGNORE_SIMILAR;
-	MissileBlock.pixoffs = LURG_OFFSET_2;
-	MissileBlock.life = OIL_LIFE + (TFB_Random () & OIL_LIFE_VARIATION);
+	MissileBlock.pixoffs = SHIP_OFFSET;
 	MissileBlock.speed = OIL_INIT_SPEED;
 	MissileBlock.hit_points = OIL_HITS;
-	MissileBlock.damage = OIL_DAMAGE;
+	MissileBlock.damage = ((COUNT)TFB_Random () & 7) == 1;
+	MissileBlock.life = OIL_LIFE;
 	MissileBlock.preprocess_func = oil_preprocess;
 	MissileBlock.blast_offs = OIL_OFFSET;
 	Missile = initialize_missile (&MissileBlock);
@@ -514,8 +303,7 @@ static void spill_oil (ELEMENT *ShipPtr)
 		ELEMENT *OilPtr;
 
 		LockElement (Missile, &OilPtr);
-		// OilPtr->turn_wait affects how long the projectile travels at OIL_INIT_SPEED.
-		OilPtr->turn_wait = OIL_SPREAD_MINIMUM + ((COUNT)TFB_Random () & OIL_SPREAD_VARIATION);
+		OilPtr->turn_wait = 0;
 		SetElementStarShip (OilPtr, StarShipPtr);
 		OilPtr->collision_func = oil_collision;
 		UnlockElement (Missile);
@@ -527,39 +315,23 @@ static void
 lurg_postprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
+	SHIP_INFO *ShipInfoPtr;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
-	
+	ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
 	if ((StarShipPtr->cur_status_flags & SPECIAL)
+			&& ShipInfoPtr->energy_level > 1
 			&& StarShipPtr->special_counter == 0
 			&& DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST))
 	{
 		int i;
-
-		ProcessSound (SetAbsSoundIndex // Spill oil.
-			(StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
-		
-		for (i = 0; i < OIL_BATCH_SIZE; i++)
+		ProcessSound (SetAbsSoundIndex (
+						/* LAUNCH_FIGHTERS */
+				StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+		for (i = 0; i < 5; i++)
 			spill_oil (ElementPtr);
 
 		StarShipPtr->special_counter = SPECIAL_WAIT;
-	}
-
-	// Start timer for passive regeneration when damaged.
-	if (ElementPtr->hit_points < MAX_CREW
-		&& StarShipPtr->auxiliary_counter == 0)
-	{
-		StarShipPtr->auxiliary_counter += REPAIR_WAIT;
-	}
-
-	// Slowly regenerate crew.
-	if (StarShipPtr->auxiliary_counter == 1
-			&& ElementPtr->hit_points > 0)
-	{
-		DeltaCrew (ElementPtr, 1);
-
-		ProcessSound (SetAbsSoundIndex // Regenerate.
-			(StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr);
 	}
 }
 
@@ -569,7 +341,7 @@ init_lurg (void)
 	RACE_DESC *RaceDescPtr;
 
 	lurg_desc.postprocess_func = lurg_postprocess;
-	lurg_desc.init_weapon_func = initialize_acid;
+	lurg_desc.init_weapon_func = initialize_horn;
 	lurg_desc.cyborg_control.intelligence_func = lurg_intelligence;
 
 	RaceDescPtr = &lurg_desc;

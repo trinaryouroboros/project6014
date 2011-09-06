@@ -17,10 +17,9 @@
  */
 
 // JMS 2009: -Don't create Ur-quan probe.
-// JMS 2010: -Removed Fwiffo from Pluto.
-//			 -Removed tractors and base from moon.
+// JMS 2010: -Removed Fwiffo from Pluto
+//			 -Removed tractors and base from moon
 //			 -Earth is now restricted planet meaning it cannot be landed on.
-//			 -If starbase is encountered, the chasing ships turn away.
 
 #include "build.h"
 #include "gamestr.h"
@@ -37,7 +36,7 @@
 #include "libs/mathlib.h"
 #include "libs/log.h"
 
-/***
+
 static int
 init_probe (void)
 {
@@ -51,8 +50,8 @@ init_probe (void)
 
 		GroupPtr = LockIpGroup (&GLOBAL (ip_group_q), hGroup);
 		GroupPtr->task = IN_ORBIT;
-		GroupPtr->sys_loc = 2 + 1; // orbitting earth
-		GroupPtr->dest_loc = 2 + 1; // orbitting earth
+		GroupPtr->sys_loc = 2 + 1; /* orbitting earth */
+		GroupPtr->dest_loc = 2 + 1; /* orbitting earth */
 		GroupPtr->loc.x = 0;
 		GroupPtr->loc.y = 0;
 		GroupPtr->group_counter = 0;
@@ -76,7 +75,7 @@ generate_tractors (void)
 	if (pSolarSysState->pOrbitalDesc->pPrevDesc != &pSolarSysState->PlanetDesc[2]
 			|| pSolarSysState->pOrbitalDesc != &pSolarSysState->MoonDesc[1])
 		pSolarSysState->CurNode = 0;
-	else // Earth Moon
+	else /* Earth Moon */
 	{
 		COUNT i, which_node;
 		DWORD old_rand, rand_val;
@@ -103,7 +102,6 @@ generate_tractors (void)
 		TFB_SeedRandom (old_rand);
 	}
 }
-***/
 
 static void
 generate_orbital (void)
@@ -115,9 +113,6 @@ generate_orbital (void)
 	if (pSolarSysState->pOrbitalDesc->pPrevDesc == &pSolarSysState->PlanetDesc[2]
 			&& pSolarSysState->pOrbitalDesc == &pSolarSysState->MoonDesc[0])
 	{
-		// JMS: If starbase is encountered, the chasing ships turn away
-		NotifyOthers (HUMAN_SHIP, (BYTE)~0);
-		
 		PutGroupInfo (GROUPS_RANDOM, GROUP_SAVE_IP);
 		ReinitQueue (&GLOBAL (ip_group_q));
 		assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
@@ -125,7 +120,6 @@ generate_orbital (void)
 		EncounterGroup = 0;
 		GLOBAL (CurrentActivity) |= START_ENCOUNTER;
 		SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
-		
 		return;
 	}
 

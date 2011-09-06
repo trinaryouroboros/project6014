@@ -151,17 +151,6 @@ static LOCDATA human_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	1, /* NumFeatures */
-	{ /* AlienFeaturesArray (alternative features) */
-	  { /* Hair colour */
-	    297, /* StartIndex */
-	    3, /* NumFrames */
-	    {0 /* BlockMaskArray */
-	    },
-	  },
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 static LOCDATA human_desc2 =
@@ -222,11 +211,6 @@ static LOCDATA human_desc2 =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	0, /* NumFeatures */
-	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 static void
@@ -236,7 +220,6 @@ static void
 ExitConversation (RESPONSE_REF R)
 {
 	BYTE NumVisits;
-	(void) R; // satisfy compiler
 	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	

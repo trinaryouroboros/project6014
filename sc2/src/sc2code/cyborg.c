@@ -16,9 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: - Amended Pursue -function: Ur-Quan pursues Earthling slowly but surely. Now it won't turn away mid-chase.
-//			 - Enable Down key in melee (comment tag JMS_KEYS)
-
 #include "battle.h"
 #include "colors.h"
 #include "collide.h"
@@ -582,7 +579,6 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 	SIZE other_delta_x, other_delta_y;
 	ELEMENT *OtherObjPtr;
 	VELOCITY_DESC ShipVelocity, OtherVelocity;
-	COUNT distance_to_give_up_and_turn; // JMS
 
 	ShipVelocity = ShipPtr->velocity;
 	GetNextVelocityComponents (&ShipVelocity,
@@ -676,18 +672,9 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 				}
 			}
 
-			// This code prevents Ur-Quan and ISD from turning around mid-chase while pursuing Earthling.
-			if (StarShipPtr->SpeciesID == (UR_QUAN_ID | ISD_ID)
-				&& EnemyStarShipPtr->SpeciesID == EARTHLING_ID 
-				&& !(EnemyStarShipPtr->cur_status_flags &
-					 (SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL)))
-				distance_to_give_up_and_turn = 44;
-			else
-				distance_to_give_up_and_turn = 24;
-			
 			if (desired_thrust_angle != desired_turn_angle
 					&& (other_delta_x || other_delta_y)
-					&& EvalDescPtr->which_turn >= distance_to_give_up_and_turn
+					&& EvalDescPtr->which_turn >= 24
 					&& NORMALIZE_ANGLE (desired_thrust_angle
 					- GetVelocityTravelAngle (&OtherVelocity)
 					+ OCTANT) <= QUADRANT
@@ -1257,12 +1244,20 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 								);
 
 						ed.MoveState = ENTICE;
-
-						if (ed.which_turn == 0)
+						if (UltraManeuverable)
+						{
+							if (ed.which_turn == 0)
+								ed.which_turn = 1;
+							else if (ed.which_turn > 16)
+								ed.which_turn = 0;
+						}
+						else if (ed.which_turn == 0)
 							ed.which_turn = 1;
-						/* Shiver: The cap on which_turn for seeking weapons raised from 16 to 20.
-							The horrible cap of 8 for above-medium speed ships has been obliterated. */
-						else if (ed.which_turn > 20)
+						else if (ed.which_turn > 16
+								|| (MANEUVERABILITY (
+								&RDPtr->cyborg_control
+								) > MEDIUM_SHIP
+								&& ed.which_turn > 8))
 							ed.which_turn = 0;
 					}
 				}
@@ -1341,8 +1336,6 @@ StarShipPtr->ship_input_state &= ~SPECIAL;
 			InputState |= BATTLE_WEAPON;
 		if (StarShipPtr->ship_input_state & SPECIAL)
 			InputState |= BATTLE_SPECIAL;
-		if (StarShipPtr->ship_input_state & DOWN) // JMS_KEYS
-			InputState |= BATTLE_DOWN;
 		return (InputState);
 	}
 }

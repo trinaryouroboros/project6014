@@ -107,7 +107,7 @@ debugKeyPressed (void)
 	triangSphereSwitch = !triangSphereSwitch;
 	ToggleTriangulationSpheres(triangSphereSwitch);
 //	forwardToNextEvent (TRUE);
-	SET_GAME_STATE (MELNORME_CREDIT1, 100);
+//	SET_GAME_STATE (MELNORME_CREDIT1, 100);
 //	GLOBAL_SIS (ResUnits) = 100000;
 
 	// Tests
@@ -286,10 +286,7 @@ equipShip (void)
 			(1 << LIGHTNING_DISASTER) |
 			(1 << LAVASPOT_DISASTER));
 	
-	if(GET_GAME_STATE(IMPROVED_LANDER_SPEED))
-		SET_GAME_STATE (IMPROVED_LANDER_SPEED, 0);
-	else
-		SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1); 
+	SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1); 
 
 	// Modules:
 	/********  NO MODULES TO EQUIP ON EXPLORER
@@ -1052,7 +1049,7 @@ static void
 dumpWorld (FILE *out, const PLANET_DESC *world)
 {
 	PLANET_INFO *info;
-	//	COUNT bio[NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES + NUM_B_CREATURE_TYPES + NUM_C_CREATURE_TYPES];
+	COUNT bio[NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES + NUM_B_CREATURE_TYPES + NUM_C_CREATURE_TYPES];
 	
 	if (world->data_index == (BYTE) ~0) {
 		// StarBase
@@ -1647,7 +1644,7 @@ dumpStrings(FILE *out) {
 	
 	if (GAMESTR_COUNT != numStrings) {
 		fprintf(stderr, "Warning: GAMESTR_COUNT is %d, but GameStrings "
-				"contains %d strings.\n", (int)GAMESTR_COUNT, (int)numStrings);
+				"contains %d strings.\n", GAMESTR_COUNT, numStrings);
 	}
 
 	categoryI = 0;
@@ -1656,7 +1653,7 @@ dumpStrings(FILE *out) {
 				stringI >= categories[categoryI + 1].base)
 			categoryI++;
 		fprintf(out, "[ %s + %d ]  %s\n", categories[categoryI].name,
-				(int)(stringI - categories[categoryI].base), GAME_STRING(stringI));
+				stringI - categories[categoryI].base, GAME_STRING(stringI));
 	}
 }
 

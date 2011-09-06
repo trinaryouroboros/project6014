@@ -16,10 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: - Damaged thrusters emit differently colored particles
-//			 - Enable Down key in melee (comment tag JMS_KEYS)
-
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+// JMS 2010: Damaged thrusters emit differently colored particles
 
 #include "battlecontrols.h"
 #include "build.h"
@@ -340,7 +337,7 @@ new_ship (ELEMENT *DeadShipPtr)
 
 			UnlockElement (hElement);
 		}
-		DeadShipPtr->state_flags |= DeadShipPtr->turn_wait;
+
 		DeadShipPtr->life_span =
 				MusicStarted ? (ONE_SECOND * 3) / BATTLE_FRAME_RATE : 1;
 		DeadShipPtr->death_func = new_ship;
@@ -785,7 +782,7 @@ ship_transition (ELEMENT *ElementPtr)
 		}
 		else if ((hShipImage = AllocElement ()))
 		{
-#define TRANSITION_SPEED DISPLAY_TO_WORLD (40 << RESOLUTION_FACTOR) // JMS_GFX
+#define TRANSITION_SPEED DISPLAY_TO_WORLD (40 * RESOLUTION_FACTOR) // JMS_GFX
 #define TRANSITION_LIFE 1
 			COUNT angle;
 
@@ -903,6 +900,6 @@ flee_preprocess (ELEMENT *ElementPtr)
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	StarShipPtr->cur_status_flags
-			&= ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
+			&= ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL);
 	PreProcessStatus (ElementPtr);
 }

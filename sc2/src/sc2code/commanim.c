@@ -183,8 +183,8 @@ ambient_anim_task (void *data)
 		{
 			--ADPtr;
 			--pSeq;
-			if (ADPtr->AnimFlags & ANIM_DISABLED)
-				continue;
+			//if (ADPtr->AnimFlags & WHEN_TALKING) // JMS: ANIM_DISABLED has been replaced with WHEN_TALKING to enable zoomed-in ambient anims.
+			//	continue;
 			if (pSeq->Direction == NO_DIR)
 			{
 					if (!(ADPtr->AnimFlags & CommData.AlienTalkDesc.AnimFlags & WAIT_TALKING))
@@ -497,18 +497,11 @@ ambient_anim_task (void *data)
 				{
 					s.frame = CommFrame;
 					DrawStamp (&s);
-					// BW: draw the chosen feature for the captain
-					for (i = 0 ; i < CommData.NumFeatures ; i++)
-						{
-							s.frame = SetAbsFrameIndex(s.frame, CommData.AlienFeatureChoice[i]);
-							DrawStamp (&s);
-						}
-					
 				}
 				i = CommData.NumAnimations;
 				while (i--)
 				{
-				  if ((ClearSub && !(CommData.AlienAmbientArray[i].AnimFlags & WHEN_TALKING)) || FrameChanged[i])
+					if (ClearSub || FrameChanged[i])
 					{
 						s.frame = AnimFrame[i];
 						DrawStamp (&s);

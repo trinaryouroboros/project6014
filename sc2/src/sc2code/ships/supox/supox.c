@@ -208,7 +208,7 @@ supox_preprocess (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
-	if ((StarShipPtr->cur_status_flags & SPECIAL) && StarShipPtr->special_counter == 0
+	if ((StarShipPtr->cur_status_flags & SPECIAL)
 /*
 			&& DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST)
 */

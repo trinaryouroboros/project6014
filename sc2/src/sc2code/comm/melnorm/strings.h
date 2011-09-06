@@ -22,7 +22,6 @@
 enum
 {
 	NULL_PHRASE,
-	dummy,
 	ENUMERATE_ONE,
 	ENUMERATE_TWO,
 	ENUMERATE_THREE,
@@ -80,22 +79,6 @@ enum
 	get_on_with_business,
 	no_trade_now,
 	OK_NO_TRADE_NOW_BYE,
-	sell_ship_mark_sightings,
-	OFFER_CREDITS_FOR_SHIPMARK_INFO,
-	deal_shipmarks,
-	no_deal_shipmarks,
-	OK_NO_DEAL_SHIPMARKS,
-	ALTERNATIVE_REWARD_FOR_SHIPMARK_INFO,
-	credits_for_ship_mark_sightings,
-	info_for_ship_mark_sightings,
-	SHIP_MARK_DEAL,
-	SHIP_MARK_INFORMATION,
-	HINT_PLANET_0,
-	HINT_PLANET_1,
-	HINT_PLANET_2,
-	SHIP_MARK_INFORMATION_2,
-	sell_tzzrak_tzon_pics,
-	NO_WAY,
 	HELLO_AND_DOWN_TO_BUSINESS1,
 	HELLO_AND_DOWN_TO_BUSINESS2,
 	HELLO_AND_DOWN_TO_BUSINESS3,
@@ -217,10 +200,9 @@ enum
 	no_buy_new_tech,
 	done_buying_new_tech,
 	fill_me_up,
-	AT_MAXIMUM_CAPACITY,
+	OK_FILL_YOU_UP,
 	OK_DONE_BUYING_FUEL,
 	CHARITY,
-	ALL_BIO_TYPES_FOUND,
 	STRIP_HEAD,
 	LANDERS,
 	THRUSTERS,
@@ -233,7 +215,7 @@ enum
 	BLASTERS,
 	CANNONS,
 	TRACKERS,
-	DEFENSES,
+	DEFENSES
 };
 
 #endif /* _STRINGS_H */

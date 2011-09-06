@@ -3,7 +3,7 @@ Greetings Captain! Welcome back to Shofixti Space!
 It's been too long. What news from the New Alliance of Free Stars?
 
 #(SHOFIXTI_GREETING_2)
-Well met, brave Captain!
+Well met, brave captain!
 I trust I greet you in strong health!
 
 #(SHOFIXTI_GREETING_3)
@@ -90,43 +90,18 @@ We're sorry to hear that. We'll remind the Chmmr of your Struggle. I'm sure they
 #(THANK_YOU)
 Thank you Earthling, your assistance is greatly appreciated once again.
 
-#(ask_scar)
-Hey! What's with that scar? Old Tanaka had one just like it.
-
-#(ANSWER_SCAR)
-Ahh... The Ceremonial Scar.
-When young Shofixti males come of age they must
-pass the Three Trials of the Warrior.
-Only he who masters the Combat Regal
-who dares the Flight of Starfire, who withstands the Duress of Hunger
-is awarded with a stroke from the 'lash of Daikon'.
-Only he can serve in the proud ranks of Guntai.
-The scar symbolizes acceptance of responsibility and adulthood
-it is a mark every Shofixti warrior carries with pride.
-
 #(where_patrol)
 Tell me about the lost scout patrol.
-
-#(where_patrol_2)
-Can you give me a recap on the lost scout patrols?
-
-#(HERE_GOES)
-Here goes, captain...
 
 #(LOST_PATROLS)
 As you know, the Alliance has been all but too busy with the Kohr-Ah
 to effectively help us in our plight.
-So some months ago we started our own program
+So about six months ago we started our own program
 to find a suitable alternative for a new home planet.
 We sent several task forces of four to six scout vessels
 to various reaches of this galactic quadrant.
-Most returned on the date agreed upon, without success, but not all...
-
-#(THREE_PATROLS_MISSING)
-...three patrols are still missing.
-
-#(TWO_PATROLS_MISSING)
-...two patrols are still missing.
+Most returned on the date agreed upon, without success, but not all
+three patrols are still missing.
 
 #(why_not_call)
 Why don't you give them a call and say 'come back'?
@@ -138,41 +113,14 @@ are few and far between.
 Such a device costs a fortune and requires a large vessel to be housed on
 neither of which we have.
 We are hard-stretched to keep even this meager scout fleet running
-so we had no option but to give each patrol a lot of autonomy
+so we had no option but to give each patrol a lot of autonomity
 and a large area of stars to investigate.
 They all knew they would be on their own once they left
 yet they volunteered with joy.
 Please, captain, find out what has happened to them
 A lot of those brave ones are my friends.
-
-#(TRANSFER_COORDINATES)
 I'll transfer you now the coordinates
 of the areas that were designated for the lost patrols.
-
-#(YOU_HAVE_COORDINATES)
-You already have the coordinates
-of the areas that were designated for the lost patrols.
-
-#(ONLY_TWO_PATROLS)
-Now that the count is down to two patrols lost
-your search for my brethren should be much easier.
-
-#(GREAT_NEWS)
-Captain, we have great news!
-One of the patrols that we thought lost
-has returned home!
-Upon entering Gamma Angstrom they ran into an asteroid field
-which their scanners didn't detect before it was too late.
-Two of the scout ships collided with asteroids sustaining severe damage
-and they had to return home at a greatly diminished speed.
-Their perilous journey was not in vain though.
-The patrol discovered there is a planet covered with abundant life
-in Beta Hicetas.
-Although cool and arid, the planet might some day be transformed
-into a home suitable for Shofixti with proper terraforming tools.
-Alas, by scanning the Alliance databanks, it seems that
-no known race possesses such technology
-not on a planetary scale at least.
 
 #(farewell_shofixti)
 Farewell Shofixti, see you next time!

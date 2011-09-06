@@ -53,7 +53,7 @@ GetTriangulationSphereRect (COUNT radius, POINT coords, char sphereString[], REC
 		SetContextFont (TinyFont);
 		
 		t.baseline.x = pRect->corner.x + (pRect->extent.width >> 1);
-		t.baseline.y = pRect->corner.y + (pRect->extent.height + (8 * RESOLUTION_FACTOR)) - 1; // JMS_GFX
+		t.baseline.y = pRect->corner.y + (pRect->extent.height + 8 * RESOLUTION_FACTOR) - 1;
 		t.align = ALIGN_CENTER;
 		t.CharCount =sizeof(sphereString);
 		t.pStr = (UNICODE *)sphereString;
@@ -131,12 +131,12 @@ void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRe
 					TEXT t;
 
 					SetContextForeGroundColor (c);
-					DrawOval (&r, 1);
+					DrawOval (&r, 0);
 
 					SetContextFont (TinyFont);
 					
 					t.baseline.x = r.corner.x + (r.extent.width >> 1);
-					t.baseline.y = r.corner.y + (r.extent.height + (8 * RESOLUTION_FACTOR)) - 1; // JMS_GFX
+					t.baseline.y = r.corner.y + (r.extent.height+8*RESOLUTION_FACTOR) - 1;
 					t.align = ALIGN_CENTER;
 					t.CharCount = sizeof(sphere_strings[index]);
 					t.pStr = (UNICODE *)sphere_strings[index];

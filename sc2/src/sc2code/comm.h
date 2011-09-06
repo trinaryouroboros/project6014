@@ -14,8 +14,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
-
 #ifndef _COMM_H
 #define _COMM_H
 
@@ -35,8 +33,8 @@ typedef enum
 
 #ifdef COMM_INTERNAL
 
-#define SLIDER_Y (107 << RESOLUTION_FACTOR) // JMS_GFX
-#define SLIDER_HEIGHT (15 << RESOLUTION_FACTOR) // JMS_GFX
+#define SLIDER_Y (107 * RESOLUTION_FACTOR) // JMS_GFX
+#define SLIDER_HEIGHT 15
 
 #include "commanim.h"
 

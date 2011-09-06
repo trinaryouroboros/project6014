@@ -39,13 +39,13 @@ static LOCDATA syreen_desc =
 	{0, 0}, /* AlienTextBaseline */
 	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
 	ALIGN_CENTER, /* AlienTextAlign */
-	VALIGN_BOTTOM, /* AlienTextValign */
+	VALIGN_TOP, /* AlienTextValign */
 	SYREEN_COLOR_MAP, /* AlienColorMap */
 	SYREEN_MUSIC, /* AlienSong */
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SYREEN_CONVERSATION_PHRASES, /* PlayerPhrases */
-	9, /* NumAnimations */
+	8, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{	// 0 - Flash eyes
 			1, /* StartIndex */
@@ -109,15 +109,7 @@ static LOCDATA syreen_desc =
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 24, 0, /* FrameRate */
 			ONE_SECOND * 2, ONE_SECOND * 2, /* RestartRate */
-			(1 << 8), /* BlockMask */
-		},
-		{	// 8 - Close-up eyebrow lift
-			189, /* StartIndex */
-			17, /* NumFrames */
-			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
-			ONE_SECOND / 16, 0, /* FrameRate */
-			ONE_SECOND * 5, ONE_SECOND * 4, /* RestartRate */
-			(1 << 7), /* BlockMask */
+			0, /* BlockMask */
 		},
 	},
 	{ /* AlienTransitionDesc */
@@ -132,7 +124,7 @@ static LOCDATA syreen_desc =
 		174, /* StartIndex */
 		8, /* NumFrames */
 		TALK_INTRO, /* AnimFlags */
-		ONE_SECOND / 16, ONE_SECOND / 30, /* FrameRate */
+		ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
 		ONE_SECOND / 10, 0, /* RestartRate */
 		0, /* BlockMask */
 	},
@@ -141,18 +133,12 @@ static LOCDATA syreen_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	0, /* NumFeatures */
-	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	(void) R; // satisfy compiler
 	NPCPhrase (COME_BACK_ANYTIME);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }
@@ -247,6 +233,11 @@ AnyAssistance (RESPONSE_REF R)
 static void
 Intro (void)
 {
+	if (GET_GAME_STATE (SYREEN_MET) == 0)
+	{
+		SET_GAME_STATE (SYREEN_MET, 1);
+	}
+
 	NPCPhrase (SYREEN_GREETING1);
 
 	Response (because_we_can, AnyAssistance);
@@ -277,8 +268,8 @@ init_syreen_comm (void)
 	syreen_desc.uninit_encounter_func = uninit_syreen;
 
 	syreen_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreen_desc.AlienTextBaseline.y = 100;
-	syreen_desc.AlienTextWidth = SIS_TEXT_WIDTH - 4;
+	syreen_desc.AlienTextBaseline.y = 0;
+	syreen_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	retval = &syreen_desc;

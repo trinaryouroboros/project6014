@@ -16,17 +16,13 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: - Certain systems have freight transport ships. These ships leave the system for their 
+// JMS 2010: -Certain systems have freight transport ships. These ships leave the system for their 
 //			  supposed freight run on first day of the month + every date divisible with seven thereafter.
 //			 
-//			 - More Transport ship mechanics: The ship's status flag is 0 when orbiting a planet, 1 when
+//			 -More Transport ship mechanics: The ship's status flag is 0 when orbiting a planet, 1 when
 //			  leaving for hyperspace and 2 when arriving from hyperspace.
 //
-//			 - Transport ship tells the intercepting ships in star system that all is well, stop chasing.
-//			  When at sol, it notifies human ships, when at procyon, it notifies chmmr ships.
-//
-//			 - Removed some Ur-Quan probe conditions.
-//			 - Enhanced battle group behavior when they orbit planets: They don't jitter no more when changing facing.
+//			 -Removed some Ur-Quan probe conditions.
 
 #include "collide.h"
 #include "globdata.h"
@@ -72,9 +68,10 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 				target_loc = GroupPtr->orbit_pos;
 				GroupPtr->orbit_pos = NORMALIZE_FACING (TFB_Random ());
 #ifdef OLD
-				target_loc = (BYTE)(((COUNT)TFB_Random ()% pSolarSysState->SunDesc[0].NumPlanets) + 1);
+				target_loc = (BYTE)((
+						(COUNT)TFB_Random ()
+						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
 #endif /* OLD */
-				
 				// JMS
 				if (target_loc==0 && GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP)
 				{
@@ -85,13 +82,14 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
 					
 				}
-				
 				if (!(task & REFORM_GROUP))
 				{
 					if ((task & ~IGNORE_FLAGSHIP) != EXPLORE)
 						GroupPtr->group_counter = 0;
 					else
-						GroupPtr->group_counter = ((COUNT) TFB_Random () % MAX_REVOLUTIONS) << FACING_SHIFT;
+						GroupPtr->group_counter =
+								((COUNT) TFB_Random () % MAX_REVOLUTIONS)
+								<< FACING_SHIFT;
 				}
 			}
 			GroupPtr->task = task;
@@ -163,7 +161,8 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		if ((task & ~IGNORE_FLAGSHIP) != EXPLORE)
 			GroupPtr->group_counter = 0;
 		else
-			GroupPtr->group_counter = ((COUNT)TFB_Random () % MAX_REVOLUTIONS) << FACING_SHIFT;
+			GroupPtr->group_counter = ((COUNT)TFB_Random ()
+					% MAX_REVOLUTIONS) << FACING_SHIFT;
 	}
 	
 	// JMS: If Slylandro-kohrah battlegroup is fought, all Slylandro battle groups escape from the system
@@ -272,14 +271,12 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 			&& GroupPtr->dest_loc == 0))
 #endif /* NEVER */
 	{
-		BOOLEAN Transition, isOrbiting;
+		BOOLEAN Transition;
 		SIZE dx, dy;
 		SIZE delta_x, delta_y;
 		COUNT angle;
-		FRAME suggestedFrame; // JMS
-		
+
 		Transition = FALSE;
-		isOrbiting = FALSE;
 		if (task == FLEE)
 		{
 			dest_pt.x = GroupPtr->loc.x << 1;
@@ -299,7 +296,6 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 				COUNT orbit_dist;
 				POINT org;
 
-				isOrbiting = TRUE;
 				if (task != ON_STATION)
 				{
 					orbit_dist = ORBIT_RADIUS;
@@ -456,7 +452,7 @@ CheckGetAway:
 
 			if (Transition)
 			{
-				/* no collisions during transition */
+						/* no collisions during transition */
 				EPtr->state_flags |= NONSOLID;
 
 				vdx = vdy = 0;
@@ -476,8 +472,14 @@ CheckGetAway:
 					/* Group completely left the star system */
 					EPtr->life_span = 0;
 					EPtr->state_flags |= DISAPPEARING | NONSOLID;
-					GroupPtr->in_system = 0;					
-
+					GroupPtr->in_system = 0;
+					
+					// JMS: When one Slylandro-kohrah group has exited the system
+					// it is safe to assume that all groups have been given the FLEE flag.
+					// Thus we can finally zero the game state that tells the sly-kohrs to flee the system.
+					if(GET_GAME_STATE(ENEMY_ESCAPE_OCCURRED))
+						SET_GAME_STATE (ENEMY_ESCAPE_OCCURRED, 0);
+					
 					// JMS: Freight Transport ship has left the system.
 					if (GroupPtr->race_id==TRANSPORT_SHIP && GET_GAME_STATE(TRANSPORT_SHIP_0_STATUS) == 1)
 						SET_GAME_STATE(TRANSPORT_SHIP_0_STATUS, 2);
@@ -487,33 +489,25 @@ CheckGetAway:
 				{
 					if (target_loc == GroupPtr->dest_loc)
 					{
-						GroupPtr->orbit_pos = NORMALIZE_FACING (ANGLE_TO_FACING (angle + HALF_CIRCLE));
-						GroupPtr->group_counter = ((COUNT)TFB_Random () % MAX_REVOLUTIONS) << FACING_SHIFT;
+						GroupPtr->orbit_pos = NORMALIZE_FACING (
+								ANGLE_TO_FACING (angle + HALF_CIRCLE));
+						GroupPtr->group_counter =
+								((COUNT)TFB_Random () % MAX_REVOLUTIONS)
+								<< FACING_SHIFT;
 					}
 
-					GroupPtr->loc.x = -(SIZE)((long)COSINE (angle, SIS_SCREEN_WIDTH * 9 / 16) * MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
-					GroupPtr->loc.y = -(SIZE)((long)SINE (angle, SIS_SCREEN_WIDTH * 9 / 16) * MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
+					GroupPtr->loc.x = -(SIZE)((long)COSINE (
+							angle, SIS_SCREEN_WIDTH * 9 / 16
+							) * MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
+					GroupPtr->loc.y = -(SIZE)((long)SINE (
+							angle, SIS_SCREEN_WIDTH * 9 / 16
+							) * MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
 
 					group_loc = target_loc;
 					GroupPtr->sys_loc = target_loc;
 				}
 			}
 		}
-		//BW : make IP ships face the direction they're going into
-		suggestedFrame = SetAbsFrameIndex(ElementPtr->next.image.farray[0], 1 + NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))));
-		
-		// JMS: Direction memory prevents jittering of battle group icons when they are orbiting a planet (and not chasing the player ship).		
-		if (isOrbiting)
-		{
-			// This works because ships always orbit planets clockwise.
-			if (GroupPtr->lastDirection < NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)))
-				|| GroupPtr->lastDirection == 15)
-				ElementPtr->next.image.frame = suggestedFrame;
-		}
-		else
-			ElementPtr->next.image.frame = suggestedFrame;
-		
-		GroupPtr->lastDirection = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
 	}
 
 	if (group_loc != 0)
@@ -623,21 +617,11 @@ ip_group_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		EncounterGroup = GroupPtr->group_id;
 
 		// JMS: So long, Ur-Quan probe.
-		/*if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
+		//if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
+		if(0)
 		{
 			GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
 			GroupPtr->dest_loc = 0;
-		}*/
-		
-		// JMS: Transport ship tells the intercepting ships in star system that all is well, stop chasing.
-		if (GroupPtr->race_id == TRANSPORT_SHIP)
-		{
-			GroupPtr->task |= REFORM_GROUP;
-			GroupPtr->group_counter = 100;
-			if (CurStarDescPtr->Index == SOL_DEFINED)
-				NotifyOthers (HUMAN_SHIP, (BYTE)~0);
-			else if (CurStarDescPtr->Index == CHMMR_DEFINED)
-				NotifyOthers (CHMMR_SHIP, (BYTE)~0);
 		}
 		else
 		{

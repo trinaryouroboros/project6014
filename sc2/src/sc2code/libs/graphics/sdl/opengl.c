@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
-
 #if defined (GFXMODULE_SDL) && defined (HAVE_OPENGL)
 
 #include "libs/graphics/sdl/opengl.h"
@@ -163,21 +161,17 @@ AttemptColorDepth (int flags, int width, int height, int bpp)
 }
 
 int
-TFB_GL_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen, unsigned int resolutionFactor)  // JMS_GFX: Added resolutionFactor
+TFB_GL_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen)
 {
 	int i, texture_width, texture_height;
 	GraphicsDriver = driver;
-	
-	// JMS_GFX: A temporary hack just to shut up the compiler. We might use resolutionFactor in openGL
-	// someday so keeping the passed variable in the function variables for now.
-	unsigned int temp = resolutionFactor;
 
 	if (AttemptColorDepth (flags, width, height, 32) &&
 			AttemptColorDepth (flags, width, height, 24) &&
 			AttemptColorDepth (flags, width, height, 16))
 	{
-		log_add (log_Error, "Couldn't set any OpenGL %ix%i video mode!, resFactor %d",
-			 width, height, temp);
+		log_add (log_Error, "Couldn't set any OpenGL %ix%i video mode!",
+			 width, height);
 		return -1;
 	}
 
@@ -277,7 +271,7 @@ TFB_GL_ConfigureVideo (int driver, int flags, int width, int height, int togglef
 }
 
 int
-TFB_GL_InitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor)  // JMS_GFX: Added resolutionFactor
+TFB_GL_InitGraphics (int driver, int flags, int width, int height)
 {
 	char VideoName[256];
 
@@ -288,10 +282,10 @@ TFB_GL_InitGraphics (int driver, int flags, int width, int height, unsigned int 
 	log_add (log_Info, "SDL initialized.");
 	log_add (log_Info, "Initializing Screen.");
 
-	ScreenWidth =  (320 << resolutionFactor); // JMS_GFX
-	ScreenHeight = (240 << resolutionFactor); // JMS_GFX
+	ScreenWidth =  (320 * resolutionFactor); // JMS_GFX
+	ScreenHeight = (240 * resolutionFactor); // JMS_GFX
 
-	if (TFB_GL_ConfigureVideo (driver, flags, width, height, 0, resolutionFactor))  // JMS_GFX: Added resolutionFactor
+	if (TFB_GL_ConfigureVideo (driver, flags, width, height, 0))
 	{
 		log_add (log_Fatal, "Could not initialize video: "
 				"no fallback at start of program!");

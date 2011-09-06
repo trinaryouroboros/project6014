@@ -14,8 +14,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
-
 /*
  * Eventually this should include all configuration stuff, 
  * for now there's few options which indicate 3do/pc flavors.
@@ -54,7 +52,7 @@ int optMeleeScale;
 const char **optAddons;
 
 // JMS_GFX
-unsigned int resolutionFactor;
+int resolutionFactor;
 BOOLEAN resFactorWasChanged;
 
 BOOLEAN opt3doMusic;
@@ -135,7 +133,7 @@ findFileInDirs (const char *locs[], int numLocs, const char *file)
 // execFile is the path to the uqm executable, as acquired through
 // main()'s argv[0].
 void
-prepareContentDir (const char *contentDirName, const char* addonDirName, char *execFile)
+prepareContentDir (const char *contentDirName, const char* addonDirName, const char *execFile)
 {
 	const char *testFile = "version";
 	const char *loc;
@@ -159,7 +157,8 @@ prepareContentDir (const char *contentDirName, const char* addonDirName, char *e
 		if (loc == NULL)
 		{
 			char *tempDir = (char *) HMalloc (PATH_MAX);
-			snprintf (tempDir, PATH_MAX, "%s/../Resources/content", dirname (execFile));
+			snprintf (tempDir, PATH_MAX, "%s/../Resources/content",
+					dirname (execFile));
 			loc = findFileInDirs ((const char **) &tempDir, 1, testFile);
 			HFree (tempDir);
 		}
@@ -486,7 +485,7 @@ loadIndices (uio_DirHandle *dir)
 		for (i = 0; i < indices->numNames; i++)
 		{
 			log_add (log_Debug, "Loading resouce index '%s'", indices->names[i]);
-			LoadResourceIndex (dir, indices->names[i], NULL);
+			LoadResourceIndex (dir, indices->names[i]);
 			numLoaded++;
 		}			
 	}

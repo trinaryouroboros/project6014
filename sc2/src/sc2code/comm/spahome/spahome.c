@@ -181,11 +181,6 @@ static LOCDATA spahome_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	0, /* NumFeatures */
-	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
-	},
-	{0 /* AlienFeatureChoice (will be computed later) */
-	},
 };
 
 static void
@@ -206,33 +201,6 @@ ExitConversation (RESPONSE_REF R)
 		NPCPhrase (GO_GET_CYPHER);
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
 	}
-    else
-    {
-		NPCPhrase (BYE);
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-    }
-}
-
-
-static void CivilisedConversation(RESPONSE_REF R)
-{
-    NPCPhrase (ANYTHING_ELSE);
-    Response (be_back_later, ExitConversation);
-}
-
-
-static void
-TurnLightsOn(RESPONSE_REF R)
-{
-    XFormColorMap (GetColorMapAddress (
-                                SetAbsColorMapIndex (CommData.AlienColorMap, 1)
-                            ), ONE_SECOND / 2);
-    NPCPhrase (LIGHTS_NOW_ON);
-    
-    SET_GAME_STATE (SPATHIHOME_MET, 1);
-    
-    Response (telling_off, CivilisedConversation);
-    Response (be_back_later, ExitConversation);
 }
 
 
@@ -242,18 +210,12 @@ Intro (void)
 {
 	if (GET_GAME_STATE (SPATHIHOME_MET) == 0)
 	{
+		//SET_GAME_STATE (SPATHIHOME_MET, 1);
 		NPCPhrase (WHAT_IS_CYPHER);
-        
-        Response (huffi_muffi_guffi, ExitConversation);
-        Response (gods_work, ExitConversation);
-        Response (left_at_home, ExitConversation);
-        Response (turn_lights_on, TurnLightsOn);
 	}
-    else
-    {
-        CommData.AlienColorMap = SetAbsColorMapIndex (CommData.AlienColorMap, 1);
-        CivilisedConversation(0);
-    }
+	Response (huffi_muffi_guffi, ExitConversation);
+	Response (gods_work, ExitConversation);
+	Response (left_at_home, ExitConversation);
 }
 
 static COUNT
