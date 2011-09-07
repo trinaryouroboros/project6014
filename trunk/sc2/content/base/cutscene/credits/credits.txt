@@ -48,8 +48,10 @@ ART
 #(Art team)
 13 C
 Damon Czanik
+Gergely Sinkó
+Aki Rissanen
+Mike Ling
 Amir Keren
- 
 
 #(Dialogue and plot)
 13 C
@@ -59,7 +61,8 @@ DIALOGUE AND PLOT
 13 C
 Cedric Horner
 Jaakko Markus Seppälä
- 
+Gergely Sinkó
+Damon Czanik
 
 #(Programming)
 13 C
@@ -71,6 +74,7 @@ Tristan Glaeser
 Edmund Horner
 Jaakko Markus Seppälä
 Benjamin Wack
+Damon Czanik
  
 
 #(Sounds)
