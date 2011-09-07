@@ -1,0 +1,5 @@
+A page of gadgets showing interesting stuff about our project.
+
+<wiki:gadget url="http://www.ohloh.net/p/project6014/widgets/project_basic_stats.xml" height="220" border="1" />
+
+<wiki:gadget url="http://www.ohloh.net/p/sc2/widgets/project_basic_stats.xml" height="220" border="1" />
