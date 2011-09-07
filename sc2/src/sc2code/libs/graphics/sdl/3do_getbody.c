@@ -662,19 +662,8 @@ _GetFontData (uio_Stream *fp, DWORD length)
 
 		char_name = GetDirEntryAddress (SetAbsDirEntryTableIndex (
 				fontDir, dirEntryI));
-		
-		// JMS_GFX: Since 320x240 still uses old type decimal numbering for font frames,
-		// and hi-res uses hex, we have to make this distinction here.
-		if (resolutionFactor > 0)
-		{
-			if (sscanf (char_name, "%x.", &charIndex) != 1)
-				continue;
-		}
-		else
-		{
-			if (sscanf (char_name, "%u.", &charIndex) != 1)
-				continue;
-		}
+		if (sscanf (char_name, "%x.", &charIndex) != 1)
+			continue;
 			
 		if (charIndex > 0xffff)
 			continue;
