@@ -209,7 +209,7 @@ add_text (int status, TEXT *pTextIn)
 		locText = *pTextIn;
 		locText.baseline.x -= 8 + RESOLUTION_FACTOR; // JMS_GFX
 		locText.CharCount = (COUNT)~0;
-		locText.pStr = "*";
+		locText.pStr = STR_BULLET;
 		font_DrawText (&locText);
 
 		locText = *pTextIn;
