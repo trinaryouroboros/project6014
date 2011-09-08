@@ -166,11 +166,12 @@ int
 TFB_GL_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen, unsigned int resolutionFactor)  // JMS_GFX: Added resolutionFactor
 {
 	int i, texture_width, texture_height;
+  unsigned int temp;
 	GraphicsDriver = driver;
 	
 	// JMS_GFX: A temporary hack just to shut up the compiler. We might use resolutionFactor in openGL
 	// someday so keeping the passed variable in the function variables for now.
-	unsigned int temp = resolutionFactor;
+	temp = resolutionFactor;
 
 	if (AttemptColorDepth (flags, width, height, 32) &&
 			AttemptColorDepth (flags, width, height, 24) &&
