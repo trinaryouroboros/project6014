@@ -16,15 +16,12 @@
 
 #include "vidplayer.h"
 
+#include "vidintrn.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/graphics/tfb_draw.h"
 #include "libs/log.h"
 #include "libs/memlib.h"
-// XXX: we should not include anything from uqm/ inside libs/
-#include "uqm/controls.h"
-#include "uqm/settings.h"
-#include "uqm/setup.h"
-#include "uqm/sounds.h"
+#include "libs/sndlib.h"
 
 // video callbacks
 static void vp_BeginFrame (TFB_VideoDecoder*);
@@ -34,7 +31,7 @@ static uint32 vp_GetTicks (TFB_VideoDecoder*);
 static bool vp_SetTimer (TFB_VideoDecoder*, uint32 msecs);
 
 
-TFB_VideoCallbacks vp_DecoderCBs =
+static const TFB_VideoCallbacks vp_DecoderCBs =
 {
 	vp_BeginFrame,
 	vp_EndFrame,
@@ -49,7 +46,7 @@ static void vp_AudioEnd (TFB_SoundSample* sample);
 static void vp_BufferTag (TFB_SoundSample* sample, TFB_SoundTag* tag);
 static void vp_QueueBuffer (TFB_SoundSample* sample, audio_Object buffer);
 
-static TFB_SoundCallbacks vp_AudioCBs =
+static const TFB_SoundCallbacks vp_AudioCBs =
 {
 	vp_AudioStart,
 	NULL,
@@ -61,16 +58,6 @@ static TFB_SoundCallbacks vp_AudioCBs =
 // inter-thread param guarded by mutex
 static Semaphore vp_interthread_lock = 0;
 static void* vp_interthread_clip = NULL;
-
-typedef struct
-{
-	// standard state required by DoInput
-	BOOLEAN (*InputFunc) (void *pInputState);
-	COUNT MenuRepeatDelay;
-
-	VIDEO_REF CurVideo;
-
-} VIDEO_INPUT_STATE;
 
 bool
 TFB_InitVideoPlayer (void)
@@ -85,29 +72,6 @@ void
 TFB_UninitVideoPlayer (void)
 {
 	DestroySemaphore (vp_interthread_lock);
-}
-
-void
-TFB_FadeClearScreen (void)
-{
-	BYTE xform_buf[1];
-	RECT r = {{0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}};
-
-	xform_buf[0] = FadeAllToBlack;
-	SleepThreadUntil (XFormColorMap (
-			(COLORMAPPTR) xform_buf, ONE_SECOND / 2));
-	
-	// paint black rect over screen	
-	LockMutex (GraphicsLock);
-	SetContext (ScreenContext);
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00));
-	DrawFilledRectangle (&r);	
-	UnlockMutex (GraphicsLock);
-
-	// fade in black rect instantly
-	xform_buf[0] = FadeAllToColor;
-	XFormColorMap ((COLORMAPPTR) xform_buf, 0);
 }
 
 // audio-synced video playback task
@@ -131,7 +95,7 @@ as_video_play_task (void *data)
 	LockMutex (vid->guard);
 	want_frame = vid->want_frame;
 	if (vid->hAudio)
-		PlayMusic (vid->hAudio, FALSE, 1);
+		PLRPlaySong (vid->hAudio, FALSE, 1);
 	UnlockMutex (vid->guard);
 
 	clagged = 0;
@@ -201,11 +165,15 @@ as_video_play_task (void *data)
 		// draw the frame
 		if (ret > 0)
 		{
+			CONTEXT oldContext;
+			
 			LockMutex (GraphicsLock);
-			SetContext (ScreenContext);
+			// We have the cliprect precalculated and don't need the rest
+			oldContext = SetContext (NULL);
 			TFB_DrawScreen_Image (vid->frame,
 					vid->dst_rect.corner.x, vid->dst_rect.corner.y,
 					GSCALE_IDENTITY, NULL, TFB_SCREEN_MAIN);
+			SetContext (oldContext);
 			UnlockMutex (GraphicsLock);
 			FlushGraphics (); // needed to prevent half-frame updates
 		}
@@ -217,7 +185,7 @@ as_video_play_task (void *data)
 		ret = VideoDecoder_Decode (vid->decoder);
 	}
 	if (vid->hAudio)
-		StopMusic ();
+		PLRStop (vid->hAudio);
 	vid->playing = false;
 
 	FinishTask (task);
@@ -241,7 +209,7 @@ video_play_task (void *data)
 
 	LockMutex (vid->guard);
 	if (vid->hAudio)
-		PlayMusic (vid->hAudio, (vid->loop_frame != VID_NO_LOOP), 1);
+		PLRPlaySong (vid->hAudio, (vid->loop_frame != VID_NO_LOOP), 1);
 
 	UnlockMutex (vid->guard);
 
@@ -258,15 +226,19 @@ video_play_task (void *data)
 
 	while (!Task_ReadState (task, TASK_EXIT) && ret > 0)
 	{
+		CONTEXT oldContext;
+		
 		// wait till its time to render next frame
 		SleepThreadUntil (vid->frame_time);
 		vid->cur_frame = vid->decoder->cur_frame;
 
 		LockMutex (GraphicsLock);
-		SetContext (ScreenContext);
+		// We have the cliprect precalculated and don't need the rest
+		oldContext = SetContext (NULL);
 		TFB_DrawScreen_Image (vid->frame,
 				vid->dst_rect.corner.x, vid->dst_rect.corner.y,
 				GSCALE_IDENTITY, NULL, TFB_SCREEN_MAIN);
+		SetContext (oldContext);
 		UnlockMutex (GraphicsLock);
 		FlushGraphics (); // needed to prevent half-frame updates
 
@@ -277,7 +249,7 @@ video_play_task (void *data)
 	}
 	vid->playing = false;
 	if (vid->hAudio)
-		StopMusic ();
+		PLRStop (vid->hAudio);
 
 	FinishTask (task);
 
@@ -289,7 +261,7 @@ TFB_PlayVideo (VIDEO_REF vid, uint32 x, uint32 y)
 {
 	RECT scrn_r;
 	RECT clip_r = {{0, 0}, {vid->w, vid->h}};
-	RECT vid_r = {{0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}};
+	RECT vid_r = {{0, 0}, {ScreenWidth, ScreenHeight}};
 	RECT dr = {{x, y}, {vid->w, vid->h}};
 	RECT sr;
 
@@ -333,12 +305,8 @@ TFB_PlayVideo (VIDEO_REF vid, uint32 x, uint32 y)
 		vid->own_audio = true;
 	}
 
-	StopMusic ();
-
 	if (vid->decoder->audio_synced)
 	{
-		TFB_SoundSample **pmus;
-
 		if (!vid->hAudio)
 		{
 			log_add (log_Warning, "TFB_PlayVideo: "
@@ -346,12 +314,8 @@ TFB_PlayVideo (VIDEO_REF vid, uint32 x, uint32 y)
 			return false;
 		}
 
-		// nasty hack for now
-		pmus = vid->hAudio;
-		(*pmus)->buffer_tag = HCalloc (
-				sizeof (TFB_SoundTag) * (*pmus)->num_buffers);
-		(*pmus)->callbacks = vp_AudioCBs;
-		(*pmus)->data = vid;	// hijack data ;)
+		TFB_SetSoundSampleCallbacks (*vid->hAudio, &vp_AudioCBs);
+		TFB_SetSoundSampleData (*vid->hAudio, (intptr_t)vid);
 	}
 
 	SetSemaphore (vp_interthread_lock);
@@ -389,7 +353,7 @@ TFB_StopVideo (VIDEO_REF vid)
 	
 	if (vid->hAudio)
 	{
-		StopMusic ();
+		PLRStop (vid->hAudio);
 		if (vid->own_audio)
 		{
 			DestroyMusic (vid->hAudio);
@@ -413,67 +377,40 @@ TFB_VideoPlaying (VIDEO_REF vid)
 	return vid->playing;
 }
 
-static BOOLEAN
-TFB_DoVideoInput (void *pIS)
+uint32
+TFB_GetVideoPosition (VIDEO_REF vid)
 {
-	VIDEO_INPUT_STATE* pVIS = (VIDEO_INPUT_STATE*) pIS;
-	TFB_VideoClip* vid = pVIS->CurVideo;
+	uint32 pos;
 
-	if (!pVIS->CurVideo || !TFB_VideoPlaying (pVIS->CurVideo))
-		return FALSE;
+	if (!TFB_VideoPlaying (vid))
+		return 0;
 
-	if (PulsedInputState.menu[KEY_MENU_SELECT]
-			|| PulsedInputState.menu[KEY_MENU_CANCEL]
-			|| PulsedInputState.menu[KEY_MENU_SPECIAL]
-			|| (GLOBAL (CurrentActivity) & CHECK_ABORT))
-	{	// abort movie
-		TFB_StopVideo (pVIS->CurVideo);
-		return FALSE;
-	}
-	else if (PulsedInputState.menu[KEY_MENU_LEFT] || PulsedInputState.menu[KEY_MENU_RIGHT])
-	{
-		if (vid->decoder->audio_synced)
-		{
-			float newpos;
-			
-			LockMutex (vid->guard);
-			newpos = vid->decoder->pos;
-			UnlockMutex (vid->guard);
+	LockMutex (vid->guard);
+	pos = (uint32) (vid->decoder->pos * 1000);
+	UnlockMutex (vid->guard);
 
-			if (PulsedInputState.menu[KEY_MENU_LEFT])
-				newpos -= 2;
-			else if (PulsedInputState.menu[KEY_MENU_RIGHT])
-				newpos += 1;
-			if (newpos < 0)
-				newpos = 0;
-
-			LockMutex (soundSource[MUSIC_SOURCE].stream_mutex);
-			SeekStream (MUSIC_SOURCE, (uint32) (newpos * 1000));
-			UnlockMutex (soundSource[MUSIC_SOURCE].stream_mutex);
-
-			TaskSwitch ();
-		}
-		// non a/s decoder seeking is not supported yet
-	}
-	else
-	{
-		SleepThread (ONE_SECOND / 30);
-	}
-
-	return TRUE;
+	return pos;
 }
 
-void
-TFB_VideoInput (VIDEO_REF VidRef)
+bool
+TFB_SeekVideo (VIDEO_REF vid, uint32 pos)
 {
-	VIDEO_INPUT_STATE vis;
+	if (!TFB_VideoPlaying (vid))
+		return false;
 
-	vis.MenuRepeatDelay = 0;
-	vis.InputFunc = TFB_DoVideoInput;
-	vis.CurVideo = VidRef;
-
-	SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
-	DoInput (&vis, TRUE);
+	if (vid->decoder->audio_synced)
+	{
+		PLRSeek (vid->hAudio, pos);
+		TaskSwitch ();
+		return true;
+	}
+	else
+	{	// TODO: Non-a/s decoder seeking is not supported yet
+		//   Decide what to do with these. Seeking this kind of
+		//   video is trivial, but we may not want to do it.
+		//   The only non-a/s videos right now are ship spins.
+		return false;
+	}
 }
 
 static void
@@ -530,10 +467,16 @@ vp_SetTimer (TFB_VideoDecoder* decoder, uint32 msecs)
 static bool
 vp_AudioStart (TFB_SoundSample* sample)
 {
-	TFB_VideoClip* vid = sample->data;
+	TFB_VideoClip* vid = (TFB_VideoClip*) TFB_GetSoundSampleData (sample);
+	TFB_SoundDecoder *decoder;
+
+	assert (sizeof (intptr_t) >= sizeof (vid));
+	assert (vid != NULL);
+
+	decoder = TFB_GetSoundSampleDecoder (sample);
 
 	LockMutex (vid->guard);
-	vid->want_frame = SoundDecoder_GetFrame (sample->decoder);
+	vid->want_frame = SoundDecoder_GetFrame (decoder);
 	UnlockMutex (vid->guard);
 
 	return true;
@@ -542,7 +485,9 @@ vp_AudioStart (TFB_SoundSample* sample)
 static void
 vp_AudioEnd (TFB_SoundSample* sample)
 {
-	TFB_VideoClip* vid = sample->data;
+	TFB_VideoClip* vid = (TFB_VideoClip*) TFB_GetSoundSampleData (sample);
+
+	assert (vid != NULL);
 
 	LockMutex (vid->guard);
 	vid->want_frame = vid->decoder->frame_count; // end it
@@ -552,9 +497,12 @@ vp_AudioEnd (TFB_SoundSample* sample)
 static void
 vp_BufferTag (TFB_SoundSample* sample, TFB_SoundTag* tag)
 {
-	TFB_VideoClip* vid = sample->data;
-	uint32 frame = (uint32) (intptr_t) tag->data;
-	
+	TFB_VideoClip* vid = (TFB_VideoClip*) TFB_GetSoundSampleData (sample);
+	uint32 frame = (uint32) tag->data;
+
+	assert (sizeof (tag->data) >= sizeof (frame));
+	assert (vid != NULL);
+
 	LockMutex (vid->guard);
 	vid->want_frame = frame; // let it go!
 	UnlockMutex (vid->guard);
@@ -563,9 +511,10 @@ vp_BufferTag (TFB_SoundSample* sample, TFB_SoundTag* tag)
 static void
 vp_QueueBuffer (TFB_SoundSample* sample, audio_Object buffer)
 {
-	//TFB_VideoClip* vid = sample->data;
+	//TFB_VideoClip* vid = (TFB_VideoClip*) TFB_GetSoundSampleData (sample);
+	TFB_SoundDecoder *decoder = TFB_GetSoundSampleDecoder (sample);
 
 	TFB_TagBuffer (sample, buffer,
-			(void *) (intptr_t) SoundDecoder_GetFrame (sample->decoder));
+			(intptr_t) SoundDecoder_GetFrame (decoder));
 }
 
