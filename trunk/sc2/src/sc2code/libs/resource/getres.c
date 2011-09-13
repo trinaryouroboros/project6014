@@ -105,6 +105,30 @@ res_GetResource (RESOURCE res)
 			// May still be NULL, if the load failed.
 }
 
+const char *
+res_GetResourceType (RESOURCE res)
+{
+	RESOURCE_INDEX resourceIndex;
+	ResourceDesc *desc;
+	
+	if (res == NULL_RESOURCE)
+	{
+		log_add (log_Warning, "Trying to get type of null resource");
+		return NULL;
+	}
+	
+	resourceIndex = _get_current_index_header ();
+	desc = lookupResourceDesc (resourceIndex, res);
+	if (desc == NULL)
+	{
+		log_add (log_Warning, "Trying to get type of undefined resource '%s'",
+				 res);
+		return NULL;
+	}
+	
+	return desc->vtable->resType;
+}
+
 DWORD
 res_GetIntResource (RESOURCE res)
 {

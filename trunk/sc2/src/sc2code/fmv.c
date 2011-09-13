@@ -195,7 +195,8 @@ LurgCutScene (void)
 	xform_buf[0] = FadeAllToBlack;
 	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
 	
-	ShowPresentation ( CaptureStringTable (LoadStringTable (LURGPRES_STRTAB)));
+	//ShowPresentation ( CaptureStringTable (LoadStringTable (LURGPRES_STRTAB)));
+	ShowPresentation (LURGPRES_STRTAB); // JMS: Changed to UQM 0.7. style.
 	
 	xform_buf[0] = FadeAllToBlack;
 	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
