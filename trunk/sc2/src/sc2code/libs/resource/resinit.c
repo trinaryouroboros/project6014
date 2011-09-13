@@ -25,6 +25,7 @@
 #include "libs/reslib.h"
 #include "libs/sndlib.h"
 #include "libs/vidlib.h"
+#include "coderes.h"
 #include "propfile.h"
 #include <ctype.h>
 #include <stdlib.h>
@@ -348,6 +349,7 @@ InitResourceSystem (void)
 	InstallGraphicResTypes ();
 	InstallStringTableResType ();
 	InstallAudioResTypes ();
+	InstallVideoResType ();
 	InstallCodeResType ();
 
 	return ndx;
