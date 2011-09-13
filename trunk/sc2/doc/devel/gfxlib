@@ -28,12 +28,12 @@ The graphics system in UQM has three major subsystems:
 The datatypes the code uses directly are CONTEXT, FRAME, and FONT, all
 of which are really pointers to void.  Pointers to those are PCONTEXT,
 PFRAME, and PFONT.  Then there's DRAWABLE, which is a DWORD, and its
-pointer type PDRAWABLE. (These are defined in sc2code/libs/gfxlib.h.)
+pointer type PDRAWABLE. (These are defined in uqm/libs/gfxlib.h.)
 I'm not sure how DRAWABLE values are transformed into actual drawable
 entities.
 
 The full structures for these are in various files in
-sc2code/libs/graphics.
+uqm/libs/graphics.
 
 context.h:  defines CONTEXT_DESC and PCONTEXT_DESC (and the equivalent
             CONTEXTPTR -- insert various sorts of incomprenshible
@@ -58,7 +58,7 @@ font.h:     defines FONT_DESC and PFONT_DESC.
 			----------------------
 
 The TFB_Draw commands have a single header file:
-sc2code/libs/graphics/tfb_draw.h.  This file declares the following
+uqm/libs/graphics/tfb_draw.h.  This file declares the following
 data types:
 
 SCREEN: This is an enum, naming the various screens that the DrawCmd
