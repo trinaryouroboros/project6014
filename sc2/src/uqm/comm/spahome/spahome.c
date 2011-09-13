@@ -214,7 +214,8 @@ ExitConversation (RESPONSE_REF R)
 }
 
 
-static void CivilisedConversation(RESPONSE_REF R)
+static void
+CivilisedConversation (RESPONSE_REF R)
 {
     NPCPhrase (ANYTHING_ELSE);
     Response (be_back_later, ExitConversation);
@@ -222,11 +223,10 @@ static void CivilisedConversation(RESPONSE_REF R)
 
 
 static void
-TurnLightsOn(RESPONSE_REF R)
+TurnLightsOn (RESPONSE_REF R)
 {
     XFormColorMap (GetColorMapAddress (
-                                SetAbsColorMapIndex (CommData.AlienColorMap, 1)
-                            ), ONE_SECOND / 2);
+		SetAbsColorMapIndex (CommData.AlienColorMap, 1)), ONE_SECOND / 2);
     NPCPhrase (LIGHTS_NOW_ON);
     
     SET_GAME_STATE (SPATHIHOME_MET, 1);

@@ -7,7 +7,7 @@ in the the meantime, and for those who seek to edit the script files
 (to conform to 3DO, PC, and/or director's cut versions).
 
 This file will describe the format, and how it relates to the source
-code in the src/sc2code/comm directory.
+code in the src/uqm/comm directory.
 
 The .txt files
 --------------
@@ -55,10 +55,10 @@ tool looks for all cases where "..." does not occur in midsentence.
 When editing the script files, check your intended results against
 this.
 
-The .h files (src/sc2code/comm)
+The .h files (src/uqm/comm)
 -------------------------------
 
-Each race has its own directory in src/sc2code/comm, and there is a
+Each race has its own directory in src/uqm/comm, and there is a
 file marked strings.h in each directory.  This file defines a single
 enum which should list every record identifier in the appropriate
 race's .txt file over in content/comm/{race}, IN THE PRECISE ORDER
