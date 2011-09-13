@@ -1,4 +1,13 @@
-uqm_SUBDIRS="uqm getopt res"
+uqm_SUBDIRS="uqm res"
+
+case "$HOST_SYSTEM" in
+	ARMV5|GCCE|WINSCW)
+		;;
+	*)
+		uqm_SUBDIRS="$uqm_SUBDIRS getopt"
+		;;
+esac
+
 case "$HOST_SYSTEM" in
 	Darwin)
 		uqm_SUBDIRS="$uqm_SUBDIRS darwin"
