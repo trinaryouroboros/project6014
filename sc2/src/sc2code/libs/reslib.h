@@ -59,7 +59,6 @@ long LengthResFile (uio_Stream *fp);
 BOOLEAN res_CloseResFile (uio_Stream *fp);
 BOOLEAN DeleteResFile (uio_DirHandle *dir, const char *filename);
 
-RESOURCE_INDEX InitResourceSystem (void);
 void UninitResourceSystem (void);
 BOOLEAN InstallResTypeVectors (const char *res_type, ResourceLoadFun *loadFun, ResourceFreeFun *freeFun, ResourceStringFun *stringFun);
 void *res_GetResource (RESOURCE res);
@@ -99,12 +98,6 @@ extern DIRENTRY_REF LoadDirEntryTable (uio_DirHandle *dirHandle,
 #define GetDirEntryAddress GetStringAddress
 
 /* Key-Value resources */
-
-void res_LoadFilename (uio_DirHandle *path, const char *fname);
-void res_SaveFilename (uio_DirHandle *path, const char *fname, const char *root);
-
-void res_LoadFile (uio_Stream *fname);
-void res_SaveFile (uio_Stream *fname, const char *root);
 
 BOOLEAN res_HasKey (const char *key);
 

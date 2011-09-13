@@ -1,4 +1,4 @@
-uqm_SUBDIRS="uqm res"
+uqm_SUBDIRS="sc2code res"
 
 if [ "$uqm_HAVE_GETOPT_LONG" = 0 ]; then
 	uqm_SUBDIRS="$uqm_SUBDIRS getopt"

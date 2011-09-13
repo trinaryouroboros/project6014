@@ -59,7 +59,6 @@
 #include "setup.h"
 #include "starcon.h"
 
-
 #if defined (GFXMODULE_SDL)
 #	include SDL_INCLUDE(SDL.h)
 			// Including this is actually necessary on OSX.
@@ -223,6 +222,7 @@ static int parseIntOption (const char *str, int *result,
 static int parseFloatOption (const char *str, float *f,
 		const char *optName);
 static void parseIntVolume (int intVol, float *vol);
+static int parseVolume (const char *str, float *vol, const char *optName);
 static int InvalidArgument (const char *supplied, const char *opt_name);
 static const char *choiceOptString (const struct int_option *option);
 static const char *boolOptString (const struct bool_option *option);
@@ -349,6 +349,7 @@ main (int argc, char *argv[])
 		getUserConfigOptions (&options);
 	}
 
+		
 	{	/* remove old control template names */
 		int i;
 
@@ -1091,6 +1092,28 @@ parseIntVolume (int intVol, float *vol)
 	}
 
 	*vol = intVol / 100.0f;
+	return;
+}
+
+static int
+parseVolume (const char *str, float *vol, const char *optName)
+{
+	char *endPtr;
+	int intVol;
+
+	if (str[0] == '\0')
+	{
+		log_add (log_Error, "Error: Invalid value for '%s'.", optName);
+		return -1;
+	}
+	intVol = (int) strtol (str, &endPtr, 10);
+	if (*endPtr != '\0')
+	{
+		log_add (log_Error, "Error: Junk characters in volume specified "
+				"for '%s'.", optName);
+		return -1;
+	}
+	parseIntVolume (intVol, vol);
 	return;
 }
 

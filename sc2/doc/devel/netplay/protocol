@@ -204,7 +204,7 @@ aren't expected.
 
 "Reset" negotiation.
 
-See src/uqm/netplay/proto.c
+See src/sc2code/netplay/proto.c
 
 
 ============================================================================

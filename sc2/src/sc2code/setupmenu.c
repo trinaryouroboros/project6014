@@ -332,7 +332,7 @@ do_editkeys (WIDGET *self, int event)
 static void
 change_template (WIDGET_CHOICE *self, int oldval)
 {
-	(void) oldval; // satisfy compiler
+	(void) oldval;
 	populate_editkeys (self->selected);
 }
 
@@ -522,8 +522,6 @@ OnTextEntryChange (TEXTENTRY_STATE *pTES)
 static BOOLEAN
 OnTextEntryFrame (TEXTENTRY_STATE *pTES)
 {
-	//	WIDGET_TEXTENTRY *widget = (WIDGET_TEXTENTRY *) pTES->CbParam;
-
 	redraw_menu ();
 
 	SleepThreadUntil (pTES->NextTime);
