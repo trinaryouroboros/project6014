@@ -1,4 +1,4 @@
-The file src/uqm/uqmdebug.c and src/uqm/uqmdebug.h contain various
+The file src/sc2code/uqmdebug.c and src/sc2code/uqmdebug.h contain various
 debugging functions, which are included in the binary when the game
 is built in debug mode.
 These functions can be called from anywhere in the code, though some

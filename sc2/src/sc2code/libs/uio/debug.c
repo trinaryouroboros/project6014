@@ -168,7 +168,7 @@ initRepository(void) {
 #endif
 #if 1
 	mountHandles[1] = debugMountOne(repository, "/", uio_FSTYPE_STDIO,
-			NULL, NULL, "/home/svdb/cvs/sc2/src/uqm/ships",
+			NULL, NULL, "/home/svdb/cvs/sc2/src/sc2code/ships",
 			autoMount, uio_MOUNT_TOP | uio_MOUNT_RDONLY, NULL);
 #endif
 #if 1
