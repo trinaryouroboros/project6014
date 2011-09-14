@@ -91,7 +91,7 @@ We're sorry to hear that. We'll remind the Chmmr of your Struggle. I'm sure they
 Thank you Earthling, your assistance is greatly appreciated once again.
 
 #(ask_scar)
-Hey! What's with that scar? Old Tanaka had one just like it.
+What's with that scar? Old Tanaka had one just like it.
 
 #(ANSWER_SCAR)
 Ahh... The Ceremonial Scar.

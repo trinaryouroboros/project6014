@@ -207,7 +207,7 @@ ARISPACE_MASK_PMAP_ANIM,graphics.arispace,sc2code/igfxres.h,GFXRES,base/nav/quas
 ORZSPACE_MASK_PMAP_ANIM,graphics.orzspace,sc2code/igfxres.h,GFXRES,base/nav/orzspace.ani
 IPBKGND_MASK_PMAP_ANIM,graphics.obbkgnd,sc2code/igfxres.h,GFXRES,base/nav/obbkgnd.ani
 SISIP_MASK_PMAP_ANIM,graphics.sis_ip,sc2code/igfxres.h,GFXRES,base/nav/explorer_ip.ani
-ORBPLAN_MASK_PMAP_ANIM,graphics.orbplan,sc2code/igfxres.h,GFXRES,base/nav/orbplan.ani
+ORBPLAN_MASK_PMAP_ANIM,graphics.planets,sc2code/igfxres.h,GFXRES,base/nav/orbplan.ani
 SUN_MASK_PMAP_ANIM,graphics.ip_sun,sc2code/igfxres.h,GFXRES,base/nav/ip_sun.ani
 ORZSPACEPORTAL_MASK_PMAP_ANIM,graphics.ip_orzspaceportal,sc2code/igfxres.h,GFXRES,base/nav/ip_orzspaceportal.ani
 LANDER_MASK_PMAP_ANIM,graphics.lander,sc2code/igfxres.h,GFXRES,base/lander/lander.ani
