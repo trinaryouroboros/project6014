@@ -3,4 +3,4 @@
    instead and regenerate. */
 
 #define EXP_VICTORY_SONG "ship.explorer.ditty"
-#define SIS_VICTORY_SONG "ship.sis_ship.ditty"
+#define SIS_VICTORY_SONG "ship.flagship.ditty"
