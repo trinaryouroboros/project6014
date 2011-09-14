@@ -39,6 +39,7 @@ PROJECT COORDINATION
 #(Project coordinator)
 13 C
 Cedric Horner
+Jaakko Markus Seppälä
  
 
 #(Art)
@@ -48,7 +49,7 @@ ART
 #(Art team)
 13 C
 Damon Czanik
-Gergely Sinkó
+Gergely Sink�
 Aki Rissanen
 Mike Ling
 Amir Keren
@@ -61,7 +62,7 @@ DIALOGUE AND PLOT
 13 C
 Cedric Horner
 Jaakko Markus Seppälä
-Gergely Sinkó
+Gergely Sink�
 Damon Czanik
 
 #(Programming)
