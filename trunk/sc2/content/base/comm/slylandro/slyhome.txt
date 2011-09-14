@@ -162,9 +162,6 @@ We go in peace and wish you do the same.
 
 
 
-
-
-
 #(RECALL_PROGRAM_1)	slyho004.ogg
 Ah! human Traveller. We have news.
 One of our probes finally returned home
