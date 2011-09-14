@@ -3,4 +3,4 @@
    instead and regenerate. */
 
 #define EXP_SHIP_SOUNDS "ship.explorer.sounds"
-#define SIS_SHIP_SOUNDS "ship.sis_ship.sounds"
+#define SIS_SHIP_SOUNDS "ship.flagship.sounds"

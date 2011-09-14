@@ -391,7 +391,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 
 			if (FleetPtr->known_strength 
 				&& FleetPtr->SpeciesID!=SLYLANDRO_KOHRAH_ID // JMS: Don't draw circle for Slylandro-Kohrahs
-				&& FleetPtr->SpeciesID!=KOHR_AH_ID)	// JMS: Don't draw circle for Kohr-Ahs
+				&& FleetPtr->SpeciesID!=KOHR_AH_ID)			// JMS: Don't draw circle for Kohr-Ahs
 			{
 				RECT repair_r;
 
@@ -1301,8 +1301,7 @@ DoMoveCursor (MENU_STATE *pMS)
 			UpdateCursorInfo (pMS, last_buf);
 			UpdateFuelRequirement (pMS);
 
-			SetMenuRepeatDelay (MIN_ACCEL_DELAY, MAX_ACCEL_DELAY,
-					STEP_ACCEL_DELAY, TRUE);
+			SetMenuRepeatDelay (MIN_ACCEL_DELAY, MAX_ACCEL_DELAY, STEP_ACCEL_DELAY, TRUE);
 			SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
 		}
 		else
@@ -1336,7 +1335,7 @@ DoMoveCursor (MENU_STATE *pMS)
 		}
 		// BW: we need to go through this because 4x only checks for
 		// input every ONE_SECOND/40 or so, thus reducing
-		// MIN_ACCEL_STEP is of no use. In practice it's similar.
+		// MIN_ACCEL_DELAY is of no use. In practice it's similar.
 		
 		if (sx != 0 || sy != 0)
 		{

@@ -59,7 +59,7 @@ static RESOURCE code_resources[] = {
 		ISD_CODE, // JMS
 		SIS_CODE,
 		SAMATRA_CODE,
-		PROBE_CODE };
+		URQUAN_DRONE_CODE };
 
 RACE_DESC *
 load_ship (SPECIES_ID SpeciesID, BOOLEAN LoadBattleData)
