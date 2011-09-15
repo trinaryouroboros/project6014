@@ -3,7 +3,7 @@
 
 The Wiki is for general development-related documentation for the game.
 
-This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from here.  Those that aren't can be found via the [http://code.google.com/p/project6014/w/list list of all Wiki pages].
+This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from here.  Those that aren't can be found via the *[http://code.google.com/p/project6014/w/list list of all Wiki pages]*.
 
 = Contents =
 
@@ -16,3 +16,5 @@ This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from 
 == Administration ==
 
 Project [Rules]
+
+[PortingChanges] from UQM
