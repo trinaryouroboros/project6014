@@ -4,7 +4,7 @@
 
 #define BATTLE_MUSIC "music.battle"
 #define CREDITS_MUSIC "music.credits"
-#define HYPERSPACE_MUSIC "music.hyper"
+#define HYPERSPACE_MUSIC "music.hyperspace"
 #define IP_MUSIC "music.space"
 #define MAINMENU_MUSIC "music.mainmenu"
 #define MELEE_MUSIC "music.meleemenu"
@@ -15,7 +15,7 @@
 #define ORBIT5_MUSIC "music.orbit5"
 #define ORZSPACE_MUSIC "music.orzspace"
 #define OUTFIT_MUSIC "music.outfit"
-#define QUASISPACE_MUSIC "music.arispace"
+#define QUASISPACE_MUSIC "music.quasispace"
 #define REDALERT_MUSIC "music.redalert"
 #define SHIPYARD_MUSIC "music.shipyard"
 #define STARBASE_MUSIC "music.starbase"
