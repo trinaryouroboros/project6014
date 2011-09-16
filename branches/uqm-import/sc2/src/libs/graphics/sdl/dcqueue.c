@@ -220,17 +220,17 @@ TFB_EnqueueDrawCommand (TFB_DrawCommand* DrawCommand)
 		static RECT scissor_rect;
 
 		// Set the clipping region.
-		if (scissor_rect.corner.x != _pCurContext->ClipRect.corner.x
-				|| scissor_rect.corner.y != _pCurContext->ClipRect.corner.y
-				|| scissor_rect.extent.width !=
-				_pCurContext->ClipRect.extent.width
-				|| scissor_rect.extent.height !=
-				_pCurContext->ClipRect.extent.height)
+		// We allow drawing with no current context set, so the whole screen
+		if ((_pCurContext && !rectsEqual (scissor_rect, _pCurContext->ClipRect))
+				|| (!_pCurContext && scissor_rect.extent.width != 0))
 		{
 			// Enqueue command to set the glScissor spec
 			TFB_DrawCommand DC;
 
-			scissor_rect = _pCurContext->ClipRect;
+			if (_pCurContext)
+				scissor_rect = _pCurContext->ClipRect;
+			else
+				scissor_rect.extent.width = 0;
 
 			if (scissor_rect.extent.width)
 			{
