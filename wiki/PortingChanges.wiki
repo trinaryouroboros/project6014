@@ -25,7 +25,13 @@ Corresponding log for uqm-import: http://code.google.com/p/project6014/source/li
 
 Original Project 6014 issue for porting changes: http://code.google.com/p/project6014/issues/detail?id=21 (now complete)
 
-Replay script (TODO)
+The Subversion replay script can be found at: http://code.google.com/p/ejrh/source/browse/trunk/utils/replay.py
+
+Usage is:
+  # svn checkout https://project6014.googlecode.com/svn/branches/uqm-import/ uqm-import
+  # In the uqm-import working copy, run: `replay.py PASSWORD`
+
+Password is found on https://code.google.com/hosting/settings
 
 
 == Current state ==
