@@ -180,7 +180,7 @@ The fate of your world and your heart relate to these matters.
 #(ARILOU_HINTS_3)	arilou-021.ogg
 The carnate forces of Ur-Quan and Kohr-Ah are twined about the memory of pain.
 They respond to these words:
-'Hold! What you are doing to us is wrong! Why do you do this thing?'
+`Hold! What you are doing to us is wrong! Why do you do this thing?'
 
 #(ARILOU_HINTS_4)	arilou-022.ogg
 The enemy of your enemy is your friend... at least for a time.
@@ -355,7 +355,7 @@ The source of the Umgah's compulsion is the Talking Pet you gave the Umgah,
 but now it is intelligent and exhibits strange powers.
 
 #(BAD_NEWS_ABOUT_TPET)	arilou-043.ogg
-That is very bad news. This creature, a super-intelligent, physically coercive creature
+That is very bad news. This creature, a super-intelligent, psychically coercive creature
 is very similar to a race of beings which was thought to have vanished over 20,000 years ago.
 They were called the Dnyarri, and history tells that they ruled a wide region of this galaxy
 for many thousands of years. The Dnyarri were cruel and devious
