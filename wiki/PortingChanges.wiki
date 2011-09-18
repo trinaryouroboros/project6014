@@ -30,9 +30,9 @@ Replay script (TODO)
 
 == Current state ==
 
-(As at September 15 2011.)
+(As at September 18 2011.)
 
-Revisions up to 3333 of UQM have been imported; UQM is currently up to 3695 so there are outstanding revisions to port.
+All extant revisions from UQM have been ported; the most recent is 3695 on 2011-09-09 21:36:34.
 
 Large changes involving content file renames have been merged into trunk, up to r628.  I believe all useful changes up to that point have been ported.
 
