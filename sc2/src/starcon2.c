@@ -397,6 +397,7 @@ main (int argc, char *argv[])
 	prepareContentDir (options.contentDir, options.addonDir, argv[0]);
 	prepareMeleeDir ();
 	prepareSaveDir ();
+	prepareShadowAddons (options.addons);
 #if 0
 	initTempDir ();
 #endif
