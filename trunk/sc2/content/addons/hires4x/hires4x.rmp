@@ -914,3 +914,4 @@ slides.ending = STRTAB:addons/hires4x/cutscene/ending/ending.txt
 slides.intro = STRTAB:addons/hires4x/cutscene/intro/intro.txt
 slides.lurgcutscene = STRTAB:addons/hires4x/cutscene/cinematic1/cine1.txt
 graphics.newgame4x = GFXRES:base/ui/newgame4x.ani
+text.starcon = STRTAB:addons/hires4x/gamestrings.txt
