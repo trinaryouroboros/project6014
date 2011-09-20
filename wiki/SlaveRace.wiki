@@ -1,22 +1,22 @@
 #labels Races
-= Tarnoon =
+= Foon-foon =
 
-(Formerly known as SlaveRace.)
+(Formerly known as Tarnoon. Even more formerly known as SlaveRace.)
 
   * *Connected races:* Baul[MasterRace]
   * *Connected devices:*
 
 == Summary info ==
 
-Under the yoke of (Baul). Almost their entire Sphere of Influence is consumed by that of the Baul�s - almost. One star will serve as a base for a rebellion which you can instigate. If you choose to help the Tarnoon, you gain their alliance, but the Baul allies with the [Lurg].
+Under the yoke of (Baul). Almost their entire Sphere of Influence is consumed by that of the Baul�s - almost. One star will serve as a base for a rebellion which you can instigate. If you choose to help the foon-foon, you gain their alliance, but the Baul allies with the [Lurg].
 
-If you deal arms to both the Baul AND the Tarnoon you gain a lot of RU, the destruction of both species, and quite a nasty reputation.
+If you deal arms to both the Baul AND the Foon-foon you gain a lot of RU, the destruction of both species, and quite a nasty reputation.
 
-It could be that the Tarnoon manufacture a lot of the Baul's industrial goods, and so if you free them, they could lower the prices of all stuff / provide constant source of RU.
+It could be that the Foon-foon manufacture a lot of the Baul's industrial goods, and so if you free them, they could lower the prices of all stuff / provide constant source of RU.
 
  (See my comment about Larry Niven's "Known Space" universe above at the Baul description. -- jorisvddonk)
 
-Tarnoon COULD find a bomb that�s one of the Exotics' megaweapons (that somehow didn't go off as planned). So it would be more plausible that they're kinda equal in their fight against the Baul when it ensues. Also that would be a nice subplot, having to talk them out of using it. Maybe having them deliver it to you, the "peace-mediator". You can opt to use it on either of the races if you so choose...
+Foon-foon COULD find a bomb that�s one of the Exotics' megaweapons (that somehow didn't go off as planned). So it would be more plausible that they're kinda equal in their fight against the Baul when it ensues. Also that would be a nice subplot, having to talk them out of using it. Maybe having them deliver it to you, the "peace-mediator". You can opt to use it on either of the races if you so choose...
 
 This megaweapon could be used to attain the "alternative good ending" of the game IF we implement two possible good endings.
 
