@@ -2124,7 +2124,7 @@ Module
 Game
 
 
-#(Exit menu)
+#(exit menu)
 Exit menu
 
 
@@ -2252,7 +2252,7 @@ Mineral
 Energy
 
 
-#(Miological)
+#(Biological)
 Biological
 
 

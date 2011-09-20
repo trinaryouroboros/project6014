@@ -2028,144 +2028,144 @@ Day:
 Tilt: 
 
 
-#(Scan)
-Scan
+#(scan)
+scan
 
 
-#(Starmap)
-Starmap
+#(starmap)
+starmap
 
 
-#(Devices)
-Devices
+#(devices)
+devices
 
 
-#(Cargo)
-Cargo
+#(cargo)
+cargo
 
 
-#(Roster)
-Roster
+#(roster)
+roster
 
 
-#(Game)
-Game
+#(game)
+game
 
 
-#(Navigate)
-Navigate
+#(navigate)
+navigate
 
 
-#(Mineral)
-Mineral
+#(mineral)
+mineral
 
 
-#(Energy)
-Energy
+#(energy)
+energy
 
 
-#(Biological)
-Biological
-
-
-#(Exit menu)
-Exit menu
-
-
-#(Autoscan)
-Autoscan
-
-
-#(Dispatch)
-Dispatch
-
-
-#(Save game)
-Save game
-
-
-#(Load game)
-Load game
-
-
-#(Quit game)
-Quit game
-
-
-#(Settings)
-Settings
-
-
-#(Exit menu)
-Exit menu
-
-
-#(Converse)
-Converse
-
-
-#(Attack!)
-Attack!
-
-
-#(Game)
-Game
-
-
-#(Fuel)
-Fuel
-
-
-#(Module)
-Module
-
-
-#(Game)
-Game
+#(biological)
+biological
 
 
 #(exit menu)
-Exit menu
+exit menu
 
 
-#(Crew)
-Crew
+#(autoscan)
+autoscan
 
 
-#(Game)
-Game
+#(dispatch)
+dispatch
 
 
-#(Exit menu)
-Exit menu
+#(save game)
+save game
 
 
-#(Sound)
-Sound
+#(load game)
+load game
 
 
-#(Music)
-Music
+#(quit game)
+quit game
 
 
-#(Voice)
-Voice
+#(settings)
+settings
 
 
-#(Cyborg)
-Cyborg
+#(exit menu)
+exit menu
 
 
-#(Captain)
-Captain
+#(converse)
+converse
 
 
-#(Flagship)
-Flagship
+#(attack!)
+attack!
 
 
-#(Exit menu)
-Exit menu
+#(game)
+game
+
+
+#(fuel)
+fuel
+
+
+#(module)
+module
+
+
+#(game)
+game
+
+
+#(exit menu)
+exit menu
+
+
+#(crew)
+crew
+
+
+#(game)
+game
+
+
+#(exit menu)
+exit menu
+
+
+#(sound)
+sound
+
+
+#(music)
+music
+
+
+#(voice)
+voice
+
+
+#(cyborg)
+cyborg
+
+
+#(captain)
+captain
+
+
+#(flagship)
+flagship
+
+
+#(exit menu)
+exit menu
 
 
 #(must restart)
@@ -2200,72 +2200,72 @@ Estimated time of completion: never
 
 
 
-#(No, play!)
-No, play!
+#(no, play!)
+no, play!
 
 
-#(Yes, quit!)
-Yes, quit!
+#(yes, quit!)
+yes, quit!
 
 
-#(Scan)
-Scan
+#(scan)
+scan
 
 
-#(Starmap)
-Starmap
+#(starmap)
+starmap
 
 
-#(Manifest)
-Manifest
+#(manifest)
+manifest
 
 
-#(Game)
-Game
+#(game)
+game
 
 
-#(Navigate)
-Navigate
+#(navigate)
+navigate
 
 
-#(Cargo)
-Cargo
+#(cargo)
+cargo
 
 
-#(Devices)
-Devices
+#(devices)
+devices
 
 
-#(Roster)
-Roster
+#(roster)
+roster
 
 
-#(Exit menu)
-Exit menu
+#(exit menu)
+exit menu
 
 
-#(Mineral)
-Mineral
+#(mineral)
+mineral
 
 
-#(Energy)
-Energy
+#(energy)
+energy
 
 
-#(Biological)
-Biological
+#(biological)
+biological
 
 
-#(Autoscan)
-Autoscan
+#(autoscan)
+autoscan
 
 
-#(Dispatch)
-Dispatch
+#(dispatch)
+dispatch
 
 
-#(Exit menu)
-Exit menu
+#(exit menu)
+exit menu
 
 
 #(mouse_err)
