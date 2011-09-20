@@ -1,5 +1,5 @@
 #(TITLE)
-Ur-Quan Masters Setup
+Project6014 Setup
 
 #(SUBTITLES)
 
@@ -449,7 +449,7 @@ Sets the speech volume.
 Quit Setup Menu
 Return to Main Menu
 Graphics Options
-PC/3do Compatibility Options
+PC/3do Options
 Sound Options
 Resources Options
 Configure Controls
