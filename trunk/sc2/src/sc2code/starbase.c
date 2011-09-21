@@ -780,6 +780,8 @@ ExitStarBase:
 			UnlockMutex (GraphicsLock);
 			pMS->CurState = NewState;
 		}
+
+		SleepThread (ONE_SECOND / 30);
 	}
 
 	return (TRUE);

@@ -326,6 +326,9 @@ res_GetString (const char *key)
 	ResourceDesc *desc = lookupResourceDesc (idx, key);
 	if (!desc || !desc->resdata.ptr || strcmp(desc->vtable->resType, "STRING"))
 		return NULL;
+	/* TODO: Work out exact STRING semantics, specifically, the lifetime of
+	 *   the returned value. If caller is allowed to reference the returned
+	 *   value forever, STRING has to be ref-counted. */
 	return (const char *)desc->resdata.ptr;
 }
 
@@ -426,7 +429,8 @@ res_Remove (const char *key)
 	{
 		if (oldDesc->resdata.ptr != NULL)
 		{
-			log_add (log_Warning, "WARNING: Replacing '%s' while it is live", key);
+			if (oldDesc->refcount > 0)
+				log_add (log_Warning, "WARNING: Replacing '%s' while it is live", key);
 			if (oldDesc->vtable && oldDesc->vtable->freeFun)
 			{
 				oldDesc->vtable->freeFun(oldDesc->resdata.ptr);

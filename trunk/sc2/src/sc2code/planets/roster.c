@@ -364,6 +364,8 @@ SelectSupport:
 					"flash roster menu");
 	}
 
+	SleepThread (ONE_SECOND / 30);
+
 	return TRUE;
 }
 

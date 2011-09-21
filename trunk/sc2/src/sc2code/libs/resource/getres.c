@@ -73,6 +73,31 @@ err:
 	return NULL;
 }
 
+const char *
+res_GetResourceType (RESOURCE res)
+{
+	RESOURCE_INDEX resourceIndex;
+	ResourceDesc *desc;
+	
+	if (res == NULL_RESOURCE)
+	{
+		log_add (log_Warning, "Trying to get type of null resource");
+		return NULL;
+	}
+	
+	resourceIndex = _get_current_index_header ();
+	desc = lookupResourceDesc (resourceIndex, res);
+	if (desc == NULL)
+	{
+		log_add (log_Warning, "Trying to get type of undefined resource '%s'",
+				res);
+		return NULL;
+	}
+	
+	return desc->vtable->resType;
+}
+	
+
 // Get a resource by its resource ID.
 void *
 res_GetResource (RESOURCE res)
@@ -96,37 +121,13 @@ res_GetResource (RESOURCE res)
 		return NULL;
 	}
 
+	if (desc->resdata.ptr == NULL)
+		loadResourceDesc (desc);
 	if (desc->resdata.ptr != NULL)
-		return desc->resdata.ptr;
-
-	loadResourceDesc (desc);
+		++desc->refcount;
 
 	return desc->resdata.ptr;
 			// May still be NULL, if the load failed.
-}
-
-const char *
-res_GetResourceType (RESOURCE res)
-{
-	RESOURCE_INDEX resourceIndex;
-	ResourceDesc *desc;
-	
-	if (res == NULL_RESOURCE)
-	{
-		log_add (log_Warning, "Trying to get type of null resource");
-		return NULL;
-	}
-	
-	resourceIndex = _get_current_index_header ();
-	desc = lookupResourceDesc (resourceIndex, res);
-	if (desc == NULL)
-	{
-		log_add (log_Warning, "Trying to get type of undefined resource '%s'",
-				 res);
-		return NULL;
-	}
-	
-	return desc->vtable->resType;
 }
 
 DWORD
@@ -175,6 +176,13 @@ res_FreeResource (RESOURCE res)
 		return;
 	}
 
+	if (desc->refcount > 0)
+		--desc->refcount;
+	else
+		log_add (log_Debug, "Warning: freeing an unreferenced resource.");
+	if (desc->refcount > 0)
+		return; // Still references left
+
 	freeFun = desc->vtable->freeFun;
 	if (freeFun == NULL)
 	{
@@ -215,7 +223,7 @@ res_DetachResource (RESOURCE res)
 	freeFun = desc->vtable->freeFun;
 	if (freeFun == NULL)
 	{
-		log_add (log_Debug, "Warning: trying to detatch from a non-heap resource.");
+		log_add (log_Debug, "Warning: trying to detach from a non-heap resource.");
 		return NULL;
 	}
 	
@@ -226,8 +234,16 @@ res_DetachResource (RESOURCE res)
 		return NULL;
 	}
 
+	if (desc->refcount > 1)
+	{
+		log_add (log_Debug, "Warning: trying to detach a resource referenced "
+				"%u times", desc->refcount);
+		return NULL;
+	}
+
 	result = desc->resdata.ptr;
 	desc->resdata.ptr = NULL;
+	desc->refcount = 0;
 
 	return result;
 }

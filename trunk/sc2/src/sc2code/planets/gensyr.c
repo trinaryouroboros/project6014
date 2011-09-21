@@ -71,7 +71,7 @@ GenerateTrap (BYTE control)
 void
 GenerateSyreen (BYTE control)
 {
-	if (CurStarDescPtr->Index == MYCON_TRAP_DEFINED)
+	if (CurStarDescPtr && CurStarDescPtr->Index == MYCON_TRAP_DEFINED)
 	{
 		GenerateTrap (control);
 		return;
@@ -83,7 +83,7 @@ GenerateSyreen (BYTE control)
 			GenerateRandomIP (GENERATE_MOONS);
 			if (pSolarSysState->pBaseDesc == &pSolarSysState->PlanetDesc[0])
 			{
-				pSolarSysState->MoonDesc[0].data_index = (BYTE)~0;
+				pSolarSysState->MoonDesc[0].data_index = HIERARCHY_STARBASE;
 				pSolarSysState->MoonDesc[0].radius = MIN_MOON_RADIUS;
 				pSolarSysState->MoonDesc[0].location.x =
 						COSINE (QUADRANT, pSolarSysState->MoonDesc[0].radius);

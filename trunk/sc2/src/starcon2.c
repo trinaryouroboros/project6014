@@ -271,7 +271,7 @@ main (int argc, char *argv[])
 	int optionsResult;
 	int gfxDriver;
 	int gfxFlags;
-//	int i;
+	int i;
 
 	// NOTE: we cannot use the logging facility yet because we may have to
 	//   log to a file, and we'll only get the log file name after parsing
@@ -442,17 +442,45 @@ main (int argc, char *argv[])
 
 	StartThread (Starcon2Main, NULL, 1024, "Starcon2Main");
 
-	for (;;)
+	for (i = 0; i < 2000 && !MainExited; )
 	{
+		if (QuitPosted)
+		{	/* Try to stop the main thread, but limited number of times */
+			SignalStopMainThread ();
+			++i;
+		}
+
 		TFB_ProcessEvents ();
 		ProcessThreadLifecycles ();
 		TFB_FlushGraphics ();
 	}
 
-#if 0
-	unInitTempDir ();
+	/* Currently, we use atexit() callbacks everywhere, so we
+	 *   cannot simply call unInitAudio() and the like, because other
+	 *   tasks might still be using it */
+	if (MainExited)
+	{
+		// Not yet: TFB_UninitInput ();
+		unInitAudio ();
+		uninit_communication ();
+		UninitColorMaps ();
+		// Not yet: TFB_UninitGraphics ();
+
+#ifdef NETPLAY
+		NetManager_uninit ();
+		Alarm_uninit ();
+		Network_uninit ();
 #endif
-	uninitIO ();
+
+		// Not yet: CleanupTaskSystem ();
+		UnInitTimeSystem ();
+#if 0
+		unInitTempDir ();
+#endif
+		uninitIO ();
+		UnInitThreadSystem ();
+		mem_uninit ();
+	}
 
 	log_showBox (false, false);
 	

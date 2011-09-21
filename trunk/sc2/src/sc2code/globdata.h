@@ -1197,6 +1197,9 @@ typedef struct
 	POINT autopilot;
 	POINT ip_location;
 	STAMP ShipStamp;
+	UWORD ShipFacing;
+	BYTE ip_planet;
+	BYTE in_orbit;
 	VELOCITY_DESC velocity;
 
 	DWORD BattleGroupRef;
