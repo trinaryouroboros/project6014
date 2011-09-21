@@ -522,7 +522,9 @@ unhyper_transition (ELEMENT *ElementPtr)
 				GLOBAL (CurrentActivity) |= START_ENCOUNTER;
 				break;
 			case INTERPLANETARY_TRANSITION:
-				GLOBAL (ShipStamp.frame) = 0;
+				GLOBAL (ip_planet) = 0;
+				GLOBAL (in_orbit) = 0;
+				GLOBAL (ShipFacing) = 0; /* Not reentering the system */
 				SET_GAME_STATE (USED_BROADCASTER, 0);
 				
 				// JMS: Entering star or portal in ORZ space
@@ -618,7 +620,7 @@ unhyper_transition (ELEMENT *ElementPtr)
 				 * or HyperSpace from QuasiSpace through the periodically
 				 * opening portal.
 				 */
-				GLOBAL (ShipStamp.frame) = 0;
+				GLOBAL (ShipFacing) = 0; /* Not reentering the system */
 				SET_GAME_STATE (USED_BROADCASTER, 0);
 				GLOBAL (autopilot.x) = ~0;
 				GLOBAL (autopilot.y) = ~0;

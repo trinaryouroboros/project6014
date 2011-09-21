@@ -1,4 +1,16 @@
 Changes towards version 0.7:
+- Do not pause the game in places where not relevant (bug #984) - Alex
+- Fixed crashes and potential weirdness when loading savegames from
+  a Homeworld encounter screen (bug #997) - Alex
+- Cleanup of GLOBAL(ShipStamp.frame) abuse; fixes bug #1054 - Alex
+- Game attempts to exit cleanly under normal circustances (bug #52) - Alex
+- Fixed Mmrnmhrm's X-Form transformation without energy use (bug #1004) - Alex
+- Added missing sleeps in DoInput() functions (bug #893) - Alex
+- Starmap unit conversion corrections; fixes bug #970 - Alex
+- Rounding-error correction in log(x|y)ToUniverse (bug #1046), from Nic
+- Change hardcoded Starbase and Sa-Matra values to pretty enum values
+  (bug #1047), from Nic
+- Load override.cfg from user's dir to add or override menu controls - Alex
 - Allow addons to override any content by placing zips into their
   'shadow-content' dir - Alex
 - Content reorg: font chars now use hexadecimal numbering - Alex

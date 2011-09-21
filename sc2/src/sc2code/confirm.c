@@ -86,7 +86,7 @@ BOOLEAN
 DoConfirmExit (void)
 {
 	BOOLEAN result;
-	static BOOLEAN in_confirm = FALSE;
+
 	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
 			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
 			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
@@ -96,12 +96,6 @@ DoConfirmExit (void)
 		PauseTrack ();
 
 	LockMutex (GraphicsLock);
-	if (in_confirm)
-	{
-		result = FALSE;
-		ExitRequested = FALSE;
-	}
-	else
 	{
 		RECT r;
 		STAMP s;
@@ -110,7 +104,6 @@ DoConfirmExit (void)
 		RECT oldRect;
 		BOOLEAN response = FALSE, done;
 
-		in_confirm = TRUE;
 		oldContext = SetContext (ScreenContext);
 		GetContextClipRect (&oldRect);
 		SetContextClipRect (NULL);
@@ -133,16 +126,20 @@ DoConfirmExit (void)
 		FlushGraphics ();
 		//LockMutex (GraphicsLock);
 
-		GLOBAL (CurrentActivity) |= CHECK_ABORT;
 		FlushInput ();
 		done = FALSE;
-
+		
 		do {
 			// Forbid recursive calls or pausing here!
 			ExitRequested = FALSE;
 			GamePaused = FALSE;
 			UpdateInputState ();
-			if (PulsedInputState.menu[KEY_MENU_SELECT])
+			if (GLOBAL (CurrentActivity) & CHECK_ABORT)
+			{	// something else triggered an exit
+				done = TRUE;
+				response = TRUE;
+			}
+			else if (PulsedInputState.menu[KEY_MENU_SELECT])
 			{
 				done = TRUE;
 				PlayMenuSound (MENU_SOUND_SUCCESS);
@@ -158,21 +155,21 @@ DoConfirmExit (void)
 				DrawConfirmationWindow (response);
 				PlayMenuSound (MENU_SOUND_MOVE);
 			}
-			TaskSwitch ();
+			SleepThread (ONE_SECOND / 30);
 		} while (!done);
 
 		s.frame = F;
 		DrawStamp (&s);
 		DestroyDrawable (ReleaseDrawable (s.frame));
 		ClearSystemRect ();
-		if (response)
+		if (response || (GLOBAL (CurrentActivity) & CHECK_ABORT))
 		{
 			result = TRUE;
+			GLOBAL (CurrentActivity) |= CHECK_ABORT;
 		}		
 		else
 		{
 			result = FALSE;
-			GLOBAL (CurrentActivity) &= ~CHECK_ABORT;
 		}
 		ExitRequested = FALSE;
 		GamePaused = FALSE;
@@ -194,7 +191,6 @@ DoConfirmExit (void)
 			do_subtitles ((void *)~0);
 	}
 
-	in_confirm = FALSE;
 	return (result);
 }
 

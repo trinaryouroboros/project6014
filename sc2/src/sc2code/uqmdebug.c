@@ -511,7 +511,9 @@ doInstantMove (void)
 			GLOBAL (CurrentActivity) &= ~IN_BATTLE;
 
 			// Enter IP:
-			GLOBAL (ShipStamp.frame) = 0;
+			GLOBAL (ShipFacing) = 0;
+			GLOBAL (ip_planet) = 0;
+			GLOBAL (in_orbit) = 0;
 					// This causes the ship position in IP to be reset.
 			GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
 		}
@@ -1030,11 +1032,11 @@ dumpMoon (FILE *out, const PLANET_DESC *moon)
 {
 	const char *typeStr;
 	
-	if (moon->data_index == (BYTE) ~0)
+	if (moon->data_index == HIERARCHY_STARBASE)
 	{
 		typeStr = "StarBase";
 	}
-	else if (moon->data_index == (BYTE) (~0 - 1))
+	else if (moon->data_index == SA_MATRA)
 	{
 		typeStr = "Sa-Matra";
 	}
@@ -1054,13 +1056,11 @@ dumpWorld (FILE *out, const PLANET_DESC *world)
 	PLANET_INFO *info;
 	//	COUNT bio[NUM_CREATURE_TYPES + NUM_SPECIAL_CREATURE_TYPES + NUM_B_CREATURE_TYPES + NUM_C_CREATURE_TYPES];
 	
-	if (world->data_index == (BYTE) ~0) {
-		// StarBase
+	if (world->data_index == HIERARCHY_STARBASE) {
 		return;
 	}
 	
-	if (world->data_index == (BYTE)(~0 - 1)) {
-		// Sa-Matra
+	if (world->data_index == SA_MATRA) {
 		return;
 	}
 
@@ -1284,13 +1284,11 @@ tallyMoonCallback (const PLANET_DESC *moon, void *arg)
 static void
 tallyResourcesWorld (TallyResourcesArg *arg, const PLANET_DESC *world)
 {
-	if (world->data_index == (BYTE) ~0) {
-		// StarBase
+	if (world->data_index == HIERARCHY_STARBASE) {
 		return;
 	}
 	
-	if (world->data_index == (BYTE)(~0 - 1)) {
-		// Sa-Matra
+	if (world->data_index == SA_MATRA) {
 		return;
 	}
 

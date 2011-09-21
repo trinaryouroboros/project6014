@@ -1068,6 +1068,8 @@ ChangeFlashRect:
 		}
 	}
 
+	SleepThread (ONE_SECOND / 30);
+
 	return TRUE;
 }
 

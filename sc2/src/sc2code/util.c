@@ -189,19 +189,19 @@ PauseGame (void)
 	FlushGraphics ();
 	//LockMutex (GraphicsLock);
 
-	while (ImmediateInputState.menu[KEY_PAUSE])
+	while (ImmediateInputState.menu[KEY_PAUSE] && GamePaused)
 	{
 		BeginInputFrame ();
 		TaskSwitch ();
 	}
 
-	while (!ImmediateInputState.menu[KEY_PAUSE])
+	while (!ImmediateInputState.menu[KEY_PAUSE] && GamePaused)
 	{
 		BeginInputFrame ();
 		TaskSwitch ();
 	}
 
-	while (ImmediateInputState.menu[KEY_PAUSE])
+	while (ImmediateInputState.menu[KEY_PAUSE] && GamePaused)
 	{
 		BeginInputFrame ();
 		TaskSwitch ();

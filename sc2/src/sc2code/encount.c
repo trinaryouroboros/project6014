@@ -211,8 +211,7 @@ InitEncounter (void)
 	PlayMusic (MR, FALSE, 1);
 	SegueFrame = CaptureDrawable (LoadGraphic (SEGUE_PMAP_ANIM));
 	UnlockMutex (GraphicsLock);
-	while (PLRPlaying (MR))
-		TaskSwitch ();
+	WaitForSoundEnd (TFBSOUND_WAIT_ALL);
 	StopMusic ();
 	DestroyMusic (MR);
 	LockMutex (GraphicsLock);
@@ -537,7 +536,7 @@ UninitEncounter (void)
 					DrawSISMessage (NULL);
 					if (LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
 						DrawHyperCoords (GLOBAL (ShipStamp.origin));
-					else if (HIWORD (GLOBAL (ShipStamp.frame)) == 0)
+					else if (GLOBAL (ip_planet) == 0)
 						DrawHyperCoords (CurStarDescPtr->star_pt);
 					else
 						DrawSISTitle(GLOBAL_SIS (PlanetName));
@@ -657,7 +656,8 @@ UninitEncounter (void)
 								for (j = 0; j < NUM_SHIP_FADES; ++j)
 								{
 									UnlockMutex (GraphicsLock);
-									Sleepy = (BOOLEAN)!AnyButtonPress (TRUE);
+									Sleepy = (BOOLEAN)!AnyButtonPress (TRUE) &&
+											!(GLOBAL (CurrentActivity) & CHECK_ABORT);
 									LockMutex (GraphicsLock);
 									if (!Sleepy)
 										break;
@@ -693,6 +693,7 @@ UninitEncounter (void)
 			FlushInput ();
 			Time = GetTimeCounter () + (ONE_SECOND * 3);
 			UnlockMutex (GraphicsLock);
+			// TODO: handle rapid quit
 			while (!(AnyButtonPress (TRUE)) && GetTimeCounter () < Time)
 				TaskSwitch ();
 			LockMutex (GraphicsLock);
@@ -723,6 +724,7 @@ UninitEncounter (void)
 					DrawFadeText (str1, str2, TRUE, &scavenge_r);
 					Time = GetTimeCounter () + ONE_SECOND * 2;
 					UnlockMutex (GraphicsLock);
+					// TODO: handle rapid quit
 					while (!(AnyButtonPress (TRUE))
 							&& GetTimeCounter () < Time)
 						TaskSwitch ();

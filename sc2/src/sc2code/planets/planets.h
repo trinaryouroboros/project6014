@@ -121,8 +121,6 @@ enum
 #define MIN_MOON_RADIUS (35 << RESOLUTION_FACTOR) // JMS_GFX
 #define MOON_DELTA (20 << RESOLUTION_FACTOR) // JMS_GFX
 
-#define PLANET_SHIELDED (1 << 7)
-
 #define BLUE_SHIELD (1 << 0)
 
 // JMS: Restricted planets are not allowed to land on. For example race homeworlds

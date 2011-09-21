@@ -231,8 +231,8 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 			if (group_loc != 0) /* if in planetary views */
 			{
 				detect_dist *= (MAX_ZOOM_RADIUS / MIN_ZOOM_RADIUS);
-				// JMS: Bye bye, Ur-Quan probe.
-				//if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
+				// JMS: Bye bye, Ur-Quan drone.
+				//if (GroupPtr->race_id == URQUAN_DRONE_SHIP)
 				//	detect_dist <<= 1;
 			}
 			vdx = GLOBAL (ip_location.x) - GroupPtr->loc.x;
@@ -622,8 +622,8 @@ ip_group_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 	{
 		EncounterGroup = GroupPtr->group_id;
 
-		// JMS: So long, Ur-Quan probe.
-		/*if (GroupPtr->race_id == URQUAN_PROBE_SHIP)
+		// JMS: So long, Ur-Quan drone.
+		/*if (GroupPtr->race_id == URQUAN_DRONE_SHIP)
 		{
 			GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
 			GroupPtr->dest_loc = 0;

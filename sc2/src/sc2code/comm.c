@@ -1098,6 +1098,7 @@ static void
 PlayerResponseInput (ENCOUNTER_STATE *pES)
 {
 	BYTE response;
+	DWORD TimeIn = GetTimeCounter ();
 
 	if (pES->top_response == (BYTE)~0)
 	{
@@ -1173,6 +1174,8 @@ PlayerResponseInput (ENCOUNTER_STATE *pES)
 			UnbatchGraphics ();
 			UnlockMutex (GraphicsLock);
 		}
+
+		SleepThreadUntil (TimeIn + ONE_SECOND / 20);
 	}
 }
 
@@ -1440,6 +1443,9 @@ HailAlien (void)
 	SetContextFont (OldFont);
 	DestroyFont (PlayerFont);
 
+	// Some support code tests either of these to see if the
+	// game is currently in comm or encounter
+	CommData.ConversationPhrasesRes = 0;
 	CommData.ConversationPhrases = 0;
 	pCurInputState = 0;
 }
@@ -1476,7 +1482,7 @@ InitCommunication (CONVERSATION which_comm)
 			DrawSISMessage (NULL);
 			if (LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
 				DrawHyperCoords (GLOBAL (ShipStamp.origin));
-			else if (HIWORD (GLOBAL (ShipStamp.frame)) == 0)
+			else if (GLOBAL (ip_planet) == 0)
 				DrawHyperCoords (CurStarDescPtr->star_pt);
 			else
 				DrawSISTitle (GLOBAL_SIS (PlanetName));
