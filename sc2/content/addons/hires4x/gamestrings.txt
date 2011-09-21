@@ -1868,14 +1868,6 @@ Yes
 No
 
 
-#(Don't Quit)
-Don't Quit
-
-
-#(Quit Game)
-Quit Game
-
-
 #(Cr)
 Cr
 
@@ -2198,14 +2190,6 @@ Estimated time of completion: never
 
 #()
 
-
-
-#(No, play!)
-No, play!
-
-
-#(Yes, quit!)
-Yes, quit!
 
 
 #(Scan)

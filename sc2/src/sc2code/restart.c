@@ -332,7 +332,7 @@ DoRestart (MENU_STATE *pMS)
 		LockMutex (GraphicsLock);
 		SetFlashRect (NULL, (FRAME)0);
 		UnlockMutex (GraphicsLock);
-		DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 58));
+		DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 56));
 				// Mouse not supported message
 		SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);	
 		SetTransitionSource (NULL);
