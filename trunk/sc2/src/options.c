@@ -66,6 +66,7 @@ uio_DirHandle *contentDir;
 uio_DirHandle *configDir;
 uio_DirHandle *saveDir;
 uio_DirHandle *meleeDir;
+uio_MountHandle* contentMountHandle;
 
 char baseContentPath[PATH_MAX];
 
@@ -139,7 +140,6 @@ prepareContentDir (const char *contentDirName, const char* addonDirName, char *e
 {
 	const char *testFile = "version";
 	const char *loc;
-	uio_MountHandle* contentMountHandle;
 
 	if (contentDirName == NULL)
 	{
@@ -553,7 +553,7 @@ prepareShadowAddons (const char **addons)
 		if (shadowDir)
 		{
 			log_add (log_Debug, "Mounting shadow content of '%s' addon", addon);
-			mountDirZips (shadowDir, "/", uio_MOUNT_TOP, NULL);
+			mountDirZips (shadowDir, "/", uio_MOUNT_ABOVE, contentMountHandle);
 			uio_closeDir (shadowDir);
 		}
 		uio_closeDir (addonDir);
