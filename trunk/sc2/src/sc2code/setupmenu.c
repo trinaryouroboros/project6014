@@ -96,8 +96,8 @@ static WIDGET_CONTROLENTRY controlentries[CONTROLENTRY_COUNT];
 typedef int (*HANDLER)(WIDGET *, int);
 
 static int choice_widths[CHOICE_COUNT] = {
-	3, 2, 3, 3, 2, 2, 2, 2, 2, 2, 
-	2, 2, 3, 2, 2, 3, 3, 2,	3, 3, 
+	3, 2, 3, 2, 2, 2, 2, 2, 2, 2, 
+	2, 2, 2, 2, 2, 3, 3, 2,	3, 3, 
 	3, 2 };
 
 static HANDLER button_handlers[BUTTON_COUNT] = {
