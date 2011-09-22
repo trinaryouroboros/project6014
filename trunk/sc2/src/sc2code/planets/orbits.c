@@ -463,13 +463,13 @@ YellowDistribution (BYTE which_world)
 }
 
 #define DWARF_ROCK_DIST MIN_PLANET_RADIUS
-#define DWARF_GASG_DIST SCALE_RADIUS (12 << RESOLUTION_FACTOR) // JMS_GFX
+#define DWARF_GASG_DIST SCALE_RADIUS (12)
 
-#define GIANT_ROCK_DIST SCALE_RADIUS (8 << RESOLUTION_FACTOR) // JMS_GFX
-#define GIANT_GASG_DIST SCALE_RADIUS (13 << RESOLUTION_FACTOR) // JMS_GFX
+#define GIANT_ROCK_DIST SCALE_RADIUS (8)
+#define GIANT_GASG_DIST SCALE_RADIUS (13)
 
-#define SUPERGIANT_ROCK_DIST SCALE_RADIUS (16 << RESOLUTION_FACTOR) // JMS_GFX
-#define SUPERGIANT_GASG_DIST SCALE_RADIUS (33 << RESOLUTION_FACTOR) // JMS_GFX
+#define SUPERGIANT_ROCK_DIST SCALE_RADIUS (16)
+#define SUPERGIANT_GASG_DIST SCALE_RADIUS (33)
 
 void
 FillOrbits (SOLARSYS_STATE *system, BYTE NumPlanets,
@@ -523,7 +523,7 @@ char scolor[] = {'B', 'G', 'O', 'R', 'W', 'Y'};
 	{
 		BYTE chance;
 		DWORD rand_val;
-		COUNT min_radius, angle;
+		DWORD min_radius, angle; // JMS_GFX: Was COUNT. Changed to avoid overflows in 1280x960.
 		SIZE delta_r;
 		PLANET_DESC *pLocPD;
 
@@ -533,8 +533,7 @@ char scolor[] = {'B', 'G', 'O', 'R', 'W', 'Y'};
 			if (TypesDefined)
 				rand_val = 0;
 			else
-				pPD->data_index =
-						(BYTE)(HIBYTE (LOWORD (rand_val)) % MaxPlanet);
+				pPD->data_index = (BYTE)(HIBYTE (LOWORD (rand_val)) % MaxPlanet);
 
 			chance = PLANET_NEVER;
 			switch (StarColor)
