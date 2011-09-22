@@ -35,8 +35,8 @@ typedef enum
 
 #ifdef COMM_INTERNAL
 
-#define SLIDER_Y (107 << RESOLUTION_FACTOR) // JMS_GFX
-#define SLIDER_HEIGHT (15 << RESOLUTION_FACTOR) // JMS_GFX
+#define SLIDER_Y ((107 << RESOLUTION_FACTOR) + RESOLUTION_FACTOR * 23) // JMS_GFX
+#define SLIDER_HEIGHT (15)// << RESOLUTION_FACTOR) // JMS_GFX
 
 #include "commanim.h"
 
