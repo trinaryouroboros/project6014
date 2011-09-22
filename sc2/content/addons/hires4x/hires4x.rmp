@@ -128,6 +128,7 @@ graphics.circles_c = GFXRES:addons/hires4x/lander/energy/circles_c.ani
 graphics.drutrans = GFXRES:addons/hires4x/lander/energy/burvixcaster.ani
 graphics.eartmask = GFXRES:addons/hires4x/planets/earthmask.ani
 graphics.eggcase = GFXRES:addons/hires4x/lander/energy/eggcase.ani
+graphics.flagship = GFXRES:addons/hires4x/nav/explorer_ip.ani
 graphics.flagstat = GFXRES:addons/hires4x/ui/flagstat.ani
 graphics.fontgrad = GFXRES:addons/hires4x/fonts/fontgrad.ani
 graphics.hyperstr = GFXRES:addons/hires4x/nav/hyperstr.ani
