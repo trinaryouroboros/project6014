@@ -2110,8 +2110,6 @@ rotate_planet_task (void *data)
 	zoom_from = (UBYTE)TFB_Random () & 0x03;
 	zoom_frames = init_zoom_array (zoom_arr);
 	zoom_amt = zoom_arr[frame_num];
-	
-	log_add (log_Debug, "Zoom frameja %d", zoom_frames);
 
 	// Disable zooming when already in orbit
 	if (LastActivity & CHECK_LOAD)
