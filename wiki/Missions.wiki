@@ -1,0 +1,56 @@
+#summary A list of all the missions and side missions available here for the full game.
+
+= Tasks to Complete =
+
+This is a list of tasks, missions, and side-quests for the player to complete. These are reasons for the player to visit these races or pick up these objects to finish the game.
+
+
+= Alien Tasks =
+
+Alien race will have a set of tasks, missions, and side-quests for the player to accomplish:
+
+==Syreen==
+
+  Visit the Syreen homeworld and tell them of your mission. They will give you a new ship.
+
+==Orz==
+
+  No missions are currently given by the Orz.
+
+==Androsynth==
+
+  No missions are curently given by the Androsynth.
+
+==Foon Foon==
+
+  They will ask you to help them against the MasterRace.
+
+==Baul==
+
+  No missions are currently given by the Baul.
+
+==Humans==
+
+No missions are currently given by the humans.
+
+
+==Yehat==
+
+  No missions are currently given by the Yehat.
+
+==Exotics==
+
+  No missions are currently given by the Extoics.
+
+
+==Faz==
+
+  No missions are currently given by the Faz.
+
+==Lurg==
+
+  # *Find the Precursor Ship*:
+    If you visit the planet with the Precursor Ship holding the Black Orb you'll encounter the Lurg. After battling the Lurg you can explore the planet. After exploring the planet you'll encounter a Precursor ship and pick up the Black Orb. A cutscene (cutscene1) will start where you are hopelessly outnumbered by the Lurg. (This is where the demo ends).
+
+
+ 
