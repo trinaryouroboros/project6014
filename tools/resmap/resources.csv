@@ -549,7 +549,7 @@ ARILOU_ALT_COLOR_MAP,comm.arilou_alt.colortable,sc2code/comm/arilou/igfxres.h,BI
 COMMANDER_MUSIC,comm.commander.music,sc2code/comm/comandr/imusicre.h,MUSICRES,base/comm/commander/commander.mod
 STARBASE_ALT_MUSIC,comm.starbase.music,sc2code/comm/comandr/imusicre.h,--,--
 COMMANDER_LOWPOW_MUSIC,comm.commander.lowpower.music,sc2code/comm/comandr/imusicre.h,--,--
-COMMANDER_FONT,comm.commander.font,sc2code/comm/comandr/ifontres.h,FONTRES,base/fonts/commander.fon
+COMMANDER_FONT,comm.commander.font,sc2code/comm/comandr/ifontres.h,FONTRES,base/fonts/player.fon
 COMMANDER_COLOR_MAP,comm.commander.colortable,sc2code/comm/comandr/istrtab.h,BINTAB,base/comm/commander/commander.ct
 COMMANDER_CONVERSATION_PHRASES,comm.commander.dialogue,sc2code/comm/comandr/istrtab.h,CONVERSATION,base/comm/commander/commander.txt
 STARBASE_CONVERSATION_PHRASES,comm.starbase.dialogue,sc2code/comm/comandr/istrtab.h,CONVERSATION,base/comm/starbase/starbase.txt

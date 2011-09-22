@@ -192,8 +192,7 @@ add_text (int status, TEXT *pTextIn)
 		{
 			case -3:
 				// Unknown. Never reached; color matches the background color.
-				SetContextForeGroundColor (
-						BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
+				SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 				break;
 			case -2:
 				// Not highlighted dialog options.
@@ -207,7 +206,7 @@ add_text (int status, TEXT *pTextIn)
 
 		maxchars = pTextIn->CharCount;
 		locText = *pTextIn;
-		locText.baseline.x -= 8 + RESOLUTION_FACTOR; // JMS_GFX
+		locText.baseline.x -= (8 << RESOLUTION_FACTOR) - 4 * RESOLUTION_FACTOR; // JMS_GFX
 		locText.CharCount = (COUNT)~0;
 		locText.pStr = STR_BULLET;
 		font_DrawText (&locText);
@@ -506,19 +505,22 @@ RefreshResponses (ENCOUNTER_STATE *pES)
 	BYTE response;
 	SIZE leading;
 	STAMP s;
+	BYTE extra_y; // JMS_GFX
 
 	SetContext (SpaceContext);
 	GetContextFontLeading (&leading);
 	BatchGraphics ();
 
 	DrawSISComWindow ();
-	y = SLIDER_Y + SLIDER_HEIGHT + 1;
-	for (response = pES->top_response; response < pES->num_responses;
-			++response)
+	y = SLIDER_Y + SLIDER_HEIGHT + (1 << RESOLUTION_FACTOR); // JMS_GFX
+	for (response = pES->top_response; response < pES->num_responses; ++response)
 	{
-		pES->response_list[response].response_text.baseline.x = TEXT_X_OFFS + 8;
-		pES->response_list[response].response_text.baseline.y = y + leading;
+		extra_y = (response == pES->top_response ? 0 : 8 * RESOLUTION_FACTOR); // JMS_GFX
+		
+		pES->response_list[response].response_text.baseline.x = TEXT_X_OFFS + (8 << RESOLUTION_FACTOR); // JMS_GFX
+		pES->response_list[response].response_text.baseline.y = y + leading + extra_y; // JMS_GFX
 		pES->response_list[response].response_text.align = ALIGN_LEFT;
+		
 		if (response == pES->cur_response)
 			y = add_text (-1, &pES->response_list[response].response_text);
 		else
@@ -921,7 +923,7 @@ typedef struct summary_state
 static BOOLEAN
 DoConvSummary (SUMMARY_STATE *pSS)
 {
-#define DELTA_Y_SUMMARY (8 << RESOLUTION_FACTOR) // JMS_GFX
+#define DELTA_Y_SUMMARY ((8 << RESOLUTION_FACTOR) - 2 * RESOLUTION_FACTOR) // JMS_GFX
 #define MAX_SUMM_ROWS ((SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT) \
 			/ DELTA_Y_SUMMARY) - (1 << RESOLUTION_FACTOR) // JMS_GFX
 
@@ -962,7 +964,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		r.corner.x = 0;
 		r.corner.y = 0;
 		r.extent.width = SIS_SCREEN_WIDTH;
-		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + (2 << RESOLUTION_FACTOR); // JMS_GFX
+		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + (2 << RESOLUTION_FACTOR) + 16 * RESOLUTION_FACTOR; // JMS_GFX
 
 		LockMutex (GraphicsLock);
 		SetContextForeGroundColor (COMM_HISTORY_BACKGROUND_COLOR);
@@ -1154,13 +1156,12 @@ PlayerResponseInput (ENCOUNTER_STATE *pES)
 
 			LockMutex (GraphicsLock);
 			BatchGraphics ();
-			add_text (-2,
-					&pES->response_list[pES->cur_response].response_text);
+			add_text (-2, &pES->response_list[pES->cur_response].response_text);
 
 			pES->cur_response = response;
 
-			y = add_text (-1,
-					&pES->response_list[pES->cur_response].response_text);
+			y = add_text (-1, &pES->response_list[pES->cur_response].response_text);
+			
 			if (response < pES->top_response)
 			{
 				pES->top_response = 0;
@@ -1350,7 +1351,7 @@ HailAlien (void)
 	TextCacheContext = CreateContext ();
 	TextCacheFrame = CaptureDrawable (
 			CreateDrawable (WANT_PIXMAP, SIS_SCREEN_WIDTH,
-			SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + 2, 1));
+			SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + (2 << RESOLUTION_FACTOR), 1));
 	SetContext (TextCacheContext);
 	SetContextFGFrame (TextCacheFrame);
 	TextBack = BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x10), 0x00);
