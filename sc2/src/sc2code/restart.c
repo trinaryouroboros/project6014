@@ -74,11 +74,7 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 	if (resFactorWasChanged)
 	{	
 		DestroyFont (StarConFont);
-		
-		if (resolutionFactor > 0)
-			StarConFont = LoadFont (FALLBACK_FONT);
-		else
-			StarConFont = LoadFont (STARCON_FONT);
+		StarConFont = LoadFont (FALLBACK_FONT);
 	}
 	
 	pMS->CurFrame = s.frame;
