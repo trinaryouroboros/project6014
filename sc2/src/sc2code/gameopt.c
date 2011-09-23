@@ -653,7 +653,7 @@ ShowSummary (SUMMARY_DESC *pSD)
 	else
 	{
 		// Game slot used, draw information about save game.
-		BYTE i;
+		BYTE i, res_scale; //JMS_GFX
 		RECT OldRect;
 		TEXT t;
 		QUEUE player_q;
@@ -785,12 +785,26 @@ ShowSummary (SUMMARY_DESC *pSD)
 		r.extent.height = 7 << RESOLUTION_FACTOR; // JMS_GFX
 		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
 		DrawFilledRectangle (&r);
-		t.baseline.x = /*r.corner.x + (SIS_MESSAGE_WIDTH >> 1)*/ 6 << RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.x = 6 << RESOLUTION_FACTOR; // JMS_GFX
 		t.baseline.y = r.corner.y + (r.extent.height - 1) - RESOLUTION_FACTOR * 2; // JMS_GFX
 		t.align = ALIGN_LEFT;
 		t.pStr = buf;
-		r.corner.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
-		r.corner.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
+		
+		// JMS: Let's make savegames work even between different resolution modes.
+		// Reading the hyperspace coordinates to RECT r.
+		if (pSD->res_factor > RESOLUTION_FACTOR)
+		{
+			res_scale  = pSD->res_factor - RESOLUTION_FACTOR;
+			r.corner.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x) >> res_scale);
+			r.corner.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y) >> res_scale);
+		}
+		else if (pSD->res_factor <= RESOLUTION_FACTOR)
+		{
+			res_scale  = RESOLUTION_FACTOR - pSD->res_factor;
+			r.corner.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x) << res_scale);
+			r.corner.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y) << res_scale);
+		}
+
 		switch (pSD->Activity)
 		{
 			case IN_LAST_BATTLE:
@@ -829,7 +843,7 @@ ShowSummary (SUMMARY_DESC *pSD)
 				break;
 		}
 
-		// Planet name or hyperspace coordinates.
+		// Printing the planet name or hyperspace coordinates.
 		SetContextFont (TinyFont);
 		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x1B), 0x33));
 		t.CharCount = (COUNT)~0;
