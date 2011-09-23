@@ -1,5 +1,5 @@
-// JMS 2009: Added byte OrzSpace in SummaryDesc to notify if in orz space or not
 // JMS 2010: Explorer has smaller thrust increment in interplanetary
+// JMS 2011: Added to BYTE res_factor to SUMMARY_DESC to enable saving/loading from different res modes.
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
@@ -235,7 +235,7 @@ typedef struct
 	BYTE NumShips, NumDevices;
 	BYTE ShipList[MAX_BUILT_SHIPS];
 	BYTE DeviceList[MAX_EXCLUSIVE_DEVICES];
-	BYTE OrzSpace;	// JMS: Shows in saved game summaries if we are in Orz space
+	BYTE res_factor;	// JMS: Stores resolution factor to enable saving/loading from different res modes.
 } SUMMARY_DESC;
 
 #define OVERRIDE_LANDER_FLAGS (1 << 7)

@@ -17,6 +17,7 @@
  */
 
 // JMS 2010: - Added Encounter pointer's home and destination pt's to house transport ships to LoadEncounter
+// JMS 2011: - Added loading res_factor to summary_desc. It'll help making saves between different resolutions compatible.
 
 #include <assert.h>
 
@@ -292,8 +293,8 @@ LoadEncounter (ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	cread_16  (fh, &EncounterPtr->origin.x);
 	cread_16  (fh, &EncounterPtr->origin.y);
 	cread_16  (fh, &EncounterPtr->radius);
-	cread_16  (fh, &EncounterPtr->destination_pt.x);	//JMS
-	cread_16  (fh, &EncounterPtr->destination_pt.y);	//JMS
+	cread_16  (fh, &EncounterPtr->destination_pt.x);//JMS
+	cread_16  (fh, &EncounterPtr->destination_pt.y);//JMS
 	cread_16  (fh, &EncounterPtr->home_pt.x);		//JMS
 	cread_16  (fh, &EncounterPtr->home_pt.y);		//JMS
 	// STAR_DESC fields
@@ -482,6 +483,7 @@ LoadSummary (SUMMARY_DESC *SummPtr, void *fp)
 			read_8  (fp, &SummPtr->NumDevices) != 1 ||
 			read_a8 (fp, SummPtr->ShipList, MAX_BUILT_SHIPS) != 1 ||
 			read_a8 (fp, SummPtr->DeviceList, MAX_EXCLUSIVE_DEVICES) != 1 ||
+			read_8  (fp, &SummPtr->res_factor) != 1 || // JMS: This'll help making saves between different resolutions compatible.
 
 			read_16  (fp, NULL) != 1 /* padding */
 		)

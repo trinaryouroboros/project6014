@@ -18,6 +18,7 @@
 
 // JMS 2009: - Added IN_ORZSPACE condition check to PrepareSummary
 // JMS 2010: - Added Encounter pointer's home and destination pt's to house transport ships to SaveEncounter
+// JMS 2011: - Added saving res_factor to summary_desc. It'll help making saves between different resolutions compatible.
 
 #include <assert.h>
 
@@ -267,10 +268,10 @@ SaveEncounter (const ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	cwrite_16  (fh, EncounterPtr->origin.x);
 	cwrite_16  (fh, EncounterPtr->origin.y);
 	cwrite_16  (fh, EncounterPtr->radius);
-	cwrite_16  (fh, EncounterPtr->destination_pt.x);//JMS
-	cwrite_16  (fh, EncounterPtr->destination_pt.y);//JMS
-	cwrite_16  (fh, EncounterPtr->home_pt.x);		//JMS
-	cwrite_16  (fh, EncounterPtr->home_pt.y);		//JMS
+	cwrite_16  (fh, EncounterPtr->destination_pt.x);// JMS
+	cwrite_16  (fh, EncounterPtr->destination_pt.y);// JMS
+	cwrite_16  (fh, EncounterPtr->home_pt.x);		// JMS
+	cwrite_16  (fh, EncounterPtr->home_pt.y);		// JMS
 	// STAR_DESC fields
 	cwrite_16  (fh, EncounterPtr->SD.star_pt.x);
 	cwrite_16  (fh, EncounterPtr->SD.star_pt.y);
@@ -450,6 +451,7 @@ SaveSummary (const SUMMARY_DESC *SummPtr, void *fp)
 			write_8  (fp, SummPtr->NumDevices) != 1 ||
 			write_a8 (fp, SummPtr->ShipList, MAX_BUILT_SHIPS) != 1 ||
 			write_a8 (fp, SummPtr->DeviceList, MAX_EXCLUSIVE_DEVICES) != 1 ||
+			write_8  (fp, SummPtr->res_factor) != 1 || // JMS: This'll help making saves in different resolutions compatible.
 
 			write_16  (fp, 0) != 1 /* padding */
 		)
@@ -477,7 +479,7 @@ PrepareSummary (SUMMARY_DESC *SummPtr)
 	switch (SummPtr->Activity = LOBYTE (GLOBAL (CurrentActivity)))
 	{
 		case IN_HYPERSPACE:
-			if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) // JMS: this condition stores that we're in ORZ space
+			if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) // JMS: this condition stores that we're in ORZ space.
 				SummPtr->Activity = IN_ORZSPACE;
 			if (GET_GAME_STATE (ARILOU_SPACE_SIDE) > 1)
 				SummPtr->Activity = IN_QUASISPACE;
@@ -519,6 +521,8 @@ PrepareSummary (SUMMARY_DESC *SummPtr)
 	SummPtr->day_index = GLOBAL (GameClock.day_index);
 	SummPtr->month_index = GLOBAL (GameClock.month_index);
 	SummPtr->year_index = GLOBAL (GameClock.year_index);
+	
+	SummPtr->res_factor = RESOLUTION_FACTOR; // JMS: This'll help making saves in different resolutions compatible.
 }
 
 static void
