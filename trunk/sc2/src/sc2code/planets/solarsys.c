@@ -909,11 +909,6 @@ UndrawShip (void)
 	SIZE radius, delta_x, delta_y;
 	BOOLEAN LeavingInnerSystem;
 
-#ifdef SHOW_RADAR
-	extern void DrawIPRadar (BOOLEAN FirstTime);
-	DrawIPRadar (FALSE);
-#endif /* SHOW_RADAR */
-
 	LeavingInnerSystem = FALSE;
 	radius = pSolarSysState->SunDesc[0].radius;
 	if (GLOBAL (ShipStamp.origin.x) < 0
@@ -1274,7 +1269,9 @@ IP_frame (void)
 		LockMutex (GraphicsLock);
 		DrawStatusMessage (NULL);
 		if (LastActivity == CHECK_LOAD)
+		{	// Selected LOAD from main menu
 			pSolarSysState->MenuState.CurState = (ROSTER + 1) + 1;
+		}
 		else
 		{
 			UnlockMutex (GraphicsLock);
@@ -1990,4 +1987,112 @@ ExploreSolarSys (void)
 	pSolarSysState = 0;
 }
 
+UNICODE *
+GetNamedPlanetaryBody (void)
+{
+	int planet;
+	int moon;
+	int parent_planet;
 
+	if (!CurStarDescPtr || !pSolarSysState || !pSolarSysState->pOrbitalDesc)
+		return NULL; // Not inside an inner system, so no name
+
+	planet = pSolarSysState->pOrbitalDesc - pSolarSysState->PlanetDesc;
+	moon = pSolarSysState->pOrbitalDesc - pSolarSysState->MoonDesc;
+	parent_planet = pSolarSysState->pOrbitalDesc->pPrevDesc
+				- pSolarSysState->PlanetDesc;
+
+	if (CurStarDescPtr->Index == SOL_DEFINED)
+	{	// Planets and moons in Sol
+		if (pSolarSysState->pOrbitalDesc->pPrevDesc == pSolarSysState->SunDesc)
+		{	// A planet
+			return GAME_STRING (PLANET_NUMBER_BASE + planet);
+		}
+		// Moons
+		switch (parent_planet)
+		{
+			case 2: // Earth
+				switch (moon)
+				{
+					case 0: // Starbase
+						return GAME_STRING (STARBASE_STRING_BASE + 0);
+					case 1: // Luna
+						return GAME_STRING (PLANET_NUMBER_BASE + 9);
+				}
+				break;
+			case 4: // Jupiter
+				switch (moon)
+				{
+					case 0: // Io
+						return GAME_STRING (PLANET_NUMBER_BASE + 10);
+					case 1: // Europa
+						return GAME_STRING (PLANET_NUMBER_BASE + 11);
+					case 2: // Ganymede
+						return GAME_STRING (PLANET_NUMBER_BASE + 12);
+					case 3: // Callisto
+						return GAME_STRING (PLANET_NUMBER_BASE + 13);
+				}
+				break;
+			case 5: // Saturn
+				if (moon == 0) // Titan
+					return GAME_STRING (PLANET_NUMBER_BASE + 14);
+				break;
+			case 7: // Neptune
+				if (moon == 0) // Triton
+					return GAME_STRING (PLANET_NUMBER_BASE + 15);
+				break;
+		}
+	}
+	else if (CurStarDescPtr->Index == SPATHI_DEFINED)
+	{
+		if (pSolarSysState->pOrbitalDesc->pPrevDesc == pSolarSysState->SunDesc)
+		{	// A planet
+#ifdef NOTYET
+			if (planet == 0)
+				return "Spathiwa";
+#endif // NOTYET
+		}
+	}
+	else if (CurStarDescPtr->Index == SAMATRA_DEFINED)
+	{
+		if (parent_planet == 4 && moon == 0) // Sa-Matra
+			return GAME_STRING (PLANET_NUMBER_BASE + 32);
+	}
+
+	return NULL;
+}
+
+void
+GetPlanetOrMoonName (UNICODE *buf, COUNT bufsize)
+{
+	UNICODE *named;
+	int moon;
+	int i;
+
+	named = GetNamedPlanetaryBody ();
+	if (named)
+	{
+		utf8StringCopy (buf, bufsize, named);
+		return;
+	}
+		
+	// Either not named or we already have a name
+	utf8StringCopy (buf, bufsize, GLOBAL_SIS (PlanetName));
+
+	if (!pSolarSysState || !pSolarSysState->pOrbitalDesc ||
+			pSolarSysState->pOrbitalDesc->pPrevDesc == pSolarSysState->SunDesc)
+	{	// Outer or inner system or orbiting a planet
+		return;
+	}
+
+	// Orbiting an unnamed moon
+	i = strlen (buf);
+	buf += i;
+	bufsize -= i;
+	moon = pSolarSysState->pOrbitalDesc - pSolarSysState->MoonDesc;
+	if (bufsize >= 3)
+	{
+		snprintf (buf, bufsize, "-%c", 'A' + moon);
+		buf[bufsize - 1] = '\0';
+	}
+}

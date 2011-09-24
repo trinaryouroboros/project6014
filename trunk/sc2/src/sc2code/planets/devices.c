@@ -563,13 +563,13 @@ SelectDevice:
 }
 
 SIZE
-InventoryDevices (BYTE *pDeviceMap)
+InventoryDevices (BYTE *pDeviceMap, COUNT Size)
 {
 	BYTE i;
 	SIZE DevicesOnBoard;
 	
 	DevicesOnBoard = 0;
-	for (i = 0; i < NUM_DEVICES; ++i)
+	for (i = 0; i < NUM_DEVICES && Size > 0; ++i)
 	{
 		BYTE DeviceState;
 
@@ -664,6 +664,7 @@ InventoryDevices (BYTE *pDeviceMap)
 		{
 			*pDeviceMap++ = i;
 			++DevicesOnBoard;
+			--Size;
 		}
 	}
 	
@@ -675,7 +676,7 @@ Devices (MENU_STATE *pMS)
 {
 	BYTE DeviceMap[NUM_DEVICES];
 
-	pMS->first_item.x = InventoryDevices (DeviceMap);
+	pMS->first_item.x = InventoryDevices (DeviceMap, NUM_DEVICES);
 	if (pMS->first_item.x)
 	{
 		pMS->InputFunc = DoManipulateDevices;

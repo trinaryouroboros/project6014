@@ -306,8 +306,8 @@ main (int argc, char *argv[])
 			P6014_PATCH_VERSION, P6014_EXTRA_VERSION,
 			__DATE__, __TIME__);
 #ifdef NETPLAY
-	log_add (log_User, "Netplay protocol version %d.%d. Minimum required "
-			"remote P6014 version is %d.%d.%d.",
+	log_add (log_User, "Netplay protocol version %d.%d. Netplay opponent "
+			"must have P6014 %d.%d.%d or later.",
 			NETPLAY_PROTOCOL_VERSION_MAJOR, NETPLAY_PROTOCOL_VERSION_MINOR,
 			NETPLAY_MIN_P6014_VERSION_MAJOR, NETPLAY_MIN_P6014_VERSION_MINOR,
 			NETPLAY_MIN_P6014_VERSION_PATCH);

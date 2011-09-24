@@ -151,7 +151,7 @@ DrawSISTitle (UNICODE *pStr)
 	TEXT t;
 	CONTEXT OldContext;
 	RECT r;
-	
+
 	t.baseline.x = SIS_TITLE_WIDTH >> 1;
 	t.baseline.y = SIS_TITLE_HEIGHT - RES_STAT_SCALE(2); // JMS_GFX
 	t.align = ALIGN_CENTER;
@@ -159,14 +159,12 @@ DrawSISTitle (UNICODE *pStr)
 	t.CharCount = (COUNT)~0;
 
 	OldContext = SetContext (OffScreenContext);
-
 	r.corner.x = SIS_ORG_X + SIS_SCREEN_WIDTH - SIS_TITLE_BOX_WIDTH + (1 << RESOLUTION_FACTOR); // JMS_GFX
 	r.corner.y = SIS_ORG_Y - SIS_TITLE_HEIGHT;
 	r.extent.width = SIS_TITLE_WIDTH;
 	r.extent.height = SIS_TITLE_HEIGHT - RES_STAT_SCALE(1); // JMS_GFX
 	SetContextFGFrame (Screen);
 	SetContextClipRect (&r);
-	
 	SetContextFont (TinyFont);
 
 	BatchGraphics ();

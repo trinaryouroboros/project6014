@@ -2133,11 +2133,13 @@ SetVelocityComponents (
 			{
 				HELEMENT hExplosionElement;
 
-				++pMS->CurState;
 				hExplosionElement = AllocElement ();
 				if (hExplosionElement)
 				{
 					ELEMENT *ExplosionElementPtr;
+
+					// Advance the state only once we've got the element
+					++pMS->CurState;
 
 					LockElement (hExplosionElement, &ExplosionElementPtr);
 
@@ -2158,6 +2160,12 @@ SetVelocityComponents (
 
 					PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_DESTROYED
 							), NotPositional (), NULL, GAME_SOUND_PRIORITY + 1);
+				}
+				else
+				{	// We could not allocate because the queue was full, but
+					// we will get another chance on the next iteration
+					log_add (log_Warning, "DoPlanetSide(): could not"
+							" allocate explosion element!");
 				}
 			}
 

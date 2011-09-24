@@ -1,4 +1,15 @@
 Changes towards version 0.7:
+- Druuge no longer turn hostile after attempting a salvage (bug #1013) - Alex
+- Process subtitles correctly with no timestamp file (bug #1060) - Alex
+- Lander will no longer hang when killed on planets with a lot of
+  natural disasters (bug #584) - Alex
+- Canceling load from the main menu returns to main menu (bug #679) - Alex
+- Fixed inputting numbers with the numpad, except directx (bug #934) - Alex
+- Better location description in savegame summaries (bug #844) - Alex
+- Fixed crash when saving a game into the last slot while having
+  too many devices on board - Alex
+- Allow any sound data format to be graphed by comm oscilloscope; also
+  auto-adjust the scope for different gain levels (bug #1064) - Alex
 - Game settings Quit menu now delegates to F10 quit (bug #462) - Alex
 - Do not pause the game in places where not relevant (bug #984) - Alex
 - Fixed crashes and potential weirdness when loading savegames from

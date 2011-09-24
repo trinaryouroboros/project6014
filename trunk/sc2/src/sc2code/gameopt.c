@@ -849,15 +849,26 @@ ShowSummary (SUMMARY_DESC *pSD)
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
 		t.align = ALIGN_CENTER;
-		t.baseline.x = SIS_SCREEN_WIDTH - ((57 + 3) << RESOLUTION_FACTOR) + (SIS_TITLE_WIDTH >> 1); // JMS_GFX
-		if (pSD->Activity == IN_STARBASE)
-			utf8StringCopy (buf, sizeof (buf), GAME_STRING (STARBASE_STRING_BASE));
-		else if (pSD->Activity == IN_PLANET_ORBIT)
-			utf8StringCopy (buf, sizeof (buf), GLOBAL_SIS (PlanetName));
-		else
-			sprintf (buf, "%03u.%01u : %03u.%01u",
-					r.corner.x / 10, r.corner.x % 10,
-					r.corner.y / 10, r.corner.y % 10);
+		t.baseline.x = SIS_SCREEN_WIDTH - SIS_TITLE_BOX_WIDTH - (4 << RESOLUTION_FACTOR)
+				+ (SIS_TITLE_WIDTH >> 1);
+		switch (pSD->Activity)
+		{
+			case IN_STARBASE:
+				utf8StringCopy (buf, sizeof (buf), // Starbase
+						GAME_STRING (STARBASE_STRING_BASE));
+				break;
+			case IN_LAST_BATTLE:
+				utf8StringCopy (buf, sizeof (buf), // Sa-Matra
+						GAME_STRING (PLANET_NUMBER_BASE + 32));
+				break;
+			case IN_PLANET_ORBIT:
+				utf8StringCopy (buf, sizeof (buf), GLOBAL_SIS (PlanetName));
+				break;
+			default:
+				sprintf (buf, "%03u.%01u : %03u.%01u",
+						r.corner.x / 10, r.corner.x % 10,
+						r.corner.y / 10, r.corner.y % 10);
+		}
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
 
@@ -932,7 +943,11 @@ Restart:
 		pMS->ModuleFrame = 0;
 		pMS->CurState = (BYTE)pMS->delta_item;
 		ResumeMusic ();
-		if (pSolarSysState)
+		if (LastActivity == CHECK_LOAD)
+		{	// Selected LOAD from main menu, and now canceled
+			GLOBAL (CurrentActivity) |= CHECK_ABORT;
+		}
+		else if (pSolarSysState)
 		{
 #define DRAW_REFRESH (1 << 5)
 #define REPAIR_SCAN (1 << 6)
@@ -1136,13 +1151,11 @@ ChangeGameSelection:
 				}
 				font_DrawText (&t);
 			}
-			if (LastActivity == CHECK_LOAD)
+			if (LastActivity == CHECK_LOAD && first_time)
 			{
 				BYTE clut_buf[] = {FadeAllToColor};
 
 				UnbatchGraphics ();
-
-				LastActivity = 0;
 				XFormColorMap ((COLORMAPPTR)clut_buf, ONE_SECOND / 2);
 			}
 			else
@@ -1272,7 +1285,7 @@ DoGameOptions (MENU_STATE *pMS)
 		return (FALSE);
 
 	if (LastActivity == CHECK_LOAD)
-		force_select = TRUE;
+		force_select = TRUE; // Selected LOAD from main menu
 
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 
