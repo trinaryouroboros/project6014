@@ -162,6 +162,7 @@ static LOCDATA druuge_desc =
 };
 
 static COUNT SlaveryCount = 0;
+static BOOLEAN AttemptedSalvage = FALSE;
 
 static void
 ExitConversation (RESPONSE_REF R)
@@ -693,8 +694,6 @@ Intro (void)
 {
 	BYTE NumVisits;
 
-	SlaveryCount = 0;
-
 	if (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
 	{
 		NPCPhrase (OUT_TAKES);
@@ -766,7 +765,9 @@ Intro (void)
 		if (GET_GAME_STATE (ATTACKED_DRUUGE)
 				&& !GET_GAME_STATE (DRUUGE_DISCLAIMER))
 		{
-// NPCPhrase (HOSTILE_TRADE);
+			// There is no HOSTILE_TRADE voice track that we know of
+			// so this is currently disabled
+			//NPCPhrase (HOSTILE_TRADE);
 			SET_GAME_STATE (DRUUGE_DISCLAIMER, 1);
 		}
 		if (GET_GAME_STATE (MAIDENS_ON_SHIP)
@@ -865,6 +866,7 @@ Intro (void)
 			SET_GAME_STATE (DRUUGE_SALVAGE, NumVisits);
 
 			SET_GAME_STATE (BATTLE_SEGUE, 1);
+			AttemptedSalvage = TRUE;
 		}
 		else
 		{
@@ -896,6 +898,7 @@ static void
 post_druuge_enc (void)
 {
 	if (GET_GAME_STATE (BATTLE_SEGUE) == 1
+			&& !AttemptedSalvage
 			&& !GET_GAME_STATE (DRUUGE_MANNER))
 	{
 		if (!GET_GAME_STATE (ATTACKED_DRUUGE))
@@ -910,6 +913,9 @@ LOCDATA*
 init_druuge_comm (void)
 {
 	LOCDATA *retval;
+
+	SlaveryCount = 0;
+	AttemptedSalvage = FALSE;
 
 	druuge_desc.init_encounter_func = Intro;
 	druuge_desc.post_encounter_func = post_druuge_enc;

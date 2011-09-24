@@ -21,6 +21,7 @@
 #include "sis.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/graphics/drawable.h"
+#include "libs/sound/sound.h"
 #include "libs/sound/trackplayer.h"
 
 #include "libs/log.h"
@@ -93,7 +94,7 @@ Oscilloscope (DWORD grab_data)
 		return;
 
 	TFB_DrawImage_Image (scope_bg, 0, 0, 0, NULL, scope_surf);
-	if (GetSoundData (scope_data)) 
+	if (GraphForegroundStream (scope_data, RADAR_WIDTH - 2, RADAR_HEIGHT - 2)) 
 	{
 		int i, r, g, b;		
 		TFB_DrawCanvas_GetPixel (scope_bg->NormalImg,
@@ -105,8 +106,8 @@ Oscilloscope (DWORD grab_data)
 			{r=g=b=0;}
 		
 		for (i = 0; i < RADAR_WIDTH - 3; ++i)
-			TFB_DrawImage_Line (i + 1, scope_data[i], i + 2,
-					scope_data[i + 1], r, g, b, scope_surf);
+			TFB_DrawImage_Line (i + 1, scope_data[i] + 1, i + 2,
+					scope_data[i + 1] + 1, r, g, b, scope_surf);
 	}
 	TFB_DrawImage_Image (scope_surf, 0, 0, 0, NULL, scope_frame->image);
 
