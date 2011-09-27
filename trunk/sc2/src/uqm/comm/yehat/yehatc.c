@@ -18,12 +18,12 @@
 
 // JMS 2010: Yeaht no longer are hostile upon encountering.
 
-#include "comm/commall.h"
-#include "comm/yehat/resinst.h"
-#include "comm/yehat/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
 
-#include "build.h"
-#include "gameev.h"
+#include "uqm/build.h"
+#include "uqm/gameev.h"
 #include "libs/mathlib.h"
 
 

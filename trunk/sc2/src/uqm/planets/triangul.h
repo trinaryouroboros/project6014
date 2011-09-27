@@ -3,8 +3,8 @@
 #ifndef _TRIANGUL_H
 #define _TRIANGUL_H
 
-#include "races.h"
-#include "globdata.h"
+#include "../races.h"
+#include "../globdata.h"
 
 #define TRIANGUL_SPHERE_CHMMR_1_RAD (3060 / SPHERE_RADIUS_INCREMENT * 2)
 #define TRIANGUL_SPHERE_CHMMR_2_RAD (3610 / SPHERE_RADIUS_INCREMENT * 2)

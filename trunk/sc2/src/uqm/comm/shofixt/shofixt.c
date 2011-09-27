@@ -20,11 +20,11 @@
 //			 -Added some dialogue options
 //			 -Lost shofixti patrols sidequest, one of 3 patrols returns home after 2 months
 
-#include "comm/commall.h"
-#include "comm/shofixt/resinst.h"
-#include "comm/shofixt/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
 
-#include "gameev.h"
+#include "uqm/gameev.h"
 
 
 static LOCDATA shofixti_desc =

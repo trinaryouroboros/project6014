@@ -18,15 +18,15 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "colors.h"
-#include "controls.h"
-#include "gamestr.h"
+#include "lander.h"
+#include "planets.h"
+#include "../colors.h"
+#include "../controls.h"
+#include "../gamestr.h"
+#include "../setup.h"
+#include "../sounds.h"
+#include "../uqmdebug.h"
 #include "options.h"
-#include "setup.h"
-#include "sounds.h"
-#include "planets/lander.h"
-#include "planets/planets.h"
-#include "uqmdebug.h"
 #include "libs/inplib.h"
 
 #include <ctype.h>

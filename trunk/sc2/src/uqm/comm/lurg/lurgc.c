@@ -18,11 +18,11 @@
 
 // JMS 2010: Totally new file: Lurg communications
 
-#include "comm/commall.h"
-#include "comm/lurg/resinst.h"
-#include "comm/lurg/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
 
-#include "build.h"
+#include "uqm/build.h"
 
 
 static LOCDATA lurg_desc =

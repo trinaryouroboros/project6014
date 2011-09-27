@@ -16,11 +16,11 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "encount.h"
-#include "globdata.h"
-#include "nameref.h"
-#include "resinst.h"
-#include "planets/genall.h"
+#include "../encount.h"
+#include "../globdata.h"
+#include "../nameref.h"
+#include "../resinst.h"
+#include "genall.h"
 #include "libs/mathlib.h"
 
 // JMS 2010: - This is a completely new file.

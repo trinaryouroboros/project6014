@@ -20,11 +20,11 @@
 //			  if he doesn't have the Temporal Wrapper device.
 //			 -Mycon music for orzspaceportal guards just to mess with fans!
 
-#include "comm/commall.h"
-#include "comm/arilou/resinst.h"
-#include "comm/arilou/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
 
-#include "gameev.h"
+#include "uqm/gameev.h"
 
 #include "../mycon/imusicre.h" // JMS
 

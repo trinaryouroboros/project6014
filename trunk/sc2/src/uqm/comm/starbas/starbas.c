@@ -19,13 +19,13 @@
 // JMS 2010: -Removed the arc welder anims that created black spots on top of earth graphics.
 //			 -Added rudimentary dialogue regarding other races and lost shofixti mission
 
-#include "comm/commall.h"
-#include "comm/comandr/resinst.h"
-#include "comm/starbas/strings.h"
+#include "../commall.h"
+#include "../comandr/resinst.h"
+#include "strings.h"
 
-#include "build.h"
-#include "setup.h"
-#include "shipcont.h"
+#include "uqm/build.h"
+#include "uqm/setup.h"
+#include "uqm/shipcont.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/inplib.h"
 #include "libs/mathlib.h"

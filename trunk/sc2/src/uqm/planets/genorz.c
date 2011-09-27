@@ -19,17 +19,14 @@
 // JMS 2010: -Removed the Taalo shield from the planet surface at Delta Vulpeculae II-C.
 //			 -Removed the mechanism that varies landing party text at three different androsynth ruins.
 
-#include "build.h"
-#include "encount.h"
-#include "globdata.h"
+#include "genall.h"
 #include "lander.h"
-#include "ipdisp.h"
-#include "nameref.h"
-#include "resinst.h"
-#include "setup.h"
-#include "state.h"
-#include "sounds.h"
-#include "planets/genall.h"
+#include "../build.h"
+#include "../encount.h"
+#include "../ipdisp.h"
+#include "../setup.h"
+#include "../state.h"
+#include "../sounds.h"
 #include "libs/mathlib.h"
 
 

@@ -18,14 +18,11 @@
 
 // JMS 2010: Removed ZoqFot scout ship from Rigel
 
-#include "build.h"
-#include "encount.h"
-#include "globdata.h"
-#include "nameref.h"
-#include "resinst.h"
-#include "state.h"
-#include "grpinfo.h"
-#include "planets/genall.h"
+#include "genall.h"
+#include "../build.h"
+#include "../encount.h"
+#include "../state.h"
+#include "../grpinfo.h"
 #include "libs/mathlib.h"
 #include "libs/log.h"
 

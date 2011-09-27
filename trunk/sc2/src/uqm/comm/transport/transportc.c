@@ -20,16 +20,12 @@
 //			  When asking about cargo, the same ship can have many kinds of crap aboard then. Kind of buggy but funny :D
 
 #include "../commall.h"
-#include "igfxres.h"
-#include "ifontres.h"
-#include "imusicre.h"
-#include "istrtab.h"
 #include "resinst.h"
 #include "strings.h"
 
 #include "libs/mathlib.h"
 
-#include "build.h"
+#include "uqm/build.h"
 
 
 static LOCDATA transport_desc =

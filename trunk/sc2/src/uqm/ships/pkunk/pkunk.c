@@ -18,10 +18,10 @@
 
 // JMS 2010: -Remove instrument damage upon rebirth
 
-#include "ships/ship.h"
-#include "ships/pkunk/resinst.h"
+#include "../ship.h"
+#include "resinst.h"
 
-#include "globdata.h"
+#include "uqm/globdata.h"
 #include "libs/mathlib.h"
 
 

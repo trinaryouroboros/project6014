@@ -19,14 +19,13 @@
 // JMS 2010: -Syreen home planet is now restricted from landing
 //			 -Syreen starbase fully operational
 
-#include "build.h"
-#include "encount.h"
-#include "globdata.h"
-#include "nameref.h"
-#include "resinst.h"
-#include "setup.h"
-#include "state.h"
-#include "planets/genall.h"
+#include "../build.h"
+#include "../globdata.h"
+#include "../nameref.h"
+#include "../setup.h"
+#include "../state.h"
+#include "genall.h"
+#include "../encount.h"
 
 
 static void

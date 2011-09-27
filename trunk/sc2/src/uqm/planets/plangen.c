@@ -20,12 +20,12 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "nameref.h"
-#include "resinst.h"
-#include "setup.h"
+#include "planets.h"
+#include "scan.h"
+#include "../nameref.h"
+#include "../resinst.h"
+#include "../setup.h"
 #include "options.h"
-#include "planets/planets.h"
-#include "planets/scan.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/graphics/drawable.h"
 #include "libs/mathlib.h"
