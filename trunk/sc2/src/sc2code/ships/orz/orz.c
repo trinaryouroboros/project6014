@@ -58,7 +58,7 @@ static RACE_DESC orz_desc =
 	{ /* FLEET_STUFF */
 		350 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			8608, 8637,
+			8587,8566,
 		},
 	},
 	{

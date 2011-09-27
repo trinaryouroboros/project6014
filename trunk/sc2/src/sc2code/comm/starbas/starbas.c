@@ -201,11 +201,13 @@ AllianceInfo (RESPONSE_REF R)
 	{
 		NPCPhrase (SHOFIXTI_INFO_SB);
 		AllianceMask |= ALLIANCE_SHOFIXTI;
+		ActivateStarShip (SHOFIXTI_SHIP, SPHERE_TRACKING);
 	}
 	else if (PLAYER_SAID (R, yehat_and_pkunk))
 	{
 		NPCPhrase (YEHAT_AND_PKUNK_INFO_SB);
 		AllianceMask |= ALLIANCE_YEHATPKUNK;
+		ActivateStarShip (YEHAT_SHIP, SPHERE_TRACKING);
 	}
 	else if (PLAYER_SAID (R, arilou))
 	{
@@ -216,16 +218,19 @@ AllianceInfo (RESPONSE_REF R)
 	{
 		NPCPhrase (SYREEN_INFO_SB);
 		AllianceMask |= ALLIANCE_SYREEN;
+		ActivateStarShip (SYREEN_SHIP, SPHERE_TRACKING);
 	}
 	else if (PLAYER_SAID (R, spathi))
 	{
 		NPCPhrase (SPATHI_INFO_SB);
 		AllianceMask |= ALLIANCE_SPATHI;
+		ActivateStarShip (SPATHI_SHIP, SPHERE_TRACKING);
 	}
 	else if (PLAYER_SAID (R, orz))
 	{
 		NPCPhrase (ORZ_INFO_SB);
 		AllianceMask |= ALLIANCE_ORZ;
+		ActivateStarShip (ORZ_SHIP, SPHERE_TRACKING);
 	}
 	else if (PLAYER_SAID (R, supox_and_utwig))
 	{
@@ -291,6 +296,7 @@ HostileInfo (RESPONSE_REF R)
 	{
 		NPCPhrase (VUX_INFO_SB);
 		HostileMask |= HOSTILE_VUX;
+		ActivateStarShip (VUX_SHIP, SPHERE_TRACKING);
 	}
 	else if (PLAYER_SAID (R, mycon))
 	{

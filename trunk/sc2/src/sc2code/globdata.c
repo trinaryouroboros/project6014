@@ -30,6 +30,8 @@
 //			 -Game now starts at Procyon
 //			 -Show human and Chmmr SoIs right from the start
 //			 -Utwig ships not available for buying at starbases anymore
+// 
+// JMS 2011: -The locations of known races' home planets is shown right from the start of the game (but not the whole SoIs).
 
 #include "globdata.h"
 
@@ -396,6 +398,14 @@ InitSIS (void)
 	// JMS: Show human and Chmmr SoIs right from the start
 	ActivateStarShip (CHMMR_SHIP, SPHERE_TRACKING);
 	ActivateStarShip (HUMAN_SHIP, SPHERE_TRACKING);
+	
+	// JMS: Show where other known races' home planets are, not the whole SoIs.
+	ActivateStarShip (ORZ_SHIP, SPHERE_INITIAL);
+	ActivateStarShip (SHOFIXTI_SHIP, SPHERE_INITIAL);
+	ActivateStarShip (SPATHI_SHIP, SPHERE_INITIAL);
+	ActivateStarShip (SYREEN_SHIP, SPHERE_INITIAL);
+	ActivateStarShip (VUX_SHIP, SPHERE_INITIAL);
+	ActivateStarShip (YEHAT_SHIP, SPHERE_INITIAL);
 
 	// JMS: Start at Procyon
 	GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (PROCYON_X);

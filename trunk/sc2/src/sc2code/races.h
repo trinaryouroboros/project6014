@@ -389,10 +389,12 @@ typedef struct
 			 * 0 if there is none and no ships will be generated.
 	         * '(COUNT) ~0' if there is none, and the ship generation
 			 * is handled separately. */
-	COUNT known_strength;
+	SIZE known_strength;
 			/* Measure for the size of the sphere of influence when last
 			 * checked the starmap.
 			 * 0 if the race's SoI is not known. */
+			// JMS: Was COUNT. We need negative numbers to pull of some creative hackery regarding intitial SoI sizes.
+			// -> Negative number if we want to make a small SoI into starmap (which doesn't correspond to the actual SoI's size.
 	POINT known_loc;
 			/* Location of the SoI (center) when last checked
 			 * the starmap. */
@@ -629,11 +631,11 @@ enum
 		20,  /* ORZ_SHIP */ \
 		40,  /* PKUNK_SHIP */ \
 		20,  /* SHOFIXTI_SHIP */ \
-		20,  /* SPATHI_SHIP */ \
+		 0,  /* SPATHI_SHIP */ \
 		 0,  /* SUPOX_SHIP */ \
 		 0,  /* THRADDASH_SHIP */ \
 		 0,  /* UTWIG_SHIP */ \
-		40,  /* VUX_SHIP */ \
+		 0,  /* VUX_SHIP */ \
 		45,  /* YEHAT_SHIP */ \
 		 0,  /* MELNORME_SHIP */ \
 		30,  /* DRUUGE_SHIP */ \
@@ -661,11 +663,11 @@ enum
 		20,  /* ORZ_SHIP */ \
 		20,  /* PKUNK_SHIP */ \
 		40,  /* SHOFIXTI_SHIP */ \
-		0,  /* SPATHI_SHIP */ \
+		0,   /* SPATHI_SHIP */ \
 		20,  /* SUPOX_SHIP */ \
 		20,  /* THRADDASH_SHIP */ \
 		20,  /* UTWIG_SHIP */ \
-		20,  /* VUX_SHIP */ \
+		 0,  /* VUX_SHIP */ \
 		40,  /* YEHAT_SHIP */ \
 		 0,  /* MELNORME_SHIP */ \
 		20,  /* DRUUGE_SHIP */ \
