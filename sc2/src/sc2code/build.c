@@ -117,18 +117,24 @@ ActivateStarShip (COUNT which_ship, SIZE state)
 	{
 		case SPHERE_TRACKING:
 		case SPHERE_KNOWN:
+		case SPHERE_INITIAL: // JMS
 		{
 			FLEET_INFO *FleetPtr;
 
 			FleetPtr = LockFleetInfo (&GLOBAL (avail_race_q), hFleet);
 			if (state == SPHERE_KNOWN)
 				which_ship = FleetPtr->known_strength;
+			else if (state == SPHERE_INITIAL)
+			{	// JMS: This shows small spheres for the races in the beginning of the game.
+				FleetPtr->known_strength = -10;
+				FleetPtr->known_loc = FleetPtr->loc;
+			}
 			else if (FleetPtr->actual_strength == 0)
 			{
 				if (!(FleetPtr->ship_flags & (GOOD_GUY | BAD_GUY)))
 					which_ship = 0;
 			}
-			else if (FleetPtr->known_strength == 0
+			else if (FleetPtr->known_strength <= 0 // JMS:was == 0
 					&& FleetPtr->actual_strength != INFINITE_RADIUS)
 			{
 				FleetPtr->known_strength = 1;

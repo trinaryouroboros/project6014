@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2011: In the beginning of the game, show small spheres for the races.
+
 // JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
 
 #ifndef _BUILD_H
@@ -50,8 +52,8 @@ extern BYTE NameCaptain (QUEUE *pQueue, SPECIES_ID SpeciesID);
 #define SPHERE_KNOWN       -5
 #define SPHERE_TRACKING    -6
 #define ESCORTING_FLAGSHIP -7
-#define FEASIBILITY_STUDY  -8
-		/* Check for how many escort ships there's still space */
+#define FEASIBILITY_STUDY  -8 /* Check for how many escort ships there's still space */
+#define SPHERE_INITIAL	   -9 // JMS: In the beginning of the game, this shows small spheres for the races.
 
 extern COUNT ActivateStarShip (COUNT which_ship, SIZE state);
 extern COUNT GetIndexFromStarShip (QUEUE *pShipQ, HLINK hStarShip);

@@ -20,6 +20,7 @@
 // JMS 2010: -Do not draw Sphere of Influence for Slylandros riding Kohr-Ah ships
 //			 -Do not draw Sphere of Influence for Kohr-Ahs.
 //			 -Display hint for the player to use the star search facility in the starmap
+// JMS 2011: -In the beginning of game, known races' home planets are marked on the map as small SoIs.
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
@@ -228,16 +229,23 @@ static void
 GetSphereRect (FLEET_INFO *FleetPtr, RECT *pRect, RECT *pRepairRect)
 {
 	long diameter;
-
-	diameter = (long)(FleetPtr->known_strength * SPHERE_RADIUS_INCREMENT);
-	pRect->extent.width = UNIVERSE_TO_DISPX (diameter)
-			- UNIVERSE_TO_DISPX (0);
+	
+	// JMS: Negative known strength marks initial state of the SoI's: 
+	// Only the home planet of certain races is known -> show small sphere.
+	if (FleetPtr->known_strength >= 0)
+		diameter = (long)(FleetPtr->known_strength * SPHERE_RADIUS_INCREMENT);
+	else
+		diameter = (long)(-(FleetPtr->known_strength) * SPHERE_RADIUS_INCREMENT);
+		
+	pRect->extent.width = UNIVERSE_TO_DISPX (diameter) - UNIVERSE_TO_DISPX (0);
+	
 	if (pRect->extent.width < 0)
 		pRect->extent.width = -pRect->extent.width;
 	else if (pRect->extent.width == 0)
 		pRect->extent.width = 1;
-	pRect->extent.height = UNIVERSE_TO_DISPY (diameter)
-			- UNIVERSE_TO_DISPY (0);
+	
+	pRect->extent.height = UNIVERSE_TO_DISPY (diameter)- UNIVERSE_TO_DISPY (0);
+	
 	if (pRect->extent.height < 0)
 		pRect->extent.height = -pRect->extent.height;
 	else if (pRect->extent.height == 0)
@@ -1475,9 +1483,7 @@ UpdateMap (void)
 			if (!AnyButtonPress (TRUE))
 				ButtonState = 0;
 		}
-		else if ((Interrupted = (BOOLEAN)(
-				Interrupted || AnyButtonPress (TRUE)
-				)))
+		else if ((Interrupted = (BOOLEAN)(Interrupted || AnyButtonPress (TRUE))))
 			MapDrawn = TRUE;
 
 		if (FleetPtr->known_strength)
@@ -1576,7 +1582,13 @@ DoneSphereMove:
 				FleetPtr->known_loc = FleetPtr->loc;
 			}
 
-			delta = FleetPtr->actual_strength - FleetPtr->known_strength;
+			// JMS: Negative known strength marks initial state of the SoI's: 
+			// Only the home planet of certain races is known -> show small sphere.
+			if (FleetPtr->known_strength > 0)
+				delta = FleetPtr->actual_strength - FleetPtr->known_strength;
+			else if (FleetPtr->known_strength < 0)
+				delta = 10;
+			
 			if (delta)
 			{
 				if (!MapDrawn)
@@ -1602,7 +1614,11 @@ DoneSphereMove:
 				{
 					do
 					{
-						FleetPtr->known_strength += dx;
+						// JMS: Negative known strength marks initial state of the SoI's: 
+						// Only the home planet of certain races is known -> show small sphere.
+						if (FleetPtr->known_strength > 0)
+							FleetPtr->known_strength += dx;
+						
 						GetSphereRect (FleetPtr, &temp_r1, &r);
 					} while (delta--
 							&& ((delta & 0xF)
@@ -1613,9 +1629,7 @@ DoneSphereMove:
 						if (!AnyButtonPress (TRUE))
 							ButtonState = 0;
 					}
-					else if ((Interrupted = (BOOLEAN)(
-								Interrupted || AnyButtonPress (TRUE)
-								)))
+					else if ((Interrupted = (BOOLEAN)(Interrupted || AnyButtonPress (TRUE))))
 					{
 						MapDrawn = TRUE;
 						goto DoneSphereGrowth;
@@ -1632,7 +1646,10 @@ DoneSphereMove:
 					RepairMap ((COUNT)~0, &last_r, &r);
 
 DoneSphereGrowth:
-				FleetPtr->known_strength = FleetPtr->actual_strength;
+				// JMS: Negative known strength marks initial state of the SoI's: 
+				// Only the home planet of certain races is known -> show small sphere.
+				if (FleetPtr->known_strength > 0)
+					FleetPtr->known_strength = FleetPtr->actual_strength;
 			}
 		}
 

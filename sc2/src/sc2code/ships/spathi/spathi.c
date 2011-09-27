@@ -50,9 +50,9 @@ static RACE_DESC spathi_desc =
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
-		0 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		50 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			7549, 9600,
+			7416, 9687,
 		},
 	},
 	{
