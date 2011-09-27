@@ -28,6 +28,7 @@
 #include "controls.h"
 #include "encount.h"
 #include "gamestr.h"
+#include "ipdisp.h"
 #include "load.h"
 #include "starbase.h"
 #include "resinst.h"

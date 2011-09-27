@@ -16,14 +16,15 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010 - Enable Down key in melee (comment tag JMS_KEYS)
+// JMS 2010 - Enable Down key in melee (comment tag JMS_KEYS) (moved to races.h)
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "build.h"
+#include "status.h"
 #include "colors.h"
 #include "globdata.h"
 #include "races.h"
+#include "ship.h"
 #include "setup.h"
 #include "options.h"
 

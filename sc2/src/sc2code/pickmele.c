@@ -25,6 +25,7 @@
 #include "controls.h"
 #include "flash.h"
 #include "intel.h"
+#include "battle.h"
 #include "melee.h"
 #ifdef NETPLAY
 #	include "netplay/netmelee.h"

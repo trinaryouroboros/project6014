@@ -16,10 +16,10 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "graphics/gfx_common.h"
-#include "graphics/widgets.h"
+#include "gfx_common.h"
+#include "widgets.h"
 #include "colors.h"
-#include "strlib.h"
+#include "libs/strlib.h"
 #include "setup.h"
 #include "units.h"
 

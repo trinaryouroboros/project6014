@@ -24,6 +24,8 @@
 #include "colors.h"
 #include "clock.h"
 #include "encount.h"
+#include "element.h"
+#include "status.h"
 #include "gamestr.h"
 #include "gameev.h"
 #include "globdata.h"

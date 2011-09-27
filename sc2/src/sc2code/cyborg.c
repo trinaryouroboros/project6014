@@ -18,11 +18,10 @@
 
 // JMS 2010: - Amended Pursue -function: Ur-Quan pursues Earthling slowly but surely. Now it won't turn away mid-chase.
 //			 - Enable Down key in melee (comment tag JMS_KEYS)
-
-#include "battle.h"
 #include "colors.h"
 #include "collide.h"
 #include "element.h"
+#include "ship.h"
 #include "globdata.h"
 #include "intel.h"
 #include "setup.h"

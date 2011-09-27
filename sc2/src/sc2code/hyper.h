@@ -26,6 +26,7 @@
 #ifndef _HYPER_H
 #define _HYPER_H
 
+#include "element.h"
 #define RADAR_SCAN_WIDTH ((UNIT_SCREEN_WIDTH * NUM_RADAR_SCREENS) >> RESOLUTION_FACTOR)
 #define RADAR_SCAN_HEIGHT ((UNIT_SCREEN_HEIGHT * NUM_RADAR_SCREENS) >> RESOLUTION_FACTOR)
 
@@ -53,6 +54,7 @@
 
 extern void FreeHyperData (void);
 extern void check_hyperspace_encounter (void);
+extern BOOLEAN hyper_transition (ELEMENT *ElementPtr);
 
 #endif /* _HYPER_H */
 
