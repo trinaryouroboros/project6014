@@ -42,6 +42,7 @@
 #include "setup.h"
 #include "sounds.h"
 #include "libs/graphics/gfx_common.h"
+#include "libs/log.h"
 #include "libs/mathlib.h"
 #include "libs/inplib.h"
 
@@ -791,7 +792,10 @@ EncounterBattle (void)
 		PlayerControl[0] = CYBORG_CONTROL | AWESOME_RATING;
 		savedPlayerInput = PlayerInput[0];
 		PlayerInput[0] = NULL;
-		SetPlayerInput (0);
+		if (!SetPlayerInput (0)) {
+			log_add (log_Fatal, "Could not set cyborg player input.");
+			explode ();  // Does not return;
+		}
 	}
 
 	GameSounds = CaptureSound (LoadSound (GAME_SOUNDS));
