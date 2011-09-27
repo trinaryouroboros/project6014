@@ -25,6 +25,7 @@
 #include "build.h"
 #include "gamestr.h"
 #include "globdata.h"
+#include "ipdisp.h"
 #include "lander.h"
 #include "lifeform.h"
 #include "nameref.h"

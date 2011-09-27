@@ -1301,3 +1301,4 @@ boolNotOptString (const struct bool_option *option)
 {
 	return option->value ? "off" : "on";
 }
+
