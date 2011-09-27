@@ -26,12 +26,14 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
+#include "lander.h"
+
 #include "cons_res.h"
 #include "controls.h"
 #include "colors.h"
 #include "encount.h"
+#include "process.h"
 #include "gamestr.h"
-#include "lander.h"
 #include "lifeform.h"
 #include "scan.h"
 #include "nameref.h"

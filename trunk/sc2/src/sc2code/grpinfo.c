@@ -24,7 +24,7 @@
 
 #include "build.h"
 #include "encount.h"
-#include "file.h"
+#include "libs/file.h"
 #include "globdata.h"
 #include "intel.h"
 #include "sis.h"

@@ -26,6 +26,7 @@
 #include "libs/gfxlib.h"
 #include "libs/sndlib.h"
 #include "menustat.h"
+#include "element.h"
 
 #define NUM_TEXT_FRAMES 32
 
@@ -59,6 +60,9 @@ extern void DoDiscoveryReport (SOUND ReadOutSounds);
 extern void SetPlanetMusic (BYTE planet_type);
 extern void LoadLanderData (void);
 extern void FreeLanderData (void);
+
+extern void object_animation (ELEMENT *ElementPtr);
+
 
 #endif /* _LANDER_H */
 

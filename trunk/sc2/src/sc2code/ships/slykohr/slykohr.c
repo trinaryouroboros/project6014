@@ -19,6 +19,7 @@
 #include "ships/ship.h"
 #include "ships/slykohr/resinst.h"
 
+#include "battle.h"
 #include "globdata.h"
 
 

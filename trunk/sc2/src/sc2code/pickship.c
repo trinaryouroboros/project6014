@@ -20,10 +20,13 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
+#include "pickship.h"
+
 #include "build.h"
 #include "colors.h"
 #include "controls.h"
 #include "pickmele.h"
+#include "battle.h"
 #include "races.h"
 #include "resinst.h"
 #include "nameref.h"

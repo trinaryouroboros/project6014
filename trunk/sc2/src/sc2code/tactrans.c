@@ -21,10 +21,16 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
+#include "tactrans.h"
+
 #include "battlecontrols.h"
 #include "build.h"
 #include "collide.h"
 #include "globdata.h"
+#include "element.h"
+#include "ship.h"
+#include "status.h"
+#include "battle.h"
 #include "init.h"
 #ifdef NETPLAY
 #	include "netplay/netmelee.h"

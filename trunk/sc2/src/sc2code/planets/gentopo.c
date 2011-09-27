@@ -20,8 +20,8 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "gfxlib.h"
-#include "mathlib.h"
+#include "libs/gfxlib.h"
+#include "libs/mathlib.h"
 #include "planets.h"
 
 #include "libs/log.h"

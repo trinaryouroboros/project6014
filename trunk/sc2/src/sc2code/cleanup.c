@@ -19,12 +19,12 @@
 // JMS 2010: -Release Bullet hole gfx when uniniting kernel
 //			 -Removed unnecessary UninitGameKernel function
 
-#include "battle.h"
 #include "master.h"
 #include "nameref.h"
-#include "reslib.h"
+#include "libs/reslib.h"
 #include "gamestr.h"
 #include "init.h"
+#include "element.h"
 #include "hyper.h"
 #include "planets/lander.h"
 #include "starcon.h"

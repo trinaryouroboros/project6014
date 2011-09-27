@@ -28,10 +28,13 @@
 //			 - Removed some Ur-Quan probe conditions.
 //			 - Enhanced battle group behavior when they orbit planets: They don't jitter no more when changing facing.
 
+#include "ipdisp.h"
+
 #include "collide.h"
 #include "globdata.h"
 #include "init.h"
 #include "races.h"
+#include "process.h"
 #include "grpinfo.h"
 #include "encount.h"
 #include "libs/mathlib.h"

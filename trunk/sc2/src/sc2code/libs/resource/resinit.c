@@ -17,6 +17,7 @@
  */
 
 #include "resintrn.h"
+#include "libs/misc.h"
 #include "libs/memlib.h"
 #include "options.h"
 #include "types.h"

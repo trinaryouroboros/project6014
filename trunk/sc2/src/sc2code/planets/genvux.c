@@ -22,6 +22,7 @@
 #include "encount.h"
 #include "globdata.h"
 #include "lander.h"
+#include "ipdisp.h"
 #include "lifeform.h"
 #include "nameref.h"
 #include "resinst.h"

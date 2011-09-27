@@ -68,6 +68,21 @@ typedef HLINK HSTARSHIP;
 #define PLAYER_CAPTAIN			(1 << 15)
 		/* The protagonist himself is on board. He gets a different color. */
 
+typedef UWORD STATUS_FLAGS;
+
+/* STATUS_FLAGS - heat of battle specific flags */
+#define LEFT                   (1 << 0)
+#define RIGHT                  (1 << 1)
+#define THRUST                 (1 << 2)
+#define WEAPON                 (1 << 3)
+#define SPECIAL                (1 << 4)
+#define LOW_ON_ENERGY          (1 << 5)
+#define SHIP_BEYOND_MAX_SPEED  (1 << 6)
+#define SHIP_AT_MAX_SPEED      (1 << 7)
+#define SHIP_IN_GRAVITY_WELL   (1 << 8)
+#define PLAY_VICTORY_DITTY     (1 << 9)
+#define DOWN				   (1 << 10) // JMS_KEYS
+
 // JMS: Damage flags for a ship
 #define SHIP_IS_NOT_DAMAGED		(1 << 0)
 #define DAMAGE_GAUGE_ENERGY		(1 << 1)
@@ -737,20 +752,5 @@ enum
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x1B, 0x02), 0x4D),  /* JMS: ISD_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x2A, 0x00, 0x00), 0x39),  /* YEHAT_REBEL_SHIP */ \
 		BUILD_COLOR (MAKE_RGB15 (0x00, 0x03, 0x1F), 0x39),  /* JMS:TRANSPORT_SHIP */ \
-
-extern BOOLEAN InitKernel (void);
-
-extern void DrawCaptainsWindow (STARSHIP *StarShipPtr);
-extern BOOLEAN GetNextStarShip (STARSHIP *LastStarShipPtr,
-		COUNT which_side);
-extern BOOLEAN GetInitialStarShips (void);
-extern HSTARSHIP GetEncounterStarShip (STARSHIP *LastStarShipPtr,
-		COUNT which_player);
-extern void DrawArmadaPickShip (BOOLEAN draw_salvage_frame, RECT *pPickRect);
-
-extern BOOLEAN load_animation (FRAME *pixarray, RESOURCE big_res,
-		RESOURCE med_res, RESOURCE sml_res);
-extern BOOLEAN free_image (FRAME *pixarray);
-extern void NotifyOthers (COUNT which_race, BYTE target_loc);
 
 #endif /* _RACES_H */
