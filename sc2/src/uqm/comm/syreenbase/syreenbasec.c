@@ -18,12 +18,12 @@
 
 // JMS 2010: Totally new file for syreen starbase comm.
 
-#include "comm/commall.h"
-#include "comm/syreenbase/resinst.h"
-#include "comm/syreenbase/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
 #include "libs/sound/sound.h"
 
-#include "build.h"
+#include "uqm/build.h"
 
 
 static LOCDATA syreenbase_desc =

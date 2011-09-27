@@ -22,19 +22,16 @@
 //			 -Earth is now restricted planet meaning it cannot be landed on.
 //			 -If starbase is encountered, the chasing ships turn away.
 
-#include "build.h"
-#include "gamestr.h"
-#include "globdata.h"
-#include "ipdisp.h"
+#include "genall.h"
+#include "../ipdisp.h"
 #include "lander.h"
 #include "lifeform.h"
-#include "nameref.h"
-#include "races.h"
-#include "resinst.h"
-#include "state.h"
-#include "grpinfo.h"
-#include "encount.h"
-#include "planets/genall.h"
+#include "../build.h"
+#include "../gamestr.h"
+#include "../races.h"
+#include "../state.h"
+#include "../grpinfo.h"
+#include "../encount.h"
 #include "libs/mathlib.h"
 #include "libs/log.h"
 

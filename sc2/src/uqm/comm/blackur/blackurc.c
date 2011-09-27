@@ -18,9 +18,9 @@
 
 // JMS 2010: New dialogue for the new, vile, disgusting and enhanced Kohr-Ah-Rath!
 
-#include "comm/commall.h"
-#include "comm/blackur/resinst.h"
-#include "comm/blackur/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
 
 static LOCDATA blackurq_desc =
 {

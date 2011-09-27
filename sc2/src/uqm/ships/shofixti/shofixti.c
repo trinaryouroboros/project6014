@@ -19,10 +19,10 @@
 // JMS 2010: Disabled Tanaka/Katana from the game.
 //			 (Left the code there for reference though.)
 
-#include "ships/ship.h"
-#include "ships/shofixti/resinst.h"
+#include "../ship.h"
+#include "resinst.h"
 
-#include "globdata.h"
+#include "uqm/globdata.h"
 #include "libs/mathlib.h"
 
 

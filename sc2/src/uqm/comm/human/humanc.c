@@ -24,7 +24,7 @@
 #include "strings.h"
 #include "libs/mathlib.h"
 
-#include "build.h"
+#include "uqm/build.h"
 
 #include "libs/log.h"
 

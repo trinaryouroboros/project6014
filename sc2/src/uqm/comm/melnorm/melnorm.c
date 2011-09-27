@@ -21,18 +21,18 @@
  //						player sells bio-data to enable the easter egg when the player
  //						finds and sells data on all 25 new lifeform types
  
-#include "comm/commall.h"
-#include "comm/melnorm/resinst.h"
-#include "comm/melnorm/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
 
-#include "gameev.h"
-#include "setup.h"
-#include "shipcont.h"
+#include "uqm/gameev.h"
+#include "uqm/setup.h"
+#include "uqm/shipcont.h"
 #include "libs/inplib.h"
 #include "libs/mathlib.h"
 #include "assert.h"
 
-#include "hyper.h"
+#include "uqm/hyper.h"
 // for SOL_X/SOL_Y
 
 #define NUM_HISTORY_ITEMS 0

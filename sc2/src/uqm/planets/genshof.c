@@ -18,11 +18,10 @@
 
 // JMS 2010: Removed all Tanaka/Katana related crap
 
-#include "build.h"
-#include "globdata.h"
-#include "state.h"
-#include "grpinfo.h"
-#include "planets/genall.h"
+#include "genall.h"
+#include "../build.h"
+#include "../state.h"
+#include "../grpinfo.h"
 
 
 void

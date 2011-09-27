@@ -24,18 +24,18 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "build.h"
-#include "encount.h"
-#include "gamestr.h"
-#include "controls.h"
-#include "settings.h"
-#include "shipcont.h"
-#include "load.h"
-#include "setup.h"
-#include "state.h"
-#include "grpinfo.h"
-#include "sounds.h"
-#include "util.h"
+#include "../build.h"
+#include "../encount.h"
+#include "../gamestr.h"
+#include "../controls.h"
+#include "../settings.h"
+#include "../shipcont.h"
+#include "../load.h"
+#include "../setup.h"
+#include "../state.h"
+#include "../grpinfo.h"
+#include "../sounds.h"
+#include "../util.h"
 #include "libs/strlib.h"
 
 

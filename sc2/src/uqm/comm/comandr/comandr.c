@@ -19,10 +19,10 @@
 // JMS 2010: Removed the references to ANIM_DISABLED from here since that define is removed...
 //			 ... We're not using this file anyway, but keeping it just to be sure.
 
-#include "setup.h"
-#include "comm/commall.h"
-#include "comm/comandr/resinst.h"
-#include "comm/comandr/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
+#include "uqm/setup.h"
 #include "libs/graphics/gfx_common.h"
 
 static LOCDATA commander_desc =

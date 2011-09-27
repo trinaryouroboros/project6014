@@ -18,14 +18,11 @@
 
 // JMS 2010: No ships orbiting Ilwrath homeworld anymore.
 
-#include "build.h"
-#include "encount.h"
-#include "globdata.h"
-#include "ipdisp.h"
-#include "nameref.h"
-#include "resinst.h"
-#include "state.h"
-#include "planets/genall.h"
+#include "genall.h"
+#include "../build.h"
+#include "../encount.h"
+#include "../ipdisp.h"
+#include "../state.h"
 #include "libs/mathlib.h"
 
 

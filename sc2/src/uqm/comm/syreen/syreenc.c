@@ -19,12 +19,11 @@
 // JMS 2010: -Cleaned up the comm logic a bit...
 //			 -Added a whole slew of new animations
 
-#include "comm/commall.h"
-#include "comm/syreen/resinst.h"
-#include "comm/syreen/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
 #include "libs/sound/sound.h"
-
-#include "build.h"
+#include "uqm/build.h"
 
 
 static LOCDATA syreen_desc =

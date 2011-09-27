@@ -24,27 +24,27 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "colors.h"
-#include "controls.h"
-#include "encount.h"
-#include "gameopt.h"
-#include "gamestr.h"
-#include "globdata.h"
-#include "options.h"
 #include "scan.h"
-#include "shipcont.h"
-#include "settings.h"
-#include "setup.h"
-#include "sounds.h"
-#include "state.h"
-#include "uqmdebug.h"
+#include "../colors.h"
+#include "../controls.h"
+#include "../encount.h"
+#include "../gameopt.h"
+#include "../gamestr.h"
+#include "../globdata.h"
+#include "../shipcont.h"
+#include "../settings.h"
+#include "../setup.h"
+#include "../sounds.h"
+#include "../state.h"
+#include "../uqmdebug.h"
+#include "options.h"
 #include "libs/inplib.h"
 #include "libs/strlib.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
 
 #include "triangul.h"
-#include "hyper.h" // for SOL_X/SOL_Y
+#include "../hyper.h" // for SOL_X/SOL_Y
 
 static inline long
 signedDivWithError (long val, long divisor)

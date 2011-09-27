@@ -18,10 +18,10 @@
 
 // JMS 2010: Cleaned up the comm logic
 
-#include "comm/commall.h"
-#include "comm/orz/resinst.h"
-#include "comm/orz/strings.h"
-#include "build.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
+#include "uqm/build.h"
 
 
 static LOCDATA orz_desc =

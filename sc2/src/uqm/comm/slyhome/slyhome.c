@@ -18,10 +18,11 @@
 
 // JMS 2010: Totally new dialogue for Slylandros riding Kohr-Ah vessels
 
-#include "gameev.h"
-#include "comm/commall.h"
-#include "comm/slyhome/resinst.h"
-#include "comm/slyhome/strings.h"
+#include "../commall.h"
+#include "resinst.h"
+#include "strings.h"
+
+#include "uqm/gameev.h"
 
 
 static LOCDATA slylandro_desc =

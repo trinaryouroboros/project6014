@@ -28,23 +28,23 @@
 
 #include "lander.h"
 
-#include "cons_res.h"
-#include "controls.h"
-#include "colors.h"
-#include "encount.h"
-#include "process.h"
-#include "gamestr.h"
 #include "lifeform.h"
 #include "scan.h"
-#include "nameref.h"
-#include "resinst.h"
-#include "setup.h"
-#include "sounds.h"
-#include "element.h"
+#include "../cons_res.h"
+#include "../controls.h"
+#include "../colors.h"
+#include "../encount.h"
+#include "../process.h"
+#include "../gamestr.h"
+#include "../nameref.h"
+#include "../resinst.h"
+#include "../setup.h"
+#include "../sounds.h"
+#include "../element.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
 #include "libs/log.h" //added to aid in debugging of new functions DN 29DEC10
-#include "load.h"
+#include "../load.h"
 
 //define SPIN_ON_LAUNCH to let the planet spin while
 // the lander animation is playing

@@ -4,7 +4,7 @@
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
 
-#include "setup.h"
+#include "../setup.h"
 #include "triangul.h"
 
 #define UNIVERSE_TO_DISPX(ux) \

@@ -18,11 +18,11 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "ships/ship.h"
-#include "ships/sis_ship/resinst.h"
-#include "colors.h"
-#include "controls.h"
-#include "globdata.h"
+#include "../ship.h"
+#include "resinst.h"
+#include "uqm/colors.h"
+#include "uqm/controls.h"
+#include "uqm/globdata.h"
 #include "libs/mathlib.h"
 #include "libs/log.h"
 

@@ -18,7 +18,7 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "globdata.h"
+#include "../globdata.h"
 #include "lifeform.h"
 #include "planets.h"
 #include "libs/mathlib.h"

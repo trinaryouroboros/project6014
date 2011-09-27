@@ -21,14 +21,14 @@
 
 // JMS 2009: Totally new file: Orz space portal
 
-#include "build.h"
+#include "../build.h"
 #include "genall.h"
-#include "grpinfo.h"
-#include "races.h"
-#include "state.h"
+#include "../grpinfo.h"
+#include "../races.h"
+#include "../state.h"
 #include "../encount.h"
 
-#include "hyper.h"
+#include "../hyper.h"
 // for SOL_X/SOL_Y
 
 void

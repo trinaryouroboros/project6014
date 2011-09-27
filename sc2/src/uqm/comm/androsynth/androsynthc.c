@@ -22,7 +22,7 @@
 #include "resinst.h"
 #include "strings.h"
 
-#include "build.h"
+#include "uqm/build.h"
 
 
 static LOCDATA androsynth_desc =

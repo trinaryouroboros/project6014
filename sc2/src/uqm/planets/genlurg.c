@@ -20,19 +20,19 @@
 //			 - Also shofixti crash site
 //			 - Now the number of Lurg ships at Shofixti crash site is remembered by the game
 
-#include "build.h"
-#include "encount.h"
-#include "globdata.h"
-#include "ipdisp.h"
+#include "../build.h"
+#include "../encount.h"
+#include "../globdata.h"
+#include "../ipdisp.h"
 #include "lander.h"
-#include "nameref.h"
-#include "resinst.h"
-#include "setup.h"
-#include "state.h"
-#include "planets/genall.h"
+#include "../nameref.h"
+#include "../resinst.h"
+#include "../setup.h"
+#include "../state.h"
+#include "genall.h"
 #include "libs/mathlib.h"
 #include "libs/log.h"
-#include "grpinfo.h"
+#include "../grpinfo.h"
 
 
 static int

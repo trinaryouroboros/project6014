@@ -18,13 +18,13 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "colors.h"
-#include "controls.h"
-#include "gamestr.h"
-#include "shipcont.h"
-#include "setup.h"
-#include "sounds.h"
-#include "util.h"
+#include "../colors.h"
+#include "../controls.h"
+#include "../gamestr.h"
+#include "../shipcont.h"
+#include "../setup.h"
+#include "../sounds.h"
+#include "../util.h"
 
 #define ELEMENT_ORG_Y      RES_STAT_SCALE(35) // JMS_GFX
 #define FREE_ORG_Y         (ELEMENT_ORG_Y + (NUM_ELEMENT_CATEGORIES * ELEMENT_SPACING_Y))

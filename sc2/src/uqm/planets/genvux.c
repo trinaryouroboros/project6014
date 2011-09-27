@@ -18,18 +18,15 @@
 
 // JMS 2010: Removed shofixti maidens
 
-#include "build.h"
-#include "encount.h"
-#include "globdata.h"
+#include "genall.h"
 #include "lander.h"
-#include "ipdisp.h"
 #include "lifeform.h"
-#include "nameref.h"
-#include "resinst.h"
-#include "setup.h"
-#include "state.h"
-#include "sounds.h"
-#include "planets/genall.h"
+#include "../build.h"
+#include "../encount.h"
+#include "../ipdisp.h"
+#include "../setup.h"
+#include "../state.h"
+#include "../sounds.h"
 #include "libs/mathlib.h"
 
 

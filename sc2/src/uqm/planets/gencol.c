@@ -18,17 +18,16 @@
 
 // JMS 2010: -Removed slave shield and the lone ur-quan ship from the system
 
-#include "build.h"
-#include "globdata.h"
-#include "state.h"
-#include "grpinfo.h"
-#include "nameref.h" // JMS
-#include "resinst.h" // JMS
-#include "planets/genall.h"
+#include "genall.h"
+#include "../build.h"
+#include "../state.h"
+#include "../grpinfo.h"
+#include "../nameref.h" // JMS
+#include "../resinst.h" // JMS
 #include "libs/mathlib.h" // JMS
 #include "libs/log.h" // JMS
 #include "lander.h" //JMS
-#include "sounds.h" //JMS
+#include "../sounds.h" //JMS
 
 void
 GenerateColony (BYTE control)
