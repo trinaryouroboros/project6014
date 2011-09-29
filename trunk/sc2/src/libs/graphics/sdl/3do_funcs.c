@@ -26,8 +26,6 @@
 #include "primitives.h"
 #include "libs/graphics/drawcmd.h"
 #include "libs/graphics/tfb_draw.h"
-// XXX: we should not include anything from uqm/ inside libs/
-#include "uqm/units.h"
 
 #include "../../log.h"
 
@@ -113,15 +111,15 @@ ExpandRect (RECT *rect, int expansion)
 		rect->corner.y = 0;
 	}
 
-	if (rect->corner.x + rect->extent.width + expansion <= SCREEN_WIDTH)
+	if (rect->corner.x + rect->extent.width + expansion <= ScreenWidth)
 		rect->extent.width += expansion;
 	else
-		rect->extent.width = SCREEN_WIDTH - rect->corner.x;
+		rect->extent.width = ScreenWidth - rect->corner.x;
 
-	if (rect->corner.y + rect->extent.height + expansion <= SCREEN_HEIGHT)
+	if (rect->corner.y + rect->extent.height + expansion <= ScreenHeight)
 		rect->extent.height += expansion;
 	else
-		rect->extent.height = SCREEN_HEIGHT - rect->corner.y;
+		rect->extent.height = ScreenHeight - rect->corner.y;
 }
 
 void

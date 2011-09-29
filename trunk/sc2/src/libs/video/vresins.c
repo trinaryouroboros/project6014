@@ -20,6 +20,8 @@
 #include <string.h>
 #include "vidintrn.h"
 #include "libs/log.h"
+#include "libs/memlib.h"
+
 
 static BOOLEAN
 FreeLegacyVideoData (void *data)
@@ -45,7 +47,7 @@ GetLegacyVideoData (const char *path, RESOURCE_DATA *resdata)
 {
 	void *result = NULL;
 	char paths[1024], *audio_path, *speech_path, *loop_str;
-	DWORD LoopFrame = VID_NO_LOOP;
+	uint32 LoopFrame = VID_NO_LOOP;
 
 	/* Parse out the video components. */
 	strncpy (paths, path, 1023);
@@ -91,13 +93,13 @@ GetLegacyVideoData (const char *path, RESOURCE_DATA *resdata)
 	if (loop_str)
 	{
 		char *end;
-		LoopFrame = (DWORD) strtol (loop_str, &end, 10);
+		LoopFrame = strtol (loop_str, &end, 10);
 		// We allow whitespace at the end, but nothing printable.
 		if (*end > 32) {
 			log_add (log_Warning, "Warning: Unparsable loop frame '%s'. Disabling loop.", loop_str);
 			LoopFrame = VID_NO_LOOP;
 		}
-		log_add (log_Info, "\tLoop frame is %d", LoopFrame);
+		log_add (log_Info, "\tLoop frame is %u", LoopFrame);
 	} 
 	else
 		log_add (log_Info, "\tNo specified loop frame");

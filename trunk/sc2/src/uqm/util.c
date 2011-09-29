@@ -17,7 +17,6 @@
  */
 
 #include "commglue.h"
-#include "comm.h"
 #include "controls.h"
 #include "util.h"
 #include "setup.h"
@@ -226,11 +225,7 @@ PauseGame (void)
 			&& LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE) // JMS
 		ResumeGameClock ();
 	if (CommData.ConversationPhrases && PlayingTrack ())
-	{
 		ResumeTrack ();
-		if (CommData.AlienTransitionDesc.AnimFlags & TALK_DONE)
-			do_subtitles ((void *)~0);
-	}
 
 	UnlockMutex (GraphicsLock);
 

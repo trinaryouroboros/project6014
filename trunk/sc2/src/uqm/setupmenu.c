@@ -24,6 +24,7 @@
 #include "options.h"
 #include "setup.h"
 #include "sounds.h"
+#include "colors.h"
 #include "libs/gfxlib.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/graphics/widgets.h"
@@ -35,6 +36,7 @@
 #include "libs/sound/sound.h"
 #include "libs/resource/stringbank.h"
 #include "libs/log.h"
+#include "libs/memlib.h"
 #include "resinst.h"
 #include "nameref.h"
 
@@ -438,6 +440,9 @@ DoSetupMenu (SETUP_MENU_STATE *pInputState)
 		SetDefaultMenuRepeatDelay ();
 		pInputState->NextTime = GetTimeCounter ();
 		SetDefaults ();
+		Widget_SetFont (StarConFont);
+		Widget_SetWindowColors (SHADOWBOX_BACKGROUND_COLOR,
+				SHADOWBOX_DARK_COLOR, SHADOWBOX_MEDIUM_COLOR);
 
 		current = NULL;
 		next = (WIDGET *)(&menus[0]);
@@ -1197,7 +1202,7 @@ GetGlobalOptions (GLOBALOPTS *opts)
 		break;
 	}
 
-	if (res_HasKey ("config.alwaysgl"))
+	if (res_IsBoolean ("config.alwaysgl"))
 	{
 		if (res_GetBoolean ("config.alwaysgl"))
 		{

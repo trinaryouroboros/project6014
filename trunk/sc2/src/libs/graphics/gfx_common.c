@@ -17,11 +17,11 @@
  */
 
 // JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
-
-#include "libs/graphics/gfxintrn.h"
-#include "libs/input/inpintrn.h"
+#include "gfxintrn.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/graphics/drawcmd.h"
+#include "libs/misc.h"
+		// for TFB_DEBUG_HALT
 
 DISPLAY_INTERFACE *_pCurDisplay; //Not a function. Probably has to be initialized...
 

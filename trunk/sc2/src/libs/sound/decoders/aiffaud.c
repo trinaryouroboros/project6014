@@ -24,6 +24,8 @@
  */
 
 #include <stdio.h>
+#include <stdlib.h>
+		// for abs()
 #include <errno.h>
 #ifndef _WIN32_WCE
 #	include <memory.h>
@@ -33,7 +35,6 @@
 #include "types.h"
 #include "libs/uio.h"
 #include "endian_uqm.h"
-#include "libs/misc.h"
 #include "libs/log.h"
 #include "aiffaud.h"
 

@@ -21,7 +21,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "port.h"
-#include "libs/misc.h"
+#include "libs/memlib.h"
 #include "libs/file.h"
 #include "libs/log.h"
 #include "decoder.h"
@@ -575,6 +575,8 @@ SoundDecoder_DecodeAll (TFB_SoundDecoder *decoder)
 	}
 	decoder->buffer_size = decoded_bytes;
 	decoder->pos += decoded_bytes;
+	// Free up some unused memory
+	decoder->buffer = HRealloc (decoder->buffer, decoded_bytes);
 
 	if (decoder->need_swap && decoded_bytes > 0 &&
 			(decoder->format == decoder_formats.stereo16 ||

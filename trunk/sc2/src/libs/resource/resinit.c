@@ -17,7 +17,7 @@
  */
 
 #include "resintrn.h"
-#include "libs/misc.h"
+#include "libs/memlib.h"
 #include "libs/memlib.h"
 #include "options.h"
 #include "types.h"
@@ -319,13 +319,21 @@ InstallResTypeVectors (const char *resType, ResourceLoadFun *loadFun,
 }
 
 /* These replace the mapres.c calls and probably should be split out at some point. */
+BOOLEAN
+res_IsString (const char *key)
+{
+	RESOURCE_INDEX idx = _get_current_index_header ();
+	ResourceDesc *desc = lookupResourceDesc (idx, key);
+	return desc && !strcmp(desc->vtable->resType, "STRING");
+}
+
 const char *
 res_GetString (const char *key)
 {
 	RESOURCE_INDEX idx = _get_current_index_header ();
 	ResourceDesc *desc = lookupResourceDesc (idx, key);
 	if (!desc || !desc->resdata.ptr || strcmp(desc->vtable->resType, "STRING"))
-		return NULL;
+		return "";
 	/* TODO: Work out exact STRING semantics, specifically, the lifetime of
 	 *   the returned value. If caller is allowed to reference the returned
 	 *   value forever, STRING has to be ref-counted. */
@@ -359,6 +367,14 @@ res_PutString (const char *key, const char *value)
 	}
 }
 
+BOOLEAN
+res_IsInteger (const char *key)
+{
+	RESOURCE_INDEX idx = _get_current_index_header ();
+	ResourceDesc *desc = lookupResourceDesc (idx, key);
+	return desc && !strcmp(desc->vtable->resType, "INT32");
+}
+
 int
 res_GetInteger (const char *key)
 {
@@ -384,6 +400,14 @@ res_PutInteger (const char *key, int value)
 		desc = lookupResourceDesc (idx, key);
 	}
 	desc->resdata.num = value;
+}
+
+BOOLEAN
+res_IsBoolean (const char *key)
+{
+	RESOURCE_INDEX idx = _get_current_index_header ();
+	ResourceDesc *desc = lookupResourceDesc (idx, key);
+	return desc && !strcmp(desc->vtable->resType, "BOOLEAN");
 }
 
 BOOLEAN
@@ -441,28 +465,3 @@ res_Remove (const char *key)
 	}
 	return CharHashTable_remove (map, key);
 }
-
-BOOLEAN
-res_IsString (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	return desc && !strcmp(desc->vtable->resType, "STRING");
-}
-
-BOOLEAN
-res_IsInteger (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	return desc && !strcmp(desc->vtable->resType, "INT32");
-}
-
-BOOLEAN
-res_IsBoolean (const char *key)
-{
-	RESOURCE_INDEX idx = _get_current_index_header ();
-	ResourceDesc *desc = lookupResourceDesc (idx, key);
-	return desc && !strcmp(desc->vtable->resType, "BOOLEAN");
-}
-

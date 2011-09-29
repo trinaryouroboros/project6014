@@ -20,14 +20,12 @@
 
 #include "controls.h"
 #include "commglue.h"
-#include "comm.h"
 #include "colors.h"
 #include "settings.h"
 #include "setup.h"
 #include "sounds.h"
 #include "gamestr.h"
 #include "libs/graphics/widgets.h"
-#include "libs/inplib.h"
 #include "libs/sound/trackplayer.h"
 #include "libs/log.h"
 #include "libs/resource/stringbank.h"
@@ -185,11 +183,7 @@ DoConfirmExit (void)
 			!(LastActivity & CHECK_RESTART))
 		ResumeGameClock ();
 	if (CommData.ConversationPhrases && PlayingTrack ())
-	{
 		ResumeTrack ();
-		if (CommData.AlienTransitionDesc.AnimFlags & TALK_DONE)
-			do_subtitles ((void *)~0);
-	}
 
 	return (result);
 }
@@ -211,7 +205,7 @@ DoPopup (struct popup_state *self)
 }
 
 void
-DoPopupWindow(const char *msg)
+DoPopupWindow (const char *msg)
 {
 	stringbank *bank = StringBank_Create ();
 	const char *lines[30];
@@ -257,6 +251,9 @@ DoPopupWindow(const char *msg)
 	s.origin = r.corner;
 	s.frame = F;
 
+	Widget_SetFont (StarConFont);
+	Widget_SetWindowColors (SHADOWBOX_BACKGROUND_COLOR, SHADOWBOX_DARK_COLOR,
+			SHADOWBOX_MEDIUM_COLOR);
 	DrawLabelAsWindow (&label);
 
 	GetMenuSounds (&s0, &s1);
@@ -267,7 +264,6 @@ DoPopupWindow(const char *msg)
 
 	DrawStamp (&s);
 	DestroyDrawable (ReleaseDrawable (s.frame));
-	FlushInput ();
 	SetContextClipRect (&oldRect);
 	SetContext (oldContext);
 	UnlockMutex (GraphicsLock);
