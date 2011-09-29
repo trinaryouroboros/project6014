@@ -32,6 +32,7 @@
 #include "libs/strlib.h"
 #include "libs/log.h"
 #include "libs/reslib.h"
+#include "libs/memlib.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -511,6 +512,7 @@ BOOLEAN
 loadAddon (const char *addon)
 {
 	uio_DirHandle *addonsDir, *addonDir;
+	int numLoaded;
 
 	addonsDir = uio_openDirRelative (contentDir, "addons", 0);
 	if (addonsDir == NULL)
@@ -529,11 +531,12 @@ loadAddon (const char *addon)
 		return FALSE;
 	}
 
-	loadIndices (addonDir);
+	numLoaded = loadIndices (addonDir);
 
 	uio_closeDir (addonDir);
 	uio_closeDir (addonsDir);
-	return TRUE;
+	
+	return (numLoaded > 0);
 }
 
 void

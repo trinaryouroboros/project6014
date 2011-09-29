@@ -27,7 +27,6 @@
 #include "uqm/setup.h"
 #include "uqm/shipcont.h"
 #include "libs/graphics/gfx_common.h"
-#include "libs/inplib.h"
 #include "libs/mathlib.h"
 #include "libs/inplib.h"
 #include "libs/sound/sound.h"

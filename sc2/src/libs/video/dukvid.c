@@ -24,6 +24,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "libs/uio.h"
+#include "libs/memlib.h"
 #include "endian_uqm.h"
 
 #define THIS_PTR    TFB_VideoDecoder* This
@@ -614,8 +615,7 @@ dukv_Open (THIS_PTR, uio_DirHandle *dir, const char *filename)
 
 	This->length = (float) dukv->cframes / DUCK_GENERAL_FPS;
 	This->frame_count = dukv->cframes;
-	This->max_frame_wait =
-			(uint32) (1000.0f / DUCK_GENERAL_FPS * 1.1);
+	This->interframe_wait = (uint32) (1000.0 / DUCK_GENERAL_FPS);
 
 	dukv->inbuf = HMalloc (DUCK_MAX_FRAME_SIZE);
 	dukv->decbuf = HMalloc (

@@ -42,6 +42,7 @@
 #include "libs/strlib.h"
 #include "libs/graphics/gfx_common.h"
 #include "libs/mathlib.h"
+#include "libs/memlib.h"
 
 #include "triangul.h"
 #include "../hyper.h" // for SOL_X/SOL_Y

@@ -348,8 +348,7 @@ main (int argc, char *argv[])
 		LoadResourceIndex (configDir, "uqm.cfg", "config.");
 		getUserConfigOptions (&options);
 	}
-
-		
+	
 	{	/* remove old control template names */
 		int i;
 
@@ -434,10 +433,10 @@ main (int argc, char *argv[])
 	   ProcessThreadLifecycles... */
 	// initAudio (snddriver, soundflags);
 	// Make sure that the compiler treats multidim arrays the way we expect
-	//	assert (sizeof (int [NUM_TEMPLATES * NUM_KEYS]) ==
-	//			sizeof (int [NUM_TEMPLATES][NUM_KEYS]));
-	//	TFB_SetInputVectors (ImmediateInputState.menu, NUM_MENU_KEYS,
-	//			(volatile int *)ImmediateInputState.key, NUM_TEMPLATES, NUM_KEYS);
+	assert (sizeof (int [NUM_TEMPLATES * NUM_KEYS]) ==
+			sizeof (int [NUM_TEMPLATES][NUM_KEYS]));
+	TFB_SetInputVectors (ImmediateInputState.menu, NUM_MENU_KEYS,
+			(volatile int *)ImmediateInputState.key, NUM_TEMPLATES, NUM_KEYS);
 	TFB_InitInput (TFB_INPUTDRIVER_SDL, 0);
 
 	StartThread (Starcon2Main, NULL, 1024, "Starcon2Main");
@@ -451,6 +450,7 @@ main (int argc, char *argv[])
 		}
 
 		TFB_ProcessEvents ();
+		ProcessUtilityKeys ();
 		ProcessThreadLifecycles ();
 		TFB_FlushGraphics ();
 	}

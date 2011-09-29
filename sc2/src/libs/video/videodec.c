@@ -19,6 +19,7 @@
 #include "videodec.h"
 #include "dukvid.h"
 #include "libs/log.h"
+#include "libs/memlib.h"
 
 #define MAX_REG_DECODERS 31
 
@@ -244,7 +245,7 @@ VideoDecoder_Load (uio_DirHandle *dir, const char *filename)
 		return NULL;
 	}
 
-	decoder = (TFB_VideoDecoder*) HCalloc (info->funcs->GetStructSize ());
+	decoder = HCalloc (info->funcs->GetStructSize ());
 	decoder->funcs = info->funcs;
 	if (!decoder->funcs->Init (decoder, &vd_vidfmt))
 	{

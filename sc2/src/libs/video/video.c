@@ -16,10 +16,11 @@
 
 #include "video.h"
 
+#include "vidintrn.h"
+#include "options.h"
 #include "vidplayer.h"
-#include "libs/inplib.h"
-// XXX: we should not include anything from uqm/ inside libs/
-#include "uqm/setup.h"
+#include "libs/memlib.h"
+#include "libs/sndlib.h"
 
 
 #define NULL_VIDEO_REF	(0)
@@ -50,21 +51,18 @@ UninitVideoPlayer (void)
 }
 
 void
-VidStop ()
+VidStop (void)
 {
 	if (_cur_speech)
 		snd_StopSpeech ();
 	if (_cur_video)
-	{
 		TFB_StopVideo (_cur_video);
-		TFB_FadeClearScreen ();
-	}
 	_cur_speech = 0;
 	_cur_video = NULL_VIDEO_REF;
 }
 
 VIDEO_REF
-VidPlaying ()
+VidPlaying (void)
 		// this should just probably return BOOLEAN
 {
 	if (!_cur_video)
@@ -74,6 +72,32 @@ VidPlaying ()
 		return _cur_video;
 
 	return NULL_VIDEO_REF;
+}
+
+BOOLEAN
+VidProcessFrame (void)
+{
+	if (!_cur_video)
+		return FALSE;
+	return TFB_ProcessVideoFrame (_cur_video);
+}
+
+// return current video position in milliseconds
+DWORD
+VidGetPosition (void)
+{
+	if (!VidPlaying ())
+		return 0;
+	return TFB_GetVideoPosition (_cur_video);
+}
+
+BOOLEAN
+VidSeek (DWORD pos)
+		// pos in milliseconds
+{
+	if (!VidPlaying ())
+		return FALSE;
+	return TFB_SeekVideo (_cur_video, pos);
 }
 
 VIDEO_TYPE
@@ -103,13 +127,10 @@ VidPlayEx (VIDEO_REF vid, MUSIC_REF AudRef, MUSIC_REF SpeechRef,
 	_cur_speech = 0;
 	_cur_video = NULL_VIDEO_REF;
 
-	TFB_FadeClearScreen ();
-	FlushInput ();
 	LockMutex (GraphicsLock);
-	SetContext (ScreenContext);
 	// play video in the center of the screen
-	if (TFB_PlayVideo (vid, (SCREEN_WIDTH - vid->w) / 2,
-			(SCREEN_HEIGHT - vid->h) / 2))
+	if (TFB_PlayVideo (vid, (ScreenWidth - vid->w) / 2,
+			(ScreenHeight - vid->h) / 2))
 	{
 		_cur_video = vid;
 		ret = SOFTWARE_FMV;
@@ -134,13 +155,6 @@ VidPlay (VIDEO_REF VidRef)
 	return VidPlayEx (VidRef, 0, 0, VID_NO_LOOP);
 }
 
-void
-VidDoInput (void)
-{
-	if (_cur_video)
-		TFB_VideoInput (_cur_video);
-}
-
 VIDEO_REF
 _init_video_file (const char *pStr)
 {
@@ -151,7 +165,7 @@ _init_video_file (const char *pStr)
 	if (!dec)
 		return NULL_VIDEO_REF;
 
-	vid = (TFB_VideoClip*) HCalloc (sizeof (*vid));
+	vid = HCalloc (sizeof (*vid));
 	vid->decoder = dec;
 	vid->length = dec->length;
 	vid->w = vid->decoder->w;
@@ -166,6 +180,9 @@ DestroyVideo (VIDEO_REF vid)
 {
 	if (!vid)
 		return FALSE;
+
+	// just some armouring; should already be stopped
+	TFB_StopVideo (vid);
 
 	VideoDecoder_Free (vid->decoder);
 	DestroyMutex (vid->guard);
