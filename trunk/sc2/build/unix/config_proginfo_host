@@ -75,6 +75,7 @@ case "$HOST_SYSTEM" in
 		LIB_SDL_DETECT="true"
 		;;		
 	*)
+		LIB_SDL_DETECT="have_command sdl-config"
 		LIB_SDL_CFLAGS='$(sdl-config --cflags)'
 		LIB_SDL_LDFLAGS='$(sdl-config --libs)'
 		LIB_SDL_VERSION='$(sdl-config --version)'
@@ -128,8 +129,15 @@ case "$HOST_SYSTEM" in
 		;;
 esac
 LIB_openal_VERSION=""
-LIB_openal_DETECT="try_pkgconfig_lib openal openal"
-LIB_openal_DEPEND_DETECT_BIN="pkgconfig"
+case "$HOST_SYSTEM" in
+	Darwin)
+		## Apple does not ship pkg-config on Mac OSX
+		;;
+	*)
+		LIB_openal_DETECT="try_pkgconfig_lib openal openal"
+		LIB_openal_DEPEND_DETECT_BIN="pkgconfig"
+		;;
+esac
 
 
 ### OpenGL ###
@@ -199,6 +207,9 @@ case "$HOST_SYSTEM" in
 	ARMV5|WINSCW|GCCE)
 		LIB_vorbisfile_DETECT="false"
 		;;
+	Darwin)
+		## Apple does not ship pkg-config on Mac OSX
+		;;
 	*)
 		LIB_vorbisfile_DETECT="try_pkgconfig_lib vorbisfile vorbisfile"
 		LIB_vorbisfile_DEPEND_DETECT_BIN="pkgconfig"
@@ -236,6 +247,7 @@ case "$HOST_SYSTEM" in
 		LIB_libmikmod_DETECT="false"
 		;;
 	*)
+		LIB_libmikmod_DETECT="have_command libmikmod-config"
 		LIB_libmikmod_CFLAGS="$(libmikmod-config --cflags)"
 		LIB_libmikmod_LDFLAGS="$(libmikmod-config --libs)"
 		LIB_libmikmod_VERSION="$(libmikmod-config --version)"
@@ -263,6 +275,9 @@ case "$HOST_SYSTEM" in
 	ARMV5|WINSCW|GCCE)
 		LIB_zlib_DETECT="true"
 		;;
+	Darwin)
+		## Apple does not ship pkg-config on Mac OSX
+		;;
 	*)
 		LIB_zlib_DETECT="try_pkgconfig_lib zlib zlib"
 		LIB_zlib_DEPEND_DETECT_BIN="pkgconfig"
@@ -280,6 +295,7 @@ case "$HOST_SYSTEM" in
 		LIB_pthread_VERSION=""
 		;;
 	FreeBSD|OpenBSD)
+		LIB_pthread_DETECT="have_command pthread-config"
 		LIB_pthread_CFLAGS="$(pthread-config --cflags)"
 		LIB_pthread_LDFLAGS="$(pthread-config --ldflags)"
 		LIB_pthread_VERSION="$(pthread-config --version)"

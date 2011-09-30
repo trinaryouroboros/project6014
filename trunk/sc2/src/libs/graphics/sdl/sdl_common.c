@@ -198,6 +198,7 @@ void
 TFB_UninitGraphics (void)
 {
 	Uninit_DrawCommandQueue ();
+	// TODO: Uninit whatever the drivers have set up for us
 	SDL_Quit ();
 }
 
@@ -234,7 +235,7 @@ static BOOLEAN system_box_active = 0;
 static SDL_Rect system_box;
 
 void
-SetSystemRect (RECT *r)
+SetSystemRect (const RECT *r)
 {
 	system_box_active = TRUE;
 	system_box.x = r->corner.x;
@@ -888,6 +889,7 @@ TFB_FlushGraphics (void) // Only call from main thread!!
 						exit (EXIT_FAILURE);
 					}
 				}
+				TFB_SwapBuffers (TFB_REDRAW_YES);
 				if (initGraphicsResult == 1)
 				{
 					DC.data.reinitvideo.flags &= ~TFB_GFXFLAGS_FULLSCREEN;

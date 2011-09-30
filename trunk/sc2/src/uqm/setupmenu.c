@@ -590,7 +590,7 @@ rebind_control (WIDGET_CONTROLENTRY *widget)
 	int index = widget->highlighted;
 
 	FlushInput ();
-	DrawLabelAsWindow (&labels[3]);
+	DrawLabelAsWindow (&labels[3], NULL);
 	RebindInputState (template, control, index);
 	populate_editkeys (template);
 	FlushInput ();
@@ -1096,7 +1096,7 @@ GetGlobalOptions (GLOBALOPTS *opts)
 	opts->stereo = optStereoSFX ? OPTVAL_ENABLED : OPTVAL_DISABLED;
 	/* These values are read in, but won't change during a run. */
 	opts->music3do = opt3doMusic ? OPTVAL_ENABLED : OPTVAL_DISABLED;
-	opts->musicremix = optPrecursorsMusic ? OPTVAL_ENABLED : OPTVAL_DISABLED;
+	opts->musicremix = optRemixMusic ? OPTVAL_ENABLED : OPTVAL_DISABLED;
 	switch (snddriver) {
 	case audio_DRIVER_OPENAL:
 		opts->adriver = OPTVAL_OPENAL;

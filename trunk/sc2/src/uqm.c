@@ -116,7 +116,7 @@ struct options_struct
 	DECL_CONFIG_OPTION(int, soundDriver);
 	DECL_CONFIG_OPTION(int, soundQuality);
 	DECL_CONFIG_OPTION(bool, use3doMusic);
-	DECL_CONFIG_OPTION(bool, usePrecursorsMusic);
+	DECL_CONFIG_OPTION(bool, useRemixMusic);
 	DECL_CONFIG_OPTION(int, whichCoarseScan);
 	DECL_CONFIG_OPTION(int, whichMenu);
 	DECL_CONFIG_OPTION(int, whichFonts);
@@ -222,7 +222,6 @@ static int parseIntOption (const char *str, int *result,
 static int parseFloatOption (const char *str, float *f,
 		const char *optName);
 static void parseIntVolume (int intVol, float *vol);
-static int parseVolume (const char *str, float *vol, const char *optName);
 static int InvalidArgument (const char *supplied, const char *opt_name);
 static const char *choiceOptString (const struct int_option *option);
 static const char *boolOptString (const struct bool_option *option);
@@ -315,7 +314,7 @@ main (int argc, char *argv[])
 
 	if (errBuffer[0] != '\0')
 	{	// Have some saved error to log
-		log_add (log_Error, "%s", errBuffer);
+		log_add (log_Error, errBuffer);
 		errBuffer[0] = '\0';
 	}
 
@@ -373,7 +372,7 @@ main (int argc, char *argv[])
 
 	// Fill in global variables:
 	opt3doMusic = options.use3doMusic.value;
-	optPrecursorsMusic = options.usePrecursorsMusic.value;
+	optRemixMusic = options.useRemixMusic.value;
 	optWhichCoarseScan = options.whichCoarseScan.value;
 	optWhichMenu = options.whichMenu.value;
 	optWhichFonts = options.whichFonts.value;
@@ -626,7 +625,7 @@ getUserConfigOptions (struct options_struct *options)
 			OPT_3DO, OPT_PC);
 
 	getBoolConfigValue (&options->use3doMusic, "config.3domusic");
-	getBoolConfigValue (&options->usePrecursorsMusic, "config.remixmusic");
+	getBoolConfigValue (&options->useRemixMusic, "config.remixmusic");
 
 	getBoolConfigValueXlat (&options->meleeScale, "config.smoothmelee",
 			TFB_SCALE_TRILINEAR, TFB_SCALE_STEP);
@@ -817,7 +816,7 @@ parseOptions (int argc, char *argv[], struct options_struct *options)
 
 	if (argc == 0)
 	{
-		log_add (log_Fatal, "Error: Bad command line.");
+		saveError ("Error: Bad command line.");
 		return EXIT_FAILURE;
 	}
 
@@ -850,7 +849,7 @@ parseOptions (int argc, char *argv[], struct options_struct *options)
 				int width, height;
 				if (sscanf (optarg, "%dx%d", &width, &height) != 2)
 				{
-					log_add (log_Fatal, "Error: invalid argument specified "
+					saveError ("Error: invalid argument specified "
 							"as resolution.");
 					badArg = true;
 					break;
@@ -1060,8 +1059,7 @@ parseOptions (int argc, char *argv[], struct options_struct *options)
 
 				if (netplayOptions.inputDelay > BATTLE_FRAME_RATE)
 				{
-					log_add (log_Fatal, "Network input delay is absurdly "
-							"large.");
+					saveError ("Network input delay is absurdly large.");
 					badArg = true;
 				}
 				break;
@@ -1088,18 +1086,18 @@ parseOptions (int argc, char *argv[], struct options_struct *options)
 				break;
 			}
 			default:
-				log_add (log_Fatal, "Error: Invalid option '%s' not found.",
-							longOptions[optionIndex].name);
-				badArg = TRUE;
+				saveError ("Error: Unknown option '%s'",
+						optionIndex < 0 ? "<unknown>" :
+						longOptions[optionIndex].name);
+				badArg = true;
 				break;
 		}
 	}
 
 	if (!badArg && optind != argc)
 	{
-		log_add (log_Fatal, "\nError: Extra arguments found on the command "
-				"line.");
-		badArg = TRUE;
+		saveError ("\nError: Extra arguments found on the command line.");
+		badArg = true;
 	}
 
 	return badArg ? EXIT_FAILURE : EXIT_SUCCESS;
@@ -1125,28 +1123,6 @@ parseIntVolume (int intVol, float *vol)
 }
 
 static int
-parseVolume (const char *str, float *vol, const char *optName)
-{
-	char *endPtr;
-	int intVol;
-
-	if (str[0] == '\0')
-	{
-		log_add (log_Error, "Error: Invalid value for '%s'.", optName);
-		return -1;
-	}
-	intVol = (int) strtol (str, &endPtr, 10);
-	if (*endPtr != '\0')
-	{
-		log_add (log_Error, "Error: Junk characters in volume specified "
-				"for '%s'.", optName);
-		return -1;
-	}
-	parseIntVolume (intVol, vol);
-	return;
-}
-
-static int
 parseIntOption (const char *str, int *result, const char *optName)
 {
 	char *endPtr;
@@ -1154,14 +1130,13 @@ parseIntOption (const char *str, int *result, const char *optName)
 
 	if (str[0] == '\0')
 	{
-		log_add (log_Error, "Error: Invalid value for '%s'.", optName);
+		saveError ("Error: Invalid value for '%s'.", optName);
 		return -1;
 	}
 	temp = (int) strtol (str, &endPtr, 10);
 	if (*endPtr != '\0')
 	{
-		log_add (log_Error, "Error: Junk characters in argument '%s'.",
-				optName);
+		saveError ("Error: Junk characters in argument '%s'.", optName);
 		return -1;
 	}
 
@@ -1177,14 +1152,13 @@ parseFloatOption (const char *str, float *f, const char *optName)
 
 	if (str[0] == '\0')
 	{
-		log_add (log_Error, "Error: Invalid value for '%s'.", optName);
+		saveError ("Error: Invalid value for '%s'.", optName);
 		return -1;
 	}
 	temp = (float) strtod (str, &endPtr);
 	if (*endPtr != '\0')
 	{
-		log_add (log_Error, "Error: Junk characters in argument '%s'.",
-				optName);
+		saveError ("Error: Junk characters in argument '%s'.", optName);
 		return -1;
 	}
 
@@ -1271,8 +1245,7 @@ usage (FILE *out, const struct options_struct *defaults)
 static int
 InvalidArgument (const char *supplied, const char *opt_name)
 {
-	log_add (log_Fatal, "Invalid argument '%s' to option %s.",
-			supplied, opt_name);
+	saveError ("Invalid argument '%s' to option %s.", supplied, opt_name);
 	return EXIT_FAILURE;
 }
 
@@ -1301,4 +1274,3 @@ boolNotOptString (const struct bool_option *option)
 {
 	return option->value ? "off" : "on";
 }
-

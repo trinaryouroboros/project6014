@@ -59,7 +59,7 @@ unsigned int resolutionFactor;
 BOOLEAN resFactorWasChanged;
 
 BOOLEAN opt3doMusic;
-BOOLEAN optPrecursorsMusic;
+BOOLEAN optRemixMusic;
 BOOLEAN optSubtitles;
 BOOLEAN optStereoSFX;
 BOOLEAN optKeepAspectRatio;
