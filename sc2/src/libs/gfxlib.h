@@ -251,7 +251,7 @@ extern void FlushColorXForms (void);
 #define GetColorMapAddress GetStringAddress
 #define GetColorMapContents GetStringContents
 
-void SetSystemRect (RECT *pRect);
+void SetSystemRect (const RECT *pRect);
 void ClearSystemRect (void);
 
 #endif /* _GFXLIB_H */

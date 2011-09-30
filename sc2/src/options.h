@@ -45,7 +45,7 @@ extern unsigned int resolutionFactor;
 extern BOOLEAN resFactorWasChanged;
 
 extern BOOLEAN opt3doMusic;
-extern BOOLEAN optPrecursorsMusic;
+extern BOOLEAN optRemixMusic;
 extern BOOLEAN optSubtitles;
 extern BOOLEAN optStereoSFX;
 extern BOOLEAN optKeepAspectRatio;

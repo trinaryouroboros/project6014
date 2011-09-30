@@ -133,7 +133,7 @@ LoadKernel (int argc, char *argv[])
 
 	loadAddon ("voice"); /* Project 6014 voice files. */
 
-	if (optPrecursorsMusic)
+	if (optRemixMusic)
 	{
 		loadAddon ("remix");
 	}

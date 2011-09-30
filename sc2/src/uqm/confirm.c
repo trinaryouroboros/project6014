@@ -215,6 +215,7 @@ DoPopupWindow (const char *msg)
 	FRAME F;
 	CONTEXT oldContext;
 	RECT oldRect;
+	RECT windowRect;
 	POPUP_STATE state;
 	MENU_SOUND_FLAGS s0, s1;
 	
@@ -254,7 +255,8 @@ DoPopupWindow (const char *msg)
 	Widget_SetFont (StarConFont);
 	Widget_SetWindowColors (SHADOWBOX_BACKGROUND_COLOR, SHADOWBOX_DARK_COLOR,
 			SHADOWBOX_MEDIUM_COLOR);
-	DrawLabelAsWindow (&label);
+	DrawLabelAsWindow (&label, &windowRect);
+	SetSystemRect (&windowRect);
 
 	GetMenuSounds (&s0, &s1);
 	SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
@@ -262,6 +264,7 @@ DoPopupWindow (const char *msg)
 	state.InputFunc = DoPopup;
 	DoInput (&state, TRUE);
 
+	ClearSystemRect ();
 	DrawStamp (&s);
 	DestroyDrawable (ReleaseDrawable (s.frame));
 	SetContextClipRect (&oldRect);
