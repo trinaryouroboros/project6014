@@ -26,11 +26,12 @@
 #ifndef _ENCOUNT_H
 #define _ENCOUNT_H
 
+// XXX: temporary, for CONVERSATION
 #include "commglue.h"
 #include "displist.h"
 #include "libs/gfxlib.h"
 #include "planets/planets.h"
-#include "races.h"
+#include "element.h"
 
 
 typedef HLINK HENCOUNTER;
@@ -141,10 +142,7 @@ enum
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED
 
-#define TEXT_X_OFFS (1 << RESOLUTION_FACTOR) // JMS_GFX
-#define TEXT_Y_OFFS (1 << RESOLUTION_FACTOR) // JMS_GFX
-#define SIS_TEXT_WIDTH (SIS_SCREEN_WIDTH - (TEXT_X_OFFS << 1))
-
+// XXX: The stuff till EOC does not belong here
 extern STAR_DESC *CurStarDescPtr;
 extern STAR_DESC *star_array;
 
@@ -154,6 +152,7 @@ extern STAR_DESC* FindStar (STAR_DESC *pLastStar, POINT *puniverse,
 		SIZE xbounds, SIZE ybounds);
 
 extern void GetClusterName (const STAR_DESC *pSD, UNICODE buf[]);
+// <<< EOC
 
 enum
 {
@@ -166,8 +165,9 @@ extern void EncounterBattle (void);
 extern void BuildBattle (COUNT which_player);
 extern COUNT InitEncounter (void);
 extern COUNT UninitEncounter (void);
+
+// XXX: in comm.h, temporary, until solsys generation code is redone
 extern COUNT InitCommunication (CONVERSATION which_comm);
-extern void RaceCommunication (void);
 
 extern void GenerateSOL (BYTE control);
 extern void GenerateShofixti (BYTE control);

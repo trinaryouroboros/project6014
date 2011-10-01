@@ -27,6 +27,7 @@
 #include "../colors.h"
 #include "../controls.h"
 #include "../encount.h"
+#include "../races.h"
 #include "../gamestr.h"
 #include "../globdata.h"
 #include "../init.h"

@@ -23,8 +23,10 @@
 //			 -Added possible systems for those who mysteriously vanished in a hurry...
 //			 -Added little something to Gamma Janus
 
+// XXX: for XXX_DEFINED constants
 #include "encount.h"
 #include "resinst.h"
+#include "planets/planets.h"
 #include "planets/elemdata.h"
 
 

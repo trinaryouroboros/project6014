@@ -7,43 +7,61 @@
 #include "../setup.h"
 #include "triangul.h"
 
-#define UNIVERSE_TO_DISPX(ux) \
-(COORD)(((((long)(ux) - pMenuState->flash_rect1.corner.x) \
-<< LOBYTE (pMenuState->delta_item)) \
-* SIS_SCREEN_WIDTH / (MAX_X_UNIVERSE + 1)) + ((SIS_SCREEN_WIDTH - 1) >> 1))
-#define UNIVERSE_TO_DISPY(uy) \
-(COORD)(((((long)pMenuState->flash_rect1.corner.y - (uy)) \
-<< LOBYTE (pMenuState->delta_item)) \
-* SIS_SCREEN_HEIGHT / (MAX_Y_UNIVERSE + 1)) + ((SIS_SCREEN_HEIGHT - 1) >> 1))
-#define DISP_TO_UNIVERSEX(dx) \
-((COORD)((((long)((dx) - ((SIS_SCREEN_WIDTH - 1) >> 1)) \
-* (MAX_X_UNIVERSE + 1)) >> LOBYTE (pMenuState->delta_item)) \
-/ SIS_SCREEN_WIDTH) + pMenuState->flash_rect1.corner.x)
-#define DISP_TO_UNIVERSEY(dy) \
-((COORD)((((long)(((SIS_SCREEN_HEIGHT - 1) >> 1) - (dy)) \
-* (MAX_Y_UNIVERSE + 1)) >> LOBYTE (pMenuState->delta_item)) \
-/ SIS_SCREEN_HEIGHT) + pMenuState->flash_rect1.corner.y)
+// Shamelessly copied from pstarmap.c and should be updated to reflect
+// any changes on the original
+static inline long
+signedDivWithError (long val, long divisor)
+{
+	int invert = 0;
+	if (val < 0)
+	{
+		invert = 1;
+		val = -val;
+	}
+	val = (val + ROUNDING_ERROR (divisor)) / divisor;
+	return invert ? -val : val;
+}
+
+#define MAP_FIT_X ((MAX_X_UNIVERSE + 1) / SIS_SCREEN_WIDTH + 1)
+
+static inline COORD
+universeToDispx (COORD ux, POINT mapOrigin, int zoomLevel)
+{
+	return signedDivWithError ((((long)ux - mapOrigin.x) << zoomLevel)
+			* SIS_SCREEN_WIDTH, MAX_X_UNIVERSE + MAP_FIT_X)
+			+ ((SIS_SCREEN_WIDTH - 1) >> 1);
+}
+#define UNIVERSE_TO_DISPX(ux, mapOrigin, zoomLevel)  universeToDispx(ux, mapOrigin, zoomLevel)
+
+static inline COORD
+universeToDispy (COORD uy, POINT mapOrigin, int zoomLevel)
+{
+	return signedDivWithError ((((long)mapOrigin.y - uy) << zoomLevel)
+			* SIS_SCREEN_HEIGHT, MAX_Y_UNIVERSE + 2)
+			+ ((SIS_SCREEN_HEIGHT - 1) >> 1);
+}
+#define UNIVERSE_TO_DISPY(uy, mapOrigin, zoomLevel)  universeToDispy(uy, mapOrigin, zoomLevel)
 
 // JMS
 static void
-GetTriangulationSphereRect (COUNT radius, POINT coords, char sphereString[], RECT *pRect, RECT *pRepairRect)
+GetTriangulationSphereRect (COUNT radius, POINT coords, char sphereString[], RECT *pRect, RECT *pRepairRect, POINT mapOrigin, int zoomLevel)
 {
 	long diameter;
 	
 	diameter = (long)(radius * SPHERE_RADIUS_INCREMENT);
-	pRect->extent.width = UNIVERSE_TO_DISPX (diameter) - UNIVERSE_TO_DISPX (0);
+	pRect->extent.width = UNIVERSE_TO_DISPX (diameter, mapOrigin, zoomLevel) - UNIVERSE_TO_DISPX (0, mapOrigin, zoomLevel);
 	if (pRect->extent.width < 0)
 		pRect->extent.width = -pRect->extent.width;
 	else if (pRect->extent.width == 0)
 		pRect->extent.width = 1;
-	pRect->extent.height = UNIVERSE_TO_DISPY (diameter) - UNIVERSE_TO_DISPY (0);
+	pRect->extent.height = UNIVERSE_TO_DISPY (diameter, mapOrigin, zoomLevel) - UNIVERSE_TO_DISPY (0, mapOrigin, zoomLevel);
 	if (pRect->extent.height < 0)
 		pRect->extent.height = -pRect->extent.height;
 	else if (pRect->extent.height == 0)
 		pRect->extent.height = 1;
 	
-	pRect->corner.x = UNIVERSE_TO_DISPX (coords.x);
-	pRect->corner.y = UNIVERSE_TO_DISPY (coords.y);
+	pRect->corner.x = UNIVERSE_TO_DISPX (coords.x, mapOrigin, zoomLevel);
+	pRect->corner.y = UNIVERSE_TO_DISPY (coords.y, mapOrigin, zoomLevel);
 	pRect->corner.x -= pRect->extent.width >> 1;
 	pRect->corner.y -= pRect->extent.height >> 1;
 	
@@ -75,7 +93,7 @@ GetTriangulationSphereRect (COUNT radius, POINT coords, char sphereString[], REC
 }
 
 // JMS: Draw Triangulation Spheres
-void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRect)
+void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRect, POINT mapOrigin, int zoomLevel)
 {	
 	if (which_space <= 1 && orz_space <= 1) // JMS: Orz space check
 	{
@@ -116,7 +134,7 @@ void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRe
 				COUNT radius = sphere_radiuses[index];
 				POINT coords = sphere_coords[index];
 
-				GetTriangulationSphereRect (radius, coords, sphere_strings[index], &r, &repair_r);
+				GetTriangulationSphereRect (radius, coords, sphere_strings[index], &r, &repair_r, mapOrigin, zoomLevel);
 
 				if (r.corner.x < SIS_SCREEN_WIDTH
 					&& r.corner.y < SIS_SCREEN_HEIGHT

@@ -26,7 +26,9 @@
 #include "build.h"
 #include "colors.h"
 #include "controls.h"
+// XXX: for CurStarDescPtr
 #include "encount.h"
+#include "comm.h"
 #include "gamestr.h"
 #include "ipdisp.h"
 #include "load.h"
@@ -41,9 +43,10 @@
 #include "libs/log.h"
 
 
+static void CleanupAfterStarBase (void);
+
 #define STARBASE_AMBIENT_ANIM_RATE   40
 
-MENU_STATE *pMenuState;
 SBDATA StarbaseData;
 
 static SBDATA sol_desc =
@@ -605,6 +608,8 @@ starbase_ambient_anim_task (void *data)
 BOOLEAN
 DoStarBase (MENU_STATE *pMS)
 {
+	// XXX: This function is full of hacks and otherwise strange code
+
 	if (GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))
 	{
 		pMS->CurState = DEPART_BASE;
@@ -673,11 +678,7 @@ DoStarBase (MENU_STATE *pMS)
 		UnbatchGraphics ();
 		UnlockMutex (GraphicsLock);
 	}
-	// JMS: These lines that are commented out are unnecessary also...
-	else if (PulsedInputState.menu[KEY_MENU_SELECT]
-			//|| GET_GAME_STATE (MOONBASE_ON_SHIP)
-			//|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2
-			)
+	else if (PulsedInputState.menu[KEY_MENU_SELECT])
 	{
 ExitStarBase:
 		DestroyDrawable (ReleaseDrawable (StarbaseData.StarbaseFrame));
@@ -721,6 +722,8 @@ ExitStarBase:
 				NotifyOthers (CHMMR_SHIP, IPNL_ALL_CLEAR);
 			}
 			
+			// XXX: InitCommunication() clears these flags, and we need them
+			//   This marks that we are in Starbase.
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
 		}
 		else
@@ -800,23 +803,31 @@ VisitStarBase (void)
 {
 	MENU_STATE MenuState;
 	CONTEXT OldContext;
+	StatMsgMode prevMsgMode = SMM_UNDEFINED;
 
+	// XXX: This should probably be moved out to Starcon2Main()
 	if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
-	{
-		CurStarDescPtr = 0;
-		goto TimePassage;
+	{	// We were just transported by Chmmr to the Starbase
+		// Force a reload of the SolarSys
+		CurStarDescPtr = NULL;
+		// This marks that we are in Starbase.
+		SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
 	}
-	else if (!GET_GAME_STATE (STARBASE_AVAILABLE))
+
+	if (!GET_GAME_STATE (STARBASE_AVAILABLE))
 	{
 		HSHIPFRAG hStarShip;
 		SHIP_FRAGMENT *FragPtr;
 
-		pMenuState = 0;
-		
+		// Unallied Starbase conversation
+		SetCommIntroMode (CIM_CROSSFADE_SCREEN, 0);
 		InitCommunication (COMMANDER_CONVERSATION);
 		if (!GET_GAME_STATE (PROBE_ILWRATH_ENCOUNTER)
 				|| (GLOBAL (CurrentActivity) & CHECK_ABORT))
-			goto ExitStarBase;
+		{
+			CleanupAfterStarBase ();
+			return;
+		}
 
 		/* Create an Ilwrath ship responding to the Ur-Quan
 		 * probe's broadcast */
@@ -831,45 +842,59 @@ VisitStarBase (void)
 		InitCommunication (ILWRATH_CONVERSATION);
 		if (GLOBAL_SIS (CrewEnlisted) == (COUNT)~0
 				|| (GLOBAL (CurrentActivity) & CHECK_ABORT))
+			return; // Killed by Ilwrath
+		
+		// After Ilwrath battle, about-to-ally Starbase conversation
+		SetCommIntroMode (CIM_CROSSFADE_SCREEN, 0);
+		InitCommunication (COMMANDER_CONVERSATION);
+		if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 			return;
+		// XXX: InitCommunication() clears these flags, and we need them
+		//   This marks that we are in Starbase.
 		SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
-
-		{
-			pMenuState = &MenuState;
-			InitCommunication (COMMANDER_CONVERSATION);
-
-TimePassage:
-			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
-			DoTimePassage ();
-			if (GLOBAL_SIS (CrewEnlisted) == (COUNT)~0)
-				return; // You are now dead! Thank you!
-		}
 	}
 
-	pMenuState = &MenuState;
+	prevMsgMode = SetStatusMessageMode (SMM_RES_UNITS);
 
-	memset (&MenuState, 0, sizeof (MenuState));
-
-	MenuState.InputFunc = DoStarBase;
 	
 	// JMS: This is unnecessary for our little sequel...
 	/*if (GET_GAME_STATE (MOONBASE_ON_SHIP)
 			|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
-	{
-		MenuState.Initialized = TRUE;
-		MenuState.CurState = TALK_COMMANDER;
+	{	// Go immediately into a conversation with the Commander when the
+		// Starbase becomes available for the first time, or after Chmmr
+		// install the bomb.
+		DoTimePassage ();
+		if (GLOBAL_SIS (CrewEnlisted) == (COUNT)~0)
+			return; // You are now dead! Thank you! (killed by Kohr-Ah)
+
+		SetCommIntroMode (CIM_FADE_IN_SCREEN, ONE_SECOND * 2);
+		InitCommunication (COMMANDER_CONVERSATION);
+		if (GLOBAL (CurrentActivity) & CHECK_ABORT)
+			return;
+		// XXX: InitCommunication() clears these flags, and we need them
+		//   This marks that we are in Starbase.
+		SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
 	}*/
 
+	memset (&MenuState, 0, sizeof (MenuState));
+	MenuState.InputFunc = DoStarBase;
+	
 	OldContext = SetContext (ScreenContext);
-	DoInput (pMenuState, TRUE);
+	DoInput (&MenuState, TRUE);
 	SetContext (OldContext);
 
-	pMenuState = 0;
+	SetStatusMessageMode (prevMsgMode);
+	CleanupAfterStarBase ();
+}
 
-ExitStarBase:
+static void
+CleanupAfterStarBase (void)
+{
 	if (!(GLOBAL (CurrentActivity) & (CHECK_LOAD | CHECK_ABORT)))
 	{
+		// Mark as not in Starbase anymore
 		SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 0);
+		// Fake a load so Starcon2Main takes us to IP
 		GLOBAL (CurrentActivity) = CHECK_LOAD;
 		NextActivity = MAKE_WORD (IN_INTERPLANETARY, 0)
 				| START_INTERPLANETARY;

@@ -63,7 +63,6 @@ typedef enum {
 } CONVERSATION;
 
 extern LOCDATA CommData;
-extern int cur_comm;
 extern UNICODE shared_phrase_buf[2048];
 
 #define PLAYER_SAID(r,i) ((r)==(i))

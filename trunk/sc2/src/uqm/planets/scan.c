@@ -29,6 +29,7 @@
 #include "../cons_res.h"
 #include "../controls.h"
 #include "../encount.h"
+		// for EncounterGroup
 #include "../gamestr.h"
 #include "../nameref.h"
 #include "../resinst.h"
@@ -52,10 +53,14 @@ extern FRAME SpaceJunkFrame;
 #undef SPIN_ON_SCAN
 
 #define FLASH_INDEX 105
-#define FLASH_WIDTH 9
-#define FLASH_HEIGHT 9
 
+// TODO: this will become static once genchmmr.c declares its own CONTEXT
 CONTEXT ScanContext;
+
+static POINT planetLoc;
+static RECT cursorRect;
+static FRAME eraseFrame;
+
 
 void
 RepairBackRect (RECT *pRect)
@@ -504,56 +509,54 @@ PrintCoarseScan3DO (void)
 }
 
 static void
-initPlanetLocationImage (MENU_STATE *pMS)
+initPlanetLocationImage (void)
 {
 	EXTENT size;
+	FRAME cursorFrame;
 
 	// Get the cursor image
-	pMS->flash_frame0 = SetAbsFrameIndex (MiscDataFrame, FLASH_INDEX);
-	size.width = GetFrameWidth (pMS->flash_frame0);
-	size.height = GetFrameHeight (pMS->flash_frame0);
-	pMS->flash_rect0.extent = size;
+	cursorFrame = SetAbsFrameIndex (MiscDataFrame, FLASH_INDEX);
+	size.width = GetFrameWidth (cursorFrame);
+	size.height = GetFrameHeight (cursorFrame);
+	cursorRect.extent = size;
 
-	pMS->flash_frame1 = CaptureDrawable (CreateDrawable (
+	eraseFrame = CaptureDrawable (CreateDrawable (
 			WANT_PIXMAP | MAPPED_TO_DISPLAY,
 			size.width, size.height, 1));
 	// copy the hotspot
-	SetFrameHot (pMS->flash_frame1, GetFrameHot (pMS->flash_frame0));
+	SetFrameHot (eraseFrame, GetFrameHot (cursorFrame));
 }
 
 static void
-savePlanetLocationImage (MENU_STATE *pMS)
+savePlanetLocationImage (void)
 {
 	RECT r;
-	HOT_SPOT hs = GetFrameHot (pMS->flash_frame1);
-
-	// Remember what we saved
-	pMS->flash_rect1.corner = pMS->flash_rect0.corner;
+	HOT_SPOT hs = GetFrameHot (eraseFrame);
 
 	GetContextClipRect (&r);
-	r.corner.x += pMS->flash_rect1.corner.x - hs.x;
-	r.corner.y += pMS->flash_rect1.corner.y - hs.y;
-	r.extent = pMS->flash_rect0.extent;
-	LoadDisplayPixmap (&r, pMS->flash_frame1);
+	r.corner.x += cursorRect.corner.x - hs.x;
+	r.corner.y += cursorRect.corner.y - hs.y;
+	r.extent = cursorRect.extent;
+	LoadDisplayPixmap (&r, eraseFrame);
 }
 
 static void
-restorePlanetLocationImage (MENU_STATE *pMS)
+restorePlanetLocationImage (void)
 {
 	STAMP s;
 
-	s.origin = pMS->flash_rect1.corner;
-	s.frame = pMS->flash_frame1; // saved image
+	s.origin = cursorRect.corner;
+	s.frame = eraseFrame; // saved image
 	DrawStamp (&s);
 }
 
-void
-drawPlanetCursor (MENU_STATE *pMS, BOOLEAN filled)
+static void
+drawPlanetCursor (BOOLEAN filled)
 {
 	STAMP s;
 
-	s.origin = pMS->flash_rect0.corner;
-	s.frame = pMS->flash_frame0;
+	s.origin = cursorRect.corner;
+	s.frame = SetAbsFrameIndex (MiscDataFrame, FLASH_INDEX);
 	if (filled)
 		DrawFilledStamp (&s);
 	else
@@ -561,28 +564,26 @@ drawPlanetCursor (MENU_STATE *pMS, BOOLEAN filled)
 }
 
 void
-setPlanetCursorLoc (MENU_STATE *pMS, POINT new_pt)
+setPlanetCursorLoc (POINT new_pt)
 {
 	new_pt.x >>= MAG_SHIFT;
 	new_pt.y >>= MAG_SHIFT;
-	pMS->flash_rect0.corner = new_pt;
+	cursorRect.corner = new_pt;
 }
 
 static void
-SetPlanetLoc (MENU_STATE *pMS, POINT new_pt)
+setPlanetLoc (POINT new_pt)
 {
-	pSolarSysState->MenuState.first_item = new_pt;
-
-	// Set the new flash location
-	setPlanetCursorLoc (pMS, new_pt);
+	planetLoc = new_pt;
 
 	SetContext (ScanContext);
-	restorePlanetLocationImage (pMS);
-	savePlanetLocationImage (pMS);
+	restorePlanetLocationImage ();
+	setPlanetCursorLoc (new_pt);
+	savePlanetLocationImage ();
 }
 
 static void
-flashPlanetLocation (MENU_STATE *pMS)
+flashPlanetLocation (void)
 {
 #define FLASH_FRAME_DELAY  (ONE_SECOND / 16)
 	static BYTE c = 0x00;
@@ -592,8 +593,8 @@ flashPlanetLocation (MENU_STATE *pMS)
 	BOOLEAN locChanged;
 	TimeCount Now = GetTimeCounter ();
 
-	locChanged = prevPt.x != pMS->flash_rect0.corner.x
-				|| prevPt.y != pMS->flash_rect0.corner.y;
+	locChanged = prevPt.x != cursorRect.corner.x
+				|| prevPt.y != cursorRect.corner.y;
 
 	if (!locChanged && Now < NextTime)
 		return; // nothing to do
@@ -602,7 +603,7 @@ flashPlanetLocation (MENU_STATE *pMS)
 	{	// Reset the flashing cycle
 		c = 0x00;
 		val = -2;
-		prevPt = pMS->flash_rect0.corner;
+		prevPt = cursorRect.corner;
 		
 		NextTime = Now + FLASH_FRAME_DELAY;
 	}
@@ -620,7 +621,27 @@ flashPlanetLocation (MENU_STATE *pMS)
 
 	SetContext (ScanContext);
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (c, c, c), c));
-	drawPlanetCursor (pMS, TRUE);
+	drawPlanetCursor (TRUE);
+}
+
+void
+RedrawSurfaceScan (const POINT *newLoc)
+{
+	CONTEXT OldContext;
+
+	OldContext = SetContext (ScanContext);
+
+	BatchGraphics ();
+	DrawPlanet (0, 0, 0, 0);
+	DrawScannedObjects (TRUE);
+	if (newLoc)
+	{
+		setPlanetLoc (*newLoc);
+	 	drawPlanetCursor (FALSE);
+	}
+	UnbatchGraphics ();
+
+	SetContext (OldContext);
 }
 
 static BOOLEAN DoScan (MENU_STATE *pMS);
@@ -650,8 +671,8 @@ PickPlanetSide (MENU_STATE *pMS)
 			LockMutex (GraphicsLock);
 			SetContext (ScanContext);
 			// Set the current flash location
-			setPlanetCursorLoc (pMS, pSolarSysState->MenuState.first_item);
-			savePlanetLocationImage (pMS);
+			setPlanetCursorLoc (planetLoc);
+			savePlanetLocationImage ();
 
 			SetFlashRect (NULL);
 			UnlockMutex (GraphicsLock);
@@ -672,7 +693,7 @@ PickPlanetSide (MENU_STATE *pMS)
 		if (!select)
 		{	// Bailing out
 			LockMutex (GraphicsLock);
-			SetPlanetLoc (pMS, pSolarSysState->MenuState.first_item);
+			restorePlanetLocationImage ();
 			UnlockMutex (GraphicsLock);
 		}
 		else
@@ -689,10 +710,10 @@ PickPlanetSide (MENU_STATE *pMS)
 			LockMutex (GraphicsLock);
 			DeltaSISGauges (0, -(SIZE)fuel_required, 0);
 			SetContext (ScanContext);
-			drawPlanetCursor (pMS, FALSE);
+			drawPlanetCursor (FALSE);
 			UnlockMutex (GraphicsLock);
 
-			PlanetSide (pMS);
+			PlanetSide (planetLoc);
 			if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 				goto ExitPlanetSide;
 
@@ -779,7 +800,7 @@ ExitPlanetSide:
 		SIZE dy = 0;
 		POINT new_pt;
 
-		new_pt = pSolarSysState->MenuState.first_item;
+		new_pt = planetLoc;
 
 		if (PulsedInputState.menu[KEY_MENU_LEFT])
 			dx = -(1 + RESOLUTION_FACTOR); // JMS_GFX
@@ -807,16 +828,16 @@ ExitPlanetSide:
 		{
 			new_pt.y += dy;
 			if (new_pt.y < 0 || new_pt.y >= (MAP_HEIGHT << MAG_SHIFT))
-				new_pt.y = pSolarSysState->MenuState.first_item.y;
+				new_pt.y = planetLoc.y;
 		}
 
-		if (new_pt.x != pSolarSysState->MenuState.first_item.x
-				|| new_pt.y != pSolarSysState->MenuState.first_item.y)
+		if (new_pt.x != planetLoc.x
+				|| new_pt.y != planetLoc.y)
 		{
-			SetPlanetLoc (pMS, new_pt);
+			setPlanetLoc (new_pt);
 		}
 
-		flashPlanetLocation (pMS);
+		flashPlanetLocation ();
 
 		UnbatchGraphics ();
 		UnlockMutex (GraphicsLock);
@@ -854,6 +875,7 @@ DrawScannedStuff (COUNT y, BYTE CurState)
 			//DWORD Time;
 			STAMP s;
 
+			// XXX: Hack: flag this as surface scan element
 			ElementPtr->state_flags |= APPEARING;
 
 			s.origin = ElementPtr->current.location;
@@ -1191,21 +1213,19 @@ ScanSystem (void)
 				GAS_GIANT_ATMOSPHERE))
 	{
 		MenuState.CurState = EXIT_SCAN;
-		ScanContext = 0;
+		ScanContext = NULL;
 	}
 	else
 	{
 		MenuState.CurState = AUTO_SCAN;
-		pSolarSysState->MenuState.first_item.x =
-				(MAP_WIDTH >> 1) << MAG_SHIFT;
-		pSolarSysState->MenuState.first_item.y =
-				(MAP_HEIGHT >> 1) << MAG_SHIFT;
+		planetLoc.x = (MAP_WIDTH >> 1) << MAG_SHIFT;
+		planetLoc.y = (MAP_HEIGHT >> 1) << MAG_SHIFT;
 
 		LockMutex (GraphicsLock);
 		ScanContext = CreateContext ("ScanContext");
 		SetContext (ScanContext);
 
-		initPlanetLocationImage (&MenuState);
+		initPlanetLocationImage ();
 
 		SetContextFGFrame (Screen);
 		r.corner.x = (SIS_ORG_X + SIS_SCREEN_WIDTH) - MAP_WIDTH;
@@ -1224,18 +1244,17 @@ ScanSystem (void)
 	else
 		PrintCoarseScan3DO ();
 
-	pMenuState = &MenuState;
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 	DoInput (&MenuState, FALSE);
-	pMenuState = 0;
 
 	if (ScanContext)
 	{
 		LockMutex (GraphicsLock);
 		SetContext (SpaceContext);
-		DestroyDrawable (ReleaseDrawable (MenuState.flash_frame1));
+		DestroyDrawable (ReleaseDrawable (eraseFrame));
+		eraseFrame = NULL;
 		DestroyContext (ScanContext);
-		ScanContext = 0;
+		ScanContext = NULL;
 		UnlockMutex (GraphicsLock);
 	}
 }

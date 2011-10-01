@@ -29,6 +29,7 @@
 #include "libs/gfxlib.h"
 #include "libs/tasklib.h"
 
+#include <stdlib.h>
 
 // Ship icon positions in status display around the flagship
 static const POINT ship_pos[MAX_COMBAT_SHIPS] =
@@ -393,10 +394,6 @@ Roster (void)
 	if (num_support_ships)
 	{
 		MENU_STATE MenuState;
-		MENU_STATE *pOldMenuState;
-
-		pOldMenuState = pMenuState;
-		pMenuState = &MenuState;
 
 		// Get the ship positions we will use and sort on X then Y
 		assert (sizeof (sorted_ship_pos) == sizeof (ship_pos));
@@ -412,8 +409,6 @@ Roster (void)
 		SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 		DoInput (&MenuState, TRUE);
 
-		pMenuState = pOldMenuState;
-		
 		return TRUE;
 	}
 	

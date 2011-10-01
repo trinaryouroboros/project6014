@@ -104,7 +104,7 @@ animatePowerLines (MENU_STATE *pMS)
 
 #ifdef WANT_SHIP_SPINS
 static void
-SpinStarShip (HFLEETINFO hStarShip)
+SpinStarShip (MENU_STATE *pMS, HFLEETINFO hStarShip)
 {
 	int Index;
 	FLEET_INFO *FleetPtr;
@@ -116,7 +116,7 @@ SpinStarShip (HFLEETINFO hStarShip)
 	if (Index >= 0 && Index < NUM_MELEE_SHIPS)
 	{
 		UnlockMutex (GraphicsLock);
-		DoShipSpin (Index, pMenuState->hMusic);
+		DoShipSpin (Index, pMS->hMusic);
 		LockMutex (GraphicsLock);
 	}
 }
@@ -171,7 +171,7 @@ GetAvailableRaceFromIndex (BYTE Index)
 }
 
 static void
-DrawRaceStrings (BYTE NewRaceItem)
+DrawRaceStrings (MENU_STATE *pMS, BYTE NewRaceItem)
 {
 	RECT r;
 	STAMP s;
@@ -212,8 +212,7 @@ DrawRaceStrings (BYTE NewRaceItem)
 		hStarShip = GetAvailableRaceFromIndex (NewRaceItem);
 		NewRaceItem = GetIndexFromStarShip (&GLOBAL (avail_race_q),
 				hStarShip);
-		s.frame = SetAbsFrameIndex (pMenuState->ModuleFrame,
-				3 + NewRaceItem);
+		s.frame = SetAbsFrameIndex (pMS->ModuleFrame, 3 + NewRaceItem);
 		DrawStamp (&s);
 		FleetPtr = LockFleetInfo (&GLOBAL (avail_race_q), hStarShip);
 		s.frame = FleetPtr->melee_icon;
@@ -289,7 +288,8 @@ ShowShipCrew (SHIP_FRAGMENT *StarShipPtr, RECT *pRect)
 }
 
 static void
-ShowCombatShip (COUNT which_window, SHIP_FRAGMENT *YankedStarShipPtr)
+ShowCombatShip (MENU_STATE *pMS, COUNT which_window,
+		SHIP_FRAGMENT *YankedStarShipPtr)
 {
 	COUNT i, num_ships;
 	HSHIPFRAG hStarShip, hNextShip;
@@ -311,8 +311,7 @@ ShowCombatShip (COUNT which_window, SHIP_FRAGMENT *YankedStarShipPtr)
 		pship_win_info->rtdoor_s.origin.x = (SHIP_WIN_WIDTH >> 1);
 		pship_win_info->lfdoor_s.origin.y = 0;
 		pship_win_info->rtdoor_s.origin.y = 0;
-		pship_win_info->lfdoor_s.frame =
-				IncFrameIndex (pMenuState->ModuleFrame);
+		pship_win_info->lfdoor_s.frame = IncFrameIndex (pMS->ModuleFrame);
 		pship_win_info->rtdoor_s.frame =
 				IncFrameIndex (pship_win_info->lfdoor_s.frame);
 
@@ -372,8 +371,7 @@ ShowCombatShip (COUNT which_window, SHIP_FRAGMENT *YankedStarShipPtr)
 			pship_win_info->rtdoor_s.origin.x = 1;
 			pship_win_info->lfdoor_s.origin.y = 0;
 			pship_win_info->rtdoor_s.origin.y = 0;
-			pship_win_info->lfdoor_s.frame =
-					IncFrameIndex (pMenuState->ModuleFrame);
+			pship_win_info->lfdoor_s.frame = IncFrameIndex (pMS->ModuleFrame);
 			pship_win_info->rtdoor_s.frame =
 					IncFrameIndex (pship_win_info->lfdoor_s.frame);
 
@@ -681,7 +679,7 @@ DoModifyShips (MENU_STATE *pMS)
 					OldContext = SetContext (ScreenContext);
 					GetContextClipRect (&OldClipRect);
 
-					SpinStarShip (hSpinShip);
+					SpinStarShip (pMS, hSpinShip);
 
 					SetContextClipRect (&OldClipRect);
 					SetContext (OldContext);
@@ -711,7 +709,7 @@ DoModifyShips (MENU_STATE *pMS)
 					if (!(pMS->delta_item & MODIFY_CREW_FLAG))
 					{
 						pMS->delta_item = MODIFY_CREW_FLAG;
-						DrawRaceStrings (0);
+						DrawRaceStrings (pMS, 0);
 						return TRUE;
 					}
 					else if (cancel)
@@ -733,7 +731,7 @@ DoModifyShips (MENU_STATE *pMS)
 								&& CloneShipFragment (Index,
 								&GLOBAL (built_ship_q), 1))
 						{
-							ShowCombatShip (pMS->CurState, NULL);
+							ShowCombatShip (pMS, pMS->CurState, NULL);
 							//Reset flash rectangle
 							LockMutex (GraphicsLock);
 							SetFlashRect (SFR_MENU_3DO);
@@ -778,7 +776,7 @@ DoModifyShips (MENU_STATE *pMS)
 						
 						if (NewState != LOBYTE (pMS->delta_item))
 						{
-							DrawRaceStrings (NewState);
+							DrawRaceStrings (pMS, NewState);
 							pMS->delta_item = NewState | MODIFY_CREW_FLAG;
 						}
 						
@@ -798,7 +796,7 @@ DoModifyShips (MENU_STATE *pMS)
 						{
 							SetFlashRect (NULL);
 							UnlockMutex (GraphicsLock);
-							ShowCombatShip (pMS->CurState, StarShipPtr);
+							ShowCombatShip (pMS, pMS->CurState, StarShipPtr);
 							LockMutex (GraphicsLock);
 							UnlockShipFrag (&GLOBAL (built_ship_q),
 									hStarShip);
@@ -807,7 +805,6 @@ DoModifyShips (MENU_STATE *pMS)
 							// refresh SIS display
 							DeltaSISGauges (UNDEFINED_DELTA, UNDEFINED_DELTA,
 									UNDEFINED_DELTA);
-							DrawStatusMessage ((UNICODE *)~0);
 							r.corner.x = pMS->flash_rect0.corner.x;
 							r.corner.y = pMS->flash_rect0.corner.y;
 							r.extent.width = SHIP_WIN_WIDTH;
@@ -1272,7 +1269,7 @@ DoShipyard (MENU_STATE *pMS)
 
 			PlayMusic (pMS->hMusic, TRUE, 1);
 
-			ShowCombatShip ((COUNT)~0, NULL);
+			ShowCombatShip (pMS, (COUNT)~0, NULL);
 			LockMutex (GraphicsLock);
 			SetFlashRect (SFR_MENU_3DO);
 			UnlockMutex (GraphicsLock);

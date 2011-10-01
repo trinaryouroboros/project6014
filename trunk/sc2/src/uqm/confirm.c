@@ -19,7 +19,6 @@
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "controls.h"
-#include "commglue.h"
 #include "colors.h"
 #include "settings.h"
 #include "setup.h"
@@ -85,13 +84,7 @@ DoConfirmExit (void)
 {
 	BOOLEAN result;
 
-// BW: game clock task retired in r1293
-//	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
-//			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
-//			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
-//			!(LastActivity & CHECK_RESTART))
-//		SuspendGameClock ();
-	if (CommData.ConversationPhrases && PlayingTrack ())
+	if (PlayingTrack ())
 		PauseTrack ();
 
 	LockMutex (GraphicsLock);
@@ -178,13 +171,7 @@ DoConfirmExit (void)
 	}
 	UnlockMutex (GraphicsLock);
 
-// BW: game clock task retired in r1293
-//	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
-//			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
-//			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
-//			!(LastActivity & CHECK_RESTART))
-//		ResumeGameClock ();
-	if (CommData.ConversationPhrases && PlayingTrack ())
+	if (PlayingTrack ())
 		ResumeTrack ();
 
 	return (result);

@@ -25,6 +25,8 @@
 #include "libs/mathlib.h"
 
 #include "uqm/build.h"
+#include "uqm/encount.h"
+// BW: for EncounterGroup, no longer included in commall.h
 
 #include "libs/log.h"
 
