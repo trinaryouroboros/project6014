@@ -138,7 +138,7 @@ GenerateShofixtiCrashSite (BYTE control)
 					// Now we reverse the fake picking up so the blip stays on the planet.
 					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] &= ~(1L << 0); 
 					
-					((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
+					pLanderInputState->planetSideDesc->InTransit = TRUE;
 					SET_GAME_STATE (BLACK_ORB_STATE, 1);
 					SET_GAME_STATE (WHICH_SHIP_PLAYER_HAS, PRECURSOR_BATTLESHIP);
 				}

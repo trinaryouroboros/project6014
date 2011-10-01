@@ -29,8 +29,13 @@
 // functions are a no-op.
 extern BOOLEAN disableInteractivity;
 
-// If a function is assigned to this, it will be called from the main loop.
+// If a function is assigned to this, it will be called from the
+// Starcon2Main thread, in the main game loop.
 extern void (* volatile debugHook) (void);
+
+// If a function is assigned to this, it will be called from the
+// Starcon2Main thread, in doInput().
+extern void (* volatile doInputDebugHook) (void);
 
 
 // Called when the debug key (symbol 'Debug' in the keys.cfg) is pressed.
@@ -182,6 +187,11 @@ void dumpStrings(FILE *out);
 
 // JMS: Toggle shofixt distress site triangulation spheres on / off
 void ToggleTriangulationSpheres (BOOLEAN triangSphereSwitch);
+
+// Graphically and textually show all the contexts.
+// Should be called from debugHook.
+void debugContexts (void);
+
 
 // To add some day:
 // - a function to fast forward the game clock to a specifiable time.

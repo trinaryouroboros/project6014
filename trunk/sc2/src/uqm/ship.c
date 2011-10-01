@@ -216,11 +216,6 @@ ship_preprocess (ELEMENT *ElementPtr)
 			InitIntersectStartPoint (ElementPtr);
 			InitIntersectEndPoint (ElementPtr);
 
-			UnlockMutex (GraphicsLock);
-			ResumeGameClock ();
-			SetGameClockRate (HYPERSPACE_CLOCK_RATE);
-			LockMutex (GraphicsLock);
-
 			if (hyper_transition (ElementPtr))
 				return;
 		}

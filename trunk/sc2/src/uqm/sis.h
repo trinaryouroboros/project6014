@@ -187,13 +187,15 @@ enum
 #define MAX_LANDERS 3 // No more than 3 landers
 
 #define SUPPORT_SHIP_PTS \
-	{RES_STAT_SCALE(3 +  0), RES_STAT_SCALE(30 + (1 * 16))}, \
-	{RES_STAT_SCALE(3 + 42), RES_STAT_SCALE(30 + (1 * 16))}, \
-	{RES_STAT_SCALE(3 +  0), RES_STAT_SCALE(30 + (0 * 16))}, \
-	{RES_STAT_SCALE(3 + 42), RES_STAT_SCALE(30 + (0 * 16))}, \
-	{RES_STAT_SCALE(3 +  0), RES_STAT_SCALE(30 + (5 * 16))}, \
-	{RES_STAT_SCALE(3 + 42), RES_STAT_SCALE(30 + (5 * 16))},
+	{3 +  0, 30 + (1 * 16)}, \
+	{3 + 42, 30 + (1 * 16)}, \
+	{3 +  0, 30 + (0 * 16)}, \
+	{3 + 42, 30 + (0 * 16)}, \
+	{3 +  0, 30 + (5 * 16)}, \
+	{3 + 42, 30 + (5 * 16)},
 // Only authorized positions according to graphics (chflagstat.0.png)
+// BW: now these need to be constant because they initialize an array
+// in roster.c. Resolution Factor will be appied when effectively drawing.
 
 #define SIS_NAME_SIZE 16
 
@@ -268,6 +270,7 @@ extern BOOLEAN DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos,
 #define DSME_SETFR    (1 << 0)
 #define DSME_CLEARFR  (1 << 1)
 #define DSME_BLOCKCUR (1 << 2)
+#define DSME_MYCOLOR  (1 << 3)
 extern void DrawSISMessage (const UNICODE *pStr);
 extern void DrawGameDate (void);
 extern void DateToString (unsigned char *buf, size_t bufLen,
@@ -278,6 +281,7 @@ extern void DrawStorageBays (BOOLEAN Refresh);
 extern void GetGaugeRect (RECT *pRect, BOOLEAN IsCrewRect);
 extern void DrawFlagshipStats (void);
 extern void SaveFlagshipState (void);
+void DrawAutoPilotMessage (BOOLEAN Reset);
 
 extern void DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int
 		resunit_delta);

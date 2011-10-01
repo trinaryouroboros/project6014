@@ -107,6 +107,7 @@ static RACE_DESC arilou_desc =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define MAX_THRUST_2XRES /* DISPLAY_TO_WORLD (20) */ 80					// JMS_GFX
@@ -183,6 +184,7 @@ static RACE_DESC arilou_desc_2xres =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define MAX_THRUST_4XRES /* DISPLAY_TO_WORLD (20) */ 160				// JMS_GFX
@@ -259,6 +261,7 @@ static RACE_DESC arilou_desc_4xres =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 

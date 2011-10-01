@@ -107,6 +107,7 @@ static RACE_DESC black_urquan_desc =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define MAX_THRUST_2XRES 60			// JMS_GFX
@@ -181,6 +182,7 @@ static RACE_DESC black_urquan_desc_2xres =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define MAX_THRUST_4XRES 120		// JMS_GFX
@@ -255,6 +257,7 @@ static RACE_DESC black_urquan_desc_4xres =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define SAW_RATE 0

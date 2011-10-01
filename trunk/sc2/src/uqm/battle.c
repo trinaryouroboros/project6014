@@ -320,9 +320,11 @@ DoBattle (BATTLE_STATE *bs)
 		SetTransitionSource (&r);
 	}
 	BatchGraphics ();
-	if ((LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE) &&
-			!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
-		SeedUniverse ();
+
+	// Call the callback function, if set
+	if (bs->frame_cb)
+		bs->frame_cb ();
+
 	RedrawQueue (TRUE);
 
 	if (bs->first_time)
@@ -401,7 +403,7 @@ selectAllShips (SIZE num_ships)
 }
 
 BOOLEAN
-Battle (void)
+Battle (BattleFrameCallback *callback)
 {
 	SIZE num_ships;
 
@@ -472,6 +474,7 @@ Battle (void)
 		}
 #endif  /* NETPLAY */
 		bs.InputFunc = DoBattle;
+		bs.frame_cb = callback;
 		bs.first_time = (BOOLEAN)(LOBYTE (GLOBAL (CurrentActivity)) ==
 				IN_HYPERSPACE);
 

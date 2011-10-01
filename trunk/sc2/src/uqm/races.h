@@ -31,6 +31,7 @@
 #ifndef _RACES_H
 #define _RACES_H
 
+#include "types.h"
 #include "libs/compiler.h"
 #include "units.h"
 #include "displist.h"
@@ -249,6 +250,8 @@ struct race_desc
 	PREPROCESS_FUNC *preprocess_func;
 	POSTPROCESS_FUNC *postprocess_func;
 	INIT_WEAPON_FUNC *init_weapon_func;
+
+	intptr_t data;  // private ship data, ship code owns this
 
 	void *CodeRef;
 };

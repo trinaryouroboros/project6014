@@ -65,7 +65,7 @@ GeneratePkunk (BYTE control)
 						// JMS: No more clear spindles!
 						/*if (!GET_GAME_STATE (CLEAR_SPINDLE))
 						{
-							((PLANETSIDE_DESC*)pMenuState->ModuleFrame)->InTransit = TRUE;
+							pLanderInputState->planetSideDesc->InTransit = TRUE;
 
 							SET_GAME_STATE (CLEAR_SPINDLE, 1);
 							SET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP, 1);

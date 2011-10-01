@@ -20,8 +20,6 @@
 #include "resinst.h"
 
 #include "libs/mathlib.h"
-#include "uqm/init.h"
-		// for NUM_PLAYERS
 
 
 #define MAX_CREW 20
@@ -107,6 +105,7 @@ static RACE_DESC androsynth_desc =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define MAX_THRUST_2XRES 48  // JMS_GFX
@@ -181,6 +180,7 @@ static RACE_DESC androsynth_desc_2xres =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define MAX_THRUST_4XRES 96  // JMS_GFX
@@ -255,6 +255,7 @@ static RACE_DESC androsynth_desc_4xres =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define BLAZER_DAMAGE 3
@@ -471,8 +472,6 @@ androsynth_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	}
 }
 
-static CollisionFunc *ship_collision_func[NUM_PLAYERS];
-
 #define BLAZER_TURN_WAIT 1
 
 static void
@@ -504,8 +503,10 @@ androsynth_postprocess (ELEMENT *ElementPtr)
 				ElementPtr->mass_points = BLAZER_MASS;
 				StarShipPtr->RaceDescPtr->characteristics.turn_wait
 						= BLAZER_TURN_WAIT;
-				ship_collision_func[StarShipPtr->playerNr]
-						= ElementPtr->collision_func;
+				/* Save the current collision func because we were not the
+				 * ones who set it */
+				StarShipPtr->RaceDescPtr->data = (intptr_t)
+						ElementPtr->collision_func;
 				ElementPtr->collision_func = blazer_collision;
 			}
 		}
@@ -573,7 +574,8 @@ androsynth_preprocess (ELEMENT *ElementPtr)
 					StarShipPtr->RaceDescPtr->characteristics.special_wait;
 			StarShipPtr->RaceDescPtr->characteristics.energy_regeneration = ENERGY_REGENERATION;
 			ElementPtr->mass_points = SHIP_MASS;
-			ElementPtr->collision_func = ship_collision_func[StarShipPtr->playerNr];
+			ElementPtr->collision_func = (CollisionFunc *)
+					StarShipPtr->RaceDescPtr->data;
 			ElementPtr->next.image.farray =
 					StarShipPtr->RaceDescPtr->ship_data.ship;
 			ElementPtr->next.image.frame =

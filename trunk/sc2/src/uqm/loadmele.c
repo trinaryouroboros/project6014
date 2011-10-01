@@ -265,7 +265,7 @@ FillFileView (MELEE_STATE *pMS)
 #define FILE_STRING_ORIGIN_Y  ((34 << RESOLUTION_FACTOR) + (RESOLUTION_FACTOR * 21)) // JMS_GFX
 #define ENTRY_HEIGHT (32 << RESOLUTION_FACTOR) // JMS_GFX
 
-void
+static void
 SelectFileString (MELEE_STATE *pMS, bool hilite)
 {
 	CONTEXT OldContext;
@@ -325,6 +325,29 @@ RefocusView (MELEE_STATE *pMS, COUNT index)
 		pMS->load.top = 0;
 	else
 		pMS->load.top = index - LOAD_TEAM_VIEW_SIZE / 2;
+}
+
+static void
+flashSelectedTeam (MELEE_STATE *pMS)
+{
+#define FLASH_RATE (ONE_SECOND / 9)
+	static TimeCount NextTime = 0;
+	static int hilite = 0;
+	TimeCount Now = GetTimeCounter ();
+
+	if (Now >= NextTime)
+	{
+		CONTEXT OldContext;
+
+		NextTime = Now + FLASH_RATE;
+		hilite ^= 1;
+
+		LockMutex (GraphicsLock);
+		OldContext = SetContext (SpaceContext);
+		SelectFileString (pMS, hilite);
+		SetContext (OldContext);
+		UnlockMutex (GraphicsLock);
+	}
 }
 
 BOOLEAN
@@ -441,6 +464,8 @@ DoLoadTeam (MELEE_STATE *pMS)
 			UnlockMutex (GraphicsLock);
 		}
 	}
+
+	flashSelectedTeam (pMS);
 
 	SleepThreadUntil (TimeIn + ONE_SECOND / 30);
 

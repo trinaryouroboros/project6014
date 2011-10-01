@@ -802,7 +802,7 @@ EncounterBattle (void)
 	GameSounds = CaptureSound (LoadSound (GAME_SOUNDS));
 
 	UnlockMutex (GraphicsLock);
-	Battle ();
+	Battle (NULL);
 	LockMutex (GraphicsLock);
 
 	DestroySound (ReleaseSound (GameSounds));

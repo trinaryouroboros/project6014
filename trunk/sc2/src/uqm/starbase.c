@@ -148,7 +148,7 @@ DrawBaseStateStrings (STARBASE_STATE OldState, STARBASE_STATE NewState)
 }
 
 void
-DrawShipPiece (MENU_STATE *pMS, COUNT which_piece, COUNT which_slot,
+DrawShipPiece (FRAME ModuleFrame, COUNT which_piece, COUNT which_slot,
 		BOOLEAN DrawBluePrint)
 {
 	COLOR OldColor = 0;  // Initialisation is to keep the compiler silent.
@@ -210,7 +210,7 @@ DrawShipPiece (MENU_STATE *pMS, COUNT which_piece, COUNT which_slot,
 	Side.origin.x += which_slot * SHIP_PIECE_OFFSET;
 	if (RepairSlot < 0)
 	{
-		Side.frame = SetAbsFrameIndex (pMS->ModuleFrame,
+		Side.frame = SetAbsFrameIndex (ModuleFrame,
 				((NUM_MODULES - 1) + (6 - 2)) + (NUM_MODULES + 6)
 				- (RepairSlot + 1));
 		DrawStamp (&Side);
@@ -248,7 +248,7 @@ DrawShipPiece (MENU_STATE *pMS, COUNT which_piece, COUNT which_slot,
 	{
 		if (RepairSlot)
 			SetContextForeGroundColor (OldColor);
-		Side.frame = SetAbsFrameIndex (pMS->ModuleFrame, which_piece - 1);
+		Side.frame = SetAbsFrameIndex (ModuleFrame, which_piece - 1);
 		DrawFilledStamp (&Side);
 	}
 	else
@@ -288,7 +288,7 @@ DrawShipPiece (MENU_STATE *pMS, COUNT which_piece, COUNT which_slot,
 			}
 		}
 
-		Top.frame = SetAbsFrameIndex (pMS->ModuleFrame, which_piece);
+		Top.frame = SetAbsFrameIndex (ModuleFrame, which_piece);
 		DrawStamp (&Top);
 
 		Side.frame = SetRelFrameIndex (Top.frame, (NUM_MODULES - 1) + 6);
@@ -300,7 +300,7 @@ DrawShipPiece (MENU_STATE *pMS, COUNT which_piece, COUNT which_slot,
 
 			s.origin = Top.origin;
 			s.origin.x -= SHIP_PIECE_OFFSET;
-			s.frame = SetAbsFrameIndex (pMS->ModuleFrame, NUM_MODULES + 5);
+			s.frame = SetAbsFrameIndex (ModuleFrame, NUM_MODULES + 5);
 			DrawStamp (&s);
 			s.origin = Side.origin;
 			s.origin.x -= SHIP_PIECE_OFFSET;
@@ -317,7 +317,7 @@ DrawShipPiece (MENU_STATE *pMS, COUNT which_piece, COUNT which_slot,
 					&& which_slot >= NUM_MODULE_SLOTS - 3)
 				++which_piece;
 
-			Top.frame = SetAbsFrameIndex (pMS->ModuleFrame, which_piece);
+			Top.frame = SetAbsFrameIndex (ModuleFrame, which_piece);
 			DrawStamp (&Top);
 
 			Side.frame = SetRelFrameIndex (Top.frame, (NUM_MODULES - 1) + 6);
@@ -326,38 +326,38 @@ DrawShipPiece (MENU_STATE *pMS, COUNT which_piece, COUNT which_slot,
 	}
 }
 
-/***
-static int
-rotate_starbase(void *data)
+static void
+rotateStarbase (MENU_STATE *pMS, FRAME AniFrame)
 {
-	DWORD TimeIn;
-	STAMP s;
-	Task task = (Task) data;
-	
-	//s.origin.x = s.origin.y = 0;
-	s.origin.x = SAFE_X;
-	s.origin.y = SAFE_Y + 4;
-	s.frame = IncFrameIndex (pMenuState->CurFrame);
-	TimeIn = GetTimeCounter ();
-	while (!Task_ReadState (task, TASK_EXIT))
-	{
-		//CONTEXT OldContext;
-		
-		LockMutex (GraphicsLock);
-		DrawStamp (&s);
-		s.frame = IncFrameIndex (s.frame);
-		if (s.frame == pMenuState->CurFrame)
-			s.frame = IncFrameIndex (s.frame);
-		UnlockMutex (GraphicsLock);
-		
-		SleepThreadUntil (TimeIn + (ONE_SECOND / 20));
-		TimeIn = GetTimeCounter ();
-	}
+	static TimeCount NextTime = 0;
+	TimeCount Now = GetTimeCounter ();
 
-	FinishTask (task);
-	return(0);
+	if (AniFrame)
+	{	// Setup the animation
+		pMS->flash_frame0 = AniFrame;
+		pMS->flash_rect0.corner.x = SAFE_X;
+		pMS->flash_rect0.corner.y = SAFE_Y + 4;
+	}
+	
+	if (Now >= NextTime || AniFrame)
+	{
+		STAMP s;
+
+		NextTime = Now + (ONE_SECOND / 20);
+
+		s.origin = pMS->flash_rect0.corner;
+		s.frame = pMS->flash_frame0;
+		DrawStamp (&s);
+
+		s.frame = IncFrameIndex (s.frame);
+		if (GetFrameIndex (s.frame) == 0)
+		{	// Do not redraw the base frame, animation loops to frame 1
+			s.frame = IncFrameIndex (s.frame);
+		}
+		pMS->flash_frame0 = s.frame;
+	}
 }
-***/
+/*** Animated starbase by BW based on tasks ; reformed for now but could be reintegrated into rotateStarbase later
 
 static void
 SetUpSBSequence (SEQUENCE *pSeq)
@@ -600,7 +600,7 @@ starbase_ambient_anim_task (void *data)
 	FinishTask (task);
 	return 0;
 }
-
+***/
 
 BOOLEAN
 DoStarBase (MENU_STATE *pMS)
@@ -614,8 +614,6 @@ DoStarBase (MENU_STATE *pMS)
 
 	if (!pMS->Initialized)
 	{
-	  STAMP s;
-
 		LastActivity &= ~CHECK_LOAD;
 		pMS->InputFunc = DoStarBase;
 
@@ -638,9 +636,6 @@ DoStarBase (MENU_STATE *pMS)
 		pMS->Initialized = TRUE;
 		UnlockMutex (GraphicsLock);
 
-		//s.origin.x = s.origin.y = 0;
-		s.origin.x = SAFE_X;
-		s.origin.y = SAFE_Y + 4;
 		
 		// JMS: Procyon starbase has different graphics from Sol and Betelgeuse starbases
 		if (CurStarDescPtr->Index == CHMMR_DEFINED)
@@ -653,7 +648,7 @@ DoStarBase (MENU_STATE *pMS)
 		
 		StarbaseData.StarbaseFrame = CaptureDrawable (LoadGraphic (StarbaseData.StarbaseFrameRes));
 
-		s.frame = StarbaseData.StarbaseFrame;
+		pMS->CurFrame = StarbaseData.StarbaseFrame;
 
 		pMS->hMusic = LoadMusic (STARBASE_MUSIC);
 
@@ -663,7 +658,7 @@ DoStarBase (MENU_STATE *pMS)
 		BatchGraphics ();
 		SetContextBackGroundColor (BLACK_COLOR);
 		ClearDrawable ();
-		DrawStamp (&s);
+		rotateStarbase (pMS, pMS->CurFrame);
 		DrawBaseStateStrings ((STARBASE_STATE)~0, pMS->CurState);
 		{
 			RECT r;
@@ -676,8 +671,6 @@ DoStarBase (MENU_STATE *pMS)
 		}
 		PlayMusic (pMS->hMusic, TRUE, 1);
 		UnbatchGraphics ();
-
-		pMS->flash_task = AssignTask (starbase_ambient_anim_task, 3072, "starbase ambient animations");
 		UnlockMutex (GraphicsLock);
 	}
 	// JMS: These lines that are commented out are unnecessary also...
@@ -687,11 +680,6 @@ DoStarBase (MENU_STATE *pMS)
 			)
 	{
 ExitStarBase:
-		if (pMS->flash_task)
-		{
-			ConcludeTask (pMS->flash_task);
-			pMS->flash_task = 0;
-		}
 		DestroyDrawable (ReleaseDrawable (StarbaseData.StarbaseFrame));
 		pMS->CurFrame = 0;
 		StopMusic ();
@@ -720,17 +708,17 @@ ExitStarBase:
 			if (CurStarDescPtr->Index == SOL_DEFINED)
 			{
 				InitCommunication (COMMANDER_CONVERSATION);
-				NotifyOthers (HUMAN_SHIP, (BYTE)~0);
+				NotifyOthers (HUMAN_SHIP, IPNL_ALL_CLEAR);
 			}
 			else if (CurStarDescPtr->Index == SYREEN_DEFINED)
 			{
 				InitCommunication (SYREENBASE_CONVERSATION);
-				NotifyOthers (SYREEN_SHIP, (BYTE)~0);
+				NotifyOthers (SYREEN_SHIP, IPNL_ALL_CLEAR);
 			}
 			else
 			{
 				InitCommunication (CHMMR_CONVERSATION);
-				NotifyOthers (CHMMR_SHIP, (BYTE)~0);
+				NotifyOthers (CHMMR_SHIP, IPNL_ALL_CLEAR);
 			}
 			
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, (BYTE)~0);
@@ -773,13 +761,20 @@ ExitStarBase:
 				NewState = TALK_COMMANDER;
 		}
 
+		LockMutex (GraphicsLock);
+		BatchGraphics ();
+		SetContext (ScreenContext);
+
 		if (NewState != pMS->CurState)
 		{
-			LockMutex (GraphicsLock);
 			DrawBaseStateStrings (pMS->CurState, NewState);
-			UnlockMutex (GraphicsLock);
 			pMS->CurState = NewState;
 		}
+
+		rotateStarbase (pMS, NULL);
+
+		UnbatchGraphics ();
+		UnlockMutex (GraphicsLock);
 
 		SleepThread (ONE_SECOND / 30);
 	}
@@ -791,20 +786,13 @@ static void
 DoTimePassage (void)
 {
 #define LOST_DAYS 14
-	COUNT i;
 	BYTE clut_buf[1];
 
 	clut_buf[0] = FadeAllToBlack;
 	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)clut_buf, ONE_SECOND * 2));
-	for (i = 0; i < LOST_DAYS; ++i)
-	{
-		while (ClockTick () > 0)
-			;
-
-		ResumeGameClock ();
-		SleepThread (ONE_SECOND / 60);
-		SuspendGameClock ();
-	}
+	LockMutex (GraphicsLock);
+	MoveGameClockDays (LOST_DAYS);
+	UnlockMutex (GraphicsLock);
 }
 
 void

@@ -39,7 +39,7 @@ enum
 static BYTE
 BlueDistribution (BYTE which_world)
 {
-	BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
+	const BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
 	{
 		PLANET_ALWAYS, /* OOLITE_WORLD */
 		PLANET_ALWAYS, /* YTTRIC_WORLD */
@@ -110,7 +110,7 @@ BlueDistribution (BYTE which_world)
 static BYTE
 GreenDistribution (BYTE which_world)
 {
-	BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
+	const BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
 	{
 		PLANET_NEVER,  /* OOLITE_WORLD */
 		PLANET_NEVER,  /* YTTRIC_WORLD */
@@ -181,7 +181,7 @@ GreenDistribution (BYTE which_world)
 static BYTE
 OrangeDistribution (BYTE which_world)
 {
-	BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
+	const BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
 	{
 		PLANET_NEVER,  /* OOLITE_WORLD */
 		PLANET_NEVER,  /* YTTRIC_WORLD */
@@ -252,7 +252,7 @@ OrangeDistribution (BYTE which_world)
 static BYTE
 RedDistribution (BYTE which_world)
 {
-	BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
+	const BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
 	{
 		PLANET_NEVER,  /* OOLITE_WORLD */
 		PLANET_NEVER,  /* YTTRIC_WORLD */
@@ -323,7 +323,7 @@ RedDistribution (BYTE which_world)
 static BYTE
 WhiteDistribution (BYTE which_world)
 {
-	BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
+	const BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
 	{
 		PLANET_ALWAYS, /* OOLITE_WORLD */
 		PLANET_ALWAYS, /* YTTRIC_WORLD */
@@ -394,7 +394,7 @@ WhiteDistribution (BYTE which_world)
 static BYTE
 YellowDistribution (BYTE which_world)
 {
-	BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
+	const BYTE PlanetDistribution[NUMBER_OF_PLANET_TYPES] =
 	{
 		PLANET_NEVER,  /* OOLITE_WORLD */
 		PLANET_NEVER,  /* YTTRIC_WORLD */
