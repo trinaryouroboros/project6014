@@ -32,8 +32,8 @@
 #include "libs/mathlib.h"
 #include "assert.h"
 
+// XXX: temporary, for SOL_X/SOL_Y
 #include "uqm/hyper.h"
-// for SOL_X/SOL_Y
 
 #define NUM_HISTORY_ITEMS 0
 #define NUM_EVENT_ITEMS 1
@@ -207,6 +207,7 @@ static NUMBER_SPEECH_DESC melnorme_numbers_english =
 	}
 };
 
+static StatMsgMode prevMsgMode;
 void 
 update_biounit_flags(void) {
 	
@@ -269,7 +270,7 @@ DeltaCredit (SIZE delta_credit)
 		SET_GAME_STATE (MELNORME_CREDIT0, LOBYTE (Credit));
 		SET_GAME_STATE (MELNORME_CREDIT1, HIBYTE (Credit));
 		LockMutex (GraphicsLock);
-		DrawStatusMessage ((UNICODE *)~0);
+		DrawStatusMessage (NULL);
 		UnlockMutex (GraphicsLock);
 	}
 	else
@@ -1088,6 +1089,8 @@ DoFirstMeeting (RESPONSE_REF R)
 
 static void
 Intro (void) {
+	prevMsgMode = SetStatusMessageMode (SMM_CREDITS);
+
 	if (GET_GAME_STATE (MET_MELNORME) == 0)
 	{
 		SET_GAME_STATE (MET_MELNORME, 1);
@@ -1102,14 +1105,16 @@ Intro (void) {
 static COUNT
 uninit_melnorme (void)
 {
-	return (0);
+	return 0;
 }
 
 static void
 post_melnorme_enc (void)
 {
 	LockMutex (GraphicsLock);
-	DrawStatusMessage (0);
+	if (prevMsgMode != SMM_UNDEFINED)
+		SetStatusMessageMode (prevMsgMode);
+	DrawStatusMessage (NULL);
 	UnlockMutex (GraphicsLock);
 }
 
@@ -1125,6 +1130,8 @@ init_melnorme_comm (void)
 	melnorme_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
 	melnorme_desc.AlienTextBaseline.y = 0;
 	melnorme_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
+
+	prevMsgMode = SMM_UNDEFINED;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	//TODO ressurect?

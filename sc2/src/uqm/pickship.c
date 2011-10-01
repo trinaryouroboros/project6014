@@ -383,10 +383,8 @@ GetArmadaStarShip (void)
 		MenuState.flash_rect1.extent.width = 0;
 
 		UnlockMutex (GraphicsLock);
-		pMenuState = &MenuState;
 		SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 		DoInput (&MenuState, FALSE);
-		pMenuState = 0;
 		LockMutex (GraphicsLock);
 
 		SetFlashRect (NULL);

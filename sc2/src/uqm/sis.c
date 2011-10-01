@@ -21,7 +21,8 @@
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "colors.h"
-#include "commglue.h"
+#include "races.h"
+// XXX: including encount.h for stuff that does not belong there
 #include "encount.h"
 #include "gamestr.h"
 #include "options.h"
@@ -36,6 +37,8 @@
 #include "libs/log.h"
 
 #include <stdio.h>
+
+static StatMsgMode curMsgMode = SMM_DEFAULT;
 
 /**** 1/1-Scale blueprint
 static const COUNT crew_lines_sizes[16] =
@@ -275,7 +278,9 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 	{	// editing state
 		int i;
 		RECT text_r;
-		BYTE char_deltas[MAX_DESC_CHARS];
+		// XXX: 128 is currently safe, but it would be better to specify
+		//   the size to TextRect()
+		BYTE char_deltas[128];
 		BYTE *pchar_deltas;
 
 		t.baseline.x = RES_STAT_SCALE(3);
@@ -400,32 +405,38 @@ DrawStatusMessage (const UNICODE *pStr)
 			BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x6E));
 	ClearDrawable ();
 
-	if (pStr == (UNICODE *)~0)
+	if (!pStr)
 	{
-		if (pMenuState == 0
-				&& CommData.ConversationPhrases /* Melnorme shenanigans */
-				&& cur_comm == MELNORME_CONVERSATION)
+		if (curMsgMode == SMM_CREDITS)
+		{
 			sprintf (buf, "%u %s", MAKE_WORD (
 					GET_GAME_STATE (MELNORME_CREDIT0),
 					GET_GAME_STATE (MELNORME_CREDIT1)
 					), GAME_STRING (STATUS_STRING_BASE + 0)); // "Cr"
-		else if (GET_GAME_STATE (CHMMR_BOMB_STATE) < 2)
-			sprintf (buf, "%u %s", GLOBAL_SIS (ResUnits),
-					GAME_STRING (STATUS_STRING_BASE + 1)); // "RU"
+		}
+		else if (curMsgMode == SMM_RES_UNITS)
+		{
+			if (GET_GAME_STATE (CHMMR_BOMB_STATE) < 2)
+			{
+				sprintf (buf, "%u %s", GLOBAL_SIS (ResUnits),
+						GAME_STRING (STATUS_STRING_BASE + 1)); // "RU"
+			}
+			else
+			{
+				sprintf (buf, "%s %s",
+						(optWhichMenu == OPT_PC) ?
+							GAME_STRING (STATUS_STRING_BASE + 2)
+							: STR_INFINITY_SIGN, // "UNLIMITED"
+						GAME_STRING (STATUS_STRING_BASE + 1)); // "RU"
+			}
+		}
 		else
-			sprintf (buf, "%s %s",
-					(optWhichMenu == OPT_PC) ?
-						GAME_STRING (STATUS_STRING_BASE + 2)
-						: STR_INFINITY_SIGN, // "UNLIMITED"
-					GAME_STRING (STATUS_STRING_BASE + 1)); // "RU"
-		pStr = buf;
-	}
-	else if (pStr == 0)
-	{
-		DateToString (buf, sizeof buf,
-				GLOBAL (GameClock.month_index),
-				GLOBAL (GameClock.day_index),
-				GLOBAL (GameClock.year_index));
+		{	// Just a date
+			DateToString (buf, sizeof buf,
+					GLOBAL (GameClock.month_index),
+					GLOBAL (GameClock.day_index),
+					GLOBAL (GameClock.year_index));
+		}
 		pStr = buf;
 	}
 
@@ -444,6 +455,14 @@ DrawStatusMessage (const UNICODE *pStr)
 	SetContextClipRect (NULL);
 
 	SetContext (OldContext);
+}
+
+StatMsgMode
+SetStatusMessageMode (StatMsgMode newMode)
+{
+	StatMsgMode oldMode = curMsgMode;
+	curMsgMode = newMode;
+	return oldMode;
 }
 
 void
@@ -1088,7 +1107,8 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 			else
 				GLOBAL_SIS (ResUnits) += resunit_delta;
 
-			DrawStatusMessage ((UNICODE *)~0);
+			assert (curMsgMode == SMM_RES_UNITS);
+			DrawStatusMessage (NULL);
 		}
 		else
 		{
@@ -1099,17 +1119,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 			SetContextForeGroundColor (
 					BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x6E));
 			DrawFilledRectangle (&r);
-
-			if ((pMenuState == 0
-					&& CommData.ConversationPhrases /* Melnorme shenanigans */
-					&& cur_comm == MELNORME_CONVERSATION)
-					|| (pMenuState
-					&& (pMenuState->InputFunc == DoStarBase
-					|| pMenuState->InputFunc == DoOutfit
-					|| pMenuState->InputFunc == DoShipyard)))
-				DrawStatusMessage ((UNICODE *)~0);
-			else
-				DrawStatusMessage (NULL);
+			DrawStatusMessage (NULL);
 		}
 	}
 	UnbatchGraphics ();

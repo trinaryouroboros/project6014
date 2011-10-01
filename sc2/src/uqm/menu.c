@@ -19,7 +19,6 @@
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "colors.h"
-#include "commglue.h"
 #include "controls.h"
 #include "options.h"
 #include "setup.h"

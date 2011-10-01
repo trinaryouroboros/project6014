@@ -22,6 +22,8 @@
 #include "globdata.h"
 #include "libs/compiler.h"
 #include "libs/gfxlib.h"
+#include "commglue.h"
+		// for CONVERSATION
 
 #ifdef COMM_INTERNAL
 
@@ -100,8 +102,16 @@ signaledStopTalkingAnim (void)
 
 #endif
 
+#define TEXT_X_OFFS (1 << RESOLUTION_FACTOR) // JMS_GFX
+#define TEXT_Y_OFFS (1 << RESOLUTION_FACTOR) // JMS_GFX
+#define SIS_TEXT_WIDTH (SIS_SCREEN_WIDTH - (TEXT_X_OFFS << 1))
+
 extern void init_communication (void);
 extern void uninit_communication (void);
+
+extern COUNT InitCommunication (CONVERSATION which_comm);
+extern void RaceCommunication (void);
+
 extern void AlienTalkSegue (COUNT wait_track);
 BOOLEAN getLineWithinWidth(TEXT *pText, const unsigned char **startNext,
 		SIZE maxWidth, COUNT maxChars);
@@ -109,6 +119,17 @@ extern void RedrawSubtitles (void);
 extern BOOLEAN HaveSubtitlesChanged (void);
 
 extern RECT CommWndRect; /* comm window rect */
+
+typedef enum
+{
+	CIM_CROSSFADE_SPACE,
+	CIM_CROSSFADE_WINDOW,
+	CIM_CROSSFADE_SCREEN,
+	CIM_FADE_IN_SCREEN,
+
+	CIM_DEFAULT = CIM_CROSSFADE_SPACE,
+} CommIntroMode;
+extern void SetCommIntroMode (CommIntroMode, TimeCount howLong);
 
 extern void EnableTalkingAnim (BOOLEAN enable);
 

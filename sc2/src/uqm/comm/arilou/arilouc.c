@@ -25,6 +25,8 @@
 #include "strings.h"
 
 #include "uqm/gameev.h"
+#include "uqm/encount.h"
+// BW: for ORZ_SPACE_PORTAL_DEFINED, no longer included in commall.h
 
 #include "../mycon/imusicre.h" // JMS
 

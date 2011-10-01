@@ -48,6 +48,6 @@
     "Patrol3", \
 
 void init_triangulation_spheres ();
-void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRect);
+void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRect, POINT mapOrigin, int zoomLevel);
 
 #endif /* _TRIANGUL_H */

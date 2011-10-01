@@ -26,6 +26,8 @@
 #include "libs/mathlib.h"
 
 #include "uqm/build.h"
+#include "uqm/encount.h"
+// BW: for SOL/CHMMR_DEFINED, no longer included in commall.h
 
 
 static LOCDATA transport_desc =

@@ -20,7 +20,7 @@
 
 #include <stdlib.h>
 
-#include "encount.h"
+#include "comm.h"
 #include "battle.h"
 #include "fmv.h"
 #include "gameev.h"
@@ -210,7 +210,8 @@ while (--ac > 0)
 				continue;
 			}
 #endif
-			
+			SetStatusMessageMode (SMM_DEFAULT);
+
 			if (!((GLOBAL (CurrentActivity) | NextActivity) & CHECK_LOAD))
 				ZeroVelocityComponents (&GLOBAL (velocity));
 					// not going into talking pet conversation
