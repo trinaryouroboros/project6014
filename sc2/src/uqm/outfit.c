@@ -355,7 +355,8 @@ DoInstallModule (MENU_STATE *pMS)
 					DisplayLanders (pMS);
 				else
 				{
-					DrawShipPiece (pMS, new_slot_piece, pMS->delta_item, FALSE);
+					DrawShipPiece (pMS->ModuleFrame, new_slot_piece,
+							pMS->delta_item, FALSE);
 
 					if (new_slot_piece > TURNING_JETS
 							&& old_slot_piece > TURNING_JETS)
@@ -660,7 +661,7 @@ DoOutfit (MENU_STATE *pMS)
 
 					which_piece = GLOBAL_SIS (DriveSlots[num_frames]);
 					if (which_piece < EMPTY_SLOT)
-						DrawShipPiece (pMS, which_piece, num_frames, FALSE);
+						DrawShipPiece (pMS->ModuleFrame, which_piece, num_frames, FALSE);
 				}
 				for (num_frames = 0; num_frames < NUM_JET_SLOTS; ++num_frames)
 				{
@@ -668,7 +669,7 @@ DoOutfit (MENU_STATE *pMS)
 
 					which_piece = GLOBAL_SIS (JetSlots[num_frames]);
 					if (which_piece < EMPTY_SLOT)
-						DrawShipPiece (pMS, which_piece, num_frames, FALSE);
+						DrawShipPiece (pMS->ModuleFrame, which_piece, num_frames, FALSE);
 				}
 				for (num_frames = 0; num_frames < NUM_MODULE_SLOTS; ++num_frames)
 				{
@@ -676,7 +677,7 @@ DoOutfit (MENU_STATE *pMS)
 
 					which_piece = GLOBAL_SIS (ModuleSlots[num_frames]);
 					if (which_piece < EMPTY_SLOT)
-						DrawShipPiece (pMS, which_piece, num_frames, FALSE);
+						DrawShipPiece (pMS->ModuleFrame, which_piece, num_frames, FALSE);
 				}
 				RedistributeFuel ();
 				DisplayLanders (pMS);

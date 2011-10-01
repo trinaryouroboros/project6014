@@ -51,6 +51,12 @@ SetContextFGFrame (FRAME Frame)
 	return (LastFrame);
 }
 
+FRAME
+GetContextFGFrame (void)
+{
+	return _CurFramePtr;
+}
+
 DRAWABLE
 CreateDisplay (CREATE_FLAGS CreateFlags, SIZE *pwidth, SIZE *pheight)
 {
@@ -91,6 +97,11 @@ AllocDrawable (COUNT n)
 	{
 		int i;
 		Drawable->Frame = (FRAME)HMalloc (sizeof (FRAME_DESC) * n);
+		if (Drawable->Frame == NULL)
+		{
+			HFree (Drawable);
+			return NULL;
+		}
 
 		/* Zero out the newly allocated frames, since HMalloc doesn't have
 		 * MEM_ZEROINIT. */

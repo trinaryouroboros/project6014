@@ -64,8 +64,6 @@ static void DrawMeleeShipStrings (MELEE_STATE *pMS, BYTE NewStarShip);
 static void StartMelee (MELEE_STATE *pMS);
 static ssize_t numPlayersReady (void);
 
-static int flash_selection_func (void *data);
-
 enum
 {
 #ifdef NETPLAY
@@ -705,13 +703,10 @@ Deselect (BYTE opt)
 			DrawMeleeIcon (25);  /* "Battle!" (not highlighted) */
 			break;
 		case LOAD_TOP:
+			DrawMeleeIcon (17); /* "Load" (top, not highlighted) */
+			break;
 		case LOAD_BOT:
-			if (pMeleeState->InputFunc != DoLoadTeam)
-				DrawMeleeIcon (opt == LOAD_TOP ? 17 : 22);
-						/* 17: "Load" (top, not highlighted) */
-						/* 22: "Load" (bottom, not highlighted) */
-			else
-				SelectFileString (pMeleeState, false);
+			DrawMeleeIcon (22); /* "Load" (bottom, not highlighted) */
 			break;
 		case SAVE_TOP:
 			DrawMeleeIcon (18);  /* "Save" (top, not highlighted) */
@@ -767,13 +762,10 @@ Select (BYTE opt)
 			DrawMeleeIcon (26);  /* "Battle!" (highlighted) */
 			break;
 		case LOAD_TOP:
+			DrawMeleeIcon (19); /* "Load" (top, highlighted) */
+			break;
 		case LOAD_BOT:
-			if (pMeleeState->InputFunc != DoLoadTeam)
-				DrawMeleeIcon (opt == LOAD_TOP ? 19 : 24);
-						/* 19: "Load" (top, highlighted) */
-						/* 24: "Load" (bottom, highlighted) */
-			else
-				SelectFileString (pMeleeState, true);
+			DrawMeleeIcon (24); /* "Load" (bottom, highlighted) */
 			break;
 		case SAVE_TOP:
 			DrawMeleeIcon (20);  /* "Save" (top; highlighted) */
@@ -816,39 +808,30 @@ Select (BYTE opt)
 	}
 }
 
-static int
-flash_selection_func (void *data)
+static void
+flashSelection (MELEE_STATE *pMS)
 {
-	DWORD TimeIn;
-	Task task = (Task) data;
-	volatile MELEE_STATE *pMS = pMeleeState;
-	
-	TimeIn = GetTimeCounter ();
-	while (!Task_ReadState (task, TASK_EXIT))
+#define FLASH_RATE (ONE_SECOND / 9)
+	static TimeCount NextTime = 0;
+	static bool select = false;
+	TimeCount Now = GetTimeCounter ();
+
+	if (Now >= NextTime)
 	{
-#define FLASH_RATE (ONE_SECOND / 8)
 		CONTEXT OldContext;
 
-		LockMutex (GraphicsLock);
-		OldContext = SetContext (SpaceContext);
-		Deselect (pMS->MeleeOption);
-		SetContext (OldContext);
-		UnlockMutex (GraphicsLock);
-		SleepThreadUntil (TimeIn + FLASH_RATE);
-		TimeIn = GetTimeCounter ();
+		NextTime = Now + FLASH_RATE;
+		select ^= true;
 
 		LockMutex (GraphicsLock);
 		OldContext = SetContext (SpaceContext);
-		Select (pMS->MeleeOption);
+		if (select)
+			Select (pMS->MeleeOption);
+		else
+			Deselect (pMS->MeleeOption);
 		SetContext (OldContext);
 		UnlockMutex (GraphicsLock);
-		SleepThreadUntil (TimeIn + FLASH_RATE);
-		TimeIn = GetTimeCounter ();
 	}
-
-	FinishTask (task);
-
-	return 0;
 }
 
 static void
@@ -869,9 +852,6 @@ InitMelee (MELEE_STATE *pMS)
 
 	r.corner.x = r.corner.y = 0;
 	RedrawMeleeFrame ();
-	
-	pMS->flash_task = AssignTask (flash_selection_func, 2048,
-			"flash melee selection");
 }
 
 static void
@@ -1090,16 +1070,24 @@ DoEdit (MELEE_STATE *pMS)
 		pMS->LastInputTime = GetTimeCounter ();
 	}
 	else if (pMS->row < NUM_MELEE_ROWS
-			&& (PulsedInputState.menu[KEY_MENU_SELECT] ||
-			PulsedInputState.menu[KEY_MENU_SPECIAL]))
+			&& PulsedInputState.menu[KEY_MENU_SELECT])
 	{
 		// Show a popup to add a new ship to the current team.
-		if (PulsedInputState.menu[KEY_MENU_SELECT])
-			pMS->Initialized = 0;
-		else
-			pMS->Initialized = -1;
+		pMS->Initialized = 0;
 		FlushInput ();
 		DoPickShip (pMS);
+	}
+	else if (pMS->row < NUM_MELEE_ROWS
+			&& PulsedInputState.menu[KEY_MENU_SPECIAL])
+	{
+		// TODO: this is a stub; Should we display a ship spin?
+		LockMutex (GraphicsLock);
+		Deselect (EDIT_MELEE);
+		if (pMS->CurIndex != (BYTE)~0)
+		{
+			// Do something with pMS->CurIndex here
+		}
+		UnlockMutex (GraphicsLock);
 	}
 	else if (pMS->row < NUM_MELEE_ROWS &&
 			PulsedInputState.menu[KEY_MENU_DELETE])
@@ -1214,6 +1202,8 @@ DoEdit (MELEE_STATE *pMS)
 	flushPacketQueues ();
 #endif
 
+	flashSelection (pMS);
+
 	SleepThreadUntil (TimeIn + ONE_SECOND / 30);
 
 	return (TRUE);
@@ -1233,35 +1223,17 @@ DoPickShip (MELEE_STATE *pMS)
 
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 
-	if (pMS->Initialized <= 0)
+	if (!pMS->Initialized)
 	{
-		if (pMS->CurIndex == (BYTE)~0 && pMS->Initialized == 0)
+		if (pMS->CurIndex == (BYTE)~0)
 			pMS->CurIndex = 0;
-		else if (pMS->CurIndex != (BYTE)~0)
-			DeleteCurrentShip (pMS);
 
-		if (pMS->Initialized == 0)
-		{
-			LockMutex (GraphicsLock);
-			Deselect (EDIT_MELEE);
-			pMS->InputFunc = DoPickShip;
-			DrawPickFrame (pMS);
-			pMS->Initialized = TRUE;
-			UnlockMutex (GraphicsLock);
-		}
-		else
-		{
-			FleetShipIndex fleetShipIndex = GetShipIndex (pMS->row, pMS->col);
-			LockMutex (GraphicsLock);
-			Deselect (EDIT_MELEE);
-			pMS->Initialized = TRUE;
-			AdvanceCursor (pMS);
-			pMS->CurIndex = pMS->SideState[pMS->side].TeamImage.ShipList[
-					fleetShipIndex];
-			UnlockMutex (GraphicsLock);
-
-			DrawMeleeShipStrings (pMS, (BYTE)(pMS->CurIndex));
-		}
+		LockMutex (GraphicsLock);
+		Deselect (EDIT_MELEE);
+		pMS->InputFunc = DoPickShip;
+		DrawPickFrame (pMS);
+		pMS->Initialized = TRUE;
+		UnlockMutex (GraphicsLock);
 	}
 	else if (PulsedInputState.menu[KEY_MENU_SELECT] ||
 			PulsedInputState.menu[KEY_MENU_CANCEL])
@@ -1302,11 +1274,7 @@ DoPickShip (MELEE_STATE *pMS)
 	else if (PulsedInputState.menu[KEY_MENU_SPECIAL]
 			&& (pMeleeState->CurIndex != (BYTE)~0))
 	{
-		BOOLEAN (*InputFunc) (struct melee_state *pInputState);
-		InputFunc = pMS->InputFunc;
-		pMS->InputFunc = 0; /* disable ship flashing */
 		DoShipSpin (pMS->CurIndex, (MUSIC_REF)0);
-		pMS->InputFunc = InputFunc;
 	
 		return (TRUE);
 	}
@@ -1370,6 +1338,8 @@ DoPickShip (MELEE_STATE *pMS)
 			DrawMeleeShipStrings (pMS, NewStarShip);
 		}
 	}
+
+	flashSelection (pMS);
 
 	SleepThreadUntil (TimeIn + ONE_SECOND / 30);
 
@@ -1582,11 +1552,6 @@ LoadMeleeInfo (MELEE_STATE *pMS)
 static void
 FreeMeleeInfo (MELEE_STATE *pMS)
 {
-	if (pMS->flash_task)
-	{
-		ConcludeTask (pMS->flash_task);
-		pMS->flash_task = 0;
-	}
 	DestroyDirEntryTable (ReleaseDirEntryTable (pMS->load.dirEntries));
 	pMS->load.dirEntries = 0;
 
@@ -1724,12 +1689,6 @@ BuildAndDrawShipList (MELEE_STATE *pMS)
 static void
 StartMelee (MELEE_STATE *pMS)
 {
-	if (pMS->flash_task)
-	{
-		ConcludeTask (pMS->flash_task);
-		pMS->flash_task = 0;
-	}
-	
 	{
 		BYTE black_buf[] = {FadeAllToBlack};
 		
@@ -1758,7 +1717,7 @@ StartMelee (MELEE_STATE *pMS)
 
 		load_gravity_well ((BYTE)((COUNT)TFB_Random () %
 					NUMBER_OF_PLANET_TYPES));
-		Battle ();
+		Battle (NULL);
 		free_gravity_well ();
 		ClearPlayerInputAll ();
 
@@ -1954,11 +1913,6 @@ DoConnectingDialog (MELEE_STATE *pMS)
 		RedrawMeleeFrame ();
 		pMS->InputFunc = DoMelee;
 		pMS->LastInputTime = GetTimeCounter ();
-		if (!pMS->flash_task)
-		{
-			pMS->flash_task = AssignTask (flash_selection_func, 2048,
-					"flash melee selection");
-		}
 
 		flushPacketQueues ();
 
@@ -1983,11 +1937,6 @@ DoConnectingDialog (MELEE_STATE *pMS)
 			pMS->LastInputTime = GetTimeCounter ();
 			Deselect (pMS->MeleeOption);
 			pMS->MeleeOption = START_MELEE;
-			if (!pMS->flash_task)
-			{
-				pMS->flash_task = AssignTask (flash_selection_func, 2048,
-						"flash melee selection");
-			}
 		}
 	}
 
@@ -2111,12 +2060,6 @@ MeleeOptionSelect (MELEE_STATE *pMS)
 			COUNT which_side;
 			BOOLEAN confirmed;
 
-			if (pMS->flash_task)
-			{
-				ConcludeTask (pMS->flash_task);
-				pMS->flash_task = 0;
-			}
-
 			which_side = pMS->MeleeOption == NET_TOP ? 1 : 0;
 			confirmed = MeleeConnectDialog (which_side);
 			RedrawMeleeFrame ();
@@ -2126,15 +2069,6 @@ MeleeOptionSelect (MELEE_STATE *pMS)
 				pMS->Initialized = FALSE;
 				pMS->InputFunc = DoConnectingDialog;
 			}
-			else
-			{
-				if (!pMS->flash_task)
-				{
-					pMS->flash_task = AssignTask (flash_selection_func,
-							2048, "flash melee selection");
-				}
-			}
-
 			break;
 		}
 #endif  /* NETPLAY */
@@ -2275,6 +2209,8 @@ DoMelee (MELEE_STATE *pMS)
 
 	check_for_disconnections (pMS);
 #endif
+
+	flashSelection (pMS);
 
 	SleepThreadUntil (TimeIn + ONE_SECOND / 30);
 

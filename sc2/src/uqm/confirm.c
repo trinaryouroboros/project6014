@@ -85,11 +85,12 @@ DoConfirmExit (void)
 {
 	BOOLEAN result;
 
-	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
-			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
-			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
-			!(LastActivity & CHECK_RESTART))
-		SuspendGameClock ();
+// BW: game clock task retired in r1293
+//	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
+//			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
+//			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
+//			!(LastActivity & CHECK_RESTART))
+//		SuspendGameClock ();
 	if (CommData.ConversationPhrases && PlayingTrack ())
 		PauseTrack ();
 
@@ -177,11 +178,12 @@ DoConfirmExit (void)
 	}
 	UnlockMutex (GraphicsLock);
 
-	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
-			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
-			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
-			!(LastActivity & CHECK_RESTART))
-		ResumeGameClock ();
+// BW: game clock task retired in r1293
+//	if (LOBYTE (GLOBAL (CurrentActivity)) != SUPER_MELEE &&
+//			LOBYTE (GLOBAL (CurrentActivity)) != WON_LAST_BATTLE &&
+//			LOBYTE (GLOBAL (CurrentActivity)) != BLACK_ORB_CUTSCENE &&
+//			!(LastActivity & CHECK_RESTART))
+//		ResumeGameClock ();
 	if (CommData.ConversationPhrases && PlayingTrack ())
 		ResumeTrack ();
 

@@ -135,6 +135,7 @@ static RACE_DESC exp_desc =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 // static void InitModuleSlots (RACE_DESC *RaceDescPtr);
@@ -742,6 +743,7 @@ static COUNT initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArr
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock[6];
 	MISSILE_BLOCK *lpMB;
+
 	
 	COORD cx, cy;
 	static COUNT blaster_side[2]={0,0};
@@ -843,8 +845,10 @@ static COUNT initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArr
 			BlasterPtr->turn_wait = MAKE_BYTE (nt, nt);
 			UnlockElement (BlasterArray[i]);
 		}
+	
 	}
 	return (num_blasters);
+
 }
 
 static void exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
@@ -852,7 +856,9 @@ static void exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	EVALUATE_DESC *lpEvalDesc;
 	STARSHIP *StarShipPtr;
 
+
 	GetElementStarShip (ShipPtr, &StarShipPtr);
+
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (lpEvalDesc->ObjectPtr)
@@ -909,6 +915,8 @@ static void exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
         RaceDescPtr->characteristics.weapon_energy_cost += 3;
         RaceDescPtr->characteristics.special_energy_cost = 12;
 } */
+
+
 
 static void InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots)
 {
@@ -1045,4 +1053,7 @@ void uninit_exp (RACE_DESC *pRaceDesc)
 		if (pRaceDesc->ship_info.ship_flags & PLAYER_CAPTAIN)
 			GLOBAL_SIS (CrewEnlisted)--;
 	}
+
+	HFree ((void *)pRaceDesc->data);
+	pRaceDesc->data = 0;
 }

@@ -111,6 +111,7 @@ static RACE_DESC shofixti_desc =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 static COUNT

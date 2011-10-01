@@ -110,6 +110,7 @@ static RACE_DESC chenjesu_desc =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define MAX_THRUST_2XRES /* DISPLAY_TO_WORLD (14) */ 54 // JMS_GFX
@@ -184,6 +185,7 @@ static RACE_DESC chenjesu_desc_2xres =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define MAX_THRUST_4XRES /* DISPLAY_TO_WORLD (14) */ 108 // JMS_GFX
@@ -258,6 +260,7 @@ static RACE_DESC chenjesu_desc_4xres =
 	(POSTPROCESS_FUNC *) NULL,
 	(INIT_WEAPON_FUNC *) NULL,
 	0,
+	0, /* CodeRef */
 };
 
 #define FRAGMENT_LIFE 10
