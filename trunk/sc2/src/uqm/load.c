@@ -173,7 +173,7 @@ LoadShipQueue (DECODE_REF fh, QUEUE *pQueue)
 		FragPtr = LockShipFrag (pQueue, hStarShip);
 
 		// Read SHIP_FRAGMENT elements
-		cread_16 (fh, &FragPtr->which_side);
+		cread_16 (fh, NULL); /* unused: was which_side */
 		cread_8  (fh, &FragPtr->captains_name_index);
 		cread_8  (fh, NULL); /* padding */
 		cread_16 (fh, NULL); /* unused: was ship_flags */
@@ -213,7 +213,7 @@ LoadRaceQueue (DECODE_REF fh, QUEUE *pQueue)
 		FleetPtr = LockFleetInfo (pQueue, hStarShip);
 
 		// Read FLEET_INFO elements
-		cread_16 (fh, &FleetPtr->ship_flags);
+		cread_16 (fh, &FleetPtr->allied_state);
 		cread_8  (fh, &FleetPtr->days_left);
 		cread_8  (fh, &FleetPtr->growth_fract);
 		cread_8  (fh, &tmpb);

@@ -46,6 +46,8 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 {
 	HSHIPFRAG hGroup, hNextGroup;
 
+	// NOTE: "Others" includes the group causing the notification too.
+
 	for (hGroup = GetHeadLink (&GLOBAL (ip_group_q));
 			hGroup; hGroup = hNextGroup)
 	{
@@ -54,50 +56,62 @@ NotifyOthers (COUNT which_race, BYTE target_loc)
 		GroupPtr = LockIpGroup (&GLOBAL (ip_group_q), hGroup);
 		hNextGroup = _GetSuccLink (GroupPtr);
 
-		if (GroupPtr->race_id == which_race)
+		if (GroupPtr->race_id != which_race)
 		{
-			BYTE task;
-			task = GroupPtr->task | IGNORE_FLAGSHIP;
-
-			if (target_loc == 0)
-			{
-				task &= ~IGNORE_FLAGSHIP;
-				// XXX: orbit_pos is abused here to store the previous
+			UnlockIpGroup (&GLOBAL (ip_group_q), hGroup);
+			continue;
+		}
+		if (target_loc == IPNL_INTERCEPT_PLAYER)
+		{
+			GroupPtr->task &= ~IGNORE_FLAGSHIP;
+			// XXX: orbit_pos is abused here to store the previous
+			//   group destination, before the intercept task.
+			//   Returned to dest_loc below.
+			GroupPtr->orbit_pos = GroupPtr->dest_loc;
+			GroupPtr->dest_loc = IPNL_INTERCEPT_PLAYER;
+		}
+		else if (target_loc == IPNL_ALL_CLEAR)
+		{
+			GroupPtr->task |= IGNORE_FLAGSHIP;
+			
+			if (GroupPtr->dest_loc == IPNL_INTERCEPT_PLAYER)
+			{	// The group was intercepting, so send it back where it came
+				// XXX: orbit_pos was abused to store the previous
 				//   group destination, before the intercept task.
-				//   Returned to dest_loc below.
-				GroupPtr->orbit_pos = GroupPtr->dest_loc;
-/* task = FLEE | IGNORE_FLAGSHIP; */
-			}
-			else if ((target_loc = GroupPtr->dest_loc) == 0)
-			{
-				// XXX: orbit_pos is abused to store the previous
-				//   group destination, before the intercept task.
-				target_loc = GroupPtr->orbit_pos;
+				GroupPtr->dest_loc = GroupPtr->orbit_pos;
 				GroupPtr->orbit_pos = NORMALIZE_FACING (TFB_Random ());
 #ifdef OLD
-				target_loc = (BYTE)(((COUNT)TFB_Random ()% pSolarSysState->SunDesc[0].NumPlanets) + 1);
+				GroupPtr->dest_loc = (BYTE)(((COUNT)TFB_Random ()% pSolarSysState->SunDesc[0].NumPlanets) + 1);
 #endif /* OLD */
 				
 				// JMS
-				if (target_loc==0 && GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP)
+				if (GroupPtr->dest_loc==0 && GroupPtr->race_id == SLYLANDRO_KOHRAH_SHIP)
 				{
-				task &= ~IGNORE_FLAGSHIP;
-				task = ON_STATION;
-				target_loc = (BYTE)((
+				GroupPtr->task &= ~IGNORE_FLAGSHIP;
+				GroupPtr->task = ON_STATION;
+				GroupPtr->dest_loc = (BYTE)((
 						(COUNT)TFB_Random ()
 						% pSolarSysState->SunDesc[0].NumPlanets) + 1);
 					
 				}
 				
-				if (!(task & REFORM_GROUP))
-				{
-					if ((task & ~IGNORE_FLAGSHIP) != EXPLORE)
-						GroupPtr->group_counter = 0;
-					else
-						GroupPtr->group_counter = ((COUNT) TFB_Random () % MAX_REVOLUTIONS) << FACING_SHIFT;
-				}
 			}
-			GroupPtr->task = task;
+			// If the group wasn't intercepting, it will just continue
+			// going about its business.
+
+			if (!(GroupPtr->task & REFORM_GROUP))
+			{
+				if ((GroupPtr->task & ~IGNORE_FLAGSHIP) != EXPLORE)
+					GroupPtr->group_counter = 0;
+				else
+					GroupPtr->group_counter = ((COUNT) TFB_Random ()
+							% MAX_REVOLUTIONS) << FACING_SHIFT;
+			}
+		}
+		else
+		{	// Send the group to the location.
+			// XXX: There is currently no use of such notify that I know of.
+			GroupPtr->task |= IGNORE_FLAGSHIP;
 			GroupPtr->dest_loc = target_loc;
 		}
 
@@ -119,14 +133,11 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 	IP_GROUP *GroupPtr;
 
 	EPtr = ElementPtr;
-	EPtr->state_flags &=
-			~(DISAPPEARING | NONSOLID); /* "I'm not quite dead." */
-	++EPtr->life_span; /* so that it will 'die'
-										 * again next time.
-										 */
+	EPtr->state_flags &= ~(DISAPPEARING | NONSOLID); // "I'm not quite dead"
+	++EPtr->life_span; // so that it will 'die' again next time
+
 	GetElementStarShip (EPtr, &GroupPtr);
-	group_loc = GroupPtr->sys_loc;
-			/* save old location */
+	group_loc = GroupPtr->sys_loc; // save old location
 	DisplayArray[EPtr->PrimIndex].Object.Point = GroupPtr->loc;
 
 	if (group_loc != 0)
@@ -160,7 +171,7 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		goto ExitIPProcess;
 
 	if ((task & REFORM_GROUP) && --GroupPtr->group_counter == 0)
-	{
+	{	// Finished reforming the group
 		task &= ~REFORM_GROUP;
 		GroupPtr->task = task;
 		if ((task & ~IGNORE_FLAGSHIP) != EXPLORE)
@@ -197,26 +208,17 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		}
 	}
 	
-	if (!(task & REFORM_GROUP))
-	{
-		if ((task & ~(IGNORE_FLAGSHIP | REFORM_GROUP)) != FLEE)
-		{
-			if (EPtr->state_flags & BAD_GUY)
-				EPtr->state_flags &= ~GOOD_GUY;
-			else
-				EPtr->state_flags |= BAD_GUY;
-		}
-		else if (!(task & IGNORE_FLAGSHIP)
-				&& !(EPtr->state_flags & (GOOD_GUY | BAD_GUY)))
-		{	// fleeing yehat ship collisions after menu fix
-			EPtr->state_flags |= BAD_GUY;
-		}
+	// If fleeing *and* ignoring flagship
+	if ((task & ~(IGNORE_FLAGSHIP | REFORM_GROUP)) == FLEE
+			&& (task & IGNORE_FLAGSHIP))
+	{	// Make fleeing groups non-collidable
+		EPtr->state_flags |= NONSOLID;
 	}
-
+	
 	target_loc = GroupPtr->dest_loc;
 	if (!(task & (IGNORE_FLAGSHIP | REFORM_GROUP)))
 	{
-		if (target_loc == 0 && task != FLEE)
+		if (target_loc == IPNL_INTERCEPT_PLAYER && task != FLEE)
 		{
 			/* if intercepting flagship */
 			target_loc = flagship_loc;
@@ -246,9 +248,10 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 				EPtr->thrust_wait = 0;
 				ZeroVelocityComponents (&EPtr->velocity);
 
-				NotifyOthers (GroupPtr->race_id, 0);
+				NotifyOthers (GroupPtr->race_id, IPNL_INTERCEPT_PLAYER);
 				task = GroupPtr->task;
-				if ((target_loc = GroupPtr->dest_loc) == 0)
+				target_loc = GroupPtr->dest_loc;
+				if (target_loc == IPNL_INTERCEPT_PLAYER)
 					target_loc = flagship_loc;
 			}
 		}
@@ -269,10 +272,10 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 	GetCurrentVelocityComponents (&EPtr->velocity, &vdx, &vdy);
 
 	task &= ~IGNORE_FLAGSHIP;
-	if (task <= ON_STATION)
 #ifdef NEVER
-	if (task <= FLEE || (task == ON_STATION
-			&& GroupPtr->dest_loc == 0))
+	if (task <= FLEE || (task == ON_STATION	&& GroupPtr->dest_loc == 0))
+#else
+	if (task <= ON_STATION)
 #endif /* NEVER */
 	{
 		BOOLEAN Transition, isOrbiting;
@@ -288,12 +291,14 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 			dest_pt.x = GroupPtr->loc.x << 1;
 			dest_pt.y = GroupPtr->loc.y << 1;
 		}
-		else if (((task != ON_STATION || GroupPtr->dest_loc == 0)
+		else if (((task != ON_STATION ||
+				GroupPtr->dest_loc == IPNL_INTERCEPT_PLAYER)
 				&& group_loc == target_loc)
-				|| (task == ON_STATION && GroupPtr->dest_loc
+				|| (task == ON_STATION &&
+				GroupPtr->dest_loc != IPNL_INTERCEPT_PLAYER
 				&& group_loc == 0))
 		{
-			if (GroupPtr->dest_loc == 0)
+			if (GroupPtr->dest_loc == IPNL_INTERCEPT_PLAYER)
 				dest_pt = GLOBAL (ip_location);
 			
 			// ship is circling around a planet.
@@ -377,7 +382,8 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		{
 			SIZE speed;
 
-			if (EPtr->thrust_wait && GroupPtr->dest_loc != 0)
+			if (EPtr->thrust_wait &&
+					GroupPtr->dest_loc != IPNL_INTERCEPT_PLAYER)
 			{
 #define ORBIT_SPEED 60
 				speed = ORBIT_SPEED;
@@ -553,6 +559,8 @@ ExitIPProcess:
 			+ (COORD)(LOG_SPACE_HEIGHT >> 1)
 			- (LOG_SPACE_HEIGHT >> (MAX_REDUCTION + 1));
 
+	// Don't draw the group if it's not at flagship location,
+	// or flash the group while it's reforming
 	if (group_loc != flagship_loc
 			|| ((task & REFORM_GROUP)
 			&& (GroupPtr->group_counter & 1)))
@@ -574,15 +582,16 @@ static void
 flag_ship_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ELEMENT *ElementPtr1, POINT *pPt1)
 {
-	if ((GLOBAL (CurrentActivity) & START_ENCOUNTER)
-			|| pSolarSysState->MenuState.CurState
-			|| (ElementPtr1->state_flags & GOOD_GUY))
-		return;
+	if (GLOBAL (CurrentActivity) & START_ENCOUNTER)
+		return; // ignore the rest of the collisions
 
-	if (!(ElementPtr1->state_flags & COLLISION)) /* not processed yet */
+	if (!(ElementPtr1->state_flags & COLLISION))
+	{	// The other element's collision has not been processed yet
+		// Defer starting the encounter until it is.
 		ElementPtr0->state_flags |= COLLISION | NONSOLID;
+	}
 	else
-	{
+	{	// Both element's collisions have now been processed
 		ElementPtr1->state_flags &= ~COLLISION;
 		GLOBAL (CurrentActivity) |= START_ENCOUNTER;
 	}
@@ -595,64 +604,62 @@ ip_group_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ELEMENT *ElementPtr1, POINT *pPt1)
 {
 	IP_GROUP *GroupPtr;
+	void *OtherPtr;
 
-	if ((GLOBAL (CurrentActivity) & START_ENCOUNTER)
-			|| pSolarSysState->MenuState.CurState
-			|| (ElementPtr0->state_flags & GOOD_GUY))
-	{
-		ElementPtr0->state_flags &= ~BAD_GUY;
-		return;
-	}
+	if (GLOBAL (CurrentActivity) & START_ENCOUNTER)
+		return; // ignore the rest of the collisions
 
 	GetElementStarShip (ElementPtr0, &GroupPtr);
-	if (ElementPtr0->state_flags & ElementPtr1->state_flags & BAD_GUY)
-	{
+	GetElementStarShip (ElementPtr1, &OtherPtr);
+	if (OtherPtr)
+	{	// Collision with another group
+		// Prevent the groups from coalescing into a single ship icon
 		if ((ElementPtr0->state_flags & COLLISION)
 				|| (ElementPtr1->current.location.x == ElementPtr1->next.location.x
 				&& ElementPtr1->current.location.y == ElementPtr1->next.location.y))
+		{
 			ElementPtr0->state_flags &= ~COLLISION;
+		}
 		else
 		{
 			ElementPtr1->state_flags |= COLLISION;
 
-			GroupPtr->loc =
-					DisplayArray[ElementPtr0->PrimIndex].Object.Point;
+			GroupPtr->loc = DisplayArray[ElementPtr0->PrimIndex].Object.Point;
 			ElementPtr0->next.location = ElementPtr0->current.location;
 			InitIntersectEndPoint (ElementPtr0);
 		}
 	}
-	else
-	{
+	else // if (!OtherPtr)
+	{	// Collision with a flagship
 		EncounterGroup = GroupPtr->group_id;
 
-		// JMS: So long, Ur-Quan drone.
-		/*if (GroupPtr->race_id == URQUAN_DRONE_SHIP)
-		{
-			GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
-			GroupPtr->dest_loc = 0;
-		}*/
-		
+		GroupPtr->task |= REFORM_GROUP;
+		GroupPtr->group_counter = 100;
+		// Send "all clear" for the time being. After the encounter, if
+		// the player battles the group, the "intercept" notify will be
+		// resent.
+		NotifyOthers (GroupPtr->race_id, IPNL_ALL_CLEAR);
+
 		// JMS: Transport ship tells the intercepting ships in star system that all is well, stop chasing.
 		if (GroupPtr->race_id == TRANSPORT_SHIP)
 		{
-			GroupPtr->task |= REFORM_GROUP;
-			GroupPtr->group_counter = 100;
 			if (CurStarDescPtr->Index == SOL_DEFINED)
-				NotifyOthers (HUMAN_SHIP, (BYTE)~0);
+				NotifyOthers (HUMAN_SHIP, IPNL_ALL_CLEAR);
 			else if (CurStarDescPtr->Index == CHMMR_DEFINED)
-				NotifyOthers (CHMMR_SHIP, (BYTE)~0);
+				NotifyOthers (CHMMR_SHIP, IPNL_ALL_CLEAR);
 		}
 		else
 		{
-			GroupPtr->task |= REFORM_GROUP;
-			GroupPtr->group_counter = 100;
-			NotifyOthers (GroupPtr->race_id, (BYTE)~0);
+			NotifyOthers (GroupPtr->race_id, IPNL_ALL_CLEAR);
 		}
 
-		if (!(ElementPtr1->state_flags & COLLISION)) /* not processed yet */
+		if (!(ElementPtr1->state_flags & COLLISION))
+		{	// The other element's collision has not been processed yet
+			// Defer starting the encounter until it is.
 			ElementPtr0->state_flags |= COLLISION | NONSOLID;
+		}
 		else
-		{
+		{	// Both element's collisions have now been processed
 			ElementPtr1->state_flags &= ~COLLISION;
 			GLOBAL (CurrentActivity) |= START_ENCOUNTER;
 		}
@@ -669,7 +676,6 @@ spawn_ip_group (IP_GROUP *GroupPtr)
 	hIPSHIPElement = AllocElement ();
 	if (hIPSHIPElement)
 	{
-		BYTE task;
 		ELEMENT *IPSHIPElementPtr;
 
 		LockElement (hIPSHIPElement, &IPSHIPElementPtr);
@@ -679,21 +685,6 @@ spawn_ip_group (IP_GROUP *GroupPtr)
 		IPSHIPElementPtr->hit_points = 1;
 		IPSHIPElementPtr->state_flags =
 				CHANGING | FINITE_LIFE | IGNORE_VELOCITY;
-
-		task = GroupPtr->task;
-		if (!(task & IGNORE_FLAGSHIP))
-			IPSHIPElementPtr->state_flags |= BAD_GUY;
-		else
-		{
-			IPSHIPElementPtr->state_flags |= GOOD_GUY;
-			// XXX: Hack: Yehat revolution start, fleeing groups
-			if (GroupPtr->race_id == YEHAT_SHIP
-					&& GET_GAME_STATE (YEHAT_CIVIL_WAR))
-			{
-				GroupPtr->task = FLEE | (task & REFORM_GROUP);
-				GroupPtr->dest_loc = 0;
-			}
-		}
 
 		SetPrimType (&DisplayArray[IPSHIPElementPtr->PrimIndex], STAMP_PRIM);
 		// XXX: Hack: farray points to FRAME[3] and given FRAME
@@ -879,8 +870,7 @@ spawn_flag_ship (void)
 			FlagShipElementPtr->sys_loc =
 					(BYTE)(pSolarSysState->pBaseDesc->pPrevDesc
 					- pSolarSysState->PlanetDesc + 2);
-		FlagShipElementPtr->state_flags =
-				APPEARING | GOOD_GUY | IGNORE_VELOCITY;
+		FlagShipElementPtr->state_flags = APPEARING | IGNORE_VELOCITY;
 		if (GET_GAME_STATE (ESCAPE_COUNTER))
 			FlagShipElementPtr->state_flags |= NONSOLID;
 		FlagShipElementPtr->life_span = NORMAL_LIFE;
@@ -916,8 +906,8 @@ DoMissions (void)
 	spawn_flag_ship ();
 
 	if (EncounterRace >= 0)
-	{
-		NotifyOthers (EncounterRace, 0);
+	{	// There was a battle. Call in reinforcements.
+		NotifyOthers (EncounterRace, IPNL_INTERCEPT_PLAYER);
 		EncounterRace = -1;
 	}
 

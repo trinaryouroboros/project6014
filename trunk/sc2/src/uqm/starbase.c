@@ -620,7 +620,7 @@ DoStarBase (MENU_STATE *pMS)
 		pMS->InputFunc = DoStarBase;
 
 		LockMutex (GraphicsLock);
-		SetFlashRect (NULL, (FRAME)0);
+		SetFlashRect (NULL);
 
 		if (pMS->hMusic)
 		{

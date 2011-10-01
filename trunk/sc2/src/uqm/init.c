@@ -165,7 +165,7 @@ BuildSIS (void)
 	if (!hStarShip)
 		return 0;
 	StarShipPtr = LockStarShip (&race_q[0], hStarShip);
-	StarShipPtr->which_side = GOOD_GUY;
+	StarShipPtr->playerNr = RPG_PLAYER_NUM;
 	StarShipPtr->captains_name_index = 0;
 	UnlockStarShip (&race_q[0], hStarShip);
 
@@ -315,7 +315,7 @@ UninitShips (void)
 			/* Record crew left after battle */
 			StarShipPtr->crew_level =
 					StarShipPtr->RaceDescPtr->ship_info.crew_level;
-			SPtr[WHICH_SIDE (ElementPtr->state_flags)] = StarShipPtr;
+			SPtr[StarShipPtr->playerNr] = StarShipPtr;
 			free_ship (StarShipPtr->RaceDescPtr, TRUE, TRUE);
 			StarShipPtr->RaceDescPtr = 0;
 		}

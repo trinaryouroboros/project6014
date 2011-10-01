@@ -275,7 +275,7 @@ while (--ac > 0)
 			}
 
 			LockMutex (GraphicsLock);
-			SetFlashRect (NULL, (FRAME)0);
+			SetFlashRect (NULL);
 			UnlockMutex (GraphicsLock);
 
 			LastActivity = GLOBAL (CurrentActivity);

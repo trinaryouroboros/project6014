@@ -252,7 +252,7 @@ DrawDescriptionString (MENU_STATE *pMS, COUNT which_string, COUNT state)
 
 	if (!(state & DDSHS_EDIT))
 	{	// normal state
-		SetFlashRect (SFR_MENU_3DO, (FRAME)0);
+		SetFlashRect (SFR_MENU_3DO);
 
 		if (pMS->InputFunc == DoNaming)
 		{
@@ -333,7 +333,7 @@ DrawDescriptionString (MENU_STATE *pMS, COUNT which_string, COUNT state)
 		SetContextForeGroundColor (ForeGround);
 		font_DrawText (&lf);
 
-		SetFlashRect (&r, (FRAME)0);
+		SetFlashRect (&r);
 	}
 
 	UnlockMutex (GraphicsLock);
@@ -937,7 +937,7 @@ Restart:
 	else if (PulsedInputState.menu[KEY_MENU_CANCEL])
 	{
 		LockMutex (GraphicsLock);
-		SetFlashRect (SFR_MENU_3DO, (FRAME)0);
+		SetFlashRect (SFR_MENU_3DO);
 		UnlockMutex (GraphicsLock);
 		pMS->ModuleFrame = 0;
 		pMS->CurState = (BYTE)pMS->delta_item;
@@ -978,7 +978,7 @@ Restart:
 				}
 				else
 				{
-					SetFlashRect (NULL, (FRAME)0);
+					SetFlashRect (NULL);
 					DrawStamp (&MsgStamp);
 					DestroyDrawable (ReleaseDrawable (MsgStamp.frame));
 					UnlockMutex (GraphicsLock);
@@ -1010,7 +1010,7 @@ Restart:
 				if (LoadGame ((COUNT)pMS->CurState, NULL))
 					GLOBAL (CurrentActivity) |= CHECK_LOAD;
 			}
-			SetFlashRect (NULL, (FRAME)0);
+			SetFlashRect (NULL);
 			UnlockMutex (GraphicsLock);
 
 			pMS->ModuleFrame = 0;
@@ -1170,7 +1170,7 @@ ChangeGameSelection:
 				}
 				UnbatchGraphics ();
 			}
-			SetFlashRect (NULL, (FRAME)0);
+			SetFlashRect (NULL);
 			UnlockMutex (GraphicsLock);
 		}
 		

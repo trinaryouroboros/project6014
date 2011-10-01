@@ -48,10 +48,7 @@ typedef HLINK HSTARSHIP;
 #define MAX_SHIPS_PER_SIDE 14
 
 /* SHIP_INFO.ship_flags - ship specific flags */
-/*
-#define GOOD_GUY  (1 << 0)
-#define BAD_GUY   (1 << 1)
-*/
+/* bits 0 and 1 are now available */
 #define SEEKING_WEAPON			(1 << 2)
 #define SEEKING_SPECIAL			(1 << 3)
 #define LIGHT_POINT_DEFENSE     (1 << 4)
@@ -279,8 +276,6 @@ struct STARSHIP
 	RACE_DESC *RaceDescPtr;
 
 	// Ship information
-	UWORD which_side;
-			// In race_q: side the ship is on
 	COUNT crew_level;
 			// In full-game battles: crew left
 			// In SuperMelee: irrelevant
@@ -309,7 +304,17 @@ struct STARSHIP
 	
 	HELEMENT hShip;
 	COUNT ShipFacing;
+
+	SIZE playerNr;
+			//  0: bottom player; In full-game: the human player (RPG)
+			//  1: top player; In full-game: the NPC opponent
+			// -1: neutral; this should currently never happen (asserts)
+	BYTE control;
+			// HUMAN, COMPUTER or NETWORK control flags, see intel.h
 };
+
+#define RPG_PLAYER_NUM  0
+#define NPC_PLAYER_NUM  1
 
 static inline STARSHIP *
 LockStarShip (const QUEUE *pq, HSTARSHIP h)
@@ -327,8 +332,6 @@ typedef HLINK HSHIPFRAG;
 typedef struct
 {
 	SHIP_BASE_COMMON;
-
-	COUNT which_side;
 
 	BYTE race_id;
 	BYTE index;
@@ -370,7 +373,7 @@ typedef struct
 
 	SPECIES_ID SpeciesID;
 
-	UWORD ship_flags; /* 0, GOOD_GUY, or BAD_GUY */
+	UWORD allied_state; /* GOOD_GUY, BAD_GUY or DEAD_GUY */
 	BYTE days_left;   /* Days left before the fleet reachers 'dest_loc'. */
 	BYTE growth_fract;
 	COUNT crew_level;
@@ -408,6 +411,14 @@ typedef struct
 			/* Location to which the fleet (center) is moving. */
 
 } FLEET_INFO;
+
+// Values for FLEET_INFO.allied_state
+enum
+{
+	DEAD_GUY = 0,
+	GOOD_GUY,
+	BAD_GUY,
+};
 
 static inline FLEET_INFO *
 LockFleetInfo (const QUEUE *pq, HFLEETINFO h)

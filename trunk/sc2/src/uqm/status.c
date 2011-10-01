@@ -27,9 +27,24 @@
 #include "ship.h"
 #include "setup.h"
 #include "options.h"
+#include "init.h"
+		// for NUM_PLAYERS
 
 #include <stdio.h>
 #include <string.h>
+
+
+COORD status_y_offsets[NUM_PLAYERS];
+
+
+void
+InitStatusOffsets (void)
+{
+	// XXX: We have to jump through these hoops because GOOD_GUY_YOFFS is
+	//   not a constant, contrary to what its name suggests.
+	status_y_offsets[0] = GOOD_GUY_YOFFS; // bottom player
+	status_y_offsets[1] = BAD_GUY_YOFFS;  // top player
+}
 
 static void
 CaptainsWindow (CAPTAIN_STUFF *CSPtr, COORD y,
@@ -118,7 +133,7 @@ CaptainsWindow (CAPTAIN_STUFF *CSPtr, COORD y,
 }
 
 void
-DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr)
+DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr, COORD y_offs)
 {
 #define MAX_CREW_DIGITS 3
 	RECT r;
@@ -127,9 +142,8 @@ DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr)
 
 	t.baseline.x = BATTLE_CREW_X + 2;
 	if (optWhichMenu == OPT_PC)
-		t.baseline.x -= 8;
-	
-	t.baseline.y = BATTLE_CREW_Y + ((ShipInfoPtr->ship_flags & GOOD_GUY) ? GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
+			t.baseline.x -= 8;
+	t.baseline.y = BATTLE_CREW_Y + y_offs;
 	t.align = ALIGN_LEFT;
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
@@ -151,7 +165,8 @@ DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr)
 void
 DrawCaptainsWindow (STARSHIP *StarShipPtr)
 {
-	COORD y, y_offs;
+	COORD y;
+	COORD y_offs;
 	RECT r;
 	STAMP s;
 	FRAME Frame;
@@ -175,19 +190,18 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 
 	BatchGraphics ();
 	
-	y_offs = CAPTAIN_YOFFS + ((RDPtr->ship_info.ship_flags & GOOD_GUY) ? GOOD_GUY_YOFFS : BAD_GUY_YOFFS);
+	assert (StarShipPtr->playerNr >= 0);
+	y_offs = status_y_offsets[StarShipPtr->playerNr];
 	r.corner.x = CAPTAIN_XOFFS - RES_STAT_SCALE(4);
-	r.corner.y = y_offs - (4 << RESOLUTION_FACTOR);
-	r.extent.width = STATUS_WIDTH - 2;
+	r.corner.y = y_offs + SHIP_INFO_HEIGHT;
+	r.extent.width = STATUS_WIDTH - CAPTAIN_XOFFS;
 	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + (4 << RESOLUTION_FACTOR); // JMS_GFX
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	DrawFilledRectangle (&r);
 
-	y = y_offs - CAPTAIN_YOFFS;
-
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 	r.corner.x = 1;
-	r.corner.y = SHIP_INFO_HEIGHT + y;
+	r.corner.y = y_offs + SHIP_INFO_HEIGHT;
 	r.extent.width = 1;
 	r.extent.height = (SHIP_STATUS_HEIGHT - SHIP_INFO_HEIGHT - 2);
 	DrawFilledRectangle (&r);
@@ -197,7 +211,7 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
 	r.corner.x = STATUS_WIDTH - 1;
-	r.corner.y = SHIP_INFO_HEIGHT + y;
+	r.corner.y = y_offs + SHIP_INFO_HEIGHT;
 	r.extent.width = 1;
 	r.extent.height = SHIP_STATUS_HEIGHT - SHIP_INFO_HEIGHT;
 	DrawFilledRectangle (&r);
@@ -205,7 +219,7 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	DrawFilledRectangle (&r);
 	r.corner.x = 1;
 	r.extent.width = STATUS_WIDTH - 2;
-	r.corner.y = (SHIP_STATUS_HEIGHT - 2) + y;
+	r.corner.y = y_offs + (SHIP_STATUS_HEIGHT - 2);
 	r.extent.height = 1;
 	DrawFilledRectangle (&r);
 	r.corner.x = 0;
@@ -213,63 +227,62 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	++r.corner.y;
 	DrawFilledRectangle (&r);
 
-	{
-		// Darker grey rectangle at bottom and right of captain's window
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
-		r.corner.x = CAPTAIN_WIDTH + CAPTAIN_XOFFS; // JMS_GFX
-		r.corner.y = y_offs;
-		r.extent.width = 1;
-		r.extent.height = CAPTAIN_HEIGHT;
-		DrawFilledRectangle (&r);
-		r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
-		r.corner.y += CAPTAIN_HEIGHT;
-		r.extent.width = CAPTAIN_WIDTH + 2;
-		r.extent.height = 1;
-		DrawFilledRectangle (&r);
+	y = y_offs + CAPTAIN_YOFFS;
 
-		// Light grey rectangle at top and left of captains window
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
-		r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
-		r.extent.width = CAPTAIN_WIDTH + 2;
-		r.corner.y = y_offs - 1;
-		r.extent.height = 1;
-		DrawFilledRectangle (&r);
-		r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
-		r.extent.width = 1;
-		r.corner.y = y_offs;
-		r.extent.height = CAPTAIN_HEIGHT;
-		DrawFilledRectangle (&r);
+	// Darker grey rectangle at bottom and right of captain's window
+	SetContextForeGroundColor (
+			BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
+	r.corner.x = CAPTAIN_WIDTH + CAPTAIN_XOFFS; // JMS_GFX
+	r.corner.y = y;
+	r.extent.width = 1;
+	r.extent.height = CAPTAIN_HEIGHT;
+	DrawFilledRectangle (&r);
+	r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
+	r.corner.y += CAPTAIN_HEIGHT;
+	r.extent.width = CAPTAIN_WIDTH + 2;
+	r.extent.height = 1;
+	DrawFilledRectangle (&r);
 
-		s.frame = RDPtr->ship_data.captain_control.background;
-		s.origin.x = CAPTAIN_XOFFS;
-		s.origin.y = y_offs;
-		DrawStamp (&s);
-	}
+	// Light grey rectangle at top and left of captains window
+	SetContextForeGroundColor (
+			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
+	r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
+	r.extent.width = CAPTAIN_WIDTH + 2;
+	r.corner.y = y - 1;
+	r.extent.height = 1;
+	DrawFilledRectangle (&r);
+	r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
+	r.extent.width = 1;
+	r.corner.y = y;
+	r.extent.height = CAPTAIN_HEIGHT;
+	DrawFilledRectangle (&r);
 
-	if (StarShipPtr->captains_name_index == 0)
-	{
-		if (RDPtr->ship_info.ship_flags & GOOD_GUY)
-		{
-			// SIS
-			TEXT t;
+	s.frame = RDPtr->ship_data.captain_control.background;
+	s.origin.x = CAPTAIN_XOFFS;
+	s.origin.y = y;
+	DrawStamp (&s);
 
-			t.baseline.x = STATUS_WIDTH >> 1;
-			t.baseline.y = y_offs + 6;
-			t.align = ALIGN_CENTER;
-			t.pStr = GLOBAL_SIS (CommanderName);
-			t.CharCount = (COUNT)~0;
-			SetContextForeGroundColor (
-					BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x00), 0x02));
-			SetContextFont (TinyFont);
-			font_DrawText (&t);
-		}
+	if (StarShipPtr->captains_name_index == 0
+			&& StarShipPtr->playerNr == RPG_PLAYER_NUM)
+	{	// This is SIS
+		TEXT t;
+
+		t.baseline.x = STATUS_WIDTH >> 1;
+		t.baseline.y = y + 6;
+		t.align = ALIGN_CENTER;
+		t.pStr = GLOBAL_SIS (CommanderName);
+		t.CharCount = (COUNT)~0;
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x00), 0x02));
+		SetContextFont (TinyFont);
+		font_DrawText (&t);
 	}
 	if (RDPtr->ship_info.max_crew > MAX_CREW_SIZE ||
 			RDPtr->ship_info.ship_flags & PLAYER_CAPTAIN)
 	{
 		// All crew doesn't fit in the graphics; print a number.
 		// Always print a number for the SIS in the full game.
-		DrawBattleCrewAmount (&RDPtr->ship_info);
+		DrawBattleCrewAmount (&RDPtr->ship_info, y_offs);
 	}
 
 	UnbatchGraphics ();
@@ -309,7 +322,8 @@ DeltaEnergy (ELEMENT *ElementPtr, SIZE energy_delta)
 		StarShipPtr->energy_counter =
 				StarShipPtr->RaceDescPtr->characteristics.energy_wait;
 
-		DeltaStatistics (ShipInfoPtr, 0, energy_delta);
+		DeltaStatistics (ShipInfoPtr, status_y_offsets[StarShipPtr->playerNr],
+				0, energy_delta);
 	}
 
 	return (retval);
@@ -323,7 +337,7 @@ DeltaCrew (ELEMENT *ElementPtr, SIZE crew_delta)
 	SHIP_INFO *ShipInfoPtr;
 
 	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_LAST_BATTLE
-			&& (ElementPtr->state_flags & BAD_GUY))
+			&& ElementPtr->playerNr == NPC_PLAYER_NUM)
 		return (TRUE); /* Samatra can't be crew-modified */
 
 	retval = TRUE;
@@ -350,7 +364,8 @@ DeltaCrew (ELEMENT *ElementPtr, SIZE crew_delta)
 		}
 	}
 
-	DeltaStatistics (ShipInfoPtr, crew_delta, 0);
+	DeltaStatistics (ShipInfoPtr, status_y_offsets[StarShipPtr->playerNr],
+			crew_delta, 0);
 
 	return (retval);
 }
@@ -362,8 +377,8 @@ PreProcessStatus (ELEMENT *ShipPtr)
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	if (StarShipPtr->captains_name_index
-			|| (StarShipPtr->RaceDescPtr->ship_info.ship_flags & GOOD_GUY))
-	{
+			|| StarShipPtr->playerNr == RPG_PLAYER_NUM)
+	{	// All except Sa-Matra, no captain's window there
 		STATUS_FLAGS old_status_flags, cur_status_flags;
 		CAPTAIN_STUFF *CSPtr;
 
@@ -375,9 +390,8 @@ PreProcessStatus (ELEMENT *ShipPtr)
 		old_status_flags &= (LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
 		if (old_status_flags)
 		{
-			CaptainsWindow (CSPtr,
-					(StarShipPtr->RaceDescPtr->ship_info.ship_flags & GOOD_GUY) ?
-					GOOD_GUY_YOFFS : BAD_GUY_YOFFS,
+			assert (StarShipPtr->playerNr >= 0);
+			CaptainsWindow (CSPtr, status_y_offsets[StarShipPtr->playerNr],
 					old_status_flags, cur_status_flags, 1);
 		}
 	}
@@ -390,15 +404,15 @@ PostProcessStatus (ELEMENT *ShipPtr)
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	if (StarShipPtr->captains_name_index
-			|| (StarShipPtr->RaceDescPtr->ship_info.ship_flags & GOOD_GUY))
-	{
+			|| StarShipPtr->playerNr == RPG_PLAYER_NUM)
+	{	// All except Sa-Matra, no captain's window there
 		COORD y;
 		STATUS_FLAGS cur_status_flags, old_status_flags;
 
 		cur_status_flags = StarShipPtr->cur_status_flags;
 
-		y = (StarShipPtr->RaceDescPtr->ship_info.ship_flags & GOOD_GUY) ?
-				GOOD_GUY_YOFFS : BAD_GUY_YOFFS;
+		assert (StarShipPtr->playerNr >= 0);
+		y = status_y_offsets[StarShipPtr->playerNr];
 
 		if (ShipPtr->crew_level == 0)
 		{

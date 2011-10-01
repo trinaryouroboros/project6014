@@ -39,8 +39,7 @@
 typedef HLINK HELEMENT;
 
 // Bits for ELEMENT_FLAGS:
-#define GOOD_GUY (1 << 0)
-#define BAD_GUY (1 << 1)
+// bits 0 and 1 are now available
 #define PLAYER_SHIP (1 << 2)
 		// The ELEMENT is a player controlable ship, and not some bullet,
 		// crew, asteroid, fighter, etc. This does not mean that the ship
@@ -116,6 +115,12 @@ struct element
 	CollisionFunc *collision_func;
 	void (*death_func) (struct element *ElementPtr);
 
+	// Player this element belongs to
+	// -1: neutral (planets, asteroids, crew, etc.)
+	//  0: Melee: bottom player; Full-game: the human player
+	//  1: Melee: top player;    Full-game: the NPC opponent
+	SIZE playerNr;
+
 	ELEMENT_FLAGS state_flags;
 	union
 	{
@@ -155,6 +160,14 @@ struct element
 	
 };
 
+#define NEUTRAL_PLAYER_NUM  -1
+
+static inline BOOLEAN
+elementsOfSamePlayer (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1)
+{
+	return ElementPtr0->playerNr == ElementPtr1->playerNr;
+}
+
 extern QUEUE disp_q;
 // The maximum number of elements is chosen to provide a slight margin.
 // Currently, it is maximum *known used* in Melee + 30
@@ -177,13 +190,6 @@ extern PRIMITIVE DisplayArray[MAX_DISPLAY_PRIMS];
 #define MAX_SHIP_MASS 10
 #define GRAVITY_MASS(m) ((m) > MAX_SHIP_MASS * 10)
 #define GRAVITY_THRESHOLD (COUNT)255
-
-static inline BYTE
-ElementFlagsSide (ELEMENT_FLAGS flags)
-{
-	return (BYTE) ((flags & BAD_GUY) >> 1);
-}
-#define WHICH_SIDE(flags) ElementFlagsSide (flags)
 
 #define OBJECT_CLOAKED(eptr) \
 		(GetPrimType (&GLOBAL (DisplayArray[(eptr)->PrimIndex])) >= NUM_PRIMS \

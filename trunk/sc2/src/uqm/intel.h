@@ -44,9 +44,6 @@ enum
 	FIRST_EMPTY_INDEX
 };
 
-extern STARSHIP *CyborgDescPtr;
-extern SIZE cur_player;
-
 extern BATTLE_INPUT_STATE computer_intelligence (
 		ComputerInputContext *context, STARSHIP *StarShipPtr);
 extern BATTLE_INPUT_STATE tactical_intelligence (

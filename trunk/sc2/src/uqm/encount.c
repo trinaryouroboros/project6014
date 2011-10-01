@@ -83,7 +83,7 @@ DoSelectAction (MENU_STATE *pMS)
 				{
 					DrawMenuStateStrings (PM_CONVERSE, pMS->CurState);
 					LockMutex (GraphicsLock);
-					SetFlashRect (SFR_MENU_3DO, (FRAME)0);
+					SetFlashRect (SFR_MENU_3DO);
 					UnlockMutex (GraphicsLock);
 				}
 				return ((BOOLEAN)pMS->Initialized);
@@ -113,7 +113,7 @@ BuildBattle (COUNT which_player)
 		return;
 	}
 
-	if (which_player == 0)
+	if (which_player == RPG_PLAYER_NUM)
 		pQueue = &GLOBAL (built_ship_q);
 	else
 	{
@@ -151,7 +151,7 @@ BuildBattle (COUNT which_player)
 		{
 			BuiltShipPtr = LockStarShip (&race_q[which_player], hBuiltShip);
 			BuiltShipPtr->captains_name_index = FragPtr->captains_name_index;
-			BuiltShipPtr->which_side = 1 << which_player;
+			BuiltShipPtr->playerNr = which_player;
 			if (FragPtr->crew_level != INFINITE_FLEET)
 				BuiltShipPtr->crew_level = FragPtr->crew_level;
 			else /* if infinite ships */
@@ -169,12 +169,12 @@ BuildBattle (COUNT which_player)
 		UnlockShipFrag (pQueue, hStarShip);
 	}
 
-	if (which_player == 0
+	if (which_player == RPG_PLAYER_NUM
 			&& (hBuiltShip = Build (&race_q[0], SIS_SHIP_ID)))
 	{
 		BuiltShipPtr = LockStarShip (&race_q[0], hBuiltShip);
 		BuiltShipPtr->captains_name_index = 0;
-		BuiltShipPtr->which_side = GOOD_GUY;
+		BuiltShipPtr->playerNr = RPG_PLAYER_NUM;
 		BuiltShipPtr->crew_level = 0;
 		BuiltShipPtr->max_crew = 0;
 				// Crew will be copied directly from
@@ -363,13 +363,13 @@ InitEncounter (void)
 
 		DrawMenuStateStrings (PM_CONVERSE, MenuState.CurState = HAIL);
 		LockMutex (GraphicsLock);
-		SetFlashRect (SFR_MENU_3DO, (FRAME)0);
+		SetFlashRect (SFR_MENU_3DO);
 		UnlockMutex (GraphicsLock);
 
 		DoInput (&MenuState, TRUE);
 
 		LockMutex (GraphicsLock);
-		SetFlashRect (NULL, (FRAME)0);
+		SetFlashRect (NULL);
 		UnlockMutex (GraphicsLock);
 
 		return (MenuState.CurState);

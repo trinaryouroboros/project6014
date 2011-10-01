@@ -338,8 +338,8 @@ ChangeSelection:
 				font_DrawText (&t);
 			}
 
-			SetFlashRect (NULL, (FRAME)0);
-			SetFlashRect (&pMS->flash_rect0, (FRAME)0);
+			SetFlashRect (NULL);
+			SetFlashRect (&pMS->flash_rect0);
 			UnlockMutex (GraphicsLock);
 		}
 	}
@@ -389,7 +389,7 @@ GetArmadaStarShip (void)
 		pMenuState = 0;
 		LockMutex (GraphicsLock);
 
-		SetFlashRect (NULL, (FRAME)0);
+		SetFlashRect (NULL);
 
 		hBattleShip = (HSTARSHIP)MenuState.CurFrame;
 	}
@@ -508,7 +508,7 @@ GetEncounterStarShip (STARSHIP *LastStarShipPtr, COUNT which_player)
 						 * fight, all Syreen ships there would be crewed to
 						 * the maximum, instead of the normal level */
 						SPtr->crew_level = FragPtr->max_crew;
-						SPtr->which_side = 1 << which_player;
+						SPtr->playerNr = which_player;
 						SPtr->captains_name_index = PickCaptainName ();
 
 						battle_counter[1]++;

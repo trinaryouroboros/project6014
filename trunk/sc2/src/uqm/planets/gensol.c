@@ -63,6 +63,33 @@ init_probe (void)
 }
 
 static void
+check_probe (void)
+{
+	HIPGROUP hGroup;
+	IP_GROUP *GroupPtr;
+
+	if (!GLOBAL (BattleGroupRef))
+		return; // nothing to check
+
+	hGroup = GetHeadLink (&GLOBAL (ip_group_q));
+	if (!hGroup)
+		return; // still nothing to check
+	
+	GroupPtr = LockIpGroup (&GLOBAL (ip_group_q), hGroup);
+	// REFORM_GROUP was set in ipdisp.c:ip_group_collision()
+	// during a collision with the flagship.
+	if (GroupPtr->race_id == URQUAN_DRONE_SHIP
+			&& (GroupPtr->task & REFORM_GROUP))
+	{
+		// We just want the probe to take off as fast as possible,
+		// so clear out REFORM_GROUP
+		GroupPtr->task = FLEE | IGNORE_FLAGSHIP;
+		GroupPtr->dest_loc = 0;
+	}
+	UnlockIpGroup (&GLOBAL (ip_group_q), hGroup);
+}
+
+static void
 generate_energy_nodes (void)
 {
 	pSolarSysState->CurNode = 0;
@@ -372,7 +399,11 @@ GenerateSOL (BYTE control)
 			break;
 		case REINIT_NPCS:
 			if (GET_GAME_STATE (CHMMR_BOMB_STATE) != 3)
+			{
 				GenerateRandomIP (REINIT_NPCS);
+				// JMS: Don't create Ur-quan probe
+				// check_probe ();
+			}
 			else
 			{
 				GLOBAL (BattleGroupRef) = 0;

@@ -296,12 +296,11 @@ new_ship (ELEMENT *DeadShipPtr)
 		}
 
 		MusicStarted = FALSE;
-		DeadShipPtr->turn_wait = (BYTE)(
-				DeadShipPtr->state_flags & (GOOD_GUY | BAD_GUY));
-				// DeadShipPtr->turn_wait is abused to store which
-				// side this element is for, because this information
-				// will be lost from state_flags when the element is
-				// set up for deletion below.
+		// XXX: Set to 0 to be vaguely checksum-compatible with previous
+		//  Netplay builds which abused turn_wait to store the ship's side.
+		//  The value is irrelevant at this point.
+		DeadShipPtr->turn_wait = 0;
+
 		for (hElement = GetHeadElement (); hElement; hElement = hSuccElement)
 		{
 			ELEMENT *ElementPtr;
@@ -355,7 +354,7 @@ new_ship (ELEMENT *DeadShipPtr)
 	}
 
 	if (DeadShipPtr->life_span || !readyForBattleEnd (
-			WHICH_SIDE (DeadShipPtr->turn_wait)))
+			DeadStarShipPtr->playerNr))
 	{
 		DeadShipPtr->state_flags &= ~DISAPPEARING;
 		++DeadShipPtr->life_span;
@@ -376,7 +375,10 @@ new_ship (ELEMENT *DeadShipPtr)
 					DeadStarShipPtr->RaceDescPtr);
 		free_ship (DeadStarShipPtr->RaceDescPtr, TRUE, TRUE);
 		DeadStarShipPtr->RaceDescPtr = 0;
-UnbatchGraphics ();
+		
+		// Graphics are batched while the draw queue is processed,
+		// but we are going to draw the ship selection box now
+		UnbatchGraphics ();
 
 #ifdef NETPLAY
 		initBattleStateDataConnections ();
@@ -396,8 +398,7 @@ UnbatchGraphics ();
 		}
 #endif  /* NETPLAY */
 
-		if (GetNextStarShip (DeadStarShipPtr,
-				WHICH_SIDE (DeadShipPtr->turn_wait)))
+		if (GetNextStarShip (DeadStarShipPtr, DeadStarShipPtr->playerNr))
 		{
 #ifdef NETPLAY
 			{
@@ -427,18 +428,7 @@ UnbatchGraphics ();
 			GLOBAL (CurrentActivity) |= CHECK_ABORT;
 		}
 #endif
-
-#ifdef NETPLAY
-		// Turn_wait was abused to store the side this element was on.
-		// We don't want this included in checksums, as it can be different
-		// for both sides of a connection.
-		// While preprocess_func == new_ship, turn_wait isn't included in
-		// the checksum at all all, but now that new_ship is done,
-		// it would be. As the value is irrelevant at this point, we can
-		// just set it to the same value on either side.
-		DeadShipPtr->turn_wait = 0;
-#endif
-BatchGraphics ();
+		BatchGraphics ();
 	}
 }
 
@@ -491,6 +481,7 @@ explosion_preprocess (ELEMENT *ShipPtr)
 
 			PutElement (hElement);
 			LockElement (hElement, &ElementPtr);
+			ElementPtr->playerNr = NEUTRAL_PLAYER_NUM;
 			ElementPtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID;
 			ElementPtr->life_span = 9;
 			SetPrimType (&DisplayArray[ElementPtr->PrimIndex], STAMP_PRIM);
@@ -527,10 +518,14 @@ ship_death (ELEMENT *ShipPtr)
 
 	StopMusic ();
 
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+
 	if (ShipPtr->mass_points <= MAX_SHIP_MASS)
-	{
-		COUNT side = ElementFlagsSide (ShipPtr->state_flags);
-		battle_counter[side]--;
+	{	// Not running away and not reincarnating (Pkunk)
+		// When a ship tries to run away, it is (dis)counted in DoRunAway(),
+		// so when it dies while running away, we will not count it again
+		assert (StarShipPtr->playerNr >= 0);
+		battle_counter[StarShipPtr->playerNr]--;
 	}
 
 	VictoriousStarShipPtr = 0;
@@ -555,7 +550,6 @@ ship_death (ELEMENT *ShipPtr)
 		UnlockElement (hElement);
 	}
 
-	GetElementStarShip (ShipPtr, &StarShipPtr);
 	StarShipPtr->cur_status_flags &= ~PLAY_VICTORY_DITTY;
 
 	DeltaEnergy (ShipPtr,
@@ -622,6 +616,7 @@ spawn_ion_trail (ELEMENT *ElementPtr)
 
 			InsertElement (hIonElement, GetHeadElement ());
 			LockElement (hIonElement, &IonElementPtr);
+			IonElementPtr->playerNr = NEUTRAL_PLAYER_NUM;
 			IonElementPtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID;
 			IonElementPtr->life_span = IonElementPtr->thrust_wait = ION_LIFE;
 			SetPrimType (&DisplayArray[IonElementPtr->PrimIndex], POINT_PRIM);
@@ -800,6 +795,7 @@ ship_transition (ELEMENT *ElementPtr)
 			angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 
 			LockElement (hShipImage, &ShipImagePtr);
+			ShipImagePtr->playerNr = NEUTRAL_PLAYER_NUM;
 			ShipImagePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID;
 			ShipImagePtr->life_span = ShipImagePtr->thrust_wait =
 					TRANSITION_LIFE;

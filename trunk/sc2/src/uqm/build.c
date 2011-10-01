@@ -131,7 +131,7 @@ ActivateStarShip (COUNT which_ship, SIZE state)
 			}
 			else if (FleetPtr->actual_strength == 0)
 			{
-				if (!(FleetPtr->ship_flags & (GOOD_GUY | BAD_GUY)))
+				if (FleetPtr->allied_state == DEAD_GUY)
 					which_ship = 0;
 			}
 			else if (FleetPtr->known_strength <= 0 // JMS:was == 0
@@ -190,10 +190,10 @@ ActivateStarShip (COUNT which_ship, SIZE state)
 		}
 		case CHECK_ALLIANCE:
 		{
-			COUNT flags;
+			UWORD flags;
 			FLEET_INFO *FleetPtr = LockFleetInfo (&GLOBAL (avail_race_q),
 					hFleet);
-			flags = FleetPtr->ship_flags & (GOOD_GUY | BAD_GUY);
+			flags = FleetPtr->allied_state;
 			UnlockFleetInfo (&GLOBAL (avail_race_q), hFleet);
 			return flags;
 		}
@@ -203,17 +203,16 @@ ActivateStarShip (COUNT which_ship, SIZE state)
 			FLEET_INFO *FleetPtr = LockFleetInfo (&GLOBAL (avail_race_q),
 					hFleet);
 
-			if (!(FleetPtr->ship_flags & (GOOD_GUY | BAD_GUY)))
+			if (FleetPtr->allied_state == DEAD_GUY)
 			{	/* Strange request, silently ignore it */
 				UnlockFleetInfo (&GLOBAL (avail_race_q), hFleet);
 				break;
 			}
 
-			FleetPtr->ship_flags &= ~(GOOD_GUY | BAD_GUY);
 			if (state == SET_ALLIED)
-				FleetPtr->ship_flags |= GOOD_GUY;
+				FleetPtr->allied_state = GOOD_GUY;
 			else
-				FleetPtr->ship_flags |= BAD_GUY;
+				FleetPtr->allied_state = BAD_GUY;
 			
 			UnlockFleetInfo (&GLOBAL (avail_race_q), hFleet);
 			break;
@@ -389,8 +388,6 @@ CloneShipFragment (COUNT shipIndex, QUEUE *pDstQueue, COUNT crew_level)
 		SHIP_FRAGMENT *ShipFragPtr;
 
 		ShipFragPtr = LockShipFrag (pDstQueue, hBuiltShip);
-		ShipFragPtr->which_side = TemplatePtr->ship_flags &
-				(GOOD_GUY | BAD_GUY);
 		ShipFragPtr->captains_name_index = captains_name_index;
 		ShipFragPtr->race_strings = TemplatePtr->race_strings;
 		ShipFragPtr->icons = TemplatePtr->icons;

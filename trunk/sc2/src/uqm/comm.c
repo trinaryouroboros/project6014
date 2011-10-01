@@ -1478,7 +1478,7 @@ InitCommunication (CONVERSATION which_comm)
 				|| LOBYTE (GLOBAL (CurrentActivity)) == IN_LAST_BATTLE))
 				|| (which_comm != SYREEN_CONVERSATION
 				))//&& (ActivateStarShip (status, CHECK_ALLIANCE) & BAD_GUY)))*/
-		BuildBattle (1);
+		BuildBattle (NPC_PLAYER_NUM);
 	}
 
 	LocDataPtr = init_race ( status != YEHAT_REBEL_SHIP ? which_comm : YEHAT_REBEL_CONVERSATION);
@@ -1534,7 +1534,7 @@ InitCommunication (CONVERSATION which_comm)
 		if (status)
 		{
 			// Start combat
-			BuildBattle (0);
+			BuildBattle (RPG_PLAYER_NUM);
 			EncounterBattle ();
 		}
 		else
@@ -1614,14 +1614,14 @@ RaceCommunication (void)
 			COUNT NumShips;
 			ENCOUNTER *EncounterPtr;
 
+			// The encounter globe that the flagship collided with is moved
+			// to the head of the queue in hyper.c:cleanup_hyperspace()
 			hEncounter = GetHeadEncounter ();
 			LockEncounter (hEncounter, &EncounterPtr);
 
 			NumShips = LONIBBLE (EncounterPtr->SD.Index);
 			for (i = 0; i < NumShips; ++i)
 			{
-				// XXX: Bug 996 lives here: crew is set to default (0)
-				//   None of ship info is actually used!
 				CloneShipFragment (EncounterPtr->SD.Type,
 						&GLOBAL (npc_built_ship_q),
 						EncounterPtr->ShipList[i].crew_level);
