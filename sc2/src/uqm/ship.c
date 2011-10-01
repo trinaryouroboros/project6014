@@ -163,15 +163,17 @@ ship_preprocess (ELEMENT *ElementPtr)
 			StarShipPtr->cur_status_flags
 			& ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
 	if (!(ElementPtr->state_flags & APPEARING))
+	{
 		cur_status_flags |= StarShipPtr->ship_input_state
 				& (LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
+	}
 	else
-	{
+	{	// Preprocessing for the first time
 		ElementPtr->crew_level = RDPtr->ship_info.crew_level;
 
-		if ((ElementPtr->state_flags & BAD_GUY)
+		if (ElementPtr->playerNr == NPC_PLAYER_NUM
 				&& LOBYTE (GLOBAL (CurrentActivity)) == IN_LAST_BATTLE)
-		{
+		{	// Sa-Matra
 			STAMP s;
 			CONTEXT OldContext;
 
@@ -187,8 +189,7 @@ ship_preprocess (ELEMENT *ElementPtr)
 		{
 			CONTEXT OldContext;
 
-			InitShipStatus (&RDPtr->ship_info,
-					StarShipPtr->captains_name_index, NULL);
+			InitShipStatus (&RDPtr->ship_info, StarShipPtr, NULL);
 			OldContext = SetContext (StatusContext);
 			DrawCaptainsWindow (StarShipPtr);
 			SetContext (OldContext);
@@ -393,7 +394,6 @@ spawn_ship (STARSHIP *StarShipPtr)
 	if (!RDPtr)
 		return FALSE;
 
-	RDPtr->ship_info.ship_flags |= StarShipPtr->which_side;
 	StarShipPtr->RaceDescPtr = RDPtr;
 
 	StarShipPtr->ship_input_state = 0;
@@ -436,10 +436,10 @@ spawn_ship (STARSHIP *StarShipPtr)
 
 		LockElement (hShip, &ShipElementPtr);
 
+		ShipElementPtr->playerNr = StarShipPtr->playerNr;
 		ShipElementPtr->crew_level = 0;
 		ShipElementPtr->mass_points = RDPtr->characteristics.ship_mass;
-		ShipElementPtr->state_flags = APPEARING | PLAYER_SHIP | IGNORE_SIMILAR
-				| (RDPtr->ship_info.ship_flags & (GOOD_GUY | BAD_GUY));
+		ShipElementPtr->state_flags = APPEARING | PLAYER_SHIP | IGNORE_SIMILAR;
 		ShipElementPtr->turn_wait = 0;
 		ShipElementPtr->thrust_wait = 0;
 		ShipElementPtr->life_span = NORMAL_LIFE;
@@ -447,7 +447,7 @@ spawn_ship (STARSHIP *StarShipPtr)
 		SetPrimType (&DisplayArray[ShipElementPtr->PrimIndex], STAMP_PRIM);
 		ShipElementPtr->current.image.farray = RDPtr->ship_data.ship;
 
-		if ((ShipElementPtr->state_flags & BAD_GUY)
+		if (ShipElementPtr->playerNr == NPC_PLAYER_NUM
 				&& LOBYTE (GLOBAL (CurrentActivity)) == IN_LAST_BATTLE)
 		{
 			// This is the Sa-Matra
@@ -509,10 +509,6 @@ GetNextStarShip (STARSHIP *LastStarShipPtr, COUNT which_side)
 {
 	HSTARSHIP hBattleShip;
 
-	cur_player = which_side;
-	CyborgDescPtr = 0;
-
-
 	hBattleShip = GetEncounterStarShip (LastStarShipPtr, which_side);
 	if (hBattleShip)
 	{
@@ -573,10 +569,11 @@ GetInitialStarShips (void)
 	}
 	else
 	{
-		COUNT num_ships = NUM_PLAYERS;
-		while (num_ships--)
+		int i;
+		
+		for (i = NUM_PLAYERS; i > 0; --i)
 		{
-			if (!GetNextStarShip (NULL, num_ships == 1))
+			if (!GetNextStarShip (NULL, i - 1))
 				return FALSE;
 		}
 		return TRUE;

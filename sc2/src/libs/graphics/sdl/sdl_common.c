@@ -873,6 +873,9 @@ TFB_FlushGraphics (void) // Only call from main thread!!
 		case TFB_DRAWCOMMANDTYPE_REINITVIDEO:
 			{
 				int oldDriver = GraphicsDriver;
+				int oldFlags = GfxFlags;
+				int oldWidth = ScreenWidthActual;
+				int oldHeight = ScreenHeightActual;
 				int initGraphicsResult = TFB_ReInitGraphics (DC.data.reinitvideo.driver,
 															 DC.data.reinitvideo.flags,
 															 DC.data.reinitvideo.width, DC.data.reinitvideo.height, resolutionFactor);
@@ -880,10 +883,9 @@ TFB_FlushGraphics (void) // Only call from main thread!!
 				if (initGraphicsResult < 0) 
 				{
 					log_add (log_Error, "Could not provide requested mode: " "reverting to last known driver.");
-					if (TFB_ReInitGraphics (oldDriver,
-							DC.data.reinitvideo.flags,
-							DC.data.reinitvideo.width,
-							DC.data.reinitvideo.height, resolutionFactor)) // JMS_GFX: Added resolutionFactor
+					// We don't know what exactly failed, so roll it all back
+					if (TFB_ReInitGraphics (oldDriver, oldFlags,
+							oldWidth, oldHeight, resolutionFactor)) // JMS_GFX: Added resolutionFactor
 					{
 						log_add (log_Fatal, "Couldn't reinit at that point either. " "Your video has been somehow tied in knots.");
 						exit (EXIT_FAILURE);

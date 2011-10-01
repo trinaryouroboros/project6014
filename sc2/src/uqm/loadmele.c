@@ -367,6 +367,7 @@ DoLoadTeam (MELEE_STATE *pMS)
 		}
 
 		pMS->InputFunc = DoMelee;
+		pMS->LastInputTime = GetTimeCounter ();
 		{
 			RECT r;
 			

@@ -144,7 +144,8 @@ initialize_turbolaser (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 	MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (StarShipPtr->ShipFacing);
-	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+	MissileBlock.sender = ShipPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.speed = MISSILE_SPEED;
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
@@ -218,7 +219,8 @@ initialize_fighterlaser (ELEMENT *ElementPtr, HELEMENT LaserArray[])
 	MissileBlock.cx = ElementPtr->next.location.x;
 	MissileBlock.cy = ElementPtr->next.location.y;
 	MissileBlock.face = ElementPtr->thrust_wait;
-	MissileBlock.sender = (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+	MissileBlock.sender = ElementPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = FIGHTER_LASER_OFFSET;
 	// The fighter laser graphics are after the first 16 frames (which are the fighter hull graphics).
 	MissileBlock.index = MissileBlock.face + 16;
@@ -475,9 +477,8 @@ spawn_fighters (ELEMENT *ElementPtr)
 		FighterElementPtr->hit_points = 1;
 		FighterElementPtr->mass_points = 0;
 		FighterElementPtr->thrust_wait = TRACK_THRESHOLD + 1;
-		FighterElementPtr->state_flags = APPEARING
-				| FINITE_LIFE | CREW_OBJECT | IGNORE_SIMILAR
-				| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+		FighterElementPtr->state_flags = APPEARING | FINITE_LIFE | CREW_OBJECT | IGNORE_SIMILAR ;
+		FighterElementPtr->playerNr = ElementPtr->playerNr;
 		FighterElementPtr->life_span = FIGHTER_LIFE;
 		SetPrimType (&(GLOBAL (DisplayArray))[FighterElementPtr->PrimIndex], STAMP_PRIM);
 		{
@@ -595,8 +596,8 @@ initialize_autoturret (ELEMENT *ElementPtr)
 	{
 		LockElement (hObject, &ObjectPtr);
 		hNextObject = GetPredElement (ObjectPtr);
-		if (((ObjectPtr->state_flags | ShipPtr->state_flags)
-			& (GOOD_GUY | BAD_GUY)) == (GOOD_GUY | BAD_GUY)
+		if (!elementsOfSamePlayer(ObjectPtr, ShipPtr)
+		        && ObjectPtr->playerNr != NEUTRAL_PLAYER_NUM
 			&& CollisionPossible (ObjectPtr, ShipPtr)
 			&& !OBJECT_CLOAKED (ObjectPtr))
 		{
@@ -670,7 +671,8 @@ initialize_autoturret (ELEMENT *ElementPtr)
 		MissileBlock.cy = ShipPtr->next.location.y;
 		MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 		MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
-		MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+		MissileBlock.sender = ShipPtr->playerNr;
+		MissileBlock.flags = IGNORE_SIMILAR;
 		MissileBlock.pixoffs = AUTOTURRET_OFFSET;
 		MissileBlock.speed = MISSILE_SPEED;
 		MissileBlock.hit_points = MISSILE_HITS;
@@ -736,8 +738,8 @@ isd_postprocess (ELEMENT *ElementPtr)
 			PutElement (hDefense);
 
 			LockElement (hDefense, &DefensePtr);
-			DefensePtr->state_flags = APPEARING | NONSOLID | FINITE_LIFE
-					| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+			DefensePtr->state_flags = APPEARING | NONSOLID | FINITE_LIFE ;
+			DefensePtr->playerNr = ElementPtr->playerNr;
 
 			{
 				ELEMENT *SuccPtr;

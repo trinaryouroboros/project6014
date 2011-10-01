@@ -102,7 +102,7 @@ DoRunAway (STARSHIP *StarShipPtr)
 				BUILD_COLOR (MAKE_RGB15 (0x0B, 0x00, 0x00), 0x2E));
 		SetPrimType (&DisplayArray[ElementPtr->PrimIndex], STAMPFILL_PRIM);
 	
-		CyborgDescPtr->ship_input_state = 0;
+		StarShipPtr->ship_input_state = 0;
 	}
 	UnlockElement (StarShipPtr->hShip);
 }
@@ -159,8 +159,7 @@ ProcessInput (void)
 	for (sideI = 0; sideI < NUM_SIDES; sideI++)
 	{
 		HSTARSHIP hBattleShip, hNextShip;
-
-		cur_player = battleInputOrder[sideI];
+		size_t cur_player = battleInputOrder[sideI];
 
 		for (hBattleShip = GetHeadLink (&race_q[cur_player]);
 				hBattleShip != 0; hBattleShip = hNextShip)
@@ -173,8 +172,10 @@ ProcessInput (void)
 
 			if (StarShipPtr->hShip)
 			{
-				CyborgDescPtr = StarShipPtr;
-
+				// TODO: review and see if we have to do this every frame, or
+				//   if we can do this once somewhere
+				StarShipPtr->control = PlayerControl[cur_player];
+				
 				InputState = PlayerInput[cur_player]->handlers->frameInput (
 						PlayerInput[cur_player], StarShipPtr);
 
@@ -195,21 +196,21 @@ ProcessInput (void)
 				}
 #endif
 
-				CyborgDescPtr->ship_input_state = 0;
-				if (CyborgDescPtr->RaceDescPtr->ship_info.crew_level)
+				StarShipPtr->ship_input_state = 0;
+				if (StarShipPtr->RaceDescPtr->ship_info.crew_level)
 				{
 					if (InputState & BATTLE_LEFT)
-						CyborgDescPtr->ship_input_state |= LEFT;
+						StarShipPtr->ship_input_state |= LEFT;
 					else if (InputState & BATTLE_RIGHT)
-						CyborgDescPtr->ship_input_state |= RIGHT;
+						StarShipPtr->ship_input_state |= RIGHT;
 					if (InputState & BATTLE_THRUST)
-						CyborgDescPtr->ship_input_state |= THRUST;
+						StarShipPtr->ship_input_state |= THRUST;
 					if (InputState & BATTLE_WEAPON)
-						CyborgDescPtr->ship_input_state |= WEAPON;
+						StarShipPtr->ship_input_state |= WEAPON;
 					if (InputState & BATTLE_SPECIAL)
-						CyborgDescPtr->ship_input_state |= SPECIAL;
+						StarShipPtr->ship_input_state |= SPECIAL;
 					if (InputState & BATTLE_DOWN)
-						CyborgDescPtr->ship_input_state |= DOWN; // JMS_KEYS: Down key is now in use!
+						StarShipPtr->ship_input_state |= DOWN; // JMS_KEYS: Down key is now in use!
 
 					if (CanRunAway && cur_player == 0 &&
 							(InputState & BATTLE_ESCAPE))

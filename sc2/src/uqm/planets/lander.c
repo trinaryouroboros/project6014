@@ -352,7 +352,8 @@ AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 		
 		WeaponElementPtr->mass_points = BIOCRITTER_PROJECTILE;
 		WeaponElementPtr->life_span = 12;
-		WeaponElementPtr->state_flags = FINITE_LIFE | BAD_GUY; // JMS: Lander's own shots have GOOD_GUY. Baddies have BAD_GUY obviously.
+		WeaponElementPtr->state_flags = FINITE_LIFE;
+		WeaponElementPtr->playerNr = PS_NON_PLAYER; // JMS: Lander's own shots have PS_HUMAN_PLAYER. Baddies have PS_NON_PLAYER.
 		WeaponElementPtr->next.location = CritterElementPtr->next.location;
 		
 		SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
@@ -389,7 +390,8 @@ AddEnemyLimpet (ELEMENT *CritterElementPtr, COUNT shot_angle, COUNT critter_angl
 		
 		WeaponElementPtr->mass_points = BIOCRITTER_LIMPET;
 		WeaponElementPtr->life_span = LIMPET_LIFESPAN;
-		WeaponElementPtr->state_flags = FINITE_LIFE | BAD_GUY; // JMS: Lander's own shots have GOOD_GUY. Baddies have BAD_GUY obviously.
+		WeaponElementPtr->state_flags = FINITE_LIFE;
+		WeaponElementPtr->playerNr = PS_NON_PLAYER;
 		WeaponElementPtr->next.location = CritterElementPtr->next.location;
 		WeaponElementPtr->preprocess_func = object_animation;
 		
@@ -885,7 +887,8 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					LockElement (hExplosionElement, &ExplosionElementPtr);
 					
 					ExplosionElementPtr->mass_points = BIOCRITTER_PROJECTILE;
-					ExplosionElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
+					ExplosionElementPtr->state_flags = FINITE_LIFE;
+					ExplosionElementPtr->playerNr = PS_NON_PLAYER;
 					ExplosionElementPtr->next.location = ElementPtr->next.location;
 					ExplosionElementPtr->preprocess_func = object_animation;
 					ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
@@ -940,7 +943,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					
 					CritterElementPtr->mass_points = CritterIndex;
 					CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
-					CritterElementPtr->state_flags = BAD_GUY;
+					CritterElementPtr->playerNr = PS_NON_PLAYER;
 					CritterElementPtr->next.location.x = ElementPtr->next.location.x + ((TFB_Random() % 24) - 12);
 					CritterElementPtr->next.location.y = ElementPtr->next.location.y + ((TFB_Random() % 24) - 12);
 					CritterElementPtr->preprocess_func = object_animation;
@@ -1039,7 +1042,8 @@ CheckObjectCollision (COUNT index)
 				continue;
 			}
 			
-			if (&DisplayArray[ElementPtr->PrimIndex] != pPrim || !(ElementPtr->state_flags & BAD_GUY))
+			if (&DisplayArray[ElementPtr->PrimIndex] != pPrim
+					|| ElementPtr->playerNr != PS_NON_PLAYER)
 			{
 				UnlockElement (hElement);
 				continue;
@@ -1423,7 +1427,8 @@ AddLightning (void)
 
 		LockElement (hLightningElement, &LightningElementPtr);
 
-		LightningElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
+		LightningElementPtr->playerNr = PS_NON_PLAYER;
+		LightningElementPtr->state_flags = FINITE_LIFE;
 		LightningElementPtr->preprocess_func = lightning_process;
 		if ((BYTE)TFB_Random () >= (256 >> 2))
 			LightningElementPtr->mass_points = 0; /* harmless */
@@ -1475,7 +1480,8 @@ AddGroundDisaster (COUNT which_disaster)
 
 		pPrim = &DisplayArray[GroundDisasterElementPtr->PrimIndex];
 		GroundDisasterElementPtr->mass_points = which_disaster;
-		GroundDisasterElementPtr->state_flags = FINITE_LIFE | BAD_GUY;
+		GroundDisasterElementPtr->playerNr = PS_NON_PLAYER;
+		GroundDisasterElementPtr->state_flags = FINITE_LIFE;
 		GroundDisasterElementPtr->preprocess_func = object_animation;
 
 		rand_val = TFB_Random ();
@@ -1587,7 +1593,7 @@ BuildObjectList (void)
 			ElementPtr->next.location.x += dx;
 			ElementPtr->next.location.y += dy;
 				/* if not lander's shot */
-			if (ElementPtr->state_flags != (FINITE_LIFE | GOOD_GUY))
+			if (ElementPtr->playerNr != PS_HUMAN_PLAYER)
 			{
 				if (ElementPtr->next.location.y < 0)
 					ElementPtr->next.location.y = 0;
@@ -2145,8 +2151,9 @@ SetVelocityComponents (
 
 					LockElement (hExplosionElement, &ExplosionElementPtr);
 
+					ExplosionElementPtr->playerNr = PS_HUMAN_PLAYER;
 					ExplosionElementPtr->mass_points = DEATH_EXPLOSION;
-					ExplosionElementPtr->state_flags = FINITE_LIFE | GOOD_GUY;
+					ExplosionElementPtr->state_flags = FINITE_LIFE;
 					ExplosionElementPtr->next.location = pSolarSysState->MenuState.first_item;
 					ExplosionElementPtr->preprocess_func = object_animation;
 					ExplosionElementPtr->turn_wait = MAKE_BYTE (2, 2);
@@ -2252,9 +2259,10 @@ SetVelocityComponents (
 
 					LockElement (hWeaponElement, &WeaponElementPtr);
 
+					WeaponElementPtr->playerNr = PS_HUMAN_PLAYER;
 					WeaponElementPtr->mass_points = 1;
 					WeaponElementPtr->life_span = 12;
-					WeaponElementPtr->state_flags = FINITE_LIFE | GOOD_GUY;
+					WeaponElementPtr->state_flags = FINITE_LIFE;
 					WeaponElementPtr->next.location = pSolarSysState->MenuState.first_item;
 					WeaponElementPtr->current.location.x = WeaponElementPtr->next.location.x >> MAG_SHIFT;
 					WeaponElementPtr->current.location.y = WeaponElementPtr->next.location.y >> MAG_SHIFT;

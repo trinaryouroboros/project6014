@@ -290,8 +290,6 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 	return (0);
 }
 
-STARSHIP *CyborgDescPtr;
-
 static void
 InitCyborg (STARSHIP *StarShipPtr)
 {
@@ -439,11 +437,11 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			ShipFired = FALSE;
 	}
 
-	if (PlayerControl[cur_player] & AWESOME_RATING)
+	if (StarShipPtr->control & AWESOME_RATING)
 		margin_of_error = 0;
-	else if (PlayerControl[cur_player] & GOOD_RATING)
+	else if (StarShipPtr->control & GOOD_RATING)
 		margin_of_error = DISPLAY_TO_WORLD (20);
-	else /* if (PlayerControl[cur_player] & STANDARD_RATING) */
+	else /* if (StarShipPtr->control & STANDARD_RATING) */
 		margin_of_error = DISPLAY_TO_WORLD (40);
 
 	ObjectsOfConcern += ConcernCounter;
@@ -468,7 +466,7 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					|| (ConcernCounter == ENEMY_WEAPON_INDEX
 					&& ObjectsOfConcern->MoveState != AVOID
 #ifdef NEVER
-					&& !(PlayerControl[cur_player] & STANDARD_RATING)
+					&& !(StarShipPtr->control & STANDARD_RATING)
 #endif /* NEVER */
 					)))
 			{
@@ -608,8 +606,7 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 		maneuver_state |= LEFT | RIGHT;
 	if (ShipPtr->thrust_wait == 0
 			&& ((OtherObjPtr->state_flags & PLAYER_SHIP)
-			|| ((OtherObjPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
-			(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)))
+			|| elementsOfSamePlayer (OtherObjPtr, ShipPtr)
 			|| OtherObjPtr->preprocess_func == crew_preprocess))
 		maneuver_state |= THRUST;
 
@@ -1049,7 +1046,7 @@ tactical_intelligence (ComputerInputContext *context, STARSHIP *StarShipPtr)
 
 	ShipMoved = TRUE;
 	/* Disable ship's special completely for the Standard AI */
-	if (PlayerControl[context->playerNr] & STANDARD_RATING)
+	if (StarShipPtr->control & STANDARD_RATING)
 		++StarShipPtr->special_counter;
 
 #ifdef DEBUG_CYBORG
@@ -1136,13 +1133,14 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 						ed.facing = ARCTAN (-dx, -dy);
 						if (UltraManeuverable)
 							ed.MoveState = AVOID;
-						else
+						else // Try a gravity whip
 							ed.MoveState = ENTICE;
 
 						ObjectsOfConcern[GRAVITY_MASS_INDEX] = ed;
 					}
-					else if (!UltraManeuverable)
-					{
+					else if (!UltraManeuverable &&
+							!IsVelocityZero (&Ship.velocity))
+					{	// Try an orbital insertion, don't thrust
 						++Ship.thrust_wait;
 						if (Ship.turn_wait)
 							ShipMoved = TRUE;
@@ -1226,8 +1224,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 					}
 				}
 			}
-			else if ((ed.ObjectPtr->state_flags & (GOOD_GUY | BAD_GUY)) !=
-					(Ship.state_flags & (GOOD_GUY | BAD_GUY))
+			else if (!elementsOfSamePlayer (ed.ObjectPtr, &Ship)
 					&& ed.ObjectPtr->preprocess_func != crew_preprocess
 					&& ObjectsOfConcern[ENEMY_WEAPON_INDEX].which_turn > 1
 					&& ed.ObjectPtr->life_span > 0)
@@ -1264,7 +1261,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 							ed.which_turn = 0;
 					}
 				}
-				else if (!(PlayerControl[context->playerNr] & AWESOME_RATING))
+				else if (!(StarShipPtr->control & AWESOME_RATING))
 					ed.which_turn = 0;
 				else
 				{
@@ -1291,8 +1288,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 			}
 			else if ((ed.ObjectPtr->state_flags & CREW_OBJECT)
 					&& ((!(ed.ObjectPtr->state_flags & IGNORE_SIMILAR)
-					&& (ed.ObjectPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
-					(Ship.state_flags & (GOOD_GUY | BAD_GUY)))
+					&& elementsOfSamePlayer (ed.ObjectPtr, &Ship))
 					|| ed.ObjectPtr->preprocess_func == crew_preprocess)
 					&& ObjectsOfConcern[CREW_OBJECT_INDEX].which_turn > 1)
 			{

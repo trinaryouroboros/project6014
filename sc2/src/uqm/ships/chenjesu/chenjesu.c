@@ -279,9 +279,8 @@ crystal_postprocess (ELEMENT *ElementPtr)
 	MissileBlock.cy = ElementPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 	MissileBlock.index = 1;
-	MissileBlock.sender =
-			(ElementPtr->state_flags & (GOOD_GUY | BAD_GUY))
-			| IGNORE_SIMILAR;
+	MissileBlock.sender = ElementPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = 0;
 	MissileBlock.speed = FRAGMENT_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = FRAGMENT_HITS;
@@ -462,10 +461,7 @@ doggy_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 #define ENERGY_DRAIN 10
 	collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
 	if ((ElementPtr1->state_flags & PLAYER_SHIP)
-			&& (ElementPtr0->state_flags
-			& (GOOD_GUY | BAD_GUY)) !=
-			(ElementPtr1->state_flags
-			& (GOOD_GUY | BAD_GUY)))
+			&& !elementsOfSamePlayer (ElementPtr0, ElementPtr1))
 	{
 		STARSHIP *StarShipPtr;
 
@@ -503,8 +499,8 @@ spawn_doggy (ELEMENT *ElementPtr)
 		DoggyElementPtr->hit_points = 3;
 		DoggyElementPtr->mass_points = 4;
 		DoggyElementPtr->thrust_wait = 0;
-		DoggyElementPtr->state_flags = APPEARING
-				| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+		DoggyElementPtr->playerNr = ElementPtr->playerNr;
+		DoggyElementPtr->state_flags = APPEARING;
 		DoggyElementPtr->life_span = NORMAL_LIFE;
 		SetPrimType (&(GLOBAL (DisplayArray))[DoggyElementPtr->PrimIndex],
 				STAMP_PRIM);
@@ -592,8 +588,7 @@ chenjesu_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					&& CrystalPtr->next.image.farray == StarShipPtr->RaceDescPtr->ship_data.weapon
 					&& CrystalPtr->preprocess_func
 					&& CrystalPtr->life_span > 0
-					&& (CrystalPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
-					(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)))
+					&& elementsOfSamePlayer (CrystalPtr, ShipPtr))
 			{
 				if (ObjectsOfConcern[ENEMY_SHIP_INDEX].ObjectPtr)
 				{
@@ -660,8 +655,8 @@ initialize_crystal (ELEMENT *ShipPtr, HELEMENT CrystalArray[])
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 	MissileBlock.face = StarShipPtr->ShipFacing;
 	MissileBlock.index = 0;
-	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
-			| IGNORE_SIMILAR;
+	MissileBlock.sender = ShipPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = CHENJESU_OFFSET;
 	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;

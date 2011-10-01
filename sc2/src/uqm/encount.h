@@ -201,6 +201,9 @@ extern void GenerateShofixtiCrashSite (BYTE control);	// JMS
 extern void GenerateHint (BYTE control);				// JMS
 extern void GenerateHint2 (BYTE control);				// JMS
 
+// Last race the player battled with, or -1 if no battle took place.
+// Set to -1 by some funcs to inhibit IP groups from intercepting
+// the flagship.
 extern SIZE EncounterRace;
 extern BYTE EncounterGroup;
 

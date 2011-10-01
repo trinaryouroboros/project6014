@@ -479,8 +479,10 @@ cleanup_hyperspace (void)
 
 			LockElement (EncounterPtr->hElement, &ElementPtr);
 
-			if (ElementPtr->state_flags & BAD_GUY)
-			{
+			if (ElementPtr->hTarget)
+			{	// This is the encounter that collided with flagship
+				// Move the encounter to the head of the queue so that
+				// comm.c:RaceCommunication() gets the right one.
 				RemoveEncounter (hEncounter);
 				InsertEncounter (hEncounter, GetHeadEncounter ());
 			}
@@ -882,6 +884,7 @@ AllocHyperElement (STAR_DESC *SDPtr)
 		ELEMENT *HyperSpaceElementPtr;
 
 		LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+		HyperSpaceElementPtr->playerNr = NEUTRAL_PLAYER_NUM;
 		HyperSpaceElementPtr->state_flags = CHANGING | FINITE_LIFE;
 		HyperSpaceElementPtr->life_span = 1;
 		HyperSpaceElementPtr->mass_points = 1;
@@ -929,6 +932,7 @@ AddAmbientElement (void)
 		ELEMENT *HyperSpaceElementPtr;
 
 		LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+		HyperSpaceElementPtr->playerNr = NEUTRAL_PLAYER_NUM;
 		HyperSpaceElementPtr->state_flags =
 				APPEARING | FINITE_LIFE | NONSOLID;
 		SetPrimType (&DisplayArray[HyperSpaceElementPtr->PrimIndex], STAMP_PRIM);
@@ -996,6 +1000,24 @@ encounter_transition (ELEMENT *ElementPtr)
 	}
 }
 
+static HELEMENT
+getSisElement (void)
+{
+	HSTARSHIP hSis;
+	HELEMENT hShip;
+	STARSHIP *StarShipPtr;
+
+	hSis = GetHeadLink (&race_q[RPG_PLAYER_NUM]);
+	if (!hSis)
+		return NULL;
+
+	StarShipPtr = LockStarShip (&race_q[RPG_PLAYER_NUM], hSis);
+	hShip = StarShipPtr->hShip;
+	UnlockStarShip (&race_q[RPG_PLAYER_NUM], hSis);
+
+	return hShip;
+}
+
 static void
 encounter_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ELEMENT *ElementPtr1, POINT *pPt1)
@@ -1027,7 +1049,10 @@ encounter_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 			UnlockEncounter (hEncounter);
 		}
 		
-		ElementPtr0->state_flags |= BAD_GUY;
+		// Mark this element as collided with flagship
+		// XXX: We could simply set hTarget to 1 or to ElementPtr1,
+		//   but that would be too hacky ;)
+		ElementPtr0->hTarget = getSisElement ();
 		ZeroVelocityComponents (&ElementPtr0->velocity);
 	}
 	(void) pPt0;  /* Satisfying compiler (unused parameter) */
@@ -1319,8 +1344,9 @@ DeleteEncounter:
 						&delta_x, &delta_y, 1);
 				if (ElementPtr->thrust_wait)
 					--ElementPtr->thrust_wait;
-				else if (!(ElementPtr->state_flags & BAD_GUY))
-				{
+				else if (!ElementPtr->hTarget)
+				{	// This is an encounter that did not collide with flagship
+					// The colliding encounter does not move
 					COUNT cur_facing, delta_facing;
 
 					cur_facing = ANGLE_TO_FACING (GetVelocityTravelAngle (&ElementPtr->velocity));
@@ -1828,14 +1854,14 @@ UnbatchGraphics ();
 
 	DrawMenuStateStrings (PM_STARMAP, STARMAP);
 	LockMutex (GraphicsLock);
-	SetFlashRect (SFR_MENU_3DO, (FRAME)0);
+	SetFlashRect (SFR_MENU_3DO);
 	UnlockMutex (GraphicsLock);
 
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 	DoInput (&MenuState, TRUE);
 
 	LockMutex (GraphicsLock);
-	SetFlashRect (NULL, (FRAME)0);
+	SetFlashRect (NULL);
 
 	SetContext (SpaceContext);
 

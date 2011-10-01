@@ -372,8 +372,8 @@ static void electrify (ELEMENT *ElementPtr)
 			{
 				LockElement (hEffect, &eptr);
 			
-				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
-						| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
+				eptr->playerNr = ElementPtr->playerNr;
 				eptr->life_span = 1;
 				eptr->current = ElementPtr->current;
 				eptr->next = ElementPtr->next;
@@ -427,8 +427,7 @@ static void stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *Eleme
 			hStunElement; hStunElement = hNextElement)
 		{
 			LockElement (hStunElement, &StunPtr);
-			if ((StunPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
-				(ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY))
+			if (elementsOfSamePlayer(StunPtr, ElementPtr0)
 				&& (StunPtr->preprocess_func == electrify))
 			{
 				UnlockElement (hStunElement);
@@ -450,8 +449,8 @@ static void stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *Eleme
 				StunPtr->current = ElementPtr0->next;
 				StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, 15);
 				StunPtr->next = StunPtr->current;
-				StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
-						| (ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY));
+				StunPtr->playerNr = ElementPtr0->playerNr;
+				StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
 				StunPtr->preprocess_func = electrify;
 				SetPrimType (&(GLOBAL (DisplayArray))[StunPtr->PrimIndex],	NO_PRIM);
 
@@ -470,7 +469,7 @@ static void stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *Eleme
 		ElementPtr0->state_flags |= DISAPPEARING | COLLISION | NONSOLID;
 	}
 	// Asteroids and planets break the stun ball.
-	else if (!(ElementPtr1->state_flags & (GOOD_GUY | BAD_GUY)))
+	else if (ElementPtr1->playerNr == NEUTRAL_PLAYER_NUM)
 	{
 		HELEMENT hBlastElement;
 
@@ -553,8 +552,7 @@ static void shockwave (ELEMENT *ElementPtr)
 				{
 					// Enemy ship check.
 					if ((ObjPtr->state_flags & PLAYER_SHIP)
-						&& (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY))
-							!= (ObjPtr->state_flags & (GOOD_GUY | BAD_GUY)))
+					    && !elementsOfSamePlayer(ElementPtr, ObjPtr))
 					{
 						hTarget = hElement;
 						GetElementStarShip (ObjPtr, &EnemyStarShipPtr);
@@ -574,8 +572,7 @@ static void shockwave (ELEMENT *ElementPtr)
 				hElement; hElement = hNextElement)
 			{
 				LockElement (hElement, &StunPtr);
-				if ((StunPtr->state_flags & (GOOD_GUY | BAD_GUY)) ==
-					(ElementPtr->state_flags & (GOOD_GUY | BAD_GUY))
+				if (elementsOfSamePlayer(StunPtr, ElementPtr)
 					&& (StunPtr->preprocess_func == electrify))
 				{
 					UnlockElement (hElement);
@@ -597,8 +594,8 @@ static void shockwave (ELEMENT *ElementPtr)
 					StunPtr->current = ElementPtr->next;
 					StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, 16);
 					StunPtr->next = StunPtr->current;
-					StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING
-							| (ElementPtr->state_flags & (GOOD_GUY | BAD_GUY));
+					StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
+					StunPtr->playerNr = ElementPtr->playerNr;
 					StunPtr->preprocess_func = electrify;
 					StunPtr->collision_func = stunner_collision;
 					SetPrimType (&(GLOBAL (DisplayArray))[StunPtr->PrimIndex], NO_PRIM);
@@ -661,7 +658,8 @@ static void initialize_stunner (ELEMENT *ShipPtr)
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
 	MissileBlock.face = StarShipPtr->ShipFacing;
 	MissileBlock.index = 0;
-	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+	MissileBlock.sender = ShipPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = STUNBALL_START_OFFSET;
 	MissileBlock.speed = STUNBALL_SPEED;
 	MissileBlock.hit_points = STUNBALL_HITS;
@@ -756,13 +754,13 @@ static COUNT initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArr
 	facing = StarShipPtr->ShipFacing;
 	angle = FACING_TO_ANGLE (facing);
 
-	blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))] = 
-		(blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))] + 1) % 2;
+	blaster_side[ShipPtr->playerNr] = 
+		(blaster_side[ShipPtr->playerNr] + 1) % 2;
 	
 	cx = ShipPtr->next.location.x;
 	cy = ShipPtr->next.location.y;
 	
-	if(blaster_side[(ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))])
+	if(blaster_side[ShipPtr->playerNr])
 	{
 		offs_x = -SINE (angle, EXP_HORZ_OFFSET_2);
 		offs_y = COSINE (angle, EXP_HORZ_OFFSET_2);
@@ -789,7 +787,8 @@ static COUNT initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArr
 			lpMB->cx = cx + offs_x;
 			lpMB->cy = cy + offs_y;
 			lpMB->farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
-			lpMB->sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY)) | IGNORE_SIMILAR;
+			lpMB->sender = ShipPtr->playerNr;
+			lpMB->flags = IGNORE_SIMILAR;
 			lpMB->blast_offs = BLASTER_OFFSET;
 			lpMB->speed = BLASTER_SPEED;
 			lpMB->preprocess_func = animate_blaster;

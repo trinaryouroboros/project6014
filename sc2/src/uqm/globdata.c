@@ -261,7 +261,7 @@ InitSIS (void)
 					free_ship (RDPtr, FALSE, FALSE);
 				}
 			}
-			FleetPtr->ship_flags = BAD_GUY;
+			FleetPtr->allied_state = BAD_GUY;
 			FleetPtr->known_strength = 0;
 			FleetPtr->loc = FleetPtr->known_loc;
 			// XXX: Hack: Rebel special case 

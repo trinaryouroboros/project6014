@@ -355,8 +355,8 @@ initialize_acid (ELEMENT *ShipPtr, HELEMENT AcidArray[])
 	MissileBlock.cy = ShipPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 	MissileBlock.face = MissileBlock.index = StarShipPtr->ShipFacing;
-	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
-			| IGNORE_SIMILAR;
+	MissileBlock.sender = ShipPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = LURG_OFFSET;
 	MissileBlock.speed = MISSILE_SPEED;
 	MissileBlock.hit_points = MISSILE_HITS;
@@ -421,14 +421,14 @@ oil_preprocess (ELEMENT *ElementPtr)
 static void
 oil_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {
-	if (!(ElementPtr1->state_flags & (APPEARING | GOOD_GUY | BAD_GUY | PLAYER_SHIP | FINITE_LIFE))
-			&& !GRAVITY_MASS (ElementPtr1->mass_points))
+	if (!(ElementPtr1->state_flags & (APPEARING | PLAYER_SHIP | FINITE_LIFE))
+	    && (ElementPtr1->playerNr == NEUTRAL_PLAYER_NUM)
+	    && !GRAVITY_MASS (ElementPtr1->mass_points))
 	{
 		ElementPtr0->mass_points = 0;
 		// Oil does no damage against asteroids
 	}
-	else if ((ElementPtr0->state_flags & (GOOD_GUY | BAD_GUY))
-			!= (ElementPtr1->state_flags & (GOOD_GUY | BAD_GUY)))
+	else if (!elementsOfSamePlayer(ElementPtr0, ElementPtr1))
 	{
 		STARSHIP *StarShipPtr;
 		STARSHIP *EnemyStarShipPtr;
@@ -498,8 +498,8 @@ static void spill_oil (ELEMENT *ShipPtr)
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
 	MissileBlock.face = (COUNT)TFB_Random (); // Deploy at random in every direction.
 	MissileBlock.index = 0;
-	MissileBlock.sender = (ShipPtr->state_flags & (GOOD_GUY | BAD_GUY))
-			| IGNORE_SIMILAR;
+	MissileBlock.sender = ShipPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = LURG_OFFSET_2;
 	MissileBlock.life = OIL_LIFE + (TFB_Random () & OIL_LIFE_VARIATION);
 	MissileBlock.speed = OIL_INIT_SPEED;

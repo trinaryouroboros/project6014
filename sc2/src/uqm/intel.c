@@ -27,8 +27,6 @@
 #include <stdio.h>
 
 
-SIZE cur_player;
-
 BATTLE_INPUT_STATE
 computer_intelligence (ComputerInputContext *context, STARSHIP *StarShipPtr)
 {
@@ -40,12 +38,12 @@ computer_intelligence (ComputerInputContext *context, STARSHIP *StarShipPtr)
 	if (StarShipPtr)
 	{
 		// Selecting the next action for in battle.
-		if (PlayerControl[context->playerNr] & CYBORG_CONTROL)
+		if (StarShipPtr->control & CYBORG_CONTROL)
 		{
 			InputState = tactical_intelligence (context, StarShipPtr);
 
 			// Allow a player to warp-escape in cyborg mode
-			if (context->playerNr == 0)
+			if (StarShipPtr->playerNr == RPG_PLAYER_NUM)
 				InputState |= CurrentInputToBattleInput (
 						context->playerNr) & BATTLE_ESCAPE;
 		}
