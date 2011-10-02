@@ -18,8 +18,11 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
+#include "menustat.h"
+
 #include "colors.h"
 #include "controls.h"
+#include "units.h"
 #include "options.h"
 #include "setup.h"
 #include "gamestr.h"

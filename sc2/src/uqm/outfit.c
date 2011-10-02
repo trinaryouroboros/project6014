@@ -21,6 +21,7 @@
 #include "options.h"
 #include "colors.h"
 #include "controls.h"
+#include "menustat.h"
 #include "gameopt.h"
 #include "gamestr.h"
 #include "resinst.h"
@@ -29,7 +30,10 @@
 #include "starbase.h"
 #include "setup.h"
 #include "sis.h"
+#include "units.h"
 #include "sounds.h"
+#include "planets/planets.h"
+		// for xxx_DISASTER
 #include "libs/graphics/gfx_common.h"
 
 

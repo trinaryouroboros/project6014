@@ -6,84 +6,15 @@
 #ifndef _SIS_H
 #define _SIS_H
 
-#include "planets/planets.h"
-
-enum
-{
-	PM_SCAN = 0,
-	PM_STARMAP,
-	PM_DEVICES,
-	PM_CARGO,
-	PM_ROSTER,
-	PM_SAVE_LOAD0,
-	PM_NAVIGATE,
-	
-	PM_MIN_SCAN,
-	PM_ENE_SCAN,
-	PM_BIO_SCAN,
-	PM_EXIT_MENU0,
-	PM_AUTO_SCAN,
-	PM_LAUNCH_LANDER,
-
-	PM_SAVE_GAME,
-	PM_LOAD_GAME,
-	PM_QUIT_GAME,
-	PM_CHANGE_SETTINGS,
-	PM_EXIT_MENU1,
-
-	PM_CONVERSE,
-	PM_ATTACK,
-	PM_SAVE_LOAD1,
-	
-	PM_FUEL,
-	PM_MODULE,
-	PM_SAVE_LOAD2,
-	PM_EXIT_MENU2,
-	
-	PM_CREW,
-	PM_SAVE_LOAD3,
-	PM_EXIT_MENU3,
-	
-	PM_SOUND_ON,
-	PM_SOUND_OFF,
-	PM_MUSIC_ON,
-	PM_MUSIC_OFF,
-	PM_VOICE_ON,
-	PM_VOICE_OFF,
-	PM_CYBORG_OFF,
-	PM_CYBORG_NORMAL,
-	PM_CYBORG_DOUBLE,
-	PM_CYBORG_SUPER,
-	PM_CHANGE_CAPTAIN,
-	PM_CHANGE_SHIP,
-	PM_EXIT_MENU4,
-
-	PM_ALT_SCAN,
-	PM_ALT_STARMAP,
-	PM_ALT_MANIFEST,
-	PM_ALT_SAVE0,
-	PM_ALT_NAVIGATE,
-
-	PM_ALT_CARGO,
-	PM_ALT_DEVICES,
-	PM_ALT_ROSTER,
-	PM_ALT_EXITMENU0,
-
-	PM_ALT_MSCAN,
-	PM_ALT_ESCAN,
-	PM_ALT_BSCAN,
-	PM_ALT_ASCAN,
-	PM_ALT_DISPATCH,
-	PM_ALT_EXITMENU1
-};
+#include "libs/compiler.h"
+#include "libs/gfxlib.h"
+#include "planets/elemdata.h"
+		// for NUM_ELEMENT_CATEGORIES
 
 #define CLEAR_SIS_RADAR (1 << 2)
 #define DRAW_SIS_DISPLAY (1 << 3)
 
 #define UNDEFINED_DELTA 0x7FFF
-
-#define NUM_RADAR_SCREENS 12
-#define MAG_SHIFT 2 /* driving on planet */
 
 #define NUM_DRIVE_SLOTS 11
 #define NUM_JET_SLOTS 8
@@ -110,13 +41,7 @@ enum
 #define FUEL_VOLUME_PER_ROW (1 ? (HEFUEL_TANK_CAPACITY*2 / 20) : (HEFUEL_TANK_CAPACITY / MAX_FUEL_BARS))
 #define FUEL_RESERVE FUEL_VOLUME_PER_ROW
 
-#define MAX_COMBAT_SHIPS 6		// No more than 6 companion ships for the Explorer
 /** Capacities for Explorer end **/
-
-#define MAX_BATTLE_GROUPS 32	// Max number of battlegroups in a solar system
-
-// XXX: Needed to maintain savegame compatibility
-#define NUM_SAVED_BATTLE_GROUPS 64
 
 #define IP_SHIP_THRUST_INCREMENT 8
 #define IP_SHIP_TURN_WAIT 17
@@ -124,8 +49,6 @@ enum
 
 // JMS
 #define EXPLORER_IP_SHIP_THRUST_INCREMENT 8 // JMS: WAS 5
-
-#define BOGUS_MASS 5
 
 #define BIO_CREDIT_VALUE 2
 
@@ -248,13 +171,6 @@ typedef struct
 #define OVERRIDE_LANDER_FLAGS (1 << 7)
 #define AFTER_BOMB_INSTALLED (1 << 7)
 
-extern BOOLEAN InitSIS (void);
-extern void UninitSIS (void);
-
-extern void SeedUniverse (void);
-extern BOOLEAN LoadHyperspace (void);
-extern BOOLEAN FreeHyperspace (void);
-extern void MoveSIS (SIZE *pdx, SIZE *pdy);
 extern void RepairSISBorder (void);
 extern void InitSISContexts (void);
 extern void DrawSISFrame (void);
@@ -272,7 +188,6 @@ extern BOOLEAN DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos,
 #define DSME_BLOCKCUR (1 << 2)
 #define DSME_MYCOLOR  (1 << 3)
 extern void DrawSISMessage (const UNICODE *pStr);
-extern void DrawGameDate (void);
 extern void DateToString (unsigned char *buf, size_t bufLen,
 		BYTE month_index, BYTE day_index, COUNT year_index);
 
@@ -305,9 +220,6 @@ extern COUNT GetSBayCapacity (POINT *ppt);
 extern DWORD GetFTankCapacity (POINT *ppt);
 extern COUNT CountSISPieces (BYTE piece_type);
 
-extern BOOLEAN DoMenuChooser (MENU_STATE *pMS, BYTE BaseState);
-extern void DrawMenuStateStrings (BYTE beg_index, SWORD NewState);
-extern void DoMenuOptions (void);
 extern void DrawFlagshipName (BOOLEAN InStatusArea);
 extern void DrawCaptainsName (void);
 

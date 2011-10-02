@@ -58,6 +58,10 @@ extern unsigned int resolutionFactor; // JMS_GFX
 #define SIS_SCREEN_HEIGHT (SPACE_HEIGHT - RES_CASE(3,6,6) - RES_CASE(10,20,30)) // JMS_GFX
 		/* Height of the usable part of the space "window": 3, 6, 6 for the grey bottom border and 10, 20, 30 for the title */
 
+
+
+
+
 				/* Radar. */
 #define RADAR_X (RES_STAT_SCALE(4) + (SCREEN_WIDTH - STATUS_WIDTH - SAFE_X))	// JMS_GFX
 #define RADAR_WIDTH (STATUS_WIDTH - RES_STAT_SCALE(8))							// JMS_GFX

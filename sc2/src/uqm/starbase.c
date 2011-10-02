@@ -33,6 +33,7 @@
 #include "ipdisp.h"
 #include "load.h"
 #include "starbase.h"
+#include "sis.h"
 #include "resinst.h"
 #include "nameref.h"
 #include "settings.h"
