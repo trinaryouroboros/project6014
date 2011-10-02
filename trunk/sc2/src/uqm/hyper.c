@@ -34,10 +34,14 @@
 #include "collide.h"
 #include "colors.h"
 #include "controls.h"
+#include "menustat.h"
+		// for DrawMenuStateStrings()
 #include "encount.h"
 #include "ship.h"
 #include "process.h"
 #include "globdata.h"
+#include "sis.h"
+#include "units.h"
 #include "init.h"
 #include "nameref.h"
 #include "resinst.h"
@@ -1827,7 +1831,7 @@ SeedUniverse (void)
 }
 
 void
-DoMenuOptions (void)
+HyperspaceMenu (void)
 {
 	COLOR OldColor;
 	CONTEXT OldContext;

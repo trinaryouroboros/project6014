@@ -20,13 +20,15 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
-#include "units.h"
-// for UNIT_SCREEN_WIDTH/HEIGHT
-
 #ifndef _HYPER_H
 #define _HYPER_H
 
 #include "element.h"
+#include "units.h"
+		// for UNIT_SCREEN_WIDTH/HEIGHT
+
+#define NUM_RADAR_SCREENS 12
+
 #define RADAR_SCAN_WIDTH ((UNIT_SCREEN_WIDTH * NUM_RADAR_SCREENS) >> RESOLUTION_FACTOR)
 #define RADAR_SCAN_HEIGHT ((UNIT_SCREEN_HEIGHT * NUM_RADAR_SCREENS) >> RESOLUTION_FACTOR)
 
@@ -52,9 +54,17 @@
 #define PROCYON_X  5742
 #define PROCYON_Y  8268
 
+
+extern BOOLEAN LoadHyperspace (void);
+extern BOOLEAN FreeHyperspace (void);
+extern void SeedUniverse (void);
+extern void MoveSIS (SIZE *pdx, SIZE *pdy);
+
 extern void FreeHyperData (void);
 extern void check_hyperspace_encounter (void);
 extern BOOLEAN hyper_transition (ELEMENT *ElementPtr);
+
+extern void HyperspaceMenu (void);
 
 #endif /* _HYPER_H */
 

@@ -36,6 +36,7 @@
 // XXX: for CurStarDescPtr and XXX_DEFINED
 #include "../encount.h"
 #include "../process.h"
+#include "../units.h"
 #include "../gamestr.h"
 #include "../nameref.h"
 #include "../resinst.h"
@@ -237,17 +238,7 @@ static int turn_wait;
 static int weapon_wait;
 		// semantics similar to STARSHIP.weapon_counter
 
-#define NUM_LANDING_DELTAS  11
-#define ON_THE_GROUND       -1
-#define IDLE_INDEX          0
-// XXX: These should be calculated based on SURFACE_HEIGHT and not fixed
-//   In fact, because 3DO SURFACE_HEIGHT was smaller, the lander visibly
-//   jumps up during takeoff, and slams hard on landing.
-//   I brought these out here from the only func that used them.
-static signed char landing_pos[NUM_LANDING_DELTAS] =
-{
-	-10, 1, 12, 22, 31, 39, 45, 50, 54, 57, 59
-};
+#define ON_THE_GROUND   0
 
 
 static COLOR
@@ -282,49 +273,6 @@ DamageColorCycle (COLOR c, COUNT i)
 		c = damage_tab[0];
 
 	return (c);
-}
-
-// XXX: This function used to erase a moving object by drawing a piece
-//   of surface over its previous location. Now it just moves the object
-static BOOLEAN
-RepairTopography (ELEMENT *ElementPtr)
-{
-	//BOOLEAN CursorIntersect;
-	SIZE delta;
-	RECT r;
-	STAMP s;
-
-	s.origin = ElementPtr->current.location;
-
-	GetFrameRect (ElementPtr->next.image.frame, &r);
-	r.corner.x += ElementPtr->current.location.x;
-	r.corner.y += ElementPtr->current.location.y;
-
-	delta = (ElementPtr->next.location.x >> MAG_SHIFT) - r.corner.x;
-	if (delta >= 0)
-		r.extent.width += delta;
-	else
-	{
-		r.corner.x += delta;
-		r.extent.width -= delta;
-	}
-	ElementPtr->current.location.x += delta;
-	if (ElementPtr->current.location.x < 0)
-		ElementPtr->current.location.x += MAP_WIDTH;
-	else if (ElementPtr->current.location.x >= MAP_WIDTH)
-		ElementPtr->current.location.x -= MAP_WIDTH;
-
-	delta = (ElementPtr->next.location.y >> MAG_SHIFT) - r.corner.y;
-	if (delta >= 0)
-		r.extent.height += delta;
-	else
-	{
-		r.corner.y += delta;
-		r.extent.height -= delta;
-	}
-	ElementPtr->current.location.y += delta;
-
-	return FALSE;
 }
 
 static HELEMENT AddGroundDisaster (COUNT which_disaster);
@@ -1602,20 +1550,8 @@ BuildObjectList (void)
 		{
 			hNextElement = GetSuccElement (ElementPtr);
 			UnlockElement (hElement);
-
-			// XXX: Hack: APPEARING flag is set by scan.c for scanned blips
-			if (ElementPtr->state_flags & APPEARING)
-			{
-				// XXX: Hack: defer deletion of the element
-				ElementPtr->current.location.x |= 0x8000;
-				ElementPtr->current.location.y |= 0x8000;
-			}
-			else
-			{
-				RemoveElement (hElement);
-				FreeElement (hElement);
-			}
-			
+			RemoveElement (hElement);
+			FreeElement (hElement);
 			continue;
 		}
 		else if (ElementPtr->state_flags & FINITE_LIFE)
@@ -1639,15 +1575,19 @@ BuildObjectList (void)
 				else if (ElementPtr->next.location.y >= (MAP_HEIGHT << MAG_SHIFT))
 					ElementPtr->next.location.y = (MAP_HEIGHT << MAG_SHIFT) - 1;
 			}
-			// XXX: Hack: APPEARING flag is set by scan.c for scanned blips
-			if (ElementPtr->state_flags & APPEARING)
-			{	// XXX: Hack: remove the element from display
-				ElementPtr->current.location.x |= 0x8000;
-			}
 			if (ElementPtr->next.location.x < 0)
 				ElementPtr->next.location.x += MAP_WIDTH << MAG_SHIFT;
 			else
 				ElementPtr->next.location.x %= MAP_WIDTH << MAG_SHIFT;
+			
+			// XXX: APPEARING flag is set by scan.c for scanned blips
+			if (ElementPtr->state_flags & APPEARING)
+			{	// Update the location of a moving object on the scan map
+				ElementPtr->current.location.x =
+						ElementPtr->next.location.x >> MAG_SHIFT;
+				ElementPtr->current.location.y =
+						ElementPtr->next.location.y >> MAG_SHIFT;
+			}
 		}
 
 		{
@@ -1680,44 +1620,7 @@ BuildObjectList (void)
 }
 
 static void
-RepairScan (POINT newPlanetLoc)
-{
-	HELEMENT hElement, hNextElement;
-
-	for (hElement = GetHeadElement ();
-			hElement; hElement = hNextElement)
-	{
-		ELEMENT *ElementPtr;
-		BOOLEAN remove = FALSE;
-
-		LockElement (hElement, &ElementPtr);
-		hNextElement = GetSuccElement (ElementPtr);
-		if (ElementPtr->current.location.x & 0x8000)
-		{	// XXX: element removed from display
-			ElementPtr->current.location.x &= ~0x8000;
-			if (ElementPtr->current.location.y & 0x8000)
-			{	// XXX: deletion of this element was defered
-				remove = TRUE;
-				ElementPtr->current.location.y &= ~0x8000;
-			}
-
-			RepairTopography (ElementPtr);
-		}
-		
-		UnlockElement (hElement);
-
-		if (remove)
-		{
-			RemoveElement (hElement);
-			FreeElement (hElement);
-		}
-	}
-
-	RedrawSurfaceScan (&newPlanetLoc);
-}
-
-static void
-ScrollPlanetSide (SIZE dx, SIZE dy, int landingIndex)
+ScrollPlanetSide (SIZE dx, SIZE dy, int landingOffset)
 {
 	POINT new_pt;
 	STAMP lander_s, shadow_s, shield_s;
@@ -1777,13 +1680,10 @@ ScrollPlanetSide (SIZE dx, SIZE dy, int landingIndex)
 	if (crew_left || damage_index || explosion_index < 3)
 	{
 		lander_s.origin.x = SURFACE_WIDTH >> 1;
+		lander_s.origin.y = (SURFACE_HEIGHT >> 1) + landingOffset;
 		lander_s.frame = LanderFrame[0];
-		if (landingIndex == ON_THE_GROUND)
-			lander_s.origin.y = SURFACE_HEIGHT >> 1;
-		else
-			lander_s.origin.y = landing_pos[landingIndex];
 
-		if (landingIndex != ON_THE_GROUND)
+		if (landingOffset != ON_THE_GROUND)
 		{	// Landing, draw a shadow
 			shadow_s.origin.x = lander_s.origin.y + (SURFACE_WIDTH >> 1) - (SURFACE_HEIGHT >> 1);//2;
 			shadow_s.origin.y = lander_s.origin.y;
@@ -1822,7 +1722,7 @@ ScrollPlanetSide (SIZE dx, SIZE dy, int landingIndex)
 		}
 	}
 	
-	if (landingIndex == ON_THE_GROUND && crew_left
+	if (landingOffset == ON_THE_GROUND && crew_left
 			&& GetPredLink (DisplayLinks) != END_OF_LIST)
 		CheckObjectCollision (END_OF_LIST);
 
@@ -1851,7 +1751,7 @@ ScrollPlanetSide (SIZE dx, SIZE dy, int landingIndex)
 		}
 	}
 
-	RepairScan (new_pt);
+	RedrawSurfaceScan (&new_pt);
 
 	if (lander_flags & KILL_CREW)
 		DeltaLanderCrew (-1, LIGHTNING_DISASTER);
@@ -2077,10 +1977,6 @@ LanderFire (SIZE facing)
 	WeaponElementPtr->life_span = 12;
 	WeaponElementPtr->state_flags = FINITE_LIFE;
 	WeaponElementPtr->next.location = curLanderLoc;
-	WeaponElementPtr->current.location.x =
-			WeaponElementPtr->next.location.x >> MAG_SHIFT;
-	WeaponElementPtr->current.location.y =
-			WeaponElementPtr->next.location.y >> MAG_SHIFT;
 
 	SetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex], STAMP_PRIM);
 	DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame =
@@ -2379,11 +2275,13 @@ ReturnToOrbit (RECT *pRect)
 static void
 IdlePlanetSide (LanderInputState *inputState, TimeCount howLong)
 {
+#define IDLE_OFFSET     
 	TimeCount TimeOut = GetTimeCounter () + howLong;
 
 	while (GetTimeCounter () < TimeOut)
 	{
-		ScrollPlanetSide (0, 0, IDLE_INDEX);
+		// 10 to clear the lander off of the screen
+		ScrollPlanetSide (0, 0, -(SURFACE_HEIGHT / 2 + 10));
 		SleepThreadUntil (inputState->NextTime);
 		inputState->NextTime += PLANET_SIDE_RATE;
 	}
@@ -2392,22 +2290,36 @@ IdlePlanetSide (LanderInputState *inputState, TimeCount howLong)
 static void
 LandingTakeoffSequence (LanderInputState *inputState, BOOLEAN landing)
 {
+// We cannot solve a quadratic equation in a macro, so use a sensible max
+#define MAX_OFFSETS  20
+// 10 to clear the lander off of the screen
+#define DISTANCE_COVERED  (SURFACE_HEIGHT / 2 + 10)
+	int landingOfs[MAX_OFFSETS];
 	int start;
 	int end;
 	int delta;
 	int index;
 
+	// Produce smooth acceleration deltas from a simple 1..x progression
+	delta = 0;
+	for (index = 0; index < MAX_OFFSETS && delta < DISTANCE_COVERED; ++index)
+	{
+		delta += index + 1;
+		landingOfs[index] = -delta;
+	}
+	assert (delta >= DISTANCE_COVERED && "Increase MAX_OFFSETS!");
+
 	if (landing)
 	{
-		start = 0;
-		end = NUM_LANDING_DELTAS;
-		delta = +1;
+		start = index - 1;
+		end = -1;
+		delta = -1;
 	}
 	else
 	{	// takeoff
-		start = NUM_LANDING_DELTAS - 1;
-		end = -1;
-		delta = -1;
+		start = 0;
+		end = index;
+		delta = +1;
 	}
 
 	if (landing)
@@ -2416,7 +2328,7 @@ LandingTakeoffSequence (LanderInputState *inputState, BOOLEAN landing)
 	// Draw the landing/takeoff lander positions
 	for (index = start; index != end; index += delta)
 	{
-		ScrollPlanetSide (0, 0, index);
+		ScrollPlanetSide (0, 0, landingOfs[index]);
 		SleepThreadUntil (inputState->NextTime);
 		inputState->NextTime += PLANET_SIDE_RATE;
 	}

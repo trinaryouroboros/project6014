@@ -28,7 +28,6 @@
 #include "libs/file.h"
 #include "globdata.h"
 #include "intel.h"
-#include "sis.h"
 #include "state.h"
 #include "grpinfo.h"
 

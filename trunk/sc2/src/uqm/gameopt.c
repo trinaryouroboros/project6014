@@ -24,21 +24,19 @@
 
 #include "build.h"
 #include "colors.h"
-#include "commglue.h"
-		// for CommData
 #include "controls.h"
 // XXX: for FindStart(), GetClusterName()
 #include "encount.h"
-#include "planets/lander.h"
+#include "menustat.h"
+#include "sis.h"
+#include "units.h"
 #include "gamestr.h"
 #include "load.h"
 #include "options.h"
 #include "save.h"
-#include "starbase.h"
 #include "settings.h"
 #include "setup.h"
 #include "sounds.h"
-#include "state.h"
 #include "util.h"
 #include "libs/graphics/gfx_common.h"
 
@@ -920,17 +918,6 @@ Restart:
 		{	// Selected LOAD from main menu, and now canceled
 			GLOBAL (CurrentActivity) |= CHECK_ABORT;
 		}
-		else if (pSolarSysState)
-		{
-#define DRAW_REFRESH (1 << 5)
-#define REPAIR_SCAN (1 << 6)
-			extern BYTE draw_sys_flags;
-
-			if (pSolarSysState->MenuState.Initialized < 3)
-				draw_sys_flags |= DRAW_REFRESH;
-			else if (pSolarSysState->MenuState.Initialized == 4)
-				draw_sys_flags |= REPAIR_SCAN;
-		}
 		return (FALSE);
 	}
 	else if (PulsedInputState.menu[KEY_MENU_SELECT])
@@ -967,17 +954,6 @@ Restart:
 					goto Restart;
 				}
 				ResumeMusic ();
-				if (pSolarSysState)
-				{
-#define DRAW_REFRESH (1 << 5)
-#define REPAIR_SCAN (1 << 6)
-					extern BYTE draw_sys_flags;
-					
-					if (pSolarSysState->MenuState.Initialized < 3)
-						draw_sys_flags |= DRAW_REFRESH;
-					else if (pSolarSysState->MenuState.Initialized == 4)
-						draw_sys_flags |= REPAIR_SCAN;
-				}
 			}
 			else
 			{
@@ -1169,7 +1145,6 @@ PickGame (MENU_STATE *pMS)
 
 	if (pSolarSysState)
 	{
-		++pSolarSysState->MenuState.Initialized;
 		pSolarSysState->PauseRotate = 1;
 		TaskSwitch ();
 	}
@@ -1181,6 +1156,7 @@ PickGame (MENU_STATE *pMS)
 
 	DlgStamp.origin.x = 0;
 	DlgStamp.origin.y = 0;
+	// Save the current state of the screen for later restoration
 	DlgRect.corner.x = SIS_ORG_X;
 	DlgRect.corner.y = SIS_ORG_Y;
 	DlgRect.extent.width = SIS_SCREEN_WIDTH;
@@ -1212,45 +1188,15 @@ PickGame (MENU_STATE *pMS)
 	}
 
 	if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
-	{	// Restore previous screen if necessary
-		// TODO: Need a better test for in-encounter
-		if (CommData.ConversationPhrasesRes
-				|| !(pSolarSysState
-				&& pSolarSysState->MenuState.Initialized < 3))
-		{
-			SetTransitionSource (&DlgRect);
-			BatchGraphics ();
-			DrawStamp(&DlgStamp);
-			ScreenTransition (3, &DlgRect);
-			UnbatchGraphics ();
-		}
+	{	// Restore previous screen
+		SetTransitionSource (&DlgRect);
+		BatchGraphics ();
+		DrawStamp (&DlgStamp);
+		ScreenTransition (3, &DlgRect);
+		UnbatchGraphics ();
 
 		if (pSolarSysState)
-		{
-			/* We're in interplanetary, so we let the IP
-			 * functions know we're ready to draw stuff
-			 * again and then update the frame twice; once
-			 * for the screen transition, and once to draw
-			 * the ships afterwards. */
-			--pSolarSysState->MenuState.Initialized;
 			pSolarSysState->PauseRotate = 0;
-			IP_frame ();
-			IP_frame ();
-
-			// TODO: Need a better test for in-encounter
-			if (!CommData.ConversationPhrasesRes
-					&& !PLRPlaying ((MUSIC_REF)~0))
-			{
-				if (pSolarSysState->MenuState.Initialized < 3)
-				{
-					PlayMusic (SpaceMusic, TRUE, 1);
-				}
-				else
-				{
-					PlayMusic (LanderMusic, TRUE, 1);
-				}
-			}
-		}
 	}
 
 	DestroyDrawable (ReleaseDrawable (DlgStamp.frame));
@@ -1295,9 +1241,6 @@ DoGameOptions (MENU_STATE *pMS)
 		{
 			case SAVE_GAME:
 			case LOAD_GAME:
-				pMS->CurFrame = (FRAME)FadeMusic (0, ONE_SECOND >> 1);
-						// XXX: what is going on here? A DWORD is cast
-						//      to a FRAME.
 				return PickGame (pMS);
 			case QUIT_GAME:
 				if (ConfirmExit ())

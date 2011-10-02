@@ -6,6 +6,8 @@
 
 #include "../setup.h"
 #include "triangul.h"
+#include "planets.h"
+// for DrawOval
 
 // Shamelessly copied from pstarmap.c and should be updated to reflect
 // any changes on the original

@@ -20,6 +20,7 @@
 #define _COMM_H
 
 #include "globdata.h"
+#include "units.h"
 #include "libs/compiler.h"
 #include "libs/gfxlib.h"
 #include "commglue.h"

@@ -34,6 +34,12 @@
 #include "master.h"
 #include "controls.h"
 #include "starcon.h"
+#include "clock.h"
+		// for GameClockTick()
+#include "hyper.h"
+		// for SeedUniverse()
+#include "planets/planets.h"
+		// for ExploreSolarSys()
 #include "uqmdebug.h"
 #include "libs/tasklib.h"
 #include "libs/log.h"
@@ -193,7 +199,7 @@ while (--ac > 0)
 			log_add (log_Fatal, "Could not set player input.");
 			explode ();  // Does not return;
 		}
-		InitSIS ();
+		InitGameStructures ();
 		InitGameClock ();
 		AddInitialGameEvents();
 		do
@@ -282,7 +288,7 @@ while (--ac > 0)
 
 		StopSound ();
 		UninitGameClock ();
-		UninitSIS ();
+		UninitGameStructures ();
 		ClearPlayerInputAll ();
 	}
 //	CloseJournal ();

@@ -39,6 +39,8 @@
 #include "encount.h"
 #include "master.h"
 #include "setup.h"
+#include "units.h"
+#include "hyper.h"
 #include "resinst.h"
 #include "nameref.h"
 #include "build.h"
@@ -59,7 +61,7 @@ FRAME PlayFrame;
 
 GLOBDATA GlobData;
 
-BOOLEAN initedSIS = 0;
+static BOOLEAN initedGameStructs = FALSE;
 
 
 BYTE
@@ -201,7 +203,7 @@ copyFleetInfo (FLEET_INFO *dst, SHIP_INFO *src, FLEET_STUFF *fleet)
 }
 
 BOOLEAN
-InitSIS (void)
+InitGameStructures (void)
 {
 	COUNT i;
 
@@ -426,8 +428,8 @@ InitSIS (void)
 	 * than once, as you can't remove the atexit function (when the full game
 	 * ends).
 	 */
-	initedSIS = TRUE;
-	atexit (UninitSIS);
+	initedGameStructs = TRUE;
+	atexit (UninitGameStructures);
 
 	return (TRUE);
 }
@@ -446,11 +448,11 @@ FreeSC2Data (void)
 }
 
 void
-UninitSIS (void)
+UninitGameStructures (void)
 {
 	HFLEETINFO hStarShip;
 
-	if (!initedSIS)
+	if (!initedGameStructs)
 		return;
 
 	UninitQueue (&GLOBAL (encounter_q));
@@ -480,7 +482,7 @@ UninitSIS (void)
 	
 	DestroyDrawable (ReleaseDrawable (PlayFrame));
 	PlayFrame = 0;
-	initedSIS = FALSE;
+	initedGameStructs = FALSE;
 }
 
 void

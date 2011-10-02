@@ -32,8 +32,11 @@
 #include "libs/mathlib.h"
 #include "assert.h"
 
-// XXX: temporary, for SOL_X/SOL_Y
 #include "uqm/hyper.h"
+			// for SOL_X/SOL_Y
+#include "uqm/planets/planets.h"
+		// for xxx_DISASTER
+#include "uqm/sis.h"
 
 #define NUM_HISTORY_ITEMS 0
 #define NUM_EVENT_ITEMS 1
