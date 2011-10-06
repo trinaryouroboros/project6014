@@ -1,0 +1,7 @@
+uqm_CFILES="gendefault.c genand.c genburv.c genchmmr.c gencol.c gendru.c
+		genhint1.c genhint2.c genilw.c genlurg.c genmel.c genmyc.c
+		genorz.c genorzspaceportal.c genpet.c genpku.c genrain.c
+		gensam.c genshof.c genshocrash.c genslaverace.c gensly.c
+		gensol.c genspa.c gensup.c gensyr.c
+		genthrad.c gentrap.c genutw.c genvault.c genvux.c genwreck.c
+		genyeh.c genzoq.c"

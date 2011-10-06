@@ -900,7 +900,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
 					pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |= (1L << temp_which_node); // Mark this bio-blip's state as "collected".
 					pSolarSysState->CurNode = (COUNT)~0; // GenerateLifeForms will update the states of ALL bio-blips when run.
-					(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE)); // Re-run GenerateLifeForms so the changed state takes effect
+					callGenerateForScanType (pSolarSysState, pSolarSysState->pOrbitalDesc, &pSolarSysState->CurNode, BIOLOGICAL_SCAN); // Re-run GenerateLifeForms so the changed state takes effect
 					SET_GAME_STATE (PLANETARY_CHANGE, 1); // Save the changes to the file containing the states of all lifeforms.
 				}
 				
@@ -957,7 +957,7 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 			temp_which_node = HIBYTE (ElementPtr->scan_node) - 1;
 			pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[BIOLOGICAL_SCAN] |= (1L << temp_which_node);
 			pSolarSysState->CurNode = (COUNT)~0;
-			(*pSolarSysState->GenFunc) ((BYTE)(GENERATE_LIFE));
+			callGenerateForScanType (pSolarSysState, pSolarSysState->pOrbitalDesc, &pSolarSysState->CurNode, BIOLOGICAL_SCAN);
 			SET_GAME_STATE (PLANETARY_CHANGE, 1);
 			
 			return (1);
@@ -1318,7 +1318,9 @@ CheckObjectCollision (COUNT index)
 				which_node = HIBYTE (ElementPtr->scan_node) - 1;
 				pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] |= (1L << which_node);
 				pSolarSysState->CurNode = (COUNT)~0;
-				(*pSolarSysState->GenFunc) ((BYTE)(scan + GENERATE_MINERAL));
+				callGenerateForScanType (pSolarSysState,
+						pSolarSysState->pOrbitalDesc,
+						&pSolarSysState->CurNode, scan);
 
 				if (!(pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] & (1L << which_node)))
 				{

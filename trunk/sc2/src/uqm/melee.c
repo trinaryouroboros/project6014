@@ -854,6 +854,8 @@ InitMelee (MELEE_STATE *pMS)
 
 	r.corner.x = r.corner.y = 0;
 	RedrawMeleeFrame ();
+
+	(void) pMS;
 }
 
 static void
