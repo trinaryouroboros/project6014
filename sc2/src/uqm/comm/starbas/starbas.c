@@ -74,12 +74,12 @@ static LOCDATA commander_desc =
 			ONE_SECOND * 2, 0, /* RestartRate */
 			0, /* BlockMask */
 		},
-		{ /* Flagship picture */
-			95, /* StartIndex */
-			1, /* NumFrames */
-			0, /* AnimFlags */
-			0, 0, /* FrameRate */
-			0, 0, /* RestartRate */
+		{ /* Explorer lights */
+			40, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND, 0, /* FrameRate */
+			ONE_SECOND * 5, ONE_SECOND * 5, /* RestartRate */
 			0, /* BlockMask */
 		},
 	},
