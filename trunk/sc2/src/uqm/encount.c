@@ -471,7 +471,6 @@ UninitEncounter (void)
 	else
 	{
 		BOOLEAN Sleepy;
-		DWORD Time;
 		SIZE VictoryState;
 		COUNT RecycleAmount = 0;
 		SIZE i;
@@ -660,7 +659,7 @@ UninitEncounter (void)
 
 							if (Sleepy)
 							{
-								Time = GetTimeCounter ();
+								TimeCount Time = GetTimeCounter ();
 								for (j = 0; j < NUM_SHIP_FADES; ++j)
 								{
 									UnlockMutex (GraphicsLock);
@@ -699,12 +698,8 @@ UninitEncounter (void)
 			DestroyDrawable (ReleaseDrawable (s.frame));
 #endif /* NEVER */
 
-			FlushInput ();
-			Time = GetTimeCounter () + (ONE_SECOND * 3);
 			UnlockMutex (GraphicsLock);
-			// TODO: handle rapid quit
-			while (!(AnyButtonPress (TRUE)) && GetTimeCounter () < Time)
-				TaskSwitch ();
+			WaitForAnyButton (TRUE, ONE_SECOND * 3, FALSE);
 			LockMutex (GraphicsLock);
 			if (!CurrentInputState.key[PlayerControls[0]][KEY_ESCAPE])
 			{
@@ -731,12 +726,8 @@ UninitEncounter (void)
 					str2 = GAME_STRING (ENCOUNTER_STRING_BASE + 7);
 							// "Scavenged"
 					DrawFadeText (str1, str2, TRUE, &scavenge_r);
-					Time = GetTimeCounter () + ONE_SECOND * 2;
 					UnlockMutex (GraphicsLock);
-					// TODO: handle rapid quit
-					while (!(AnyButtonPress (TRUE))
-							&& GetTimeCounter () < Time)
-						TaskSwitch ();
+					WaitForAnyButton (TRUE, ONE_SECOND * 2, FALSE);
 					LockMutex (GraphicsLock);
 					if (!CurrentInputState.key[PlayerControls[0]][KEY_ESCAPE])
 						DrawFadeText (str1, str2, FALSE, &scavenge_r);

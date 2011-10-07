@@ -60,12 +60,6 @@
 // ONE_SECOND.
 #define PLANET_SIDE_RATE (ONE_SECOND / 35)
 
-LanderInputState *pLanderInputState;
-		// Temporary, to replace the references to pMenuState.
-		// TODO: Many functions depend on pLanderInputState. In particular,
-		//   the ELEMENT property functions. Fields in LanderInputState
-		//   should either be made static vars, or ELEMENT should carry
-		//   something like an 'intptr_t private' field
 
 /*
  * creature_data_index is populated by the collision detection 
@@ -76,6 +70,19 @@ LanderInputState *pLanderInputState;
  * DN 29DEC10
  */
 int creature_data_index = -1;
+
+// This is a derived type from INPUT_STATE_DESC.
+typedef struct LanderInputState LanderInputState;
+struct LanderInputState {
+	// Fields required by DoInput()
+	BOOLEAN (*InputFunc) (LanderInputState *pMS);
+	COUNT MenuRepeatDelay;
+
+	BOOLEAN Initialized;
+	TimeCount NextTime;
+			// Frame rate control
+};
+
 FRAME LanderFrame[10]; // JMS: Was 8, added one slot for critter explosion frames and one for dividing critter's small frames.
 static SOUND LanderSounds;
 MUSIC_REF LanderMusic;
@@ -237,6 +244,9 @@ static int turn_wait;
 		// thus named for similar semantics to ELEMENT.turn_wait
 static int weapon_wait;
 		// semantics similar to STARSHIP.weapon_counter
+
+// TODO: We may want to make the PLANETSIDE_DESC fields into static vars
+static PLANETSIDE_DESC *planetSideDesc;
 
 #define ON_THE_GROUND   0
 
@@ -676,7 +686,7 @@ object_animation (ELEMENT *ElementPtr)
 					if (creatureHasWeapon
 						&& frame_index == 4
 						&& (ElementPtr->mass_points & CREATURE_AWARE)
-						&& !((pLanderInputState->planetSideDesc)->InTransit)
+						&& !((planetSideDesc)->InTransit)
 						&& (dx <= MAX_ENEMYSHOT_DISTANCE 
 							&& dy <= MAX_ENEMYSHOT_DISTANCE
 							&& dx * dx + dy * dy <= MAX_ENEMYSHOT_DISTANCE * MAX_ENEMYSHOT_DISTANCE))
@@ -827,6 +837,88 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 	SetContext (OldContext);
 }
 
+// returns true iff the node was picked up.
+static bool
+pickupMineralNode (PLANETSIDE_DESC *pPSD, COUNT NumRetrieved,
+		ELEMENT *ElementPtr, const INTERSECT_CONTROL *LanderControl,
+		const INTERSECT_CONTROL *ElementControl)
+{
+	BYTE EType;
+	UNICODE ch;
+	UNICODE *pStr;
+
+	if (pPSD->ElementLevel >= pPSD->MaxElementLevel)
+	{
+		// Lander full
+		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_FULL),
+				NotPositional (), NULL, GAME_SOUND_PRIORITY);
+		return false;
+	}
+
+	if (pPSD->ElementLevel + NumRetrieved > pPSD->MaxElementLevel)
+	{
+		// Deposit could only be picked up partially.
+		NumRetrieved = (COUNT)(pPSD->MaxElementLevel - pPSD->ElementLevel);
+	}
+
+	FillLanderHold (pPSD, MINERAL_SCAN, NumRetrieved);
+
+	EType = ElementPtr->turn_wait;
+	pPSD->ElementAmounts[ElementCategory (EType)] += NumRetrieved;
+
+	pPSD->NumFrames = NUM_TEXT_FRAMES;
+	sprintf (pPSD->AmountBuf, "%u", NumRetrieved);
+	pStr = GAME_STRING (EType + ELEMENTS_STRING_BASE);
+
+	pPSD->MineralText[0].baseline.x = (SURFACE_WIDTH >> 1)
+			+ (ElementControl->EndPoint.x - LanderControl->EndPoint.x);
+	pPSD->MineralText[0].baseline.y = (SURFACE_HEIGHT >> 1)
+		+ ((ElementControl->EndPoint.y - LanderControl->EndPoint.y) << RESOLUTION_FACTOR); // JMS_GFX;
+	pPSD->MineralText[0].CharCount = (COUNT)~0;
+	pPSD->MineralText[1].pStr = pStr;
+
+	while ((ch = *pStr++) && ch != ' ')
+		;
+	if (ch == '\0')
+	{
+		pPSD->MineralText[1].CharCount = (COUNT)~0;
+		pPSD->MineralText[2].CharCount = 0;
+	}
+	else  /* ch == ' ' */
+	{
+		// Name contains a space. Print over
+		// two lines.
+		pPSD->MineralText[1].CharCount = utf8StringCountN(
+				pPSD->MineralText[1].pStr, pStr - 1);
+		pPSD->MineralText[2].pStr = pStr;
+		pPSD->MineralText[2].CharCount = (COUNT)~0;
+	}
+
+	return true;
+}
+
+static bool
+pickupBioNode (PLANETSIDE_DESC *pPSD, COUNT NumRetrieved)
+{
+	if (pPSD->BiologicalLevel >= MAX_SCROUNGED)
+	{
+		// Lander is full.
+		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_FULL),
+				NotPositional (), NULL, GAME_SOUND_PRIORITY);
+		return false;
+	}
+
+	if (pPSD->BiologicalLevel + NumRetrieved > MAX_SCROUNGED)
+	{
+		// Node could only be picked up partially.
+		NumRetrieved = (COUNT)(MAX_SCROUNGED - pPSD->BiologicalLevel);
+	}
+
+	FillLanderHold (pPSD, BIOLOGICAL_SCAN, NumRetrieved);
+
+	return true;
+}
+
 static int
 CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 {
@@ -968,13 +1060,74 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 }
 
 static void
+shotCreature (ELEMENT *ElementPtr, BYTE value,
+		INTERSECT_CONTROL *LanderControl, PRIMITIVE *pPrim)
+{
+	COUNT frame_index;
+	PRIMITIVE *pPrimFrame;
+	
+	if (ElementPtr->hit_points == 0)
+	{
+		// Creature is already canned.
+		return;
+	}
+
+	pPrimFrame = &DisplayArray[ElementPtr->PrimIndex];
+	frame_index = GetFrameIndex (pPrimFrame->Object.Stamp.frame) + 1;
+	
+	// 1) Critter is invulnerable: stop the function here - critter is unharmed.
+	if (CheckSpecialAttributes(ElementPtr, INVULNERABILITY_SPECIALS))
+	{
+		PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
+		return;
+	}
+	
+	--ElementPtr->hit_points;
+	if (ElementPtr->hit_points == 0)
+	{
+		// 2) Can creature.
+		if (CheckSpecialAttributes(ElementPtr, WHEN_DYING_SPECIALS))
+		{
+			// JMS: The special cases like exploding/dividing creatures are handled in a separate function.
+		}
+		else
+		{
+			ElementPtr->mass_points = value;
+			DisplayArray[ElementPtr->PrimIndex].Object.Stamp.frame =
+				pSolarSysState->PlanetSideFrame[0];
+		}
+	}
+	// 3) Critter is weakened.
+	else if (CreatureData[ElementPtr->mass_points & ~CREATURE_AWARE]
+			.Attributes & SPEED_MASK)
+	{
+		COUNT angle;
+		
+		angle = FACING_TO_ANGLE (GetFrameIndex (
+				LanderControl->IntersectStamp.frame) -
+				ANGLE_TO_FACING (FULL_CIRCLE));
+		DeltaVelocityComponents (&ElementPtr->velocity,
+				COSINE (angle, WORLD_TO_VELOCITY (1)),
+				SINE (angle, WORLD_TO_VELOCITY (1)));
+		ElementPtr->thrust_wait = 0;
+		ElementPtr->mass_points |= CREATURE_AWARE;
+	}
+
+	SetPrimType (pPrim, STAMPFILL_PRIM);
+	SetPrimColor (pPrim, WHITE_COLOR);
+
+	PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_HITS),
+			NotPositional (), NULL, GAME_SOUND_PRIORITY);
+}
+
+static void
 CheckObjectCollision (COUNT index)
 {
 	INTERSECT_CONTROL LanderControl;
 	DRAWABLE LanderHandle;
 	PRIMITIVE *pPrim;
 	PRIMITIVE *pLanderPrim;
-	PLANETSIDE_DESC *pPSD;
+	PLANETSIDE_DESC *pPSD = planetSideDesc;
 
 	if (index != END_OF_LIST)
 	{
@@ -991,7 +1144,6 @@ CheckObjectCollision (COUNT index)
 		index = GetSuccLink (DisplayLinks);
 	}
 
-	pPSD = pLanderInputState->planetSideDesc;
 	LanderControl.EndPoint = LanderControl.IntersectStamp.origin;
 	LanderHandle = GetFrameParentDrawable (LanderControl.IntersectStamp.frame);
 
@@ -1168,66 +1320,16 @@ CheckObjectCollision (COUNT index)
 						UnlockElement (hElement);
 						break;
 					}
-					else if (scan == BIOLOGICAL_SCAN
+
+					if (scan == BIOLOGICAL_SCAN
 							&& (value = LONIBBLE (CreatureData[
 							ElementPtr->mass_points
 							& ~CREATURE_AWARE
 							].ValueAndHitPoints)))
 					{
 						/* Collision of a stun bolt with a viable creature */
-						if (ElementPtr->hit_points)
-						{
-							COUNT frame_index;
-							PRIMITIVE *pPrim;
-							pPrim = &DisplayArray[ElementPtr->PrimIndex];
-							frame_index = GetFrameIndex (pPrim->Object.Stamp.frame) + 1;
-							
-							// 1) Critter is invulnerable: stop the function here - critter is unharmed.
-							if (CheckSpecialAttributes(ElementPtr, INVULNERABILITY_SPECIALS))
-							{
-								PlaySound (SetAbsSoundIndex (LanderSounds, BIOLOGICAL_DISASTER), NotPositional (), NULL, GAME_SOUND_PRIORITY);
-								break;
-							}
-							// 2) Critter dies.
-							else if (--ElementPtr->hit_points == 0)
-							{
-								if (CheckSpecialAttributes(ElementPtr, WHEN_DYING_SPECIALS))
-								{
-									// JMS: The special cases like exploding/dividing creatures are handled in a separate function.
-								}
-								else
-								{
-									ElementPtr->mass_points = value;
-									DisplayArray[ElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[0];
-								}
-							}
-							// 3) Critter is weakened.
-							else if (CreatureData[
-									ElementPtr->mass_points
-									& ~CREATURE_AWARE
-									].Attributes & SPEED_MASK)
-							{
-								COUNT angle;
-
-								angle = FACING_TO_ANGLE (GetFrameIndex (
-										LanderControl.IntersectStamp.frame
-										) - ANGLE_TO_FACING (FULL_CIRCLE));
-								DeltaVelocityComponents (
-										&ElementPtr->velocity,
-										COSINE (angle, WORLD_TO_VELOCITY (1)),
-										SINE (angle, WORLD_TO_VELOCITY (1)));
-								ElementPtr->thrust_wait = 0;
-								ElementPtr->mass_points |= CREATURE_AWARE;
-							}
-
-							SetPrimType (pPrim, STAMPFILL_PRIM);
-							SetPrimColor (pPrim, WHITE_COLOR);
-
-							PlaySound (SetAbsSoundIndex (
-									LanderSounds, LANDER_HITS),
-									NotPositional (), NULL,
-									GAME_SOUND_PRIORITY);
-						}
+						shotCreature (ElementPtr, value, &LanderControl,
+								pPrim);
 						UnlockElement (hElement);
 						break;
 					}
@@ -1242,76 +1344,15 @@ CheckObjectCollision (COUNT index)
 						case ENERGY_SCAN:
 							break;
 						case MINERAL_SCAN:
-							if (pPSD->ElementLevel < pPSD->MaxElementLevel)
-							{
-								if (pPSD->ElementLevel
-										+ NumRetrieved > pPSD->MaxElementLevel)
-									NumRetrieved = (COUNT)(pPSD->MaxElementLevel
-											- pPSD->ElementLevel);
-								FillLanderHold (pPSD, scan, NumRetrieved);
-								if (scan == MINERAL_SCAN)
-								{
-									BYTE EType;
-									UNICODE ch, *pStr;
-
-									EType = ElementPtr->turn_wait;
-									pPSD->ElementAmounts[
-											ElementCategory (EType)
-											] += NumRetrieved;
-
-									pPSD->NumFrames = NUM_TEXT_FRAMES;
-									sprintf (pPSD->AmountBuf, "%u", NumRetrieved);
-									pStr = GAME_STRING (EType + ELEMENTS_STRING_BASE);
-
-									pPSD->MineralText[0].baseline.x =
-											(SURFACE_WIDTH >> 1)
-											+ (ElementControl.EndPoint.x
-											- LanderControl.EndPoint.x);
-									pPSD->MineralText[0].baseline.y =
-											(SURFACE_HEIGHT >> 1)
-											+ ((ElementControl.EndPoint.y
-											- LanderControl.EndPoint.y) << RESOLUTION_FACTOR); // JMS_GFX;
-									pPSD->MineralText[0].CharCount =
-											(COUNT)~0;
-									pPSD->MineralText[1].pStr = pStr;
-									while ((ch = *pStr++) && ch != ' ')
-										;
-									if (ch == '\0')
-									{
-										pPSD->MineralText[1].CharCount =
-												(COUNT)~0;
-										pPSD->MineralText[2].CharCount = 0;
-									}
-									else  /* ch == ' ' */
-									{
-										// Name contains a space. Print over
-										// two lines.
-										pPSD->MineralText[1].CharCount =
-												utf8StringCountN(
-												pPSD->MineralText[1].pStr,
-												pStr - 1);
-										pPSD->MineralText[2].pStr = pStr;
-										pPSD->MineralText[2].CharCount =
-												(COUNT)~0;
-									}
-								}
-								break;
-							}
-							PlaySound (SetAbsSoundIndex (
-									LanderSounds, LANDER_FULL),
-									NotPositional (), NULL,
-									GAME_SOUND_PRIORITY);
-							continue;
+							if (!pickupMineralNode (pPSD, NumRetrieved,
+									ElementPtr, &LanderControl,
+									&ElementControl))
+								continue;
+							break;
 						case BIOLOGICAL_SCAN:
-							if (pPSD->BiologicalLevel < MAX_SCROUNGED)
-							{
-								if (pPSD->BiologicalLevel+ NumRetrieved > MAX_SCROUNGED)
-									NumRetrieved = (COUNT)(MAX_SCROUNGED - pPSD->BiologicalLevel);
-								FillLanderHold (pPSD, scan, NumRetrieved);
-								break;
-							}
-							PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_FULL), NotPositional (), NULL, GAME_SOUND_PRIORITY);
-							continue;
+							if (!pickupBioNode (pPSD, NumRetrieved))
+								continue;
+							break;
 					}
 				}
 
@@ -1383,9 +1424,8 @@ lightning_process (ELEMENT *ElementPtr)
 			if (ElementPtr->mass_points == LIGHTNING_DISASTER)
 			{
 				/* This one always strikes the lander and can hurt */
-				PLANETSIDE_DESC *pPSD = pLanderInputState->planetSideDesc;
 				if (crew_left && TFB_Random () % 100 < 10
-						&& !pPSD->InTransit)
+						&& !planetSideDesc->InTransit)
 					lander_flags |= KILL_CREW;
 
 				ElementPtr->next.location = curLanderLoc;
@@ -1518,13 +1558,12 @@ BuildObjectList (void)
 	DWORD rand_val;
 	POINT org;
 	HELEMENT hElement, hNextElement;
-	PLANETSIDE_DESC *pPSD;
+	PLANETSIDE_DESC *pPSD = planetSideDesc;
 
 	DisplayLinks = MakeLinks (END_OF_LIST, END_OF_LIST);
 	
 	lander_flags &= ~KILL_CREW;
 
-	pPSD = pLanderInputState->planetSideDesc;
 	rand_val = TFB_Random ();
 	if (LOBYTE (HIWORD (rand_val)) < pPSD->FireChance)
 	{
@@ -1729,9 +1768,7 @@ ScrollPlanetSide (SIZE dx, SIZE dy, int landingOffset)
 		CheckObjectCollision (END_OF_LIST);
 
 	{
-		PLANETSIDE_DESC *pPSD;
-
-		pPSD = pLanderInputState->planetSideDesc;
+		PLANETSIDE_DESC *pPSD = planetSideDesc;
 		if (pPSD->NumFrames)
 		{
 			--pPSD->NumFrames;
@@ -2086,7 +2123,7 @@ landerSpeedNumer = WORLD_TO_VELOCITY (48); // JMS
 	else if (crew_left /* alive and taking off */
 			&& ((CurrentInputState.key[PlayerControls[0]][KEY_ESCAPE] ||
 			CurrentInputState.key[PlayerControls[0]][KEY_SPECIAL])
-			|| pLanderInputState->planetSideDesc->InTransit))
+			|| planetSideDesc->InTransit))
 	{
 		return FALSE;
 	}
@@ -2117,7 +2154,7 @@ landerSpeedNumer = WORLD_TO_VELOCITY (48); // JMS
 	else
 	{
 		PLANETSIDE_DESC *pPSD;	// JMS
-		pPSD = pLanderInputState->planetSideDesc; // JMS
+		pPSD = planetSideDesc; // JMS
 
 		if (crew_left)
 		{
@@ -2360,6 +2397,14 @@ LandingTakeoffSequence (LanderInputState *inputState, BOOLEAN landing)
 }
 
 void
+SetLanderTakeoff (void)
+{
+	assert (planetSideDesc != NULL);
+	if (planetSideDesc)
+		planetSideDesc->InTransit = TRUE;
+}
+
+void
 PlanetSide (POINT planetLoc)
 {
 	SIZE index;
@@ -2421,14 +2466,8 @@ PlanetSide (POINT planetLoc)
 	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 3] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7B);
 	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 2] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D);
 	PSD.ColorCycle[(NUM_TEXT_FRAMES >> 1) - 1] = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7F);
-	landerInputState.planetSideDesc = &PSD;
+	planetSideDesc = &PSD;
 	
-	// TODO: Many functions depend on pLanderInputState. In particular,
-	//   the ELEMENT property functions. Fields in LanderInputState
-	//   should either be made static vars, or ELEMENT should carry
-	//   something like an 'intptr_t private' field
-	pLanderInputState = &landerInputState;
-
 	index = NORMALIZE_FACING (TFB_Random ());
 	LanderFrame[0] = SetAbsFrameIndex (LanderFrame[0], index);
 	crew_left = 0;
@@ -2503,7 +2542,7 @@ PlanetSide (POINT planetLoc)
 		}
 	}
 
-	landerInputState.planetSideDesc = NULL;
+	planetSideDesc = NULL;
 
 	{
 		HELEMENT hElement, hNextElement;

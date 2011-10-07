@@ -25,6 +25,7 @@
 #include "../fmv.h"
 #include "lander.h"
 #include "lifeform.h"
+#include "scan.h"
 #include "../build.h"
 #include "../cons_res.h"
 #include "../controls.h"
@@ -56,8 +57,7 @@ extern FRAME SpaceJunkFrame;
 
 #define FLASH_INDEX 105
 
-// TODO: this will become static once genchmmr.c declares its own CONTEXT
-CONTEXT ScanContext;
+static CONTEXT ScanContext;
 
 static POINT planetLoc;
 static RECT cursorRect;
@@ -966,7 +966,10 @@ callGenerateForScanType (SOLARSYS_STATE *solarSys, PLANET_DESC *world,
 static BOOLEAN
 DoScan (MENU_STATE *pMS)
 {
-	DWORD TimeIn, WaitTime;
+#define SCAN_DURATION   (ONE_SECOND * 7 / 4)
+// NUM_FLASH_COLORS for flashing blips; 1 for the final frame
+#define SCAN_LINES      (MAP_HEIGHT + NUM_FLASH_COLORS + 1)
+#define SCAN_LINE_WAIT  (SCAN_DURATION / SCAN_LINES)
 	BOOLEAN select, cancel;
 
 	select = PulsedInputState.menu[KEY_MENU_SELECT];
@@ -997,7 +1000,6 @@ DoScan (MENU_STATE *pMS)
 	{
 		BYTE min_scan, max_scan;
 		RECT r;
-		BOOLEAN PressState, ButtonState;
 
 		if (pMS->CurState == DISPATCH_SHUTTLE)
 		{
@@ -1069,7 +1071,7 @@ DoScan (MENU_STATE *pMS)
 			max_scan = BIOLOGICAL_SCAN;
 		}
 
-		do
+		for ( ; min_scan <= max_scan; ++min_scan)
 		{
 			TEXT t;
 			SWORD i;
@@ -1117,6 +1119,7 @@ DoScan (MENU_STATE *pMS)
 
 			{
 				DWORD rgb;
+				TimeCount TimeOut;
 				
 				switch (min_scan)
 				{
@@ -1131,45 +1134,43 @@ DoScan (MENU_STATE *pMS)
 						break;
 				}
 
+				// Draw a virgin surface
 				LockMutex (GraphicsLock);
 				BatchGraphics ();
 				DrawPlanet (0, 0, 0, 0);
 				UnbatchGraphics ();
 				UnlockMutex (GraphicsLock);
 
-				PressState = AnyButtonPress (TRUE);
-				WaitTime = (ONE_SECOND << 1) / MAP_HEIGHT;
-//				LockMutex (GraphicsLock);
-				TimeIn = GetTimeCounter ();
-				for (i = 0; i < MAP_HEIGHT + NUM_FLASH_COLORS + 1; i++)
+				// Draw the scan slowly line by line
+				TimeOut = GetTimeCounter ();
+				for (i = 0; i < SCAN_LINES; i++)
 				{
-					ButtonState = AnyButtonPress (TRUE);
-					if (PressState)
-					{
-						PressState = ButtonState;
-						ButtonState = FALSE;
-					}
-					if (ButtonState)
-						i = -i;
+					TimeOut += SCAN_LINE_WAIT;
+					if (WaitForAnyButtonUntil (TRUE, TimeOut, FALSE))
+						break;
+
 					LockMutex (GraphicsLock);
 					BatchGraphics ();
 					DrawPlanet (0, 0, i, rgb);
-					if (i < 0)
-						i = MAP_HEIGHT + NUM_FLASH_COLORS;
-					if (pMS->delta_item)
-						DrawScannedStuff (i, min_scan);
+					DrawScannedStuff (i, min_scan);
 					UnbatchGraphics ();
 					UnlockMutex (GraphicsLock);
-//					FlushGraphics ();
-					SleepThreadUntil (TimeIn + WaitTime);
-					TimeIn = GetTimeCounter ();
 				}
-//				UnlockMutex (GraphicsLock);
+
+				if (i < SCAN_LINES)
+				{	// Aborted by a keypress; draw in finished state
+					LockMutex (GraphicsLock);
+					BatchGraphics ();
+					// dy < 0 means "from dy to the end"
+					DrawPlanet (0, 0, -i, rgb);
+					DrawScannedStuff (SCAN_LINES - 1, min_scan);
+					UnbatchGraphics ();
+					UnlockMutex (GraphicsLock);
+				}
+
 				pSolarSysState->Tint_rgb = 0;
-
 			}
-
-		} while (++min_scan <= max_scan);
+		}
 
 		LockMutex (GraphicsLock);
 		SetContext (SpaceContext);
@@ -1206,32 +1207,52 @@ DoScan (MENU_STATE *pMS)
 	return (TRUE);
 }
 
+static CONTEXT
+CreateScanContext (void)
+{
+	CONTEXT oldContext;
+	CONTEXT context;
+	RECT r;
+
+	context = CreateContext ("ScanContext");
+	oldContext = SetContext (context);
+	
+	SetContextFGFrame (Screen);
+	r.corner.x = (SIS_ORG_X + SIS_SCREEN_WIDTH) - MAP_WIDTH;
+	r.corner.y = (SIS_ORG_Y + SIS_SCREEN_HEIGHT) - MAP_HEIGHT;
+	r.extent.width = MAP_WIDTH;
+	r.extent.height = MAP_HEIGHT;
+	SetContextClipRect (&r);
+
+	SetContext (oldContext);
+
+	return context;
+}
+
+CONTEXT
+GetScanContext (BOOLEAN *owner)
+{
+	// TODO: Make CONTEXT ref-counted
+	if (ScanContext)
+	{
+		*owner = FALSE;
+		return ScanContext;
+	}
+	else
+	{
+		*owner = TRUE;
+		return CreateScanContext ();
+	}
+}
+
 void
 ScanSystem (void)
 {
-	RECT r;
 	MENU_STATE MenuState;
 
 	MenuState.InputFunc = DoScan;
 	MenuState.Initialized = FALSE;
 	MenuState.flash_task = 0;
-
-{
-#define REPAIR_SCAN (1 << 6)
-	extern BYTE draw_sys_flags;
-	
-	if (draw_sys_flags & REPAIR_SCAN)
-	{
-		RECT r;
-
-		r.corner.x = SIS_ORG_X;
-		r.corner.y = SIS_ORG_Y;
-		r.extent.width = SIS_SCREEN_WIDTH;
-		r.extent.height = SIS_SCREEN_HEIGHT;
-		LoadIntoExtraScreen (&r);
-		draw_sys_flags &= ~REPAIR_SCAN;
-	}
-}
 
 	if (optWhichMenu == OPT_3DO &&
 			((pSolarSysState->pOrbitalDesc->data_index & PLANET_SHIELDED)
@@ -1248,17 +1269,9 @@ ScanSystem (void)
 		planetLoc.y = (MAP_HEIGHT >> 1) << MAG_SHIFT;
 
 		LockMutex (GraphicsLock);
-		ScanContext = CreateContext ("ScanContext");
-		SetContext (ScanContext);
-
 		initPlanetLocationImage ();
-
-		SetContextFGFrame (Screen);
-		r.corner.x = (SIS_ORG_X + SIS_SCREEN_WIDTH) - MAP_WIDTH;
-		r.corner.y = (SIS_ORG_Y + SIS_SCREEN_HEIGHT) - MAP_HEIGHT;
-		r.extent.width = MAP_WIDTH;
-		r.extent.height = MAP_HEIGHT;
-		SetContextClipRect (&r);
+		ScanContext = CreateScanContext ();
+		SetContext (ScanContext);
 		DrawScannedObjects (FALSE);
 		UnlockMutex (GraphicsLock);
 	}
@@ -1285,17 +1298,66 @@ ScanSystem (void)
 	}
 }
 
+static void
+generateBioNode (SOLARSYS_STATE *system, ELEMENT *NodeElementPtr,
+		BYTE *life_init_tab)
+{
+	COUNT i;
+	COUNT creatureType;
+
+	creatureType = system->SysInfo.PlanetInfo.CurType;
+
+	if (CreatureData[creatureType].Attributes & SPEED_MASK)
+	{
+		// Place moving creatures at a random location.
+		i = (COUNT)TFB_Random ();
+		NodeElementPtr->current.location.x =
+				(LOBYTE (i) % (MAP_WIDTH - (8 << 1))) + 8;
+		NodeElementPtr->current.location.y =
+				(HIBYTE (i) % (MAP_HEIGHT - (8 << 1))) + 8;
+	}
+
+	if (system->PlanetSideFrame[0] == 0)
+		system->PlanetSideFrame[0] =
+				CaptureDrawable (LoadGraphic (CANNISTER_MASK_PMAP_ANIM));
+
+	for (i = 0; i < MAX_LIFE_VARIATION
+			&& life_init_tab[i] != (BYTE)(creatureType + 1);
+			++i)
+	{
+		if (life_init_tab[i] != 0)
+			continue;
+
+		life_init_tab[i] = (BYTE)creatureType + 1;
+
+		system->PlanetSideFrame[i + 3] = load_life_form (creatureType);
+		break;
+	}
+
+	NodeElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[creatureType].FrameRate);
+	NodeElementPtr->mass_points = (BYTE)creatureType;
+	NodeElementPtr->hit_points = HINIBBLE (
+			CreatureData[creatureType].ValueAndHitPoints);
+	DisplayArray[NodeElementPtr->PrimIndex].
+			Object.Stamp.frame = SetAbsFrameIndex (
+			system->PlanetSideFrame[i + 3], (COUNT)TFB_Random ());
+}
+
 void
 GeneratePlanetSide (void)
 {
 	SIZE scan;
 	BYTE life_init_tab[MAX_LIFE_VARIATION];
+			// life_init_tab is filled with the creature types of already
+			// selected creatures. If an entry is 0, none has been selected
+			// yet, otherwise, it is 1 more than the creature type.
 
 	InitDisplayList ();
 	if (pSolarSysState->pOrbitalDesc->data_index & PLANET_SHIELDED)
 		return;
 
-	memset (life_init_tab, 0, sizeof (life_init_tab));
+	memset (life_init_tab, 0, sizeof life_init_tab);
+
 	for (scan = BIOLOGICAL_SCAN; scan >= MINERAL_SCAN; --scan)
 	{
 		COUNT num_nodes;
@@ -1313,7 +1375,8 @@ GeneratePlanetSide (void)
 			HELEMENT hNodeElement;
 			ELEMENT *NodeElementPtr;
 
-			if (pSolarSysState->SysInfo.PlanetInfo.ScanRetrieveMask[scan] & (1L << num_nodes))
+			if (isNodeRetrieved (&pSolarSysState->SysInfo.PlanetInfo,
+					scan, num_nodes))
 				continue;
 
 			hNodeElement = AllocElement ();
@@ -1348,7 +1411,7 @@ GeneratePlanetSide (void)
 						pSolarSysState->SysInfo.PlanetInfo.CurDensity) + 1);
 				DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = IncFrameIndex (NodeElementPtr->next.image.frame);
 			}
-			else
+			else  /* (scan == BIOLOGICAL_SCAN || scan == ENERGY_SCAN) */
 			{
 				NodeElementPtr->current.image.frame = f;
 				NodeElementPtr->next.image.frame = SetRelFrameIndex (
@@ -1358,9 +1421,14 @@ GeneratePlanetSide (void)
 				if (scan == ENERGY_SCAN)
 				{
 					if (pSolarSysState->SysInfo.PlanetInfo.CurType == 1)
+					{
 						NodeElementPtr->mass_points = 0;
+					}
 					else if (pSolarSysState->SysInfo.PlanetInfo.CurType == 2)
+					{
+						// Special case: Fwiffo
 						NodeElementPtr->mass_points = 1;
+					}
 					else
 						NodeElementPtr->mass_points = MAX_SCROUNGED;
 					
@@ -1376,41 +1444,10 @@ GeneratePlanetSide (void)
 					else
 						DisplayArray[NodeElementPtr->PrimIndex].Object.Stamp.frame = pSolarSysState->PlanetSideFrame[1];
 				}
-				else
+				else /* (scan == BIOLOGICAL_SCAN) */
 				{
-					COUNT i, which_node;
-
-					which_node = pSolarSysState->SysInfo.PlanetInfo.CurType;
-
-					if (CreatureData[which_node].Attributes & SPEED_MASK)
-					{
-						i = (COUNT)TFB_Random ();
-						NodeElementPtr->current.location.x = (LOBYTE (i) % (MAP_WIDTH - (8 << 1))) + 8;
-						NodeElementPtr->current.location.y = (HIBYTE (i) % (MAP_HEIGHT - (8 << 1))) + 8;
-					}
-
-					if (pSolarSysState->PlanetSideFrame[0] == 0)
-						pSolarSysState->PlanetSideFrame[0] =
-								CaptureDrawable (LoadGraphic (
-								CANNISTER_MASK_PMAP_ANIM));
-					for (i = 0; i < MAX_LIFE_VARIATION && life_init_tab[i] != (BYTE)(which_node + 1); ++i)
-					{
-						if (life_init_tab[i] != 0)
-							continue;
-
-						life_init_tab[i] = (BYTE)which_node + 1;
-
-						pSolarSysState->PlanetSideFrame[i + 3] = load_life_form (which_node);
-						break;
-					}
-
-					NodeElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[which_node].FrameRate);
-					NodeElementPtr->mass_points = (BYTE)which_node;
-					NodeElementPtr->hit_points = HINIBBLE (CreatureData[which_node].ValueAndHitPoints);
-					DisplayArray[NodeElementPtr->PrimIndex].
-							Object.Stamp.frame = SetAbsFrameIndex (
-							pSolarSysState->PlanetSideFrame[i + 3],
-							(COUNT)TFB_Random ());
+					generateBioNode (pSolarSysState, NodeElementPtr,
+							life_init_tab);
 				}
 			}
 
@@ -1423,4 +1460,22 @@ GeneratePlanetSide (void)
 	}
 }
 
+bool
+isNodeRetrieved (PLANET_INFO *planetInfo, BYTE scanType, BYTE nodeNr)
+{
+	return (planetInfo->ScanRetrieveMask[scanType] & ((DWORD) 1 << nodeNr))
+			!= 0;
+}
+
+void
+setNodeRetrieved (PLANET_INFO *planetInfo, BYTE scanType, BYTE nodeNr)
+{
+	planetInfo->ScanRetrieveMask[scanType] |= ((DWORD) 1 << nodeNr);
+}
+
+void
+setNodeNotRetrieved (PLANET_INFO *planetInfo, BYTE scanType, BYTE nodeNr)
+{
+	planetInfo->ScanRetrieveMask[scanType] &= ~((DWORD) 1 << nodeNr);
+}
 

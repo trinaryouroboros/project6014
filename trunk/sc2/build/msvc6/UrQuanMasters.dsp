@@ -1581,6 +1581,42 @@ SOURCE=..\..\src\libs\vidlib.h
 # Begin Group "comm"
 
 # PROP Default_Filter ""
+# Begin Group "androsynth.comm"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\androsynth\androsynthc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\androsynth\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\androsynth\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\androsynth\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\androsynth\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\androsynth\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\androsynth\restypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\androsynth\strings.h
+# End Source File
+# End Group
 # Begin Group "arilou.comm"
 
 # PROP Default_Filter ""
@@ -1761,6 +1797,42 @@ SOURCE=..\..\src\uqm\comm\druuge\restypes.h
 SOURCE=..\..\src\uqm\comm\druuge\strings.h
 # End Source File
 # End Group
+# Begin Group "human.comm"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\human\humanc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\human\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\human\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\human\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\human\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\human\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\human\restypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\human\strings.h
+# End Source File
+# End Group
 # Begin Group "ilwrath.comm"
 
 # PROP Default_Filter ""
@@ -1795,6 +1867,42 @@ SOURCE=..\..\src\uqm\comm\ilwrath\restypes.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\comm\ilwrath\strings.h
+# End Source File
+# End Group
+# Begin Group "lurg.comm"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\lurg\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\lurg\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\lurg\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\lurg\lurgc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\lurg\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\lurg\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\lurg\restypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\lurg\strings.h
 # End Source File
 # End Group
 # Begin Group "melnorm.comm"
@@ -1987,6 +2095,42 @@ SOURCE=..\..\src\uqm\comm\shofixt\shofixt.c
 # Begin Source File
 
 SOURCE=..\..\src\uqm\comm\shofixt\strings.h
+# End Source File
+# End Group
+# Begin Group "slaverace.comm"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\slaverace\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\slaverace\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\slaverace\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\slaverace\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\slaverace\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\slaverace\restypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\slaverace\slaveracec.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\slaverace\strings.h
 # End Source File
 # End Group
 # Begin Group "slyhome.comm"
@@ -2193,6 +2337,78 @@ SOURCE=..\..\src\uqm\comm\syreen\strings.h
 SOURCE=..\..\src\uqm\comm\syreen\syreenc.c
 # End Source File
 # End Group
+# Begin Group "syreenbase.comm"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenbase\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenbase\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenbase\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenbase\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenbase\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenbase\restypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenbase\strings.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenbase\syreenbasec.c
+# End Source File
+# End Group
+# Begin Group "syreenhome.comm"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenhome\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenhome\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenhome\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenhome\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenhome\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenhome\restypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenhome\strings.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\syreenhome\syreenhomec.c
+# End Source File
+# End Group
 # Begin Group "talkpet.comm"
 
 # PROP Default_Filter ""
@@ -2265,7 +2481,34 @@ SOURCE=..\..\src\uqm\comm\thradd\strings.h
 SOURCE=..\..\src\uqm\comm\thradd\thraddc.c
 # End Source File
 # End Group
-# Begin Group "umgah.comm"
+# Begin Group "transport.comm"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\transport\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\transport\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\transport\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\transport\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\transport\strings.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\comm\transport\transportc.c
+# End Source File
+# End Group# Begin Group "umgah.comm"
 
 # PROP Default_Filter ""
 # Begin Source File
@@ -2661,6 +2904,154 @@ SOURCE=..\..\src\uqm\netplay\packetsenders.h
 # Begin Group "planets"
 
 # PROP Default_Filter ""
+# Begin Group "generate"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genall.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genand.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genburv.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genchmmr.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gencol.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gendefault.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gendefault.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gendru.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genhint1.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genhint2.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genilw.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genlurg.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genmel.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genmyc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genorz.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genorzspaceportal.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genpet.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genpku.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genrain.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gensam.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genshocrash.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genshof.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genslaverace.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gensly.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gensol.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genspa.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gensup.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gensyr.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genthrad.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\gentrap.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genutw.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genvault.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genvux.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genwreck.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genyeh.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\generate\genzoq.c
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\..\src\uqm\planets\calc.c
@@ -2679,111 +3070,11 @@ SOURCE=..\..\src\uqm\planets\elemdata.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\planets\genall.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genburv.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genchmmr.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\gencol.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\gendru.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genilw.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genmel.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genmyc.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genorz.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genpet.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genpku.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genrain.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\gensam.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genshof.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\gensly.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\gensol.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genspa.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\gensup.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\gensyr.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genthrad.c
+SOURCE=..\..\src\uqm\planets\generate.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\planets\gentopo.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genutw.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genvault.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genvux.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genwreck.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genyeh.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\planets\genzoq.c
 # End Source File
 # Begin Source File
 
@@ -2856,6 +3147,14 @@ SOURCE=..\..\src\uqm\planets\sundata.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\planets\surface.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\triangul.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\planets\triangul.h
 # End Source File
 # End Group
 # Begin Group "ships"
@@ -3149,6 +3448,42 @@ SOURCE=..\..\src\uqm\ships\ilwrath\respkg.h
 SOURCE=..\..\src\uqm\ships\ilwrath\restypes.h
 # End Source File
 # End Group
+# Begin Group "isd"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\icode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\isd.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\restypes.h
+# End Source File
+# End Group
 # Begin Group "lastbat"
 
 # PROP Default_Filter ""
@@ -3183,6 +3518,42 @@ SOURCE=..\..\src\uqm\ships\lastbat\respkg.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\lastbat\restypes.h
+# End Source File
+# End Group
+# Begin Group "lurg"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\icode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\lurg.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\restypes.h
 # End Source File
 # End Group
 # Begin Group "melnorme"
@@ -3469,6 +3840,42 @@ SOURCE=..\..\src\uqm\ships\sis_ship\restypes.h
 SOURCE=..\..\src\uqm\ships\sis_ship\sis_ship.c
 # End Source File
 # End Group
+# Begin Group "slykohr"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\icode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\imusicre.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\restypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\slykohr.c
+# End Source File
+# End Group
 # Begin Group "slylandr"
 
 # PROP Default_Filter ""
@@ -3647,6 +4054,38 @@ SOURCE=..\..\src\uqm\ships\thradd\restypes.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\thradd\thradd.c
+# End Source File
+# End Group
+# Begin Group "transport"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\transport\icode.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\transport\igfxres.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\transport\istrtab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\transport\resinst.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\transport\respkg.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\transport\restypes.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\transport\transport.c
 # End Source File
 # End Group
 # Begin Group "umgah"
@@ -4064,6 +4503,10 @@ SOURCE=..\..\src\uqm\gendef.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\gendef.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\getchar.c
 # End Source File
 # Begin Source File
@@ -4136,7 +4579,7 @@ SOURCE=..\..\src\uqm\ipdisp.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ires_ind.h
+SOURCE=..\..\src\uqm\isndres.h
 # End Source File
 # Begin Source File
 
@@ -4253,10 +4696,6 @@ SOURCE=..\..\src\uqm\restart.c
 # Begin Source File
 
 SOURCE=..\..\src\uqm\restart.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\restypes.h
 # End Source File
 # Begin Source File
 
