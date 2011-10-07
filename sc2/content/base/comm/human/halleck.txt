@@ -1,0 +1,153 @@
+#(SPACE_HELLO_1a)
+This is captain 
+
+#(SPACE_HELLO_1b)
+ of star cruiser Galileo.
+Oh. It's you captain. What do you want?
+
+#(SPACE_HELLO_1c)
+This is captain Halleck of star cruiser Galileo.
+What do ya need?
+
+#(SPACE_HELLO_2)
+Hey, captain. You lost or something?
+Anything we can assist you with?
+
+#(SPACE_HELLO_3)
+Damn it. I'm busy here. What do you want?
+
+#(ask_news)
+Got any hot news from this side of the galaxy?
+
+#(keep_up_goodbye)
+Keep up the good work, guys. See you later!
+
+#(short_on_fuel)
+You wouldn't happen to have any extra fuel with you? We're running pretty lean.
+
+#(spare_nukes)
+Would you have some old nukes to spare?
+
+#(NEWS_1)
+Not much. Same old crap, different day. Just escort
+missions mostly. Boring as hell, until one of those 
+damn Kohr-Ah ships show up. Then all hell breaks loose.
+I'd rather have boring, I'm not supposed to be here.
+But, with Earth being under that damn slave shield for so long,
+there's a need for experienced captains, so they
+hauled my old butt out of retirement.
+
+
+#(NEWS_2)
+Crap son. Everybody is talking. 
+'Bout last week, we lost contact with with a cruiser.
+Escort mission to Corvi, I believe. Well, the last we
+heard from 'em was routine chit-chat near the Tauri
+constellation. After that, nothing. No distress call.
+The old girl just disappeared...
+I think they got careless and some damn Ur-Quan got 'em
+blowed up. HQ is sending somebody over to investigate.
+
+
+#(NEWS_3)
+
+The patrol that was sent after the missing cruiser
+found no signs of the ship.
+Some say the Kohr-Ah jumped them, but I'm not sure
+Usually those black bastards have given us plenty of time
+to call for back-up.
+You see, they still act like they had
+the same power as in the bad old days.
+Full frontal attacks, guns blazing. So full of it.
+If you ask me, I think it was someone else
+like someone with a cloaking device.
+
+#(NEWS_4)
+Things have quieted down quite a bit.
+Lately we've just been sitting idle,
+waiting for an assignment to Betelgeuse.
+
+#(NEWS_5)
+Twiddling thumbs, babysitting cargo ships.
+Not much has happened in the past few days.
+Of course, that's how I like it. 
+With Earth being under that damn slave shield for so long,
+they need experienced captains, so they dragged my 
+old butt out of retirement. 
+
+
+#(FUEL_1)
+It'll take more fuel from this little old girl to move 
+that fat lady you call a ship Captain.
+
+#(FUEL_2)
+Figures! Fancy big toy, and you're running out gas?
+Your damn toy is too big for our small fuel tanks to 
+do much good. 
+
+#(FUEL_3)
+Damn it son! The whole tank of this cruiser
+wouldn't move that barge of yours an inch.
+
+#(NUKES_QUESTION)
+Boy. Are you out of your damn mind?
+
+#(serious)
+No, I'm serious.
+
+#(joking)
+Just horsing around! Lighten up, old man!
+
+#(NUKES_SERIOUS)
+Where they hell are they getting Captains nowadays?!
+Some snot-nose kid just out of diapers wants me to 
+give out military-grade nuclear missiles, so I can
+get a court martial and spend my few remaining years
+rotting away in some hell-hole prison?
+You're lucky you're not here because I'd kick your ass
+just to knock some damn sense into ya.
+
+#(NUKES_JOKING)
+Look at me. I'm not one for joking around, son! 
+We're still in a state of war!
+
+#(GOODBYE_CAPTAIN_1)
+Goodbye Captain. Take care out there.
+
+#(GOODBYE_CAPTAIN_2)
+Be careful out there son. I've seen too many good people
+die out here. Don't become one of them.
+
+#(GOODBYE_CAPTAIN_3)
+Goodbye Captain. God willing, they'll finally let me retire
+and the next time we meet we'll be drinking beers 
+at my retirement party.
+
+#(NEUTRAL_SPACE_HELLO_1)
+I've got the need to kick somebody's ass. 
+You Interested boy?
+
+#(NEUTRAL_SPACE_HELLO_2)
+Hello Captain. Are you here to see if this old man 
+still has it? Because if you are, I'll show you.
+
+#(HOSTILE_SPACE_HELLO_1)
+So another hot-shot captain wants a crack
+at the old man, huh? See if I'm as good as
+they say, huh?
+
+#(HOSTILE_SPACE_HELLO_2)
+You want a chance to fight the best, huh?
+
+#(yessiree)
+Yessiree! Lemme at you!
+
+#(nonono)
+No thanks, matey, some other time.
+
+#(MADE_MY_DAY)
+You really made my day, pal!
+
+#(MADE_WOOD)
+Come back and see me when you grow
+some testicles son.

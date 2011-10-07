@@ -1,0 +1,134 @@
+#(SPACE_HELLO_1a)
+Greetings. This is captain 
+
+#(SPACE_HELLO_1b)
+ of star cruiser Endeavor.
+How can we be of assistance?
+
+#(SPACE_HELLO_1c)
+Greetings. This is Captain Decker of star cruiser Endeavor.
+How may we assist you?
+
+#(SPACE_HELLO_2)
+Welcome home, Captain.
+Anything we can assist you with?
+
+#(SPACE_HELLO_3)
+Yes, captain, how can we help you?
+
+#(ask_news)
+Got any hot news from this side of the galaxy?
+
+#(keep_up_goodbye)
+Keep up the good work, guys. See you later!
+
+#(short_on_fuel)
+You wouldn't happen to have any extra fuel with you? We're running pretty lean.
+
+#(spare_nukes)
+Would you have some old nukes to spare?
+
+#(NEWS_1)
+Just routine patrol missions.
+Keeping an eye out for any Kohr-Ah ships.
+I'm afraid, the price of freedom is eternal vigilance.
+
+
+#(NEWS_2)
+I do have something interesting sir.
+Last week we lost contact with a cruiser returning
+from an escort expedition to Corvi. The last we heard of her
+was routine radio traffic near Tauri constellation.
+After that, she just vanished. 
+HQ is sending a patrol to investigate. It's still enroute.
+It could be a malfunction, but I suspect the Kohr-Ah have
+changed tactics and mounted a surprise attack.
+
+#(NEWS_3)
+The patrol that was sent after the missing cruiser
+found no signs of the ship.
+I think the Kohr-Ah attacked them, but others disagree.
+Usually the Kohr-Ah give us plenty of time
+to call for back-up.
+They still act like they had
+the same power as in the bad old days.
+Full frontal attacks, guns blazing. 
+I bet they've changed their tactics, maybe
+they got a cloaking device.
+
+#(NEWS_4)
+Things have quieted down quite a bit.
+Lately we've just been sitting idle,
+waiting for an assignment to Procyon.
+
+#(NEWS_5)
+Not much Captain.
+Frankly, I think it's a waste of my skill baby sitting
+cargo ships.
+
+#(FUEL_1)
+I'm sorry, captain, but the sheer mass of your Explorer ship
+makes it pretty pointless to transfer from our limited reserves.
+
+#(FUEL_2)
+Your vessel is too large for our fuel to be of any real help.
+
+#(FUEL_3)
+Oh, come on! The whole tank of this cruiser
+wouldn't move that barge of yours an inch.
+
+#(NUKES_QUESTION)
+...Are you serious?
+
+#(serious)
+Dead serious.
+
+#(joking)
+Just horsing around! Lighten up, buddy!
+
+#(NUKES_SERIOUS)
+Lending out nuclear missiles to whoever asked for it?
+Quite illogical and against procedure.
+
+#(NUKES_JOKING)
+I am not amused Captain. We're still in a state of war.
+
+#(GOODBYE_CAPTAIN_1)
+Goodbye. If you see any Kohr-Ah, send them my way.
+
+#(GOODBYE_CAPTAIN_2)
+Be careful out there. I know Captains don't often get
+the chance to live long enough to prosper.
+
+#(GOODBYE_CAPTAIN_3)
+Godspeed on your journey Captain.
+
+#(NEUTRAL_SPACE_HELLO_1)
+Friend human. You are hereby cordially invited
+to a bloody duel to the death via an impromptu
+exchange of nuclear missiles and SDI laser blasts.
+...Interested?
+
+#(NEUTRAL_SPACE_HELLO_2)
+Greetings, traveler. I present thee two options:
+You may cowardly back out of my sight this instant, or
+you can be a man and pick a fight with me.
+What it'll be?
+
+#(HOSTILE_SPACE_HELLO_1)
+Yo, bitch! Wanna fight?
+
+#(HOSTILE_SPACE_HELLO_2)
+Yo, yo, yo, wanna exchange a few nukes?
+
+#(yessiree)
+Yessiree! Lemme at you!
+
+#(nonono)
+No thanks, matey, some other time.
+
+#(MADE_MY_DAY)
+Mess with the best, die like the rest.
+
+#(MADE_WOOD)
+I know that every captain isn't as great as me. 
