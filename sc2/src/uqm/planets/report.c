@@ -19,11 +19,13 @@
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "lander.h"
+#include "scan.h"
 #include "planets.h"
 #include "../colors.h"
 #include "../controls.h"
 #include "../gamestr.h"
 #include "../setup.h"
+#include "../util.h"
 #include "../sounds.h"
 #include "../uqmdebug.h"
 #include "options.h"
@@ -151,7 +153,7 @@ MakeReport (SOUND ReadOutSounds, UNICODE *pStr, COUNT StrLen)
 			word_chars = utf8StringCountN (t.pStr, pStr);
 			if ((col_cells += word_chars) <= NUM_CELL_COLS)
 			{
-				DWORD TimeOut;
+				TimeCount TimeOut;
 
 				if (StrLen -= word_chars)
 					--StrLen;
@@ -181,22 +183,12 @@ MakeReport (SOUND ReadOutSounds, UNICODE *pStr, COUNT StrLen)
 						if (word_chars == 0)
 							TimeOut += ONE_SECOND / 20;
 
-						TaskSwitch ();
-						while (GetTimeCounter () < TimeOut)
+						if (WaitForAnyButtonUntil (TRUE, TimeOut, FALSE))
 						{
-							if (ButtonState)
-							{
-								if (!AnyButtonPress (TRUE))
-									ButtonState = 0;
-							}
-							else if (AnyButtonPress (TRUE))
-							{
-								Sleepy = FALSE;
-								LockMutex (GraphicsLock);
-								BatchGraphics ();
-								break;
-							}
-							TaskSwitch();
+							Sleepy = FALSE;
+							// We draw the whole thing at once after this
+							LockMutex (GraphicsLock);
+							BatchGraphics ();
 						}
 					}
 					t.pStr = pNextStr;
@@ -219,7 +211,7 @@ MakeReport (SOUND ReadOutSounds, UNICODE *pStr, COUNT StrLen)
 				UnlockMutex (GraphicsLock);
 			}
 
-			if (WaitAnyButtonOrQuit (TRUE))
+			if (!WaitForAnyButton (TRUE, WAIT_INFINITE, FALSE))
 				break;
 
 InitPageCell:
@@ -246,13 +238,18 @@ void
 DoDiscoveryReport (SOUND ReadOutSounds)
 {
 	CONTEXT OldContext;
+	CONTEXT context;
+	BOOLEAN ownContext;
+	STAMP saveStamp;
 
 #ifdef DEBUG
 	if (disableInteractivity)
 		return;
 #endif
 
-	OldContext = SetContext (ScanContext);
+	context = GetScanContext (&ownContext);
+	OldContext = SetContext (context);
+	saveStamp = SaveContextFrame (NULL);
 	{
 		FONT OldFont;
 		FRAME OldFontEffect;
@@ -272,20 +269,17 @@ DoDiscoveryReport (SOUND ReadOutSounds)
 		SetContextFontEffect (OldFontEffect);
 		SetContextFont (OldFont);
 	}
-#ifdef OLD
-	ClearDrawable ();
-	if (pSolarSysState->MenuState.Initialized >= 3)
-		DrawScannedObjects (FALSE);
-#else /* !OLD */
-	if (pSolarSysState->MenuState.Initialized < 3)
-		ClearDrawable ();
-#endif /* OLD */
+	// Restore previous screen
+	DrawStamp (&saveStamp);
 	SetContext (OldContext);
+	// TODO: Make CONTEXT ref-counted
+	if (ownContext)
+		DestroyContext (context);
+
+	DestroyDrawable (ReleaseDrawable (saveStamp.frame));
 
 	UnlockMutex (GraphicsLock);
-	FlushInput ();
-	while (AnyButtonPress (TRUE))
-		TaskSwitch ();
+	WaitForNoInput (WAIT_INFINITE, TRUE);
 	LockMutex (GraphicsLock);
 }
 

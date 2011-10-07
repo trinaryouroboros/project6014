@@ -73,7 +73,7 @@ BYTE EncounterGroup;
 #define DRAW_HYPER_COORDS (1 << 3)
 #define UNBATCH_SYS (1 << 4)
 #define DRAW_REFRESH (1 << 5)
-#define REPAIR_SCAN (1 << 6)
+// Unused: #define REPAIR_SCAN (1 << 6)
 #define GRAB_BKGND (1 << 7)
 
 static SIZE old_radius;
@@ -140,11 +140,11 @@ matchWorld (const SOLARSYS_STATE *solarSys, const PLANET_DESC *world,
 }
 
 static void
-GenerateMoons (void)
+GenerateMoons (SOLARSYS_STATE *system, PLANET_DESC *planet)
 {
-	COUNT i, facing;
+	COUNT i;
+	COUNT facing;
 	PLANET_DESC *pMoonDesc;
-	PLANET_DESC *pCurDesc;
 	DWORD old_seed;
 
 	GLOBAL (ip_location.x) =
@@ -155,42 +155,36 @@ GenerateMoons (void)
 			(SIZE)((long)(GLOBAL (ShipStamp.origin.y)
 			- (SIS_SCREEN_HEIGHT >> 1))
 			* MAX_ZOOM_RADIUS / (DISPLAY_FACTOR >> 1));
-	pCurDesc = pSolarSysState->pBaseDesc;
-	old_seed = TFB_SeedRandom (pCurDesc->rand_seed);
+	old_seed = TFB_SeedRandom (planet->rand_seed);
 
-	(*pSolarSysState->genFuncs->generateName) (pSolarSysState, pCurDesc);
-	(*pSolarSysState->genFuncs->generateMoons) (pSolarSysState, pCurDesc);
+	(*system->genFuncs->generateName) (system, planet);
+	(*system->genFuncs->generateMoons) (system, planet);
 
 	facing = NORMALIZE_FACING (ANGLE_TO_FACING (
-			ARCTAN (pCurDesc->location.x, pCurDesc->location.y)));
-	for (i = 0, pMoonDesc = &pSolarSysState->MoonDesc[0];
+			ARCTAN (planet->location.x, planet->location.y)));
+	for (i = 0, pMoonDesc = &system->MoonDesc[0];
 			i < MAX_MOONS; ++i, ++pMoonDesc)
 	{
-		pMoonDesc->pPrevDesc = pCurDesc;
-		if (pSolarSysState->MenuState.Initialized > 1
-				|| i >= pCurDesc->NumPlanets)
-			;
-		else
+		BYTE data_index;
+
+		pMoonDesc->pPrevDesc = planet;
+		if (system->MenuState.Initialized > 1 || i >= planet->NumPlanets)
+			continue;
+		
+		pMoonDesc->temp_color = planet->temp_color;
+
+		data_index = pMoonDesc->data_index;
+		if (data_index == HIERARCHY_STARBASE)
 		{
-			BYTE data_index;
-
-			pMoonDesc->temp_color = pCurDesc->temp_color;
-
-			data_index = pMoonDesc->data_index;
-			if (data_index == HIERARCHY_STARBASE)
-			{
-				pMoonDesc->image.frame =
-						SetAbsFrameIndex (SpaceJunkFrame, 16);
-			}
-			else if (data_index == SA_MATRA)
-			{
-				pMoonDesc->image.frame =
-						SetAbsFrameIndex (SpaceJunkFrame, 19);
-			}
+			pMoonDesc->image.frame = SetAbsFrameIndex (SpaceJunkFrame, 16);
+		}
+		else if (data_index == SA_MATRA)
+		{
+			pMoonDesc->image.frame = SetAbsFrameIndex (SpaceJunkFrame, 19);
 		}
 	}
 
-	pSolarSysState->pBaseDesc = pSolarSysState->MoonDesc;
+	system->pBaseDesc = system->MoonDesc;
 	TFB_SeedRandom (old_seed);
 }
 
@@ -403,7 +397,7 @@ LoadSolarSys (void)
 		pSolarSysState->pOrbitalDesc = 0;
 		pSolarSysState->pBaseDesc = &pSolarSysState->PlanetDesc[i - 1];
 		pSolarSysState->SunDesc[0].location = GLOBAL (ip_location);
-		GenerateMoons ();
+		GenerateMoons (pSolarSysState, pSolarSysState->pBaseDesc);
 
 		SET_GAME_STATE (PLANETARY_LANDING, 0);
 	}
@@ -586,13 +580,11 @@ ShowPlanet:
 				GLOBAL (ShipStamp.origin.x) =
 						(SIS_SCREEN_WIDTH >> 1) + COSINE (
 						angle, MIN_MOON_RADIUS
-						+ ((MAX_MOONS - 1) * MOON_DELTA)
-						+ (MOON_DELTA >> 2));
+						+ ((MAX_MOONS - 1) * MOON_DELTA) + (MOON_DELTA >> 2));
 				GLOBAL (ShipStamp.origin.y) =
 						(SIS_SCREEN_HEIGHT >> 1) + SINE (
 						angle, MIN_MOON_RADIUS
-						+ ((MAX_MOONS - 1) * MOON_DELTA)
-						+ (MOON_DELTA >> 2));
+						+ ((MAX_MOONS - 1) * MOON_DELTA) + (MOON_DELTA >> 2));
 				if (GLOBAL (ShipStamp.origin.y) < 0)
 					GLOBAL (ShipStamp.origin.y) = 1;
 				else if (GLOBAL (ShipStamp.origin.y) >= SIS_SCREEN_HEIGHT)
@@ -602,7 +594,7 @@ ShowPlanet:
 				XFormIPLoc (&pCurDesc->image.origin,
 						&pSolarSysState->SunDesc[0].location, FALSE);
 				ZeroVelocityComponents (&GLOBAL (velocity));
-				GenerateMoons ();
+				GenerateMoons (pSolarSysState, pCurDesc);
 
 				NewWaitPlanet = 0;
 				SetTransitionSource (NULL);

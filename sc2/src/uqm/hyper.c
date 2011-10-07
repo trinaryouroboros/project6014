@@ -1866,7 +1866,7 @@ UnbatchGraphics ();
 	{
 		ClearSISRect (CLEAR_SIS_RADAR);
 		UnlockMutex (GraphicsLock);
-		WaitForNoInput (ONE_SECOND / 2);
+		WaitForNoInput (ONE_SECOND / 2, FALSE);
 		LockMutex (GraphicsLock);
 	}
 
