@@ -169,13 +169,5 @@ typedef unsigned short mode_t;
 	int readdir_r (DIR *dirp, struct dirent *entry, struct dirent **result);
 #endif
 
-// String formatting
-#ifdef _MSC_VER
-#define snprintf _snprintf
-// #define vsnprintf _vsnprintf 
-#endif
-
-
 #endif  /* _UIOPORT_H */
-
 

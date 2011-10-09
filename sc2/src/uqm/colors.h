@@ -272,6 +272,17 @@
 			 BUILD_COLOR (MAKE_RGB15 (0x00, 0x07, 0x00), 0x65), \
 		}
 
+#define PC_EXPLORER_CREW_COLOR_TABLE					\
+	{								\
+	BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x65),		\
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x0C, 0x00), 0x65),	\
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x10, 0x00), 0x65),	\
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x15, 0x00), 0x65),	\
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x19, 0x00), 0x65),	\
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x1D, 0x00), 0x65),	\
+		BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1E, 0x09), 0x65),	\
+		}
+
 // Colors for the crew in the crew pods as they are filled up,
 // when viewed from the shipyard, when using 3DO fonts.
 #define THREEDO_CREW_COLOR \

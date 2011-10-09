@@ -433,8 +433,8 @@ Section -ShortcutsAndIcons
   !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory "$SMPROGRAMS\$ICONS_GROUP"
     CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\The Ur-Quan Masters p6014.lnk" "$INSTDIR\p6014.exe" $UQMARGS
-    CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\p6014 (Safe Mode).lnk" "$INSTDIR\p6014.exe" "-wx -r 640x480 -c none --sound=none -g 1.0 -M 100 -S 100 -T 100 -q medium"
-    CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\p6014 (Safe OpenGL).lnk" "$INSTDIR\p6014.exe" "-wo -r 640x480 -c none --sound=none -g 1.0 -M 100 -S 100 -T 100 -q medium"
+    CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\p6014 (Safe Mode).lnk" "$INSTDIR\p6014.exe" "-x --safe"
+    CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\p6014 (Safe OpenGL).lnk" "$INSTDIR\p6014.exe" "-o --safe"
     CreateDirectory "$SMPROGRAMS\$ICONS_GROUP\Documentation"
     CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\AUTHORS.lnk" "$INSTDIR\AUTHORS.txt"
     CreateShortCut "$SMPROGRAMS\$ICONS_GROUP\Documentation\COPYING.lnk" "$INSTDIR\COPYING.txt"

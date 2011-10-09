@@ -34,7 +34,7 @@
 #include "../../grpinfo.h"
 
 
-static bool GenerateShofixtiCrashSite_initNpcs (void);
+static bool GenerateShofixtiCrashSite_initNpcs (SOLARSYS_STATE *solarSys);
 static bool GenerateShofixtiCrashSite_generatePlanets (SOLARSYS_STATE *solarSys);
 static bool GenerateShofixtiCrashSite_generateMoons (SOLARSYS_STATE *solarSys,
 		PLANET_DESC *planet);
@@ -85,7 +85,7 @@ init_lurg_teaser (void)
 }
 
 
-static bool GenerateShofixtiCrashSite_initNpcs (void)
+static bool GenerateShofixtiCrashSite_initNpcs (SOLARSYS_STATE *solarSys)
 {
 	if (!GET_GAME_STATE (PLAYER_VISITED_BETA_NAOS))
 	{
@@ -101,7 +101,7 @@ static bool GenerateShofixtiCrashSite_initNpcs (void)
 		
 	}
 	if (!init_lurg_teaser ()) 
-		GenerateDefault_initNpcs ();
+		GenerateDefault_initNpcs (solarSys);
 	
 	return true;
 }
