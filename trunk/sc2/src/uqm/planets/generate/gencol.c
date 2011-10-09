@@ -33,7 +33,7 @@
 #include "../lander.h" //JMS
 
 
-static bool GenerateColony_initNpcs (void);
+static bool GenerateColony_initNpcs (SOLARSYS_STATE *solarSys);
 static bool GenerateColony_generateEnergy (SOLARSYS_STATE *solarSys,
 		PLANET_DESC *world, COUNT *whichNode);
 static bool GenerateColony_generatePlanets (SOLARSYS_STATE *solarSys);
@@ -56,7 +56,7 @@ const GenerateFunctions generateColonyFunctions = {
 
 
 static bool
-GenerateColony_initNpcs (void)
+GenerateColony_initNpcs (SOLARSYS_STATE *solarSys)
 {
 	HIPGROUP hGroup;
 
@@ -72,7 +72,7 @@ GenerateColony_initNpcs (void)
 		SET_GAME_STATE_32 (COLONY_GRPOFFS0, GLOBAL (BattleGroupRef));
 	}*/
 
-	GenerateDefault_initNpcs ();
+	GenerateDefault_initNpcs (solarSys);
 
 	if (GLOBAL (BattleGroupRef)
 			&& (hGroup = GetHeadLink (&GLOBAL (ip_group_q))))

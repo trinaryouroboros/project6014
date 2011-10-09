@@ -586,147 +586,153 @@ ship_death (ELEMENT *ShipPtr)
 #define START_ION_COLOR BUILD_COLOR (MAKE_RGB15 (0x1F, 0x15, 0x00), 0x7A)
 #define START_ION_COLOR_DAMAGED BUILD_COLOR (MAKE_RGB15 (0x20, 0x20, 0x00), 0x7A)
 
+// Called from the death_func of an element for an ion trail pixel, or a
+// ship shadow (when warping in/out).
+void
+cycle_ion_trail (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+	SHIP_INFO *ShipInfoPtr;
+	// JMS: Get the pointers to element's owner ship.
+	// They are needed to see if the ship's thrust is damaged
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
+
+	// Color table for fully functional thrusters
+	static const COLOR colorTab[] =
+	{
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x15, 0x00), 0x7a),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7b),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0E, 0x00), 0x7c),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7d),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x07, 0x00), 0x7e),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7f),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x00, 0x00), 0x2a),
+		BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x00), 0x2b),
+		BUILD_COLOR (MAKE_RGB15 (0x17, 0x00, 0x00), 0x2c),
+		BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2d),
+		BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x00), 0x2e),
+		BUILD_COLOR (MAKE_RGB15 (0x0B, 0x00, 0x00), 0x2f),
+	};
+
+	// JMS: Color table for damaged thrusters
+	static const COLOR colorTab2[] =
+	{
+		BUILD_COLOR (MAKE_RGB15 (0x0F, 0x0F, 0x00), 0x7a),
+		BUILD_COLOR (MAKE_RGB15 (0x0E, 0x0E, 0x00), 0x7b),
+		BUILD_COLOR (MAKE_RGB15 (0x0C, 0x0C, 0x00), 0x7c),
+		BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x00), 0x7d),
+		BUILD_COLOR (MAKE_RGB15 (0x07, 0x07, 0x00), 0x7e),
+		BUILD_COLOR (MAKE_RGB15 (0x03, 0x03, 0x00), 0x7f),
+		BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x2a),
+		BUILD_COLOR (MAKE_RGB15 (0x1B, 0x1B, 0x00), 0x2b),
+		BUILD_COLOR (MAKE_RGB15 (0x17, 0x17, 0x00), 0x2c),
+		BUILD_COLOR (MAKE_RGB15 (0x15, 0x15, 0x00), 0x2d),
+		BUILD_COLOR (MAKE_RGB15 (0x13, 0x13, 0x00), 0x2e),
+		BUILD_COLOR (MAKE_RGB15 (0x11, 0x11, 0x00), 0x2f),
+	};
+	
+	const size_t colorTabCount = sizeof colorTab / sizeof colorTab[0];
+			
+	assert (!(ElementPtr->state_flags & PLAYER_SHIP));
+
+	ElementPtr->colorCycleIndex++;
+	if (ElementPtr->colorCycleIndex != colorTabCount)
+	{
+		ElementPtr->life_span = ElementPtr->thrust_wait;
+				// Reset the life span.
+		
+		// JMS: Damaged thruster emits differently colored particles
+		if (ShipInfoPtr->damage_flags & DAMAGE_THRUST)
+		{
+			SetPrimColor (&DisplayArray[ElementPtr->PrimIndex],
+				      colorTab2[ElementPtr->colorCycleIndex]);
+		}
+		else
+		{
+			SetPrimColor (&DisplayArray[ElementPtr->PrimIndex],
+				      colorTab[ElementPtr->colorCycleIndex]);
+		}
+
+		ElementPtr->state_flags &= ~DISAPPEARING;
+		ElementPtr->state_flags |= CHANGING;
+	} // else, the element disappears.
+}
+
 void
 spawn_ion_trail (ELEMENT *ElementPtr)
 {
-	// JMS: Get the pointers to element's owner ship.
-	// They are needed to see if the ship's thrust is damaged
 	STARSHIP *StarShipPtr;
 	SHIP_INFO *ShipInfoPtr;
+	HELEMENT hIonElement;
+
+	assert (ElementPtr->state_flags & PLAYER_SHIP);
+
+	// JMS: Get the pointers to element's owner ship.
+	// They are needed to see if the ship's thrust is damaged
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
-		  
-	if (ElementPtr->state_flags & PLAYER_SHIP)
-	{
-		HELEMENT hIonElement;
 
-		hIonElement = AllocElement ();
-		if (hIonElement)
-		{
+	hIonElement = AllocElement ();
+	if (hIonElement)
+	{
 #define ION_LIFE 1
-			COUNT angle;
-			RECT r;
-			ELEMENT *IonElementPtr;
-			STARSHIP *StarShipPtr;
+		COUNT angle;
+		RECT r;
+		ELEMENT *IonElementPtr;
+		STARSHIP *StarShipPtr;
 
-			GetElementStarShip (ElementPtr, &StarShipPtr);
-			angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing) + HALF_CIRCLE;
-			GetFrameRect (StarShipPtr->RaceDescPtr->ship_data.ship[0], &r);
-			r.extent.height = DISPLAY_TO_WORLD (r.extent.height + r.corner.y);
+		GetElementStarShip (ElementPtr, &StarShipPtr);
+		angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing) + HALF_CIRCLE;
+		GetFrameRect (StarShipPtr->RaceDescPtr->ship_data.ship[0], &r);
+		r.extent.height = DISPLAY_TO_WORLD (r.extent.height + r.corner.y);
 
-			InsertElement (hIonElement, GetHeadElement ());
-			LockElement (hIonElement, &IonElementPtr);
-			IonElementPtr->playerNr = NEUTRAL_PLAYER_NUM;
-			IonElementPtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID;
-			IonElementPtr->life_span = IonElementPtr->thrust_wait = ION_LIFE;
-			SetPrimType (&DisplayArray[IonElementPtr->PrimIndex], POINT_PRIM);
-			
-			// JMS: Damaged thruster emits differently colored particles
-			if (ShipInfoPtr->damage_flags & DAMAGE_THRUST)
-			{
-				SetPrimColor (&DisplayArray[IonElementPtr->PrimIndex],
-					START_ION_COLOR_DAMAGED);
-			}
-			else
-			{
-				SetPrimColor (&DisplayArray[IonElementPtr->PrimIndex],
-					START_ION_COLOR);
-			}
-			
-			IonElementPtr->current.image.frame =
-					DecFrameIndex (stars_in_space);
-			IonElementPtr->current.image.farray = &stars_in_space;
-			IonElementPtr->current.location = ElementPtr->current.location;
-			IonElementPtr->current.location.x +=
-					(COORD)COSINE (angle, r.extent.height);
-			IonElementPtr->current.location.y +=
-					(COORD)SINE (angle, r.extent.height);
-			IonElementPtr->death_func = spawn_ion_trail;
-
-			SetElementStarShip (IonElementPtr, StarShipPtr);
-
-			{
-					/* normally done during preprocess, but because
-					 * object is being inserted at head rather than
-					 * appended after tail it may never get preprocessed.
-					 */
-				IonElementPtr->next = IonElementPtr->current;
-				--IonElementPtr->life_span;
-				IonElementPtr->state_flags |= PRE_PROCESS;
-			}
-
-			UnlockElement (hIonElement);
+		InsertElement (hIonElement, GetHeadElement ());
+		LockElement (hIonElement, &IonElementPtr);
+		IonElementPtr->playerNr = NEUTRAL_PLAYER_NUM;
+		IonElementPtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID;
+		IonElementPtr->thrust_wait = ION_LIFE;
+		IonElementPtr->life_span = IonElementPtr->thrust_wait;
+				// When the element "dies", in the death_func
+				// 'cycle_ion_trail', it is given new life a number of
+				// times, by setting life_span to thrust_wait.
+		SetPrimType (&DisplayArray[IonElementPtr->PrimIndex], POINT_PRIM);
+		// JMS: Damaged thruster emits differently colored particles
+		if (ShipInfoPtr->damage_flags & DAMAGE_THRUST)
+		{
+			SetPrimColor (&DisplayArray[IonElementPtr->PrimIndex],
+				      START_ION_COLOR_DAMAGED);
 		}
-	}
-	else
-	{
-		// Color table for fully functional thrusters
-		static const COLOR color_tab[] =
+		else
 		{
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x00, 0x00), 0x2a),
-			BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x00), 0x2b),
-			BUILD_COLOR (MAKE_RGB15 (0x17, 0x00, 0x00), 0x2c),
-			BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2d),
-			BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x00), 0x2e),
-			BUILD_COLOR (MAKE_RGB15 (0x0B, 0x00, 0x00), 0x2f),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x15, 0x00), 0x7a),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x11, 0x00), 0x7b),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0E, 0x00), 0x7c),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7d),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x07, 0x00), 0x7e),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x03, 0x00), 0x7f),
-		};
-		
-		// JMS: Color table for damaged thrusters
-		static const COLOR color_tab2[] =
-		{
-			BUILD_COLOR (MAKE_RGB15 (0x0F, 0x0F, 0x00), 0x7a),
-			BUILD_COLOR (MAKE_RGB15 (0x0E, 0x0E, 0x00), 0x7b),
-			BUILD_COLOR (MAKE_RGB15 (0x0C, 0x0C, 0x00), 0x7c),
-			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x00), 0x7d),
-			BUILD_COLOR (MAKE_RGB15 (0x07, 0x07, 0x00), 0x7e),
-			BUILD_COLOR (MAKE_RGB15 (0x03, 0x03, 0x00), 0x7f),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x00), 0x2a),
-			BUILD_COLOR (MAKE_RGB15 (0x1B, 0x1B, 0x00), 0x2b),
-			BUILD_COLOR (MAKE_RGB15 (0x17, 0x17, 0x00), 0x2c),
-			BUILD_COLOR (MAKE_RGB15 (0x15, 0x15, 0x00), 0x2d),
-			BUILD_COLOR (MAKE_RGB15 (0x13, 0x13, 0x00), 0x2e),
-			BUILD_COLOR (MAKE_RGB15 (0x11, 0x11, 0x00), 0x2f),
-		};
-		
-#define NUM_TAB_COLORS (sizeof (color_tab) / sizeof (color_tab[0]))
-		
-		COUNT color_index = 0;
-		COLOR Color;
-
-		Color = COLOR_256 (GetPrimColor (&DisplayArray[ElementPtr->PrimIndex]));
-		if (Color != 0x2F)
-		{
-			ElementPtr->life_span = ElementPtr->thrust_wait;
-			
-			++Color;
-			if (Color > 0x7F)
-				Color = 0x2A;
-			if (Color <= 0x2f && Color >= 0x2a)
-				color_index = (COUNT)Color - 0x2a;
-			else /* color is between 0x7a and 0x7f */
-				color_index = (COUNT)(Color - 0x7a) + (NUM_TAB_COLORS >> 1);
-			
-			// JMS: Damaged thruster emits differently colored particles
-			if (ShipInfoPtr->damage_flags & DAMAGE_THRUST)
-			{
-				SetPrimColor (&DisplayArray[ElementPtr->PrimIndex],
-					color_tab2[color_index]);
-			}
-			else
-			{
-				SetPrimColor (&DisplayArray[ElementPtr->PrimIndex],
-					color_tab[color_index]);
-			}
-
-			ElementPtr->state_flags &= ~DISAPPEARING;
-			ElementPtr->state_flags |= CHANGING;
+			SetPrimColor (&DisplayArray[IonElementPtr->PrimIndex],
+				      START_ION_COLOR);
 		}
+
+		IonElementPtr->colorCycleIndex = 0;
+		IonElementPtr->current.image.frame =
+				DecFrameIndex (stars_in_space);
+		IonElementPtr->current.image.farray = &stars_in_space;
+		IonElementPtr->current.location = ElementPtr->current.location;
+		IonElementPtr->current.location.x +=
+				(COORD)COSINE (angle, r.extent.height);
+		IonElementPtr->current.location.y +=
+				(COORD)SINE (angle, r.extent.height);
+		IonElementPtr->death_func = cycle_ion_trail;
+
+		SetElementStarShip (IonElementPtr, StarShipPtr);
+
+		{
+			/* normally done during preprocess, but because
+			 * object is being inserted at head rather than
+			 * appended after tail it may never get preprocessed.
+			 */
+			IonElementPtr->next = IonElementPtr->current;
+			--IonElementPtr->life_span;
+			IonElementPtr->state_flags |= PRE_PROCESS;
+		}
+
+		UnlockElement (hIonElement);
 	}
 }
 
@@ -797,12 +803,16 @@ ship_transition (ELEMENT *ElementPtr)
 			LockElement (hShipImage, &ShipImagePtr);
 			ShipImagePtr->playerNr = NEUTRAL_PLAYER_NUM;
 			ShipImagePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID;
-			ShipImagePtr->life_span = ShipImagePtr->thrust_wait =
-					TRANSITION_LIFE;
+			ShipImagePtr->thrust_wait = TRANSITION_LIFE;
+			ShipImagePtr->life_span = ShipImagePtr->thrust_wait;
+					// When the element "dies", in the death_func
+					// 'cycle_ion_trail', it is given new life a number of
+					// times, by setting life_span to thrust_wait.
 			SetPrimType (&DisplayArray[ShipImagePtr->PrimIndex],
 					STAMPFILL_PRIM);
 			SetPrimColor (&DisplayArray[ShipImagePtr->PrimIndex],
 					START_ION_COLOR);
+			ShipImagePtr->colorCycleIndex = 0;
 			ShipImagePtr->current.image = ElementPtr->current.image;
 			ShipImagePtr->current.location = ElementPtr->current.location;
 			if (!(ElementPtr->state_flags & PLAYER_SHIP))
@@ -828,7 +838,7 @@ ship_transition (ELEMENT *ElementPtr)
 						WRAP_Y (ShipImagePtr->current.location.y);
 			}
 			ShipImagePtr->preprocess_func = ship_transition;
-			ShipImagePtr->death_func = spawn_ion_trail;
+			ShipImagePtr->death_func = cycle_ion_trail;
 			SetElementStarShip (ShipImagePtr, StarShipPtr);
 
 			UnlockElement (hShipImage);
@@ -845,10 +855,18 @@ flee_preprocess (ELEMENT *ElementPtr)
 
 	if (--ElementPtr->turn_wait == 0)
 	{
-		SIZE dir;
-		COLOR c;
-		static const COLOR color_tab[] =
+		static const COLOR colorTab[] =
 		{
+			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x00, 0x00), 0x2E),
+			BUILD_COLOR (MAKE_RGB15 (0x0E, 0x00, 0x00), 0x2D),
+			BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2C),
+			BUILD_COLOR (MAKE_RGB15 (0x17, 0x00, 0x00), 0x2B),
+			BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x00), 0x2A),
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x00, 0x00), 0x29),
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x04, 0x04), 0x28),
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x0A), 0x27),
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0F, 0x0F), 0x26),
+			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x13, 0x13), 0x25),
 			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x19, 0x19), 0x24),
 			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x13, 0x13), 0x25),
 			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0F, 0x0F), 0x26),
@@ -859,34 +877,26 @@ flee_preprocess (ELEMENT *ElementPtr)
 			BUILD_COLOR (MAKE_RGB15 (0x17, 0x00, 0x00), 0x2B),
 			BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2C),
 			BUILD_COLOR (MAKE_RGB15 (0x0E, 0x00, 0x00), 0x2D),
-			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x00, 0x00), 0x2E),
 		};
+		const size_t colorTabCount = sizeof colorTab / sizeof colorTab[0];
 
-		dir = HINIBBLE (ElementPtr->thrust_wait) - 1;
+		ElementPtr->colorCycleIndex++;
+		if (ElementPtr->colorCycleIndex == colorTabCount)
+			ElementPtr->colorCycleIndex = 0;
 
-		c = COLOR_256 (GetPrimColor (&DisplayArray[ElementPtr->PrimIndex]));
-		if (c == 0x24)
-			dir = -dir;
-		c += dir;
-		c = color_tab[c - 0x24];
-		SetPrimColor (&DisplayArray[ElementPtr->PrimIndex], c);
+		SetPrimColor (&DisplayArray[ElementPtr->PrimIndex],
+				colorTab[ElementPtr->colorCycleIndex]);
 
-		if (COLOR_256 (c) == 0x2E)
-		{
-			dir = -dir;
+		if (ElementPtr->colorCycleIndex == 0)
 			--ElementPtr->thrust_wait;
-		}
-		dir += 1;
 
-		ElementPtr->turn_wait = LONIBBLE (ElementPtr->thrust_wait);
+		ElementPtr->turn_wait = ElementPtr->thrust_wait;
 		if (ElementPtr->turn_wait)
 		{
-			ElementPtr->thrust_wait = MAKE_BYTE (ElementPtr->turn_wait, dir);
 			ElementPtr->turn_wait = ((ElementPtr->turn_wait - 1) >> 1) + 1;
 		}
-		else if (COLOR_256 (c) != 0x24)
+		else if (ElementPtr->colorCycleIndex != (colorTabCount / 2))
 		{
-			ElementPtr->thrust_wait = MAKE_BYTE (0, dir);
 			ElementPtr->turn_wait = 1;
 		}
 		else
@@ -904,7 +914,8 @@ flee_preprocess (ELEMENT *ElementPtr)
 	}
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
-	StarShipPtr->cur_status_flags
-			&= ~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN); // JMS_KEYS
+	StarShipPtr->cur_status_flags &=
+			~(LEFT | RIGHT | THRUST | WEAPON | SPECIAL | DOWN);
+			// Ignore control input when fleeing.
 	PreProcessStatus (ElementPtr);
 }

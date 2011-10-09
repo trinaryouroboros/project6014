@@ -54,7 +54,7 @@ ShowRemainingCapacity (void)
 	OldContext = SetContext (StatusContext);
 	SetContextFont (TinyFont);
 
-	sprintf (rt_amount_buf, "%u", GetSBayCapacity (NULL) - GLOBAL_SIS (TotalElementMass));
+	sprintf (rt_amount_buf, "%u", GetStorageBayCapacity () - GLOBAL_SIS (TotalElementMass));
 	
 	r.corner.x = RES_STAT_SCALE(40); // JMS_GFX
 	r.corner.y = FREE_ORG_Y; // JMS_GFX

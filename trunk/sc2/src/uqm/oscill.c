@@ -85,14 +85,11 @@ UninitOscilloscope (void)
 
 // draws the oscilloscope
 void
-Oscilloscope (DWORD grab_data)
+DrawOscilloscope (void)
 {
 	STAMP s;
 
 	if (oscillDisabled)
-		return;
-
-	if (!grab_data)
 		return;
 
 	TFB_DrawImage_Image (scope_bg, 0, 0, 0, NULL, scope_surf);
@@ -156,7 +153,7 @@ SetSliderImage (FRAME f)
 }
 
 void
-Slider (void)
+DrawSlider (void)
 {
 	int offs;
 	static int last_offs = -1;

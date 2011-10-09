@@ -31,7 +31,7 @@
 #include "../../hyper.h"
 // for SOL_X/SOL_Y
 
-static bool GenerateOrzSpacePortal_initNpcs (void);
+static bool GenerateOrzSpacePortal_initNpcs (SOLARSYS_STATE *solarSys);
 static bool GenerateOrzSpacePortal_generatePlanets (SOLARSYS_STATE *solarSys);
 static bool GenerateOrzSpacePortal_generateOrbital (SOLARSYS_STATE *solarSys,
 		PLANET_DESC *world);
@@ -52,13 +52,13 @@ const GenerateFunctions generateOrzSpacePortalFunctions = {
 
 
 static bool
-GenerateOrzSpacePortal_initNpcs (void)
+GenerateOrzSpacePortal_initNpcs (SOLARSYS_STATE *solarSys)
 {
 	CloneShipFragment (ORZ_SHIP, &GLOBAL (npc_built_ship_q), 0);
 	GLOBAL (BattleGroupRef) = PutGroupInfo (GROUPS_ADD_NEW, 1);
 	ReinitQueue (&GLOBAL (npc_built_ship_q));
 	
-	GenerateDefault_initNpcs();
+	GenerateDefault_initNpcs(solarSys);
 	return true;
 }
 
