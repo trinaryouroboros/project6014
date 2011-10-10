@@ -118,7 +118,7 @@ void
 ClearSISRect (BYTE ClearFlags)
 {
 	RECT r;
-	COLOR OldColor;
+	Color OldColor;
 	CONTEXT OldContext;
 
 	OldContext = SetContext (StatusContext);
@@ -482,7 +482,7 @@ DrawCaptainsName (void)
 	TEXT t;
 	CONTEXT OldContext;
 	FONT OldFont;
-	COLOR OldColor;
+	Color OldColor;
 
 	OldContext = SetContext (StatusContext);
 	OldFont = SetContextFont (TinyFont);
@@ -515,7 +515,7 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 	RECT r;
 	TEXT t;
 	FONT OldFont;
-	COLOR OldColor;
+	Color OldColor;
 	CONTEXT OldContext;
 	FRAME OldFontEffect;
 	UNICODE buf[250];
@@ -576,7 +576,7 @@ DrawFlagshipStats (void)
 	RECT r;
 	TEXT t;
 	FONT OldFont;
-	COLOR OldColor;
+	Color OldColor;
 	FRAME OldFontEffect;
 	CONTEXT OldContext;
 	UNICODE buf[128];
@@ -1024,13 +1024,142 @@ DrawSupportShips (void)
 	}
 }
 
+static void
+DeltaSISGauges_crewDelta (SIZE crew_delta)
+{
+	if (crew_delta == 0)
+		return;
+
+	if (crew_delta != UNDEFINED_DELTA)
+	{
+		COUNT CrewCapacity;
+
+		if (crew_delta < 0
+				&& GLOBAL_SIS (CrewEnlisted) <= (COUNT)-crew_delta)
+			GLOBAL_SIS (CrewEnlisted) = 0;
+		else
+		{
+			GLOBAL_SIS (CrewEnlisted) += crew_delta;
+			CrewCapacity = GetCrewPodCapacity ();
+			if (GLOBAL_SIS (CrewEnlisted) > CrewCapacity)
+				GLOBAL_SIS (CrewEnlisted) = CrewCapacity;
+		}
+	}
+
+	{
+		TEXT t;
+		UNICODE buf[60];
+		RECT r;
+
+		snprintf (buf, sizeof buf, "%u", GLOBAL_SIS (CrewEnlisted));
+
+		GetGaugeRect (&r, TRUE);
+		
+		t.baseline.x = STATUS_WIDTH >> 1;
+		t.baseline.y = r.corner.y + r.extent.height;
+		t.align = ALIGN_CENTER;
+		t.pStr = buf;
+		t.CharCount = (COUNT)~0;
+
+		SetContextForeGroundColor (BLACK_COLOR);
+		DrawFilledRectangle (&r);
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x6C));
+		font_DrawText (&t);
+	}
+}
+
+static void
+DeltaSISGauges_fuelDelta (SIZE fuel_delta)
+{
+	COUNT old_coarse_fuel;
+	COUNT new_coarse_fuel;
+
+	if (fuel_delta == 0)
+		return;
+
+	if (fuel_delta == UNDEFINED_DELTA)
+		old_coarse_fuel = (COUNT)~0;
+	else
+	{
+
+		old_coarse_fuel = (COUNT)(
+				GLOBAL_SIS (FuelOnBoard) / FUEL_TANK_SCALE);
+		if (fuel_delta < 0
+				&& GLOBAL_SIS (FuelOnBoard) <= (DWORD)-fuel_delta)
+		{
+			GLOBAL_SIS (FuelOnBoard) = 0;
+		}
+		else
+		{
+			DWORD FuelCapacity = GetFuelTankCapacity ();
+			GLOBAL_SIS (FuelOnBoard) += fuel_delta;
+			if (GLOBAL_SIS (FuelOnBoard) > FuelCapacity)
+				GLOBAL_SIS (FuelOnBoard) = FuelCapacity;
+		}
+	}
+
+	new_coarse_fuel = (COUNT)(
+			GLOBAL_SIS (FuelOnBoard) / FUEL_TANK_SCALE);
+	if (new_coarse_fuel != old_coarse_fuel)
+	{
+		TEXT t;
+		UNICODE buf[60];
+		RECT r;
+
+		snprintf (buf, sizeof buf, "%u", new_coarse_fuel);
+
+		GetGaugeRect (&r, FALSE);
+		
+		t.baseline.x = STATUS_WIDTH >> 1;
+		t.baseline.y = r.corner.y + r.extent.height;
+		t.align = ALIGN_CENTER;
+		t.pStr = buf;
+		t.CharCount = (COUNT)~0;
+
+		SetContextForeGroundColor (BLACK_COLOR);
+		DrawFilledRectangle (&r);
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2C));
+		font_DrawText (&t);
+	}
+}
+	
+static void
+DeltaSISGauges_resunitDelta (SIZE resunit_delta)
+{
+	if (resunit_delta == 0)
+		return;
+
+	if (resunit_delta != UNDEFINED_DELTA)
+	{
+		if (resunit_delta < 0
+				&& GLOBAL_SIS (ResUnits) <= (DWORD)-resunit_delta)
+			GLOBAL_SIS (ResUnits) = 0;
+		else
+			GLOBAL_SIS (ResUnits) += resunit_delta;
+
+		assert (curMsgMode == SMM_RES_UNITS);
+	}
+	else
+	{
+		RECT r;
+
+		r.corner.x = RES_STAT_SCALE(2); // JMS_GFX
+		r.corner.y = RES_STAT_SCALE(130); // JMS_GFX
+		r.extent.width = STATUS_MESSAGE_WIDTH;
+		r.extent.height = STATUS_MESSAGE_HEIGHT;
+		SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x6E));
+		DrawFilledRectangle (&r);
+	}
+		
+	DrawStatusMessage (NULL);
+}
+
 void
 DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 {
-	STAMP s;
-	RECT r;
-	TEXT t;
-	UNICODE buf[60];
 	CONTEXT OldContext;
 
 	if (crew_delta == 0 && fuel_delta == 0 && resunit_delta == 0)
@@ -1041,6 +1170,7 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 	BatchGraphics ();
 	if (crew_delta == UNDEFINED_DELTA)
 	{
+		STAMP s;
 		s.origin.x = 0;
 		s.origin.y = 0;
 		s.frame = FlagStatFrame;
@@ -1064,79 +1194,10 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 		LockMutex (GraphicsLock);
 	}
 
-	t.baseline.x = STATUS_WIDTH >> 1;
-	t.align = ALIGN_CENTER;
-	t.pStr = buf;
 	SetContextFont (TinyFont);
 
-	if (crew_delta != 0)
-	{
-		if (crew_delta != UNDEFINED_DELTA)
-		{
-			COUNT CrewCapacity;
-
-			if (crew_delta < 0 && GLOBAL_SIS (CrewEnlisted) <= (COUNT)-crew_delta)
-				GLOBAL_SIS (CrewEnlisted) = 0;
-			else
-			{
-				GLOBAL_SIS (CrewEnlisted) += crew_delta;
-				CrewCapacity = GetCrewPodCapacity ();
-				if (GLOBAL_SIS (CrewEnlisted) > CrewCapacity)
-					GLOBAL_SIS (CrewEnlisted) = CrewCapacity;
-			}
-		}
-
-		snprintf (buf, sizeof buf, "%u", GLOBAL_SIS (CrewEnlisted));
-		GetGaugeRect (&r, TRUE);
-		t.baseline.y = r.corner.y + r.extent.height; // JMS_GFX
-		t.CharCount = (COUNT)~0;
-		SetContextForeGroundColor (BLACK_COLOR);
-		DrawFilledRectangle (&r);
-		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x6C));
-		font_DrawText (&t);
-	}
-
-	if (fuel_delta != 0)
-	{
-		COUNT old_coarse_fuel;
-		COUNT new_coarse_fuel;
-
-		if (fuel_delta == UNDEFINED_DELTA)
-			old_coarse_fuel = (COUNT)~0;
-		else
-		{
-
-			old_coarse_fuel = (COUNT)(
-					GLOBAL_SIS (FuelOnBoard) / FUEL_TANK_SCALE);
-			if (fuel_delta < 0
-					&& GLOBAL_SIS (FuelOnBoard) <= (DWORD)-fuel_delta)
-			{
-				GLOBAL_SIS (FuelOnBoard) = 0;
-			}
-			else
-			{
-				DWORD FuelCapacity = GetFuelTankCapacity ();
-				GLOBAL_SIS (FuelOnBoard) += fuel_delta;
-				if (GLOBAL_SIS (FuelOnBoard) > FuelCapacity)
-					GLOBAL_SIS (FuelOnBoard) = FuelCapacity;
-			}
-		}
-
-		new_coarse_fuel = (COUNT)(
-				GLOBAL_SIS (FuelOnBoard) / FUEL_TANK_SCALE);
-		if (new_coarse_fuel != old_coarse_fuel)
-		{
-			snprintf (buf, sizeof buf, "%u", new_coarse_fuel);
-			GetGaugeRect (&r, FALSE);
-			t.baseline.y = r.corner.y + r.extent.height; // JMS_GFX
-			t.CharCount = (COUNT)~0;
-			SetContextForeGroundColor (BLACK_COLOR);
-			DrawFilledRectangle (&r);
-			SetContextForeGroundColor (
-					BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2C));
-			font_DrawText (&t);
-		}
-	}
+	DeltaSISGauges_crewDelta (crew_delta);
+	DeltaSISGauges_fuelDelta (fuel_delta);
 
 	if (crew_delta == UNDEFINED_DELTA)
 	{
@@ -1146,30 +1207,8 @@ DeltaSISGauges (SIZE crew_delta, SIZE fuel_delta, int resunit_delta)
 		DrawStorageBays (FALSE);
 	}
 
-	if (resunit_delta != 0)
-	{
-		if (resunit_delta != UNDEFINED_DELTA)
-		{
-			if (resunit_delta < 0 && GLOBAL_SIS (ResUnits) <= (DWORD)-resunit_delta)
-				GLOBAL_SIS (ResUnits) = 0;
-			else
-				GLOBAL_SIS (ResUnits) += resunit_delta;
+	DeltaSISGauges_resunitDelta (resunit_delta);
 
-			assert (curMsgMode == SMM_RES_UNITS);
-			DrawStatusMessage (NULL);
-		}
-		else
-		{
-			r.corner.x = RES_STAT_SCALE(2); // JMS_GFX
-			r.corner.y = RES_STAT_SCALE(130); // JMS_GFX
-			r.extent.width = STATUS_MESSAGE_WIDTH;
-			r.extent.height = STATUS_MESSAGE_HEIGHT;
-			SetContextForeGroundColor (
-					BUILD_COLOR (MAKE_RGB15 (0x00, 0x08, 0x00), 0x6E));
-			DrawFilledRectangle (&r);
-			DrawStatusMessage (NULL);
-		}
-	}
 	UnbatchGraphics ();
 
 	SetContext (OldContext);
@@ -1275,7 +1314,7 @@ GetCPodCapacity (POINT *ppt)
   
 		if (ppt)
 		{
-			static const COLOR crew_rows[] = PC_EXPLORER_CREW_COLOR_TABLE;
+			static const Color crew_rows[] = PC_EXPLORER_CREW_COLOR_TABLE;
       
 			ppt->x = x + 2 * line_remainder - 1;
 			ppt->y = y + 6;
@@ -1296,7 +1335,7 @@ GetCPodCapacity (POINT *ppt)
 		COUNT rowNr;
 		COUNT colNr;
 				
-		static const COLOR crewRows[] = PC_CREW_COLOR_TABLE;
+		static const Color crewRows[] = PC_CREW_COLOR_TABLE;
 
 		crewCount = GetCrewCount ();
 		if (!GetCrewPodForCrewMember (crewCount, &slotNr, &seatNr))
@@ -1412,7 +1451,7 @@ GetSBayCapacity (POINT *ppt)
 		COUNT rowNr;
 		COUNT colNr;
 				
-		static const COLOR colorBars[] = STORAGE_BAY_COLOR_TABLE;
+		static const Color colorBars[] = STORAGE_BAY_COLOR_TABLE;
 
 		massCount = GetElementMass ();
 		if (!GetStorageCellForMineralUnit (massCount, &slotNr, &cellNr))
@@ -1533,7 +1572,7 @@ GetFTankCapacity (POINT *ppt)
 		if (ppt)
 		{
 			COUNT which_row;
-			static const COLOR fuel_colors[] = FUEL_COLOR_TABLE;
+			static const Color fuel_colors[] = FUEL_COLOR_TABLE;
 	  
 			which_row = (COUNT)(GetFuelTotal() * 20
 					    / (EXPLORER_FUEL_CAPACITY));
@@ -1560,7 +1599,7 @@ GetFTankCapacity (POINT *ppt)
 
 		COUNT rowNr;
 				
-		static const COLOR fuelColors[] = FUEL_COLOR_TABLE;
+		static const Color fuelColors[] = FUEL_COLOR_TABLE;
 
 		fuelAmount = GetFuelTotal ();
 		if (!GetFuelTankForFuelUnit (fuelAmount, &slotNr, &compartmentNr))
@@ -1632,7 +1671,7 @@ DrawAutoPilotMessage (BOOLEAN Reset)
 	static DWORD cycle_index = 0;
 	BOOLEAN OnAutoPilot;
 	
-	static const COLOR cycle_tab[] = AUTOPILOT_COLOR_CYCLE_TABLE;
+	static const Color cycle_tab[] = AUTOPILOT_COLOR_CYCLE_TABLE;
 	const size_t cycleCount = sizeof cycle_tab / sizeof cycle_tab[0];
 #define BLINK_RATE (ONE_SECOND * 3 / 40) // 9 @ 120 ticks/second
 

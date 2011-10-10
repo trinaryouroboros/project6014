@@ -807,7 +807,8 @@ ExitOutfit:
 				DoInstallModule (pMS);
 				break;
 			case OUTFIT_SAVELOAD:
-				if (GameOptions () == 0)
+				// Clearing FlashRect is not necessary
+				if (!GameOptions ())
 					goto ExitOutfit;
 				DrawMenuStateStrings (PM_FUEL, pMS->CurState);
 				LockMutex (GraphicsLock);

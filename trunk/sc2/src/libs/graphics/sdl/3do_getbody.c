@@ -584,7 +584,7 @@ _ReleaseCelData (void *handle)
 
 typedef struct BuildCharDesc {
 	SDL_Surface *surface;
-	wchar_t index;
+	UniChar index;
 } BuildCharDesc;
 
 int

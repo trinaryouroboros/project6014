@@ -81,15 +81,14 @@ DoSelectAction (MENU_STATE *pMS)
 					pMS->CurState = HAIL;
 				return (FALSE);
 			case ATTACK + 1:
-				pMS->Initialized = GameOptions ();
-				if (pMS->Initialized)
-				{
-					DrawMenuStateStrings (PM_CONVERSE, pMS->CurState);
-					LockMutex (GraphicsLock);
-					SetFlashRect (SFR_MENU_3DO);
-					UnlockMutex (GraphicsLock);
-				}
-				return ((BOOLEAN)pMS->Initialized);
+				// Clearing FlashRect is not necessary
+				if (!GameOptions ())
+					return FALSE;
+				DrawMenuStateStrings (PM_CONVERSE, pMS->CurState);
+				LockMutex (GraphicsLock);
+				SetFlashRect (SFR_MENU_3DO);
+				UnlockMutex (GraphicsLock);
+				break;
 			default:
 				printf ("Unknown option: %d\n", pMS->CurState);
 		}
@@ -386,15 +385,15 @@ DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in,
 	SIZE i;
 	DWORD TimeIn;
 	TEXT t1, t2;
-	static const COLOR fade_cycle[] =
+	static const Color fade_cycle[] =
 	{
-		BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x1D),
-		BUILD_COLOR (MAKE_RGB15 (0x09, 0x09, 0x09), 0x1E),
-		BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F),
-		BUILD_COLOR (MAKE_RGB15 (0x06, 0x06, 0x06), 0x20),
-		BUILD_COLOR (MAKE_RGB15 (0x05, 0x05, 0x05), 0x21),
-		BUILD_COLOR (MAKE_RGB15 (0x04, 0x04, 0x04), 0x22),
-		BUILD_COLOR (MAKE_RGB15 (0x03, 0x03, 0x03), 0x23),
+		BUILD_COLOR (MAKE_RGB15_INIT (0x0A, 0x0A, 0x0A), 0x1D),
+		BUILD_COLOR (MAKE_RGB15_INIT (0x09, 0x09, 0x09), 0x1E),
+		BUILD_COLOR (MAKE_RGB15_INIT (0x08, 0x08, 0x08), 0x1F),
+		BUILD_COLOR (MAKE_RGB15_INIT (0x06, 0x06, 0x06), 0x20),
+		BUILD_COLOR (MAKE_RGB15_INIT (0x05, 0x05, 0x05), 0x21),
+		BUILD_COLOR (MAKE_RGB15_INIT (0x04, 0x04, 0x04), 0x22),
+		BUILD_COLOR (MAKE_RGB15_INIT (0x03, 0x03, 0x03), 0x23),
 	};
 #define NUM_FADES (sizeof (fade_cycle) / sizeof (fade_cycle[0]))
 
@@ -483,18 +482,18 @@ UninitEncounter (void)
 		UNICODE buf[80];
 		HSHIPFRAG hStarShip;
 		SHIP_FRAGMENT *FragPtr;
-		static const COLOR fade_ship_cycle[] =
+		static const Color fade_ship_cycle[] =
 		{
-			BUILD_COLOR (MAKE_RGB15 (0x07, 0x00, 0x00), 0x2F),
-			BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x00), 0x2D),
-			BUILD_COLOR (MAKE_RGB15 (0x17, 0x00, 0x00), 0x2B),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x0A), 0x27),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x14, 0x14), 0x25),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x14, 0x14), 0x25),
-			BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x0A), 0x27),
-			BUILD_COLOR (MAKE_RGB15 (0x1B, 0x00, 0x00), 0x2A),
-			BUILD_COLOR (MAKE_RGB15 (0x17, 0x00, 0x00), 0x2B),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x07, 0x00, 0x00), 0x2F),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x0F, 0x00, 0x00), 0x2D),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x17, 0x00, 0x00), 0x2B),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x1F, 0x0A, 0x0A), 0x27),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x1F, 0x14, 0x14), 0x25),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x1F, 0x1F, 0x1F), 0x0F),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x1F, 0x14, 0x14), 0x25),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x1F, 0x0A, 0x0A), 0x27),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x1B, 0x00, 0x00), 0x2A),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x17, 0x00, 0x00), 0x2B),
 		};
 #define NUM_SHIP_FADES (sizeof (fade_ship_cycle) / \
 		sizeof (fade_ship_cycle[0]))

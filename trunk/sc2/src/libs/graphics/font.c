@@ -18,11 +18,10 @@
 
 #include "gfxintrn.h"
 #include "tfb_prim.h"
-#include "gfxother.h"
 #include "libs/log.h"
 
 extern void FixContextFontEffect (void);
-static inline TFB_Char *getCharFrame (FONT_DESC *fontPtr, wchar_t ch);
+static inline TFB_Char *getCharFrame (FONT_DESC *fontPtr, UniChar ch);
 
 
 FONT
@@ -64,10 +63,10 @@ font_DrawText (TEXT *lpText)
  * background color one pixel shifted to all 4 directions.
  */
 void
-font_DrawTracedText (TEXT *pText, COLOR text, COLOR trace)
+font_DrawTracedText (TEXT *pText, Color text, Color trace)
 {
 	// Preserve current foreground color for full correctness
-	COLOR oldfg = SetContextForeGroundColor (trace);
+	Color oldfg = SetContextForeGroundColor (trace);
 	pText->baseline.x--;
 	font_DrawText (pText);
 	pText->baseline.x += 2;
@@ -120,7 +119,7 @@ TextRect (TEXT *lpText, RECT *pRect, BYTE *pdelta)
 	{
 		COORD top_y, bot_y;
 		SIZE width;
-		wchar_t next_ch;
+		UniChar next_ch;
 		const unsigned char *pStr;
 		COUNT num_chars;
 	
@@ -151,7 +150,7 @@ TextRect (TEXT *lpText, RECT *pRect, BYTE *pdelta)
 		}
 		while (num_chars--)
 		{
-			wchar_t ch;
+			UniChar ch;
 			SIZE last_width;
 			TFB_Char *charFrame;
 
@@ -231,11 +230,10 @@ _text_blt (RECT *pClipRect, PRIMITIVE *PrimPtr)
 	FONT FontPtr;
 
 	COUNT num_chars;
-	wchar_t next_ch;
+	UniChar next_ch;
 	const unsigned char *pStr;
 	TEXT *TextPtr;
 	POINT origin;
-	TFB_Palette color;
 	TFB_Image *backing;
 
 	FontPtr = _CurFontPtr;
@@ -245,8 +243,6 @@ _text_blt (RECT *pClipRect, PRIMITIVE *PrimPtr)
 	if (!backing)
 		return;
 	
-	COLORtoPalette (_get_context_fg_color (), &color);
-
 	TextPtr = &PrimPtr->Object.Text;
 	origin.x = _save_stamp.origin.x;
 	origin.y = TextPtr->baseline.y;
@@ -261,7 +257,7 @@ _text_blt (RECT *pClipRect, PRIMITIVE *PrimPtr)
 		num_chars = 0;
 	while (num_chars--)
 	{
-		wchar_t ch;
+		UniChar ch;
 		TFB_Char* fontChar;
 
 		ch = next_ch;
@@ -299,9 +295,9 @@ _text_blt (RECT *pClipRect, PRIMITIVE *PrimPtr)
 }
 
 static inline TFB_Char *
-getCharFrame (FONT_DESC *fontPtr, wchar_t ch)
+getCharFrame (FONT_DESC *fontPtr, UniChar ch)
 {
-	wchar_t pageStart = ch & CHARACTER_PAGE_MASK;
+	UniChar pageStart = ch & CHARACTER_PAGE_MASK;
 	size_t charIndex;
 
 	FONT_PAGE *page = fontPtr->fontPages;

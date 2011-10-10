@@ -127,7 +127,7 @@ flashCurrentLocation (POINT *where)
 
 	if (GetTimeCounter () >= NextTime)
 	{
-		COLOR OldColor;
+		Color OldColor;
 		CONTEXT OldContext;
 		STAMP s;
 
@@ -139,7 +139,8 @@ flashCurrentLocation (POINT *where)
 		if (c == 0x00 || c == 0x1A)
 			val = -val;
 		c += val;
-		OldColor = SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (c, c, c), c));
+		OldColor = SetContextForeGroundColor (
+				BUILD_COLOR (MAKE_RGB15 (c, c, c), c));
 		s.origin.x = UNIVERSE_TO_DISPX (universe.x);
 		s.origin.y = UNIVERSE_TO_DISPY (universe.y);
 		s.frame = IncFrameIndex (StarMapFrame);
@@ -208,7 +209,8 @@ DrawAutoPilot (POINT *pDstPt)
 		cycle = dy;
 	delta = xerror = yerror = cycle >> 1;
 
-	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x04, 0x04, 0x1F), 0x01));
+	SetContextForeGroundColor (
+			BUILD_COLOR (MAKE_RGB15 (0x04, 0x04, 0x1F), 0x01));
 
 	delta &= ~1;
 	while (delta--)
@@ -276,12 +278,16 @@ GetSphereRect (FLEET_INFO *FleetPtr, RECT *pRect, RECT *pRepairRect)
 		
 		if (pRepairRect->corner.x <= 0)
 			pRepairRect->corner.x = 1;
-		else if (pRepairRect->corner.x + pRepairRect->extent.width >= SIS_SCREEN_WIDTH)
-			pRepairRect->corner.x = SIS_SCREEN_WIDTH - pRepairRect->extent.width - 1;
+		else if (pRepairRect->corner.x + pRepairRect->extent.width >=
+				SIS_SCREEN_WIDTH)
+			pRepairRect->corner.x =
+					SIS_SCREEN_WIDTH - pRepairRect->extent.width - 1;
 		if (pRepairRect->corner.y <= 0)
 			pRepairRect->corner.y = 1;
-		else if (pRepairRect->corner.y + pRepairRect->extent.height >= SIS_SCREEN_HEIGHT)
-			pRepairRect->corner.y = SIS_SCREEN_HEIGHT - pRepairRect->extent.height - 1;
+		else if (pRepairRect->corner.y + pRepairRect->extent.height >=
+				SIS_SCREEN_HEIGHT)
+			pRepairRect->corner.y =
+					SIS_SCREEN_HEIGHT - pRepairRect->extent.height - 1;
 
 		BoxUnion (pRepairRect, pRect, pRepairRect);
 		pRepairRect->extent.width++;
@@ -366,7 +372,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 			&& orz_space < 2 // JMS: Orz space check
 			&& (diameter = (long)GLOBAL_SIS (FuelOnBoard) << 1))
 	{
-		COLOR OldColor;
+		Color OldColor;
 
 		if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
 			r.corner = CurStarDescPtr->star_pt;
@@ -423,7 +429,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	{
 		COUNT index;
 		HFLEETINFO hStarShip, hNextShip;
-		static const COLOR race_colors[] =
+		static const Color race_colors[] =
 		{
 			RACE_COLORS
 		};
@@ -454,7 +460,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 						&& repair_r.corner.x + repair_r.extent.width > pClipRect->corner.x
 						&& repair_r.corner.y + repair_r.extent.height > pClipRect->corner.y)))
 				{
-					COLOR c;
+					Color c;
 					TEXT t;
 					STRING locString;
 
@@ -487,22 +493,16 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 						t.baseline.y -= (r.corner.y + r.extent.height)
 								- SIS_SCREEN_HEIGHT + 1;
 
-					{
-						BYTE r, g, b;
-						COLOR c32k;
+					// The text color is slightly lighter than the color of
+					// the SoI.
+					c.r = (c.r >= 0xff - CC5TO8 (0x03)) ?
+							0xff : c.r + CC5TO8 (0x03);
+					c.g = (c.g >= 0xff - CC5TO8 (0x03)) ?
+							0xff : c.g + CC5TO8 (0x03);
+					c.b = (c.b >= 0xff - CC5TO8 (0x03)) ?
+							0xff : c.b + CC5TO8 (0x03);
 
-						c32k = COLOR_32k (c);
-						r = (BYTE)((c32k >> (5 * 2)) & 0x1F);
-						if ((r += 0x03) > 0x1F) r = 0x1F;
-						g = (BYTE)((c32k >> (5 * 1)) & 0x1F);
-						if ((g += 0x03) > 0x1F) g = 0x1F;
-						b = (BYTE)((c32k >> (5 * 0)) & 0x1F);
-						if ((b += 0x03) > 0x1F) b = 0x1F;
-
-						SetContextForeGroundColor (
-								BUILD_COLOR (MAKE_RGB15 (r, g, b), COLOR_256 (c) - 1)
-								);
-					}
+					SetContextForeGroundColor (c);
 					font_DrawText (&t);
 				}
 			}
@@ -1003,10 +1003,10 @@ FindNextStarIndex (STAR_SEARCH_STATE *pSS, int from, BOOLEAN WithinClust)
 		for (c = 0, sptr = pSS->Cluster, dptr = ClusterName;
 				c < pSS->ClusterLen; ++c)
 		{
-			wchar_t sc = getCharFromString (&sptr);
-			wchar_t dc = getCharFromString (&dptr);
+			UniChar sc = getCharFromString (&sptr);
+			UniChar dc = getCharFromString (&dptr);
 
-			if (toWideUpper (sc) != toWideUpper (dc))
+			if (UniChar_toUpper (sc) != UniChar_toUpper (dc))
 				break;
 		}
 
@@ -1045,10 +1045,10 @@ FindNextStarIndex (STAR_SEARCH_STATE *pSS, int from, BOOLEAN WithinClust)
 		for (c = 0, sptr = pSS->Prefix, dptr = FullName;
 				c < pSS->PrefixLen; ++c)
 		{
-			wchar_t sc = getCharFromString (&sptr);
-			wchar_t dc = getCharFromString (&dptr);
+			UniChar sc = getCharFromString (&sptr);
+			UniChar dc = getCharFromString (&dptr);
 
-			if (toWideUpper (sc) != toWideUpper (dc))
+			if (UniChar_toUpper (sc) != UniChar_toUpper (dc))
 				break;
 		}
 
@@ -1646,8 +1646,8 @@ DoneSphereGrowth:
 	}
 }
 
-static BOOLEAN
-DoStarMap (void)
+BOOLEAN
+StarMap (void)
 {
 	MENU_STATE MenuState;
 	POINT universe;
@@ -1673,9 +1673,6 @@ DoStarMap (void)
 	cursorLoc = GLOBAL (autopilot);
 	if (cursorLoc.x == ~0 && cursorLoc.y == ~0)
 		cursorLoc = universe;
-
-	UnlockMutex (GraphicsLock);
-	TaskSwitch ();
 
 	MenuState.InputFunc = DoMoveCursor;
 	MenuState.Initialized = FALSE;
@@ -1703,10 +1700,10 @@ DoStarMap (void)
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 
 	LockMutex (GraphicsLock);
-
 	DrawHyperCoords (universe);
 	DrawSISMessage (NULL);
 	DrawStatusMessage (NULL);
+	UnlockMutex (GraphicsLock);
 
 	if (GLOBAL (autopilot.x) == universe.x
 			&& GLOBAL (autopilot.y) == universe.y)
@@ -1714,187 +1711,5 @@ DoStarMap (void)
 
 	return (GLOBAL (autopilot.x) != ~0
 			&& GLOBAL (autopilot.y) != ~0);
-}
-
-BOOLEAN
-DoFlagshipCommands (MENU_STATE *pMS)
-{
-	/* TODO: Make this carried cleanly by MENU_STATE structure */
-	// static DWORD NextTime;
-	if (!(pMS->Initialized & 1))
-	{
-		/* This has some dependency on the IPtask_func */
-		ChangeSolarSys ();
-		// NextTime = GetTimeCounter ();
-	}
-	else
-	{
-		BOOLEAN select = PulsedInputState.menu[KEY_MENU_SELECT];
-		LockMutex (GraphicsLock);
-		if (*(volatile BYTE *)&pMS->CurState == 0
-				&& (*(volatile SIZE *)&pMS->Initialized & 1)
-				&& !(GLOBAL (CurrentActivity)
-				& (START_ENCOUNTER | END_INTERPLANETARY
-				| CHECK_ABORT | CHECK_LOAD))
-				&& GLOBAL_SIS (CrewEnlisted) != (COUNT)~0)
-		{
-			UnlockMutex (GraphicsLock);
-			IP_frame ();
-			return TRUE;
-		}
-		UnlockMutex (GraphicsLock);
-
-		if (pMS->CurState)
-		{
-			BOOLEAN DoMenu;
-			BYTE NewState;
-
-			/* If pMS->CurState == 0, then we're flying
-			 * around in interplanetary.  This needs to be
-			 * corrected for the MenuChooser, which thinks
-			 * that "0" is the first menu option */
-			pMS->CurState --;
-			DoMenu = DoMenuChooser (pMS, 
-				(BYTE)(pMS->Initialized <= 1 ? PM_STARMAP : PM_SCAN));
-			pMS->CurState ++;
-
-			if (!DoMenu) {
-
-				NewState = pMS->CurState;
-				if (LastActivity == CHECK_LOAD)
-					select = TRUE; // Selected LOAD from main menu
-				if (select)
-				{
-					if (NewState != SCAN + 1 && NewState != (GAME_MENU) + 1)
-					{
-						LockMutex (GraphicsLock);
-						SetFlashRect (NULL);
-						UnlockMutex (GraphicsLock);
-					}
-
-					switch (NewState - 1)
-					{
-						case SCAN:
-							ScanSystem ();
-							break;
-						case EQUIP_DEVICE:
-						{
-							if (!Devices (pMS))
-								select = FALSE;
-							if (GET_GAME_STATE (PORTAL_COUNTER)) {
-								// A player-induced portal to QuasiSpace is
-								// opening.
-								return (FALSE);
-							}
-							break;
-						}
-						case CARGO:
-						{
-							Cargo (pMS);
-							break;
-						}
-						case ROSTER:
-						{
-							if (!Roster ())
-								select = FALSE;
-							break;
-						}
-						case GAME_MENU:
-							if (GameOptions () == 0)
-								return (FALSE);						
-							break;
-						case STARMAP:
-						{
-							BOOLEAN AutoPilotSet;
-
-							LockMutex (GraphicsLock);
-							if (++pMS->Initialized > 3) {
-								pSolarSysState->PauseRotate = 1;
-								RepairSISBorder ();
-							}
-
-							AutoPilotSet = DoStarMap ();
-							SetDefaultMenuRepeatDelay ();
-
-							if (LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE
-									|| (GLOBAL (CurrentActivity) & CHECK_ABORT))
-							{
-								UnlockMutex (GraphicsLock);
-								return (FALSE);
-							}
-							else if (pMS->Initialized <= 3)
-							{
-								ZoomSystem ();
-								--pMS->Initialized;
-							}
-							UnlockMutex (GraphicsLock);
-
-							if (!AutoPilotSet && pMS->Initialized >= 3)
-							{
-								LoadPlanet (NULL);
-								--pMS->Initialized;
-								pSolarSysState->PauseRotate = 0;
-								LockMutex (GraphicsLock);
-								SetFlashRect (SFR_MENU_3DO);
-								UnlockMutex (GraphicsLock);
-								break;
-							}
-						}
-						case NAVIGATION:
-							if (LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
-								return (FALSE);
-
-							if (pMS->Initialized <= 1)
-							{
-								pMS->Initialized = 1;
-							}
-							else if (pMS->flash_task)
-							{	// In planet orbit
-								FreePlanet ();
-								LockMutex (GraphicsLock);
-								LoadSolarSys ();
-								ValidateOrbits ();
-								ZoomSystem ();
-								UnlockMutex (GraphicsLock);
-							}
-
-							LockMutex (GraphicsLock);
-							pMS->CurState = 0;
-							FlushInput ();
-							UnlockMutex (GraphicsLock);
-							break;
-					}
-				
-					if (GLOBAL (CurrentActivity) & CHECK_ABORT)
-						;
-					else if (pMS->CurState)
-					{
-						LockMutex (GraphicsLock);
-						SetFlashRect (SFR_MENU_3DO);
-						UnlockMutex (GraphicsLock);
-						if (select)
-						{
-							if (optWhichMenu != OPT_PC)
-								pMS->CurState = (NAVIGATION) + 1;
-							DrawMenuStateStrings ((BYTE)(pMS->Initialized <= 1 ? PM_STARMAP : PM_SCAN),
-									pMS->CurState - 1);
-						}
-					}
-					else
-					{
-						LockMutex (GraphicsLock);
-						SetFlashRect (NULL);
-						UnlockMutex (GraphicsLock);
-						DrawMenuStateStrings (PM_STARMAP, -NAVIGATION);
-					}
-				}
-			}
-		}
-	}
-
-	return (!(GLOBAL (CurrentActivity)
-			& (START_ENCOUNTER | END_INTERPLANETARY
-			| CHECK_ABORT | CHECK_LOAD))
-			&& GLOBAL_SIS (CrewEnlisted) != (COUNT)~0);
 }
 

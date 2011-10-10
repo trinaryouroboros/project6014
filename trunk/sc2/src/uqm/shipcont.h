@@ -23,9 +23,10 @@
 
 #define FIELD_WIDTH (STATUS_WIDTH - RES_STAT_SCALE(5)) // JMS_GFX
 
-extern void Cargo (MENU_STATE *pMS);
-extern BOOLEAN Roster (void);
-extern BOOLEAN Devices (MENU_STATE *pMS);
+extern void CargoMenu (void);
+extern BOOLEAN RosterMenu (void);
+extern BOOLEAN DevicesMenu (void);
+extern BOOLEAN StarMap (void);
 
 extern void DrawCargoStrings (BYTE OldElement, BYTE NewElement);
 extern void ShowRemainingCapacity (void);

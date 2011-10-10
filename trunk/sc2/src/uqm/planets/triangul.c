@@ -100,7 +100,7 @@ void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRe
 	if (which_space <= 1 && orz_space <= 1) // JMS: Orz space check
 	{
 		COUNT index;
-		COLOR c = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x00, 0x00), 0x2D);
+		Color c = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x00, 0x00), 0x2D);
 		
 		// JMS: Sphere_statuses, getgamestates defined at triangul.h
 		BYTE sphere_statuses[] =
@@ -171,20 +171,16 @@ void drawTriangulationSpheres (COUNT which_space, COUNT orz_space, RECT *pClipRe
 					else if (r.corner.y + r.extent.height >= SIS_SCREEN_HEIGHT)
 						t.baseline.y -= (r.corner.y + r.extent.height)- SIS_SCREEN_HEIGHT + 1;
 					
-					{
-						BYTE r, g, b;
-						COLOR c32k;
-						
-						c32k = COLOR_32k (c);
-						r = (BYTE)((c32k >> (5 * 2)) & 0x1F);
-						if ((r += 0x03) > 0x1F) r = 0x1F;
-						g = (BYTE)((c32k >> (5 * 1)) & 0x1F);
-						if ((g += 0x03) > 0x1F) g = 0x1F;
-						b = (BYTE)((c32k >> (5 * 0)) & 0x1F);
-						if ((b += 0x03) > 0x1F) b = 0x1F;
-		
-						SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (r, g, b), COLOR_256 (c) - 1));
-					}
+					// The text color is slightly lighter than the color of
+					// the SoI.
+					c.r = (c.r >= 0xff - CC5TO8 (0x03)) ?
+							0xff : c.r + CC5TO8 (0x03);
+					c.g = (c.g >= 0xff - CC5TO8 (0x03)) ?
+							0xff : c.g + CC5TO8 (0x03);
+					c.b = (c.b >= 0xff - CC5TO8 (0x03)) ?
+							0xff : c.b + CC5TO8 (0x03);
+
+					SetContextForeGroundColor (c);
 					font_DrawText (&t);
 				}
 			}

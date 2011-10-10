@@ -94,8 +94,8 @@ static void
 MCD_DrawButton (WIDGET *_self, int x, int y)
 {
 	WIDGET_BUTTON *self = (WIDGET_BUTTON *)_self;
-	COLOR oldtext;
-	COLOR inactive, selected;
+	Color oldtext;
+	Color inactive, selected;
 	FONT  oldfont = SetContextFont (StarConFont);
 	FRAME oldFontEffect = SetContextFontEffect (NULL);
 	TEXT t;
@@ -127,8 +127,8 @@ static void
 MCD_DrawSlider (WIDGET *_self, int x, int y)
 {
 	WIDGET_SLIDER *self = (WIDGET_SLIDER *)_self;
-	COLOR oldtext;
-	COLOR default_color, selected;
+	Color oldtext;
+	Color default_color, selected;
 	FONT  oldfont = SetContextFont (PlayerFont);
 	FRAME oldFontEffect = SetContextFontEffect (NULL);
 	TEXT t;
@@ -177,8 +177,8 @@ void
 MCD_DrawTextEntry (WIDGET *_self, int x, int y)
 {
 	WIDGET_TEXTENTRY *self = (WIDGET_TEXTENTRY *)_self;
-	COLOR oldtext;
-	COLOR inactive, default_color, selected;
+	Color oldtext;
+	Color inactive, default_color, selected;
 	FONT  oldfont = SetContextFont (PlayerFont);
 	FRAME oldFontEffect = SetContextFontEffect (NULL);
 	TEXT t;
@@ -330,13 +330,12 @@ OnTextEntryChange (TEXTENTRY_STATE *pTES)
 static BOOLEAN
 OnTextEntryFrame (TEXTENTRY_STATE *pTES)
 {
-	//	WIDGET_TEXTENTRY *widget = (WIDGET_TEXTENTRY *) pTES->CbParam;
-
 	DrawConnectDialog ();
 
 	SleepThreadUntil (pTES->NextTime);
 	pTES->NextTime = GetTimeCounter () + MENU_FRAME_RATE;
 
+	(void) pTES;  // satisfying compiler
 	return TRUE; // continue
 }
 

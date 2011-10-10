@@ -333,7 +333,7 @@ getLineWithinWidth(TEXT *pText, const unsigned char **startNext,
 	COUNT oldCount;
 	const unsigned char *ptr;
 	const unsigned char *wordStart;
-	wchar_t ch;
+	UniChar ch;
 	COUNT charCount;
 
 	//GetContextClipRect (&rect);
@@ -1227,7 +1227,7 @@ HailAlien (void)
 	ENCOUNTER_STATE ES;
 	FONT PlayerFont, OldFont;
 	MUSIC_REF SongRef = 0;
-	COLOR TextBack;
+	Color TextBack;
 	DWORD tmpseed;
 	
 	pCurInputState = &ES;

@@ -1299,7 +1299,8 @@ ExitShipyard:
 		}
 		else
 		{
-			if (GameOptions () == 0)
+			// Clearing FlashRect is not necessary
+			if (!GameOptions ())
 				goto ExitShipyard;
 			DrawMenuStateStrings (PM_CREW, pMS->CurState);
 			LockMutex (GraphicsLock);

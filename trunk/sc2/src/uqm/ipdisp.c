@@ -168,8 +168,6 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 				- pSolarSysState->PlanetDesc + 1);
 
 	task = GroupPtr->task;
-	if (pSolarSysState->MenuState.CurState)
-		goto ExitIPProcess;
 
 	if ((task & REFORM_GROUP) && --GroupPtr->group_counter == 0)
 	{	// Finished reforming the group
@@ -552,7 +550,6 @@ CheckGetAway:
 			+ (SIZE)((long)GroupPtr->loc.y
 			* (DISPLAY_FACTOR >> 1) / radius);
 
-ExitIPProcess:
 	EPtr->next.location.x = DISPLAY_TO_WORLD (dest_pt.x)
 			+ (COORD)(LOG_SPACE_WIDTH >> 1)
 			- (LOG_SPACE_WIDTH >> (MAX_REDUCTION + 1));
@@ -766,7 +763,6 @@ flag_ship_preprocess (ELEMENT *ElementPtr)
 		ElementPtr->thrust_wait = FLIP_WAIT;
 	}
 
-	if (pSolarSysState->MenuState.CurState == 0)
 	{
 		BYTE flagship_loc, ec;
 		SIZE vdx, vdy, radius;
