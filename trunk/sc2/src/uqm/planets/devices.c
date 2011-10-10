@@ -34,10 +34,14 @@
 #include "../setup.h"
 #include "../state.h"
 #include "../sis.h"
-		// for ClearSISRect(), SaveFlagshipState()
+		// for ClearSISRect()
 #include "../grpinfo.h"
 #include "../sounds.h"
 #include "../util.h"
+#include "../hyper.h"
+		// for SaveSisHyperState()
+#include "planets.h"
+		// for SaveSolarSysLocation() and tests
 #include "libs/strlib.h"
 
 
@@ -234,11 +238,11 @@ UseCaster (void)
 	}
 	
 	if (LOBYTE (GLOBAL (CurrentActivity)) != IN_INTERPLANETARY
-			|| pSolarSysState == NULL)
+			|| !playerInSolarSystem ())
 		return FALSE;
 
 	/*if (pSolarSysState->pOrbitalDesc == &pSolarSysState->PlanetDesc[1]
-			&& pSolarSysState->MenuState.Initialized == 3
+			&& playerInPlanetOrbit ()
 			&& CurStarDescPtr->Index == CHMMR_DEFINED
 			&& !GET_GAME_STATE (CHMMR_UNLEASHED)) */
 	// JMS: Disabled the caster's effect on CHMMR at Procyon.
@@ -254,7 +258,7 @@ UseCaster (void)
 		assert (CountLinks (&GLOBAL (npc_built_ship_q)) == 0);
 
 		SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 7);
-		SaveFlagshipState ();
+		SaveSolarSysLocation ();
 		return TRUE;
 	}
 
@@ -297,8 +301,8 @@ UseCaster (void)
 				SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 5);
 			}
 			
-			if (pSolarSysState->MenuState.Initialized >= 3)
-				SaveFlagshipState ();
+			if (playerInPlanetOrbit ())
+				SaveSolarSysLocation ();
 			return TRUE;
 		}
 	}
@@ -322,9 +326,7 @@ DeviceFailed (BYTE which_device)
 			break;
 		case SUN_EFFICIENCY_DEVICE:
 			if (LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY
-					&& pSolarSysState
-					&& pSolarSysState->pOrbitalDesc
-					&& pSolarSysState->MenuState.Initialized == 3)
+					&& playerInPlanetOrbit ())
 			{
 				BYTE fade_buf[1];
 
@@ -389,6 +391,8 @@ DeviceFailed (BYTE which_device)
 					SET_GAME_STATE (SHIP_TO_COMPEL, 1);
 				}
 				GLOBAL (CurrentActivity) &= ~IN_BATTLE;
+
+				SaveSisHyperState ();
 			}
 			else
 			{
@@ -406,10 +410,9 @@ DeviceFailed (BYTE which_device)
 				{
 					SET_GAME_STATE (READY_TO_CONFUSE_URQUAN, 1);
 				}
-				if (pSolarSysState->MenuState.Initialized < 3)
-					return (FALSE);
+				if (playerInPlanetOrbit ())
+					SaveSolarSysLocation ();
 			}
-			SaveFlagshipState ();
 			return (FALSE);
 		case AQUA_HELIX_DEVICE:
 			val = GET_GAME_STATE (ULTRON_CONDITION);

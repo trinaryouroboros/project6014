@@ -2306,7 +2306,8 @@ ReturnToOrbit (RECT *pRect)
 
 	SetTransitionSource (pRect);
 	BatchGraphics ();
-	DrawStarBackGround (TRUE);
+	DrawStarBackGround ();
+	DrawPlanetSurfaceBorder ();
 	RedrawSurfaceScan (NULL);
 	ScreenTransition (3, pRect);
 	UnbatchGraphics ();

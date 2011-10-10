@@ -666,7 +666,6 @@ PickPlanetSide (MENU_STATE *pMS)
 	if (!pMS->Initialized)
 	{
 		pMS->InputFunc = PickPlanetSide;
-		SetMenuRepeatDelay (0, 0, 0, FALSE);
 		SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
 		if (!select)
 		{
@@ -774,7 +773,7 @@ PickPlanetSide (MENU_STATE *pMS)
 					UnlockShipFrag (&GLOBAL (npc_built_ship_q), hStarShip);
 				}
 
-				SaveFlagshipState ();
+				SaveSolarSysLocation ();
 				return (FALSE);
 			}
 			
@@ -794,7 +793,6 @@ ExitPlanetSide:
 
 		pMS->InputFunc = DoScan;
 		pMS->CurState = DISPATCH_SHUTTLE;
-		SetDefaultMenuRepeatDelay ();
 	}
 	else
 	{
@@ -804,13 +802,13 @@ ExitPlanetSide:
 
 		new_pt = planetLoc;
 
-		if (PulsedInputState.menu[KEY_MENU_LEFT])
+		if (CurrentInputState.menu[KEY_MENU_LEFT])
 			dx = -(1 + RESOLUTION_FACTOR); // JMS_GFX
-		if (PulsedInputState.menu[KEY_MENU_RIGHT])
+		if (CurrentInputState.menu[KEY_MENU_RIGHT])
 			dx = (1 + RESOLUTION_FACTOR); // JMS_GFX
-		if (PulsedInputState.menu[KEY_MENU_UP])
+		if (CurrentInputState.menu[KEY_MENU_UP])
 			dy = -(1 + RESOLUTION_FACTOR);	 // JMS_GFX
-		if (PulsedInputState.menu[KEY_MENU_DOWN])
+		if (CurrentInputState.menu[KEY_MENU_DOWN])
 			dy = (1 + RESOLUTION_FACTOR);	 // JMS_GFX
 
 		LockMutex (GraphicsLock);
