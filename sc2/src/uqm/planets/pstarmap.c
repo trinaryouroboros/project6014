@@ -1251,6 +1251,7 @@ DoStarSearch (MENU_STATE *pMS)
 	tes.FrameCallback = OnStarNameFrame;
 
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
+	SetDefaultMenuRepeatDelay ();
 	success = DoTextEntry (&tes);
 
 	LockMutex (GraphicsLock);
@@ -1279,9 +1280,6 @@ DoMoveCursor (MENU_STATE *pMS)
 
 		pMS->Initialized = TRUE;
 		pMS->InputFunc = DoMoveCursor;
-
-		SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
-		SetMenuRepeatDelay (MIN_ACCEL_DELAY, MAX_ACCEL_DELAY, STEP_ACCEL_DELAY, TRUE);
 
 		if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
 			universe = CurStarDescPtr->star_pt;
@@ -1696,8 +1694,12 @@ StarMap (void)
 	UnbatchGraphics ();
 	UnlockMutex (GraphicsLock);
 
+	SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
+	SetMenuRepeatDelay (MIN_ACCEL_DELAY, MAX_ACCEL_DELAY, STEP_ACCEL_DELAY,
+			TRUE);
 	DoInput (&MenuState, FALSE);
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
+	SetDefaultMenuRepeatDelay ();
 
 	LockMutex (GraphicsLock);
 	DrawHyperCoords (universe);

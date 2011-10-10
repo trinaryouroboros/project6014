@@ -705,8 +705,7 @@ GetGroupInfo (DWORD offset, BYTE which_group)
 				COUNT angle;
 				POINT org;
 
-				XFormIPLoc (&pSolarSysState->PlanetDesc[group_loc - 1]
-						.image.origin, &org, FALSE);
+				org = planetOuterLocation (group_loc - 1);
 				angle = FACING_TO_ANGLE (GroupPtr->orbit_pos + 1);
 				
 				if (pSolarSysState->SunDesc[0].NumPlanets==0)			// JMS:

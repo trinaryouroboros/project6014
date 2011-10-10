@@ -65,6 +65,7 @@ extern void check_hyperspace_encounter (void);
 extern BOOLEAN hyper_transition (ELEMENT *ElementPtr);
 
 extern void HyperspaceMenu (void);
+extern void SaveSisHyperState (void);
 
 #endif /* _HYPER_H */
 

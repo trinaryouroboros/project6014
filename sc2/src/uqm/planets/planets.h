@@ -188,6 +188,10 @@ struct solarsys_state
 	MENU_STATE MenuState;
 
 	COUNT WaitIntersect;
+			// Planet/moon number with which the flagship should not collide
+			// For example, if the player just left the planet or inner system
+			// If set to (COUNT)~0, all planet collisions are disabled until
+			// the flagship stops intersecting with all planets.
 	PLANET_DESC SunDesc[MAX_SUNS];
 	PLANET_DESC PlanetDesc[MAX_PLANETS];
 			// Description of the planets in the system.
@@ -200,8 +204,10 @@ struct solarsys_state
 			// as its argument, and overwritten by subsequent calls.
 	PLANET_DESC *pBaseDesc;
 	PLANET_DESC *pOrbitalDesc;
-			// Points into PlanetDesc or MoonDesc to the planet currently
-			// orbiting.
+			// In orbit: points into PlanetDesc or MoonDesc to the planet
+			// currently orbiting.
+			// In inner system: points into PlanetDesc to the planet whose
+			// inner system the ship is inside
 	SIZE FirstPlanetIndex, LastPlanetIndex;
 			// The planets get sorted on their image.origin.y value.
 			// PlanetDesc[FirstPlanetIndex] is the planet with the lowest
@@ -244,6 +250,9 @@ struct solarsys_state
 extern SOLARSYS_STATE *pSolarSysState;
 extern MUSIC_REF SpaceMusic;
 
+bool playerInSolarSystem (void);
+bool playerInPlanetOrbit (void);
+bool playerInInnerSystem (void);
 bool worldIsPlanet (const SOLARSYS_STATE *solarSys, const PLANET_DESC *world);
 bool worldIsMoon (const SOLARSYS_STATE *solarSys, const PLANET_DESC *world);
 COUNT planetIndex (const SOLARSYS_STATE *solarSys, const PLANET_DESC *world);
@@ -252,6 +261,10 @@ COUNT moonIndex (const SOLARSYS_STATE *solarSys, const PLANET_DESC *moon);
 bool matchWorld (const SOLARSYS_STATE *solarSys, const PLANET_DESC *world,
 		BYTE planetI, BYTE moonI);
 
+POINT locationToDisplay (POINT pt, SIZE scaleRadius);
+POINT displayToLocation (POINT pt, SIZE scaleRadius);
+POINT planetOuterLocation (COUNT planetI);
+
 extern void LoadPlanet (FRAME SurfDefFrame);
 extern void DrawPlanet (int x, int y, int dy, Color rgb);
 extern void FreePlanet (void);
@@ -259,7 +272,7 @@ extern void LoadStdLanderFont (PLANET_INFO *info);
 extern void FreeLanderFont (PLANET_INFO *info);
 
 extern void ExploreSolarSys (void);
-extern void DrawStarBackGround (BOOLEAN ForPlanet);
+extern void DrawStarBackGround (void);
 extern void XFormIPLoc (POINT *pIn, POINT *pOut, BOOLEAN ToDisplay);
 extern PLAN_GEN_FUNC GenerateIP (BYTE Index);
 extern void DrawOval (RECT *pRect, BYTE num_off_pixels);
@@ -276,10 +289,13 @@ extern void GeneratePlanetMask (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame);
 extern void DeltaTopography (COUNT num_iterations, SBYTE *DepthArray,
 		RECT *pRect, SIZE depth_delta);
 
+extern void DrawPlanetSurfaceBorder (void);
+
 extern UNICODE* GetNamedPlanetaryBody (void);
 extern void GetPlanetOrMoonName (UNICODE *buf, COUNT bufsize);
 
 extern void PlanetOrbitMenu (void);
+extern void SaveSolarSysLocation (void);
 
 #endif /* _PLANETS_H */
 
