@@ -558,7 +558,7 @@ DrawPickIcon (COUNT iship, BYTE DrawErase)
 	}
 	else
 	{	// erase icon
-		COLOR OldColor;
+		Color OldColor;
 
 		OldColor = SetContextForeGroundColor (BLACK_COLOR);
 		DrawFilledStamp (&s);
@@ -1854,7 +1854,7 @@ DoConnectingDialog (MELEE_STATE *pMS)
 	{
 		RECT r;
 		FONT oldfont;
-		COLOR oldcolor;
+		Color oldcolor;
 		TEXT t;
 
 		// Build a network connection.

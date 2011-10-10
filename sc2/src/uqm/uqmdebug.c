@@ -623,7 +623,6 @@ forAllMoons (STAR_DESC *star, SOLARSYS_STATE *system, PLANET_DESC *planet,
 	COUNT i;
 
 	assert(pSolarSysState == system);
-	assert(system->pBaseDesc == planet);
 
 	for (i = 0; i < planet->NumPlanets; i++)
 		callback (star, system, planet, &system->MoonDesc[i], arg);
@@ -714,7 +713,6 @@ planetRecurse (STAR_DESC *star, SOLARSYS_STATE *system, PLANET_DESC *planet,
 	assert(CurStarDescPtr == star);
 	assert(pSolarSysState == system);
 
-	system->pBaseDesc = planet;
 	planet->pPrevDesc = &system->SunDesc[0];
 
 	if (universeRecurseArg->planetFuncPre != NULL)
@@ -762,7 +760,6 @@ moonRecurse (STAR_DESC *star, SOLARSYS_STATE *system, PLANET_DESC *planet,
 	
 	assert(CurStarDescPtr == star);
 	assert(pSolarSysState == system);
-	assert(system->pBaseDesc == planet);
 	
 	moon->pPrevDesc = planet;
 
@@ -1672,7 +1669,7 @@ dumpStrings (FILE *out)
 ////////////////////////////////////////////////////////////////////////////
 
 
-static COLOR
+static Color
 hsvaToRgba (double hue, double sat, double val, BYTE alpha)
 {
 	unsigned int hi = (int) (hue / 60.0);
@@ -1707,31 +1704,6 @@ hsvaToRgba (double hue, double sat, double val, BYTE alpha)
 	return BUILD_COLOR_RGBA (0, 0, 0, alpha);
 }
 
-// Work-around: colors returned by BUILD_COLOR_RGBA are not usable to draw
-// with.
-static DWORD
-fixColorRgba (FRAME frame, COLOR col)
-{
-#if 0
-	extern DWORD frame_mapRGBA (FRAME FramePtr, BYTE r, BYTE g, BYTE b,
-			BYTE a);
-
-	BYTE r = (col & 0xff000000) >> 24;
-	BYTE g = (col & 0x00ff0000) >> 16;
-	BYTE b = (col & 0x0000ff00) >> 8;
-	BYTE a = (col & 0x000000ff) >> 0;
-
-	return (DWORD) frame_mapRGBA (frame, r, g, b, a);
-#endif
-
-	BYTE r = (col & 0xff000000) >> 24;
-	BYTE g = (col & 0x00ff0000) >> 16;
-	BYTE b = (col & 0x0000ff00) >> 8;
-
-	(void) frame;
-	return BUILD_COLOR (MAKE_RGB15 (r >> 3, g >> 3, b >> 3) ,0);
-}
-
 // Workaround. DrawFilledRectangle() doesn't handle transparency.
 // We use a temporary frame to achieve the same thing.
 static void
@@ -1742,7 +1714,7 @@ DrawFilledRectangleTransparent (RECT *rect, BYTE alpha)
 
 	RECT absRect;
 	FRAME orgRectFrame;
-	COLOR fillColor;
+	Color fillColor;
 
 	// Create a rectangle from 'rect', but with (0, 0) as origin.
 	absRect.corner.x = 0;
@@ -1760,23 +1732,13 @@ DrawFilledRectangleTransparent (RECT *rect, BYTE alpha)
 
 	// Apply the transparency to the colour.
 	fillColor = GetContextForeGroundColor ();
-#if 0  /* 32 bits RGBA */
-	fillColor =
-			(((((fillColor & 0xff000000) >> 24) * alpha + 127) / 255) << 24) |
-			(((((fillColor & 0x00ff0000) >> 16) * alpha + 127) / 255) << 16) |
-			(((((fillColor & 0x0000ff00) >>  8) * alpha + 127) / 255) <<  8);
-	*/
-#endif
-	/* 15 bits RGB + index: */
-	fillColor =
-			(((((fillColor & 0x007c0000) >> 18) * alpha + 15) / 31) << 18) |
-			(((((fillColor & 0x0003e000) >> 13) * alpha + 15) / 31) << 13) |
-			(((((fillColor & 0x00001f00) >>  8) * alpha + 15) / 31) <<  8) |
-			(fillColor & 0x000000ff);
+	fillColor.r = (fillColor.r * alpha + 127) / 255;
+	fillColor.g = (fillColor.g * alpha + 127) / 255;
+	fillColor.b = (fillColor.b * alpha + 127) / 255;
 
 	// Fill the frame with fillColor
 	{
-		COLOR oldFgColor = SetContextForeGroundColor (fillColor);
+		Color oldFgColor = SetContextForeGroundColor (fillColor);
 		DrawFilledRectangle (rect);
 		SetContextForeGroundColor (oldFgColor);
 		FlushGraphics ();
@@ -1838,10 +1800,10 @@ drawContext (CONTEXT context, double hue /* no pun intended */)
 	FRAME drawFrame;
 	CONTEXT oldContext;
 	FONT oldFont;
-	COLOR oldFgCol;
-	COLOR rectCol;
-	COLOR lineCol;
-	COLOR textCol;
+	Color oldFgCol;
+	Color rectCol;
+	Color lineCol;
+	Color textCol;
 	bool haveClippingRect;
 	RECT rect;
 	LINE line;
@@ -1849,10 +1811,8 @@ drawContext (CONTEXT context, double hue /* no pun intended */)
 	POINT p1, p2, p3, p4;
 
 	drawFrame = GetContextFGFrame ();
-	rectCol = (COLOR) fixColorRgba (drawFrame,
-			hsvaToRgba (hue, 1.0, 0.5, 127));
-	lineCol = (COLOR) fixColorRgba (drawFrame,
-			hsvaToRgba (hue, 1.0, 1.0, 0));
+	rectCol = hsvaToRgba (hue, 1.0, 0.5, 127);
+	lineCol = hsvaToRgba (hue, 1.0, 1.0, 0);
 	textCol = lineCol;
 
 	// Save the original context.

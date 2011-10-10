@@ -209,7 +209,7 @@ DrawDescriptionString (MENU_STATE *pMS, UNICODE *Str, COUNT CursorPos,
 {
 	RECT r;
 	TEXT lf;
-	COLOR BackGround, ForeGround;
+	Color BackGround, ForeGround;
 	FONT Font;
 
 	LockMutex (GraphicsLock);
@@ -253,8 +253,6 @@ DrawDescriptionString (MENU_STATE *pMS, UNICODE *Str, COUNT CursorPos,
 
 	if (!(state & DDSHS_EDIT))
 	{	// normal state
-		SetFlashRect (SFR_MENU_3DO);
-
 		if (pMS->CurState == CHANGE_CAPTAIN_SETTING)
 			DrawCaptainsName ();
 		else
@@ -342,6 +340,10 @@ DoNaming (MENU_STATE *pMS)
 	pMS->Initialized = TRUE;
 	pMS->InputFunc = DoNaming;
 
+	LockMutex (GraphicsLock);
+	SetFlashRect (NULL);
+	UnlockMutex (GraphicsLock);
+
 	DrawDescriptionString (pMS, buf, 0, DDSHS_EDIT);
 
 	LockMutex (GraphicsLock);
@@ -372,6 +374,11 @@ DoNaming (MENU_STATE *pMS)
 		utf8StringCopy (Setting, tes.MaxSize, buf);
 	else
 		utf8StringCopy (buf, sizeof (buf), Setting);
+	
+	LockMutex (GraphicsLock);
+	SetFlashRect (SFR_MENU_3DO);
+	UnlockMutex (GraphicsLock);
+	
 	DrawDescriptionString (pMS, buf, 0, DDSHS_NORMAL);
 
 	if (namingCB)
@@ -555,17 +562,17 @@ DrawCargo (COUNT redraw_state)
 	{
 		TEXT t;
 		UNICODE buf[40];
-		static const COLOR cargo_color[] =
+		static const Color cargo_color[] =
 		{
-			BUILD_COLOR (MAKE_RGB15 (0x02, 0x0E, 0x13), 0x00),
-			BUILD_COLOR (MAKE_RGB15 (0x19, 0x00, 0x00), 0x00),
-			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x00),
-			BUILD_COLOR (MAKE_RGB15 (0x03, 0x05, 0x1E), 0x00),
-			BUILD_COLOR (MAKE_RGB15 (0x00, 0x18, 0x00), 0x00),
-			BUILD_COLOR (MAKE_RGB15 (0x1B, 0x1B, 0x00), 0x00),
-			BUILD_COLOR (MAKE_RGB15 (0x1E, 0x0D, 0x00), 0x00),
-			BUILD_COLOR (MAKE_RGB15 (0x14, 0x00, 0x14), 0x05),
-			BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x19), 0x00),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x02, 0x0E, 0x13), 0x00),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x19, 0x00, 0x00), 0x00),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x10, 0x10, 0x10), 0x00),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x03, 0x05, 0x1E), 0x00),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x00, 0x18, 0x00), 0x00),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x1B, 0x1B, 0x00), 0x00),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x1E, 0x0D, 0x00), 0x00),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x14, 0x00, 0x14), 0x05),
+			BUILD_COLOR (MAKE_RGB15_INIT (0x0F, 0x00, 0x19), 0x00),
 		};
 
 		// Cargo amounts.
@@ -882,11 +889,12 @@ DoPickGame (MENU_STATE *pMS)
 		
 		return (FALSE);
 	}
-	first_time = (BOOLEAN)(pMS->Initialized == 0);
+	first_time = !pMS->Initialized;
 	SetMenuSounds (MENU_SOUND_ARROWS | MENU_SOUND_PAGEUP | MENU_SOUND_PAGEDOWN, MENU_SOUND_SELECT);
 
 	if (!pMS->Initialized)
 	{
+		// XXX: Save DoGameOptions() state
 		pMS->delta_item = (SIZE)pMS->CurState;
 		pMS->CurState = NewState = prev_save;
 		pMS->InputFunc = DoPickGame;
@@ -908,10 +916,8 @@ Restart:
 	}
 	else if (PulsedInputState.menu[KEY_MENU_CANCEL])
 	{
-		LockMutex (GraphicsLock);
-		SetFlashRect (SFR_MENU_3DO);
-		UnlockMutex (GraphicsLock);
 		pMS->ModuleFrame = 0;
+		// XXX: Restore DoGameOptions() state
 		pMS->CurState = (BYTE)pMS->delta_item;
 		ResumeMusic ();
 		if (LastActivity == CHECK_LOAD)
@@ -939,7 +945,6 @@ Restart:
 				}
 				else
 				{
-					SetFlashRect (NULL);
 					DrawStamp (&MsgStamp);
 					DestroyDrawable (ReleaseDrawable (MsgStamp.frame));
 					UnlockMutex (GraphicsLock);
@@ -961,10 +966,10 @@ Restart:
 				if (LoadGame ((COUNT)pMS->CurState, NULL))
 					GLOBAL (CurrentActivity) |= CHECK_LOAD;
 			}
-			SetFlashRect (NULL);
 			UnlockMutex (GraphicsLock);
 
 			pMS->ModuleFrame = 0;
+			// XXX: Restore DoGameOptions() state
 			pMS->CurState = (BYTE)pMS->delta_item;
 			return (FALSE);
 		}
@@ -1125,7 +1130,6 @@ ChangeGameSelection:
 				}
 				UnbatchGraphics ();
 			}
-			SetFlashRect (NULL);
 			UnlockMutex (GraphicsLock);
 		}
 		
@@ -1174,7 +1178,7 @@ PickGame (MENU_STATE *pMS)
 
 	DoInput (pMS, TRUE); 
 	LockMutex (GraphicsLock);
-	pMS->Initialized = -1;
+	pMS->Initialized = FALSE;
 	pMS->InputFunc = DoGameOptions;
 
 	retval = TRUE;
@@ -1218,13 +1222,13 @@ DoGameOptions (MENU_STATE *pMS)
 
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 
-	if (pMS->Initialized <= 0)
+	if (!pMS->Initialized)
 	{
 		if (LastActivity == CHECK_LOAD)
 			pMS->CurState = LOAD_GAME;
 		DrawMenuStateStrings (PM_SAVE_GAME, pMS->CurState);
 
-		pMS->Initialized = 1;
+		pMS->Initialized = TRUE;
 		pMS->InputFunc = DoGameOptions;
 	}
 	else if (PulsedInputState.menu[KEY_MENU_CANCEL]
@@ -1240,7 +1244,15 @@ DoGameOptions (MENU_STATE *pMS)
 		{
 			case SAVE_GAME:
 			case LOAD_GAME:
-				return PickGame (pMS);
+				LockMutex (GraphicsLock);
+				SetFlashRect (NULL);
+				UnlockMutex (GraphicsLock);
+				if (!PickGame (pMS))
+					return FALSE;
+				LockMutex (GraphicsLock);
+				SetFlashRect (SFR_MENU_3DO);
+				UnlockMutex (GraphicsLock);
+				break;
 			case QUIT_GAME:
 				if (ConfirmExit ())
 					return FALSE;
@@ -1269,8 +1281,17 @@ GameOptions (void)
 
 	MenuState.InputFunc = DoGameOptions;
 	MenuState.CurState = SAVE_GAME;
+
+	LockMutex (GraphicsLock);
+	SetFlashRect (SFR_MENU_3DO);
+	UnlockMutex (GraphicsLock);
+	
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 	DoInput (&MenuState, TRUE);
+
+	LockMutex (GraphicsLock);
+	SetFlashRect (NULL);
+	UnlockMutex (GraphicsLock);
 
 	pLocMenuState = 0;
 
