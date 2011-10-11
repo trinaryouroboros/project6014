@@ -66,12 +66,6 @@ ConfirmSaveLoad (STAMP *MsgStamp)
 
 	SetContextFont (StarConFont);
 	GetContextClipRect (&clip_r);
-	if (clip_r.extent.width == 0)
-	{
-		clip_r.corner.x = clip_r.corner.y = 0;
-		clip_r.extent.width = SCREEN_WIDTH;
-		clip_r.extent.height = SCREEN_HEIGHT;
-	}
 
 	t.baseline.x = clip_r.extent.width >> 1;
 	t.baseline.y = (clip_r.extent.height >> 1) + (3 << RESOLUTION_FACTOR); // JMS_GFX
@@ -88,12 +82,7 @@ ConfirmSaveLoad (STAMP *MsgStamp)
 	r.extent.height += 8 << RESOLUTION_FACTOR; // JMS_GFX
 	if (MsgStamp)
 	{
-		MsgStamp->origin = r.corner;
-		r.corner.x += clip_r.corner.x;
-		r.corner.y += clip_r.corner.y;
-		MsgStamp->frame = CaptureDrawable (LoadDisplayPixmap (&r, (FRAME)0));
-		r.corner.x -= clip_r.corner.x;
-		r.corner.y -= clip_r.corner.y;
+		*MsgStamp = SaveContextFrame (&r);
 	}
 	DrawStarConBox (&r, 2,
 			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19),
@@ -1148,14 +1137,12 @@ PickGame (MENU_STATE *pMS)
 	RECT DlgRect;
 	STAMP DlgStamp;
 	TimeCount TimeOut;
+	InputFrameCallback *oldCallback;
 
 	TimeOut = FadeMusic (0, ONE_SECOND / 2);
 
-	if (pSolarSysState)
-	{
-		pSolarSysState->PauseRotate = 1;
-		TaskSwitch ();
-	}
+	// Deactivate any background drawing, like planet rotation
+	oldCallback = SetInputCallback (NULL);
 
 	LoadGameDescriptions (desc_array);
 
@@ -1177,6 +1164,7 @@ PickGame (MENU_STATE *pMS)
 	FadeMusic (NORMAL_VOLUME, 0);
 
 	DoInput (pMS, TRUE); 
+
 	LockMutex (GraphicsLock);
 	pMS->Initialized = FALSE;
 	pMS->InputFunc = DoGameOptions;
@@ -1197,15 +1185,15 @@ PickGame (MENU_STATE *pMS)
 		DrawStamp (&DlgStamp);
 		ScreenTransition (3, &DlgRect);
 		UnbatchGraphics ();
-
-		if (pSolarSysState)
-			pSolarSysState->PauseRotate = 0;
 	}
 
 	DestroyDrawable (ReleaseDrawable (DlgStamp.frame));
 
 	SetContext (OldContext);
 	UnlockMutex (GraphicsLock);
+
+	// Reactivate any background drawing, like planet rotation
+	SetInputCallback (oldCallback);
 
 	return (retval);
 }

@@ -49,6 +49,10 @@
 
 #include "libs/graphics/sdl/pure.h" // JMS_GFX
  
+// TODO: This entire module fails to uphold the GraphicsLock semantics
+//   This either has to be fixed, or GraphicsLock completely ignored,
+//   or will become irrelevant if GraphicsLock completely removed.
+
 enum
 {
 	START_NEW_GAME = 0,

@@ -35,9 +35,6 @@
 #include "libs/graphics/gfx_common.h"
 
 
-extern int rotate_planet_task (void *data);
-
-
 void
 DrawScannedObjects (BOOLEAN Reversed)
 {
@@ -69,7 +66,6 @@ DrawScannedObjects (BOOLEAN Reversed)
 void
 DrawPlanetSurfaceBorder (void)
 {
-#define BORDER_HEIGHT  5
 	CONTEXT oldContext;
 	RECT oldClipRect;
 	RECT clipRect;
@@ -91,9 +87,9 @@ DrawPlanetSurfaceBorder (void)
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	r.corner.x = 0;
-	r.corner.y = clipRect.extent.height - MAP_HEIGHT - BORDER_HEIGHT;
+	r.corner.y = clipRect.extent.height - MAP_HEIGHT - MAP_BORDER_HEIGHT;
 	r.extent.width = clipRect.extent.width;
-	r.extent.height = BORDER_HEIGHT - 2;
+	r.extent.height = MAP_BORDER_HEIGHT - 2;
 	DrawFilledRectangle (&r);
 
 	SetContextForeGroundColor (SIS_BOTTOM_RIGHT_BORDER_COLOR);
@@ -110,7 +106,7 @@ DrawPlanetSurfaceBorder (void)
 	// Right shadow line
 	r.extent.width = 1;
 	r.extent.height = MAP_HEIGHT + 2;
-	r.corner.y += BORDER_HEIGHT - 1;
+	r.corner.y += MAP_BORDER_HEIGHT - 1;
 	r.corner.x = clipRect.extent.width - 1;
 	DrawFilledRectangle (&r);
 
@@ -171,7 +167,12 @@ DrawOrbitalDisplay (DRAW_ORBITAL_MODE Mode)
 		DrawStamp (&s);
 		DestroyDrawable (ReleaseDrawable (s.frame));
 	}
-	else
+	else if (Mode == DRAW_ORBITAL_FULL)
+	{
+		DrawDefaultPlanetSphere ();
+	}
+
+	if (Mode != DRAW_ORBITAL_WAIT)
 	{
 		DrawPlanet (SIS_SCREEN_WIDTH - MAP_WIDTH,
 				SIS_SCREEN_HEIGHT - MAP_HEIGHT, 0, BLACK_COLOR);
@@ -186,6 +187,7 @@ DrawOrbitalDisplay (DRAW_ORBITAL_MODE Mode)
 
 	if (Mode != DRAW_ORBITAL_WAIT)
 	{
+		// for later RepairBackRect()
 		LoadIntoExtraScreen (&r);
 	}
 }
@@ -208,7 +210,7 @@ LoadPlanet (FRAME SurfDefFrame)
 #endif
 
 	WaitMode = !(LastActivity & CHECK_LOAD) &&
-			(pSolarSysState->MenuState.Initialized <= 2);
+			(pSolarSysState->MenuState.Initialized != 3);
 
 	if (WaitMode)
 	{
@@ -217,9 +219,11 @@ LoadPlanet (FRAME SurfDefFrame)
 		UnlockMutex (GraphicsLock);
 	}
 
-	if (pSolarSysState->MenuState.flash_task == 0)
+	// TODO: split off the scan screen redraw code into a separate
+	//   function so that we could lose this hack.
+	if (!pSolarSysState->TopoFrame)
 	{
-		// The "rotate planets" task is not initialised yet.
+		// TopoFrame has not been initialised yet.
 		// This means the call to LoadPlanet is made from some
 		// GenerateFunctions.generateOribital() function.
 		PLANET_DESC *pPlanetDesc;
@@ -230,51 +234,26 @@ LoadPlanet (FRAME SurfDefFrame)
 
 		pPlanetDesc = pSolarSysState->pOrbitalDesc;
 
-
-		/* 
-		if (pPlanetDesc->data_index & PLANET_SHIELDED)
-			pSolarSysState->PlanetSideFrame[2] = CaptureDrawable (
-					LoadGraphic (PLANET_SHIELDED_MASK_PMAP_ANIM)
-					);
-		else if (pSolarSysState->SysInfo.PlanetInfo.AtmoDensity != GAS_GIANT_ATMOSPHERE)
-			LoadLanderData ();
-		*/
-
-		GeneratePlanetMask (pPlanetDesc, SurfDefFrame);
-		SetPlanetMusic ((UBYTE)(pPlanetDesc->data_index & ~PLANET_SHIELDED));
-
-		if (pPlanetDesc->pPrevDesc != &pSolarSysState->SunDesc[0])
-			pPlanetDesc = pPlanetDesc->pPrevDesc;
-
+		GeneratePlanetSurface (pPlanetDesc, SurfDefFrame);
+		SetPlanetMusic (pPlanetDesc->data_index & ~PLANET_SHIELDED);
 		GeneratePlanetSide ();
 	}
 
 	LockMutex (GraphicsLock);
 	DrawOrbitalDisplay (WaitMode ? DRAW_ORBITAL_UPDATE : DRAW_ORBITAL_FULL);
-#if 0
-	// this used to draw the static slave shield graphic
-	SetContext (SpaceContext);
-	s.frame = pSolarSysState->PlanetSideFrame[2];
-	if (s.frame)
-	{
-		s.origin.x = SIS_SCREEN_WIDTH >> 1;
-		s.origin.y = ((116 << RESOLUTION_FACTOR - SIS_ORG_Y) >> 1) + 2 << RESOLUTION_FACTOR; // JMS_GFX
-		DrawStamp (&s);
-	}
-#endif
 	UnlockMutex (GraphicsLock);
 
 	if (!PLRPlaying ((MUSIC_REF)~0))
 		PlayMusic (LanderMusic, TRUE, 1);
 
-	if (pSolarSysState->MenuState.flash_task == 0)
+	if (WaitMode)
 	{
-		pSolarSysState->MenuState.flash_task =
-				AssignTask (rotate_planet_task, 4096,
-				"rotate planets");
+		assert (pSolarSysState->MenuState.Initialized == 2);
 
-		while (pSolarSysState->MenuState.Initialized == 2)
-			TaskSwitch ();
+		ZoomInPlanetSphere ();
+		
+		// XXX: Mark as in-orbit. This should go away eventually
+		pSolarSysState->MenuState.Initialized = 3;
 	}
 }
 
@@ -284,12 +263,7 @@ FreePlanet (void)
 	COUNT i;
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
 
-	if (pSolarSysState->MenuState.flash_task)
-	{
-		ConcludeTask (pSolarSysState->MenuState.flash_task);
-//		Task_SetState (pSolarSysState->MenuState.flash_task, TASK_EXIT);
-		pSolarSysState->MenuState.flash_task = 0;
-	}
+	UninitSphereRotation ();
 
 	StopMusic ();
 	LockMutex (GraphicsLock);
@@ -314,8 +288,8 @@ FreePlanet (void)
 	Orbit->lpTopoData = 0;
 	DestroyDrawable (ReleaseDrawable (Orbit->TopoZoomFrame));
 	Orbit->TopoZoomFrame = 0;
-	DestroyDrawable (ReleaseDrawable (Orbit->PlanetFrameArray));
-	Orbit->PlanetFrameArray = 0;
+	DestroyDrawable (ReleaseDrawable (Orbit->SphereFrame));
+	Orbit->SphereFrame = NULL;
 
 	DestroyDrawable (ReleaseDrawable (Orbit->TintFrame));
 	Orbit->TintFrame = 0;
@@ -345,7 +319,6 @@ FreePlanet (void)
 			));
 	pSolarSysState->SysInfo.PlanetInfo.DiscoveryString = 0;
 	FreeLanderFont (&pSolarSysState->SysInfo.PlanetInfo);
-	pSolarSysState->PauseRotate = 0;
 
 	UnlockMutex (GraphicsLock);
 }
@@ -416,24 +389,25 @@ DoPlanetOrbit (MENU_STATE *pMS)
 		case STARMAP:
 		{
 			BOOLEAN AutoPilotSet;
+			InputFrameCallback *oldCallback;
+
+			// Deactivate planet rotation
+			oldCallback = SetInputCallback (NULL);
 
 			LockMutex (GraphicsLock);
-			pSolarSysState->PauseRotate = 1;
 			RepairSISBorder ();
 			UnlockMutex (GraphicsLock);
-			TaskSwitch ();
 
 			AutoPilotSet = StarMap ();
-
 			if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 				return FALSE;
+
+			// Reactivate planet rotation
+			SetInputCallback (oldCallback);
 
 			if (!AutoPilotSet)
 			{	// Redraw the orbital display
 				LoadPlanet (NULL);
-				LockMutex (GraphicsLock);
-				pSolarSysState->PauseRotate = 0;
-				UnlockMutex (GraphicsLock);
 				break;
 			}
 			// Fall through !!!
@@ -458,10 +432,19 @@ DoPlanetOrbit (MENU_STATE *pMS)
 	return TRUE;
 }
 
+static void
+on_input_frame (void)
+{
+	LockMutex (GraphicsLock);
+	RotatePlanetSphere (TRUE);
+	UnlockMutex (GraphicsLock);
+}
+
 void
 PlanetOrbitMenu (void)
 {
 	void *oldInputFunc = pSolarSysState->MenuState.InputFunc;
+	InputFrameCallback *oldCallback;
 
 	DrawMenuStateStrings (PM_SCAN, SCAN);
 	LockMutex (GraphicsLock);
@@ -470,11 +453,14 @@ PlanetOrbitMenu (void)
 
 	pSolarSysState->MenuState.CurState = SCAN;
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
+	oldCallback = SetInputCallback (on_input_frame);
 
 	// XXX: temporary; will have an own MENU_STATE
 	pSolarSysState->MenuState.InputFunc = DoPlanetOrbit;
 	DoInput (&pSolarSysState->MenuState, TRUE);
 	pSolarSysState->MenuState.InputFunc = oldInputFunc;
+
+	SetInputCallback (oldCallback);
 
 	LockMutex (GraphicsLock);
 	SetFlashRect (NULL);

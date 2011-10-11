@@ -29,6 +29,8 @@ typedef UWORD FBK_FLAGS;
 struct context_desc
 {
 	UWORD Flags;
+			// Low nibble currently unused
+			// High nibble contains GRAPHICS_STATUS
 
 	Color ForeGroundColor, BackGroundColor;
 	FRAME ForeGroundFrame;
@@ -108,17 +110,6 @@ extern PRIMITIVE _locPrim;
 	SetContextFBkFlags (FBK_DIRTY); \
 }
 
-/*
-These seem to have been moved to gfxlib.h, but not in their
-entirety.  That's rather unpleasant.  -- Michael
-
-#define BATCH_BUILD_PAGE (BATCH_FLAGS)(1 << 0)
-#define BATCH_SINGLE (BATCH_FLAGS)(1 << 1)
-#define BATCH_UPDATE_DRAWABLE (BATCH_FLAGS)(1 << 2)
-*/
-#define BATCH_CLIP_GRAPHICS (BATCH_FLAGS)(1 << 3)
-#define BATCH_XFORM (BATCH_FLAGS)(1 << 4)
-
 typedef BYTE GRAPHICS_STATUS;
 
 extern GRAPHICS_STATUS _GraphicsStatusFlags;
@@ -151,6 +142,9 @@ extern GRAPHICS_STATUS _GraphicsStatusFlags;
 #define GraphicsStatus() \
 		(_GraphicsStatusFlags & (GRAPHICS_STATUS)(GRAPHICS_ACTIVE \
 							| GRAPHICS_VISIBLE))
+
+// pValidRect or origin may be NULL
+BOOLEAN GetContextValidRect (RECT *pValidRect, POINT *origin);
 
 #endif /* _CONTEXT_H */
 

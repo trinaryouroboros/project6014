@@ -59,7 +59,6 @@ ClearReportArea (void)
 
 	SetContextBackGroundColor (BLACK_COLOR);
 	ClearDrawable ();
-	SetContextClipping (FALSE);
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x00, 0x07, 0x00), 0x57));
 	
@@ -79,8 +78,6 @@ ClearReportArea (void)
 		}
 		s.origin.y += r.extent.height + 1;
 	}
-
-	SetContextClipping (TRUE);
 
 	UnbatchGraphics ();
 }

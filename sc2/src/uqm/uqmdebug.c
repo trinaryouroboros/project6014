@@ -1824,14 +1824,6 @@ drawContext (CONTEXT context, double hue /* no pun intended */)
 	// Switch back the old context; we're going to draw in it.
 	(void) SetContext (oldContext);
 
-	if (!haveClippingRect)
-	{
-		rect.corner.x = 0;
-		rect.corner.y = 0;
-		rect.extent.width = ScreenWidth;
-		rect.extent.height = ScreenHeight;
-	}
-
 	p1 = rect.corner;
 	p2.x = rect.corner.x + rect.extent.width - 1;
 	p2.y = rect.corner.y;
@@ -1962,11 +1954,14 @@ debugContexts (void)
 		return;
 	inDebugContexts = true;
 
+	LockMutex (GraphicsLock);
 	contextCount = countVisibleContexts ();
 	if (contextCount == 0)
+	{
+		UnlockMutex (GraphicsLock);
 		goto out;
+	}
 	
-	LockMutex (GraphicsLock);
 	savedScreen = getScreen ();
 	//UnlockMutex (GraphicsLock);
 	FlushGraphics ();
@@ -2016,7 +2011,9 @@ debugContexts (void)
 		DoInput(&state, TRUE);
 	}
 
+	LockMutex (GraphicsLock);
 	SetContext (orgContext);
+	UnlockMutex (GraphicsLock);
 
 	// Destroy the debugging frame and context.
 	DestroyContext (debugDrawContext);
