@@ -143,9 +143,14 @@ worldIsMoon (const SOLARSYS_STATE *solarSys, const PLANET_DESC *world)
 COUNT
 planetIndex (const SOLARSYS_STATE *solarSys, const PLANET_DESC *world)
 {
-	const PLANET_DESC *planet = worldIsPlanet (solarSys, world) ?
-			world : world->pPrevDesc;
-	return planet - solarSys->PlanetDesc;
+	// JMS: Don't check index in e.g. Orz space portal system since it'd crash.
+	if (pSolarSysState->SunDesc[0].NumPlanets != 0)
+	{
+		const PLANET_DESC *planet = worldIsPlanet (solarSys, world) ? world : world->pPrevDesc;
+		return planet - solarSys->PlanetDesc;
+	}
+	else
+		return 1;
 }
 
 COUNT
@@ -813,7 +818,7 @@ flagship_inertial_thrust (COUNT CurrentAngle)
 		SIZE delta_x, delta_y, ip_increment;
 		DWORD desired_speed;
 		
-		// JMS: Explorer accelerates at its own slooooow pace
+		// JMS: Explorer accelerates at its own pace.
 		if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 			ip_increment = EXPLORER_IP_SHIP_THRUST_INCREMENT;
 		else
@@ -1229,8 +1234,7 @@ ValidateInnerOrbits (void)
 	assert (playerInInnerSystem ());
 
 	planet = pSolarSysState->pOrbitalDesc;
-	ValidateOrbit (planet, DISPLAY_FACTOR * 4, DISPLAY_FACTOR,
-			planet->radius);
+	ValidateOrbit (planet, DISPLAY_FACTOR * 4, DISPLAY_FACTOR, planet->radius);
 
 	for (i = 0; i < planet->NumPlanets; ++i)
 	{
@@ -1307,12 +1311,13 @@ EnterPlanetOrbit (void)
 	}
 
 	GetPlanetInfo ();
-	(*pSolarSysState->genFuncs->generateOrbital) (pSolarSysState,
-			pSolarSysState->pOrbitalDesc);
+	(*pSolarSysState->genFuncs->generateOrbital) (pSolarSysState, pSolarSysState->pOrbitalDesc);
 	LastActivity &= ~(CHECK_LOAD | CHECK_RESTART);
-	if ((GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD |
-			START_ENCOUNTER)) || GLOBAL_SIS (CrewEnlisted) == (COUNT)~0
-			|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
+	
+	// JMS: Also check for END_INTERPLANETARY which can be set by e.g. the Orz space portal.
+	if ((GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD | START_ENCOUNTER | END_INTERPLANETARY)) 
+		|| GLOBAL_SIS (CrewEnlisted) == (COUNT)~0
+		|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 		return;
 
 	if (pSolarSysState->MenuState.flash_task)
@@ -1327,14 +1332,18 @@ EnterPlanetOrbit (void)
 	// Talking Pet, Sun Device or a Caster over Chmmr, or
 	// a Caster for Ilwrath
 	// Could also have blown self up with Utwig Bomb
-	if (!(GLOBAL (CurrentActivity) & (START_ENCOUNTER |
-			CHECK_ABORT | CHECK_LOAD))
+	// JMS: Also check for END_INTERPLANETARY which can be set by e.g. the Orz space portal.
+	if (!(GLOBAL (CurrentActivity) & (START_ENCOUNTER | CHECK_ABORT | CHECK_LOAD | END_INTERPLANETARY))
 			&& GLOBAL_SIS (CrewEnlisted) != (COUNT)~0)
 	{	// Reload the system and return to the inner view
 		LoadSolarSys ();
 		CheckZoomLevel ();
 		ValidateOrbits ();
-		ValidateInnerOrbits ();
+		
+		// JMS: Don't check inner orbits in 0 planet systems e.g. Orz space portal system since it'd crash.
+		if (pSolarSysState->SunDesc[0].NumPlanets != 0)
+			ValidateInnerOrbits ();
+		
 		ResetSolarSys ();
 
 		LockMutex (GraphicsLock);
@@ -1880,8 +1889,7 @@ GetNamedPlanetaryBody (void)
 	}
 	else if (CurStarDescPtr->Index == SPATHI_DEFINED)
 	{
-		if (matchWorld (pSolarSysState, pSolarSysState->pOrbitalDesc,
-				0, MATCH_PLANET))
+		if (matchWorld (pSolarSysState, pSolarSysState->pOrbitalDesc, 0, MATCH_PLANET))
 		{
 #ifdef NOTYET
 			return "Spathiwa";
@@ -1916,8 +1924,7 @@ GetPlanetOrMoonName (UNICODE *buf, COUNT bufsize)
 	// Either not named or we already have a name
 	utf8StringCopy (buf, bufsize, GLOBAL_SIS (PlanetName));
 
-	if (!playerInInnerSystem () ||
-			worldIsPlanet (pSolarSysState, pSolarSysState->pOrbitalDesc))
+	if (!playerInInnerSystem () || worldIsPlanet (pSolarSysState, pSolarSysState->pOrbitalDesc))
 	{	// Outer or inner system or orbiting a planet
 		return;
 	}

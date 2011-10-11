@@ -73,8 +73,7 @@ GenerateOrzSpacePortal_generatePlanets (SOLARSYS_STATE *solarSys)
 }
 
 static bool
-GenerateOrzSpacePortal_generateOrbital (SOLARSYS_STATE *solarSys,
-					PLANET_DESC *world)
+GenerateOrzSpacePortal_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 {
 	//GenerateRandomIP (GENERATE_ORBITAL);
 	/* The PORTAL */
