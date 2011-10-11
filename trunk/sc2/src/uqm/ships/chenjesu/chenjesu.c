@@ -177,7 +177,7 @@ static RACE_DESC chenjesu_desc_2xres =
 	},
 	{
 		0,
-		LONG_RANGE_WEAPON,
+		LONG_RANGE_WEAPON_2XRES,
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -252,7 +252,7 @@ static RACE_DESC chenjesu_desc_4xres =
 	},
 	{
 		0,
-		LONG_RANGE_WEAPON,
+		LONG_RANGE_WEAPON_4XRES,
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -561,7 +561,7 @@ chenjesu_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				) <= SLOW_SHIP
 				&& WEAPON_RANGE (
 				&EnemyStarShipPtr->RaceDescPtr->cyborg_control
-				) >= LONG_RANGE_WEAPON * 3 / 4
+				) >= (LONG_RANGE_WEAPON << RESOLUTION_FACTOR) * 3 / 4 // JMS_GFX
 				&& (EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & SEEKING_WEAPON)))
 			lpEvalDesc->MoveState = PURSUE;
 	}
@@ -720,7 +720,7 @@ init_chenjesu (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	// JMS_GFX: A rather clumsy way of giving ship correct max speed at hi-res mode
+	// JMS_GFX: A rather clumsy way of giving ship correct stats at hi-res mode
 	if (RESOLUTION_FACTOR == 0)
 	{
 		chenjesu_desc.preprocess_func = chenjesu_preprocess;

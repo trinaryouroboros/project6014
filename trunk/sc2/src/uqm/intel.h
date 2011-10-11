@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+ // JMS_GFX: Added definitions for hi-res modes.
+
 #ifndef _INTEL_H
 #define _INTEL_H
 
@@ -34,6 +36,20 @@
 #define FAST_SHIP 150
 #define MEDIUM_SHIP 45
 #define SLOW_SHIP 25
+
+// JMS_GFX
+#define CLOSE_RANGE_WEAPON_2XRES DISPLAY_TO_WORLD (100)
+#define LONG_RANGE_WEAPON_2XRES DISPLAY_TO_WORLD (2000)
+#define FAST_SHIP_2XRES 300
+#define MEDIUM_SHIP_2XRES 90
+#define SLOW_SHIP_2XRES 50
+
+// JMS_GFX
+#define CLOSE_RANGE_WEAPON_4XRES DISPLAY_TO_WORLD (200)
+#define LONG_RANGE_WEAPON_4XRES DISPLAY_TO_WORLD (4000)
+#define FAST_SHIP_4XRES 600
+#define MEDIUM_SHIP_4XRES 180
+#define SLOW_SHIP_4XRES 100
 
 enum
 {

@@ -273,6 +273,16 @@ initialize_autoaim_laser (ELEMENT *ShipPtr, HELEMENT LaserArray[])
 	SIZE delta_facing;
 	STARSHIP *StarShipPtr;
 	LASER_BLOCK LaserBlock;
+	
+	COUNT laser_range_resscaled; // JMS_GFX
+	
+	// JMS_GFX
+	if (RESOLUTION_FACTOR == 0)
+		laser_range_resscaled = LASER_RANGE;
+	else if (RESOLUTION_FACTOR == 1)
+		laser_range_resscaled = LASER_RANGE_2XRES;
+	else
+		laser_range_resscaled = LASER_RANGE_4XRES;
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	LaserBlock.face = orig_facing = StarShipPtr->ShipFacing;
@@ -282,8 +292,8 @@ initialize_autoaim_laser (ELEMENT *ShipPtr, HELEMENT LaserArray[])
 
 	LaserBlock.cx = ShipPtr->next.location.x;
 	LaserBlock.cy = ShipPtr->next.location.y;
-	LaserBlock.ex = COSINE (FACING_TO_ANGLE (LaserBlock.face), LASER_RANGE);
-	LaserBlock.ey = SINE (FACING_TO_ANGLE (LaserBlock.face), LASER_RANGE);
+	LaserBlock.ex = COSINE (FACING_TO_ANGLE (LaserBlock.face), laser_range_resscaled);
+	LaserBlock.ey = SINE (FACING_TO_ANGLE (LaserBlock.face), laser_range_resscaled);
 	LaserBlock.sender = ShipPtr->playerNr;
 	LaserBlock.flags = IGNORE_SIMILAR;
 	LaserBlock.pixoffs = ARILOU_OFFSET << RESOLUTION_FACTOR; // JMS_GFX

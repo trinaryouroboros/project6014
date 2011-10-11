@@ -174,7 +174,7 @@ static RACE_DESC black_urquan_desc_2xres =
 	},
 	{
 		0,
-		CLOSE_RANGE_WEAPON,
+		CLOSE_RANGE_WEAPON_2XRES,
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -249,7 +249,7 @@ static RACE_DESC black_urquan_desc_4xres =
 	},
 	{
 		0,
-		CLOSE_RANGE_WEAPON,
+		CLOSE_RANGE_WEAPON_4XRES,
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
