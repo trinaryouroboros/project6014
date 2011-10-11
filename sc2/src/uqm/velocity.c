@@ -55,8 +55,9 @@ GetNextVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy,
 	velocityptr->error.height = VELOCITY_REMAINDER (e);
 }
 
+// JMS_GFX: Preventing overflows in hi-res: The SDWORD in this function's parameters was SIZE.
 void
-SetVelocityVector (VELOCITY_DESC *velocityptr, SIZE magnitude, COUNT facing)
+SetVelocityVector (VELOCITY_DESC *velocityptr, SDWORD magnitude, COUNT facing)
 {
 	COUNT angle;
 	SIZE dx, dy;
@@ -96,8 +97,9 @@ SetVelocityVector (VELOCITY_DESC *velocityptr, SIZE magnitude, COUNT facing)
 	velocityptr->error.width = velocityptr->error.height = 0;
 }
 
+// JMS_GFX: Preventing overflows in hi-res: The SDWORDs in this function's parameters were SIZEs.
 void
-SetVelocityComponents (VELOCITY_DESC *velocityptr, SIZE dx, SIZE dy)
+SetVelocityComponents (VELOCITY_DESC *velocityptr, SDWORD dx, SDWORD dy)
 {
 	COUNT angle;
 
@@ -140,8 +142,9 @@ SetVelocityComponents (VELOCITY_DESC *velocityptr, SIZE dx, SIZE dy)
 	velocityptr->TravelAngle = angle;
 }
 
+// JMS_GFX: Preventing overflows in hi-res: The SDWORDs in this function's parameters were SIZEs.
 void
-DeltaVelocityComponents (VELOCITY_DESC *velocityptr, SIZE dx, SIZE dy)
+DeltaVelocityComponents (VELOCITY_DESC *velocityptr, SDWORD dx, SDWORD dy)
 {
 
 	dx += WORLD_TO_VELOCITY (velocityptr->vector.width)

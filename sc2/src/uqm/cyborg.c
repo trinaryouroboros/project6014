@@ -18,6 +18,9 @@
 
 // JMS 2010: - Amended Pursue -function: Ur-Quan pursues Earthling slowly but surely. Now it won't turn away mid-chase.
 //			 - Enable Down key in melee (comment tag JMS_KEYS)
+
+// JMS_GFX: Added RESOLUTION_FACTORs to LONG_RANGE_WEAPONs and CLOSE_RANGE_WEAPONs
+
 #include "colors.h"
 #include "collide.h"
 #include "element.h"
@@ -624,7 +627,7 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 				&StarShipPtr->RaceDescPtr->cyborg_control
 				) >= FAST_SHIP
 				&& WEAPON_RANGE (&StarShipPtr->RaceDescPtr->cyborg_control)
-				> CLOSE_RANGE_WEAPON)
+				> (CLOSE_RANGE_WEAPON << RESOLUTION_FACTOR)) // JMS_GFX
 				|| (EvalDescPtr->which_turn >= 24
 				&& (StarShipPtr->RaceDescPtr->characteristics.max_thrust * 2 / 3 <
 				EnemyStarShipPtr->RaceDescPtr->characteristics.max_thrust
@@ -873,8 +876,8 @@ Entice (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 				)
 				{
 						/* need to be close for a kill */
-					if (WRange < LONG_RANGE_WEAPON
-							&& EvalDescPtr->which_turn <= 32)
+					if (WRange < (LONG_RANGE_WEAPON << RESOLUTION_FACTOR)
+						&& EvalDescPtr->which_turn <= 32)
 					{
 						/* catch him on the back side */
 						desired_thrust_angle = desired_turn_angle;
@@ -894,15 +897,13 @@ Entice (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 		if
 		(
 #ifdef NOTYET
-			WRange < LONG_RANGE_WEAPON
+			WRange < (LONG_RANGE_WEAPON << RESOLUTION_FACTOR)
 			&&
 #endif /* NOTYET */
 					/* not at full speed */
 			!(StarShipPtr->cur_status_flags
 			& (SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED))
-			&& (PlotIntercept (
-					ShipPtr, OtherObjPtr, 40, CLOSE_RANGE_WEAPON << 1
-					)
+			&& (PlotIntercept (ShipPtr, OtherObjPtr, 40, (CLOSE_RANGE_WEAPON << RESOLUTION_FACTOR) << 1) // JMS_GFX
 #ifdef NOTYET
 			||
 			(
@@ -977,9 +978,7 @@ desired_turn_angle = desired_thrust_angle;
 					- ARCTAN (ship_delta_x, ship_delta_y)
 					+ (OCTANT + 2)) <= ((OCTANT + 2) << 1)
 							/* or not on collision course */
-					|| !PlotIntercept (
-							ShipPtr, OtherObjPtr, 30, CLOSE_RANGE_WEAPON << 1
-							)))
+					|| !PlotIntercept (ShipPtr, OtherObjPtr, 30, (CLOSE_RANGE_WEAPON << RESOLUTION_FACTOR) << 1))) // JMS_GFX
 				maneuver_state &= ~THRUST;
 					/* veer off */
 			else if (cone_of_fire == 1
@@ -1176,9 +1175,9 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 
 				if (ShipMoved
 						|| ed.ObjectPtr->mass_points > MAX_SHIP_MASS
-						|| (WEAPON_RANGE (&RDPtr->cyborg_control) < LONG_RANGE_WEAPON
-						&& (WEAPON_RANGE (&RDPtr->cyborg_control) <= CLOSE_RANGE_WEAPON
-						|| (WEAPON_RANGE (&EnemyRDPtr->cyborg_control) >= LONG_RANGE_WEAPON
+						|| (WEAPON_RANGE (&RDPtr->cyborg_control) < (LONG_RANGE_WEAPON << RESOLUTION_FACTOR)
+						&& (WEAPON_RANGE (&RDPtr->cyborg_control) <= (CLOSE_RANGE_WEAPON << RESOLUTION_FACTOR)
+						|| (WEAPON_RANGE (&EnemyRDPtr->cyborg_control) >= (LONG_RANGE_WEAPON << RESOLUTION_FACTOR)
 						&& (EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & SEEKING_WEAPON))
 						|| (
 #ifdef OLD

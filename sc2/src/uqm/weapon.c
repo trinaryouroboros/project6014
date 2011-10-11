@@ -47,8 +47,7 @@ initialize_laser (LASER_BLOCK *pLaserBlock)
 		LaserElementPtr->playerNr = pLaserBlock->sender;
 		LaserElementPtr->hit_points = 1;
 		LaserElementPtr->mass_points = 1;
-		LaserElementPtr->state_flags = APPEARING | FINITE_LIFE
-				| pLaserBlock->flags;
+		LaserElementPtr->state_flags = APPEARING | FINITE_LIFE | pLaserBlock->flags;
 		LaserElementPtr->life_span = LASER_LIFE;
 		LaserElementPtr->collision_func = (CollisionFunc*)weapon_collision;
 		LaserElementPtr->blast_offset = 1;
@@ -64,11 +63,9 @@ initialize_laser (LASER_BLOCK *pLaserBlock)
 				pLaserBlock->color);
 		LaserElementPtr->current.image.frame = DecFrameIndex (stars_in_space);
 		LaserElementPtr->current.image.farray = &stars_in_space;
-		SetVelocityComponents (&LaserElementPtr->velocity,
-				WORLD_TO_VELOCITY ((pLaserBlock->cx + pLaserBlock->ex)
-				- LaserElementPtr->current.location.x),
-				WORLD_TO_VELOCITY ((pLaserBlock->cy + pLaserBlock->ey)
-				- LaserElementPtr->current.location.y));
+		SetVelocityComponents (&LaserElementPtr->velocity, 
+			WORLD_TO_VELOCITY ((pLaserBlock->cx + pLaserBlock->ex) - LaserElementPtr->current.location.x),
+			WORLD_TO_VELOCITY ((pLaserBlock->cy + pLaserBlock->ey) - LaserElementPtr->current.location.y));
 		UnlockElement (hLaserElement);
 	}
 
