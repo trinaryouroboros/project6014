@@ -116,8 +116,7 @@ DrawRestartMenu (MENU_STATE *pMS, BYTE NewState, FRAME f)
 	POINT origin;
 	origin.x = 0;
 	origin.y = 0;
-	Flash_setOverlay(pMS->flashContext,
-			&origin, SetAbsFrameIndex (f, NewState + 1));
+	Flash_setOverlay(pMS->flashContext, &origin, SetAbsFrameIndex (f, NewState + 1));
 }
 
 static BOOLEAN
@@ -185,7 +184,7 @@ DoRestart (MENU_STATE *pMS)
 					SetTransitionSource (NULL);
 					BatchGraphics ();
 					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu ((BYTE)~0, pMS->CurState, pMS->CurFrame);
+					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
 					fade_buf[0] = FadeAllToBlack;
@@ -210,7 +209,7 @@ DoRestart (MENU_STATE *pMS)
 					SetTransitionSource (NULL);
 					BatchGraphics ();
 					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu ((BYTE)~0, pMS->CurState, pMS->CurFrame);
+					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
 					fade_buf[0] = FadeAllToBlack;
@@ -235,7 +234,7 @@ DoRestart (MENU_STATE *pMS)
 					SetTransitionSource (NULL);
 					BatchGraphics ();
 					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu ((BYTE)~0, pMS->CurState, pMS->CurFrame);
+					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
 					fade_buf[0] = FadeAllToBlack;
