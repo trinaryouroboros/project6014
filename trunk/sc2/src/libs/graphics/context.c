@@ -98,7 +98,6 @@ CreateContextAux (void)
 				BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F));
 		SetContextBackGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00));
-		SetContextClipping (TRUE);
 		SetContext (OldContext);
 	}
 
@@ -200,25 +199,13 @@ GetContextBackGroundColor (void)
 	return _get_context_bg_color ();
 }
 
-BOOLEAN
-SetContextClipping (BOOLEAN ClipStatus)
+// Returns a rect based at 0,0 and the size of context foreground frame
+static inline RECT
+_get_context_fg_rect (void)
 {
-	BOOLEAN oldClipStatus;
-
-	if (!ContextActive ())
-		return (TRUE);
-
-	oldClipStatus = (_get_context_flags () & BATCH_CLIP_GRAPHICS) != 0;
-	if (ClipStatus)
-	{
-		SetContextFlags (BATCH_CLIP_GRAPHICS);
-	}
-	else
-	{
-		UnsetContextFlags (BATCH_CLIP_GRAPHICS);
-	}
-
-	return (oldClipStatus);
+	RECT r = { {0, 0}, {0, 0} };
+	r.extent = GetFrameBounds (_CurFramePtr);
+	return r;
 }
 
 BOOLEAN
@@ -228,11 +215,22 @@ SetContextClipRect (RECT *lpRect)
 		return (FALSE);
 
 	if (lpRect)
-		_pCurContext->ClipRect = *lpRect;
+	{
+		if (rectsEqual (*lpRect, _get_context_fg_rect ()))
+		{	// Cliprect is undefined to mirror GetContextClipRect()
+			_pCurContext->ClipRect.extent.width = 0;
+		}
+		else
+		{	// We have a cliprect
+			_pCurContext->ClipRect = *lpRect;
+		}
+	}
 	else
+	{	// Set cliprect as undefined
 		_pCurContext->ClipRect.extent.width = 0;
+	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 BOOLEAN
@@ -242,9 +240,21 @@ GetContextClipRect (RECT *lpRect)
 		return (FALSE);
 
 	*lpRect = _pCurContext->ClipRect;
-	return (lpRect->extent.width != 0);
+	if (!_pCurContext->ClipRect.extent.width)
+	{	// Though the cliprect is undefined, drawing will be clipped
+		// to the extent of the foreground frame
+		*lpRect = _get_context_fg_rect ();
+	}
+
+	return (_pCurContext->ClipRect.extent.width != 0);
 }
 
+POINT
+SetContextOrigin (POINT orgOffset)
+{
+	// XXX: This is a hack, kind of. But that's what the original did.
+	return SetFrameHot (_CurFramePtr, orgOffset);
+}
 
 FRAME
 SetContextFontEffect (FRAME EffectFrame)

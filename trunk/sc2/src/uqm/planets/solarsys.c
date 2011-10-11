@@ -198,8 +198,10 @@ playerInSolarSystem (void)
 bool
 playerInPlanetOrbit (void)
 {
+	assert (!pSolarSysState || pSolarSysState->MenuState.Initialized < 4);
+
 	return playerInSolarSystem () &&
-			pSolarSysState->MenuState.Initialized >= 3;
+			pSolarSysState->MenuState.Initialized == 3;
 			// XXX: This test will change eventually
 }
 
@@ -766,14 +768,6 @@ DrawOrbit (PLANET_DESC *planet, int sizeNumer, int dyNumer, int denom)
 	DrawOval (&r, 1);
 }
 
-static inline bool
-pointWithinRect (RECT *r, POINT p)
-{
-	return p.x >= r->corner.x && p.y >= r->corner.y
-			&& p.x < r->corner.x + r->extent.width
-			&& p.y < r->corner.y + r->extent.height;
-}
-
 static SIZE
 FindRadius (POINT shipLoc, SIZE fromRadius)
 {
@@ -792,7 +786,7 @@ FindRadius (POINT shipLoc, SIZE fromRadius)
 				DISPLAY_FACTOR, DISPLAY_FACTOR >> 2, fromRadius);
 		displayLoc = locationToDisplay (shipLoc, fromRadius);
 	
-	} while (pointWithinRect (&scaleRect, displayLoc));
+	} while (pointWithinRect (scaleRect, displayLoc));
 
 	return fromRadius;
 }
@@ -1022,7 +1016,7 @@ CheckShipLocation (SIZE *newRadius)
 	}
 
 	if (!playerInInnerSystem ()
-			&& pointWithinRect (&scaleRect, GLOBAL (ShipStamp.origin)))
+			&& pointWithinRect (scaleRect, GLOBAL (ShipStamp.origin)))
 	{	// Outer zoom-in transition
 		*newRadius = FindRadius (GLOBAL (ip_location), radius);
 		return TRUE;
@@ -1320,8 +1314,9 @@ EnterPlanetOrbit (void)
 		|| GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 		return;
 
-	if (pSolarSysState->MenuState.flash_task)
-	{	// We've entered orbit; LoadPlanet() set flash_task to rotate planet
+	// Implement a to-do in generate.h for a better test
+	if (pSolarSysState->TopoFrame)
+	{	// We've entered orbit; LoadPlanet() called planet surface-gen code
 		PlanetOrbitMenu ();
 		FreePlanet ();
 	}

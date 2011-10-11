@@ -23,6 +23,7 @@
 #include "sis.h"
 #include "setup.h"
 #include "sounds.h"
+#include "colors.h"
 #include "fmv.h"
 #include "resinst.h"
 #include "nameref.h"
@@ -284,7 +285,6 @@ Present_DrawMovieFrame (PRESENTATION_INPUT_STATE* pPIS)
 	s.origin.y = 0;
 	s.frame = SetAbsFrameIndex (pPIS->Frame, pPIS->MovieFrame);
 	LockMutex (GraphicsLock);
-	SetContextClipping (TRUE);
 	DrawStamp (&s);
 	UnlockMutex (GraphicsLock);
 }
@@ -499,7 +499,6 @@ DoPresentation (void *pIS)
 				t.baseline.y = y;
 				if (!pPIS->Batched)
 					LockMutex (GraphicsLock);
-				SetContextClipping (TRUE);
 				DrawTextEffect (&t, pPIS->TextColor, pPIS->TextBackColor,
 						pPIS->TextEffect);
 				if (!pPIS->Batched)
@@ -545,7 +544,6 @@ DoPresentation (void *pIS)
 			}
 
 			LockMutex (GraphicsLock);
-			SetContextClipping (TRUE);
 			for (i = 0; i < pPIS->LinesCount; ++i)
 				DrawTextEffect (pPIS->TextLines + i, pPIS->TextFadeColor,
 						pPIS->TextFadeColor, pPIS->TextEffect);
@@ -568,7 +566,6 @@ DoPresentation (void *pIS)
 			Present_UnbatchGraphics (pPIS, TRUE);
 
 			LockMutex (GraphicsLock);
-			SetContextClipping (TRUE);
 			/* do transition */
 			SetTransitionSource (&pPIS->tfade_r);
 			BatchGraphics ();
@@ -662,7 +659,6 @@ DoPresentation (void *pIS)
 				LockMutex (GraphicsLock);
 			old_mode = SetGraphicScaleMode (scale_mode);
 			old_scale = SetGraphicScale (scale);
-			SetContextClipping (TRUE);
 			DrawStamp (&s);
 			SetGraphicScale (old_scale);
 			SetGraphicScaleMode (old_mode);
@@ -694,17 +690,10 @@ DoPresentation (void *pIS)
 		}
 		else if (strcmp (Opcode, "CLS") == 0)
 		{	/* clear screen */
-			RECT r;
-
 			Present_UnbatchGraphics (pPIS, TRUE);
 
 			LockMutex (GraphicsLock);
-			GetContextClipRect (&r);
-			r.corner.x = r.corner.y = 0;
-			/* paint black rect over screen	*/
-			SetContextForeGroundColor (
-					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00));
-			DrawFilledRectangle (&r);	
+			ClearDrawable ();	
 			UnlockMutex (GraphicsLock);
 		}
 		else if (strcmp (Opcode, "CALL") == 0)
@@ -789,6 +778,7 @@ ShowSlidePresentation (STRING PresStr)
 	OldContext = SetContext (ScreenContext);
 	GetContextClipRect (&OldRect);
 	OldFont = SetContextFont (NULL);
+	SetContextBackGroundColor (BLACK_COLOR);
 	UnlockMutex (GraphicsLock);
 
 	SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
@@ -865,18 +855,16 @@ static void
 FadeClearScreen (void)
 {
 	BYTE xform_buf[1];
-	RECT r = {{0, 0}, {SCREEN_WIDTH, SCREEN_HEIGHT}};
 
 	xform_buf[0] = FadeAllToBlack;
 	SleepThreadUntil (XFormColorMap (
 			(COLORMAPPTR) xform_buf, ONE_SECOND / 2));
 	
-	// paint black rect over screen	
+	// clear the screen with black
 	LockMutex (GraphicsLock);
 	SetContext (ScreenContext);
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00));
-	DrawFilledRectangle (&r);	
+	SetContextBackGroundColor (BLACK_COLOR);
+	ClearDrawable ();
 	UnlockMutex (GraphicsLock);
 
 	// fade in black rect instantly

@@ -24,6 +24,7 @@
 #include "setup.h"
 #include "sounds.h"
 #include "gamestr.h"
+#include "util.h"
 #include "libs/graphics/widgets.h"
 #include "libs/sound/trackplayer.h"
 #include "libs/log.h"
@@ -91,7 +92,7 @@ DoConfirmExit (void)
 	{
 		RECT r;
 		STAMP s;
-		FRAME F;
+		RECT ctxRect;
 		CONTEXT oldContext;
 		RECT oldRect;
 		BOOLEAN response = FALSE, done;
@@ -100,23 +101,16 @@ DoConfirmExit (void)
 		GetContextClipRect (&oldRect);
 		SetContextClipRect (NULL);
 
+		GetContextClipRect (&ctxRect);
 		r.extent.width = CONFIRM_WIN_WIDTH + 4;
 		r.extent.height = CONFIRM_WIN_HEIGHT + 4;
-		r.corner.x = (SCREEN_WIDTH - r.extent.width) >> 1;
-		r.corner.y = (SCREEN_HEIGHT - r.extent.height) >> 1;
-		s.origin = r.corner;
-		F = CaptureDrawable (LoadDisplayPixmap (&r, (FRAME)0));
-
+		r.corner.x = (ctxRect.extent.width - r.extent.width) >> 1;
+		r.corner.y = (ctxRect.extent.height - r.extent.height) >> 1;
+		s = SaveContextFrame (&r);
 		SetSystemRect (&r);
 
 		DrawConfirmationWindow (response);
-
-		// Releasing the lock lets the rotate_planet_task
-		// draw a frame.  PauseRotate can still allow one more frame
-		// to be drawn, so it is safer to just not release the lock
-		//UnlockMutex (GraphicsLock);
 		FlushGraphics ();
-		//LockMutex (GraphicsLock);
 
 		FlushInput ();
 		done = FALSE;
@@ -150,7 +144,7 @@ DoConfirmExit (void)
 			SleepThread (ONE_SECOND / 30);
 		} while (!done);
 
-		s.frame = F;
+		// Restore the screen under the confirmation window
 		DrawStamp (&s);
 		DestroyDrawable (ReleaseDrawable (s.frame));
 		ClearSystemRect ();
@@ -190,7 +184,8 @@ DoPopup (struct popup_state *self)
 	(void)self;
 	SleepThread (ONE_SECOND / 20);
 	return !(PulsedInputState.menu[KEY_MENU_SELECT] || 
-			PulsedInputState.menu[KEY_MENU_CANCEL]);
+			PulsedInputState.menu[KEY_MENU_CANCEL] ||
+			(GLOBAL (CurrentActivity) & CHECK_ABORT));
 }
 
 void
@@ -199,15 +194,13 @@ DoPopupWindow (const char *msg)
 	stringbank *bank = StringBank_Create ();
 	const char *lines[30];
 	WIDGET_LABEL label;
-	RECT r;
 	STAMP s;
-	FRAME F;
 	CONTEXT oldContext;
 	RECT oldRect;
 	RECT windowRect;
 	POPUP_STATE state;
 	MENU_SOUND_FLAGS s0, s1;
-	
+	InputFrameCallback *oldCallback;
 
 	if (!bank)
 	{
@@ -231,15 +224,9 @@ DoPopupWindow (const char *msg)
 	GetContextClipRect (&oldRect);
 	SetContextClipRect (NULL);
 
-	/* TODO: Better measure of dimensions than this */
-	r.extent.width = SCREEN_WIDTH;
-	r.extent.height = SCREEN_HEIGHT;
-	r.corner.x = (SCREEN_WIDTH - r.extent.width) >> 1;
-	r.corner.y = (SCREEN_HEIGHT - r.extent.height) >> 1;
-	F = CaptureDrawable (LoadDisplayPixmap (&r, (FRAME)0));
-
-	s.origin = r.corner;
-	s.frame = F;
+	// TODO: Maybe DrawLabelAsWindow() should return a saved STAMP?
+	//   We do not know the dimensions here, and so save the whole context
+	s = SaveContextFrame (NULL);
 
 	Widget_SetFont (StarConFont);
 	Widget_SetWindowColors (SHADOWBOX_BACKGROUND_COLOR, SHADOWBOX_DARK_COLOR,
@@ -249,10 +236,12 @@ DoPopupWindow (const char *msg)
 
 	GetMenuSounds (&s0, &s1);
 	SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
+	oldCallback = SetInputCallback (NULL);
 
 	state.InputFunc = DoPopup;
 	DoInput (&state, TRUE);
 
+	SetInputCallback (oldCallback);
 	ClearSystemRect ();
 	DrawStamp (&s);
 	DestroyDrawable (ReleaseDrawable (s.frame));

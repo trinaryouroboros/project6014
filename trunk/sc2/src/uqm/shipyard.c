@@ -103,6 +103,18 @@ animatePowerLines (MENU_STATE *pMS)
 	}
 }
 
+static void
+on_input_frame (void)
+{
+	CONTEXT oldContext;
+
+	LockMutex (GraphicsLock);
+	oldContext = SetContext (SpaceContext);
+	animatePowerLines (NULL);
+	SetContext (oldContext);
+	UnlockMutex (GraphicsLock);
+}
+
 #ifdef WANT_SHIP_SPINS
 static void
 SpinStarShip (MENU_STATE *pMS, HFLEETINFO hStarShip)
@@ -1028,13 +1040,6 @@ ChangeFlashRect:
 			}
 			UnlockMutex (GraphicsLock);
 		}
-
-#ifndef USE_3DO_HANGAR
-		LockMutex (GraphicsLock);
-		SetContext (SpaceContext);
-		animatePowerLines (NULL);
-		UnlockMutex (GraphicsLock);
-#endif
 	}
 
 	SleepThread (ONE_SECOND / 30);
@@ -1256,21 +1261,16 @@ DoShipyard (MENU_STATE *pMS)
 			
 			SetContextFont (TinyFont);
 
-			{
-				RECT r;
-				
-				r.corner.x = 0;
-				r.corner.y = 0;
-				r.extent.width = SCREEN_WIDTH;
-				r.extent.height = SCREEN_HEIGHT;
-				ScreenTransition (3, &r);
-			}
+			ScreenTransition (3, NULL);
 			UnbatchGraphics ();
 			UnlockMutex (GraphicsLock);
 
 			PlayMusic (pMS->hMusic, TRUE, 1);
 
 			ShowCombatShip (pMS, (COUNT)~0, NULL);
+
+			SetInputCallback (on_input_frame);
+
 			LockMutex (GraphicsLock);
 			SetFlashRect (SFR_MENU_3DO);
 			UnlockMutex (GraphicsLock);
@@ -1281,6 +1281,8 @@ DoShipyard (MENU_STATE *pMS)
 	else if (cancel || (select && pMS->CurState == SHIPYARD_EXIT))
 	{
 ExitShipyard:
+		SetInputCallback (NULL);
+
 		LockMutex (GraphicsLock);
 		DestroyDrawable (ReleaseDrawable (pMS->ModuleFrame));
 		pMS->ModuleFrame = 0;
@@ -1310,12 +1312,6 @@ ExitShipyard:
 	}
 	else
 	{
-#ifndef USE_3DO_HANGAR
-		LockMutex (GraphicsLock);
-		SetContext (SpaceContext);
-		animatePowerLines (NULL);
-		UnlockMutex (GraphicsLock);
-#endif
 		DoMenuChooser (pMS, PM_CREW);
 	}
 

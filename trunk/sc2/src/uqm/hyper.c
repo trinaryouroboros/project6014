@@ -70,7 +70,8 @@ MoveSIS (SIZE *pdx, SIZE *pdy)
 	SIZE new_dx, new_dy;
 
 	new_dx = *pdx;
-	if ((GLOBAL_SIS (log_x) -= new_dx) < 0)
+	GLOBAL_SIS (log_x) -= new_dx;
+	if (GLOBAL_SIS (log_x) < 0)
 	{
 		new_dx += (SIZE)GLOBAL_SIS (log_x);
 		GLOBAL_SIS (log_x) = 0;
@@ -82,7 +83,8 @@ MoveSIS (SIZE *pdx, SIZE *pdy)
 	}
 
 	new_dy = *pdy;
-	if ((GLOBAL_SIS (log_y) -= new_dy) < 0)
+	GLOBAL_SIS (log_y) -= new_dy;
+	if (GLOBAL_SIS (log_y) < 0)
 	{
 		new_dy += (SIZE)GLOBAL_SIS (log_y);
 		GLOBAL_SIS (log_y) = 0;
@@ -367,7 +369,9 @@ LoadHyperData (void)
 BOOLEAN
 LoadHyperspace (void)
 {
-	hyper_dx = hyper_dy = hyper_extra = 0;
+	hyper_dx = 0;
+	hyper_dy = 0;
+	hyper_extra = 0;
 	fuel_ticks = 1;
 
 	GLOBAL (ShipStamp.origin.x) = -MAX_X_UNIVERSE;
@@ -432,7 +436,7 @@ LoadHyperspace (void)
 
 	ClearSISRect (CLEAR_SIS_RADAR);
 
-	return (TRUE);
+	return TRUE;
 }
 
 BOOLEAN
@@ -447,7 +451,7 @@ FreeHyperspace (void)
 	}
 //    FreeHyperData ();
 
-	return (TRUE);
+	return TRUE;
 }
 
 static void
@@ -506,6 +510,123 @@ typedef enum
 } TRANSITION_TYPE;
 
 static void
+InterplanetaryTransition (ELEMENT *ElementPtr)
+{
+	GLOBAL (ip_planet) = 0;
+	GLOBAL (in_orbit) = 0;
+	GLOBAL (ShipFacing) = 0; /* Not reentering the system */
+	SET_GAME_STATE (USED_BROADCASTER, 0);
+	// JMS: Entering star or portal in ORZ space
+	if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+	{
+		POINT orz_pt;
+		COUNT orz_index;
+
+		POINT orz_portal_pt[] =
+		{
+			{8654, 8587}, // Exit from Orz space brings ship to these hyperspace coordinates.
+		};
+
+		GLOBAL (autopilot.x) = ~0;
+		GLOBAL (autopilot.y) = ~0;
+
+		ElementToUniverse (ElementPtr, &orz_pt);
+		CurStarDescPtr = FindStar (NULL, &orz_pt, 5, 5);
+
+		orz_index = CurStarDescPtr
+			- &star_array[NUM_SOLAR_SYSTEMS + 15 + 2 +1]; // JMS: Number of solar systems + 1 + number of vortices + 1  
+		GLOBAL_SIS (log_x) =							  // + arilou home world
+			UNIVERSE_TO_LOGX (orz_portal_pt[orz_index].x);
+		GLOBAL_SIS (log_y) =
+			UNIVERSE_TO_LOGY (orz_portal_pt[orz_index].y);
+
+		GLOBAL (CurrentActivity) |= START_INTERPLANETARY;  // JMS: Returns inside portal star system interplanetary
+		SET_GAME_STATE (ESCAPE_COUNTER, 0);			
+		SET_GAME_STATE (LEAVING_ORZ_SPACE, 1);			// JMS: Added this so returning to interplanetary instead of hyperspace works.
+		// (Check ExploreSolarSys  in solarsys.c for more info)
+		SET_GAME_STATE (ORZ_SPACE_SIDE, 0);
+		SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
+
+	} // JMS ENDS
+
+	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
+	{
+		// Enter a solar system from HyperSpace.
+		GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
+		SET_GAME_STATE (ESCAPE_COUNTER, 0);
+	}
+	else
+	{
+		POINT pt;
+
+		GLOBAL (autopilot.x) = ~0;
+		GLOBAL (autopilot.y) = ~0;
+
+		ElementToUniverse (ElementPtr, &pt);
+		CurStarDescPtr = FindStar (NULL, &pt, 5, 5);
+		if (CurStarDescPtr->star_pt.x == ARILOU_HOME_X
+				&& CurStarDescPtr->star_pt.y == ARILOU_HOME_Y)
+		{
+			// Meet the Arilou.
+			GLOBAL (CurrentActivity) |= START_ENCOUNTER;
+		}
+		else
+		{
+			// Transition from QuasiSpace to HyperSpace through
+			// one of the permanent portals.
+			COUNT index;
+			const POINT portal_pt[] = QUASISPACE_PORTALS_HYPERSPACE_ENDPOINTS;
+
+			index = CurStarDescPtr - &star_array[NUM_SOLAR_SYSTEMS + 1];
+			GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (portal_pt[index].x);
+			GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (portal_pt[index].y);
+
+			SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
+		}
+	}
+}
+
+/* Enter QuasiSpace from HyperSpace by any portal, or HyperSpace from
+ * QuasiSpace through the periodically opening portal.
+ */
+static void
+ArilouSpaceTransition (void)
+{
+	GLOBAL (ShipFacing) = 0; /* Not reentering the system */
+	SET_GAME_STATE (USED_BROADCASTER, 0);
+	GLOBAL (autopilot.x) = ~0;
+	GLOBAL (autopilot.y) = ~0;
+	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
+	{
+		// From Orz space or HyperSpace to QuasiSpace.
+		GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (QUASI_SPACE_X);
+		GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (QUASI_SPACE_Y);
+		if (GET_GAME_STATE (PORTAL_COUNTER) == 0)
+		{
+			// Periodically appearing portal.
+			SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Don't think this is necessary, but won't hurt either.
+			SET_GAME_STATE (ARILOU_SPACE_SIDE, 3);
+		}
+		else
+		{
+			// Player-induced portal.
+			SET_GAME_STATE (PORTAL_COUNTER, 0);
+			SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Well, this is necessary.
+			SET_GAME_STATE (ARILOU_SPACE_SIDE, 3);
+		}
+	}
+	else
+	{
+		// From QuasiSpace to HyperSpace through the periodically appearing
+		// portal.
+		GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (ARILOU_SPACE_X);
+		GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (ARILOU_SPACE_Y);
+		SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
+		SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Don't think this is necessary, but won't hurt either.
+	}
+}
+
+static void
 unhyper_transition (ELEMENT *ElementPtr)
 {
 	COUNT frame_index;
@@ -529,136 +650,10 @@ unhyper_transition (ELEMENT *ElementPtr)
 				GLOBAL (CurrentActivity) |= START_ENCOUNTER;
 				break;
 			case INTERPLANETARY_TRANSITION:
-				GLOBAL (ip_planet) = 0;
-				GLOBAL (in_orbit) = 0;
-				GLOBAL (ShipFacing) = 0; /* Not reentering the system */
-				SET_GAME_STATE (USED_BROADCASTER, 0);
-				
-				// JMS: Entering star or portal in ORZ space
-				if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
-				{
-					POINT orz_pt;
-					COUNT orz_index;
-
-					POINT orz_portal_pt[] =
-					{
-						{8654, 8587}, // Exit from Orz space brings ship to these hyperspace coordinates.
-					};
-
-					GLOBAL (autopilot.x) = ~0;
-					GLOBAL (autopilot.y) = ~0;
-					
-					ElementToUniverse (ElementPtr, &orz_pt);
-					CurStarDescPtr = FindStar (NULL, &orz_pt, 5, 5);
-					
-					orz_index = CurStarDescPtr
-					- &star_array[NUM_SOLAR_SYSTEMS + 15 + 2 +1]; // JMS: Number of solar systems + 1 + number of vortices + 1  
-					GLOBAL_SIS (log_x) =							  // + arilou home world
-					UNIVERSE_TO_LOGX (orz_portal_pt[orz_index].x);
-					GLOBAL_SIS (log_y) =
-					UNIVERSE_TO_LOGY (orz_portal_pt[orz_index].y);
-					
-					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;  // JMS: Returns inside portal star system interplanetary
-					SET_GAME_STATE (ESCAPE_COUNTER, 0);			
-					SET_GAME_STATE (LEAVING_ORZ_SPACE, 1);			// JMS: Added this so returning to interplanetary instead of hyperspace works.
-																	// (Check ExploreSolarSys  in solarsys.c for more info)
-					SET_GAME_STATE (ORZ_SPACE_SIDE, 0);
-					SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
-					
-				} // JMS ENDS
-				
-				// Entering interplanetary from Hyperspace
-				if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
-				{
-					GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
-					SET_GAME_STATE (ESCAPE_COUNTER, 0);
-				}
-				
-				// Entering something in Quasispace
-				else
-				{
-					POINT pt;
-
-					GLOBAL (autopilot.x) = ~0;
-					GLOBAL (autopilot.y) = ~0;
-
-					ElementToUniverse (ElementPtr, &pt);
-					CurStarDescPtr = FindStar (NULL, &pt, 5, 5);
-					if (CurStarDescPtr->star_pt.x == ARILOU_HOME_X
-							&& CurStarDescPtr->star_pt.y == ARILOU_HOME_Y)
-					{
-						GLOBAL (CurrentActivity) |= START_ENCOUNTER;
-					}
-					else
-					{
-						COUNT index;
-						POINT portal_pt[] =
-						{
-							{4091, 7748},
-							{3184, 4906},
-							{9211, 6104},
-							{5673, 1207},
-							{1910,  926},
-							{8607,  151},
-							{  50, 1647},
-							{6117, 4131},
-							{5658, 9712},
-							{2302, 3988},
-							{ 112, 9409},
-							{7752, 8906},
-							{ 368, 6332},
-							{9735, 3153},
-							{5850, 6213},
-						};
-
-						index = CurStarDescPtr
-								- &star_array[NUM_SOLAR_SYSTEMS + 1];
-						GLOBAL_SIS (log_x) =
-								UNIVERSE_TO_LOGX (portal_pt[index].x);
-						GLOBAL_SIS (log_y) =
-								UNIVERSE_TO_LOGY (portal_pt[index].y);
-
-						SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
-					}
-				}
+				InterplanetaryTransition (ElementPtr);
 				break;
 			case ARILOU_SPACE_TRANSITION:
-				/* Enter QuasiSpace from HyperSpace by any portal,
-				 * or HyperSpace from QuasiSpace through the periodically
-				 * opening portal.
-				 */
-				GLOBAL (ShipFacing) = 0; /* Not reentering the system */
-				SET_GAME_STATE (USED_BROADCASTER, 0);
-				GLOBAL (autopilot.x) = ~0;
-				GLOBAL (autopilot.y) = ~0;
-				if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
-				{
-					// From Orz space or HyperSpace to QuasiSpace.
-					GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (QUASI_SPACE_X);
-					GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (QUASI_SPACE_Y);
-					if (GET_GAME_STATE (PORTAL_COUNTER) == 0)
-					{
-						// Periodically appearing portal.
-						SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Don't think this is necessary, but won't hurt either.
-						SET_GAME_STATE (ARILOU_SPACE_SIDE, 3);
-					}
-					else
-					{
-						// Player-induced portal.
-						SET_GAME_STATE (PORTAL_COUNTER, 0);
-						SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Well, this is necessary.
-						SET_GAME_STATE (ARILOU_SPACE_SIDE, 3);
-					}
-				}
-				else
-				{
-					// From QuasiSpace to HyperSpace through the
-					// periodically appearing portal.
-					GLOBAL_SIS (log_x) = UNIVERSE_TO_LOGX (ARILOU_SPACE_X);
-					GLOBAL_SIS (log_y) = UNIVERSE_TO_LOGY (ARILOU_SPACE_Y);
-					SET_GAME_STATE (ARILOU_SPACE_SIDE, 0);
-					SET_GAME_STATE (ORZ_SPACE_SIDE, 0);		// JMS: Don't think this is necessary, but won't hurt either.
-				}
+				ArilouSpaceTransition ();
 				break;
 		}
 
@@ -674,7 +669,8 @@ static void
 init_transition (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 		TRANSITION_TYPE which_transition)
 {
-	SIZE dx, dy, num_turns;
+	SIZE dx, dy;
+	SIZE num_turns;
 	STARSHIP *StarShipPtr;
 
 	dx = WORLD_TO_VELOCITY (ElementPtr0->next.location.x
@@ -688,10 +684,11 @@ init_transition (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 	ElementPtr1->turn_wait = (BYTE) which_transition;
 
 	GetElementStarShip (ElementPtr1, &StarShipPtr);
-	if ((num_turns = GetFrameCount (ElementPtr1->next.image.frame)
+	num_turns = GetFrameCount (ElementPtr1->next.image.frame)
 			- ANGLE_TO_FACING (FULL_CIRCLE)
 			+ NORMALIZE_FACING (ANGLE_TO_FACING (FULL_CIRCLE)
-			- StarShipPtr->ShipFacing)) == 0)
+			- StarShipPtr->ShipFacing);
+	if (num_turns == 0)
 		num_turns = 1;
 
 	SetVelocityComponents (&ElementPtr1->velocity,
@@ -712,13 +709,12 @@ hyper_transition (ELEMENT *ElementPtr)
 
 			ElementPtr->state_flags |= DEFY_PHYSICS;
 
-			return (FALSE);
+			return FALSE;
 		}
 		else
 		{
 			ElementPtr->preprocess_func =
-						(void (*) (struct element
-								*ElementPtr))hyper_transition;
+					(void (*) (struct element *ElementPtr)) hyper_transition;
 			ElementPtr->postprocess_func = NULL;
 			ElementPtr->state_flags |= NONSOLID;
 			ElementPtr->next.image.frame =
@@ -763,7 +759,7 @@ hyper_transition (ELEMENT *ElementPtr)
 		}
 	}
 
-	return (TRUE);
+	return TRUE;
 }
 
 static void
@@ -867,7 +863,8 @@ arilou_space_collision (ELEMENT *ElementPtr0,
 		}
 		else
 		{
-			init_transition (ElementPtr0, ElementPtr1, ARILOU_SPACE_TRANSITION);
+			init_transition (ElementPtr0, ElementPtr1,
+					ARILOU_SPACE_TRANSITION);
 		}
 	}
 
@@ -896,17 +893,16 @@ AllocHyperElement (STAR_DESC *SDPtr)
 			long lx, ly;
 
 			lx = UNIVERSE_TO_LOGX (SDPtr->star_pt.x)
-					+ (LOG_SPACE_WIDTH >> 1)
-					- GLOBAL_SIS (log_x);
+					+ (LOG_SPACE_WIDTH >> 1) - GLOBAL_SIS (log_x);
 			HyperSpaceElementPtr->current.location.x = WRAP_X (lx);
 
 			ly = UNIVERSE_TO_LOGY (SDPtr->star_pt.y)
-					+ (LOG_SPACE_HEIGHT >> 1)
-					- GLOBAL_SIS (log_y);
+					+ (LOG_SPACE_HEIGHT >> 1) - GLOBAL_SIS (log_y);
 			HyperSpaceElementPtr->current.location.y = WRAP_Y (ly);
 		}
 
-		SetPrimType (&DisplayArray[HyperSpaceElementPtr->PrimIndex], STAMP_PRIM);
+		SetPrimType (&DisplayArray[HyperSpaceElementPtr->PrimIndex],
+				STAMP_PRIM);
 		HyperSpaceElementPtr->current.image.farray =
 				&hyperstars[1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1)];
 		
@@ -919,7 +915,7 @@ AllocHyperElement (STAR_DESC *SDPtr)
 		UnlockElement (hHyperSpaceElement);
 	}
 
-	return (hHyperSpaceElement);
+	return hHyperSpaceElement;
 }
 
 static void
@@ -938,7 +934,8 @@ AddAmbientElement (void)
 		HyperSpaceElementPtr->playerNr = NEUTRAL_PLAYER_NUM;
 		HyperSpaceElementPtr->state_flags =
 				APPEARING | FINITE_LIFE | NONSOLID;
-		SetPrimType (&DisplayArray[HyperSpaceElementPtr->PrimIndex], STAMP_PRIM);
+		SetPrimType (&DisplayArray[HyperSpaceElementPtr->PrimIndex],
+				STAMP_PRIM);
 		HyperSpaceElementPtr->preprocess_func = animation_preprocess;
 
 		rand_val = TFB_Random ();
@@ -1034,39 +1031,39 @@ static void
 encounter_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ELEMENT *ElementPtr1, POINT *pPt1)
 {
+	HENCOUNTER hEncounter;
+	HENCOUNTER hNextEncounter;
 
-	if ((ElementPtr1->state_flags & PLAYER_SHIP)
-			&& (GLOBAL (CurrentActivity) & IN_BATTLE))
+	if (!(ElementPtr1->state_flags & PLAYER_SHIP)
+			|| !(GLOBAL (CurrentActivity) & IN_BATTLE))
+		return;
+		
+	init_transition (ElementPtr0, ElementPtr1, RANDOM_ENCOUNTER_TRANSITION);
+
+	for (hEncounter = GetHeadEncounter ();
+			hEncounter != 0; hEncounter = hNextEncounter)
 	{
-		HENCOUNTER hEncounter, hNextEncounter;
 		ENCOUNTER *EncounterPtr;
-		
-		init_transition (ElementPtr0, ElementPtr1, RANDOM_ENCOUNTER_TRANSITION);
 
-		for (hEncounter = GetHeadEncounter ();
-				hEncounter != 0; hEncounter = hNextEncounter)
+		LockEncounter (hEncounter, &EncounterPtr);
+		hNextEncounter = GetSuccEncounter (EncounterPtr);
+		if (EncounterPtr->hElement)
 		{
-			LockEncounter (hEncounter, &EncounterPtr);
-			hNextEncounter = GetSuccEncounter (EncounterPtr);
-			if (EncounterPtr->hElement)
-			{
-				ELEMENT *ElementPtr;
+			ELEMENT *ElementPtr;
 
-				LockElement (EncounterPtr->hElement, &ElementPtr);
-
-				ElementPtr->state_flags |= NONSOLID | IGNORE_SIMILAR;
-
-				UnlockElement (EncounterPtr->hElement);
-			}
-			UnlockEncounter (hEncounter);
+			LockElement (EncounterPtr->hElement, &ElementPtr);
+			ElementPtr->state_flags |= NONSOLID | IGNORE_SIMILAR;
+			UnlockElement (EncounterPtr->hElement);
 		}
-		
-		// Mark this element as collided with flagship
-		// XXX: We could simply set hTarget to 1 or to ElementPtr1,
-		//   but that would be too hacky ;)
-		ElementPtr0->hTarget = getSisElement ();
-		ZeroVelocityComponents (&ElementPtr0->velocity);
+		UnlockEncounter (hEncounter);
 	}
+
+	// Mark this element as collided with flagship
+	// XXX: We could simply set hTarget to 1 or to ElementPtr1,
+	//   but that would be too hacky ;)
+	ElementPtr0->hTarget = getSisElement ();
+	ZeroVelocityComponents (&ElementPtr0->velocity);
+
 	(void) pPt0;  /* Satisfying compiler (unused parameter) */
 	(void) pPt1;  /* Satisfying compiler (unused parameter) */
 }
@@ -1079,7 +1076,7 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 	STAR_DESC SD;
 	
 	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) >= 2)
-		return (0);
+		return 0;
 	
 	if (EncounterPtr->SD.Index & ENCOUNTER_REFORMING)
 	{
@@ -1087,7 +1084,7 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 		EncounterPtr->transition_state = 100;
 		if ((EncounterPtr->SD.Index & ONE_SHOT_ENCOUNTER)
 				|| LONIBBLE (EncounterPtr->SD.Index) == 0)
-			return (0);
+			return 0;
 	}
 
 	if (LONIBBLE (EncounterPtr->SD.Index))
@@ -1099,7 +1096,8 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 	{
 		BYTE Type;
 		SIZE dx, dy;
-		COUNT i, NumShips;
+		COUNT i;
+		COUNT NumShips;
 		DWORD radius_squared;
 		BYTE EncounterMakeup[] =
 		{
@@ -1122,16 +1120,15 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 			NumShips = MAX_HYPER_SHIPS;
 
 
-		EncounterPtr->SD.Index = MAKE_BYTE (
-				NumShips, HINIBBLE (EncounterPtr->SD.Index));
+		EncounterPtr->SD.Index =
+				MAKE_BYTE (NumShips, HINIBBLE (EncounterPtr->SD.Index));
 		for (i = 0; i < NumShips; ++i)
 		{
-			HFLEETINFO hStarShip;
-			FLEET_INFO *FleetPtr;
 			BRIEF_SHIP_INFO *BSIPtr = &EncounterPtr->ShipList[i];
-
-			hStarShip = GetStarShipFromIndex (&GLOBAL (avail_race_q), Type);
-			FleetPtr = LockFleetInfo (&GLOBAL (avail_race_q), hStarShip);
+			HFLEETINFO hStarShip =
+					GetStarShipFromIndex (&GLOBAL (avail_race_q), Type);
+			FLEET_INFO *FleetPtr =
+					LockFleetInfo (&GLOBAL (avail_race_q), hStarShip);
 			BSIPtr->race_id = Type;
 			BSIPtr->crew_level = FleetPtr->crew_level;
 			BSIPtr->max_crew = FleetPtr->max_crew;
@@ -1183,8 +1180,9 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 
 		LockElement (hElement, &ElementPtr);
 		
+		i = EncounterPtr->transition_state;
 		// JMS: Force Orz fingers in Orz space to use other than normal npcship graphics.
-		if (((i = EncounterPtr->transition_state) || NewEncounter) 
+		if ((i || NewEncounter) 
 			&& !( (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) && (EncounterPtr->SD.Type== ORZ_SHIP) ) )
 		{
 			if (i < 0)
@@ -1232,14 +1230,14 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 		InsertElement (hElement, GetTailElement ());
 	}
 	
-	return (EncounterPtr->hElement = hElement);
+	EncounterPtr->hElement = hElement;
+	return hElement;
 }
 
 #define GRID_OFFSET 200
 
 static void
-DrawHyperGrid (COORD ux, COORD uy, COORD ox,
-		COORD oy)
+DrawHyperGrid (COORD ux, COORD uy, COORD ox, COORD oy)
 {
 	COORD sx, sy, ex, ey;
 	RECT r;
@@ -1252,18 +1250,22 @@ DrawHyperGrid (COORD ux, COORD uy, COORD ox,
 		SetContextForeGroundColor (
 					BUILD_COLOR (MAKE_RGB15 (0x00, 0x10, 0x00), 0x6B));
 
-	if ((sx = ux - (RADAR_SCAN_WIDTH >> 1)) < 0)
+	sx = ux - (RADAR_SCAN_WIDTH >> 1);
+	if (sx  < 0)
 		sx = 0;
 	else
 		sx -= sx % GRID_OFFSET;
-	if ((ex = ux + (RADAR_SCAN_WIDTH >> 1)) > MAX_X_UNIVERSE + 1)
+	ex = ux + (RADAR_SCAN_WIDTH >> 1);
+	if (ex > MAX_X_UNIVERSE + 1)
 		ex = MAX_X_UNIVERSE + 1;
 
-	if ((sy = uy - (RADAR_SCAN_HEIGHT >> 1)) < 0)
+	sy = uy - (RADAR_SCAN_HEIGHT >> 1);
+	if (sy < 0)
 		sy = 0;
 	else
 		sy -= sy % GRID_OFFSET;
-	if ((ey = uy + (RADAR_SCAN_HEIGHT >> 1)) > MAX_Y_UNIVERSE + 1)
+	ey = uy + (RADAR_SCAN_HEIGHT >> 1);
+	if (ey > MAX_Y_UNIVERSE + 1)
 		ey = MAX_Y_UNIVERSE + 1;
 
 	r.corner.y = (COORD) ((long)(MAX_Y_UNIVERSE - ey)
@@ -1273,182 +1275,155 @@ DrawHyperGrid (COORD ux, COORD uy, COORD ox,
 			* RADAR_HEIGHT / RADAR_SCAN_HEIGHT) - oy) - r.corner.y + 1;
 	for (ux = sx; ux <= ex; ux += GRID_OFFSET)
 	{
-		r.corner.x = (COORD) ((long)ux
-				* RADAR_WIDTH / RADAR_SCAN_WIDTH) - ox;
+		r.corner.x = (COORD) ((long)ux * RADAR_WIDTH / RADAR_SCAN_WIDTH) - ox;
 		DrawFilledRectangle (&r);
-	} while ((ux += GRID_OFFSET) < ex);
+	}
 
 	r.corner.x = (COORD) ((long)sx * RADAR_WIDTH / RADAR_SCAN_WIDTH) - ox;
-	r.extent.width = ((COORD) ((long)ex
-			* RADAR_WIDTH / RADAR_SCAN_WIDTH) - ox)
-			- r.corner.x + 1;
+	r.extent.width = ((COORD) ((long)ex * RADAR_WIDTH / RADAR_SCAN_WIDTH)
+			- ox) - r.corner.x + 1;
 	r.extent.height = 1;
 	for (uy = sy; uy <= ey; uy += GRID_OFFSET)
 	{
 		r.corner.y = (COORD)((long)(MAX_Y_UNIVERSE - uy)
 				* RADAR_HEIGHT / RADAR_SCAN_HEIGHT) - oy;
 		DrawFilledRectangle (&r);
-	} while ((uy += GRID_OFFSET) < ey);
+	}
 }
 
-
-static void
-ProcessEncounters (POINT *puniverse, COORD ox, COORD oy)
+// Returns false iff the encounter is to be removed.
+static bool
+ProcessEncounter (ENCOUNTER *EncounterPtr, POINT *puniverse,
+		COORD ox, COORD oy, STAMP *stamp)
 {
-	STAMP s;
-	HENCOUNTER hEncounter, hNextEncounter;
+	ELEMENT *ElementPtr;
+	COORD ex, ey;
 
-	s.frame = SetAbsFrameIndex (stars_in_space, 91);
-	for (hEncounter = GetHeadEncounter ();
-			hEncounter; hEncounter = hNextEncounter)
+	if (EncounterPtr->hElement == 0
+			&& AddEncounterElement (EncounterPtr, puniverse) == 0)
+		return false;
+
+	LockElement (EncounterPtr->hElement, &ElementPtr);
+
+	if (ElementPtr->death_func)
 	{
-		COORD ex, ey;
-		ENCOUNTER *EncounterPtr;
-
-		LockEncounter (hEncounter, &EncounterPtr);
-		hNextEncounter = GetSuccEncounter (EncounterPtr);
-
-		if (EncounterPtr->hElement == 0
-				&& AddEncounterElement (EncounterPtr, puniverse) == 0)
+		if (EncounterPtr->transition_state && ElementPtr->turn_wait == 0)
 		{
-DeleteEncounter:
-			UnlockEncounter (hEncounter);
-			RemoveEncounter (hEncounter);
-			FreeEncounter (hEncounter);
-			continue;
-		}
-
-		{
-			ELEMENT *ElementPtr;
-
-			LockElement (EncounterPtr->hElement, &ElementPtr);
-
-			if (ElementPtr->death_func)
+			--EncounterPtr->transition_state;
+			if (EncounterPtr->transition_state >= NUM_VORTEX_TRANSITIONS)
+				++ElementPtr->turn_wait;
+			else if (EncounterPtr->transition_state ==
+					-NUM_VORTEX_TRANSITIONS)
 			{
-				if (EncounterPtr->transition_state
-						&& ElementPtr->turn_wait == 0)
+				ElementPtr->death_func = NULL;
+				UnlockElement (EncounterPtr->hElement);
+				return false;
+			}
+			else
+				SetPrimType (&DisplayArray[ElementPtr->PrimIndex],
+						STAMP_PRIM);
+		}
+	}
+	else
+	{
+		SIZE delta_x, delta_y;
+		COUNT encounter_radius;
+
+		SIZE shx, shy;
+		SIZE destx, desty;
+				
+		ElementPtr->life_span = 1;
+		GetNextVelocityComponents (&ElementPtr->velocity,
+				&delta_x, &delta_y, 1);
+		if (ElementPtr->thrust_wait)
+			--ElementPtr->thrust_wait;
+		else if (!ElementPtr->hTarget)
+		{	// This is an encounter that did not collide with flagship
+			// The colliding encounter does not move
+			COUNT cur_facing, delta_facing;
+
+			cur_facing = ANGLE_TO_FACING (
+					GetVelocityTravelAngle (&ElementPtr->velocity));
+			// JMS: Transport ship doesn't chase player, heads for target system instead.
+			if (EncounterPtr->SD.Type == TRANSPORT_SHIP) 
+			{
+				delta_facing = NORMALIZE_FACING (cur_facing
+					- ANGLE_TO_FACING (ARCTAN (
+					EncounterPtr->destination_pt.x - EncounterPtr->SD.star_pt.x,
+					EncounterPtr->destination_pt.y - EncounterPtr->SD.star_pt.y)));
+			}
+			// Normal ships chase player.
+			else
+			{
+				delta_facing = NORMALIZE_FACING (cur_facing - ANGLE_TO_FACING (
+						ARCTAN (puniverse->x - EncounterPtr->SD.star_pt.x,
+						puniverse->y - EncounterPtr->SD.star_pt.y)));
+			}
+			if (delta_facing || (delta_x == 0 && delta_y == 0))
+			{
+				SIZE speed;
+				const SIZE RaceHyperSpeed[] =
 				{
-					--EncounterPtr->transition_state;
-					if (EncounterPtr->transition_state >=
-							NUM_VORTEX_TRANSITIONS)
-						++ElementPtr->turn_wait;
-					else if (EncounterPtr->transition_state ==
-							-NUM_VORTEX_TRANSITIONS)
-					{
-						ElementPtr->death_func = NULL;
-						UnlockElement (EncounterPtr->hElement);
-						goto DeleteEncounter;
-					}
+					RACE_HYPER_SPEED
+				};
+
+#define ENCOUNTER_TRACK_WAIT 3
+				speed = RaceHyperSpeed[EncounterPtr->SD.Type];
+				if (delta_facing < ANGLE_TO_FACING (HALF_CIRCLE))
+					--cur_facing;
+				else
+					++cur_facing;
+				if (NORMALIZE_FACING (delta_facing + ANGLE_TO_FACING (OCTANT))
+						> ANGLE_TO_FACING (QUADRANT))
+				{
+					if (delta_facing < ANGLE_TO_FACING (HALF_CIRCLE))
+						--cur_facing;
 					else
-						SetPrimType (&DisplayArray[ElementPtr->PrimIndex], STAMP_PRIM);
+						++cur_facing;
+					speed >>= 1;
 				}
+				cur_facing = FACING_TO_ANGLE (cur_facing);
+				SetVelocityComponents (&ElementPtr->velocity,
+						COSINE (cur_facing, speed), SINE (cur_facing, speed));
+				GetNextVelocityComponents (&ElementPtr->velocity,
+						&delta_x, &delta_y, 1);
+
+				ElementPtr->thrust_wait = ENCOUNTER_TRACK_WAIT;
+			}
+		}
+		EncounterPtr->log_x += delta_x;
+		EncounterPtr->log_y -= delta_y;
+		EncounterPtr->SD.star_pt.x = LOGX_TO_UNIVERSE (EncounterPtr->log_x);
+		EncounterPtr->SD.star_pt.y = LOGY_TO_UNIVERSE (EncounterPtr->log_y);
+
+		encounter_radius = EncounterPtr->radius + (GRID_OFFSET >> 1);
+		delta_x = EncounterPtr->SD.star_pt.x - EncounterPtr->origin.x;
+		if (delta_x < 0)
+			delta_x = -delta_x;
+		delta_y = EncounterPtr->SD.star_pt.y - EncounterPtr->origin.y;
+		if (delta_y < 0)
+			delta_y = -delta_y;
+		if ((COUNT)delta_x >= encounter_radius
+				|| (COUNT)delta_y >= encounter_radius
+				|| (DWORD)delta_x * delta_x + (DWORD)delta_y * delta_y >=
+				(DWORD)encounter_radius * encounter_radius)
+		{
+			ElementPtr->state_flags |= NONSOLID;
+			ElementPtr->life_span = 0;
+
+			if (EncounterPtr->transition_state == 0)
+			{
+				ElementPtr->death_func = encounter_transition;
+				EncounterPtr->transition_state = -1;
+				ElementPtr->hit_points = 1;
 			}
 			else
 			{
-				SIZE delta_x, delta_y;
-				COUNT encounter_radius;
-
-				SIZE shx, shy;
-				SIZE destx, desty;
-				
-				ElementPtr->life_span = 1;
-				GetNextVelocityComponents (&ElementPtr->velocity,
-						&delta_x, &delta_y, 1);
-				if (ElementPtr->thrust_wait)
-					--ElementPtr->thrust_wait;
-				else if (!ElementPtr->hTarget)
-				{	// This is an encounter that did not collide with flagship
-					// The colliding encounter does not move
-					COUNT cur_facing, delta_facing;
-
-					cur_facing = ANGLE_TO_FACING (GetVelocityTravelAngle (&ElementPtr->velocity));
-					
-					// JMS: Transport ship doesn't chase player, heads for target system instead.
-					if (EncounterPtr->SD.Type == TRANSPORT_SHIP) 
-					{
-						delta_facing = NORMALIZE_FACING (cur_facing
-							- ANGLE_TO_FACING (ARCTAN (
-							EncounterPtr->destination_pt.x - EncounterPtr->SD.star_pt.x,
-							EncounterPtr->destination_pt.y - EncounterPtr->SD.star_pt.y)));
-					}
-					// Normal ships chase player.
-					else
-					{
-						delta_facing = NORMALIZE_FACING (cur_facing
-							- ANGLE_TO_FACING (ARCTAN (
-							puniverse->x - EncounterPtr->SD.star_pt.x,
-							puniverse->y - EncounterPtr->SD.star_pt.y)));
-					}
-					
-					if (delta_facing || (delta_x == 0 && delta_y == 0))
-					{
-						SIZE s, RaceHyperSpeed[] =
-						{
-							RACE_HYPER_SPEED
-						};
-
-#define ENCOUNTER_TRACK_WAIT 3
-						s = RaceHyperSpeed[EncounterPtr->SD.Type];
-						if (delta_facing < ANGLE_TO_FACING (HALF_CIRCLE))
-							--cur_facing;
-						else
-							++cur_facing;
-						if (NORMALIZE_FACING (delta_facing
-								+ ANGLE_TO_FACING (OCTANT)) > ANGLE_TO_FACING (QUADRANT))
-						{
-							if (delta_facing < ANGLE_TO_FACING (HALF_CIRCLE))
-								--cur_facing;
-							else
-								++cur_facing;
-							s >>= 1;
-						}
-						cur_facing = FACING_TO_ANGLE (cur_facing);
-						SetVelocityComponents (
-								&ElementPtr->velocity,
-								COSINE (cur_facing, s),
-								SINE (cur_facing, s)
-								);
-						GetNextVelocityComponents (&ElementPtr->velocity,
-								&delta_x, &delta_y, 1);
-
-						ElementPtr->thrust_wait = ENCOUNTER_TRACK_WAIT;
-					}
-				}
-				EncounterPtr->log_x += delta_x;
-				EncounterPtr->log_y -= delta_y;
-				EncounterPtr->SD.star_pt.x =
-						LOGX_TO_UNIVERSE (EncounterPtr->log_x);
-				EncounterPtr->SD.star_pt.y =
-						LOGY_TO_UNIVERSE (EncounterPtr->log_y);
-
-				encounter_radius = EncounterPtr->radius + (GRID_OFFSET >> 1);
-				if ((delta_x = EncounterPtr->SD.star_pt.x
-						- EncounterPtr->origin.x) < 0)
-					delta_x = -delta_x;
-				if ((delta_y = EncounterPtr->SD.star_pt.y
-						- EncounterPtr->origin.y) < 0)
-					delta_y = -delta_y;
-				if ((COUNT)delta_x >= encounter_radius
-						|| (COUNT)delta_y >= encounter_radius
-						|| (DWORD)delta_x * delta_x + (DWORD)delta_y * delta_y >=
-						(DWORD)encounter_radius * encounter_radius)
-				{
-					ElementPtr->state_flags |= NONSOLID;
-					ElementPtr->life_span = 0;
-
-					if (EncounterPtr->transition_state == 0)
-					{
-						ElementPtr->death_func = encounter_transition;
-						EncounterPtr->transition_state = -1;
-						ElementPtr->hit_points = 1;
-					}
-					else
-					{
-						ElementPtr->death_func = NULL;
-						UnlockElement (EncounterPtr->hElement);
-						goto DeleteEncounter;
-					}
-				}
+				ElementPtr->death_func = NULL;
+				UnlockElement (EncounterPtr->hElement);
+				return false;
+			}
+		}
 				
 				shx=EncounterPtr->SD.star_pt.x;
 				shy=EncounterPtr->SD.star_pt.y;
@@ -1474,68 +1449,85 @@ DeleteEncounter:
 					{
 						ElementPtr->death_func = NULL;
 						UnlockElement (EncounterPtr->hElement);
-						goto DeleteEncounter;
+						return false;
 					}
 				}
-				
-			}
 
-			ex = EncounterPtr->SD.star_pt.x;
-			ey = EncounterPtr->SD.star_pt.y;
-			
-			if (ex - puniverse->x >= -UNIT_SCREEN_WIDTH
-					&& ex - puniverse->x <= UNIT_SCREEN_WIDTH
-					&& ey - puniverse->y >= -UNIT_SCREEN_HEIGHT
-					&& ey - puniverse->y <= UNIT_SCREEN_HEIGHT)
+	}
+
+	ex = EncounterPtr->SD.star_pt.x;
+	ey = EncounterPtr->SD.star_pt.y;
+	if (ex - puniverse->x >= -UNIT_SCREEN_WIDTH
+			&& ex - puniverse->x <= UNIT_SCREEN_WIDTH
+			&& ey - puniverse->y >= -UNIT_SCREEN_HEIGHT
+			&& ey - puniverse->y <= UNIT_SCREEN_HEIGHT)
+	{
+		ElementPtr->next.location.x =
+				(SIZE)(EncounterPtr->log_x - GLOBAL_SIS (log_x))
+				+ (LOG_SPACE_WIDTH >> 1);
+		ElementPtr->next.location.y =
+				(SIZE)(EncounterPtr->log_y - GLOBAL_SIS (log_y))
+				+ (LOG_SPACE_HEIGHT >> 1);
+		if ((ElementPtr->state_flags & NONSOLID)
+				&& EncounterPtr->transition_state == 0)
+		{
+			ElementPtr->current.location = ElementPtr->next.location;
+			SetPrimType (&DisplayArray[ElementPtr->PrimIndex],
+					STAMP_PRIM);
+			if (ElementPtr->death_func == 0)
 			{
-				ElementPtr->next.location.x = (SIZE)(
-						EncounterPtr->log_x - GLOBAL_SIS (log_x)
-						) + (LOG_SPACE_WIDTH >> 1);
-				ElementPtr->next.location.y = (SIZE)(
-						EncounterPtr->log_y - GLOBAL_SIS (log_y)
-						) + (LOG_SPACE_HEIGHT >> 1);
-				if ((ElementPtr->state_flags & NONSOLID)
-						&& EncounterPtr->transition_state == 0)
-				{
-					ElementPtr->current.location =
-							ElementPtr->next.location;
-					SetPrimType (&DisplayArray[ElementPtr->PrimIndex], STAMP_PRIM);
-					if (ElementPtr->death_func == 0)
-					{
-						InitIntersectStartPoint (ElementPtr);
-						ElementPtr->state_flags &= ~NONSOLID;
-					}
-				}
+				InitIntersectStartPoint (ElementPtr);
+				ElementPtr->state_flags &= ~NONSOLID;
 			}
-			else
-			{
-				ElementPtr->state_flags |= NONSOLID;
-				
-				// JMS: Never delete transport ship spoors, no matter how far from player's ship they are...
-				if ((ex - puniverse->x < -XOFFS
-						|| ex - puniverse->x > XOFFS
-						|| ey - puniverse->y < -YOFFS
-						|| ey - puniverse->y > YOFFS)
-						&& (EncounterPtr->SD.Type != TRANSPORT_SHIP) )
-				{
-					ElementPtr->life_span = 0;
-					ElementPtr->death_func = NULL;
-					UnlockElement (EncounterPtr->hElement);
-
-					goto DeleteEncounter;
-				}
-
-				SetPrimType (&DisplayArray[ElementPtr->PrimIndex], NO_PRIM);
-			}
-
+		}
+	}
+	else
+	{
+		ElementPtr->state_flags |= NONSOLID;
+		if (ex - puniverse->x < -XOFFS || ex - puniverse->x > XOFFS
+				|| ey - puniverse->y < -YOFFS || ey - puniverse->y > YOFFS)
+		{
+			ElementPtr->life_span = 0;
+			ElementPtr->death_func = NULL;
 			UnlockElement (EncounterPtr->hElement);
+			return false;
 		}
 
-		s.origin.x = (COORD)((long)ex * RADAR_WIDTH
-				/ RADAR_SCAN_WIDTH) - ox;
-		s.origin.y = (COORD)((long)(MAX_Y_UNIVERSE - ey) * RADAR_HEIGHT
-				/ RADAR_SCAN_HEIGHT) - oy;
-		DrawStamp (&s);
+		SetPrimType (&DisplayArray[ElementPtr->PrimIndex], NO_PRIM);
+	}
+
+	UnlockElement (EncounterPtr->hElement);
+		
+	stamp->origin.x = (COORD)((long)ex * RADAR_WIDTH / RADAR_SCAN_WIDTH) - ox;
+	stamp->origin.y = (COORD)((long)(MAX_Y_UNIVERSE - ey) * RADAR_HEIGHT
+			/ RADAR_SCAN_HEIGHT) - oy;
+	DrawStamp (stamp);
+
+	return true;
+}
+
+static void
+ProcessEncounters (POINT *puniverse, COORD ox, COORD oy)
+{
+	STAMP stamp;
+	HENCOUNTER hEncounter, hNextEncounter;
+
+	stamp.frame = SetAbsFrameIndex (stars_in_space, 91);
+	for (hEncounter = GetHeadEncounter ();
+			hEncounter; hEncounter = hNextEncounter)
+	{
+		ENCOUNTER *EncounterPtr;
+
+		LockEncounter (hEncounter, &EncounterPtr);
+		hNextEncounter = GetSuccEncounter (EncounterPtr);
+
+		if (!ProcessEncounter (EncounterPtr, puniverse, ox, oy, &stamp))
+		{
+			UnlockEncounter (hEncounter);
+			RemoveEncounter (hEncounter);
+			FreeEncounter (hEncounter);
+			continue;
+		}
 
 		UnlockEncounter (hEncounter);
 	}
@@ -1562,20 +1554,15 @@ SeedUniverse (void)
 	SetContext (RadarContext);
 	BatchGraphics ();
 	
-	ox = (COORD)((long)universe.x
-			* RADAR_WIDTH / RADAR_SCAN_WIDTH)
+	ox = (COORD)((long)universe.x * RADAR_WIDTH / RADAR_SCAN_WIDTH)
 			- (RADAR_WIDTH >> 1);
 	oy = (COORD)((long)(MAX_Y_UNIVERSE - universe.y)
-			* RADAR_HEIGHT / RADAR_SCAN_HEIGHT)
-			- (RADAR_HEIGHT >> 1);
+			* RADAR_HEIGHT / RADAR_SCAN_HEIGHT) - (RADAR_HEIGHT >> 1);
 
 	ex = (COORD)((long)GLOBAL (ShipStamp.origin.x)
-			* RADAR_WIDTH / RADAR_SCAN_WIDTH)
-			- (RADAR_WIDTH >> 1);
-	ey = (COORD)((long)(MAX_Y_UNIVERSE
-			- GLOBAL (ShipStamp.origin.y))
-			* RADAR_HEIGHT / RADAR_SCAN_HEIGHT)
-			- (RADAR_HEIGHT >> 1);
+			* RADAR_WIDTH / RADAR_SCAN_WIDTH) - (RADAR_WIDTH >> 1);
+	ey = (COORD)((long)(MAX_Y_UNIVERSE - GLOBAL (ShipStamp.origin.y))
+			* RADAR_HEIGHT / RADAR_SCAN_HEIGHT) - (RADAR_HEIGHT >> 1);
 
 	arilouSpaceCounter = GET_GAME_STATE (ARILOU_SPACE_COUNTER);
 	arilouSpaceSide = GET_GAME_STATE (ARILOU_SPACE_SIDE);
@@ -1599,8 +1586,8 @@ SeedUniverse (void)
 
 				s.origin.x = (COORD)((long)ex * RADAR_WIDTH
 						/ RADAR_SCAN_WIDTH) - ox;
-				s.origin.y = (COORD)((long)(MAX_Y_UNIVERSE - ey) * RADAR_HEIGHT
-						/ RADAR_SCAN_HEIGHT) - oy;
+				s.origin.y = (COORD)((long)(MAX_Y_UNIVERSE - ey)
+						* RADAR_HEIGHT / RADAR_SCAN_HEIGHT) - oy;
 				s.frame = SetRelFrameIndex (blip_frame,
 						star_type + 2);
 				DrawStamp (&s);
@@ -1658,67 +1645,67 @@ SeedUniverse (void)
 		// Process the i portals from SD.
 		do
 		{
+			int which_spaces_star_gfx;
 			--i;
 			sx = SD[i].star_pt.x - universe.x + XOFFS;
 			sy = SD[i].star_pt.y - universe.y + YOFFS;
-			if (sx >= 0 && sy >= 0
-					&& sx < (XOFFS << 1) && sy < (YOFFS << 1))
+			if (sx < 0 || sy < 0 || sx >= (XOFFS << 1) || sy >= (YOFFS << 1))
+				continue;
+
+			ex = SD[i].star_pt.x;
+			ey = SD[i].star_pt.y;
+			s.origin.x = (COORD)((long)ex * RADAR_WIDTH / RADAR_SCAN_WIDTH)
+					- ox;
+			s.origin.y = (COORD)((long)(MAX_Y_UNIVERSE - ey)
+					* RADAR_HEIGHT / RADAR_SCAN_HEIGHT) - oy;
+			s.frame = SetAbsFrameIndex (stars_in_space, 95);
+			DrawStamp (&s);
+
+			ex -= universe.x;
+			if (ex < 0)
+				ex = -ex;
+			ey -= universe.y;
+			if (ey < 0)
+				ey = -ey;
+
+			if (ex > (XOFFS / NUM_RADAR_SCREENS)
+					|| ey > (YOFFS / NUM_RADAR_SCREENS))
+				continue;
+
+			hHyperSpaceElement = AllocHyperElement (&SD[i]);
+			if (hHyperSpaceElement == 0)
+				continue;
+
+			LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+
+			// JMS: Orzspace element graphics
+			
+			if (GET_GAME_STATE (ORZ_SPACE_SIDE))
+				which_spaces_star_gfx = 3;
+			else 
+				which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
+
+			HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
+					hyperstars[which_spaces_star_gfx],	// JMS: was "hyperstars[1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1)],"
+					SD[i].Index);
+			HyperSpaceElementPtr->preprocess_func = NULL;
+			HyperSpaceElementPtr->postprocess_func = NULL;
+			HyperSpaceElementPtr->collision_func = arilou_space_collision;
+
+			SetUpElement (HyperSpaceElementPtr);
+
+			if (arilouSpaceSide == 1 || arilouSpaceSide == 2)
+				HyperSpaceElementPtr->death_func = arilou_space_death;
+			else
 			{
-				ex = SD[i].star_pt.x;
-				ey = SD[i].star_pt.y;
-				s.origin.x = (COORD)((long)ex * RADAR_WIDTH
-						/ RADAR_SCAN_WIDTH) - ox;
-				s.origin.y = (COORD)((long)(MAX_Y_UNIVERSE - ey)
-						* RADAR_HEIGHT
-						/ RADAR_SCAN_HEIGHT) - oy;
-				s.frame = SetAbsFrameIndex (stars_in_space, 95);
-				DrawStamp (&s);
-
-				if ((ex -= universe.x) < 0)
-					ex = -ex;
-				if ((ey -= universe.y) < 0)
-					ey = -ey;
-				if (ex <= (XOFFS / NUM_RADAR_SCREENS)
-						&& ey <= (YOFFS / NUM_RADAR_SCREENS)
-						&& (hHyperSpaceElement =
-						AllocHyperElement (&SD[i])) != 0)
-				{
-					int which_spaces_star_gfx;
-					
-					LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
-					
-					// JMS: Orzspace element graphics
-					
-					if (GET_GAME_STATE (ORZ_SPACE_SIDE))
-						which_spaces_star_gfx = 3;
-					else 
-						which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
-					
-					HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
-							hyperstars[which_spaces_star_gfx],	// JMS: was "hyperstars[1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1)],"
-							SD[i].Index
-							);
-					
-					HyperSpaceElementPtr->preprocess_func =
-							HyperSpaceElementPtr->postprocess_func = NULL;
-					HyperSpaceElementPtr->collision_func = arilou_space_collision;
-
-					SetUpElement (HyperSpaceElementPtr);
-
-					if (arilouSpaceSide == 1 || arilouSpaceSide == 2)
-						HyperSpaceElementPtr->death_func = arilou_space_death;
-					else
-					{
-						HyperSpaceElementPtr->death_func = NULL;
-						HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
-								DecFrameIndex (stars_in_space);
-					}
-
-					UnlockElement (hHyperSpaceElement);
-
-					InsertElement (hHyperSpaceElement, GetHeadElement ());
-				}
+				HyperSpaceElementPtr->death_func = NULL;
+				HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
+						DecFrameIndex (stars_in_space);
 			}
+
+			UnlockElement (hHyperSpaceElement);
+
+			InsertElement (hHyperSpaceElement, GetHeadElement ());
 		} while (i);
 	}
 
@@ -1726,56 +1713,56 @@ SeedUniverse (void)
 		SDPtr = 0;
 		while ((SDPtr = FindStar (SDPtr, &universe, XOFFS, YOFFS)))
 		{
-			ex = SDPtr->star_pt.x;
-			ey = SDPtr->star_pt.y;
-			if ((ex -= universe.x) < 0)
+			BYTE star_type;
+
+			ex = SDPtr->star_pt.x - universe.x;
+			if (ex < 0)
 				ex = -ex;
-			if ((ey -= universe.y) < 0)
+			ey = SDPtr->star_pt.y - universe.y;
+			if (ey < 0)
 				ey = -ey;
-			if (ex <= (XOFFS / NUM_RADAR_SCREENS)
-					&& ey <= (YOFFS / NUM_RADAR_SCREENS)
-					&& (hHyperSpaceElement = AllocHyperElement (SDPtr)) != 0)
-			{
-				BYTE star_type;
+			if (ex > (XOFFS / NUM_RADAR_SCREENS)
+					|| ey > (YOFFS / NUM_RADAR_SCREENS))
+				continue;
 				int which_spaces_star_gfx;
 				
-				star_type = SDPtr->Type;
+			hHyperSpaceElement = AllocHyperElement (SDPtr);
+			if (hHyperSpaceElement == 0)
+				continue;
 
-				LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
-				
-				// DEBUG BY JMS: ORZ space element gfx
-				
-				if (GET_GAME_STATE (ORZ_SPACE_SIDE))
-					which_spaces_star_gfx = 3;
-				else 
-					which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
-				
-				HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
-						hyperstars[which_spaces_star_gfx],
-						STAR_TYPE (star_type)
-						* NUM_STAR_COLORS
-						+ STAR_COLOR (star_type)
-						);
-				
-				HyperSpaceElementPtr->preprocess_func =
-						HyperSpaceElementPtr->postprocess_func = NULL;
-				HyperSpaceElementPtr->collision_func = hyper_collision;
+			star_type = SDPtr->Type;
 
-				SetUpElement (HyperSpaceElementPtr);
+			LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
 
-				if (SDPtr == CurStarDescPtr
-						&& GET_GAME_STATE (PORTAL_COUNTER) == 0)
-					HyperSpaceElementPtr->death_func = hyper_death;
-				else
-				{
-					HyperSpaceElementPtr->death_func = NULL;
-					HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
-							DecFrameIndex (stars_in_space);
-				}
-				UnlockElement (hHyperSpaceElement);
+			// DEBUG BY JMS: ORZ space element gfx
+			
+			if (GET_GAME_STATE (ORZ_SPACE_SIDE))
+				which_spaces_star_gfx = 3;
+			else 
+				which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
 
-				InsertElement (hHyperSpaceElement, GetHeadElement ());
+			HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
+					hyperstars[which_spaces_star_gfx],
+					STAR_TYPE (star_type) * NUM_STAR_COLORS
+					+ STAR_COLOR (star_type));
+			HyperSpaceElementPtr->preprocess_func = NULL;
+			HyperSpaceElementPtr->postprocess_func = NULL;
+			HyperSpaceElementPtr->collision_func = hyper_collision;
+
+			SetUpElement (HyperSpaceElementPtr);
+
+			if (SDPtr == CurStarDescPtr
+					&& GET_GAME_STATE (PORTAL_COUNTER) == 0)
+				HyperSpaceElementPtr->death_func = hyper_death;
+			else
+			{
+				HyperSpaceElementPtr->death_func = NULL;
+				HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
+						DecFrameIndex (stars_in_space);
 			}
+			UnlockElement (hHyperSpaceElement);
+
+			InsertElement (hHyperSpaceElement, GetHeadElement ());
 		}
 		
 		// JMS: If player left system before transport ship and the transport ship was on its way to leaving system,
@@ -1973,3 +1960,4 @@ SaveSisHyperState (void)
 	GLOBAL (ShipFacing) = StarShipPtr->ShipFacing + 1;
 	UnlockElement (hSisElement);
 }
+

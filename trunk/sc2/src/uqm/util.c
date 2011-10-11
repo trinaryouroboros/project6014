@@ -143,8 +143,9 @@ PauseGame (void)
 	RECT r;
 	STAMP s;
 	CONTEXT OldContext;
-	FRAME F;
-	HOT_SPOT OldHot;
+	STAMP saveStamp;
+	RECT ctxRect;
+	POINT oldOrigin;
 	RECT OldRect;
 
 	if (ActivityFrame == 0
@@ -159,22 +160,24 @@ PauseGame (void)
 
 	LockMutex (GraphicsLock);
 	OldContext = SetContext (ScreenContext);
-	OldHot = SetFrameHot (Screen, MAKE_HOT_SPOT (0, 0));
+	oldOrigin = SetContextOrigin (MAKE_POINT (0, 0));
 	GetContextClipRect (&OldRect);
 	SetContextClipRect (NULL);
 
+	GetContextClipRect (&ctxRect);
 	GetFrameRect (ActivityFrame, &r);
-	r.corner.x = (SCREEN_WIDTH - r.extent.width) >> 1;
-	r.corner.y = (SCREEN_HEIGHT - r.extent.height) >> 1;
+	r.corner.x = (ctxRect.extent.width - r.extent.width) >> 1;
+	r.corner.y = (ctxRect.extent.height - r.extent.height) >> 1;
+	saveStamp = SaveContextFrame (&r);
+
+	// TODO: This should draw a localizable text message instead
 	s.origin = r.corner;
 	s.frame = ActivityFrame;
-	F = CaptureDrawable (LoadDisplayPixmap (&r, (FRAME)0));
 	SetSystemRect (&r);
 	DrawStamp (&s);
 
-	// Releasing the lock lets the rotate_planet_task
-	// draw a frame.  PauseRotate can still allow one more frame
-	// to be drawn, so it is safer to just not release the lock
+	// It is safer to just not release the lock so any graphics tasks
+	// would be blocked
 	//UnlockMutex (GraphicsLock);
 	FlushGraphics ();
 	//LockMutex (GraphicsLock);
@@ -199,13 +202,12 @@ PauseGame (void)
 
 	GamePaused = FALSE;
 
-	s.frame = F;
-	DrawStamp (&s);
-	DestroyDrawable (ReleaseDrawable (s.frame));
+	DrawStamp (&saveStamp);
+	DestroyDrawable (ReleaseDrawable (saveStamp.frame));
 	ClearSystemRect ();
 
 	SetContextClipRect (&OldRect);
-	SetFrameHot (Screen, OldHot);
+	SetContextOrigin (oldOrigin);
 	SetContext (OldContext);
 
 	WaitForNoInput (ONE_SECOND / 4, TRUE);

@@ -83,36 +83,23 @@ RepairBackRect (RECT *pRect)
 static void
 EraseCoarseScan (void)
 {
-	RECT r, tr;
-	const int leftScanWidth   = 80 << RESOLUTION_FACTOR; // JMS_GFX
-	const int rightScanWidth  = 80 << RESOLUTION_FACTOR; // JMS_GFX
-	const int leftScanOffset  = 5 << RESOLUTION_FACTOR; // JMS_GFX
-	const int rightScanOffset = 50 << RESOLUTION_FACTOR; // JMS_GFX
-	const int nameEraseWidth = (SIS_SCREEN_WIDTH - (2 << RESOLUTION_FACTOR)); // JMS_GFX
+	RECT oldClipRect;
+	RECT clipRect;
 
 	LockMutex (GraphicsLock);
 	SetContext (SpaceContext);
-
-	// Erase planet name
-	r.corner.x = (SIS_SCREEN_WIDTH >> 1) - (nameEraseWidth >> 1);
-	r.corner.y = (13 - 10) << RESOLUTION_FACTOR; // JMS_GFX
-	r.extent.width = nameEraseWidth;
-	r.extent.height = 14 << RESOLUTION_FACTOR; // JMS_GFX
-	RepairBackRect (&r);
-
-	// Erase left side (Orbit, atmo, temp...)
-	GetFrameRect (SetAbsFrameIndex (SpaceJunkFrame, 20), &tr);
-	r = tr;
-	r.corner.x += leftScanOffset;
-	r.extent.width = leftScanWidth;
-	RepairBackRect (&r);
-
-	// Erase right side info (Mass, radius, gravity...)
-	r = tr;
-	r.corner.x += (r.extent.width - rightScanOffset);
-	r.extent.width = rightScanWidth;
-	RepairBackRect (&r);
-
+	// TODO: Give coarse scan an own context
+	GetContextClipRect (&oldClipRect);
+	clipRect = oldClipRect;
+	clipRect.extent.height = SCAN_SCREEN_HEIGHT;
+	SetContextClipRect (&clipRect);
+	
+	BatchGraphics ();
+	DrawStarBackGround ();
+	DrawDefaultPlanetSphere ();
+	UnbatchGraphics ();
+	
+	SetContextClipRect (&oldClipRect);
 	UnlockMutex (GraphicsLock);
 }
 
@@ -655,6 +642,7 @@ PickPlanetSide (MENU_STATE *pMS)
 {
 	DWORD TimeIn = GetTimeCounter ();
 	BOOLEAN select, cancel;
+
 	select = PulsedInputState.menu[KEY_MENU_SELECT];
 	cancel = PulsedInputState.menu[KEY_MENU_CANCEL];
 	
@@ -699,6 +687,7 @@ PickPlanetSide (MENU_STATE *pMS)
 		}
 		else
 		{
+			InputFrameCallback *oldCallback;
 			COUNT fuel_required;
 
 			fuel_required = (COUNT)(
@@ -707,6 +696,9 @@ PickPlanetSide (MENU_STATE *pMS)
 				fuel_required = 3 * FUEL_TANK_SCALE;
 
 			EraseCoarseScan ();
+
+			// Deactivate planet rotation callback
+			oldCallback = SetInputCallback (NULL);
 
 			LockMutex (GraphicsLock);
 			DeltaSISGauges (0, -(SIZE)fuel_required, 0);
@@ -721,10 +713,12 @@ PickPlanetSide (MENU_STATE *pMS)
 			// JMS: If black orb is found and the lander returned to Explorer ship, allow initiating cutscene
 			if(GET_GAME_STATE(BLACK_ORB_STATE) == 1)
 			{
+				InputFrameCallback *oldCallback;
 				BYTE xform_buf[1];
 				SET_GAME_STATE(BLACK_ORB_STATE, 2); // Now the black orb is fetched - prevent playing this
 				StopMusic ();
-				pSolarSysState->PauseRotate = 1;
+ 				// Deactivate planet rotation -- is this really necessary ?
+ 				oldCallback = SetInputCallback (NULL);
 				LurgCutScene ();
 				
 				xform_buf[0] = FadeAllToBlack;
@@ -742,7 +736,8 @@ PickPlanetSide (MENU_STATE *pMS)
 				DrawStarBackGround (TRUE);
 				DrawPlanet (SIS_SCREEN_WIDTH - MAP_WIDTH + 7, SIS_SCREEN_HEIGHT - MAP_HEIGHT + 10, 0, 0);
 				UnlockMutex (GraphicsLock);
-				pSolarSysState->PauseRotate = 0;
+				// Reactivate planet rotation
+				SetInputCallback (oldCallback);
 				PlayMusic (LanderMusic, TRUE, 1);*/
 			}
 			
@@ -781,6 +776,9 @@ PickPlanetSide (MENU_STATE *pMS)
 				PrintCoarseScanPC ();
 			else
 				PrintCoarseScan3DO ();
+
+			// Reactivate planet rotation callback
+			SetInputCallback (oldCallback);
 		}
 
 		DrawMenuStateStrings (PM_MIN_SCAN, DISPATCH_SHUTTLE);
@@ -1058,11 +1056,6 @@ DoScan (MENU_STATE *pMS)
 			return (TRUE);
 		}
 
-		pSolarSysState->MenuState.Initialized += 4;
-#ifndef SPIN_ON_SCAN
-		pSolarSysState->PauseRotate = 1;
-#endif
-	
 		min_scan = pMS->CurState;
 		if (min_scan != AUTO_SCAN)
 			max_scan = min_scan;
@@ -1156,6 +1149,9 @@ DoScan (MENU_STATE *pMS)
 					DrawPlanet (0, 0, i, rgb);
 					DrawScannedStuff (i, min_scan);
 					UnbatchGraphics ();
+#ifdef SPIN_ON_SCAN
+					RotatePlanetSphere (TRUE);
+#endif
 					UnlockMutex (GraphicsLock);
 				}
 
@@ -1196,8 +1192,6 @@ DoScan (MENU_STATE *pMS)
 		else
 			UnlockMutex (GraphicsLock);
 			
-		pSolarSysState->MenuState.Initialized -= 4;
-		pSolarSysState->PauseRotate = 0;
 		FlushInput ();
 	}
 	else if (optWhichMenu == OPT_PC ||

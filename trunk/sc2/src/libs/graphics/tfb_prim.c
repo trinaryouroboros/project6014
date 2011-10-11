@@ -29,12 +29,13 @@
 #include "libs/log.h"
 
 void
-TFB_Prim_Point (POINT *p, Color color)
+TFB_Prim_Point (POINT *p, Color color, POINT ctxOrigin)
 {
 	RECT r;
 
-	r.corner.x = p->x - _CurFramePtr->HotSpot.x;
-	r.corner.y = p->y - _CurFramePtr->HotSpot.y;
+	// The caller must scale the origin!
+	r.corner.x = p->x + ctxOrigin.x;
+	r.corner.y = p->y + ctxOrigin.y;
 	r.extent.width = r.extent.height = 1;
 
 	if (_CurFramePtr->Type == SCREEN_DRAWABLE)
@@ -44,41 +45,48 @@ TFB_Prim_Point (POINT *p, Color color)
 }
 
 void
-TFB_Prim_Rect (RECT *r, Color color)
+TFB_Prim_Rect (RECT *r, Color color, POINT ctxOrigin)
 {
 	RECT arm;
 	int gscale;
+
+	// XXX: Rect prim scaling is currently unused
+	//   We scale the rect size just to be consistent with stamp prim,
+	//   which does same. The caller must scale the origin!
 	gscale = GetGraphicScale ();
 	arm = *r;
 	arm.extent.width = r->extent.width;
 	arm.extent.height = 1;
-	TFB_Prim_FillRect (&arm, color);
+	TFB_Prim_FillRect (&arm, color, ctxOrigin);
 	arm.extent.height = r->extent.height;
 	arm.extent.width = 1;
-	TFB_Prim_FillRect (&arm, color);
+	TFB_Prim_FillRect (&arm, color, ctxOrigin);
 	// rounding error correction here
 	arm.corner.x += ((r->extent.width * gscale + (GSCALE_IDENTITY >> 1))
 			/ GSCALE_IDENTITY) - 1;
-	TFB_Prim_FillRect (&arm, color);
+	TFB_Prim_FillRect (&arm, color, ctxOrigin);
 	arm.corner.x = r->corner.x;
 	arm.corner.y += ((r->extent.height * gscale + (GSCALE_IDENTITY >> 1))
 			/ GSCALE_IDENTITY) - 1;
 	arm.extent.width = r->extent.width;
 	arm.extent.height = 1;
-	TFB_Prim_FillRect (&arm, color);	
+	TFB_Prim_FillRect (&arm, color, ctxOrigin);
 }
 
 void
-TFB_Prim_FillRect (RECT *r, Color color)
+TFB_Prim_FillRect (RECT *r, Color color, POINT ctxOrigin)
 {
 	RECT rect;
 	int gscale;
 
-	rect.corner.x = r->corner.x - _CurFramePtr->HotSpot.x;
-	rect.corner.y = r->corner.y - _CurFramePtr->HotSpot.y;
+	rect.corner.x = r->corner.x + ctxOrigin.x;
+	rect.corner.y = r->corner.y + ctxOrigin.y;
 	rect.extent.width = r->extent.width;
 	rect.extent.height = r->extent.height;
 
+	// XXX: Rect prim scaling is currently unused
+	//   We scale the rect size just to be consistent with stamp prim,
+	//   which does same. The caller must scale the origin!
 	gscale = GetGraphicScale ();
 	if (gscale != GSCALE_IDENTITY)
 	{	// rounding error correction here
@@ -86,8 +94,6 @@ TFB_Prim_FillRect (RECT *r, Color color)
 				+ (GSCALE_IDENTITY >> 1)) / GSCALE_IDENTITY;
 		rect.extent.height = (rect.extent.height * gscale
 				+ (GSCALE_IDENTITY >> 1)) / GSCALE_IDENTITY;
-		rect.corner.x += (r->extent.width - rect.extent.width) >> 1;
-		rect.corner.y += (r->extent.height - rect.extent.height) >> 1;
 	}
 
 	if (_CurFramePtr->Type == SCREEN_DRAWABLE)
@@ -97,14 +103,15 @@ TFB_Prim_FillRect (RECT *r, Color color)
 }
 
 void
-TFB_Prim_Line (LINE *line, Color color)
+TFB_Prim_Line (LINE *line, Color color, POINT ctxOrigin)
 {
 	int x1, y1, x2, y2;
 
-	x1=line->first.x - _CurFramePtr->HotSpot.x;
-	y1=line->first.y - _CurFramePtr->HotSpot.y;
-	x2=line->second.x - _CurFramePtr->HotSpot.x;
-	y2=line->second.y - _CurFramePtr->HotSpot.y;
+	// The caller must scale the origins!
+	x1=line->first.x + ctxOrigin.x;
+	y1=line->first.y + ctxOrigin.y;
+	x2=line->second.x + ctxOrigin.x;
+	y2=line->second.y + ctxOrigin.y;
 
 	if (_CurFramePtr->Type == SCREEN_DRAWABLE)
 		TFB_DrawScreen_Line (x1, y1, x2, y2, color, TFB_SCREEN_MAIN);
@@ -113,7 +120,7 @@ TFB_Prim_Line (LINE *line, Color color)
 }
 
 void
-TFB_Prim_Stamp (STAMP *stmp)
+TFB_Prim_Stamp (STAMP *stmp, POINT ctxOrigin)
 {
 	int x, y;
 	FRAME SrcFramePtr;
@@ -140,8 +147,9 @@ TFB_Prim_Stamp (STAMP *stmp)
 	LockMutex (img->mutex);
 
 	img->NormalHs = SrcFramePtr->HotSpot;
-	x = stmp->origin.x - _CurFramePtr->HotSpot.x;
-	y = stmp->origin.y - _CurFramePtr->HotSpot.y;
+	// We scale the image size here, but the caller must scale the origin!
+	x = stmp->origin.x + ctxOrigin.x;
+	y = stmp->origin.y + ctxOrigin.y;
 
 	if (TFB_DrawCanvas_IsPaletted(img->NormalImg) && img->colormap_index != -1)
 	{
@@ -162,7 +170,7 @@ TFB_Prim_Stamp (STAMP *stmp)
 }
 
 void
-TFB_Prim_StampFill (STAMP *stmp, Color color)
+TFB_Prim_StampFill (STAMP *stmp, Color color, POINT ctxOrigin)
 {
 	int x, y;
 	FRAME SrcFramePtr;
@@ -188,8 +196,9 @@ TFB_Prim_StampFill (STAMP *stmp, Color color)
 	LockMutex (img->mutex);
 
 	img->NormalHs = SrcFramePtr->HotSpot;
-	x = stmp->origin.x - _CurFramePtr->HotSpot.x;
-	y = stmp->origin.y - _CurFramePtr->HotSpot.y;
+	// We scale the image size here, but the caller must scale the origin!
+	x = stmp->origin.x + ctxOrigin.x;
+	y = stmp->origin.y + ctxOrigin.y;
 
 	UnlockMutex (img->mutex);
 
@@ -205,12 +214,14 @@ TFB_Prim_StampFill (STAMP *stmp, Color color)
 }
 
 void
-TFB_Prim_FontChar (POINT *origin, TFB_Char *fontChar, TFB_Image *backing)
+TFB_Prim_FontChar (POINT charOrigin, TFB_Char *fontChar, TFB_Image *backing,
+		POINT ctxOrigin)
 {
 	int x, y;
 
-	x = origin->x - _CurFramePtr->HotSpot.x;
-	y = origin->y - _CurFramePtr->HotSpot.y;
+	// Text prim does not scale
+	x = charOrigin.x + ctxOrigin.x;
+	y = charOrigin.y + ctxOrigin.y;
 
 	if (_CurFramePtr->Type == SCREEN_DRAWABLE)
 	{

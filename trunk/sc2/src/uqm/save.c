@@ -549,6 +549,8 @@ SaveProblemMessage (STAMP *MsgStamp)
 	TEXT t;
 	UNICODE *ppStr[MAX_MSG_LINES];
 
+	// TODO: This should probably just use DoPopupWindow()
+
 	ppStr[0] = GAME_STRING (SAVEGAME_STRING_BASE + 2);
  
 	SetContextFont (StarConFont);
@@ -579,17 +581,7 @@ SaveProblemMessage (STAMP *MsgStamp)
 	r.extent.width += 8;
 	r.extent.height += 8;
 
-	{
-		RECT clip_r;
-		
-		GetContextClipRect (&clip_r);
-		MsgStamp->origin = r.corner;
-		r.corner.x += clip_r.corner.x;
-		r.corner.y += clip_r.corner.y;
-		MsgStamp->frame = CaptureDrawable (LoadDisplayPixmap (&r, (FRAME)0));
-		r.corner.x -= clip_r.corner.x;
-		r.corner.y -= clip_r.corner.y;
-	}
+	*MsgStamp = SaveContextFrame (&r);
 	
 	BatchGraphics ();
 	DrawStarConBox (&r, 2,
@@ -626,9 +618,8 @@ SaveProblem (void)
 	WaitForAnyButton (TRUE, WAIT_INFINITE, FALSE);
 
 	LockMutex (GraphicsLock);
-	BatchGraphics ();
+	// Restore the screen under the message
 	DrawStamp (&s);
-	UnbatchGraphics ();
 	SetContext (OldContext);
 	DestroyDrawable (ReleaseDrawable (s.frame));
 	UnlockMutex (GraphicsLock);
