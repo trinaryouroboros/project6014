@@ -117,9 +117,14 @@ bool
 GenerateDefault_generateName (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 {
 	COUNT i = planetIndex (solarSys, world);
-	utf8StringCopy (GLOBAL_SIS (PlanetName), sizeof (GLOBAL_SIS (PlanetName)),
-			GAME_STRING (PLANET_NUMBER_BASE + (9 + 7) + i));
-	SET_GAME_STATE (BATTLE_PLANET, world->data_index);
+	utf8StringCopy (GLOBAL_SIS (PlanetName), sizeof (GLOBAL_SIS (PlanetName)), GAME_STRING (PLANET_NUMBER_BASE + (9 + 7) + i));
+	
+	// JMS: This is to make 0 planet systems work (e.g. Orz space portal).
+	if (pSolarSysState->SunDesc[0].NumPlanets != 0)
+		SET_GAME_STATE (BATTLE_PLANET, world->data_index);
+	else 
+		SET_GAME_STATE (BATTLE_PLANET, solarSys->PlanetDesc[0].data_index);
+
 
 	return true;
 }
