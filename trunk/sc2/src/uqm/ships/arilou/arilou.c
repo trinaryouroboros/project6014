@@ -454,7 +454,7 @@ init_arilou (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	// JMS_GFX: A rather clumsy way of giving ship correct max speed at hi-res mode
+	// JMS_GFX: A rather clumsy way of giving ship correct stats at hi-res mode
 	if (RESOLUTION_FACTOR == 0)
 	{
 		arilou_desc.preprocess_func = arilou_preprocess;
