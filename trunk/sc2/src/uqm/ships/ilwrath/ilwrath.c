@@ -110,6 +110,158 @@ static RACE_DESC ilwrath_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 50
+#define THRUST_INCREMENT_2XRES 10
+
+// JMS_GFX
+static RACE_DESC ilwrath_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		10, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		ILWRATH_RACE_STRINGS,
+		ILWRATH_ICON_MASK_PMAP_ANIM,
+		ILWRATH_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			ILWRATH_BIG_MASK_PMAP_ANIM,
+			ILWRATH_MED_MASK_PMAP_ANIM,
+			ILWRATH_SML_MASK_PMAP_ANIM,
+		},
+		{
+			FIRE_BIG_MASK_PMAP_ANIM,
+			FIRE_MED_MASK_PMAP_ANIM,
+			FIRE_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			ILWRATH_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		ILWRATH_VICTORY_SONG,
+		ILWRATH_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_2XRES,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 100
+#define THRUST_INCREMENT_4XRES 20
+
+// JMS_GFX
+static RACE_DESC ilwrath_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		10, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		ILWRATH_RACE_STRINGS,
+		ILWRATH_ICON_MASK_PMAP_ANIM,
+		ILWRATH_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			ILWRATH_BIG_MASK_PMAP_ANIM,
+			ILWRATH_MED_MASK_PMAP_ANIM,
+			ILWRATH_SML_MASK_PMAP_ANIM,
+		},
+		{
+			FIRE_BIG_MASK_PMAP_ANIM,
+			FIRE_MED_MASK_PMAP_ANIM,
+			FIRE_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			ILWRATH_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		ILWRATH_VICTORY_SONG,
+		ILWRATH_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_4XRES,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static void
 flame_preprocess (ELEMENT *ElementPtr)
 {
@@ -117,10 +269,8 @@ flame_preprocess (ELEMENT *ElementPtr)
 		--ElementPtr->turn_wait;
 	else
 	{
-		ElementPtr->next.image.frame =
-				IncFrameIndex (ElementPtr->current.image.frame);
+		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 		ElementPtr->state_flags |= CHANGING;
-
 		ElementPtr->turn_wait = ElementPtr->next_turn;
 	}
 }
@@ -135,14 +285,14 @@ flame_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 }
 
 static void
-ilwrath_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-		COUNT ConcernCounter)
+ilwrath_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
 	EVALUATE_DESC *lpEvalDesc;
 	STARSHIP *StarShipPtr;
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	 lpEvalDesc->MoveState = PURSUE;
+	lpEvalDesc->MoveState = PURSUE;
+	
 	if (lpEvalDesc->ObjectPtr && lpEvalDesc->which_turn <= 10)
 				/* don't want to dodge when you could be flaming */
 		ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr = 0;
@@ -177,8 +327,8 @@ ilwrath_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 static COUNT
 initialize_flame (ELEMENT *ShipPtr, HELEMENT FlameArray[])
 {
-#define ILWRATH_OFFSET 29
-#define MISSILE_SPEED MAX_THRUST
+#define ILWRATH_OFFSET (29 << RESOLUTION_FACTOR)		// JMS_GFX
+#define MISSILE_SPEED (MAX_THRUST << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_HITS 1
 #define MISSILE_DAMAGE 1
 #define MISSILE_OFFSET 0
@@ -268,8 +418,9 @@ ilwrath_preprocess (ELEMENT *ElementPtr)
 				ProcessSound (SetAbsSoundIndex (
 								/* CLOAKING_OFF */
 						StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr);
-				SetPrimColor (lpPrim,
-						BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
+				
+				SetPrimColor (lpPrim, BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01));
+				
 				if (weapon_discharge)
 				{
 					COUNT facing;
@@ -391,11 +542,27 @@ init_ilwrath (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	ilwrath_desc.preprocess_func = ilwrath_preprocess;
-	ilwrath_desc.init_weapon_func = initialize_flame;
-	ilwrath_desc.cyborg_control.intelligence_func = ilwrath_intelligence;
-
-	RaceDescPtr = &ilwrath_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		ilwrath_desc.preprocess_func = ilwrath_preprocess;
+		ilwrath_desc.init_weapon_func = initialize_flame;
+		ilwrath_desc.cyborg_control.intelligence_func = ilwrath_intelligence;
+		RaceDescPtr = &ilwrath_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		ilwrath_desc_2xres.preprocess_func = ilwrath_preprocess;
+		ilwrath_desc_2xres.init_weapon_func = initialize_flame;
+		ilwrath_desc_2xres.cyborg_control.intelligence_func = ilwrath_intelligence;
+		RaceDescPtr = &ilwrath_desc_2xres;
+	}
+	else
+	{
+		ilwrath_desc_4xres.preprocess_func = ilwrath_preprocess;
+		ilwrath_desc_4xres.init_weapon_func = initialize_flame;
+		ilwrath_desc_4xres.cyborg_control.intelligence_func = ilwrath_intelligence;
+		RaceDescPtr = &ilwrath_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }

@@ -413,10 +413,10 @@ spawn_point_defense (ELEMENT *ElementPtr)
 static COUNT
 initialize_nuke (ELEMENT *ShipPtr, HELEMENT NukeArray[])
 {
-#define HUMAN_OFFSET 42
+#define HUMAN_OFFSET (42 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_DAMAGE 4
 #define MISSILE_HITS 1
-#define NUKE_OFFSET 8
+#define NUKE_OFFSET (8 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -427,13 +427,13 @@ initialize_nuke (ELEMENT *ShipPtr, HELEMENT NukeArray[])
 	MissileBlock.face = MissileBlock.index = StarShipPtr->ShipFacing;
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = 0;
-	MissileBlock.pixoffs = HUMAN_OFFSET << RESOLUTION_FACTOR; // JMS_GFX
+	MissileBlock.pixoffs = HUMAN_OFFSET;
 	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
 	MissileBlock.preprocess_func = nuke_preprocess;
-	MissileBlock.blast_offs = NUKE_OFFSET << RESOLUTION_FACTOR; // JMS_GFX
+	MissileBlock.blast_offs = NUKE_OFFSET;
 	NukeArray[0] = initialize_missile (&MissileBlock);
 
 	if (NukeArray[0])
