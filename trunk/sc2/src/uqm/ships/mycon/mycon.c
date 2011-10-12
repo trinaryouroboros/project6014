@@ -38,7 +38,7 @@
 #define NUM_GLOBALLS 8
 #define PLASMA_DURATION 13
 #define MISSILE_LIFE (NUM_PLASMAS * PLASMA_DURATION)
-#define MISSILE_SPEED DISPLAY_TO_WORLD (8)
+#define MISSILE_SPEED DISPLAY_TO_WORLD (8 << RESOLUTION_FACTOR) // JMS_GFX
 
 static RACE_DESC mycon_desc =
 {
@@ -111,8 +111,159 @@ static RACE_DESC mycon_desc =
 	0, /* CodeRef */
 };
 
-#define MISSILE_DAMAGE 10
+// JMS_GFX
+#define MAX_THRUST_2XRES /* DISPLAY_TO_WORLD (14) */ 54
+#define THRUST_INCREMENT_2XRES /* DISPLAY_TO_WORLD (4) */ 18
 
+// JMS_GFX
+static RACE_DESC mycon_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_WEAPON,
+		21, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		MYCON_RACE_STRINGS,
+		MYCON_ICON_MASK_PMAP_ANIM,
+		MYCON_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			MYCON_BIG_MASK_PMAP_ANIM,
+			MYCON_MED_MASK_PMAP_ANIM,
+			MYCON_SML_MASK_PMAP_ANIM,
+		},
+		{
+			PLASMA_BIG_MASK_PMAP_ANIM,
+			PLASMA_MED_MASK_PMAP_ANIM,
+			PLASMA_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			MYCON_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		MYCON_VICTORY_SONG,
+		MYCON_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		DISPLAY_TO_WORLD (1600),
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES /* DISPLAY_TO_WORLD (28) */ 108
+#define THRUST_INCREMENT_4XRES /* DISPLAY_TO_WORLD (8) */ 36
+
+// JMS_GFX
+static RACE_DESC mycon_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_WEAPON,
+		21, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		MYCON_RACE_STRINGS,
+		MYCON_ICON_MASK_PMAP_ANIM,
+		MYCON_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			MYCON_BIG_MASK_PMAP_ANIM,
+			MYCON_MED_MASK_PMAP_ANIM,
+			MYCON_SML_MASK_PMAP_ANIM,
+		},
+		{
+			PLASMA_BIG_MASK_PMAP_ANIM,
+			PLASMA_MED_MASK_PMAP_ANIM,
+			PLASMA_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			MYCON_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		MYCON_VICTORY_SONG,
+		MYCON_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		DISPLAY_TO_WORLD (3200),
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+#define MISSILE_DAMAGE 10
 #define TRACK_WAIT 1
 
 static void
@@ -123,16 +274,14 @@ plasma_preprocess (ELEMENT *ElementPtr)
 	if (ElementPtr->mass_points > ElementPtr->hit_points)
 		ElementPtr->life_span = ElementPtr->hit_points * PLASMA_DURATION;
 	else
-		ElementPtr->hit_points = (BYTE)((ElementPtr->life_span *
-				MISSILE_DAMAGE + (MISSILE_LIFE - 1)) / MISSILE_LIFE);
+		ElementPtr->hit_points = (BYTE)((ElementPtr->life_span * MISSILE_DAMAGE + (MISSILE_LIFE - 1)) / MISSILE_LIFE);
+	
 	ElementPtr->mass_points = ElementPtr->hit_points;
-	plasma_index = NUM_PLASMAS - ((ElementPtr->life_span +
-			(PLASMA_DURATION - 1)) / PLASMA_DURATION);
+	plasma_index = NUM_PLASMAS - ((ElementPtr->life_span + (PLASMA_DURATION - 1)) / PLASMA_DURATION);
+	
 	if (plasma_index != GetFrameIndex (ElementPtr->next.image.frame))
 	{
-		ElementPtr->next.image.frame =
-				SetAbsFrameIndex (ElementPtr->next.image.frame,
-				plasma_index);
+		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, plasma_index);
 		ElementPtr->state_flags |= CHANGING;
 	}
 
@@ -142,12 +291,10 @@ plasma_preprocess (ELEMENT *ElementPtr)
 	{
 		COUNT facing;
 
-		facing = NORMALIZE_FACING (ANGLE_TO_FACING (
-				GetVelocityTravelAngle (&ElementPtr->velocity)
-				));
+		facing = NORMALIZE_FACING (ANGLE_TO_FACING ( GetVelocityTravelAngle (&ElementPtr->velocity)));
+		
 		if (TrackShip (ElementPtr, &facing) > 0)
-			SetVelocityVector (&ElementPtr->velocity,
-					MISSILE_SPEED, facing);
+			SetVelocityVector (&ElementPtr->velocity, MISSILE_SPEED, facing);
 
 		ElementPtr->turn_wait = TRACK_WAIT;
 	}
@@ -282,7 +429,7 @@ mycon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	if (StarShipPtr->special_counter == 0)
 	{
 		StarShipPtr->ship_input_state &= ~SPECIAL;
-		StarShipPtr->RaceDescPtr->cyborg_control.WeaponRange = DISPLAY_TO_WORLD (800);
+		StarShipPtr->RaceDescPtr->cyborg_control.WeaponRange = DISPLAY_TO_WORLD (800 << RESOLUTION_FACTOR); // JMS_GFX
 		if (ShipPtr->crew_level < StarShipPtr->RaceDescPtr->ship_info.max_crew)
 		{
 			StarShipPtr->RaceDescPtr->cyborg_control.WeaponRange = MISSILE_SPEED * MISSILE_LIFE;
@@ -296,7 +443,7 @@ mycon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 static COUNT
 initialize_plasma (ELEMENT *ShipPtr, HELEMENT PlasmaArray[])
 {
-#define MYCON_OFFSET 24
+#define MYCON_OFFSET (24 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_OFFSET 0
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
@@ -363,11 +510,27 @@ init_mycon (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	mycon_desc.postprocess_func = mycon_postprocess;
-	mycon_desc.init_weapon_func = initialize_plasma;
-	mycon_desc.cyborg_control.intelligence_func = mycon_intelligence;
-
-	RaceDescPtr = &mycon_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		mycon_desc.postprocess_func = mycon_postprocess;
+		mycon_desc.init_weapon_func = initialize_plasma;
+		mycon_desc.cyborg_control.intelligence_func = mycon_intelligence;
+		RaceDescPtr = &mycon_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		mycon_desc_2xres.postprocess_func = mycon_postprocess;
+		mycon_desc_2xres.init_weapon_func = initialize_plasma;
+		mycon_desc_2xres.cyborg_control.intelligence_func = mycon_intelligence;
+		RaceDescPtr = &mycon_desc_2xres;
+	}
+	else
+	{
+		mycon_desc_4xres.postprocess_func = mycon_postprocess;
+		mycon_desc_4xres.init_weapon_func = initialize_plasma;
+		mycon_desc_4xres.cyborg_control.intelligence_func = mycon_intelligence;
+		RaceDescPtr = &mycon_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
