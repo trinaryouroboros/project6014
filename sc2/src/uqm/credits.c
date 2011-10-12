@@ -691,7 +691,6 @@ typedef struct
 {
 	// standard state required by DoInput
 	BOOLEAN (*InputFunc) (void *pInputState);
-	COUNT MenuRepeatDelay;
 
 	BOOLEAN AllowCancel;
 	BOOLEAN AllowSpeedChange;
@@ -776,7 +775,6 @@ on_input_frame (void)
 void
 Credits (BOOLEAN WithOuttakes)
 {
-	BYTE fade_buf[1];
 	MUSIC_REF hMusic;
 	CREDITS_INPUT_STATE cis;
 	RECT screenRect;
@@ -801,8 +799,7 @@ Credits (BOOLEAN WithOuttakes)
 	s.frame = CreditsBack;
 	LockMutex (GraphicsLock);
 	DrawStamp (&s);
-	fade_buf[0] = FadeAllToColor;
-	XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND / 2);
+	FadeScreen (FadeAllToColor, ONE_SECOND / 2);
 	UnlockMutex (GraphicsLock);
 
 	// set the position of outtakes comm
@@ -827,7 +824,6 @@ Credits (BOOLEAN WithOuttakes)
 
 		// nothing to do now but wait until credits
 		//  are done or canceled by user
-		cis.MenuRepeatDelay = 0;
 		cis.InputFunc = DoCreditsInput;
 		cis.AllowCancel = !WithOuttakes;
 		cis.CloseWhenDone = !WithOuttakes;
@@ -842,8 +838,7 @@ Credits (BOOLEAN WithOuttakes)
 
 	LockMutex (GraphicsLock);
 	SetContext (ScreenContext);
-	fade_buf[0] = FadeAllToBlack;
-	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND / 2));
+	SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND / 2));
 	FlushColorXForms ();
 	UnlockMutex (GraphicsLock);
 

@@ -76,7 +76,6 @@ typedef struct LanderInputState LanderInputState;
 struct LanderInputState {
 	// Fields required by DoInput()
 	BOOLEAN (*InputFunc) (LanderInputState *pMS);
-	COUNT MenuRepeatDelay;
 
 	BOOLEAN Initialized;
 	TimeCount NextTime;
@@ -482,8 +481,8 @@ object_animation (ELEMENT *ElementPtr)
 				SIZE current_limpet_speed;
 				COUNT limpet_angle;
 				
-				ldx = pSolarSysState->MenuState.first_item.x - ElementPtr->next.location.x;
-				ldy = pSolarSysState->MenuState.first_item.y - ElementPtr->next.location.y;
+				ldx = curLanderLoc.x - ElementPtr->next.location.x;
+				ldy = curLanderLoc.y - ElementPtr->next.location.y;
 				
 				if (ldx < 0 && ldx < -(MAP_WIDTH << (MAG_SHIFT - 1)))
 					ldx += MAP_WIDTH << MAG_SHIFT;
@@ -2108,7 +2107,6 @@ DoPlanetSide (LanderInputState *pMS)
 	if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 		return (FALSE);
 
-	pMS->MenuRepeatDelay = 0;
 	if (!pMS->Initialized)
 	{
 		COUNT landerSpeedNumer;

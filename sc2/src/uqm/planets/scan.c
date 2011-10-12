@@ -714,15 +714,13 @@ PickPlanetSide (MENU_STATE *pMS)
 			if(GET_GAME_STATE(BLACK_ORB_STATE) == 1)
 			{
 				InputFrameCallback *oldCallback;
-				BYTE xform_buf[1];
 				SET_GAME_STATE(BLACK_ORB_STATE, 2); // Now the black orb is fetched - prevent playing this
 				StopMusic ();
  				// Deactivate planet rotation -- is this really necessary ?
  				oldCallback = SetInputCallback (NULL);
 				LurgCutScene ();
 				
-				xform_buf[0] = FadeAllToBlack;
-				XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2);
+				FadeScreen(FadeAllToBlack, ONE_SECOND / 2);
 				GLOBAL (CurrentActivity) = CHECK_ABORT;
 				
 				// JMS: Commented the next lines out for the demo.
@@ -1246,9 +1244,9 @@ ScanSystem (void)
 {
 	MENU_STATE MenuState;
 
+	memset (&MenuState, 0, sizeof MenuState);
+
 	MenuState.InputFunc = DoScan;
-	MenuState.Initialized = FALSE;
-	MenuState.flash_task = 0;
 
 	if (optWhichMenu == OPT_3DO &&
 			((pSolarSysState->pOrbitalDesc->data_index & PLANET_SHIELDED)

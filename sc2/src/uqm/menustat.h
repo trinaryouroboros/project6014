@@ -21,13 +21,12 @@
 
 #include "libs/gfxlib.h"
 #include "libs/sndlib.h"
-#include "libs/tasklib.h"
 #include "flash.h"
 
 typedef struct menu_state
 {
+	// Standard field required by DoInput()
 	BOOLEAN (*InputFunc) (struct menu_state *pMS);
-	COUNT MenuRepeatDelay;
 
 	SIZE Initialized;
 
@@ -38,14 +37,16 @@ typedef struct menu_state
 	SIZE delta_item;
 
 	FRAME ModuleFrame;
-	Task flash_task;
 	RECT flash_rect0, flash_rect1;
 	FRAME flash_frame0, flash_frame1;
 	FlashContext *flashContext;
 
 	MUSIC_REF hMusic;
 
-	void *Extra;
+	// For private use by various menus
+	// Usually, a menu associates its internal data struct using this
+	void *privData;
+
 } MENU_STATE;
 
 // XXX: Should probably go to menu.h (does not yet exist)

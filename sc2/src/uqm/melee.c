@@ -1130,7 +1130,6 @@ DoEdit (MELEE_STATE *pMS)
 				UnlockMutex (GraphicsLock);
 
 				tes.Initialized = FALSE;
-				tes.MenuRepeatDelay = 0;
 				tes.BaseStr = pMS->SideState[pMS->side].TeamImage.TeamName;
 				tes.CursorPos = 0;
 				tes.MaxSize = MAX_TEAM_CHARS + 1;
@@ -1696,11 +1695,9 @@ static void
 StartMelee (MELEE_STATE *pMS)
 {
 	{
-		BYTE black_buf[] = {FadeAllToBlack};
-		
 		FadeMusic (0, ONE_SECOND / 2);
-		SleepThreadUntil (XFormColorMap (
-				(COLORMAPPTR)black_buf, ONE_SECOND / 2) + ONE_SECOND / 60);
+		SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND / 2)
+				+ ONE_SECOND / 60);
 		FlushColorXForms ();
 		StopMusic ();
 	}
@@ -1730,14 +1727,10 @@ StartMelee (MELEE_STATE *pMS)
 		if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 			return;
 
-		{
-			BYTE black_buf[] = { FadeAllToBlack };
-		
-			SleepThreadUntil (XFormColorMap (
-					(COLORMAPPTR)black_buf, ONE_SECOND / 2)
-					+ ONE_SECOND / 60);
-			FlushColorXForms ();
-		}
+		SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND / 2)
+				+ ONE_SECOND / 60);
+		FlushColorXForms ();
+
 	} while (0 /* !(GLOBAL (CurrentActivity) & CHECK_ABORT) */);
 	GLOBAL (CurrentActivity) = SUPER_MELEE;
 
@@ -2117,11 +2110,8 @@ DoMelee (MELEE_STATE *pMS)
 		LockMutex (GraphicsLock);
 		InitMelee (pMS);
 		UnlockMutex (GraphicsLock);
-		{
-			BYTE clut_buf[] = {FadeAllToColor};
-				
-			XFormColorMap ((COLORMAPPTR)clut_buf, ONE_SECOND / 2);
-		}
+
+		FadeScreen (FadeAllToColor, ONE_SECOND / 2);
 		pMS->LastInputTime = GetTimeCounter ();
 		return TRUE;
 	}

@@ -41,7 +41,6 @@ typedef struct
 {
 	/* standard state required by DoInput */
 	BOOLEAN (*InputFunc) (void *pInputState);
-	COUNT MenuRepeatDelay;
 
 	/* Presentation state */
 	TimeCount StartTime;
@@ -79,7 +78,6 @@ typedef struct
 typedef struct {
 	/* standard state required by DoInput */
 	BOOLEAN (*InputFunc) (void *pInputState);
-	COUNT MenuRepeatDelay;
 
 	/* Spinanim state */
 	STAMP anim;
@@ -91,7 +89,6 @@ typedef struct
 {
 	// standard state required by DoInput
 	BOOLEAN (*InputFunc) (void *pInputState);
-	COUNT MenuRepeatDelay;
 
 	LEGACY_VIDEO_REF CurVideo;
 
@@ -114,12 +111,11 @@ ParseColorString (const char *Src, Color* pColor)
 static BOOLEAN
 DoFadeScreen (PRESENTATION_INPUT_STATE* pPIS, const char *Src, BYTE FadeType)
 {
-	BYTE xform_buf[1] = {FadeType};
 	int msecs;
 	if (1 == sscanf (Src, "%d", &msecs))
 	{
-		pPIS->TimeOut = XFormColorMap ((COLORMAPPTR) xform_buf,
-				(SIZE)(msecs * ONE_SECOND / 1000)) + ONE_SECOND / 10;
+		pPIS->TimeOut = FadeScreen (FadeType, msecs * ONE_SECOND / 1000)
+				+ ONE_SECOND / 10;
 		pPIS->TimeOutOnSkip = FALSE;
 	}
 	return TRUE;
@@ -782,7 +778,6 @@ ShowSlidePresentation (STRING PresStr)
 	UnlockMutex (GraphicsLock);
 
 	SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);
-	pis.MenuRepeatDelay = 0;
 	pis.InputFunc = DoPresentation;
 	pis.LastDrawKind = -1;
 	pis.TextVPos = 'B';
@@ -854,11 +849,7 @@ DoVideoInput (void *pIS)
 static void
 FadeClearScreen (void)
 {
-	BYTE xform_buf[1];
-
-	xform_buf[0] = FadeAllToBlack;
-	SleepThreadUntil (XFormColorMap (
-			(COLORMAPPTR) xform_buf, ONE_SECOND / 2));
+	SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND / 2));
 	
 	// clear the screen with black
 	LockMutex (GraphicsLock);
@@ -867,9 +858,7 @@ FadeClearScreen (void)
 	ClearDrawable ();
 	UnlockMutex (GraphicsLock);
 
-	// fade in black rect instantly
-	xform_buf[0] = FadeAllToColor;
-	XFormColorMap ((COLORMAPPTR) xform_buf, 0);
+	FadeScreen (FadeAllToColor, 0);
 }
 
 static BOOLEAN
@@ -884,7 +873,6 @@ ShowLegacyVideo (LEGACY_VIDEO vid)
 	if (!ref)
 		return FALSE;
 
-	vis.MenuRepeatDelay = 0;
 	vis.InputFunc = DoVideoInput;
 	vis.CurVideo = ref;
 	SetMenuSounds (MENU_SOUND_NONE, MENU_SOUND_NONE);

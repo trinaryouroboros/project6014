@@ -141,9 +141,7 @@ GenerateVux_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 	if (CurStarDescPtr->Index == VUX_DEFINED
 	    && matchWorld(solarSys, world, 0, 0))
 	{
-		solarSys->MenuState.Initialized += 2;
 		InitCommunication (VUX_CONVERSATION);
-		solarSys->MenuState.Initialized -= 2;
 	}
 	else
 	{

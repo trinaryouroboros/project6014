@@ -94,10 +94,8 @@ GenerateChmmr_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 	{
 		if (GET_GAME_STATE (CHMMR_UNLEASHED))
 		{
-			solarSys->MenuState.Initialized += 2;
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 7);
 			InitCommunication (CHMMR_CONVERSATION);
-			solarSys->MenuState.Initialized -= 2;
 
 			if (GET_GAME_STATE (CHMMR_BOMB_STATE) == 2)
 			{

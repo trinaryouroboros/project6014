@@ -160,11 +160,7 @@ DoRestart (MENU_STATE *pMS)
 		LastInputTime = GetTimeCounter ();
 		pMS->Initialized = TRUE;
 
-		{
-			BYTE clut_buf[] = {FadeAllToColor};
-			SleepThreadUntil (XFormColorMap ((COLORMAPPTR)clut_buf,
-					ONE_SECOND / 2));
-		}
+		SleepThreadUntil (FadeScreen (FadeAllToColor, ONE_SECOND / 2));
 	}
 	else if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 	{
@@ -172,8 +168,6 @@ DoRestart (MENU_STATE *pMS)
 	}
 	else if (PulsedInputState.menu[KEY_MENU_SELECT])
 	{
-		BYTE fade_buf[1];
-
 		switch (pMS->CurState)
 		{
 			case LOAD_SAVED_GAME:
@@ -191,8 +185,7 @@ DoRestart (MENU_STATE *pMS)
 					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
-					fade_buf[0] = FadeAllToBlack;
-					SleepThreadUntil (XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND / 2));
+					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
 					GLOBAL (CurrentActivity) = CHECK_ABORT;
 				}
 				else
@@ -216,8 +209,7 @@ DoRestart (MENU_STATE *pMS)
 					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
-					fade_buf[0] = FadeAllToBlack;
-					SleepThreadUntil (XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND / 2));
+					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
 					GLOBAL (CurrentActivity) = CHECK_ABORT;
 				}
 				else
@@ -241,8 +233,7 @@ DoRestart (MENU_STATE *pMS)
 					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
-					fade_buf[0] = FadeAllToBlack;
-					SleepThreadUntil (XFormColorMap ((COLORMAPPTR)fade_buf, ONE_SECOND / 2));
+					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
 					GLOBAL (CurrentActivity) = CHECK_ABORT;
 				}
 				else
@@ -267,10 +258,7 @@ DoRestart (MENU_STATE *pMS)
 				UnbatchGraphics ();
 				return TRUE;
 			case QUIT_GAME:
-				fade_buf[0] = FadeAllToBlack;
-				SleepThreadUntil (XFormColorMap (
-						(COLORMAPPTR)fade_buf, ONE_SECOND / 2));
-
+				SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND / 2));
 				GLOBAL (CurrentActivity) = CHECK_ABORT;
 				break;
 		}
@@ -352,12 +340,9 @@ static BOOLEAN
 RestartMenu (MENU_STATE *pMS)
 {
 	TimeCount TimeOut;
-	BYTE black_buf[1];
 
 	ReinitQueue (&race_q[0]);
 	ReinitQueue (&race_q[1]);
-
-	black_buf[0] = FadeAllToBlack;
 
 	SetContext (ScreenContext);
 
@@ -366,12 +351,10 @@ RestartMenu (MENU_STATE *pMS)
 			&& GET_GAME_STATE (UTWIG_BOMB_ON_SHIP)
 			&& !GET_GAME_STATE (UTWIG_BOMB))
 	{	// player blew himself up with Utwig bomb
-		BYTE white_buf[] = {FadeAllToWhite};
-
 		SET_GAME_STATE (UTWIG_BOMB_ON_SHIP, 0);
 
-		SleepThreadUntil (XFormColorMap ((COLORMAPPTR)white_buf,
-				ONE_SECOND / 8) + ONE_SECOND / 60);
+		SleepThreadUntil (FadeScreen (FadeAllToWhite, ONE_SECOND / 8)
+				+ ONE_SECOND / 60);
 		SetContextBackGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F));
 		ClearDrawable ();
@@ -398,7 +381,7 @@ RestartMenu (MENU_STATE *pMS)
 	LastActivity = 0;
 	NextActivity = 0;
 
-	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)black_buf, TimeOut));
+	SleepThreadUntil (FadeScreen (FadeAllToBlack, TimeOut));
 	if (TimeOut == ONE_SECOND / 8)
 		SleepThread (ONE_SECOND * 3);
 	DrawRestartMenuGraphic (pMS);
@@ -423,7 +406,7 @@ RestartMenu (MENU_STATE *pMS)
 	if (GLOBAL (CurrentActivity) & CHECK_ABORT)
 		return (FALSE); // quit
 
-	TimeOut = XFormColorMap ((COLORMAPPTR)black_buf, ONE_SECOND / 2);
+	TimeOut = FadeScreen (FadeAllToBlack, ONE_SECOND / 2);
 	
 	SleepThreadUntil (TimeOut);
 	FlushColorXForms ();
@@ -455,9 +438,7 @@ TryStartGame (void)
 		}
 		else if (GLOBAL (CurrentActivity) == (ACTIVITY)~0)
 		{	// timed out
-			BYTE black_buf[] = {FadeAllToBlack};
-			SleepThreadUntil (XFormColorMap ((COLORMAPPTR)black_buf,
-					ONE_SECOND / 2));
+			SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND / 2));
 			return (FALSE);
 		}
 		else if (GLOBAL (CurrentActivity) & CHECK_ABORT)

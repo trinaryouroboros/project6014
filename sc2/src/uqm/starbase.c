@@ -634,12 +634,6 @@ DoStarBase (MENU_STATE *pMS)
 			pMS->hMusic = 0;
 		}
 
-		if (pMS->flash_task)
-		{
-			Task_SetState (pMS->flash_task, TASK_EXIT);
-			pMS->flash_task = 0;
-		}
-
 		pMS->Initialized = TRUE;
 		UnlockMutex (GraphicsLock);
 
@@ -667,15 +661,7 @@ DoStarBase (MENU_STATE *pMS)
 		ClearDrawable ();
 		rotateStarbase (pMS, pMS->CurFrame);
 		DrawBaseStateStrings ((STARBASE_STATE)~0, pMS->CurState);
-		{
-			RECT r;
-			
-			r.corner.x = 0;
-			r.corner.y = 0;
-			r.extent.width = SCREEN_WIDTH;
-			r.extent.height = SCREEN_HEIGHT;
-			ScreenTransition (3, &r);
-		}
+		ScreenTransition (3, NULL);
 		PlayMusic (pMS->hMusic, TRUE, 1);
 		UnbatchGraphics ();
 		UnlockMutex (GraphicsLock);
@@ -791,10 +777,7 @@ static void
 DoTimePassage (void)
 {
 #define LOST_DAYS 14
-	BYTE clut_buf[1];
-
-	clut_buf[0] = FadeAllToBlack;
-	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)clut_buf, ONE_SECOND * 2));
+	SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND * 2));
 	LockMutex (GraphicsLock);
 	MoveGameClockDays (LOST_DAYS);
 	UnlockMutex (GraphicsLock);
@@ -906,8 +889,6 @@ CleanupAfterStarBase (void)
 void
 InstallBombAtEarth (void)
 {
-	BYTE clut_buf[1];
-
 	DoTimePassage ();
 
 	LockMutex (GraphicsLock);
@@ -917,8 +898,7 @@ InstallBombAtEarth (void)
 	ClearDrawable ();
 	UnlockMutex (GraphicsLock);
 	
-	clut_buf[0] = FadeAllToColor;
-	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)clut_buf, 0));
+	SleepThreadUntil (FadeScreen (FadeAllToColor, 0));
 	
 	SET_GAME_STATE (CHMMR_BOMB_STATE, 3); /* bomb processed */
 	GLOBAL (CurrentActivity) = CHECK_LOAD; /* fake a load game */

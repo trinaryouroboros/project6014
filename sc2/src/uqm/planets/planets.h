@@ -192,7 +192,12 @@ struct planet_orbit
 // filled.
 struct solarsys_state
 {
-	MENU_STATE MenuState;
+	// Standard field required by DoInput()
+	BOOLEAN (*InputFunc) (struct solarsys_state *);
+
+	BOOLEAN InIpFlight;
+			// Set to TRUE when player is flying around in interplanetary
+			// Reset to FALSE when going into orbit or encounter
 
 	COUNT WaitIntersect;
 			// Planet/moon number with which the flagship should not collide
@@ -253,6 +258,9 @@ struct solarsys_state
 	Color Tint_rgb;
 	FRAME TopoFrame;
 	PLANET_ORBIT Orbit;
+	BOOLEAN InOrbit;
+			// Set to TRUE when player hits a world in an inner system
+			// Homeworld encounters count as 'in orbit'
 };
 
 extern SOLARSYS_STATE *pSolarSysState;
