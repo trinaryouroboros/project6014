@@ -23,7 +23,6 @@
 #include "libs/mathlib.h"
 #include <stdlib.h>
 
-
 #define MAX_CREW MAX_CREW_SIZE
 #define MAX_ENERGY MAX_ENERGY_SIZE
 #define ENERGY_REGENERATION 3
@@ -41,27 +40,27 @@
 #define MISSILE_LIFE 15
 #define MISSILE_HITS 2
 #define MISSILE_DAMAGE 2
-#define MISSILE_OFFSET 8
-#define ISD_OFFSET 42
+#define MISSILE_OFFSET (8 << RESOLUTION_FACTOR) // JMS_GFX
+#define ISD_OFFSET (42 << RESOLUTION_FACTOR) // JMS_GFX
 
 #define SPECIAL_ENERGY_COST 8
 #define TRACK_THRESHOLD 6
-#define ONE_WAY_FLIGHT 125
-#define FIGHTER_LIFE (ONE_WAY_FLIGHT + ONE_WAY_FLIGHT + 150)
-#define FIGHTER_SPEED DISPLAY_TO_WORLD (8)
+#define ONE_WAY_FLIGHT (125 << RESOLUTION_FACTOR) // JMS_GFX
+#define FIGHTER_LIFE (ONE_WAY_FLIGHT + ONE_WAY_FLIGHT + (150 << RESOLUTION_FACTOR)) // JMS_GFX
+#define FIGHTER_SPEED DISPLAY_TO_WORLD (8 << RESOLUTION_FACTOR) // JMS_GFX
 #define FIGHTER_WEAPON_WAIT 8
-#define FIGHTER_LASER_SPEED DISPLAY_TO_WORLD (20)
+#define FIGHTER_LASER_SPEED DISPLAY_TO_WORLD (20 << RESOLUTION_FACTOR) // JMS_GFX
 #define FIGHTER_LASER_HITS 1
 #define FIGHTER_LASER_DAMAGE 1
 #define FIGHTER_LASER_LIFE 10
-#define FIGHTER_LASER_OFFSET 2
-#define FIGHTER_LASER_BLAST_OFFSET 4
-#define FIGHTER_LASER_RANGE DISPLAY_TO_WORLD (120 + FIGHTER_LASER_OFFSET)
+#define FIGHTER_LASER_OFFSET (2 << RESOLUTION_FACTOR) // JMS_GFX
+#define FIGHTER_LASER_BLAST_OFFSET (4 << RESOLUTION_FACTOR) // JMS_GFX
+#define FIGHTER_LASER_RANGE DISPLAY_TO_WORLD ((120 << RESOLUTION_FACTOR) + FIGHTER_LASER_OFFSET) // JMS_GFX
 
 #define AUXILIARY_ENERGY_COST 1
-#define AUTOTURRET_RANGE (MISSILE_SPEED * MISSILE_LIFE)
+#define AUTOTURRET_RANGE ((MISSILE_SPEED * MISSILE_LIFE) << RESOLUTION_FACTOR) // JMS_GFX
 #define AUTOTURRET_WAIT 11
-#define AUTOTURRET_OFFSET 20
+#define AUTOTURRET_OFFSET (20 << RESOLUTION_FACTOR) // JMS_GFX
 
 static RACE_DESC isd_desc =
 {
@@ -134,6 +133,160 @@ static RACE_DESC isd_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 60
+#define THRUST_INCREMENT_2XRES 12
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (50)
+
+// JMS_GFX
+static RACE_DESC isd_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_SPECIAL,
+		30, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		ISD_RACE_STRINGS,
+		ISD_ICON_MASK_PMAP_ANIM,
+		ISD_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			ISD_BIG_MASK_PMAP_ANIM,
+			ISD_MED_MASK_PMAP_ANIM,
+			ISD_SML_MASK_PMAP_ANIM,
+		},
+		{
+			ISDLASER_BIG_MASK_PMAP_ANIM,
+			ISDLASER_MED_MASK_PMAP_ANIM,
+			ISDLASER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			ISDFIGHTER_BIG_MASK_PMAP_ANIM,
+			ISDFIGHTER_MED_MASK_PMAP_ANIM,
+			ISDFIGHTER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			ISD_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		ISD_VICTORY_SONG,
+		ISD_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_2XRES * MISSILE_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 120
+#define THRUST_INCREMENT_4XRES 24
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (100)
+
+// JMS_GFX
+static RACE_DESC isd_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_SPECIAL,
+		30, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		ISD_RACE_STRINGS,
+		ISD_ICON_MASK_PMAP_ANIM,
+		ISD_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			ISD_BIG_MASK_PMAP_ANIM,
+			ISD_MED_MASK_PMAP_ANIM,
+			ISD_SML_MASK_PMAP_ANIM,
+		},
+		{
+			ISDLASER_BIG_MASK_PMAP_ANIM,
+			ISDLASER_MED_MASK_PMAP_ANIM,
+			ISDLASER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			ISDFIGHTER_BIG_MASK_PMAP_ANIM,
+			ISDFIGHTER_MED_MASK_PMAP_ANIM,
+			ISDFIGHTER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			ISD_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		ISD_VICTORY_SONG,
+		ISD_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_4XRES * MISSILE_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static COUNT
 initialize_turbolaser (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 {
@@ -147,7 +300,7 @@ initialize_turbolaser (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	MissileBlock.face = MissileBlock.index = NORMALIZE_FACING (StarShipPtr->ShipFacing);
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -164,45 +317,45 @@ initialize_turbolaser (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	}
 	else if (turret == 1)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 32)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 32)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), (32 << RESOLUTION_FACTOR))
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(52 << RESOLUTION_FACTOR));
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), (32 << RESOLUTION_FACTOR))
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(52 << RESOLUTION_FACTOR));
 	}
 	else if (turret == 2)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -32)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -32)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -52);
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -(32 << RESOLUTION_FACTOR))
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(52 << RESOLUTION_FACTOR));
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -(32 << RESOLUTION_FACTOR))
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(52 << RESOLUTION_FACTOR));
 	}
 	else if (turret == 3)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 48)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -120);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 48)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -120);
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), (48 << RESOLUTION_FACTOR))
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(120 << RESOLUTION_FACTOR));
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), (48 << RESOLUTION_FACTOR))
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(120 << RESOLUTION_FACTOR));
 	}
 	else if (turret == 4)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -48)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -48)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -136);
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -(48 << RESOLUTION_FACTOR))
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(136 << RESOLUTION_FACTOR));
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -(48 << RESOLUTION_FACTOR))
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(136 << RESOLUTION_FACTOR));
 	}
 	else if (turret == 5)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), 64)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -156);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), 64)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -156);
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), (64 << RESOLUTION_FACTOR))
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(156 << RESOLUTION_FACTOR));
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), (64 << RESOLUTION_FACTOR))
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(156 << RESOLUTION_FACTOR));
 	}
 	else if (turret == 6)
 	{
-		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -64)
-			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -156);
-		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -64)
-			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -156);
+		MissileBlock.cx = ShipPtr->next.location.x + COSINE(FACING_TO_ANGLE (MissileBlock.face + 4), -(64 << RESOLUTION_FACTOR))
+			+ COSINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(156 << RESOLUTION_FACTOR));
+		MissileBlock.cy = ShipPtr->next.location.y + SINE(FACING_TO_ANGLE (MissileBlock.face + 4), -(64 << RESOLUTION_FACTOR))
+			+ SINE(FACING_TO_ANGLE(StarShipPtr->ShipFacing), -(156 << RESOLUTION_FACTOR));
 	}
 	
 	MissileArray[0] = initialize_missile (&MissileBlock);
@@ -351,13 +504,13 @@ fighter_preprocess (ELEMENT *ElementPtr)
 				facing = GetFrameIndex (eptr->current.image.frame);
 				if (ElementPtr->turn_wait & LEFT)
 				{
-					delta_x += COSINE (FACING_TO_ANGLE (facing - 4), DISPLAY_TO_WORLD (30));
-					delta_y += SINE (FACING_TO_ANGLE (facing - 4), DISPLAY_TO_WORLD (30));
+					delta_x += COSINE (FACING_TO_ANGLE (facing - 4), DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR));
+					delta_y += SINE (FACING_TO_ANGLE (facing - 4), DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR));
 				}
 				else
 				{
-					delta_x += COSINE (FACING_TO_ANGLE (facing + 4), DISPLAY_TO_WORLD (30));
-					delta_y += SINE (FACING_TO_ANGLE (facing + 4), DISPLAY_TO_WORLD (30));
+					delta_x += COSINE (FACING_TO_ANGLE (facing + 4), DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR));
+					delta_y += SINE (FACING_TO_ANGLE (facing + 4), DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR));
 				}
 				facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
 			}
@@ -461,8 +614,8 @@ spawn_fighters (ELEMENT *ElementPtr)
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	facing = StarShipPtr->ShipFacing + ANGLE_TO_FACING (HALF_CIRCLE);
-	delta_x = COSINE (FACING_TO_ANGLE (facing), DISPLAY_TO_WORLD (14));
-	delta_y = SINE (FACING_TO_ANGLE (facing), DISPLAY_TO_WORLD (14));
+	delta_x = COSINE (FACING_TO_ANGLE (facing), DISPLAY_TO_WORLD (14 << RESOLUTION_FACTOR));
+	delta_y = SINE (FACING_TO_ANGLE (facing), DISPLAY_TO_WORLD (14 << RESOLUTION_FACTOR));
 
 	i = ElementPtr->crew_level > 2 ? 2 : 1;
 	while (i-- && (hFighterElement = AllocElement ()))
@@ -551,7 +704,7 @@ isd_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conce
 			GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 
 			// ISD will attack if the enemy is within approximate reach.
-			if (ship_weapons (ShipPtr, ObjectsOfConcern->ObjectPtr, DISPLAY_TO_WORLD (25)))
+			if (ship_weapons (ShipPtr, ObjectsOfConcern->ObjectPtr, DISPLAY_TO_WORLD (25 << RESOLUTION_FACTOR)))
 				StarShipPtr->ship_input_state |= WEAPON;
 		}
 		if (StarShipPtr->special_counter == 0
@@ -655,7 +808,7 @@ initialize_autoturret (ELEMENT *ElementPtr)
 		delta_y = WRAP_DELTA_Y (delta_y);
 	
 		num_frames = (square_root ((long)delta_x * delta_x
-				+ (long)delta_y * delta_y)) / MISSILE_SPEED;
+				+ (long)delta_y * delta_y)) / (MISSILE_SPEED << RESOLUTION_FACTOR);
 		if (num_frames == 0)
 			num_frames = 1;
 	
@@ -675,7 +828,7 @@ initialize_autoturret (ELEMENT *ElementPtr)
 		MissileBlock.sender = ShipPtr->playerNr;
 		MissileBlock.flags = IGNORE_SIMILAR;
 		MissileBlock.pixoffs = AUTOTURRET_OFFSET;
-		MissileBlock.speed = MISSILE_SPEED;
+		MissileBlock.speed = (MISSILE_SPEED << RESOLUTION_FACTOR);
 		MissileBlock.hit_points = MISSILE_HITS;
 		MissileBlock.damage = MISSILE_DAMAGE;
 		MissileBlock.life = MISSILE_LIFE;
@@ -764,12 +917,30 @@ init_isd (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	// isd_desc.preprocess_func = isd_preprocess;
-	isd_desc.postprocess_func = isd_postprocess;
-	isd_desc.init_weapon_func = initialize_turbolaser;
-	isd_desc.cyborg_control.intelligence_func = isd_intelligence;
-
-	RaceDescPtr = &isd_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		// isd_desc.preprocess_func = isd_preprocess;
+		isd_desc.postprocess_func = isd_postprocess;
+		isd_desc.init_weapon_func = initialize_turbolaser;
+		isd_desc.cyborg_control.intelligence_func = isd_intelligence;
+		RaceDescPtr = &isd_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		// isd_desc_2xres.preprocess_func = isd_preprocess;
+		isd_desc_2xres.postprocess_func = isd_postprocess;
+		isd_desc_2xres.init_weapon_func = initialize_turbolaser;
+		isd_desc_2xres.cyborg_control.intelligence_func = isd_intelligence;
+		RaceDescPtr = &isd_desc_2xres;
+	}
+	else
+	{
+		// isd_desc_4xres.preprocess_func = isd_preprocess;
+		isd_desc_4xres.postprocess_func = isd_postprocess;
+		isd_desc_4xres.init_weapon_func = initialize_turbolaser;
+		isd_desc_4xres.cyborg_control.intelligence_func = isd_intelligence;
+		RaceDescPtr = &isd_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
