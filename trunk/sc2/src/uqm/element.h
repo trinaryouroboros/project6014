@@ -239,7 +239,7 @@ extern COUNT PlotIntercept (ELEMENT *ElementPtr0,
 		ELEMENT *ElementPtr1, COUNT max_turns, COUNT margin_of_error);
 
 extern void InitGalaxy (void);
-extern void MoveGalaxy (VIEW_STATE view_state, SIZE dx, SIZE dy);
+extern void MoveGalaxy (VIEW_STATE view_state, SDWORD dx, SDWORD dy);
 
 extern BOOLEAN CalculateGravity (ELEMENT *ElementPtr);
 

@@ -65,9 +65,9 @@ static BYTE fuel_ticks;
 static COUNT hyper_dx, hyper_dy, hyper_extra;
 
 void
-MoveSIS (SIZE *pdx, SIZE *pdy)
+MoveSIS (SDWORD *pdx, SDWORD *pdy)
 {
-	SIZE new_dx, new_dy;
+	SDWORD new_dx, new_dy;
 
 	new_dx = *pdx;
 	GLOBAL_SIS (log_x) -= new_dx;

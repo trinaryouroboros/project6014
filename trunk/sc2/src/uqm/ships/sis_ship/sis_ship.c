@@ -147,10 +147,10 @@ void uninit_exp (RACE_DESC *pRaceDesc);
 // Hyperspace movement.
 static void exp_hyper_preprocess (ELEMENT *ElementPtr)
 {
-	SIZE udx, udy, dx, dy;
+	SIZE dx, dy;
 	SIZE AccelerateDirection;
 	STARSHIP *StarShipPtr;
-	SDWORD dtempx, dtempy;	// JMS_GFX: These babies help to make the hyperspace speed calculations not overflow in 640x480.
+	SDWORD udx, udy, dtempx, dtempy;	// JMS_GFX: These babies help to make the hyperspace speed calculations not overflow in hires.
 
 	if (ElementPtr->state_flags & APPEARING)
 		ElementPtr->velocity = GLOBAL (velocity);
@@ -183,22 +183,12 @@ LeaveAutoPilot:
 			else
 				SET_GAME_STATE (AUTOPILOT_OK, 0);
 			
-			// JMS_GFX: Since the max speed with max thrusters in 640x480 mode is 2048, 
-			// SIZE variables dx and dy would overflow when leftshifted by 4. (The speed would
-			// be then 32768 which would wrap around to -32768 instead).
-			// If speed would surpass the wraparound limit, the speed is limited to max of 32767.
-			// This introduces very slight error to the speed, but who cares - it is negligible.
 			dtempx = (SDWORD)dx;
 			dtempy = (SDWORD)dy;
-			if((dtempx << 4) > 32767)
-				udx = 32767;
-			else
-				udx = dtempx;
-			if((dtempy << 4) > 32767)
-				udy = 32767;
-			else
-				udy = dtempy;
-
+			
+			udx = dtempx;
+			udy = dtempy;
+			
 			StarShipPtr->cur_status_flags &= ~THRUST;
 		}
 	}
@@ -211,11 +201,11 @@ LeaveAutoPilot:
 		universe.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
 		udx = (GLOBAL (autopilot)).x - universe.x;
 		udy = -((GLOBAL (autopilot)).y - universe.y);
-		if ((dx = udx) < 0)
+		if ((dx = (SIZE)udx) < 0)
 			dx = -dx;
-		if ((dy = udy) < 0)
+		if ((dy = (SIZE)udy) < 0)
 			dy = -dy;
-		if (dx <= 1 && dy <= 1)
+		if (dx <= (1 << RESOLUTION_FACTOR) && dy <= (1 << RESOLUTION_FACTOR))
 			goto LeaveAutoPilot;
 
 		facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (udx, udy)));
@@ -260,8 +250,8 @@ LeaveAutoPilot:
 		else
 		{
 			AccelerateDirection = -1;
-			udx = dx << 4;
-			udy = dy << 4;
+			udx = dx;// << 4;
+			udy = dy;// << 4;
 		}
 	}
 
@@ -308,10 +298,10 @@ LeaveAutoPilot:
 			}
 		}
 		
-		dx = (SIZE)((long)udx * speed / (long)dist);
-		dy = (SIZE)((long)udy * speed / (long)dist);
+		dtempx = (SDWORD)((long)udx * speed / (long)dist);
+		dtempy = (SDWORD)((long)udy * speed / (long)dist);
 		
-		SetVelocityComponents (&ElementPtr->velocity, dx, dy);
+		SetVelocityComponents (&ElementPtr->velocity, dtempx, dtempy);
 		ElementPtr->thrust_wait =StarShipPtr->RaceDescPtr->characteristics.thrust_wait;
 	}
 }

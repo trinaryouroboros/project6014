@@ -79,7 +79,7 @@
 extern BOOLEAN LoadHyperspace (void);
 extern BOOLEAN FreeHyperspace (void);
 extern void SeedUniverse (void);
-extern void MoveSIS (SIZE *pdx, SIZE *pdy);
+extern void MoveSIS (SDWORD *pdx, SDWORD *pdy);
 
 extern void FreeHyperData (void);
 extern void check_hyperspace_encounter (void);
