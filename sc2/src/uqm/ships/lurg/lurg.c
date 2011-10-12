@@ -39,8 +39,8 @@
 #define MISSILE_LIFE 23
 #define MISSILE_HITS 5
 #define MISSILE_DAMAGE 4
-#define MISSILE_OFFSET 2
-#define LURG_OFFSET 23
+#define MISSILE_OFFSET (2 << RESOLUTION_FACTOR) // JMS_GFX
+#define LURG_OFFSET (23 << RESOLUTION_FACTOR) // JMS_GFX
 
 // Secondary weapon
 #define SPECIAL_ENERGY_COST 2
@@ -57,8 +57,8 @@
 #define OIL_DELAY 6
 #define OIL_DELAY_MAX 36
 #define OIL_SNARE WORLD_TO_VELOCITY (-1)
-#define OIL_OFFSET 3
-#define LURG_OFFSET_2 16
+#define OIL_OFFSET (3 << RESOLUTION_FACTOR) // JMS_GFX
+#define LURG_OFFSET_2 (16 << RESOLUTION_FACTOR) // JMS_GFX
 
 // Bonus ability
 #define REPAIR_WAIT 192 // Was 216.
@@ -124,6 +124,160 @@ static RACE_DESC lurg_desc =
 	{
 		0,
 		(MISSILE_SPEED * MISSILE_LIFE) *  4/5,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_2XRES 40
+#define THRUST_INCREMENT_2XRES 12
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (36)
+
+// JMS_GFX
+static RACE_DESC lurg_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_SPECIAL | LIGHT_POINT_DEFENSE,
+		20, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		LURG_RACE_STRINGS,
+		LURG_ICON_MASK_PMAP_ANIM,
+		LURG_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, //1525 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			3710, 4389,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			LURG_BIG_MASK_PMAP_ANIM,
+			LURG_MED_MASK_PMAP_ANIM,
+			LURG_SML_MASK_PMAP_ANIM,
+		},
+		{
+			LURGGOB_BIG_MASK_PMAP_ANIM,
+			LURGGOB_MED_MASK_PMAP_ANIM,
+			LURGGOB_SML_MASK_PMAP_ANIM,
+		},
+		{
+			OIL_BIG_MASK_PMAP_ANIM,
+			OIL_MED_MASK_PMAP_ANIM,
+			OIL_SML_MASK_PMAP_ANIM,
+		},
+		{
+			LURG_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		LURG_VICTORY_SONG,
+		LURG_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		(MISSILE_SPEED_2XRES * MISSILE_LIFE) *  4/5,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 80
+#define THRUST_INCREMENT_4XRES 24
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (72)
+
+// JMS_GFX
+static RACE_DESC lurg_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_SPECIAL | LIGHT_POINT_DEFENSE,
+		20, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		LURG_RACE_STRINGS,
+		LURG_ICON_MASK_PMAP_ANIM,
+		LURG_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, //1525 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			3710, 4389,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			LURG_BIG_MASK_PMAP_ANIM,
+			LURG_MED_MASK_PMAP_ANIM,
+			LURG_SML_MASK_PMAP_ANIM,
+		},
+		{
+			LURGGOB_BIG_MASK_PMAP_ANIM,
+			LURGGOB_MED_MASK_PMAP_ANIM,
+			LURGGOB_SML_MASK_PMAP_ANIM,
+		},
+		{
+			OIL_BIG_MASK_PMAP_ANIM,
+			OIL_MED_MASK_PMAP_ANIM,
+			OIL_SML_MASK_PMAP_ANIM,
+		},
+		{
+			LURG_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		LURG_VICTORY_SONG,
+		LURG_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		(MISSILE_SPEED_4XRES * MISSILE_LIFE) *  4/5,
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -260,18 +414,18 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 		}
 
 		// Frequently disregard good firing opportunities.
-		if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (10)))
+		if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (10 << RESOLUTION_FACTOR))) // JMS_GFX
 		{
 			if (TFB_Random () & 3)
 				StarShipPtr->ship_input_state |= WEAPON;
 		}
 		// Sometimes take shots that don't line up with the opponent's current trajectory.
-		else if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (20)))
+		else if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (20 << RESOLUTION_FACTOR))) // JMS_GFX
 		{
 			if (TFB_Random () & 5)
 				StarShipPtr->ship_input_state |= WEAPON;
 		}
-		else if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (30)))
+		else if (ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR))) // JMS_GFX
 		{
 			if (TFB_Random () % 11)
 				StarShipPtr->ship_input_state |= WEAPON;
@@ -342,7 +496,7 @@ acid_preprocess (ELEMENT *ElementPtr)
 	ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, facing);
 	ElementPtr->state_flags |= CHANGING;
 	
-	SetVelocityVector (&ElementPtr->velocity, MISSILE_SPEED, facing);
+	SetVelocityVector (&ElementPtr->velocity, (MISSILE_SPEED << RESOLUTION_FACTOR), facing); // JMS_GFX
 }
 
 static COUNT
@@ -569,11 +723,27 @@ init_lurg (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	lurg_desc.postprocess_func = lurg_postprocess;
-	lurg_desc.init_weapon_func = initialize_acid;
-	lurg_desc.cyborg_control.intelligence_func = lurg_intelligence;
-
-	RaceDescPtr = &lurg_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		lurg_desc.postprocess_func = lurg_postprocess;
+		lurg_desc.init_weapon_func = initialize_acid;
+		lurg_desc.cyborg_control.intelligence_func = lurg_intelligence;
+		RaceDescPtr = &lurg_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		lurg_desc_2xres.postprocess_func = lurg_postprocess;
+		lurg_desc_2xres.init_weapon_func = initialize_acid;
+		lurg_desc_2xres.cyborg_control.intelligence_func = lurg_intelligence;
+		RaceDescPtr = &lurg_desc_2xres;
+	}
+	else
+	{
+		lurg_desc_4xres.postprocess_func = lurg_postprocess;
+		lurg_desc_4xres.init_weapon_func = initialize_acid;
+		lurg_desc_4xres.cyborg_control.intelligence_func = lurg_intelligence;
+		RaceDescPtr = &lurg_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }

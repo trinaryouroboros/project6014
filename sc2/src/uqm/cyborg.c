@@ -19,7 +19,8 @@
 // JMS 2010: - Amended Pursue -function: Ur-Quan pursues Earthling slowly but surely. Now it won't turn away mid-chase.
 //			 - Enable Down key in melee (comment tag JMS_KEYS)
 
-// JMS_GFX: Added RESOLUTION_FACTORs to LONG_RANGE_WEAPONs and CLOSE_RANGE_WEAPONs
+// JMS_GFX:	 - Added RESOLUTION_FACTORs to LONG_RANGE_WEAPONs and CLOSE_RANGE_WEAPONs
+//			 - Amended some constant values with RESOLUTION_FACTOR
 
 #include "colors.h"
 #include "collide.h"
@@ -353,7 +354,7 @@ ship_weapons (ELEMENT *ShipPtr, ELEMENT *OtherPtr, COUNT margin_of_error)
 	STARSHIP *StarShipPtr;
 
 	if (OBJECT_CLOAKED (OtherPtr))
-		margin_of_error += DISPLAY_TO_WORLD (40);
+		margin_of_error += DISPLAY_TO_WORLD (40 << RESOLUTION_FACTOR); // JMS_GFX
 
 	Ship = *ShipPtr;
 	GetNextVelocityComponents (&Ship.velocity,
@@ -443,9 +444,9 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	if (StarShipPtr->control & AWESOME_RATING)
 		margin_of_error = 0;
 	else if (StarShipPtr->control & GOOD_RATING)
-		margin_of_error = DISPLAY_TO_WORLD (20);
+		margin_of_error = DISPLAY_TO_WORLD (20 << RESOLUTION_FACTOR); // JMS_GFX
 	else /* if (StarShipPtr->control & STANDARD_RATING) */
-		margin_of_error = DISPLAY_TO_WORLD (40);
+		margin_of_error = DISPLAY_TO_WORLD (40 << RESOLUTION_FACTOR); // JMS_GFX
 
 	ObjectsOfConcern += ConcernCounter;
 	while (ConcernCounter--)
@@ -1120,14 +1121,14 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 
 				if (!ShipMoved && (ed.which_turn =
 						PlotIntercept (ed.ObjectPtr, &Ship, maneuver_turn,
-						DISPLAY_TO_WORLD (30 + (ship_bounds * 3 /* << 2 */)))))
+						DISPLAY_TO_WORLD ((30 << RESOLUTION_FACTOR) + (ship_bounds * 3 /* << 2 */))))) // JMS_GFX
 				{
 					if (ed.which_turn > 1
 							|| PlotIntercept (ed.ObjectPtr, &Ship, 1,
-							DISPLAY_TO_WORLD (35 + ship_bounds))
+							DISPLAY_TO_WORLD ((35 << RESOLUTION_FACTOR) + ship_bounds)) // JMS_GFX
 							|| PlotIntercept (ed.ObjectPtr, &Ship,
 							maneuver_turn << 1,
-							DISPLAY_TO_WORLD (40 + ship_bounds)) > 1)
+							DISPLAY_TO_WORLD ((40 << RESOLUTION_FACTOR) + ship_bounds)) > 1) // JMS_GFX
 					{
 						ed.facing = ARCTAN (-dx, -dy);
 						if (UltraManeuverable)
@@ -1238,7 +1239,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 						EnemyRDPtr->ship_data.special))
 				{
 					if ((!(ed.ObjectPtr->state_flags & (FINITE_LIFE | CREW_OBJECT))
-							&& RDPtr->characteristics.max_thrust > DISPLAY_TO_WORLD (8))
+							&& RDPtr->characteristics.max_thrust > DISPLAY_TO_WORLD (8 << RESOLUTION_FACTOR)) // JMS_GFX
 							|| NORMALIZE_ANGLE (GetVelocityTravelAngle (
 									&ed.ObjectPtr->velocity
 									) - ARCTAN (-dx, -dy)
@@ -1267,7 +1268,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 					ed.which_turn =
 							PlotIntercept (ed.ObjectPtr,
 							&Ship, ed.ObjectPtr->life_span,
-							DISPLAY_TO_WORLD (40));
+							DISPLAY_TO_WORLD (40 << RESOLUTION_FACTOR)); // JMS_GFX
 					ed.MoveState = AVOID;
 				}
 
