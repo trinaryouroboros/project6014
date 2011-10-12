@@ -16,6 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2011: Originally, the smooth zoom was TFB_SCALE_TRILINEAR instead of bilinear.
+// Using bilinear alleviates the smooth zoom performance choppiness problems in 2x and 4x, but
+// is kinda hacky solution...
+
 // JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
 
 #include "setupmenu.h"
@@ -1372,7 +1376,12 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	optWhichCoarseScan = (opts->cscan == OPTVAL_3DO) ? OPT_3DO : OPT_PC;
 	optSmoothScroll = (opts->scroll == OPTVAL_3DO) ? OPT_3DO : OPT_PC;
 	optWhichShield = (opts->shield == OPTVAL_3DO) ? OPT_3DO : OPT_PC;
-	optMeleeScale = (opts->meleezoom == OPTVAL_3DO) ? TFB_SCALE_TRILINEAR : TFB_SCALE_STEP;
+	
+	// JMS: Originally, the smooth zoom was TFB_SCALE_TRILINEAR instead of bilinear.
+	// Using bilinear alleviates the smooth zoom performance choppiness problems in 2x and 4x, but
+	// is kinda hacky solution...
+	optMeleeScale = (opts->meleezoom == OPTVAL_3DO) ? TFB_SCALE_BILINEAR : TFB_SCALE_STEP;
+	
 	optWhichIntro = (opts->intro == OPTVAL_3DO) ? OPT_3DO : OPT_PC;
 	PlayerControls[0] = opts->player1;
 	PlayerControls[1] = opts->player2;
