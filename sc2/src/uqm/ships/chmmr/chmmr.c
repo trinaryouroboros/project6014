@@ -437,13 +437,11 @@ chmmr_postprocess (ELEMENT *ElementPtr)
 		{
 			LockElement (hMuzzleFlash, &MuzzleFlashPtr);
 			MuzzleFlashPtr->playerNr = ElementPtr->playerNr;
-			MuzzleFlashPtr->state_flags = FINITE_LIFE | NONSOLID
-					| IGNORE_SIMILAR | APPEARING;
+			MuzzleFlashPtr->state_flags = FINITE_LIFE | NONSOLID | IGNORE_SIMILAR | APPEARING;
 			MuzzleFlashPtr->life_span = 1;
 
 			MuzzleFlashPtr->current = ElementPtr->next;
-			MuzzleFlashPtr->current.image.farray =
-					StarShipPtr->RaceDescPtr->ship_data.weapon;
+			MuzzleFlashPtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 			MuzzleFlashPtr->current.image.frame = SetAbsFrameIndex (
 					StarShipPtr->RaceDescPtr->ship_data.weapon[0],
 					StarShipPtr->ShipFacing + ANGLE_TO_FACING (FULL_CIRCLE)
