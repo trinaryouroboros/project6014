@@ -43,8 +43,8 @@ extern PRIM_LINKS DisplayLinks;
 			+ MED_STAR_COUNT \
 			+ SML_STAR_COUNT)
 
-POINT SpaceOrg;
-static POINT log_star_array[NUM_STARS];
+DPOINT SpaceOrg;
+static DPOINT log_star_array[NUM_STARS];
 
 #define NUM_STAR_PLANES 3
 
@@ -52,9 +52,9 @@ typedef struct
 {
 	COUNT min_star_index;
 	COUNT num_stars;
-	POINT *star_array;
-	POINT *pmin_star;
-	POINT *plast_star;
+	DPOINT *star_array;
+	DPOINT *pmin_star;
+	DPOINT *plast_star;
 } STAR_BLOCK;
 
 STAR_BLOCK StarBlock[NUM_STAR_PLANES] =
@@ -89,7 +89,7 @@ SortStarBlock (STAR_BLOCK *pStarBlock)
 		{
 			if (pStarBlock->star_array[i].y > pStarBlock->star_array[j].y)
 			{
-				POINT temp;
+				DPOINT temp;
 
 				temp = pStarBlock->star_array[i];
 				pStarBlock->star_array[i] = pStarBlock->star_array[j];
@@ -99,17 +99,16 @@ SortStarBlock (STAR_BLOCK *pStarBlock)
 	}
 
 	pStarBlock->min_star_index = 0;
-	pStarBlock->pmin_star = &pStarBlock->star_array[0];
-	pStarBlock->plast_star =
-			&pStarBlock->star_array[pStarBlock->num_stars - 1];
+	pStarBlock->pmin_star  = &pStarBlock->star_array[0];
+	pStarBlock->plast_star = &pStarBlock->star_array[pStarBlock->num_stars - 1];
 }
 
 static void
-WrapStarBlock (SIZE plane, SIZE dx, SIZE dy)
+WrapStarBlock (SIZE plane, SDWORD dx, SDWORD dy)
 {
 	COUNT i;
-	POINT *ppt;
-	SIZE offs_y;
+	DPOINT *ppt;
+	SDWORD offs_y;
 	COUNT num_stars;
 	STAR_BLOCK *pStarBlock;
 
@@ -239,7 +238,7 @@ void
 InitGalaxy (void)
 {
 	COUNT i, factor;
-	POINT *ppt;
+	DPOINT *ppt;
 	PRIM_LINKS Links;
 
 	Links = MakeLinks (END_OF_LIST, END_OF_LIST);
@@ -253,8 +252,8 @@ InitGalaxy (void)
 		if (i == BIG_STAR_COUNT || i == BIG_STAR_COUNT + MED_STAR_COUNT)
 			++factor;
 
-		ppt->x = (COORD)((UWORD)TFB_Random () % SPACE_WIDTH) << factor;
-		ppt->y = (COORD)((UWORD)TFB_Random () % SPACE_HEIGHT) << factor;
+		ppt->x = (SDWORD)((UWORD)TFB_Random () % SPACE_WIDTH) << factor;
+		ppt->y = (SDWORD)((UWORD)TFB_Random () % SPACE_HEIGHT) << factor;
 
 		if (i < BIG_STAR_COUNT + MED_STAR_COUNT)
 		{
@@ -284,7 +283,7 @@ InitGalaxy (void)
 }
 
 static BOOLEAN
-CmpMovePoints (const POINT *pt1, const POINT *pt2, SIZE dx, SIZE dy, SIZE reduction)
+CmpMovePoints (const POINT *pt1, const DPOINT *pt2, SDWORD dx, SDWORD dy, SIZE reduction)
 {
 	if (optMeleeScale == TFB_SCALE_STEP)
 	{
@@ -299,7 +298,7 @@ CmpMovePoints (const POINT *pt1, const POINT *pt2, SIZE dx, SIZE dy, SIZE reduct
 }
 
 void
-MoveGalaxy (VIEW_STATE view_state, SIZE dx, SIZE dy)
+MoveGalaxy (VIEW_STATE view_state, SDWORD dx, SDWORD dy)
 {
 	PRIMITIVE *pprim;
 	static const COUNT star_counts[] =
@@ -315,7 +314,7 @@ MoveGalaxy (VIEW_STATE view_state, SIZE dx, SIZE dy)
 		COUNT reduction;
 		COUNT i;
 		COUNT iss;
-		POINT *ppt;
+		DPOINT *ppt;
 		int wrap_around;
 
 		reduction = zoom_out;
@@ -412,10 +411,10 @@ MoveGalaxy (VIEW_STATE view_state, SIZE dx, SIZE dy)
 		}
 		else
 		{
-			dx = (COORD)(LOG_SPACE_WIDTH >> 1)
+			dx = (SDWORD)(LOG_SPACE_WIDTH >> 1)
 					- (LOG_SPACE_WIDTH >> ((MAX_REDUCTION + 1)
 					- MAX_VIS_REDUCTION));
-			dy = (COORD)(LOG_SPACE_HEIGHT >> 1)
+			dy = (SDWORD)(LOG_SPACE_HEIGHT >> 1)
 					- (LOG_SPACE_HEIGHT >> ((MAX_REDUCTION + 1)
 					- MAX_VIS_REDUCTION));
 			if (optMeleeScale == TFB_SCALE_STEP)
@@ -426,9 +425,7 @@ MoveGalaxy (VIEW_STATE view_state, SIZE dx, SIZE dy)
 
 		ppt = log_star_array;
 		for (iss = 0, pprim = DisplayArray, wrap_around = LOG_SPACE_WIDTH;
-				iss < 3 && 
-				(view_state == VIEW_CHANGE || CmpMovePoints (
-					&pprim->Object.Point, ppt, dx, dy, reduction));
+				iss < 3 && (view_state == VIEW_CHANGE || CmpMovePoints (&pprim->Object.Point, ppt, dx, dy, reduction));
 				++iss, wrap_around <<= 1, dx <<= 1, dy <<= 1)
 		{
 			for (i = star_counts[iss]; i > 0; --i, ++pprim, ++ppt)
@@ -442,10 +439,8 @@ MoveGalaxy (VIEW_STATE view_state, SIZE dx, SIZE dy)
 				}
 				else
 				{
-					pprim->Object.Point.x = ((ppt->x - dx) << ZOOM_SHIFT)
-							/ reduction;
-					pprim->Object.Point.y = ((ppt->y - dy) << ZOOM_SHIFT)
-							/ reduction;
+					pprim->Object.Point.x = ((ppt->x - dx) << ZOOM_SHIFT) / reduction;
+					pprim->Object.Point.y = ((ppt->y - dy) << ZOOM_SHIFT) / reduction;
 				}
 			}
 			if (optMeleeScale == TFB_SCALE_STEP)
