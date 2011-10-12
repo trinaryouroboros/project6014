@@ -939,9 +939,8 @@ AddAmbientElement (void)
 		HyperSpaceElementPtr->preprocess_func = animation_preprocess;
 
 		rand_val = TFB_Random ();
-		dy = LOWORD (rand_val);
-		dx = (SIZE)(LOBYTE (dy) % SPACE_WIDTH) - (SPACE_WIDTH >> 1);
-		dy = (SIZE)(HIBYTE (dy) % SPACE_HEIGHT) - (SPACE_HEIGHT >> 1);
+		dx = (SIZE)(LOWORD (rand_val) % SPACE_WIDTH) - (SPACE_WIDTH >> 1);
+		dy = (SIZE)(HIWORD (rand_val) % SPACE_HEIGHT) - (SPACE_HEIGHT >> 1);
 		HyperSpaceElementPtr->current.location.x = (LOG_SPACE_WIDTH >> 1)
 				+ DISPLAY_TO_WORLD (dx);
 		HyperSpaceElementPtr->current.location.y = (LOG_SPACE_HEIGHT >> 1)
