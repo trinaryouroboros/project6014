@@ -1244,7 +1244,6 @@ DoStarSearch (MENU_STATE *pMS)
 
 	// text entry setup
 	tes.Initialized = FALSE;
-	tes.MenuRepeatDelay = 0;
 	tes.BaseStr = pss->Text;
 	tes.MaxSize = sizeof (pss->Text);
 	tes.CursorPos = 0;

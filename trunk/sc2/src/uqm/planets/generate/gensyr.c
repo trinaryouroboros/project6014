@@ -85,9 +85,7 @@ GenerateSyreen_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 	if (matchWorld (solarSys, world, 0, MATCH_PLANET))
 	{
 		/* Syreen home planet */
-		solarSys->MenuState.Initialized += 2;
 		InitCommunication (SYREENHOME_CONVERSATION);
-		solarSys->MenuState.Initialized -= 2;
 		return true;
 	}
 

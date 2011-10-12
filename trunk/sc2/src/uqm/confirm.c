@@ -77,9 +77,6 @@ DrawConfirmationWindow (BOOLEAN answer)
 	SetContextForeGroundColor (oldfg);
 }
 
-/* This code assumes that you aren't in Character Mode.  This is
- * currently safe because VControl doesn't see keystrokes when you
- * are, and thus cannot conclude that an exit is necessary. */
 BOOLEAN
 DoConfirmExit (void)
 {
@@ -175,7 +172,6 @@ typedef struct popup_state
 {
 	// standard state required by DoInput
 	BOOLEAN (*InputFunc) (struct popup_state *self);
-	COUNT MenuRepeatDelay;
 } POPUP_STATE;
 
 static BOOLEAN

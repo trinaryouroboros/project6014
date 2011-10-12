@@ -86,7 +86,6 @@ GenerateTalkingPet_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world
 
 		if (ActivateStarShip (UMGAH_SHIP, SPHERE_TRACKING))
 		{
-			solarSys->MenuState.Initialized += 2;
 			GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 7);
 			if (!GET_GAME_STATE (UMGAH_ZOMBIE_BLOBBIES))
@@ -106,7 +105,6 @@ GenerateTalkingPet_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world
 				}
 				InitCommunication (TALKING_PET_CONVERSATION);
 			}
-			solarSys->MenuState.Initialized -= 2;
 		}
 
 		if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
@@ -239,9 +237,7 @@ ZapToUrquanEncounter (void)
 
 		{
 #define LOST_DAYS 15
-			BYTE black_buf[] = {FadeAllToBlack};
-
-			SleepThreadUntil (XFormColorMap ((COLORMAPPTR)black_buf, ONE_SECOND * 2));
+			SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND * 2));
 			LockMutex (GraphicsLock);
 			MoveGameClockDays (LOST_DAYS);
 			UnlockMutex (GraphicsLock);

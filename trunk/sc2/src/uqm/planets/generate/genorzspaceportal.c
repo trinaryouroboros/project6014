@@ -82,9 +82,7 @@ GenerateOrzSpacePortal_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *w
 	{
 		if(!(GET_GAME_STATE(TEMPORAL_WRAPPER_ON_SHIP)))
 		{  // Arilou Communication if one doesn't have proper protective device along
-			solarSys->MenuState.Initialized += 2;
 			InitCommunication (ARILOU_CONVERSATION);
-			solarSys->MenuState.Initialized -= 2;
 		}
 		else   
 		{	// Thru the portal to ORZ space

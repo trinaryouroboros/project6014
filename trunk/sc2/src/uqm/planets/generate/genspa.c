@@ -108,9 +108,8 @@ GenerateSpathi_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 {
 	if (matchWorld (solarSys, world, 0, 1))
 	{
-		pSolarSysState->MenuState.Initialized += 2;
-		InitCommunication (SPATHI_CONVERSATION);
-		pSolarSysState->MenuState.Initialized -= 2;		/* Spathiwa's moon */
+		InitCommunication (SPATHI_CONVERSATION);		/* Spathiwa's moon */
+
 		return true;
 	}
 

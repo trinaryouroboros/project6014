@@ -58,7 +58,6 @@ CONTEXT ScreenContext;
 CONTEXT SpaceContext;
 CONTEXT StatusContext;
 CONTEXT OffScreenContext;
-CONTEXT TaskContext;
 SIZE screen_width, screen_height;
 FRAME Screen;
 FONT StarConFont;

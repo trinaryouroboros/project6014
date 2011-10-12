@@ -185,11 +185,8 @@ DrawOrbitalDisplay (DRAW_ORBITAL_MODE Mode)
 
 	UnbatchGraphics ();
 
-	if (Mode != DRAW_ORBITAL_WAIT)
-	{
-		// for later RepairBackRect()
-		LoadIntoExtraScreen (&r);
-	}
+	// for later RepairBackRect()
+	LoadIntoExtraScreen (&r);
 }
 
 // Initialise the surface graphics, and start the planet music.
@@ -202,15 +199,15 @@ DrawOrbitalDisplay (DRAW_ORBITAL_MODE Mode)
 void
 LoadPlanet (FRAME SurfDefFrame)
 {
-	BOOLEAN WaitMode;
+	bool WaitMode = !(LastActivity & CHECK_LOAD);
+	PLANET_DESC *pPlanetDesc;
 
 #ifdef DEBUG
 	if (disableInteractivity)
 		return;
 #endif
 
-	WaitMode = !(LastActivity & CHECK_LOAD) &&
-			(pSolarSysState->MenuState.Initialized != 3);
+	assert (pSolarSysState->InOrbit && !pSolarSysState->TopoFrame);
 
 	if (WaitMode)
 	{
@@ -219,41 +216,28 @@ LoadPlanet (FRAME SurfDefFrame)
 		UnlockMutex (GraphicsLock);
 	}
 
-	// TODO: split off the scan screen redraw code into a separate
-	//   function so that we could lose this hack.
-	if (!pSolarSysState->TopoFrame)
-	{
-		// TopoFrame has not been initialised yet.
-		// This means the call to LoadPlanet is made from some
-		// GenerateFunctions.generateOribital() function.
-		PLANET_DESC *pPlanetDesc;
+	StopMusic ();
 
-		StopMusic ();
-
-		TaskContext = CreateContext ("TaskContext");
-
-		pPlanetDesc = pSolarSysState->pOrbitalDesc;
-
-		GeneratePlanetSurface (pPlanetDesc, SurfDefFrame);
-		SetPlanetMusic (pPlanetDesc->data_index & ~PLANET_SHIELDED);
-		GeneratePlanetSide ();
-	}
-
-	LockMutex (GraphicsLock);
-	DrawOrbitalDisplay (WaitMode ? DRAW_ORBITAL_UPDATE : DRAW_ORBITAL_FULL);
-	UnlockMutex (GraphicsLock);
+	pPlanetDesc = pSolarSysState->pOrbitalDesc;
+	GeneratePlanetSurface (pPlanetDesc, SurfDefFrame);
+	SetPlanetMusic (pPlanetDesc->data_index & ~PLANET_SHIELDED);
+	GeneratePlanetSide ();
 
 	if (!PLRPlaying ((MUSIC_REF)~0))
 		PlayMusic (LanderMusic, TRUE, 1);
 
 	if (WaitMode)
 	{
-		assert (pSolarSysState->MenuState.Initialized == 2);
-
 		ZoomInPlanetSphere ();
-		
-		// XXX: Mark as in-orbit. This should go away eventually
-		pSolarSysState->MenuState.Initialized = 3;
+		LockMutex (GraphicsLock);
+		DrawOrbitalDisplay (DRAW_ORBITAL_UPDATE);
+		UnlockMutex (GraphicsLock);
+	}
+	else
+	{
+		LockMutex (GraphicsLock);
+		DrawOrbitalDisplay (DRAW_ORBITAL_FULL);
+		UnlockMutex (GraphicsLock);
 	}
 }
 
@@ -311,9 +295,6 @@ FreePlanet (void)
 		Orbit->ScratchArray = 0;
 	}
 
-	DestroyContext (TaskContext);
-	TaskContext = 0;
-	
 	DestroyStringTable (ReleaseStringTable (
 			pSolarSysState->SysInfo.PlanetInfo.DiscoveryString
 			));
@@ -407,7 +388,9 @@ DoPlanetOrbit (MENU_STATE *pMS)
 
 			if (!AutoPilotSet)
 			{	// Redraw the orbital display
-				LoadPlanet (NULL);
+				LockMutex (GraphicsLock);
+				DrawOrbitalDisplay (DRAW_ORBITAL_FULL);
+				UnlockMutex (GraphicsLock);
 				break;
 			}
 			// Fall through !!!
@@ -443,22 +426,22 @@ on_input_frame (void)
 void
 PlanetOrbitMenu (void)
 {
-	void *oldInputFunc = pSolarSysState->MenuState.InputFunc;
+	MENU_STATE MenuState;
 	InputFrameCallback *oldCallback;
+
+	memset (&MenuState, 0, sizeof MenuState);
 
 	DrawMenuStateStrings (PM_SCAN, SCAN);
 	LockMutex (GraphicsLock);
 	SetFlashRect (SFR_MENU_3DO);
 	UnlockMutex (GraphicsLock);
 
-	pSolarSysState->MenuState.CurState = SCAN;
+	MenuState.CurState = SCAN;
 	SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 	oldCallback = SetInputCallback (on_input_frame);
 
-	// XXX: temporary; will have an own MENU_STATE
-	pSolarSysState->MenuState.InputFunc = DoPlanetOrbit;
-	DoInput (&pSolarSysState->MenuState, TRUE);
-	pSolarSysState->MenuState.InputFunc = oldInputFunc;
+	MenuState.InputFunc = DoPlanetOrbit;
+	DoInput (&MenuState, TRUE);
 
 	SetInputCallback (oldCallback);
 

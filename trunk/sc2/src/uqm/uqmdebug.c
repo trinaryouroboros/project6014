@@ -1880,7 +1880,6 @@ typedef struct wait_state
 {
 	// standard state required by DoInput
 	BOOLEAN (*InputFunc) (struct wait_state *self);
-	COUNT MenuRepeatDelay;
 } WAIT_STATE;
 
 		
