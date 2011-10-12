@@ -113,7 +113,6 @@ static RACE_DESC chmmr_desc =
 };
 
 // JMS_GFX
-#define LASER_RANGE_2XRES DISPLAY_TO_WORLD (300)
 #define MAX_THRUST_2XRES 70
 #define THRUST_INCREMENT_2XRES 14
 
@@ -190,7 +189,6 @@ static RACE_DESC chmmr_desc_2xres =
 };
 
 // JMS_GFX
-#define LASER_RANGE_4XRES DISPLAY_TO_WORLD (600)
 #define MAX_THRUST_4XRES 140
 #define THRUST_INCREMENT_4XRES 28
 
@@ -360,16 +358,6 @@ initialize_megawatt_laser (ELEMENT *ShipPtr, HELEMENT LaserArray[])
 		BUILD_COLOR (MAKE_RGB15_INIT (0x1F, 0x11, 0x00), 0x7B),
 		BUILD_COLOR (MAKE_RGB15_INIT (0x1F, 0x03, 0x00), 0x7F),
 	};
-	
-	COUNT laser_range_resscaled; // JMS_GFX
-	
-	// JMS_GFX
-	if (RESOLUTION_FACTOR == 0)
-		laser_range_resscaled = LASER_RANGE;
-	else if (RESOLUTION_FACTOR == 1)
-		laser_range_resscaled = LASER_RANGE_2XRES;
-	else
-		laser_range_resscaled = LASER_RANGE_4XRES;
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	LaserBlock.face = StarShipPtr->ShipFacing;
@@ -378,8 +366,8 @@ initialize_megawatt_laser (ELEMENT *ShipPtr, HELEMENT LaserArray[])
 	LaserBlock.cx = DISPLAY_ALIGN (ShipPtr->next.location.x) + DISPLAY_TO_WORLD (r.corner.x);
 	LaserBlock.cy = DISPLAY_ALIGN (ShipPtr->next.location.y) + DISPLAY_TO_WORLD (r.corner.y);
 	
-	LaserBlock.ex = COSINE (FACING_TO_ANGLE (LaserBlock.face), laser_range_resscaled);
-	LaserBlock.ey = SINE (FACING_TO_ANGLE (LaserBlock.face), laser_range_resscaled);
+	LaserBlock.ex = COSINE (FACING_TO_ANGLE (LaserBlock.face), (LASER_RANGE << RESOLUTION_FACTOR)); // JMS_GFX
+	LaserBlock.ey = SINE (FACING_TO_ANGLE (LaserBlock.face), (LASER_RANGE << RESOLUTION_FACTOR)); // JMS_GFX
 	LaserBlock.sender = ShipPtr->playerNr;
 	LaserBlock.flags = IGNORE_SIMILAR;
 	LaserBlock.pixoffs = 0;
@@ -429,15 +417,6 @@ static void
 chmmr_postprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
-	COUNT laser_range_resscaled; // JMS_GFX
-	
-	// JMS_GFX
-	if (RESOLUTION_FACTOR == 0)
-		laser_range_resscaled = LASER_RANGE;
-	else if (RESOLUTION_FACTOR == 1)
-		laser_range_resscaled = LASER_RANGE_2XRES;
-	else
-		laser_range_resscaled = LASER_RANGE_4XRES;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 
@@ -541,11 +520,11 @@ chmmr_postprocess (ELEMENT *ElementPtr)
 				// calculate tractor beam effect
 				angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 				dx = (ElementPtr->next.location.x
-						+ COSINE (angle, (laser_range_resscaled / 3)
+						+ COSINE (angle, ((LASER_RANGE << RESOLUTION_FACTOR) / 3) // JMS_GFX
 						+ DISPLAY_TO_WORLD (CHMMR_OFFSET << RESOLUTION_FACTOR))) // JMS_GFX
 						- ShipElementPtr->next.location.x;
 				dy = (ElementPtr->next.location.y
-						+ SINE (angle, (laser_range_resscaled / 3)
+						+ SINE (angle, ((LASER_RANGE << RESOLUTION_FACTOR) / 3) // JMS_GFX
 						+ DISPLAY_TO_WORLD (CHMMR_OFFSET << RESOLUTION_FACTOR))) // JMS_GFX
 						- ShipElementPtr->next.location.y;
 				angle = ARCTAN (dx, dy);
