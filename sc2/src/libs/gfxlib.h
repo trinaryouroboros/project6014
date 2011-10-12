@@ -16,6 +16,8 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2011: Added DPOINT type - a coordinate point with larger values to avoid overflows in hires modes.
+
 #ifndef _GFXLIB_H
 #define _GFXLIB_H
 
@@ -146,6 +148,12 @@ typedef struct point
 {
 	COORD x, y;
 } POINT;
+
+// JMS: coordinate point with larger values to avoid overflows in hires modes.
+typedef struct dpoint
+{
+	SDWORD x, y;
+} DPOINT;
 
 typedef struct stamp
 {

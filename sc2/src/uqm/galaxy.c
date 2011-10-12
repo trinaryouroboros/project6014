@@ -259,25 +259,20 @@ InitGalaxy (void)
 		if (i < BIG_STAR_COUNT + MED_STAR_COUNT)
 		{
 			SetPrimType (&DisplayArray[p], STAMP_PRIM);
-			SetPrimColor (&DisplayArray[p],
-					BUILD_COLOR (MAKE_RGB15 (0x0B, 0x0B, 0x1F), 0x09));
+			SetPrimColor (&DisplayArray[p], BUILD_COLOR (MAKE_RGB15 (0x0B, 0x0B, 0x1F), 0x09));
 			DisplayArray[p].Object.Stamp.frame = stars_in_space;
 		}
 		else
 		{
 			SetPrimType (&DisplayArray[p], POINT_PRIM);
 			if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
-				SetPrimColor (&DisplayArray[p],
-						BUILD_COLOR (MAKE_RGB15 (0x15, 0x15, 0x15), 0x07));
-			else if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)					// BY JMS - Should check what color this actually changes...
-				SetPrimColor (&DisplayArray[p],
-							  BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x15), 0x8C));
+				SetPrimColor (&DisplayArray[p], BUILD_COLOR (MAKE_RGB15 (0x15, 0x15, 0x15), 0x07)); // Grey small dot stars in melee.
+			else if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+				SetPrimColor (&DisplayArray[p], BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x15), 0x8C));
 			else if (GET_GAME_STATE (ARILOU_SPACE_SIDE) <= 1)
-				SetPrimColor (&DisplayArray[p],
-						BUILD_COLOR (MAKE_RGB15 (0x14, 0x00, 0x00), 0x8C));
+				SetPrimColor (&DisplayArray[p], BUILD_COLOR (MAKE_RGB15 (0x14, 0x00, 0x00), 0x8C));
 			else
-				SetPrimColor (&DisplayArray[p],
-						BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x8C));
+				SetPrimColor (&DisplayArray[p], BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x8C));
 		}
 
 		InsertPrim (&Links, p, GetPredLink (Links));
@@ -289,8 +284,7 @@ InitGalaxy (void)
 }
 
 static BOOLEAN
-CmpMovePoints (const POINT *pt1, const POINT *pt2, SIZE dx, SIZE dy,
-			   SIZE reduction)
+CmpMovePoints (const POINT *pt1, const POINT *pt2, SIZE dx, SIZE dy, SIZE reduction)
 {
 	if (optMeleeScale == TFB_SCALE_STEP)
 	{
