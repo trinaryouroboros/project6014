@@ -616,7 +616,7 @@ init_androsynth (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	// JMS_GFX: A rather clumsy way of giving ship correct max speed & accel at hi-res modes.
+	// JMS_GFX: A rather clumsy way of giving ship correct stats at hi-res modes.
 	if (RESOLUTION_FACTOR == 0)
 	{
 		androsynth_desc.preprocess_func = androsynth_preprocess;

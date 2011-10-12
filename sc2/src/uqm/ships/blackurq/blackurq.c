@@ -36,7 +36,7 @@
 #define SPECIAL_WAIT 9
 
 #define SHIP_MASS 10
-#define MISSILE_SPEED 64
+#define MISSILE_SPEED (64 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_LIFE 64 /* actually, it's as long as you hold the button down.*/
 
 static RACE_DESC black_urquan_desc =
@@ -381,8 +381,7 @@ decelerate_preprocess (ELEMENT *ElementPtr)
 static void
 splinter_preprocess (ELEMENT *ElementPtr)
 {
-	ElementPtr->next.image.frame =
-			IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 	ElementPtr->state_flags |= CHANGING;
 }
 
@@ -397,8 +396,7 @@ buzzsaw_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ElementPtr0->state_flags &= ~DISAPPEARING;
 		ElementPtr0->state_flags |= NONSOLID | CHANGING;
 		ElementPtr0->life_span = 5;
-		ElementPtr0->next.image.frame =
-				SetAbsFrameIndex (ElementPtr0->current.image.frame, 2);
+		ElementPtr0->next.image.frame = SetAbsFrameIndex (ElementPtr0->current.image.frame, 2);
 
 		ElementPtr0->preprocess_func = splinter_preprocess;
 	}
@@ -436,8 +434,7 @@ buzzsaw_postprocess (ELEMENT *ElementPtr)
 		primIndex = ListElementPtr->PrimIndex;
 		*ListElementPtr = *ElementPtr;
 		ListElementPtr->PrimIndex = primIndex;
-		(GLOBAL (DisplayArray))[primIndex] =
-				(GLOBAL (DisplayArray))[ElementPtr->PrimIndex];
+		(GLOBAL (DisplayArray))[primIndex] = (GLOBAL (DisplayArray))[ElementPtr->PrimIndex];
 		ListElementPtr->current = ListElementPtr->next;
 		InitIntersectStartPoint (ListElementPtr);
 		InitIntersectEndPoint (ListElementPtr);
@@ -474,7 +471,7 @@ initialize_buzzsaw (ELEMENT *ShipPtr, HELEMENT SawArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = KOHR_AH_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
+	MissileBlock.speed = MISSILE_SPEED; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -548,7 +545,7 @@ black_urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 
 					if (!PlotIntercept (BuzzSawPtr,
 							lpEvalDesc->ObjectPtr, BuzzSawPtr->life_span,
-							(FRAGMENT_RANGE << RESOLUTION_FACTOR) / 2)) // JMS_GFX
+							FRAGMENT_RANGE / 2))
 						StarShipPtr->ship_input_state &= ~WEAPON;
 					else if (StarShipPtr->weapon_counter == 0)
 						StarShipPtr->ship_input_state |= WEAPON;
@@ -566,7 +563,7 @@ black_urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			if (StarShipPtr->old_status_flags & WEAPON)
 				StarShipPtr->ship_input_state &= ~WEAPON;
 			else if (StarShipPtr->weapon_counter == 0
-					&& ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, (FRAGMENT_RANGE << RESOLUTION_FACTOR) / 2)) // JMS_GFX
+					&& ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, FRAGMENT_RANGE / 2))
 				StarShipPtr->ship_input_state |= WEAPON;
 
 			if (StarShipPtr->special_counter == 0
@@ -701,7 +698,7 @@ init_black_urquan (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	// JMS_GFX: A rather clumsy way of giving ship correct max speed at hi-res mode
+	// JMS_GFX: A rather clumsy way of giving ship correct stats at hi-res mode
 	if (RESOLUTION_FACTOR == 0)
 	{
 		black_urquan_desc.preprocess_func = black_urquan_preprocess;
