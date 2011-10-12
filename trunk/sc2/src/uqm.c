@@ -17,6 +17,9 @@
  */
 
 // JMS 2010: If uqm.cfg is not found (running for the first time), start in full-screen mode to prevent color bug on OSX
+// JMS 2011: Originally, the smooth zoom was TFB_SCALE_TRILINEAR instead of bilinear.
+// Using bilinear alleviates the smooth zoom performance choppiness problems in 2x and 4x, but
+// is kinda hacky solution...
 
 // JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
 
@@ -159,8 +162,8 @@ static const struct option_list_value scalerList[] =
 
 static const struct option_list_value meleeScaleList[] = 
 {
-	{"smooth",   TFB_SCALE_TRILINEAR},
-	{"3do",      TFB_SCALE_TRILINEAR},
+	{"smooth",   TFB_SCALE_BILINEAR}, // JMS: Replaced trilinear with bilinear because of performance problems.
+	{"3do",      TFB_SCALE_BILINEAR}, // JMS: Replaced trilinear with bilinear because of performance problems.
 	{"step",     TFB_SCALE_STEP},
 	{"pc",       TFB_SCALE_STEP},
 	{"bilinear", TFB_SCALE_BILINEAR},
@@ -257,7 +260,7 @@ main (int argc, char *argv[])
 		INIT_CONFIG_OPTION(  whichIntro,        OPT_PC ),
 		INIT_CONFIG_OPTION(  whichShield,       OPT_PC ),
 		INIT_CONFIG_OPTION(  smoothScroll,      OPT_PC ),
-		INIT_CONFIG_OPTION(  meleeScale,        TFB_SCALE_TRILINEAR ),
+		INIT_CONFIG_OPTION(  meleeScale,        TFB_SCALE_BILINEAR ), // JMS: Replaced trilinear with bilinear because of performance problems.
 		INIT_CONFIG_OPTION(  subtitles,         true ),
 		INIT_CONFIG_OPTION(  stereoSFX,         false ),
 		INIT_CONFIG_OPTION(  musicVolumeScale,  1.0f ),
@@ -631,8 +634,11 @@ getUserConfigOptions (struct options_struct *options)
 	getBoolConfigValue (&options->use3doMusic, "config.3domusic");
 	getBoolConfigValue (&options->useRemixMusic, "config.remixmusic");
 
+	// JMS: Originally, the smooth zoom was TFB_SCALE_TRILINEAR instead of bilinear.
+	// Using bilinear alleviates the smooth zoom performance choppiness problems in 2x and 4x, but
+	// is kinda hacky solution...
 	getBoolConfigValueXlat (&options->meleeScale, "config.smoothmelee",
-			TFB_SCALE_TRILINEAR, TFB_SCALE_STEP);
+			TFB_SCALE_BILINEAR, TFB_SCALE_STEP);
 
 	if (getListConfigValue (&options->soundDriver, "config.audiodriver",
 			audioDriverList))
