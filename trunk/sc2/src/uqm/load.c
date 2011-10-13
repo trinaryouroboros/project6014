@@ -62,12 +62,38 @@ cread_16 (DECODE_REF fh, UWORD *v)
 }
 
 static inline COUNT
+cread_16s (DECODE_REF fh, SWORD *v)
+{
+	UWORD t;
+	COUNT ret;
+	// value was converted to unsigned when saved
+	ret = cread_16 (fh, &t);
+	// unsigned to signed conversion
+	if (v)
+		*v = t;
+	return ret;
+}
+
+static inline COUNT
 cread_32 (DECODE_REF fh, DWORD *v)
 {
 	DWORD t;
 	if (!v) /* read value ignored */
 		v = &t;
 	return cread (v, 4, 1, fh);
+}
+
+static inline COUNT
+cread_32s (DECODE_REF fh, SDWORD *v)
+{
+	DWORD t;
+	COUNT ret;
+	// value was converted to unsigned when saved
+	ret = cread_32 (fh, &t);
+	// unsigned to signed conversion
+	if (v)
+		*v = t;
+	return ret;
 }
 
 static inline COUNT
@@ -112,6 +138,19 @@ read_32 (void *fp, DWORD *v)
 }
 
 static inline COUNT
+read_32s (void *fp, SDWORD *v)
+{
+	DWORD t;
+	COUNT ret;
+	// value was converted to unsigned when saved
+	ret = read_32 (fp, &t);
+	// unsigned to signed conversion
+	if (v)
+		*v = t;
+	return ret;
+}
+
+static inline COUNT
 read_ptr (void *fp)
 {
 	DWORD t;
@@ -123,6 +162,13 @@ read_a8 (void *fp, BYTE *ar, COUNT count)
 {
 	assert (ar != NULL);
 	return ReadResFile (ar, 1, count, fp) == count;
+}
+
+static inline COUNT
+read_str (void *fp, char *str, COUNT count)
+{
+	// no type conversion needed for strings
+	return read_a8 (fp, (BYTE *)str, count);
 }
 
 static inline COUNT
@@ -222,17 +268,17 @@ LoadRaceQueue (DECODE_REF fh, QUEUE *pQueue)
 		FleetPtr->max_crew = tmpb;
 		cread_8  (fh, &FleetPtr->growth);
 		cread_8  (fh, &FleetPtr->max_energy);
-		cread_16 (fh, &FleetPtr->loc.x);
-		cread_16 (fh, &FleetPtr->loc.y);
+		cread_16s(fh, &FleetPtr->loc.x);
+		cread_16s(fh, &FleetPtr->loc.y);
 
 		cread_16 (fh, &FleetPtr->actual_strength);
 		cread_16 (fh, &FleetPtr->known_strength);
-		cread_16 (fh, &FleetPtr->known_loc.x);
-		cread_16 (fh, &FleetPtr->known_loc.y);
+		cread_16s(fh, &FleetPtr->known_loc.x);
+		cread_16s(fh, &FleetPtr->known_loc.y);
 		cread_8  (fh, &FleetPtr->growth_err_term);
 		cread_8  (fh, &FleetPtr->func_index);
-		cread_16 (fh, &FleetPtr->dest_loc.x);
-		cread_16 (fh, &FleetPtr->dest_loc.y);
+		cread_16s(fh, &FleetPtr->dest_loc.x);
+		cread_16s(fh, &FleetPtr->dest_loc.y);
 		cread_16 (fh, NULL); /* alignment padding */
 
 		UnlockFleetInfo (pQueue, hStarShip);
@@ -271,8 +317,8 @@ LoadGroupQueue (DECODE_REF fh, QUEUE *pQueue)
 		GroupPtr->dest_loc = LONIBBLE (tmpb);
 		GroupPtr->orbit_pos = HINIBBLE (tmpb);
 		cread_8  (fh, &GroupPtr->group_id); /* was max_energy */
-		cread_16 (fh, &GroupPtr->loc.x);
-		cread_16 (fh, &GroupPtr->loc.y);
+		cread_16s(fh, &GroupPtr->loc.x);
+		cread_16s(fh, &GroupPtr->loc.y);
 
 		UnlockIpGroup (pQueue, hGroup);
 	}
@@ -289,17 +335,17 @@ LoadEncounter (ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	EncounterPtr->succ = 0;
 	cread_ptr (fh); /* useless ptr; HELEMENT hElement */
 	EncounterPtr->hElement = 0;
-	cread_16  (fh, &EncounterPtr->transition_state);
-	cread_16  (fh, &EncounterPtr->origin.x);
-	cread_16  (fh, &EncounterPtr->origin.y);
+	cread_16s (fh, &EncounterPtr->transition_state);
+	cread_16s (fh, &EncounterPtr->origin.x);
+	cread_16s (fh, &EncounterPtr->origin.y);
 	cread_16  (fh, &EncounterPtr->radius);
-	cread_16  (fh, &EncounterPtr->destination_pt.x);//JMS
-	cread_16  (fh, &EncounterPtr->destination_pt.y);//JMS
-	cread_16  (fh, &EncounterPtr->home_pt.x);		//JMS
-	cread_16  (fh, &EncounterPtr->home_pt.y);		//JMS
+	cread_16s  (fh, &EncounterPtr->destination_pt.x);//JMS
+	cread_16s  (fh, &EncounterPtr->destination_pt.y);//JMS
+	cread_16s  (fh, &EncounterPtr->home_pt.x);		//JMS
+	cread_16s  (fh, &EncounterPtr->home_pt.y);		//JMS
 	// STAR_DESC fields
-	cread_16  (fh, &EncounterPtr->SD.star_pt.x);
-	cread_16  (fh, &EncounterPtr->SD.star_pt.y);
+	cread_16s (fh, &EncounterPtr->SD.star_pt.x);
+	cread_16s (fh, &EncounterPtr->SD.star_pt.y);
 	cread_8   (fh, &EncounterPtr->SD.Type);
 	cread_8   (fh, &EncounterPtr->SD.Index);
 	cread_16  (fh, NULL); /* alignment padding */
@@ -328,8 +374,8 @@ LoadEncounter (ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	}
 	
 	// Load the stuff after the BRIEF_SHIP_INFO array
-	cread_32  (fh, &EncounterPtr->log_x);
-	cread_32  (fh, &EncounterPtr->log_y);
+	cread_32s (fh, &EncounterPtr->log_x);
+	cread_32s (fh, &EncounterPtr->log_y);
 }
 
 static void
@@ -374,8 +420,8 @@ LoadClockState (CLOCK_STATE *ClockPtr, DECODE_REF fh)
 	cread_8   (fh, &ClockPtr->day_index);
 	cread_8   (fh, &ClockPtr->month_index);
 	cread_16  (fh, &ClockPtr->year_index);
-	cread_16  (fh, &ClockPtr->tick_count);
-	cread_16  (fh, &ClockPtr->day_in_ticks);
+	cread_16s (fh, &ClockPtr->tick_count);
+	cread_16s (fh, &ClockPtr->day_in_ticks);
 	cread_ptr (fh); /* not loading ptr; Semaphore clock_sem */
 	cread_ptr (fh); /* not loading ptr; Task clock_task */
 	cread_32  (fh, NULL); /* not loading; DWORD TimeCounter */
@@ -400,27 +446,27 @@ LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 	cread_16  (fh, NULL); /* CLOCK_STATE alignment padding */
 	LoadClockState (&GSPtr->GameClock, fh);
 
-	cread_16  (fh, &GSPtr->autopilot.x);
-	cread_16  (fh, &GSPtr->autopilot.y);
-	cread_16  (fh, &GSPtr->ip_location.x);
-	cread_16  (fh, &GSPtr->ip_location.y);
+	cread_16s (fh, &GSPtr->autopilot.x);
+	cread_16s (fh, &GSPtr->autopilot.y);
+	cread_16s (fh, &GSPtr->ip_location.x);
+	cread_16s (fh, &GSPtr->ip_location.y);
 	/* STAMP ShipStamp */
-	cread_16  (fh, &GSPtr->ShipStamp.origin.x);
-	cread_16  (fh, &GSPtr->ShipStamp.origin.y);
+	cread_16s (fh, &GSPtr->ShipStamp.origin.x);
+	cread_16s (fh, &GSPtr->ShipStamp.origin.y);
 	cread_16  (fh, &GSPtr->ShipFacing);
 	cread_8   (fh, &GSPtr->ip_planet);
 	cread_8   (fh, &GSPtr->in_orbit);
 
 	/* VELOCITY_DESC velocity */
 	cread_16  (fh, &GSPtr->velocity.TravelAngle);
-	cread_16  (fh, &GSPtr->velocity.vector.width);
-	cread_16  (fh, &GSPtr->velocity.vector.height);
-	cread_16  (fh, &GSPtr->velocity.fract.width);
-	cread_16  (fh, &GSPtr->velocity.fract.height);
-	cread_16  (fh, &GSPtr->velocity.error.width);
-	cread_16  (fh, &GSPtr->velocity.error.height);
-	cread_16  (fh, &GSPtr->velocity.incr.width);
-	cread_16  (fh, &GSPtr->velocity.incr.height);
+	cread_16s (fh, &GSPtr->velocity.vector.width);
+	cread_16s (fh, &GSPtr->velocity.vector.height);
+	cread_16s (fh, &GSPtr->velocity.fract.width);
+	cread_16s (fh, &GSPtr->velocity.fract.height);
+	cread_16s (fh, &GSPtr->velocity.error.width);
+	cread_16s (fh, &GSPtr->velocity.error.height);
+	cread_16s (fh, &GSPtr->velocity.incr.width);
+	cread_16s (fh, &GSPtr->velocity.incr.height);
 	cread_16  (fh, NULL); /* VELOCITY_DESC padding */
 
 	cread_32  (fh, &GSPtr->BattleGroupRef);
@@ -441,8 +487,8 @@ static BOOLEAN
 LoadSisState (SIS_STATE *SSPtr, void *fp)
 {
 	if (
-			read_32  (fp, &SSPtr->log_x) != 1 ||
-			read_32  (fp, &SSPtr->log_y) != 1 ||
+			read_32s (fp, &SSPtr->log_x) != 1 ||
+			read_32s (fp, &SSPtr->log_y) != 1 ||
 			read_32  (fp, &SSPtr->ResUnits) != 1 ||
 			read_32  (fp, &SSPtr->FuelOnBoard) != 1 ||
 			read_16  (fp, &SSPtr->CrewEnlisted) != 1 ||
@@ -454,9 +500,9 @@ LoadSisState (SIS_STATE *SSPtr, void *fp)
 			read_8   (fp, &SSPtr->NumLanders) != 1 ||
 			read_a16 (fp, SSPtr->ElementAmounts, NUM_ELEMENT_CATEGORIES) != 1 ||
 
-			read_a8  (fp, SSPtr->ShipName, SIS_NAME_SIZE) != 1 ||
-			read_a8  (fp, SSPtr->CommanderName, SIS_NAME_SIZE) != 1 ||
-			read_a8  (fp, SSPtr->PlanetName, SIS_NAME_SIZE) != 1 ||
+			read_str (fp, SSPtr->ShipName, SIS_NAME_SIZE) != 1 ||
+			read_str (fp, SSPtr->CommanderName, SIS_NAME_SIZE) != 1 ||
+			read_str (fp, SSPtr->PlanetName, SIS_NAME_SIZE) != 1 ||
 
 			read_16  (fp, NULL) != 1 /* padding */
 		)
@@ -495,8 +541,8 @@ LoadSummary (SUMMARY_DESC *SummPtr, void *fp)
 static void
 LoadStarDesc (STAR_DESC *SDPtr, DECODE_REF fh)
 {
-	cread_16 (fh, &SDPtr->star_pt.x);
-	cread_16 (fh, &SDPtr->star_pt.y);
+	cread_16s(fh, &SDPtr->star_pt.x);
+	cread_16s(fh, &SDPtr->star_pt.y);
 	cread_8  (fh, &SDPtr->Type);
 	cread_8  (fh, &SDPtr->Index);
 	cread_8  (fh, &SDPtr->Prefix);

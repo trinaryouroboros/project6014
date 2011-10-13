@@ -16,7 +16,10 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-#include "gfxintrn.h"
+#include "libs/gfxlib.h"
+#include "libs/graphics/context.h"
+#include "libs/graphics/drawable.h"
+#include "libs/graphics/tfb_draw.h"
 #include "libs/memlib.h"
 #include "tfb_draw.h"
 #include <math.h>
@@ -56,22 +59,54 @@ GetContextFGFrame (void)
 	return _CurFramePtr;
 }
 
+static DRAWABLE
+request_drawable (COUNT NumFrames, DRAWABLE_TYPE DrawableType,
+		CREATE_FLAGS flags, SIZE width, SIZE height)
+{
+	DRAWABLE Drawable;
+	COUNT i;
+
+	Drawable = AllocDrawable (NumFrames);
+	if (!Drawable)
+		return NULL;
+
+	Drawable->Flags = flags;
+	Drawable->MaxIndex = NumFrames - 1;
+
+	for (i = 0; i < NumFrames; ++i)
+	{
+		FRAME FramePtr = &Drawable->Frame[i];
+
+		if (DrawableType == RAM_DRAWABLE && width > 0 && height > 0)
+		{
+			FramePtr->image = TFB_DrawImage_New (TFB_DrawCanvas_New_TrueColor (
+					width, height, (flags & WANT_ALPHA) ? TRUE : FALSE));
+		}
+
+		FramePtr->Type = DrawableType;
+		FramePtr->Index = i;
+		SetFrameBounds (FramePtr, width, height);
+	}
+
+	return Drawable;
+}
+
 DRAWABLE
 CreateDisplay (CREATE_FLAGS CreateFlags, SIZE *pwidth, SIZE *pheight)
 {
 	DRAWABLE Drawable;
 
-	if (!DisplayActive ())
-		return (0);
-
-	Drawable = _request_drawable (1, SCREEN_DRAWABLE,
-			(CreateFlags & (WANT_PIXMAP | (GetDisplayFlags () & WANT_MASK))),
-			GetDisplayWidth (), GetDisplayHeight ());
+	// TODO: ScreenWidth and ScreenHeight should be passed in
+	//   instead of returned.
+	Drawable = request_drawable (1, SCREEN_DRAWABLE,
+			(CreateFlags & (WANT_PIXMAP | WANT_MASK)),
+			ScreenWidth, ScreenHeight);
 	if (Drawable)
 	{
 		FRAME F;
 
-		if ((F = CaptureDrawable (Drawable)) == 0)
+		F = CaptureDrawable (Drawable);
+		if (F == 0)
 			DestroyDrawable (Drawable);
 		else
 		{
@@ -126,10 +161,7 @@ CreateDrawable (CREATE_FLAGS CreateFlags, SIZE width, SIZE height, COUNT
 {
 	DRAWABLE Drawable;
 
-	if (!DisplayActive ())
-		return (0);
-
-	Drawable = _request_drawable (num_frames, RAM_DRAWABLE,
+	Drawable = request_drawable (num_frames, RAM_DRAWABLE,
 			(CreateFlags & (WANT_MASK | WANT_PIXMAP
 				| WANT_ALPHA | MAPPED_TO_DISPLAY)),
 			width, height);
@@ -216,7 +248,7 @@ RotateFrame (FRAME Frame, int angle_deg)
 	double d;
 	double angle = angle_deg * M_PI / 180;
 
-	Drawable = _request_drawable (1, RAM_DRAWABLE, WANT_PIXMAP, 0, 0);
+	Drawable = request_drawable (1, RAM_DRAWABLE, WANT_PIXMAP, 0, 0);
 	if (!Drawable)
 		return 0;
 	RotFramePtr = CaptureDrawable (Drawable);
@@ -257,3 +289,110 @@ SetFrameTransparentColor (FRAME Frame, Color color)
 			FALSE);
 }
 
+Color
+GetFramePixel (FRAME frame, POINT pixelPt)
+{
+	return TFB_DrawCanvas_GetPixel (frame->image->NormalImg,
+			pixelPt.x, pixelPt.y);
+}
+
+// Creates a new DRAWABLE of specified size and scales the passed
+// frame onto it. The aspect ratio is not preserved.
+DRAWABLE
+RescaleFrame (FRAME frame, int width, int height)
+{
+	DRAWABLE drawable;
+	FRAME newFrame;
+	CREATE_FLAGS flags;
+	TFB_Image *img;
+	TFB_Canvas src, dst;
+
+	if (!frame)
+		return NULL;
+
+	flags = GetFrameParentDrawable (frame)->Flags;
+	drawable = CreateDrawable (flags, width, height, 1);
+	if (!drawable)
+		return NULL;
+	newFrame = CaptureDrawable (drawable);
+	if (!newFrame)
+	{
+		FreeDrawable (drawable);
+		return NULL;
+	}
+
+	// scale the hot-spot
+	newFrame->HotSpot.x = frame->HotSpot.x * width / frame->Bounds.width;
+	newFrame->HotSpot.y = frame->HotSpot.y * height / frame->Bounds.height;
+
+	img = frame->image;
+	LockMutex (img->mutex);
+	
+	src = img->NormalImg;
+	dst = newFrame->image->NormalImg;
+	TFB_DrawCanvas_Rescale_Nearest (src, dst, -1, NULL, NULL, NULL);
+	
+	UnlockMutex (img->mutex);
+
+	ReleaseDrawable (newFrame);
+
+	return drawable;
+}
+
+BOOLEAN
+ReadFramePixelColors (FRAME frame, Color *pixels, int width, int height)
+{
+	TFB_Image *img;
+
+	if (!frame)
+		return FALSE;
+
+	// TODO: Do we need to lock the img->mutex here?
+	img = frame->image;
+	return TFB_DrawCanvas_GetPixelColors (img->NormalImg, pixels,
+			width, height);
+}
+
+// Warning: this functions bypasses DCQ, which is why it is not a DrawXXX
+BOOLEAN
+WriteFramePixelColors (FRAME frame, const Color *pixels, int width, int height)
+{
+	TFB_Image *img;
+
+	if (!frame)
+		return FALSE;
+
+	// TODO: Do we need to lock the img->mutex here?
+	img = frame->image;
+	return TFB_DrawCanvas_SetPixelColors (img->NormalImg, pixels,
+			width, height);
+}
+
+BOOLEAN
+ReadFramePixelIndexes (FRAME frame, BYTE *pixels, int width, int height)
+{
+	TFB_Image *img;
+
+	if (!frame)
+		return FALSE;
+
+	// TODO: Do we need to lock the img->mutex here?
+	img = frame->image;
+	return TFB_DrawCanvas_GetPixelIndexes (img->NormalImg, pixels,
+			width, height);
+}
+
+// Warning: this functions bypasses DCQ, which is why it is not a DrawXXX
+BOOLEAN
+WriteFramePixelIndexes (FRAME frame, const BYTE *pixels, int width, int height)
+{
+	TFB_Image *img;
+
+	if (!frame)
+		return FALSE;
+
+	// TODO: Do we need to lock the img->mutex here?
+	img = frame->image;
+	return TFB_DrawCanvas_SetPixelIndexes (img->NormalImg, pixels,
+			width, height);
+}

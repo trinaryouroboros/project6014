@@ -24,7 +24,8 @@
 static const HOT_SPOT NullHs = {0, 0};
 
 void
-TFB_DrawScreen_Line (int x1, int y1, int x2, int y2, Color color, SCREEN dest)
+TFB_DrawScreen_Line (int x1, int y1, int x2, int y2, Color color,
+		DrawMode mode, SCREEN dest)
 {
 	TFB_DrawCommand DC;
 
@@ -34,13 +35,14 @@ TFB_DrawScreen_Line (int x1, int y1, int x2, int y2, Color color, SCREEN dest)
 	DC.data.line.x2 = x2;
 	DC.data.line.y2 = y2;
 	DC.data.line.color = color;
+	DC.data.line.drawMode = mode;
 	DC.data.line.destBuffer = dest;
 
 	TFB_EnqueueDrawCommand (&DC);
 }
 
 void
-TFB_DrawScreen_Rect (RECT *rect, Color color, SCREEN dest)
+TFB_DrawScreen_Rect (RECT *rect, Color color, DrawMode mode, SCREEN dest)
 {
 	RECT locRect;
 	TFB_DrawCommand DC;
@@ -56,6 +58,7 @@ TFB_DrawScreen_Rect (RECT *rect, Color color, SCREEN dest)
 	DC.Type = TFB_DRAWCOMMANDTYPE_RECTANGLE;
 	DC.data.rect.rect = *rect;
 	DC.data.rect.color = color;
+	DC.data.rect.drawMode = mode;
 	DC.data.rect.destBuffer = dest;
 
 	TFB_EnqueueDrawCommand (&DC);
@@ -63,7 +66,7 @@ TFB_DrawScreen_Rect (RECT *rect, Color color, SCREEN dest)
 
 void
 TFB_DrawScreen_Image (TFB_Image *img, int x, int y, int scale,
-		TFB_ColorMap *cmap, SCREEN dest)
+		int scaleMode, TFB_ColorMap *cmap, DrawMode mode, SCREEN dest)
 {
 	TFB_DrawCommand DC;
 	
@@ -73,6 +76,8 @@ TFB_DrawScreen_Image (TFB_Image *img, int x, int y, int scale,
 	DC.data.image.x = x;
 	DC.data.image.y = y;
 	DC.data.image.scale = (scale == GSCALE_IDENTITY) ? 0 : scale;
+	DC.data.image.scaleMode = scaleMode;
+	DC.data.image.drawMode = mode;
 	DC.data.image.destBuffer = dest;
 
 	TFB_EnqueueDrawCommand (&DC);
@@ -80,7 +85,7 @@ TFB_DrawScreen_Image (TFB_Image *img, int x, int y, int scale,
 
 void
 TFB_DrawScreen_FilledImage (TFB_Image *img, int x, int y, int scale,
-		Color color, SCREEN dest)
+		int scaleMode, Color color, DrawMode mode, SCREEN dest)
 {
 	TFB_DrawCommand DC;
 	
@@ -89,7 +94,9 @@ TFB_DrawScreen_FilledImage (TFB_Image *img, int x, int y, int scale,
 	DC.data.filledimage.x = x;
 	DC.data.filledimage.y = y;
 	DC.data.filledimage.scale = (scale == GSCALE_IDENTITY) ? 0 : scale;
+	DC.data.filledimage.scaleMode = scaleMode;
 	DC.data.filledimage.color = color;
+	DC.data.filledimage.drawMode = mode;
 	DC.data.filledimage.destBuffer = dest;
 
 	TFB_EnqueueDrawCommand (&DC);
@@ -97,7 +104,7 @@ TFB_DrawScreen_FilledImage (TFB_Image *img, int x, int y, int scale,
 
 void
 TFB_DrawScreen_FontChar (TFB_Char *fontChar, TFB_Image *backing,
-		int x, int y, SCREEN dest)
+		int x, int y, DrawMode mode, SCREEN dest)
 {
 	TFB_DrawCommand DC;
 	
@@ -106,21 +113,19 @@ TFB_DrawScreen_FontChar (TFB_Char *fontChar, TFB_Image *backing,
 	DC.data.fontchar.backing = backing;
 	DC.data.fontchar.x = x;
 	DC.data.fontchar.y = y;
+	DC.data.fontchar.drawMode = mode;
 	DC.data.fontchar.destBuffer = dest;
 
 	TFB_EnqueueDrawCommand (&DC);
 }
 
 void
-TFB_DrawScreen_CopyToImage (TFB_Image *img, RECT *lpRect, SCREEN src)
+TFB_DrawScreen_CopyToImage (TFB_Image *img, const RECT *r, SCREEN src)
 {
 	TFB_DrawCommand DC;
 
 	DC.Type = TFB_DRAWCOMMANDTYPE_COPYTOIMAGE;
-	DC.data.copytoimage.x = lpRect->corner.x;
-	DC.data.copytoimage.y = lpRect->corner.y;
-	DC.data.copytoimage.w = lpRect->extent.width;
-	DC.data.copytoimage.h = lpRect->extent.height;
+	DC.data.copytoimage.rect = *r;
 	DC.data.copytoimage.image = img;
 	DC.data.copytoimage.srcBuffer = src;
 	
@@ -128,7 +133,7 @@ TFB_DrawScreen_CopyToImage (TFB_Image *img, RECT *lpRect, SCREEN src)
 }
 
 void
-TFB_DrawScreen_Copy (RECT *r, SCREEN src, SCREEN dest)
+TFB_DrawScreen_Copy (const RECT *r, SCREEN src, SCREEN dest)
 {
 	RECT locRect;
 	TFB_DrawCommand DC;
@@ -142,10 +147,7 @@ TFB_DrawScreen_Copy (RECT *r, SCREEN src, SCREEN dest)
 	}
 
 	DC.Type = TFB_DRAWCOMMANDTYPE_COPY;
-	DC.data.copy.x = r->corner.x;
-	DC.data.copy.y = r->corner.y;
-	DC.data.copy.w = r->extent.width;
-	DC.data.copy.h = r->extent.height;
+	DC.data.copy.rect = *r;
 	DC.data.copy.srcBuffer = src;
 	DC.data.copy.destBuffer = dest;
 
@@ -234,49 +236,51 @@ TFB_DrawScreen_Callback (void (*callback) (void *arg), void *arg)
 
 void
 TFB_DrawImage_Line (int x1, int y1, int x2, int y2, Color color,
-		TFB_Image *dest)
+		DrawMode mode, TFB_Image *target)
 {
-	LockMutex (dest->mutex);
-	TFB_DrawCanvas_Line (x1, y1, x2, y2, color, dest->NormalImg);
-	dest->dirty = TRUE;
-	UnlockMutex (dest->mutex);
+	LockMutex (target->mutex);
+	TFB_DrawCanvas_Line (x1, y1, x2, y2, color, mode, target->NormalImg);
+	target->dirty = TRUE;
+	UnlockMutex (target->mutex);
 }
 
 void
-TFB_DrawImage_Rect (RECT *rect, Color color, TFB_Image *image)
+TFB_DrawImage_Rect (RECT *rect, Color color, DrawMode mode, TFB_Image *target)
 {
-	LockMutex (image->mutex);
-	TFB_DrawCanvas_Rect (rect, color, image->NormalImg);
-	image->dirty = TRUE;
-	UnlockMutex (image->mutex);
+	LockMutex (target->mutex);
+	TFB_DrawCanvas_Rect (rect, color, mode, target->NormalImg);
+	target->dirty = TRUE;
+	UnlockMutex (target->mutex);
 }
 
 void
 TFB_DrawImage_Image (TFB_Image *img, int x, int y, int scale,
-		TFB_ColorMap *cmap, TFB_Image *target)
+		int scaleMode, TFB_ColorMap *cmap, DrawMode mode, TFB_Image *target)
 {
 	LockMutex (target->mutex);
-	TFB_DrawCanvas_Image (img, x, y, scale, cmap, target->NormalImg);
+	TFB_DrawCanvas_Image (img, x, y, scale, scaleMode, cmap,
+			mode, target->NormalImg);
 	target->dirty = TRUE;
 	UnlockMutex (target->mutex);
 }
 
 void
 TFB_DrawImage_FilledImage (TFB_Image *img, int x, int y, int scale,
-		Color color, TFB_Image *target)
+		int scaleMode, Color color, DrawMode mode, TFB_Image *target)
 {
 	LockMutex (target->mutex);
-	TFB_DrawCanvas_FilledImage (img, x, y, scale, color, target->NormalImg);
+	TFB_DrawCanvas_FilledImage (img, x, y, scale, scaleMode, color,
+			mode, target->NormalImg);
 	target->dirty = TRUE;
 	UnlockMutex (target->mutex);
 }
 
 void
 TFB_DrawImage_FontChar (TFB_Char *fontChar, TFB_Image *backing,
-		int x, int y, TFB_Image *target)
+		int x, int y, DrawMode mode, TFB_Image *target)
 {
 	LockMutex (target->mutex);
-	TFB_DrawCanvas_FontChar (fontChar, backing, x, y, target->NormalImg);
+	TFB_DrawCanvas_FontChar (fontChar, backing, x, y, mode, target->NormalImg);
 	target->dirty = TRUE;
 	UnlockMutex (target->mutex);
 }
@@ -299,9 +303,7 @@ TFB_DrawImage_New (TFB_Canvas canvas)
 	img->last_scale = 0;
 	TFB_DrawCanvas_GetExtent (canvas, &img->extent);
 
-	img->Palette = TFB_DrawCanvas_ExtractPalette (canvas);
-	
-	if (img->Palette)
+	if (TFB_DrawCanvas_IsPaletted (canvas))
 	{
 		img->NormalImg = canvas;
 	}
@@ -328,7 +330,6 @@ TFB_DrawImage_CreateForScreen (int w, int h, BOOLEAN withalpha)
 	img->last_scale_hs = NullHs;
 	img->last_scale_type = -1;
 	img->last_scale = 0;
-	img->Palette = NULL;
 	img->extent.width = w;
 	img->extent.height = h;
 
@@ -417,9 +418,6 @@ TFB_DrawImage_Delete (TFB_Image *image)
 		TFB_DrawCanvas_Delete (image->ScaledImg);
 	}
 
-	if (image->Palette)
-		HFree (image->Palette);
-
 	UnlockMutex (image->mutex);
 	DestroyMutex (image->mutex);
 			
@@ -456,3 +454,10 @@ TFB_DrawImage_FixScaling (TFB_Image *image, int target, int type)
 	}
 }
 
+BOOLEAN
+TFB_DrawImage_Intersect (TFB_Image *img1, POINT img1org,
+		TFB_Image *img2, POINT img2org, const RECT *interRect)
+{
+	return TFB_DrawCanvas_Intersect (img1->NormalImg, img1org,
+			img2->NormalImg, img2org, interRect);
+}

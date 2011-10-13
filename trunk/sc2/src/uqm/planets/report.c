@@ -88,7 +88,7 @@ MakeReport (SOUND ReadOutSounds, UNICODE *pStr, COUNT StrLen)
 	BYTE ButtonState;
 	int end_page_len;
 	UNICODE end_page_buf[200];
-	UniChar last_c;
+	UniChar last_c = 0;
 	COUNT row_cells;
 	BOOLEAN Sleepy;
 	RECT r;
@@ -271,7 +271,7 @@ DoDiscoveryReport (SOUND ReadOutSounds)
 	SetContext (OldContext);
 	// TODO: Make CONTEXT ref-counted
 	if (ownContext)
-		DestroyContext (context);
+		DestroyScanContext ();
 
 	DestroyDrawable (ReleaseDrawable (saveStamp.frame));
 

@@ -473,7 +473,8 @@ UninitEncounter (void)
 		SIZE VictoryState;
 		COUNT RecycleAmount = 0;
 		SIZE i;
-		RECT r, scavenge_r;
+		RECT r;
+		RECT scavenge_r = {{0, 0}, {0, 0}};
 		TEXT t;
 		STAMP ship_s;
 		const UNICODE *str1 = NULL;
@@ -524,6 +525,8 @@ UninitEncounter (void)
 		UnlockShipFrag (&GLOBAL (npc_built_ship_q), hStarShip);
 
 		prevMsgMode = SetStatusMessageMode (SMM_RES_UNITS);
+		ship_s.origin.x = 0;
+		ship_s.origin.y = 0;
 		Sleepy = TRUE;
 		for (i = 0; i < NUM_SIDES; ++i)
 		{
@@ -587,8 +590,8 @@ UninitEncounter (void)
 										BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 								SetContextFont (TinyFont);
 
-								GetStringContents (FragPtr->race_strings,
-										(STRINGPTR)buf, FALSE);
+								utf8StringCopy (buf, sizeof buf,
+										GetStringAddress (FragPtr->race_strings));
 								// XXX: this will not work with UTF-8 strings
 								strupr (buf);
 
@@ -756,7 +759,7 @@ EncounterBattle (void)
 { 
 	ACTIVITY OldActivity;
 	extern UWORD nth_frame;
-	InputContext *savedPlayerInput;
+	InputContext *savedPlayerInput = NULL;
 
 	LockMutex (GraphicsLock);
 

@@ -385,7 +385,7 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 }
 
 void
-DateToString (unsigned char *buf, size_t bufLen,
+DateToString (char *buf, size_t bufLen,
 		BYTE month_index, BYTE day_index, COUNT year_index)
 {
 	snprintf (buf, bufLen, "%s %02d" STR_MIDDLE_DOT "%04d",
@@ -395,21 +395,32 @@ DateToString (unsigned char *buf, size_t bufLen,
 
 // The green screen which contains date etc.
 void
+GetStatusMessageRect (RECT *r)
+{
+	r->corner.x = RES_STAT_SCALE(2);
+	r->corner.y = RES_STAT_SCALE(130);
+	r->extent.width = STATUS_MESSAGE_WIDTH;
+	r->extent.height = STATUS_MESSAGE_HEIGHT;
+}
+
+void
 DrawStatusMessage (const UNICODE *pStr)
 {
 	RECT r;
+	RECT ctxRect;
 	TEXT t;
 	UNICODE buf[128];
 	CONTEXT OldContext;
 
 	OldContext = SetContext (StatusContext);
-	GetContextClipRect (&r);
+	GetContextClipRect (&ctxRect);
+	// XXX: Technically, this does not need OffScreenContext. The only reason
+	//   it is used is to avoid preserving StatusContext settings.
 	SetContext (OffScreenContext);
 	SetContextFGFrame (Screen);
-	r.corner.x += RES_STAT_SCALE(2); // JMS_GFX
-	r.corner.y += RES_STAT_SCALE(130); // JMS_GFX
-	r.extent.width = STATUS_MESSAGE_WIDTH;
-	r.extent.height = STATUS_MESSAGE_HEIGHT;
+	GetStatusMessageRect (&r);
+	r.corner.x += ctxRect.corner.x;
+	r.corner.y += ctxRect.corner.y;
 	SetContextClipRect (&r);
 
 	BatchGraphics ();
@@ -1742,7 +1753,7 @@ flash_rect_func (void *data)
 	DWORD TimeIn;
 	const DWORD WaitTime = ONE_SECOND / 16;
 	SIZE strength;
-	RECT cached_rect;
+	RECT cached_rect = {{0, 0}, {0, 0}};
 	FRAME cached_screen_frame = 0;
 	Task task = (Task)data;
 	bool cached[CACHE_SIZE];
@@ -1861,7 +1872,8 @@ flash_rect_func (void *data)
 void
 SetFlashRect (RECT *pRect)
 {
-	RECT clip_r, temp_r, flash_rect1, old_r;
+	RECT clip_r = {{0, 0}, {0, 0}};
+	RECT temp_r, flash_rect1, old_r;
 	CONTEXT OldContext;
 	int create_flash = 0;
 

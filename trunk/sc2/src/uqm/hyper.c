@@ -64,6 +64,19 @@ static COLORMAP hypercmaps[3];		// JMS: Extra slot for ORZ space color map
 static BYTE fuel_ticks;
 static COUNT hyper_dx, hyper_dy, hyper_extra;
 
+// HyperspaceMenu() items
+enum HyperMenuItems
+{
+	// XXX: Must match the enum in menustat.h
+	STARMAP = 1,
+	EQUIP_DEVICE,
+	CARGO,
+	ROSTER,
+	GAME_MENU,
+	NAVIGATION,
+};
+
+
 void
 MoveSIS (SDWORD *pdx, SDWORD *pdy)
 {

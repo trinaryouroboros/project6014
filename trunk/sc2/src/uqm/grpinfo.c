@@ -161,8 +161,8 @@ ReadIpGroup (void *fp, IP_GROUP *GroupPtr)
 	GroupPtr->dest_loc = LONIBBLE (tmpb);
 	GroupPtr->orbit_pos = HINIBBLE (tmpb);
 	sread_8  (fp, &GroupPtr->group_id); /* was max_energy */
-	sread_16 (fp, &GroupPtr->loc.x);
-	sread_16 (fp, &GroupPtr->loc.y);
+	sread_16s(fp, &GroupPtr->loc.x);
+	sread_16s(fp, &GroupPtr->loc.y);
 }
 
 static void
@@ -254,8 +254,9 @@ BuildGroup (QUEUE *pDstQueue, BYTE race_id)
 void
 BuildGroups (void)
 {
-	BYTE Index, BestIndex;
-	COUNT BestPercent;
+	BYTE Index;
+	BYTE BestIndex = 0;
+	COUNT BestPercent = 0;
 	POINT universe;
 	HFLEETINFO hFleet, hNextFleet;
 	BYTE HomeWorld[] =
@@ -316,7 +317,6 @@ BuildGroups (void)
 		HomeWorld[SUPOX_SHIP] = 0;
 	}
 
-	BestPercent = 0;
 	universe = CurStarDescPtr->star_pt;
 	for (hFleet = GetHeadLink (&GLOBAL (avail_race_q)), Index = 0;
 			hFleet; hFleet = hNextFleet, ++Index)

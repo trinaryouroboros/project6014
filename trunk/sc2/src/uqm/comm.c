@@ -132,7 +132,7 @@ static int
 _count_lines (TEXT *pText)
 {
 	SIZE text_width;
-	const unsigned char *pStr;
+	const char *pStr;
 	int numLines = 0;
 	BOOLEAN eol;
 
@@ -162,12 +162,12 @@ add_text (int status, TEXT *pTextIn)
 	TEXT locText;
 	TEXT *pText;
 	SIZE leading;
-	const unsigned char *pStr;
+	const char *pStr;
 	SIZE text_width;
 	int num_lines = 0;
 	static COORD last_baseline;
 	BOOLEAN eol;
-	CONTEXT OldContext;
+	CONTEXT OldContext = NULL;
 	
 	BatchGraphics ();
 
@@ -321,7 +321,7 @@ add_text (int status, TEXT *pTextIn)
 // TRUE is returned if a complete line fitted
 // FALSE otherwise
 BOOLEAN
-getLineWithinWidth(TEXT *pText, const unsigned char **startNext,
+getLineWithinWidth(TEXT *pText, const char **startNext,
 		SIZE maxWidth, COUNT maxChars)
 {
 	BOOLEAN eol;
@@ -330,8 +330,8 @@ getLineWithinWidth(TEXT *pText, const unsigned char **startNext,
 			// We cannot add any more words.
 	RECT rect;
 	COUNT oldCount;
-	const unsigned char *ptr;
-	const unsigned char *wordStart;
+	const char *ptr;
+	const char *wordStart;
 	UniChar ch;
 	COUNT charCount;
 
@@ -504,20 +504,11 @@ FeedbackPlayerPhrase (UNICODE *pStr)
 static void
 InitSpeechGraphics (void)
 {
-	RECT r;
-	RECT sr;
-	FRAME f;
+	InitOscilloscope (SetAbsFrameIndex (ActivityFrame, 9));
 
-	InitOscilloscope (0, 0, RADAR_WIDTH, RADAR_HEIGHT,
-			SetAbsFrameIndex (ActivityFrame, 9));
-
-	f = SetAbsFrameIndex (ActivityFrame, 2);
-	GetFrameRect (f, &r);
-	SetSliderImage (f);
-	f = SetAbsFrameIndex (ActivityFrame, 5);
-	GetFrameRect (f, &sr);
-	InitSlider (0, SLIDER_Y, SIS_SCREEN_WIDTH, sr.extent.height,
-			r.extent.width, r.extent.height, f);
+	InitSlider (0, SLIDER_Y, SIS_SCREEN_WIDTH,
+			SetAbsFrameIndex (ActivityFrame, 5),
+			SetAbsFrameIndex (ActivityFrame, 2));
 }
 
 static void
@@ -883,7 +874,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		for (row = 0; row < MAX_SUMM_ROWS && pSS->NextSub;
 				++row, pSS->NextSub = GetNextTrackSubtitle (pSS->NextSub))
 		{
-			const unsigned char *next;
+			const char *next = NULL;
 
 			if (pSS->LeftOver)
 			{	// some text left from last subtitle

@@ -25,27 +25,13 @@
 
 #define END_INTERPLANETARY START_INTERPLANETARY
 
-enum
-{
-	SCAN = 0,
-	STARMAP,
-	EQUIP_DEVICE,
-	CARGO,
-	ROSTER,
-	GAME_MENU,
-	NAVIGATION
-};
-
-enum
+enum PlanetScanTypes
 {
 	MINERAL_SCAN = 0,
 	ENERGY_SCAN,
 	BIOLOGICAL_SCAN,
 
 	NUM_SCAN_TYPES,
-	EXIT_SCAN = NUM_SCAN_TYPES,
-	AUTO_SCAN,
-	DISPATCH_SHUTTLE
 };
 
 #define MAP_WIDTH SIS_SCREEN_WIDTH
@@ -169,7 +155,7 @@ struct planet_orbit
 {
 	FRAME TopoZoomFrame;
 			// 4x scaled topo image for planet-side
-	BYTE  *lpTopoData;
+	SBYTE  *lpTopoData;
 			// normal topo data; expressed in elevation levels
 			// data is signed for planets other than gas giants
 			// transformed to light variance map for 3d planet
@@ -180,9 +166,11 @@ struct planet_orbit
 			// automatically drawn if present
 	FRAME TintFrame;
 			// tinted topo images for current scan type (dynamic)
-	DWORD *lpTopoMap;
+	Color TintColor;
+			// the color of the last used tint
+	Color *TopoColors;
 			// RGBA version of topo image; for 3d planet
-	DWORD *ScratchArray;
+	Color *ScratchArray;
 			// temp RGBA data for whatever transforms (nuked often)
 	FRAME WorkFrame;
 			// any extra frame workspace (for dynamic objects)
@@ -236,7 +224,7 @@ struct solarsys_state
 	BYTE max_ship_speed;
 
 	STRING XlatRef;
-	STRINGPTR XlatPtr;
+	void *XlatPtr;
 	COLORMAP OrbitalCMap;
 
 	SYSTEM_INFO SysInfo;
@@ -255,7 +243,6 @@ struct solarsys_state
 			 * [4] = bio 2 (world-specific)
 			 * [5] = bio 3 (world-specific)
 			 */
-	Color Tint_rgb;
 	FRAME TopoFrame;
 	PLANET_ORBIT Orbit;
 	BOOLEAN InOrbit;
@@ -282,7 +269,7 @@ POINT displayToLocation (POINT pt, SIZE scaleRadius);
 POINT planetOuterLocation (COUNT planetI);
 
 extern void LoadPlanet (FRAME SurfDefFrame);
-extern void DrawPlanet (int x, int y, int dy, Color rgb);
+extern void DrawPlanet (int dy, Color tintColor);
 extern void FreePlanet (void);
 extern void LoadStdLanderFont (PLANET_INFO *info);
 extern void FreeLanderFont (PLANET_INFO *info);

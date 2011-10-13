@@ -24,13 +24,14 @@
 #include "opengl.h"
 #include "pure.h"
 #include "primitives.h"
-#include "dcqueue.h"
 #include "options.h"
 #include "uqmversion.h"
 #include "libs/graphics/drawcmd.h"
+#include "libs/graphics/dcqueue.h"
+#include "libs/graphics/cmap.h"
 #include "libs/input/sdl/input.h"
 		// for ProcessInputEvent()
-#include "bbox.h"
+#include "libs/graphics/bbox.h"
 #include "port.h"
 #include "libs/uio.h"
 #include "libs/log.h"
@@ -46,16 +47,11 @@ SDL_Surface *SDL_Screens[TFB_GFX_NUMSCREENS];
 
 SDL_Surface *format_conv_surf = NULL;
 
-volatile int TransitionAmount = 255;
-SDL_Rect TransitionClipRect;
 static volatile BOOLEAN abortFlag = FALSE;
 
 int GfxFlags = 0;
 
 TFB_GRAPHICS_BACKEND *graphics_backend = NULL;
-
-#define FPS_PERIOD 100
-int RenderedFrames = 0;
 
 volatile int QuitPosted = 0;
 volatile int GameActive = 1; // Track the SDL_ACTIVEEVENT state SDL_APPACTIVE
@@ -187,9 +183,6 @@ TFB_InitGraphics (int driver, int flags, int width, int height, unsigned int res
 
 	TFB_DrawCanvas_Initialize ();
 
-	RenderingCond = CreateCondVar ("DCQ empty",
-			SYNC_CLASS_TOPLEVEL | SYNC_CLASS_VIDEO);
-
 	atexit (TFB_UninitGraphics);
 
 	return 0;
@@ -288,8 +281,13 @@ TFB_SwapBuffers (int force_full_redraw)
 
 	if (transition_amount != 255)
 	{
+		SDL_Rect r;
+		r.x = TransitionClipRect.corner.x;
+		r.y = TransitionClipRect.corner.y;
+		r.w = TransitionClipRect.extent.width;
+		r.h = TransitionClipRect.extent.height;
 		graphics_backend->screen (TFB_SCREEN_TRANSITION,
-				255 - transition_amount, &TransitionClipRect);
+				255 - transition_amount, &r);
 	}
 
 	if (fade_amount != 255)
@@ -350,7 +348,7 @@ TFB_DisplayFormatAlpha (SDL_Surface *surface)
 TFB_Canvas
 TFB_GetScreenCanvas (SCREEN screen)
 {
-	return (TFB_Canvas) SDL_Screens[screen];
+	return SDL_Screens[screen];
 }
 
 void TFB_BlitSurface (SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
@@ -597,331 +595,14 @@ void TFB_BlitSurface (SDL_Surface *src, SDL_Rect *srcrect, SDL_Surface *dst,
 }
 
 void
-TFB_ComputeFPS (void)
+TFB_UploadTransitionScreen (void)
 {
-	static Uint32 last_time = 0, fps_counter = 0;
-	Uint32 current_time, delta_time;
-
-	current_time = SDL_GetTicks ();
-	delta_time = current_time - last_time;
-	last_time = current_time;
-	
-	fps_counter += delta_time;
-	if (fps_counter > FPS_PERIOD)
+#ifdef HAVE_OPENGL
+	if (GraphicsDriver == TFB_GFXDRIVER_SDL_OPENGL)
 	{
-		log_add (log_User, "fps %.2f, effective %.2f",
-				1000.0 / delta_time,
-				1000.0 * RenderedFrames / fps_counter);
-
-		fps_counter = 0;
-		RenderedFrames = 0;
+		TFB_GL_UploadTransitionScreen ();
 	}
-}
-
-void
-TFB_FlushGraphics (void) // Only call from main thread!!
-{
-	int commands_handled;
-	BOOLEAN livelock_deterrence;
-	BOOLEAN done;
-
-	// This is technically a locking violation on DrawCommandQueue.Size,
-	// but it is likely to not be very destructive.
-	if (DrawCommandQueue.Size == 0)
-	{
-		static int last_fade = 255;
-		static int last_transition = 255;
-		int current_fade = GetFadeAmount ();
-		int current_transition = TransitionAmount;
-		
-		if ((current_fade != 255 && current_fade != last_fade) ||
-			(current_transition != 255 &&
-			current_transition != last_transition) ||
-			(current_fade == 255 && last_fade != 255) ||
-			(current_transition == 255 && last_transition != 255))
-		{
-			TFB_SwapBuffers (TFB_REDRAW_FADING);
-					// if fading, redraw every frame
-		}
-		else
-		{
-			TaskSwitch ();
-		}
-		
-		last_fade = current_fade;
-		last_transition = current_transition;
-		BroadcastCondVar (RenderingCond);
-		return;
-	}
-
-	if (GfxFlags & TFB_GFXFLAGS_SHOWFPS)
-		TFB_ComputeFPS ();
-
-	commands_handled = 0;
-	livelock_deterrence = FALSE;
-
-	if (DrawCommandQueue.FullSize > DCQ_FORCE_BREAK_SIZE)
-	{
-		TFB_BatchReset ();
-	}
-
-	if (DrawCommandQueue.Size > DCQ_FORCE_SLOWDOWN_SIZE)
-	{
-		Lock_DCQ (-1);
-		livelock_deterrence = TRUE;
-	}
-
-	TFB_BBox_Reset ();
-	TFB_BBox_GetClipRect (SDL_Screens[0]);
-
-	done = FALSE;
-	while (!done)
-	{
-		TFB_DrawCommand DC;
-
-		if (!TFB_DrawCommandQueue_Pop (&DC))
-		{
-			// the Queue is now empty.
-			break;
-		}
-
-		++commands_handled;
-		if (!livelock_deterrence && commands_handled + DrawCommandQueue.Size
-				> DCQ_LIVELOCK_MAX)
-		{
-			// log_add (log_Debug, "Initiating livelock deterrence!");
-			livelock_deterrence = TRUE;
-			
-			Lock_DCQ (-1);
-		}
-
-		switch (DC.Type)
-		{
-		case TFB_DRAWCOMMANDTYPE_SETMIPMAP:
-			TFB_DrawImage_SetMipmap (DC.data.setmipmap.image,
-					DC.data.setmipmap.mipmap,
-					DC.data.setmipmap.hotx, DC.data.setmipmap.hoty);
-			break;
-		case TFB_DRAWCOMMANDTYPE_IMAGE:
-			{
-				TFB_Image *DC_image = DC.data.image.image;
-				TFB_ColorMap *cmap = DC.data.image.colormap;
-				int x = DC.data.image.x;
-				int y = DC.data.image.y;
-
-				TFB_DrawCanvas_Image (DC_image, x, y,
-						DC.data.image.scale, cmap,
-						SDL_Screens[DC.data.image.destBuffer]);
-
-				if (DC.data.image.destBuffer == 0)
-				{
-					LockMutex (DC_image->mutex);
-					if (DC.data.image.scale)
-						TFB_BBox_RegisterCanvas (DC_image->ScaledImg,
-								x - DC_image->last_scale_hs.x,
-								y - DC_image->last_scale_hs.y);
-					else
-						TFB_BBox_RegisterCanvas (DC_image->NormalImg,
-								x - DC_image->NormalHs.x,
-								y - DC_image->NormalHs.y);
-					UnlockMutex (DC_image->mutex);
-				}
-
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_FILLEDIMAGE:
-			{
-				TFB_Image *DC_image = DC.data.filledimage.image;
-				int x = DC.data.filledimage.x;
-				int y = DC.data.filledimage.y;
-
-				TFB_DrawCanvas_FilledImage (DC.data.filledimage.image,
-						DC.data.filledimage.x, DC.data.filledimage.y,
-						DC.data.filledimage.scale, DC.data.filledimage.color,
-						SDL_Screens[DC.data.filledimage.destBuffer]);
-
-				if (DC.data.filledimage.destBuffer == 0)
-				{
-					LockMutex (DC_image->mutex);
-					if (DC.data.filledimage.scale)
-						TFB_BBox_RegisterCanvas (DC_image->ScaledImg,
-								x - DC_image->last_scale_hs.x,
-								y - DC_image->last_scale_hs.y);
-					else
-						TFB_BBox_RegisterCanvas (DC_image->NormalImg,
-								x - DC_image->NormalHs.x,
-								y - DC_image->NormalHs.y);
-					UnlockMutex (DC_image->mutex);
-				}
-
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_FONTCHAR:
-			{
-				TFB_Char *DC_char = DC.data.fontchar.fontchar;
-				int x = DC.data.fontchar.x;
-				int y = DC.data.fontchar.y;
-
-				TFB_DrawCanvas_FontChar (DC.data.fontchar.fontchar,
-						DC.data.fontchar.backing,
-						DC.data.fontchar.x, DC.data.fontchar.y,
-						SDL_Screens[DC.data.fontchar.destBuffer]);
-
-				if (DC.data.fontchar.destBuffer == 0)
-				{
-					RECT r;
-					
-					r.corner.x = x - DC_char->HotSpot.x;
-					r.corner.y = y - DC_char->HotSpot.y;
-					r.extent.width = DC_char->extent.width;
-					r.extent.height = DC_char->extent.height;
-
-					TFB_BBox_RegisterRect (&r);
-				}
-
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_LINE:
-			{
-				if (DC.data.line.destBuffer == 0)
-				{
-					TFB_BBox_RegisterPoint (DC.data.line.x1, DC.data.line.y1);
-					TFB_BBox_RegisterPoint (DC.data.line.x2, DC.data.line.y2);
-				}
-				TFB_DrawCanvas_Line (DC.data.line.x1, DC.data.line.y1,
-						DC.data.line.x2, DC.data.line.y2,
-						DC.data.line.color,
-						SDL_Screens[DC.data.line.destBuffer]);
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_RECTANGLE:
-			{
-				if (DC.data.rect.destBuffer == 0)
-					TFB_BBox_RegisterRect (&DC.data.rect.rect);
-				TFB_DrawCanvas_Rect (&DC.data.rect.rect, DC.data.rect.color,
-						SDL_Screens[DC.data.rect.destBuffer]);
-
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_SCISSORENABLE:
-			{
-				SDL_Rect r;
-				r.x = TFB_BBox.clip.corner.x = DC.data.scissor.x;
-				r.y = TFB_BBox.clip.corner.y = DC.data.scissor.y;
-				r.w = TFB_BBox.clip.extent.width = DC.data.scissor.w;
-				r.h = TFB_BBox.clip.extent.height = DC.data.scissor.h;
-				SDL_SetClipRect (SDL_Screens[0], &r);
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_SCISSORDISABLE:
-			SDL_SetClipRect (SDL_Screens[0], NULL);
-			TFB_BBox.clip.corner.x = 0;
-			TFB_BBox.clip.corner.y = 0;
-			TFB_BBox.clip.extent.width = ScreenWidth;
-			TFB_BBox.clip.extent.height = ScreenHeight;
-			break;
-		case TFB_DRAWCOMMANDTYPE_COPYTOIMAGE:
-			{
-				SDL_Rect src, dest;
-				TFB_Image *DC_image = DC.data.copytoimage.image;
-
-				if (DC_image == 0)
-				{
-					log_add (log_Debug, "DCQ ERROR: COPYTOIMAGE passed null "
-							"image ptr");
-					break;
-				}
-				LockMutex (DC_image->mutex);
-
-				src.x = dest.x = DC.data.copytoimage.x;
-				src.y = dest.y = DC.data.copytoimage.y;
-				src.w = DC.data.copytoimage.w;
-				src.h = DC.data.copytoimage.h;
-
-				dest.x = 0;
-				dest.y = 0;
-				SDL_BlitSurface (SDL_Screens[DC.data.copytoimage.srcBuffer],
-						&src, DC_image->NormalImg, &dest);
-				UnlockMutex (DC_image->mutex);
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_COPY:
-			{
-				SDL_Rect src, dest;
-				src.x = dest.x = DC.data.copy.x;
-				src.y = dest.y = DC.data.copy.y;
-				src.w = DC.data.copy.w;
-				src.h = DC.data.copy.h;
-
-				if (DC.data.copy.destBuffer == 0)
-				{
-					TFB_BBox_RegisterPoint (src.x, src.y);
-					TFB_BBox_RegisterPoint (src.x + src.w, src.y + src.h);
-				}
-
-				SDL_BlitSurface (SDL_Screens[DC.data.copy.srcBuffer], &src,
-						SDL_Screens[DC.data.copy.destBuffer], &dest);
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_DELETEIMAGE:
-			{
-				TFB_Image *DC_image = (TFB_Image *)DC.data.deleteimage.image;
-				TFB_DrawImage_Delete (DC_image);
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_DELETEDATA:
-			{
-				void *data = DC.data.deletedata.data;
-				HFree (data);
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_SENDSIGNAL:
-			ClearSemaphore (DC.data.sendsignal.sem);
-			break;
-		case TFB_DRAWCOMMANDTYPE_REINITVIDEO:
-			{
-				int oldDriver = GraphicsDriver;
-				int oldFlags = GfxFlags;
-				int oldWidth = ScreenWidthActual;
-				int oldHeight = ScreenHeightActual;
-				int initGraphicsResult = TFB_ReInitGraphics (DC.data.reinitvideo.driver,
-															 DC.data.reinitvideo.flags,
-															 DC.data.reinitvideo.width, DC.data.reinitvideo.height, resolutionFactor);
-															// JMS_GFX: Added resolutionFactor
-				if (initGraphicsResult < 0) 
-				{
-					log_add (log_Error, "Could not provide requested mode: " "reverting to last known driver.");
-					// We don't know what exactly failed, so roll it all back
-					if (TFB_ReInitGraphics (oldDriver, oldFlags,
-							oldWidth, oldHeight, resolutionFactor)) // JMS_GFX: Added resolutionFactor
-					{
-						log_add (log_Fatal, "Couldn't reinit at that point either. " "Your video has been somehow tied in knots.");
-						exit (EXIT_FAILURE);
-					}
-				}
-				TFB_SwapBuffers (TFB_REDRAW_YES);
-				if (initGraphicsResult == 1)
-				{
-					DC.data.reinitvideo.flags &= ~TFB_GFXFLAGS_FULLSCREEN;
-				}
-				
-				TFB_SwapBuffers (TFB_REDRAW_YES);
-				break;
-			}
-		case TFB_DRAWCOMMANDTYPE_CALLBACK:
-			{
-				DC.data.callback.callback (DC.data.callback.arg);
-				break;
-			}
-		}
-	}
-	
-	if (livelock_deterrence)
-		Unlock_DCQ ();
-
-	TFB_SwapBuffers (TFB_REDRAW_NO);
-	RenderedFrames++;
-	BroadcastCondVar (RenderingCond);
+#endif
 }
 
 void
