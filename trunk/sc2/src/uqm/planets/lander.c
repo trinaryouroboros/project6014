@@ -359,8 +359,8 @@ AddEnemyShot (ELEMENT *CritterElementPtr, COUNT angle, COUNT speed)
 		DisplayArray[WeaponElementPtr->PrimIndex].Object.Stamp.frame = SetAbsFrameIndex (LanderFrame[8], shotFrameIndex); 
 		
 		SetVelocityComponents (&WeaponElementPtr->velocity, 
-							   COSINE (angle, WORLD_TO_VELOCITY (2 * 3)) + speed,
-							   SINE   (angle, WORLD_TO_VELOCITY (2 * 3)) + speed);
+							   COSINE (angle, WORLD_TO_VELOCITY (6 << RESOLUTION_FACTOR)) + speed,
+							   SINE   (angle, WORLD_TO_VELOCITY (6 << RESOLUTION_FACTOR)) + speed);
 		
 		UnlockElement (hWeaponElement);
 		InsertElement (hWeaponElement, GetHeadElement ());
@@ -1022,8 +1022,8 @@ CheckSpecialAttributes (ELEMENT *ElementPtr, COUNT WhichSpecial)
 					CritterElementPtr->mass_points = CritterIndex;
 					CritterElementPtr->hit_points = HINIBBLE (CreatureData[CritterIndex].ValueAndHitPoints);
 					CritterElementPtr->playerNr = PS_NON_PLAYER;
-					CritterElementPtr->next.location.x = ElementPtr->next.location.x + ((TFB_Random() % 24) - 12);
-					CritterElementPtr->next.location.y = ElementPtr->next.location.y + ((TFB_Random() % 24) - 12);
+					CritterElementPtr->next.location.x = ElementPtr->next.location.x + (((TFB_Random() % 24) - 12) << RESOLUTION_FACTOR);
+					CritterElementPtr->next.location.y = ElementPtr->next.location.y + (((TFB_Random() % 24) - 12) << RESOLUTION_FACTOR);
 					CritterElementPtr->preprocess_func = object_animation;
 					CritterElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[CritterIndex].FrameRate);
 					CritterElementPtr->thrust_wait = 0;
@@ -2049,8 +2049,8 @@ LanderFire (SIZE facing)
 	angle = FACING_TO_ANGLE (facing);
 	SetVelocityComponents (
 			&WeaponElementPtr->velocity,
-			COSINE (angle, WORLD_TO_VELOCITY (2 * 3)) + wdx,
-			SINE (angle, WORLD_TO_VELOCITY (2 * 3)) + wdy);
+			COSINE (angle, WORLD_TO_VELOCITY ((2 * 3) << RESOLUTION_FACTOR)) + wdx,
+			SINE (angle, WORLD_TO_VELOCITY ((2 * 3) << RESOLUTION_FACTOR)) + wdy);
 
 	UnlockElement (hWeaponElement);
 
