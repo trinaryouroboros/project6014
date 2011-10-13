@@ -19,7 +19,6 @@
 // JMS 2010: -Release Bullet hole gfx when uniniting kernel
 //			 -Removed unnecessary UninitGameKernel function
 
-#include "master.h"
 #include "nameref.h"
 #include "libs/reslib.h"
 #include "gamestr.h"
@@ -37,28 +36,20 @@
 //  should be something like solarsys.h
 extern void FreeIPData (void);
 
-static void UninitContexts (void);
-static void UninitKernel (BOOLEAN ships);
-
-//static void UninitGameKernel (void); // JMS: This functions seems to be never used
 
 
 void
 FreeKernel (void)
 {
-	UninitKernel (TRUE);
-	UninitContexts ();
+	UninitPlayerInput ();
 
 	UninitResourceSystem ();
-
-	UninitPlayerInput ();
 
 	DestroyDrawable (ReleaseDrawable (Screen));
 	DestroyContext (ScreenContext);
 
 	UninitVideoPlayer ();
 	UninitSound ();
-	UninitGraphics ();
 }
 
 static void
@@ -72,7 +63,7 @@ UninitContexts (void)
 }
 
 static void
-UninitKernel (BOOLEAN ships)
+UninitKernel (void)
 {
 	UninitSpace ();
 
@@ -88,9 +79,6 @@ UninitKernel (BOOLEAN ships)
 	UninitQueue (&race_q[0]);
 	UninitQueue (&race_q[1]);
 
-	if (ships)
-		FreeMasterShipList ();
-	
 	ActivityFrame = 0;
 }
 
@@ -103,20 +91,17 @@ FreeGameData (void)
 	FreeHyperData ();
 }
 
-/* JMS: Commented out because it seems all the functionalities contained in this function
+// JMS: Commented out because it seems all the functionalities contained in this function
  // are called separately when the program run ends: Freegamedata and Freekernel
  // (which contains UninitKernel and UninitContexts) are run straight in starcon.c where the program run ends.
-static void
+void
 UninitGameKernel (void)
 {
-	// XXX: this function is never called. Why not? (BUG?)
 	if (ActivityFrame)
 	{
 		FreeGameData ();
 
-		UninitKernel (FALSE);
+		UninitKernel ();
 		UninitContexts ();
 	}
-}*/
-
-
+}

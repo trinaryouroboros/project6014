@@ -44,7 +44,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
-# ADD CPP /nologo /MD /W3 /GX /Zi /O2 /I "..\..\src" /I "..\..\src\regex" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D _VW=320 /D _VH=240 /D "HAVE_OPENGL" /D "GFXMODULE_SDL" /D "THREADLIB_SDL" /D "HAVE_OPENAL" /D "HAVE_ZIP" /D "HAVE_JOYSTICK" /D "NETPLAY" /D "ZLIB_DLL" /D "USE_INTERNAL_MIKMOD" /D "USE_PLATFORM_ACCEL" /FD /c
+# ADD CPP /nologo /MD /W2 /GX /Zi /O2 /I "..\..\src" /I "..\..\src\regex" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D _VW=320 /D _VH=240 /D "HAVE_OPENGL" /D "GFXMODULE_SDL" /D "THREADLIB_SDL" /D "HAVE_OPENAL" /D "HAVE_ZIP" /D "HAVE_JOYSTICK" /D "NETPLAY" /D "ZLIB_DLL" /D "USE_INTERNAL_MIKMOD" /D "USE_PLATFORM_ACCEL" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -100,8 +100,7 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Debug_NoAccel"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /FD /GZ /c
-# SUBTRACT BASE CPP /YX
+# ADD BASE CPP /nologo /W3 /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /GZ /c
 # ADD CPP /nologo /MDd /W3 /GX /Zi /Od /I "..\..\src" /I "..\..\src\regex" /D "DEBUG" /D "_DEBUG" /D "DEBUG_TRACK_SEM" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D _VW=320 /D _VH=240 /D "HAVE_OPENGL" /D "GFXMODULE_SDL" /D "THREADLIB_SDL" /D "HAVE_OPENAL" /D "HAVE_ZIP" /D "HAVE_JOYSTICK" /D "NETPLAY" /D "ZLIB_DLL" /D "USE_INTERNAL_MIKMOD" /FR /FD /GZ /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -128,9 +127,8 @@ LINK32=link.exe
 # PROP Intermediate_Dir "Release_NoAccel"
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /FD /c
-# SUBTRACT BASE CPP /YX
-# ADD CPP /nologo /MD /W3 /GX /Zi /O2 /I "..\..\src" /I "..\..\src\regex" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D _VW=320 /D _VH=240 /D "HAVE_OPENGL" /D "GFXMODULE_SDL" /D "THREADLIB_SDL" /D "HAVE_OPENAL" /D "HAVE_ZIP" /D "HAVE_JOYSTICK" /D "NETPLAY" /D "ZLIB_DLL" /D "USE_INTERNAL_MIKMOD" /FR /FD /c
+# ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_MBCS" /YX /FD /c
+# ADD CPP /nologo /MD /W2 /GX /Zi /O2 /I "..\..\src" /I "..\..\src\regex" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_MBCS" /D _VW=320 /D _VH=240 /D "HAVE_OPENGL" /D "GFXMODULE_SDL" /D "THREADLIB_SDL" /D "HAVE_OPENAL" /D "HAVE_ZIP" /D "HAVE_JOYSTICK" /D "NETPLAY" /D "ZLIB_DLL" /D "USE_INTERNAL_MIKMOD" /FD /c
 # SUBTRACT CPP /YX
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
 # ADD RSC /l 0x409 /d "NDEBUG"
@@ -292,23 +290,7 @@ SOURCE=..\..\src\libs\graphics\sdl\2xscalers_sse.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\libs\graphics\sdl\3do_blt.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\libs\graphics\sdl\3do_funcs.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\libs\graphics\sdl\3do_getbody.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\libs\graphics\sdl\bbox.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\libs\graphics\sdl\bbox.h
 # End Source File
 # Begin Source File
 
@@ -321,14 +303,6 @@ SOURCE=..\..\src\libs\graphics\sdl\bilinear2x.c
 # Begin Source File
 
 SOURCE=..\..\src\libs\graphics\sdl\canvas.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\libs\graphics\sdl\dcqueue.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\libs\graphics\sdl\dcqueue.h
 # End Source File
 # Begin Source File
 
@@ -348,6 +322,14 @@ SOURCE=..\..\src\libs\graphics\sdl\opengl.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\libs\graphics\sdl\palette.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\libs\graphics\sdl\palette.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\libs\graphics\sdl\primitives.c
 # End Source File
 # Begin Source File
@@ -361,10 +343,6 @@ SOURCE=..\..\src\libs\graphics\sdl\pure.c
 # Begin Source File
 
 SOURCE=..\..\src\libs\graphics\sdl\pure.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\libs\graphics\sdl\rndzoom.c
 # End Source File
 # Begin Source File
 
@@ -413,6 +391,14 @@ SOURCE=..\..\src\libs\graphics\sdl\triscan2x.c
 # End Group
 # Begin Source File
 
+SOURCE=..\..\src\libs\graphics\bbox.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\libs\graphics\bbox.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\libs\graphics\boxint.c
 # End Source File
 # Begin Source File
@@ -437,7 +423,11 @@ SOURCE=..\..\src\libs\graphics\context.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\libs\graphics\display.h
+SOURCE=..\..\src\libs\graphics\dcqueue.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\libs\graphics\dcqueue.h
 # End Source File
 # Begin Source File
 
@@ -478,6 +468,10 @@ SOURCE=..\..\src\libs\graphics\gfx_common.h
 # Begin Source File
 
 SOURCE=..\..\src\libs\graphics\gfxintrn.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\libs\graphics\gfxload.c
 # End Source File
 # Begin Source File
 

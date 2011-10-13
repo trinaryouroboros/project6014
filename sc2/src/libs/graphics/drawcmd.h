@@ -47,6 +47,7 @@ typedef struct tfb_dc_line
 {
 	int x1, y1, x2, y2;
 	Color color;
+	DrawMode drawMode;
 	SCREEN destBuffer;
 } TFB_DrawCommand_Line;
 
@@ -54,6 +55,7 @@ typedef struct tfb_dc_rect
 {
 	RECT rect;
 	Color color;
+	DrawMode drawMode;
 	SCREEN destBuffer;
 } TFB_DrawCommand_Rect;
 
@@ -63,7 +65,9 @@ typedef struct tfb_dc_img
 	int x, y;
 	SCREEN destBuffer;
 	TFB_ColorMap *colormap;
+	DrawMode drawMode;
 	int scale;
+	int scaleMode;
 } TFB_DrawCommand_Image;
 
 typedef struct tfb_dc_filledimg
@@ -72,7 +76,9 @@ typedef struct tfb_dc_filledimg
 	int x, y;
 	Color color;
 	SCREEN destBuffer;
+	DrawMode drawMode;
 	int scale;
+	int scaleMode;
 } TFB_DrawCommand_FilledImage;
 
 typedef struct tfb_dc_fontchar
@@ -80,32 +86,27 @@ typedef struct tfb_dc_fontchar
 	TFB_Char *fontchar;
 	TFB_Image *backing;
 	int x, y;
+	DrawMode drawMode;
 	SCREEN destBuffer;
 } TFB_DrawCommand_FontChar;
 
 typedef struct tfb_dc_copy
 {
-	int x, y, w, h;
+	RECT rect;
 	SCREEN srcBuffer, destBuffer;
 } TFB_DrawCommand_Copy;
 
 typedef struct tfb_dc_copyimg
 {
 	TFB_Image *image;
-	int x, y, w, h;
+	RECT rect;
 	SCREEN srcBuffer;
 } TFB_DrawCommand_CopyToImage;
 
 typedef struct tfb_dc_scissor
 {
-	int x, y, w, h;
+	RECT rect;
 } TFB_DrawCommand_Scissor;
-
-typedef struct tfb_dc_setpal
-{
-	int index;
-	Color color;
-} TFB_DrawCommand_SetPalette;
 
 typedef struct tfb_dc_setmip
 {
@@ -153,7 +154,6 @@ typedef struct tfb_drawcommand
 		TFB_DrawCommand_Copy copy;
 		TFB_DrawCommand_CopyToImage copytoimage;
 		TFB_DrawCommand_Scissor scissor;
-		TFB_DrawCommand_SetPalette setpalette;
 		TFB_DrawCommand_SetMipmap setmipmap;
 		TFB_DrawCommand_DeleteImage deleteimage;
 		TFB_DrawCommand_DeleteData deletedata;

@@ -20,7 +20,7 @@
 #ifdef GFXMODULE_SDL
 
 #include "pure.h"
-#include "bbox.h"
+#include "libs/graphics/bbox.h"
 #include "scalers.h"
 #include "libs/log.h"
 
@@ -456,7 +456,8 @@ TFB_Pure_ColorLayer (Uint8 r, Uint8 g, Uint8 b, Uint8 a, SDL_Rect *rect)
 void
 Scale_PerfTest (void)
 {
-	DWORD TimeStart, TimeIn, Now;
+	TimeCount TimeStart, TimeIn;
+	TimeCount Now = 0;
 	SDL_Rect updated = {0, 0, ScreenWidth, ScreenHeight};
 	int i;
 

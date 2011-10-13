@@ -81,8 +81,6 @@ BOOLEAN FreeResourceData (void *);
 #include "libs/strlib.h"
 #include "libs/gfxlib.h"
 		// For Color
-#include "gfxlib.h"
-		// For Color
 
 typedef STRING_TABLE DIRENTRY_REF;
 typedef STRING DIRENTRY;

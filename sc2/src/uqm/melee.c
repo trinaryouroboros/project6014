@@ -594,7 +594,7 @@ multiLineDrawText (TEXT *textIn, RECT *clipRect) {
 	lineWidth = clipRect->extent.width - text.baseline.x;
 
 	while (*text.pStr != '\0') {
-		const unsigned char *nextLine;
+		const char *nextLine;
 
 		text.baseline.y += leading;
 		text.CharCount = (COUNT) ~0;

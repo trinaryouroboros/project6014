@@ -147,10 +147,10 @@ void uninit_exp (RACE_DESC *pRaceDesc);
 // Hyperspace movement.
 static void exp_hyper_preprocess (ELEMENT *ElementPtr)
 {
-	SIZE dx, dy;
+	SIZE dx = 0, dy = 0;
 	SIZE AccelerateDirection;
 	STARSHIP *StarShipPtr;
-	SDWORD udx, udy, dtempx, dtempy;	// JMS_GFX: These babies help to make the hyperspace speed calculations not overflow in hires.
+	SDWORD udx = 0, udy = 0, dtempx, dtempy;	// JMS_GFX: These babies help to make the hyperspace speed calculations not overflow in hires.
 
 	if (ElementPtr->state_flags & APPEARING)
 		ElementPtr->velocity = GLOBAL (velocity);

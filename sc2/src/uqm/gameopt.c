@@ -495,7 +495,7 @@ DrawSaveLoad (PICK_GAME_STATE *pickState)
 }
 
 static void
-DrawSavegameCargo (PICK_GAME_STATE *pickState, COUNT gameIndex)
+DrawSavegameCargo (SIS_STATE *sisState)
 {
 	COUNT i;
 	STAMP s;
@@ -548,7 +548,7 @@ DrawSavegameCargo (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		s.origin.y += ELEMENT_SPACING_Y;
 		// print element amount
 		SetContextForeGroundColor (cargo_color[i]);
-		snprintf (buf, sizeof buf, "%u", GLOBAL_SIS (ElementAmounts[i]));
+		snprintf (buf, sizeof buf, "%u", sisState->ElementAmounts[i]);
 		t.CharCount = (COUNT)~0;
 		font_DrawText (&t);
 		t.baseline.y += ELEMENT_SPACING_Y;
@@ -563,7 +563,7 @@ DrawSavegameCargo (PICK_GAME_STATE *pickState, COUNT gameIndex)
 	t.baseline.x = (50 << RESOLUTION_FACTOR) + SUMMARY_X_OFFS; // JMS_GFX
 	t.baseline.y = s.origin.y + (3 << RESOLUTION_FACTOR); // JMS_GFX
 	SetContextForeGroundColor (cargo_color[i]);
-	snprintf (buf, sizeof buf, "%u", GLOBAL_SIS (TotalBioMass));
+	snprintf (buf, sizeof buf, "%u", sisState->TotalBioMass);
 	t.CharCount = (COUNT)~0;
 	font_DrawText (&t);
 
@@ -675,7 +675,7 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		}
 		else
 		{
-			DrawSavegameCargo (pickState, gameIndex);
+			DrawSavegameCargo (&pSD->SS);
 
 			// RU amount.
 			SetContext (RadarContext);
@@ -691,7 +691,7 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 			LockMutex (GraphicsLock);
 			SetContextClipRect (&OldRect);
 			SetContext (SpaceContext);
-			snprintf (buf, sizeof buf, "%u", GLOBAL_SIS (ResUnits));
+			snprintf (buf, sizeof buf, "%u", pSD->SS.ResUnits);
 			t.baseline.y = 102 << RESOLUTION_FACTOR; // JMS_GFX
 			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x00, 0x10), 0x01));
 			font_DrawText (&t);
@@ -716,14 +716,14 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		if (pSD->res_factor > RESOLUTION_FACTOR)
 		{
 			res_scale  = pSD->res_factor - RESOLUTION_FACTOR;
-			starPt.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x) >> res_scale);
-			starPt.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y) >> res_scale);
+			starPt.x = LOGX_TO_UNIVERSE (pSD->SS.log_x >> res_scale);
+			starPt.y = LOGY_TO_UNIVERSE (pSD->SS.log_y >> res_scale);
 		}
 		else if (pSD->res_factor <= RESOLUTION_FACTOR)
 		{
 			res_scale  = RESOLUTION_FACTOR - pSD->res_factor;
-			starPt.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x) << res_scale);
-			starPt.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y) << res_scale);
+			starPt.x = LOGX_TO_UNIVERSE (pSD->SS.log_x << res_scale);
+			starPt.y = LOGY_TO_UNIVERSE (pSD->SS.log_y << res_scale);
 		}
 
 		switch (pSD->Activity)
@@ -783,7 +783,7 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 						GAME_STRING (PLANET_NUMBER_BASE + 32));
 				break;
 			case IN_PLANET_ORBIT:
-				utf8StringCopy (buf, sizeof (buf), GLOBAL_SIS (PlanetName));
+				utf8StringCopy (buf, sizeof (buf), pSD->SS.PlanetName);
 				break;
 			default:
 				snprintf (buf, sizeof buf, "%03u.%01u : %03u.%01u",
@@ -986,8 +986,12 @@ SaveLoadGame (PICK_GAME_STATE *pickState, COUNT gameIndex)
 	STAMP saveStamp;
 	BOOLEAN success;
 
+	saveStamp.frame = NULL;
+
+	// TODO: fix ConfirmSaveLoad() interface so it does not rely on
+	//   MsgStamp != NULL parameter.
 	LockMutex (GraphicsLock);
-	ConfirmSaveLoad (&saveStamp);
+	ConfirmSaveLoad (pickState->saving ? &saveStamp : NULL);
 	UnlockMutex (GraphicsLock);
 
 	if (pickState->saving)
@@ -995,10 +999,14 @@ SaveLoadGame (PICK_GAME_STATE *pickState, COUNT gameIndex)
 	else
 		success = LoadGame (gameIndex, NULL);
 
-	// restore the screen under "Saving..." message
-	LockMutex (GraphicsLock);
-	DrawStamp (&saveStamp);
-	UnlockMutex (GraphicsLock);
+	// TODO: the same should be done for both save and load if we also
+	//   display a load problem message
+	if (pickState->saving)
+	{	// restore the screen under "SAVING..." message
+		LockMutex (GraphicsLock);
+		DrawStamp (&saveStamp);
+		UnlockMutex (GraphicsLock);
+	}
 
 	DestroyDrawable (ReleaseDrawable (saveStamp.frame));
 

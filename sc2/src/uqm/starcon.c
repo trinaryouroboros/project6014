@@ -45,6 +45,7 @@
 #include "libs/log.h"
 #include "libs/gfxlib.h"
 #include "libs/graphics/gfx_common.h"
+#include "libs/graphics/tfb_draw.h"
 #include "libs/misc.h"
 
 #include "uqmversion.h"
@@ -296,7 +297,8 @@ while (--ac > 0)
 	}
 //	CloseJournal ();
 
-	FreeGameData ();
+	UninitGameKernel ();
+	FreeMasterShipList ();
 	FreeKernel ();
 
 	MainExited = TRUE;

@@ -39,7 +39,7 @@
 
 #define CREDITS_TIMEOUT   (ONE_SECOND * 5)
 
-#define TRANS_COLOR   BLUE_COLOR
+#define TRANS_COLOR   BRIGHT_BLUE_COLOR
 
 // Positive or negative scroll rate in pixel lines per second
 static int CreditsRate;
@@ -142,7 +142,7 @@ Credits_RenderTextFrame (CONTEXT TempContext, int *istr, int dir,
 	CONTEXT OldContext;
 	FRAME OldFrame;
 	TEXT TextLines[MAX_TEXT_LINES];
-	STRINGPTR pStr = NULL;
+	char *pStr = NULL;
 	int size;
 	char salign[32];
 	char *scol;

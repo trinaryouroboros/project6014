@@ -129,8 +129,8 @@ TextRect (TEXT *lpText, RECT *pRect, BYTE *pdelta)
 	{
 		COORD top_y, bot_y;
 		SIZE width;
-		UniChar next_ch;
-		const unsigned char *pStr;
+		UniChar next_ch = 0;
+		const char *pStr;
 		COUNT num_chars;
 	
 		num_chars = lpText->CharCount;
@@ -240,9 +240,10 @@ _text_blt (RECT *pClipRect, TEXT *TextPtr, POINT ctxOrigin)
 	FONT FontPtr;
 	COUNT num_chars;
 	UniChar next_ch;
-	const unsigned char *pStr;
+	const char *pStr;
 	POINT origin;
 	TFB_Image *backing;
+	DrawMode mode = _get_context_draw_mode ();
 
 	FontPtr = _CurFontPtr;
 	if (FontPtr == NULL)
@@ -286,7 +287,8 @@ _text_blt (RECT *pClipRect, TEXT *TextPtr, POINT ctxOrigin)
 			r.extent.height = fontChar->disp.height;
 			if (BoxIntersect (&r, pClipRect, &r))
 			{
-				TFB_Prim_FontChar (origin, fontChar, backing, ctxOrigin);
+				TFB_Prim_FontChar (origin, fontChar, backing, mode,
+						ctxOrigin);
 			}
 
 			origin.x += fontChar->disp.width;

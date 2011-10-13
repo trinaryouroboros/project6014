@@ -63,10 +63,16 @@ enum
 // The flag variable itself
 extern int GfxFlags;
 
+// The following functions are driver-defined
 void TFB_PreInit (void);
 int TFB_InitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor); // JMS_GFX: Added resolutionFactor
+int TFB_ReInitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor);
 void TFB_UninitGraphics (void);
 void TFB_ProcessEvents (void);
+void TFB_SetGamma (float gamma);
+void TFB_UploadTransitionScreen (void);
+// This function should not be called directly
+void TFB_SwapBuffers (int force_full_redraw);
 
 #define GSCALE_IDENTITY 256
 
@@ -83,16 +89,17 @@ int SetGraphicScale (int scale);
 int GetGraphicScale (void);
 int SetGraphicScaleMode (int mode /* enum SCALE */);
 int GetGraphicScaleMode (void);
-void SetTransitionSource (RECT *pRect);
-void ScreenTransition (int transition, RECT *pRect);
+void SetTransitionSource (const RECT *pRect);
+void ScreenTransition (int transition, const RECT *pRect);
+
+// TODO: there should be accessor functions for these
+extern volatile int TransitionAmount;
+extern RECT TransitionClipRect;
 
 extern float FrameRate;
 extern int FrameRateTickBase;
 
 void TFB_FlushGraphics (void); // Only call from main thread!!
-
-void TFB_SetGamma (float gamma);
-// Unknown Stuff
 
 // JMS_GFX
 extern unsigned int resolutionFactor;
@@ -103,7 +110,5 @@ extern int ScreenWidthActual;
 extern int ScreenHeightActual;
 extern int ScreenColorDepth;
 extern int GraphicsDriver;
-
-#include "cmap.h"
 
 #endif

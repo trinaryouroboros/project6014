@@ -21,6 +21,7 @@
 #ifndef _GFXLIB_H
 #define _GFXLIB_H
 
+#include "port.h"
 #include "libs/compiler.h"
 
 typedef struct Color Color;
@@ -28,7 +29,7 @@ struct Color {
 	BYTE r;
 	BYTE g;
 	BYTE b;
-	BYTE a;  // Currently unused
+	BYTE a;
 };
 
 #include "libs/reslib.h"
@@ -134,8 +135,14 @@ buildColorRgba (BYTE r, BYTE g, BYTE b, BYTE a)
 
 
 typedef BYTE CREATE_FLAGS;
+// WANT_MASK is deprecated (and non-functional). It used to generate a bitmap
+// of changed pixels for a target DRAWABLE, so that DRAW_SUBTRACTIVE could
+// paint background pixels over them, i.e. a revert draw. The backgrounds
+// are fully erased now instead.
 #define WANT_MASK (CREATE_FLAGS)(1 << 0)
 #define WANT_PIXMAP (CREATE_FLAGS)(1 << 1)
+// MAPPED_TO_DISPLAY is deprecated but still checked by LoadDisplayPixmap().
+// Its former use was to indicate a pre-scaled graphic for the display.
 #define MAPPED_TO_DISPLAY (CREATE_FLAGS)(1 << 2)
 #define WANT_ALPHA (CREATE_FLAGS)(1 << 3)
 
@@ -228,11 +235,13 @@ typedef struct text
 	COUNT CharCount;
 } TEXT;
 
-#include "strlib.h"
+#include "libs/strlib.h"
 
 typedef STRING_TABLE COLORMAP_REF;
 typedef STRING COLORMAP;
-typedef STRINGPTR COLORMAPPTR;
+// COLORMAPPTR is really a pointer to colortable entry structure
+// which is documented in doc/devel/strtab, .ct files section
+typedef void *COLORMAPPTR;
 
 #include "graphics/prim.h"
 
@@ -276,8 +285,55 @@ typedef enum
 	FadeSomeToColor
 } ScreenFadeType;
 
-extern BOOLEAN InitGraphics (int argc, char *argv[], COUNT KbytesRequired, int res_factor); // JMS_GFX
-extern void UninitGraphics (void);
+typedef enum
+{
+	DRAW_REPLACE = 0,
+			// Pixels in the target FRAME are replaced entirely.
+			// Non-stamp primitives with Color.a < 255 to RGB targets are
+			// equivalent to DRAW_ALPHA with (DrawMode.factor = Color.a),
+			// except the Text primitives.
+			// DrawMode.factor: ignored
+			// Text: supported (except DRAW_ALPHA via Color.a)
+			// RGBA sources (WANT_ALPHA): per-pixel alpha blending performed
+			// RGBA targets (WANT_ALPHA): replace directly supported
+	DRAW_ADDITIVE,
+			// Pixel channels of the source FRAME or Color channels of
+			// a primitive are modulated by (DrawMode.factor / 255) and added
+			// to the pixel channels of the target FRAME.
+			// DrawMode.factor range: -32767..32767 (negative values make
+			//    draw subtractive); 255 = 1:1 ratio
+			// Text: not yet supported
+			// RGBA sources (WANT_ALPHA): alpha channel ignored
+			// RGBA targets (WANT_ALPHA): not yet supported
+	DRAW_ALPHA,
+			// Pixel channels of the source FRAME or Color channels of
+			// a primitive are modulated by (DrawMode.factor / 255) and added
+			// to the pixel channels of the target FRAME, modulated by
+			// (1 - DrawMode.factor / 255)
+			// DrawMode.factor range: 0..255; 255 = fully opaque
+			// Text: supported
+			// RGBA sources (WANT_ALPHA): alpha channel ignored
+			// RGBA targets (WANT_ALPHA): not yet supported
+
+	DRAW_DEFAULT = DRAW_REPLACE,
+} DrawKind;
+
+typedef struct
+{
+	BYTE kind;
+	SWORD factor;
+} DrawMode;
+
+#define DRAW_REPLACE_MODE   MAKE_DRAW_MODE (DRAW_REPLACE, 0)
+
+static inline DrawMode
+MAKE_DRAW_MODE (DrawKind kind, SWORD factor)
+{
+	DrawMode mode;
+	mode.kind = kind;
+	mode.factor = factor;
+	return mode;
+}
 
 extern CONTEXT SetContext (CONTEXT Context);
 extern Color SetContextForeGroundColor (Color Color);
@@ -294,6 +350,8 @@ extern BOOLEAN SetContextClipRect (RECT *pRect);
 extern BOOLEAN GetContextClipRect (RECT *pRect);
 // The actual origin will be orgOffset + context ClipRect.corner
 extern POINT SetContextOrigin (POINT orgOffset);
+extern DrawMode SetContextDrawMode (DrawMode);
+extern DrawMode GetContextDrawMode (void);
 
 extern TIME_VALUE DrawablesIntersect (INTERSECT_CONTROL *pControl0,
 		INTERSECT_CONTROL *pControl1, TIME_VALUE max_time_val);
@@ -338,7 +396,7 @@ extern BOOLEAN InstallGraphicResTypes (void);
 extern DRAWABLE LoadGraphicFile (const char *pStr);
 extern FONT LoadFontFile (const char *pStr);
 extern void *LoadGraphicInstance (RESOURCE res);
-extern DRAWABLE LoadDisplayPixmap (RECT *area, FRAME frame);
+extern DRAWABLE LoadDisplayPixmap (const RECT *area, FRAME frame);
 extern FRAME SetContextFontEffect (FRAME EffectFrame);
 extern FONT SetContextFont (FONT Font);
 extern BOOLEAN DestroyFont (FONT FontRef);
@@ -354,7 +412,22 @@ extern FRAME SetEquFrameIndex (FRAME DstFrame, FRAME SrcFrame);
 extern FRAME IncFrameIndex (FRAME Frame);
 extern FRAME DecFrameIndex (FRAME Frame);
 extern DRAWABLE RotateFrame (FRAME Frame, int angle_deg);
-extern void SetFrameTransparentColor (FRAME Frame, Color c32k);
+extern DRAWABLE RescaleFrame (FRAME, int width, int height);
+// This pair works for both paletted and trucolor frames
+extern BOOLEAN ReadFramePixelColors (FRAME frame, Color *pixels,
+		int width, int height);
+extern BOOLEAN WriteFramePixelColors (FRAME frame, const Color *pixels,
+		int width, int height);
+// This pair only works for paletted frames
+extern BOOLEAN ReadFramePixelIndexes (FRAME frame, BYTE *pixels,
+		int width, int height);
+extern BOOLEAN WriteFramePixelIndexes (FRAME frame, const BYTE *pixels,
+		int width, int height);
+extern void SetFrameTransparentColor (FRAME, Color);
+
+// If the frame is an active SCREEN_DRAWABLE, this call must be
+// preceeded by FlushGraphics() for draw commands to have taken effect
+extern Color GetFramePixel (FRAME, POINT pixelPt);
 
 extern FRAME CaptureDrawable (DRAWABLE Drawable);
 extern DRAWABLE ReleaseDrawable (FRAME Frame);
@@ -377,8 +450,8 @@ extern void FlushColorXForms (void);
 #define SetAbsColorMapIndex SetAbsStringTableIndex
 #define SetRelColorMapIndex SetRelStringTableIndex
 #define GetColorMapLength GetStringLengthBin
-#define GetColorMapAddress GetStringAddress
-#define GetColorMapContents GetStringContents
+
+extern COLORMAPPTR GetColorMapAddress (COLORMAP);
 
 void SetSystemRect (const RECT *pRect);
 void ClearSystemRect (void);

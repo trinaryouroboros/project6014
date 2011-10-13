@@ -109,6 +109,13 @@ write_a8 (void *fp, const BYTE *ar, COUNT count)
 }
 
 static inline COUNT
+write_str (void *fp, const char *str, COUNT count)
+{
+	// no type conversion needed for strings
+	return write_a8 (fp, (const BYTE *)str, count);
+}
+
+static inline COUNT
 write_a16 (void *fp, const UWORD *ar, COUNT count)
 {
 	for ( ; count > 0; --count, ++ar)
@@ -427,9 +434,9 @@ SaveSisState (const SIS_STATE *SSPtr, void *fp)
 			write_8   (fp, SSPtr->NumLanders) != 1 ||
 			write_a16 (fp, SSPtr->ElementAmounts, NUM_ELEMENT_CATEGORIES) != 1 ||
 
-			write_a8  (fp, SSPtr->ShipName, SIS_NAME_SIZE) != 1 ||
-			write_a8  (fp, SSPtr->CommanderName, SIS_NAME_SIZE) != 1 ||
-			write_a8  (fp, SSPtr->PlanetName, SIS_NAME_SIZE) != 1 ||
+			write_str (fp, SSPtr->ShipName, SIS_NAME_SIZE) != 1 ||
+			write_str (fp, SSPtr->CommanderName, SIS_NAME_SIZE) != 1 ||
+			write_str (fp, SSPtr->PlanetName, SIS_NAME_SIZE) != 1 ||
 
 			write_16  (fp, 0) != 1 /* padding */
 		)
@@ -544,7 +551,7 @@ static void
 SaveProblemMessage (STAMP *MsgStamp)
 {
 #define MAX_MSG_LINES 1
-	RECT r;
+	RECT r = {{0, 0}, {0, 0}};
 	COUNT i;
 	TEXT t;
 	UNICODE *ppStr[MAX_MSG_LINES];
