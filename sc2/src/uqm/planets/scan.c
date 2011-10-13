@@ -1305,6 +1305,7 @@ generateBioNode (SOLARSYS_STATE *system, ELEMENT *NodeElementPtr,
 {
 	COUNT i;
 	COUNT creatureType;
+	DWORD j;
 
 	creatureType = system->SysInfo.PlanetInfo.CurType;
 
@@ -1312,19 +1313,24 @@ generateBioNode (SOLARSYS_STATE *system, ELEMENT *NodeElementPtr,
 	{
 		// Place moving creatures at a random location.
 		i = (COUNT)TFB_Random ();
-		NodeElementPtr->current.location.x =
-				(LOBYTE (i) % (MAP_WIDTH - (8 << 1))) + 8;
-		NodeElementPtr->current.location.y =
-				(HIBYTE (i) % (MAP_HEIGHT - (8 << 1))) + 8;
+		j = (DWORD)TFB_Random ();
+		
+		if (RESOLUTION_FACTOR == 0)
+		{
+			NodeElementPtr->current.location.x = (LOBYTE (i) % (MAP_WIDTH - (8 << 1))) + 8;
+			NodeElementPtr->current.location.y = (HIBYTE (i) % (MAP_HEIGHT - (8 << 1))) + 8;
+		}
+		else 
+		{
+			NodeElementPtr->current.location.x = (LOWORD (j) % (MAP_WIDTH - (8 << 1))) + 8;	// JMS_GFX: Replaced previous line with this line (BYTE was too small for 640x480 maps.)
+			NodeElementPtr->current.location.y = (HIWORD (j) % (MAP_HEIGHT - (8 << 1))) + 8;  // JMS_GFX: Replaced previous line with this line (BYTE was too small for 1280x960 maps.)
+		}
 	}
 
 	if (system->PlanetSideFrame[0] == 0)
-		system->PlanetSideFrame[0] =
-				CaptureDrawable (LoadGraphic (CANNISTER_MASK_PMAP_ANIM));
+		system->PlanetSideFrame[0] = CaptureDrawable (LoadGraphic (CANNISTER_MASK_PMAP_ANIM));
 
-	for (i = 0; i < MAX_LIFE_VARIATION
-			&& life_init_tab[i] != (BYTE)(creatureType + 1);
-			++i)
+	for (i = 0; i < MAX_LIFE_VARIATION && life_init_tab[i] != (BYTE)(creatureType + 1); ++i)
 	{
 		if (life_init_tab[i] != 0)
 			continue;
@@ -1337,8 +1343,7 @@ generateBioNode (SOLARSYS_STATE *system, ELEMENT *NodeElementPtr,
 
 	NodeElementPtr->turn_wait = MAKE_BYTE (0, CreatureData[creatureType].FrameRate);
 	NodeElementPtr->mass_points = (BYTE)creatureType;
-	NodeElementPtr->hit_points = HINIBBLE (
-			CreatureData[creatureType].ValueAndHitPoints);
+	NodeElementPtr->hit_points = HINIBBLE (CreatureData[creatureType].ValueAndHitPoints);
 	DisplayArray[NodeElementPtr->PrimIndex].
 			Object.Stamp.frame = SetAbsFrameIndex (
 			system->PlanetSideFrame[i + 3], (COUNT)TFB_Random ());
@@ -1367,8 +1372,7 @@ GeneratePlanetSide (void)
 		f = SetAbsFrameIndex (MiscDataFrame, NUM_SCANDOT_TRANSITIONS * (scan - ENERGY_SCAN));
 
 		pSolarSysState->CurNode = (COUNT)~0;
-		callGenerateForScanType (pSolarSysState,
-				pSolarSysState->pOrbitalDesc, &pSolarSysState->CurNode, scan);
+		callGenerateForScanType (pSolarSysState, pSolarSysState->pOrbitalDesc, &pSolarSysState->CurNode, scan);
 
 		num_nodes = pSolarSysState->CurNode;
 		while (num_nodes--)
@@ -1387,9 +1391,7 @@ GeneratePlanetSide (void)
 			LockElement (hNodeElement, &NodeElementPtr);
 
 			pSolarSysState->CurNode = num_nodes;
-			callGenerateForScanType (pSolarSysState,
-					pSolarSysState->pOrbitalDesc, &pSolarSysState->CurNode,
-					scan);
+			callGenerateForScanType (pSolarSysState, pSolarSysState->pOrbitalDesc, &pSolarSysState->CurNode, scan);
 
 			NodeElementPtr->scan_node = MAKE_WORD (scan, num_nodes + 1);
 			NodeElementPtr->playerNr = PS_NON_PLAYER;
@@ -1397,6 +1399,7 @@ GeneratePlanetSide (void)
 			NodeElementPtr->current.location.y = pSolarSysState->SysInfo.PlanetInfo.CurPt.y;
 
 			SetPrimType (&DisplayArray[NodeElementPtr->PrimIndex], STAMP_PRIM);
+			
 			if (scan == MINERAL_SCAN)
 			{
 				COUNT EType;
@@ -1415,10 +1418,10 @@ GeneratePlanetSide (void)
 			else  /* (scan == BIOLOGICAL_SCAN || scan == ENERGY_SCAN) */
 			{
 				NodeElementPtr->current.image.frame = f;
-				NodeElementPtr->next.image.frame = SetRelFrameIndex (
-						f, NUM_SCANDOT_TRANSITIONS - 1);
+				NodeElementPtr->next.image.frame = SetRelFrameIndex (f, NUM_SCANDOT_TRANSITIONS - 1);
 				NodeElementPtr->turn_wait = MAKE_BYTE (4, 4);
 				NodeElementPtr->preprocess_func = object_animation;
+				
 				if (scan == ENERGY_SCAN)
 				{
 					if (pSolarSysState->SysInfo.PlanetInfo.CurType == 1)
@@ -1447,8 +1450,7 @@ GeneratePlanetSide (void)
 				}
 				else /* (scan == BIOLOGICAL_SCAN) */
 				{
-					generateBioNode (pSolarSysState, NodeElementPtr,
-							life_init_tab);
+					generateBioNode (pSolarSysState, NodeElementPtr, life_init_tab);
 				}
 			}
 

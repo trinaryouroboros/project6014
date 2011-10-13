@@ -260,7 +260,7 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 				    if (!zoneB)
 				      index += NUM_B_CREATURE_TYPES;
 				  }
-				
+	
 				// BW: Reduce amounts in the NE quadrant
 				if ((GLOBAL_SIS (log_x) > UNIVERSE_TO_LOGX(5000)) && (GLOBAL_SIS (log_y) < UNIVERSE_TO_LOGY(6000)))
 				  num_creatures = (BYTE)((HIBYTE ((UWORD)rand_val) % 3) + 1);
@@ -269,7 +269,7 @@ CalcLifeForms (SYSTEM_INFO *SysInfoPtr, COUNT which_life)
 
 				do
 				{
-					rand_val = (UWORD)TFB_Random ();
+					rand_val = (DWORD)TFB_Random ();
 					loword = LOWORD (rand_val);
 					hiword = HIWORD (rand_val);
 					
