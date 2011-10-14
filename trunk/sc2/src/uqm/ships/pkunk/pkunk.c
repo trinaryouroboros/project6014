@@ -113,6 +113,158 @@ static RACE_DESC pkunk_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 128
+#define THRUST_INCREMENT_2XRES 32
+
+// JMS_GFX
+static RACE_DESC pkunk_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | FIRES_LEFT | FIRES_RIGHT,
+		20, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		PKUNK_RACE_STRINGS,
+		PKUNK_ICON_MASK_PMAP_ANIM,
+		PKUNK_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0, 0,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		0, /* SPECIAL_WAIT */
+		SHIP_MASS,
+	},
+	{
+		{
+			PKUNK_BIG_MASK_PMAP_ANIM,
+			PKUNK_MED_MASK_PMAP_ANIM,
+			PKUNK_SML_MASK_PMAP_ANIM,
+		},
+		{
+			BUG_BIG_MASK_PMAP_ANIM,
+			BUG_MED_MASK_PMAP_ANIM,
+			BUG_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			PKUNK_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		PKUNK_VICTORY_SONG,
+		PKUNK_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_2XRES + 2,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 256
+#define THRUST_INCREMENT_4XRES 64
+
+// JMS_GFX
+static RACE_DESC pkunk_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | FIRES_LEFT | FIRES_RIGHT,
+		20, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		PKUNK_RACE_STRINGS,
+		PKUNK_ICON_MASK_PMAP_ANIM,
+		PKUNK_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0, 0,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		0, /* SPECIAL_WAIT */
+		SHIP_MASS,
+	},
+	{
+		{
+			PKUNK_BIG_MASK_PMAP_ANIM,
+			PKUNK_MED_MASK_PMAP_ANIM,
+			PKUNK_SML_MASK_PMAP_ANIM,
+		},
+		{
+			BUG_BIG_MASK_PMAP_ANIM,
+			BUG_MED_MASK_PMAP_ANIM,
+			BUG_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			PKUNK_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		PKUNK_VICTORY_SONG,
+		PKUNK_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_4XRES + 4,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static void
 animate (ELEMENT *ElementPtr)
 {
@@ -120,10 +272,8 @@ animate (ELEMENT *ElementPtr)
 		--ElementPtr->turn_wait;
 	else
 	{
-		ElementPtr->next.image.frame =
-				IncFrameIndex (ElementPtr->current.image.frame);
+		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 		ElementPtr->state_flags |= CHANGING;
-
 		ElementPtr->turn_wait = ElementPtr->next_turn;
 	}
 }
@@ -131,10 +281,10 @@ animate (ELEMENT *ElementPtr)
 static COUNT
 initialize_bug_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 {
-#define PKUNK_OFFSET 15
+#define PKUNK_OFFSET (15 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_HITS 1
 #define MISSILE_DAMAGE 1
-#define MISSILE_OFFSET 1
+#define MISSILE_OFFSET (1 << RESOLUTION_FACTOR) // JMS_GFX
 	COUNT i;
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
@@ -147,7 +297,7 @@ initialize_bug_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = PKUNK_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -156,11 +306,11 @@ initialize_bug_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 
 	for (i = 0; i < 3; ++i)
 	{
-		MissileBlock.face =
-				StarShipPtr->ShipFacing
-				+ (ANGLE_TO_FACING (QUADRANT) * i);
+		MissileBlock.face = StarShipPtr->ShipFacing + (ANGLE_TO_FACING (QUADRANT) * i);
+		
 		if (i == 2)
 			MissileBlock.face += ANGLE_TO_FACING (QUADRANT);
+		
 		MissileBlock.face = NORMALIZE_FACING (MissileBlock.face);
 
 		if ((MissileArray[i] = initialize_missile (&MissileBlock)))
@@ -241,8 +391,8 @@ new_pkunk (ELEMENT *ElementPtr)
 		StarShipPtr->RaceDescPtr->ship_info.crew_level = MAX_CREW;
 		StarShipPtr->RaceDescPtr->ship_info.energy_level = MAX_ENERGY;
 					/* fix vux impairment */
-		StarShipPtr->RaceDescPtr->characteristics.max_thrust = MAX_THRUST;
-		StarShipPtr->RaceDescPtr->characteristics.thrust_increment = THRUST_INCREMENT;
+		StarShipPtr->RaceDescPtr->characteristics.max_thrust = MAX_THRUST << RESOLUTION_FACTOR; // JMS_GFX
+		StarShipPtr->RaceDescPtr->characteristics.thrust_increment = THRUST_INCREMENT << RESOLUTION_FACTOR; // JMS_GFX
 		StarShipPtr->RaceDescPtr->characteristics.turn_wait = TURN_WAIT;
 		StarShipPtr->RaceDescPtr->characteristics.thrust_wait = THRUST_WAIT;
 		StarShipPtr->RaceDescPtr->characteristics.special_wait = 0;
@@ -267,9 +417,7 @@ new_pkunk (ELEMENT *ElementPtr)
 		ElementPtr->current.image.frame =
 				SetAbsFrameIndex (StarShipPtr->RaceDescPtr->ship_data.ship[0],
 				StarShipPtr->ShipFacing);
-		SetPrimType (&(GLOBAL (DisplayArray))[
-				ElementPtr->PrimIndex
-				], STAMP_PRIM);
+		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex], STAMP_PRIM);
 
 		do
 		{
@@ -372,7 +520,7 @@ phoenix_transition (ELEMENT *ElementPtr)
 	}
 	else if ((hShipImage = AllocElement ()))
 	{
-#define TRANSITION_SPEED DISPLAY_TO_WORLD (20)
+#define TRANSITION_SPEED DISPLAY_TO_WORLD (20 << RESOLUTION_FACTOR) // JMS_GFX
 		COUNT angle;
 
 		PutElement (hShipImage);
@@ -548,12 +696,30 @@ init_pkunk (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	pkunk_desc.preprocess_func = pkunk_preprocess;
-	pkunk_desc.postprocess_func = pkunk_postprocess;
-	pkunk_desc.init_weapon_func = initialize_bug_missile;
-	pkunk_desc.cyborg_control.intelligence_func = pkunk_intelligence;
-
-	RaceDescPtr = &pkunk_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		pkunk_desc.preprocess_func = pkunk_preprocess;
+		pkunk_desc.postprocess_func = pkunk_postprocess;
+		pkunk_desc.init_weapon_func = initialize_bug_missile;
+		pkunk_desc.cyborg_control.intelligence_func = pkunk_intelligence;
+		RaceDescPtr = &pkunk_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		pkunk_desc_2xres.preprocess_func = pkunk_preprocess;
+		pkunk_desc_2xres.postprocess_func = pkunk_postprocess;
+		pkunk_desc_2xres.init_weapon_func = initialize_bug_missile;
+		pkunk_desc_2xres.cyborg_control.intelligence_func = pkunk_intelligence;
+		RaceDescPtr = &pkunk_desc_2xres;
+	}
+	else
+	{
+		pkunk_desc_4xres.preprocess_func = pkunk_preprocess;
+		pkunk_desc_4xres.postprocess_func = pkunk_postprocess;
+		pkunk_desc_4xres.init_weapon_func = initialize_bug_missile;
+		pkunk_desc_4xres.cyborg_control.intelligence_func = pkunk_intelligence;
+		RaceDescPtr = &pkunk_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
