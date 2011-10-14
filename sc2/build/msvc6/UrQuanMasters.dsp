@@ -1584,27 +1584,7 @@ SOURCE=..\..\src\uqm\comm\androsynth\androsynthc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\androsynth\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\androsynth\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\androsynth\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\androsynth\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\androsynth\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\androsynth\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1624,23 +1604,7 @@ SOURCE=..\..\src\uqm\comm\arilou\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\arilou\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\arilou\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\arilou\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\arilou\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\arilou\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1660,23 +1624,7 @@ SOURCE=..\..\src\uqm\comm\blackur\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\blackur\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\blackur\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\blackur\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\blackur\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\blackur\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1696,23 +1644,7 @@ SOURCE=..\..\src\uqm\comm\chmmr\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\chmmr\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\chmmr\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\chmmr\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\chmmr\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\chmmr\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1732,23 +1664,7 @@ SOURCE=..\..\src\uqm\comm\comandr\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\comandr\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\comandr\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\comandr\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\comandr\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\comandr\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1768,23 +1684,7 @@ SOURCE=..\..\src\uqm\comm\druuge\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\druuge\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\druuge\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\druuge\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\druuge\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\druuge\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1800,27 +1700,7 @@ SOURCE=..\..\src\uqm\comm\human\humanc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\human\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\human\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\human\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\human\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\human\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\human\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1840,23 +1720,7 @@ SOURCE=..\..\src\uqm\comm\ilwrath\ilwrathc.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\ilwrath\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\ilwrath\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\ilwrath\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\ilwrath\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\ilwrath\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1868,31 +1732,11 @@ SOURCE=..\..\src\uqm\comm\ilwrath\strings.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\lurg\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\lurg\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\lurg\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\lurg\lurgc.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\comm\lurg\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\lurg\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\lurg\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1908,27 +1752,11 @@ SOURCE=..\..\src\uqm\comm\melnorm\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\melnorm\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\melnorm\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\melnorm\melnorm.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\comm\melnorm\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\melnorm\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\melnorm\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1944,27 +1772,11 @@ SOURCE=..\..\src\uqm\comm\mycon\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\mycon\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\mycon\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\mycon\myconc.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\comm\mycon\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\mycon\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\mycon\restypes.h
 # End Source File
 # Begin Source File
 
@@ -1980,27 +1792,11 @@ SOURCE=..\..\src\uqm\comm\orz\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\orz\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\orz\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\orz\orzc.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\comm\orz\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\orz\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\orz\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2016,27 +1812,11 @@ SOURCE=..\..\src\uqm\comm\pkunk\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\pkunk\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\pkunk\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\pkunk\pkunkc.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\comm\pkunk\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\pkunk\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\pkunk\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2064,23 +1844,7 @@ SOURCE=..\..\src\uqm\comm\shofixt\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\shofixt\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\shofixt\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\shofixt\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\shofixt\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\shofixt\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2096,27 +1860,7 @@ SOURCE=..\..\src\uqm\comm\shofixt\strings.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\slaverace\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slaverace\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slaverace\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\slaverace\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slaverace\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slaverace\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2136,23 +1880,7 @@ SOURCE=..\..\src\uqm\comm\slyhome\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\slyhome\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slyhome\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\slyhome\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slyhome\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slyhome\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2172,23 +1900,7 @@ SOURCE=..\..\src\uqm\comm\slyland\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\slyland\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slyland\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\slyland\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slyland\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\slyland\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2220,23 +1932,7 @@ SOURCE=..\..\src\uqm\comm\spathi\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\spathi\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\spathi\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\spathi\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\spathi\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\spathi\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2268,23 +1964,7 @@ SOURCE=..\..\src\uqm\comm\supox\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\supox\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\supox\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\supox\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\supox\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\supox\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2304,23 +1984,7 @@ SOURCE=..\..\src\uqm\comm\syreen\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\syreen\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreen\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\syreen\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreen\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreen\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2336,27 +2000,7 @@ SOURCE=..\..\src\uqm\comm\syreen\syreenc.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\syreenbase\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreenbase\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreenbase\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\syreenbase\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreenbase\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreenbase\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2372,27 +2016,7 @@ SOURCE=..\..\src\uqm\comm\syreenbase\syreenbasec.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\syreenhome\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreenhome\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreenhome\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\syreenhome\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreenhome\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\syreenhome\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2412,23 +2036,7 @@ SOURCE=..\..\src\uqm\comm\talkpet\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\talkpet\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\talkpet\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\talkpet\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\talkpet\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\talkpet\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2448,23 +2056,7 @@ SOURCE=..\..\src\uqm\comm\thradd\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\thradd\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\thradd\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\thradd\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\thradd\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\thradd\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2480,18 +2072,6 @@ SOURCE=..\..\src\uqm\comm\thradd\thraddc.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\transport\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\transport\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\transport\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\transport\resinst.h
 # End Source File
 # Begin Source File
@@ -2502,7 +2082,8 @@ SOURCE=..\..\src\uqm\comm\transport\strings.h
 
 SOURCE=..\..\src\uqm\comm\transport\transportc.c
 # End Source File
-# End Group# Begin Group "umgah.comm"
+# End Group
+# Begin Group "umgah.comm"
 
 # PROP Default_Filter ""
 # Begin Source File
@@ -2511,23 +2092,7 @@ SOURCE=..\..\src\uqm\comm\umgah\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\umgah\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\umgah\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\umgah\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\umgah\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\umgah\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2543,31 +2108,11 @@ SOURCE=..\..\src\uqm\comm\umgah\umgahc.c
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\urquan\icode.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\urquan\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\urquan\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\urquan\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\urquan\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\urquan\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\urquan\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2587,23 +2132,7 @@ SOURCE=..\..\src\uqm\comm\utwig\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\utwig\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\utwig\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\utwig\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\utwig\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\utwig\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2623,23 +2152,7 @@ SOURCE=..\..\src\uqm\comm\vux\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\vux\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\vux\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\vux\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\vux\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\vux\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2659,23 +2172,7 @@ SOURCE=..\..\src\uqm\comm\yehat\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\yehat\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\yehat\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\yehat\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\yehat\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\yehat\restypes.h
 # End Source File
 # Begin Source File
 
@@ -2695,23 +2192,7 @@ SOURCE=..\..\src\uqm\comm\zoqfot\igfxres.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\comm\zoqfot\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\zoqfot\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\comm\zoqfot\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\zoqfot\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\comm\zoqfot\restypes.h
 # End Source File
 # Begin Source File
 
@@ -3167,27 +2648,7 @@ SOURCE=..\..\src\uqm\ships\androsyn\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\androsyn\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\androsyn\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\androsyn\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\androsyn\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\androsyn\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\androsyn\restypes.h
 # End Source File
 # End Group
 # Begin Group "arilou"
@@ -3203,27 +2664,7 @@ SOURCE=..\..\src\uqm\ships\arilou\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\arilou\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\arilou\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\arilou\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\arilou\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\arilou\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\arilou\restypes.h
 # End Source File
 # End Group
 # Begin Group "blackurq"
@@ -3239,27 +2680,7 @@ SOURCE=..\..\src\uqm\ships\blackurq\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\blackurq\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\blackurq\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\blackurq\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\blackurq\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\blackurq\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\blackurq\restypes.h
 # End Source File
 # End Group
 # Begin Group "chenjesu"
@@ -3275,27 +2696,7 @@ SOURCE=..\..\src\uqm\ships\chenjesu\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\chenjesu\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\chenjesu\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\chenjesu\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\chenjesu\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\chenjesu\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\chenjesu\restypes.h
 # End Source File
 # End Group
 # Begin Group "chmmr"
@@ -3311,27 +2712,7 @@ SOURCE=..\..\src\uqm\ships\chmmr\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\chmmr\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\chmmr\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\chmmr\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\chmmr\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\chmmr\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\chmmr\restypes.h
 # End Source File
 # End Group
 # Begin Group "druuge"
@@ -3347,27 +2728,7 @@ SOURCE=..\..\src\uqm\ships\druuge\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\druuge\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\druuge\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\druuge\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\druuge\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\druuge\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\druuge\restypes.h
 # End Source File
 # End Group
 # Begin Group "human"
@@ -3383,27 +2744,7 @@ SOURCE=..\..\src\uqm\ships\human\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\human\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\human\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\human\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\human\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\human\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\human\restypes.h
 # End Source File
 # End Group
 # Begin Group "ilwrath"
@@ -3415,31 +2756,11 @@ SOURCE=..\..\src\uqm\ships\ilwrath\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\ilwrath\igfxres.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\ilwrath\ilwrath.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\ilwrath\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\ilwrath\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\ilwrath\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\ilwrath\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\ilwrath\restypes.h
 # End Source File
 # End Group
 # Begin Group "isd"
@@ -3451,33 +2772,13 @@ SOURCE=..\..\src\uqm\ships\isd\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\isd\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\isd\imusicre.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\isd\isd.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\isd\istrtab.h
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\isd\resinst.h
 # End Source File
 # Begin Source File
-
-SOURCE=..\..\src\uqm\ships\isd\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\isd\restypes.h
-# End Source File
-# End Group
 # Begin Group "lastbat"
 
 # PROP Default_Filter ""
@@ -3487,31 +2788,11 @@ SOURCE=..\..\src\uqm\ships\lastbat\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\lastbat\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\lastbat\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\lastbat\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\lastbat\lastbat.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\lastbat\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\lastbat\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\lastbat\restypes.h
 # End Source File
 # End Group
 # Begin Group "lurg"
@@ -3523,18 +2804,6 @@ SOURCE=..\..\src\uqm\ships\lurg\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\lurg\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\lurg\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\lurg\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\lurg\lurg.c
 # End Source File
 # Begin Source File
@@ -3542,14 +2811,6 @@ SOURCE=..\..\src\uqm\ships\lurg\lurg.c
 SOURCE=..\..\src\uqm\ships\lurg\resinst.h
 # End Source File
 # Begin Source File
-
-SOURCE=..\..\src\uqm\ships\lurg\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\lurg\restypes.h
-# End Source File
-# End Group
 # Begin Group "melnorme"
 
 # PROP Default_Filter ""
@@ -3559,31 +2820,11 @@ SOURCE=..\..\src\uqm\ships\melnorme\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\melnorme\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\melnorme\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\melnorme\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\melnorme\melnorme.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\melnorme\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\melnorme\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\melnorme\restypes.h
 # End Source File
 # End Group
 # Begin Group "mmrnmhrm"
@@ -3595,31 +2836,11 @@ SOURCE=..\..\src\uqm\ships\mmrnmhrm\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\mmrnmhrm\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\mmrnmhrm\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\mmrnmhrm\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\mmrnmhrm\mmrnmhrm.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\mmrnmhrm\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\mmrnmhrm\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\mmrnmhrm\restypes.h
 # End Source File
 # End Group
 # Begin Group "mycon"
@@ -3631,31 +2852,11 @@ SOURCE=..\..\src\uqm\ships\mycon\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\mycon\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\mycon\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\mycon\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\mycon\mycon.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\mycon\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\mycon\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\mycon\restypes.h
 # End Source File
 # End Group
 # Begin Group "orz"
@@ -3667,31 +2868,11 @@ SOURCE=..\..\src\uqm\ships\orz\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\orz\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\orz\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\orz\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\orz\orz.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\orz\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\orz\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\orz\restypes.h
 # End Source File
 # End Group
 # Begin Group "pkunk"
@@ -3703,31 +2884,11 @@ SOURCE=..\..\src\uqm\ships\pkunk\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\pkunk\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\pkunk\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\pkunk\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\pkunk\pkunk.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\pkunk\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\pkunk\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\pkunk\restypes.h
 # End Source File
 # End Group
 # Begin Group "probe"
@@ -3739,27 +2900,11 @@ SOURCE=..\..\src\uqm\ships\probe\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\probe\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\probe\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\probe\probe.c
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\probe\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\probe\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\probe\restypes.h
 # End Source File
 # End Group
 # Begin Group "shofixti"
@@ -3771,27 +2916,7 @@ SOURCE=..\..\src\uqm\ships\shofixti\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\shofixti\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\shofixti\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\shofixti\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\shofixti\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\shofixti\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\shofixti\restypes.h
 # End Source File
 # Begin Source File
 
@@ -3843,27 +2968,7 @@ SOURCE=..\..\src\uqm\ships\slykohr\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\slykohr\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\slykohr\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\slykohr\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\slykohr\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\slykohr\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\slykohr\restypes.h
 # End Source File
 # Begin Source File
 
@@ -3879,27 +2984,7 @@ SOURCE=..\..\src\uqm\ships\slylandr\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\slylandr\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\slylandr\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\slylandr\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\slylandr\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\slylandr\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\slylandr\restypes.h
 # End Source File
 # Begin Source File
 
@@ -3915,27 +3000,7 @@ SOURCE=..\..\src\uqm\ships\spathi\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\spathi\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\spathi\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\spathi\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\spathi\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\spathi\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\spathi\restypes.h
 # End Source File
 # Begin Source File
 
@@ -3951,27 +3016,7 @@ SOURCE=..\..\src\uqm\ships\supox\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\supox\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\supox\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\supox\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\supox\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\supox\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\supox\restypes.h
 # End Source File
 # Begin Source File
 
@@ -3987,27 +3032,7 @@ SOURCE=..\..\src\uqm\ships\syreen\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\syreen\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\syreen\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\syreen\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\syreen\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\syreen\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\syreen\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4023,27 +3048,7 @@ SOURCE=..\..\src\uqm\ships\thradd\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\thradd\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\thradd\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\thradd\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\thradd\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\thradd\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\thradd\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4059,23 +3064,7 @@ SOURCE=..\..\src\uqm\ships\transport\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\transport\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\transport\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\transport\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\transport\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\transport\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4091,27 +3080,7 @@ SOURCE=..\..\src\uqm\ships\umgah\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\umgah\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\umgah\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\umgah\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\umgah\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\umgah\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\umgah\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4127,27 +3096,7 @@ SOURCE=..\..\src\uqm\ships\urquan\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\urquan\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\urquan\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\urquan\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\urquan\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\urquan\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\urquan\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4163,27 +3112,7 @@ SOURCE=..\..\src\uqm\ships\utwig\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\utwig\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\utwig\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\utwig\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\utwig\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\utwig\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\utwig\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4199,27 +3128,7 @@ SOURCE=..\..\src\uqm\ships\vux\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\vux\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\vux\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\vux\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\vux\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\vux\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\vux\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4235,27 +3144,7 @@ SOURCE=..\..\src\uqm\ships\yehat\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\yehat\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\yehat\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\yehat\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\yehat\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\yehat\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\yehat\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4271,27 +3160,7 @@ SOURCE=..\..\src\uqm\ships\zoqfot\icode.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\ships\zoqfot\igfxres.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\zoqfot\imusicre.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\zoqfot\istrtab.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\ships\zoqfot\resinst.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\zoqfot\respkg.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\ships\zoqfot\restypes.h
 # End Source File
 # Begin Source File
 
@@ -4308,27 +3177,27 @@ SOURCE=..\..\src\uqm\ships\ship.h
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=..\..\src\uqm\loadmele.c
+SOURCE=..\..\src\uqm\supermelee\loadmele.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\loadmele.h
+SOURCE=..\..\src\uqm\supermelee\loadmele.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\melee.c
+SOURCE=..\..\src\uqm\supermelee\melee.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\melee.h
+SOURCE=..\..\src\uqm\supermelee\melee.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\pickmele.c
+SOURCE=..\..\src\uqm\supermelee\pickmele.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\pickmele.h
+SOURCE=..\..\src\uqm\supermelee\pickmele.h
 # End Source File
 # End Group
 # Begin Source File

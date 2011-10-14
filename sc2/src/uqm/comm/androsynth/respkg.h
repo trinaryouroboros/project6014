@@ -1,5 +1,0 @@
-enum
-{
-	ANDROSYNTH_PACKAGE = 1
-};
-

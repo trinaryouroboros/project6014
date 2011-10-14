@@ -1,8 +1,0 @@
-INCLUDE	../star3do.typ
-
-PATH	transport
-
-PACKAGE	TRANSPORT_CODE_PACKAGE	transport.sc2
-	CODE		TRANSPORT_CODE			transport.cod
-	GFXRES		TRANSPORT_MICON_MASK_PMAP_ANIM	tramicon.ani
-
