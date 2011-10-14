@@ -37,11 +37,10 @@
 #define SPECIAL_WAIT 9
 
 #define SHIP_MASS 10
-#define MISSILE_SPEED 64
+#define MISSILE_SPEED (64 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_LIFE 64 /* actually, it's as long as you
 										 * hold the button down.
 										 */
-
 static RACE_DESC slylandro_kohrah_desc =
 {
 	{ /* SHIP_INFO */
@@ -113,6 +112,158 @@ static RACE_DESC slylandro_kohrah_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 60
+#define THRUST_INCREMENT_2XRES 12
+
+// JMS_GFX
+static RACE_DESC slylandro_kohrah_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		30, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SLYLANDRO_KOHRAH_RACE_STRINGS,
+		KOHR_AH_ICON_MASK_PMAP_ANIM,
+		KOHR_AH_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		4000 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			9999,9999,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			KOHR_AH_BIG_MASK_PMAP_ANIM,
+			KOHR_AH_MED_MASK_PMAP_ANIM,
+			KOHR_AH_SML_MASK_PMAP_ANIM,
+		},
+		{
+			BUZZSAW_BIG_MASK_PMAP_ANIM,
+			BUZZSAW_MED_MASK_PMAP_ANIM,
+			BUZZSAW_SML_MASK_PMAP_ANIM,
+		},
+		{
+			GAS_BIG_MASK_PMAP_ANIM,
+			GAS_MED_MASK_PMAP_ANIM,
+			GAS_SML_MASK_PMAP_ANIM,
+		},
+		{
+			SLYLANDRO_KOHRAH_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		KOHR_AH_VICTORY_SONG,
+		KOHR_AH_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_2XRES,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 120
+#define THRUST_INCREMENT_4XRES 24
+
+// JMS_GFX
+static RACE_DESC slylandro_kohrah_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		30, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SLYLANDRO_KOHRAH_RACE_STRINGS,
+		KOHR_AH_ICON_MASK_PMAP_ANIM,
+		KOHR_AH_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		4000 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			9999,9999,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			KOHR_AH_BIG_MASK_PMAP_ANIM,
+			KOHR_AH_MED_MASK_PMAP_ANIM,
+			KOHR_AH_SML_MASK_PMAP_ANIM,
+		},
+		{
+			BUZZSAW_BIG_MASK_PMAP_ANIM,
+			BUZZSAW_MED_MASK_PMAP_ANIM,
+			BUZZSAW_SML_MASK_PMAP_ANIM,
+		},
+		{
+			GAS_BIG_MASK_PMAP_ANIM,
+			GAS_MED_MASK_PMAP_ANIM,
+			GAS_SML_MASK_PMAP_ANIM,
+		},
+		{
+			SLYLANDRO_KOHRAH_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		KOHR_AH_VICTORY_SONG,
+		KOHR_AH_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_4XRES,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 #define SAW_RATE 0
 #define MAX_SAWS 8
 
@@ -124,8 +275,7 @@ spin_preprocess (ELEMENT *ElementPtr)
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	LockElement (StarShipPtr->hShip, &ShipPtr);
-	if (ShipPtr->crew_level
-			&& ++StarShipPtr->RaceDescPtr->characteristics.special_wait > MAX_SAWS)
+	if (ShipPtr->crew_level && ++StarShipPtr->RaceDescPtr->characteristics.special_wait > MAX_SAWS)
 	{
 		ElementPtr->life_span = 1;
 		ElementPtr->state_flags |= DISAPPEARING;
@@ -138,16 +288,12 @@ spin_preprocess (ELEMENT *ElementPtr)
 		else
 		{
 #define LAST_SPIN_INDEX 1
-			if (GetFrameIndex (
-					ElementPtr->current.image.frame
-					) < LAST_SPIN_INDEX)
-				ElementPtr->next.image.frame =
-						IncFrameIndex (ElementPtr->current.image.frame);
+			if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_SPIN_INDEX)
+				ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 			else
-				ElementPtr->next.image.frame =
-						SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+			
 			ElementPtr->state_flags |= CHANGING;
-
 			ElementPtr->turn_wait = SAW_RATE;
 		}
 	}
@@ -172,7 +318,7 @@ buzztrack_preprocess (ELEMENT *ElementPtr)
 		}
 		else
 		{
-#define ACTIVATE_RANGE 224 /* Originally SPACE_WIDTH */
+#define ACTIVATE_RANGE (224 << RESOLUTION_FACTOR) // JMS_GFX /* Originally SPACE_WIDTH */
 			SIZE delta_x, delta_y;
 			ELEMENT *eptr;
 
@@ -205,8 +351,7 @@ buzztrack_preprocess (ELEMENT *ElementPtr)
 			else
 			{
 				ElementPtr->thrust_wait = TRACK_WAIT;
-				SetVelocityVector (&ElementPtr->velocity,
-						DISPLAY_TO_WORLD (2), facing);
+				SetVelocityVector (&ElementPtr->velocity, DISPLAY_TO_WORLD (2 << RESOLUTION_FACTOR), facing);
 			}
 		}
 	}
@@ -313,8 +458,8 @@ initialize_buzzsaw (ELEMENT *ShipPtr, HELEMENT SawArray[])
 {
 #define MISSILE_HITS 10
 #define MISSILE_DAMAGE 4
-#define MISSILE_OFFSET 9
-#define KOHR_AH_OFFSET 28
+#define MISSILE_OFFSET (9 << RESOLUTION_FACTOR) // JMS_GFX
+#define KOHR_AH_OFFSET (28 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -327,7 +472,7 @@ initialize_buzzsaw (ELEMENT *ShipPtr, HELEMENT SawArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = KOHR_AH_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -509,9 +654,9 @@ gas_cloud_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 static void
 spawn_gas_cloud (ELEMENT *ElementPtr)
 {
-#define GAS_SPEED 16
+#define GAS_SPEED (16 << RESOLUTION_FACTOR) // JMS_GFX
 #define GAS_HITS 100
-#define GAS_OFFSET 2
+#define GAS_OFFSET (2 << RESOLUTION_FACTOR) // JMS_GFX
 #define NUM_GAS_CLOUDS 16
 	SIZE dx, dy;
 	STARSHIP *StarShipPtr;
@@ -524,7 +669,7 @@ spawn_gas_cloud (ELEMENT *ElementPtr)
 	MissileBlock.index = 0;
 	MissileBlock.sender = ElementPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
-	MissileBlock.pixoffs = 20;
+	MissileBlock.pixoffs = 20 << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.speed = GAS_SPEED;
 	MissileBlock.hit_points = GAS_HITS;
 	MissileBlock.damage = GAS_DAMAGE;
@@ -596,12 +741,30 @@ init_slylandro_kohrah (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	slylandro_kohrah_desc.preprocess_func = slylandro_kohrah_preprocess;
-	slylandro_kohrah_desc.postprocess_func = slylandro_kohrah_postprocess;
-	slylandro_kohrah_desc.init_weapon_func = initialize_buzzsaw;
-	slylandro_kohrah_desc.cyborg_control.intelligence_func = slylandro_kohrah_intelligence;
-
-	RaceDescPtr = &slylandro_kohrah_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		slylandro_kohrah_desc.preprocess_func = slylandro_kohrah_preprocess;
+		slylandro_kohrah_desc.postprocess_func = slylandro_kohrah_postprocess;
+		slylandro_kohrah_desc.init_weapon_func = initialize_buzzsaw;
+		slylandro_kohrah_desc.cyborg_control.intelligence_func = slylandro_kohrah_intelligence;
+		RaceDescPtr = &slylandro_kohrah_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		slylandro_kohrah_desc_2xres.preprocess_func = slylandro_kohrah_preprocess;
+		slylandro_kohrah_desc_2xres.postprocess_func = slylandro_kohrah_postprocess;
+		slylandro_kohrah_desc_2xres.init_weapon_func = initialize_buzzsaw;
+		slylandro_kohrah_desc_2xres.cyborg_control.intelligence_func = slylandro_kohrah_intelligence;
+		RaceDescPtr = &slylandro_kohrah_desc_2xres;
+	}
+	else
+	{
+		slylandro_kohrah_desc_4xres.preprocess_func = slylandro_kohrah_preprocess;
+		slylandro_kohrah_desc_4xres.postprocess_func = slylandro_kohrah_postprocess;
+		slylandro_kohrah_desc_4xres.init_weapon_func = initialize_buzzsaw;
+		slylandro_kohrah_desc_4xres.cyborg_control.intelligence_func = slylandro_kohrah_intelligence;
+		RaceDescPtr = &slylandro_kohrah_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }

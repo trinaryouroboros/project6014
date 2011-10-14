@@ -110,8 +110,159 @@ static RACE_DESC slylandro_desc =
 	0, /* CodeRef */
 };
 
-static COUNT initialize_lightning (ELEMENT *ElementPtr,
-		HELEMENT LaserArray[]);
+// JMS_GFX
+#define MAX_THRUST_2XRES 120
+#define THRUST_INCREMENT_2XRES MAX_THRUST_2XRES
+
+// JMS_GFX
+static RACE_DESC slylandro_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		SEEKING_WEAPON | CREW_IMMUNE,
+		17, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SLYLANDRO_RACE_STRINGS,
+		SLYLANDRO_ICON_MASK_PMAP_ANIM,
+		SLYLANDRO_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial sphere of influence radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SLYLANDRO_BIG_MASK_PMAP_ANIM,
+			SLYLANDRO_MED_MASK_PMAP_ANIM,
+			SLYLANDRO_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			SLYLANDRO_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SLYLANDRO_VICTORY_SONG,
+		SLYLANDRO_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_2XRES << 1,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 240
+#define THRUST_INCREMENT_4XRES MAX_THRUST_4XRES
+
+// JMS_GFX
+static RACE_DESC slylandro_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		SEEKING_WEAPON | CREW_IMMUNE,
+		17, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SLYLANDRO_RACE_STRINGS,
+		SLYLANDRO_ICON_MASK_PMAP_ANIM,
+		SLYLANDRO_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial sphere of influence radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SLYLANDRO_BIG_MASK_PMAP_ANIM,
+			SLYLANDRO_MED_MASK_PMAP_ANIM,
+			SLYLANDRO_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			SLYLANDRO_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SLYLANDRO_VICTORY_SONG,
+		SLYLANDRO_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_4XRES << 1,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+static COUNT initialize_lightning (ELEMENT *ElementPtr, HELEMENT LaserArray[]);
 
 static void
 lightning_postprocess (ELEMENT *ElementPtr)
@@ -237,10 +388,8 @@ initialize_lightning (ELEMENT *ElementPtr, HELEMENT LaserArray[])
 			angle += LOWORD (rand_val) & (QUADRANT - 1);
 		else
 			angle -= LOWORD (rand_val) & (QUADRANT - 1);
-#define LASER_RANGE 32
-		delta = WORLD_TO_VELOCITY (
-				DISPLAY_TO_WORLD ((HIWORD (rand_val) & (LASER_RANGE - 1)) + 4)
-				);
+#define LASER_RANGE (32 << RESOLUTION_FACTOR) // JMS_GF
+		delta = WORLD_TO_VELOCITY (DISPLAY_TO_WORLD ((HIWORD (rand_val) & (LASER_RANGE - 1)) + 4));
 		SetVelocityComponents (&LaserPtr->velocity,
 				COSINE (angle, delta), SINE (angle, delta));
 
@@ -313,7 +462,7 @@ harvest_space_junk (ELEMENT *ElementPtr)
 				&& CollisionPossible (ObjPtr, ElementPtr))
 		{
 //HARVEST_RANGE was originally (SPACE_HEIGHT * 3 / 8)
-#define HARVEST_RANGE (208 * 3 / 8)
+#define HARVEST_RANGE ((208 * 3 / 8) << RESOLUTION_FACTOR) // JMS_GFX
 			SIZE dx, dy;
 
 			if ((dx = ObjPtr->next.location.x
@@ -421,12 +570,30 @@ init_slylandro (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	slylandro_desc.preprocess_func = slylandro_preprocess;
-	slylandro_desc.postprocess_func = slylandro_postprocess;
-	slylandro_desc.init_weapon_func = initialize_lightning;
-	slylandro_desc.cyborg_control.intelligence_func = slylandro_intelligence;
-
-	RaceDescPtr = &slylandro_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		slylandro_desc.preprocess_func = slylandro_preprocess;
+		slylandro_desc.postprocess_func = slylandro_postprocess;
+		slylandro_desc.init_weapon_func = initialize_lightning;
+		slylandro_desc.cyborg_control.intelligence_func = slylandro_intelligence;
+		RaceDescPtr = &slylandro_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		slylandro_desc_2xres.preprocess_func = slylandro_preprocess;
+		slylandro_desc_2xres.postprocess_func = slylandro_postprocess;
+		slylandro_desc_2xres.init_weapon_func = initialize_lightning;
+		slylandro_desc_2xres.cyborg_control.intelligence_func = slylandro_intelligence;
+		RaceDescPtr = &slylandro_desc_2xres;
+	}
+	else
+	{
+		slylandro_desc_4xres.preprocess_func = slylandro_preprocess;
+		slylandro_desc_4xres.postprocess_func = slylandro_postprocess;
+		slylandro_desc_4xres.init_weapon_func = initialize_lightning;
+		slylandro_desc_4xres.cyborg_control.intelligence_func = slylandro_intelligence;
+		RaceDescPtr = &slylandro_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
