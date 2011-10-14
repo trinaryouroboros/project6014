@@ -112,13 +112,167 @@ static RACE_DESC urquan_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 60
+#define THRUST_INCREMENT_2XRES 12
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (40)
+
+// JMS_GFX
+static RACE_DESC urquan_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_SPECIAL,
+		30, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		URQUAN_RACE_STRINGS,
+		URQUAN_ICON_MASK_PMAP_ANIM,
+		URQUAN_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			URQUAN_BIG_MASK_PMAP_ANIM,
+			URQUAN_MED_MASK_PMAP_ANIM,
+			URQUAN_SML_MASK_PMAP_ANIM,
+		},
+		{
+			FUSION_BIG_MASK_PMAP_ANIM,
+			FUSION_MED_MASK_PMAP_ANIM,
+			FUSION_SML_MASK_PMAP_ANIM,
+		},
+		{
+			FIGHTER_BIG_MASK_PMAP_ANIM,
+			FIGHTER_MED_MASK_PMAP_ANIM,
+			FIGHTER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			URQUAN_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		URQUAN_VICTORY_SONG,
+		URQUAN_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_2XRES * MISSILE_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 120
+#define THRUST_INCREMENT_4XRES 24
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (80)
+
+// JMS_GFX
+static RACE_DESC urquan_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_SPECIAL,
+		30, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		URQUAN_RACE_STRINGS,
+		URQUAN_ICON_MASK_PMAP_ANIM,
+		URQUAN_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			URQUAN_BIG_MASK_PMAP_ANIM,
+			URQUAN_MED_MASK_PMAP_ANIM,
+			URQUAN_SML_MASK_PMAP_ANIM,
+		},
+		{
+			FUSION_BIG_MASK_PMAP_ANIM,
+			FUSION_MED_MASK_PMAP_ANIM,
+			FUSION_SML_MASK_PMAP_ANIM,
+		},
+		{
+			FIGHTER_BIG_MASK_PMAP_ANIM,
+			FIGHTER_MED_MASK_PMAP_ANIM,
+			FIGHTER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			URQUAN_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		URQUAN_VICTORY_SONG,
+		URQUAN_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_4XRES * MISSILE_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static COUNT
 initialize_fusion (ELEMENT *ShipPtr, HELEMENT FusionArray[])
 {
 #define MISSILE_HITS 10
 #define MISSILE_DAMAGE 6
-#define MISSILE_OFFSET 8
-#define URQUAN_OFFSET 32
+#define MISSILE_OFFSET (8 << RESOLUTION_FACTOR) // JMS_GFX
+#define URQUAN_OFFSET (32 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -130,7 +284,7 @@ initialize_fusion (ELEMENT *ShipPtr, HELEMENT FusionArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = URQUAN_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -142,13 +296,13 @@ initialize_fusion (ELEMENT *ShipPtr, HELEMENT FusionArray[])
 }
 
 #define TRACK_THRESHOLD 6
-#define FIGHTER_SPEED DISPLAY_TO_WORLD (8)
+#define FIGHTER_SPEED DISPLAY_TO_WORLD (8 << RESOLUTION_FACTOR) // JMS_GFX
 #define ONE_WAY_FLIGHT 125
 #define FIGHTER_LIFE (ONE_WAY_FLIGHT + ONE_WAY_FLIGHT + 150)
 
 #define FIGHTER_WEAPON_WAIT 8
-#define FIGHTER_OFFSET 4
-#define LASER_RANGE DISPLAY_TO_WORLD (40 + FIGHTER_OFFSET)
+#define FIGHTER_OFFSET (4 << RESOLUTION_FACTOR) // JMS_GFX
+#define LASER_RANGE DISPLAY_TO_WORLD ((40 << RESOLUTION_FACTOR) + FIGHTER_OFFSET) // JMS_GFX
 
 static void
 fighter_postprocess (ELEMENT *ElementPtr)
@@ -273,16 +427,16 @@ fighter_preprocess (ELEMENT *ElementPtr)
 				if (ElementPtr->turn_wait & LEFT)
 				{
 					delta_x += COSINE (FACING_TO_ANGLE (facing - 4),
-							DISPLAY_TO_WORLD (30));
+							DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR)); // JMS_GFX
 					delta_y += SINE (FACING_TO_ANGLE (facing - 4),
-							DISPLAY_TO_WORLD (30));
+							DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR));
 				}
 				else
 				{
 					delta_x += COSINE (FACING_TO_ANGLE (facing + 4),
-							DISPLAY_TO_WORLD (30));
+							DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR)); // JMS_GFX
 					delta_y += SINE (FACING_TO_ANGLE (facing + 4),
-							DISPLAY_TO_WORLD (30));
+							DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR));
 				}
 				facing = NORMALIZE_FACING (
 						ANGLE_TO_FACING (ARCTAN (delta_x, delta_y))
@@ -399,8 +553,8 @@ spawn_fighters (ELEMENT *ElementPtr)
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	facing = StarShipPtr->ShipFacing + ANGLE_TO_FACING (HALF_CIRCLE);
-	delta_x = COSINE (FACING_TO_ANGLE (facing), DISPLAY_TO_WORLD (14));
-	delta_y = SINE (FACING_TO_ANGLE (facing), DISPLAY_TO_WORLD (14));
+	delta_x = COSINE (FACING_TO_ANGLE (facing), DISPLAY_TO_WORLD (14 << RESOLUTION_FACTOR)); // JMS_GFX
+	delta_y = SINE (FACING_TO_ANGLE (facing), DISPLAY_TO_WORLD (14 << RESOLUTION_FACTOR));
 
 	i = ElementPtr->crew_level > 2 ? 2 : 1;
 	while (i-- && (hFighterElement = AllocElement ()))
@@ -539,11 +693,27 @@ init_urquan (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	urquan_desc.postprocess_func = urquan_postprocess;
-	urquan_desc.init_weapon_func = initialize_fusion;
-	urquan_desc.cyborg_control.intelligence_func = urquan_intelligence;
-
-	RaceDescPtr = &urquan_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		urquan_desc.postprocess_func = urquan_postprocess;
+		urquan_desc.init_weapon_func = initialize_fusion;
+		urquan_desc.cyborg_control.intelligence_func = urquan_intelligence;
+		RaceDescPtr = &urquan_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		urquan_desc_2xres.postprocess_func = urquan_postprocess;
+		urquan_desc_2xres.init_weapon_func = initialize_fusion;
+		urquan_desc_2xres.cyborg_control.intelligence_func = urquan_intelligence;
+		RaceDescPtr = &urquan_desc_2xres;
+	}
+	else
+	{
+		urquan_desc_4xres.postprocess_func = urquan_postprocess;
+		urquan_desc_4xres.init_weapon_func = initialize_fusion;
+		urquan_desc_4xres.cyborg_control.intelligence_func = urquan_intelligence;
+		RaceDescPtr = &urquan_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }

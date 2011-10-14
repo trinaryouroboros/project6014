@@ -38,7 +38,7 @@
 
 #define SHIP_MASS 8
 #define UTWIG_OFFSET 9
-#define MISSILE_SPEED DISPLAY_TO_WORLD (30)
+#define MISSILE_SPEED DISPLAY_TO_WORLD (30 << RESOLUTION_FACTOR)
 #define MISSILE_LIFE 10
 
 static RACE_DESC utwig_desc =
@@ -112,18 +112,170 @@ static RACE_DESC utwig_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 72
+#define THRUST_INCREMENT_2XRES 12
+
+// JMS_GFX
+static RACE_DESC utwig_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SHIELD_DEFENSE | LIGHT_POINT_DEFENSE,
+		22, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY >> 1, MAX_ENERGY,
+		UTWIG_RACE_STRINGS,
+		UTWIG_ICON_MASK_PMAP_ANIM,
+		UTWIG_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			UTWIG_BIG_MASK_PMAP_ANIM,
+			UTWIG_MED_MASK_PMAP_ANIM,
+			UTWIG_SML_MASK_PMAP_ANIM,
+		},
+		{
+			LANCE_BIG_MASK_PMAP_ANIM,
+			LANCE_MED_MASK_PMAP_ANIM,
+			LANCE_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			UTWIG_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		UTWIG_VICTORY_SONG,
+		UTWIG_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_2XRES,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 144
+#define THRUST_INCREMENT_4XRES 24
+
+// JMS_GFX
+static RACE_DESC utwig_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SHIELD_DEFENSE | LIGHT_POINT_DEFENSE,
+		22, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY >> 1, MAX_ENERGY,
+		UTWIG_RACE_STRINGS,
+		UTWIG_ICON_MASK_PMAP_ANIM,
+		UTWIG_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0,0,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			UTWIG_BIG_MASK_PMAP_ANIM,
+			UTWIG_MED_MASK_PMAP_ANIM,
+			UTWIG_SML_MASK_PMAP_ANIM,
+		},
+		{
+			LANCE_BIG_MASK_PMAP_ANIM,
+			LANCE_MED_MASK_PMAP_ANIM,
+			LANCE_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			UTWIG_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		UTWIG_VICTORY_SONG,
+		UTWIG_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		CLOSE_RANGE_WEAPON_4XRES,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static COUNT
 initialize_lance (ELEMENT *ShipPtr, HELEMENT WeaponArray[])
 {
-#define LAUNCH_XOFFS0 DISPLAY_TO_WORLD (5)
-#define LAUNCH_YOFFS0 -DISPLAY_TO_WORLD (18)
-#define LAUNCH_XOFFS1 DISPLAY_TO_WORLD (13)
-#define LAUNCH_YOFFS1 -DISPLAY_TO_WORLD (9)
-#define LAUNCH_XOFFS2 DISPLAY_TO_WORLD (17)
-#define LAUNCH_YOFFS2 -DISPLAY_TO_WORLD (4)
+#define LAUNCH_XOFFS0 DISPLAY_TO_WORLD (5 << RESOLUTION_FACTOR) // JMS_GFX
+#define LAUNCH_YOFFS0 -DISPLAY_TO_WORLD (18 << RESOLUTION_FACTOR) // JMS_GFX
+#define LAUNCH_XOFFS1 DISPLAY_TO_WORLD (13 << RESOLUTION_FACTOR) // JMS_GFX
+#define LAUNCH_YOFFS1 -DISPLAY_TO_WORLD (9 << RESOLUTION_FACTOR) // JMS_GFX
+#define LAUNCH_XOFFS2 DISPLAY_TO_WORLD (17 << RESOLUTION_FACTOR) // JMS_GFX
+#define LAUNCH_YOFFS2 -DISPLAY_TO_WORLD (4 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_HITS 1
 #define MISSILE_DAMAGE 1
-#define MISSILE_OFFSET 1
+#define MISSILE_OFFSET (1 << RESOLUTION_FACTOR) // JMS_GFX
 	COUNT i;
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
@@ -332,8 +484,7 @@ utwig_preprocess (ELEMENT *ElementPtr)
 	if (StarShipPtr->special_counter == 0)
 	{
 		// The shield is off.
-		SetPrimColor (lpPrim,
-				BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1C, 0x00), 0x78));
+		SetPrimColor (lpPrim, BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1C, 0x00), 0x78));
 		ElementPtr->colorCycleIndex = 0;
 		ElementPtr->life_span = NORMAL_LIFE;
 		SetPrimType (lpPrim, STAMP_PRIM);
@@ -387,11 +538,27 @@ init_utwig (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	utwig_desc.preprocess_func = utwig_preprocess;
-	utwig_desc.init_weapon_func = initialize_lance;
-	utwig_desc.cyborg_control.intelligence_func = utwig_intelligence;
-
-	RaceDescPtr = &utwig_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		utwig_desc.preprocess_func = utwig_preprocess;
+		utwig_desc.init_weapon_func = initialize_lance;
+		utwig_desc.cyborg_control.intelligence_func = utwig_intelligence;
+		RaceDescPtr = &utwig_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		utwig_desc_2xres.preprocess_func = utwig_preprocess;
+		utwig_desc_2xres.init_weapon_func = initialize_lance;
+		utwig_desc_2xres.cyborg_control.intelligence_func = utwig_intelligence;
+		RaceDescPtr = &utwig_desc_2xres;
+	}
+	else
+	{
+		utwig_desc_4xres.preprocess_func = utwig_preprocess;
+		utwig_desc_4xres.init_weapon_func = initialize_lance;
+		utwig_desc_4xres.cyborg_control.intelligence_func = utwig_intelligence;
+		RaceDescPtr = &utwig_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
