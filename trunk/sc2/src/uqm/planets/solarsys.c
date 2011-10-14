@@ -60,6 +60,7 @@
 
 #define IP_FRAME_RATE  (ONE_SECOND / 30)
 
+static void AnimateSun (void); // JMS
 static BOOLEAN DoIpFlight (SOLARSYS_STATE *pSS);
 static void DrawSystem (SIZE radius, BOOLEAN IsInnerSystem);
 static FRAME CreateStarBackGround (void);
@@ -97,7 +98,6 @@ static FRAME StarsFrame;
 		// prepared star-field graphic
 static FRAME SolarSysFrame;
 		// saved solar system view graphic
-
 static RECT scaleRect;
 		// system zooms in when the flagship enters this rect
 
@@ -274,19 +274,36 @@ LoadIPData (void)
 {	
 	// JMS: ORZ space portal gfx replaces normal sun gfx. 
 	// Originally there was only the statement within else block and it was within the if (SpaceJunkFrame == 0) block.
-	if (CurStarDescPtr->Index==ORZ_SPACE_PORTAL_DEFINED) 
+	
+	if (RESOLUTION_FACTOR < 2)
 	{
-		SunFrame = CaptureDrawable (LoadGraphic (ORZSPACEPORTAL_MASK_PMAP_ANIM));
+		if (CurStarDescPtr->Index==ORZ_SPACE_PORTAL_DEFINED) 
+			SunFrame = CaptureDrawable (LoadGraphic (ORZSPACEPORTAL_MASK_PMAP_ANIM));
+		else
+			SunFrame = CaptureDrawable (LoadGraphic (SUN_MASK_PMAP_ANIM));
 	}
-	else
+	// JMS: In hi-res separate animations are used for each star color.
+	else 
 	{
-		SunFrame = CaptureDrawable (LoadGraphic (SUN_MASK_PMAP_ANIM));
+		if (CurStarDescPtr->Index==ORZ_SPACE_PORTAL_DEFINED) 
+			SunFrame = CaptureDrawable (LoadGraphic (ORZSPACEPORTAL_MASK_PMAP_ANIM));
+		else if (STAR_COLOR(CurStarDescPtr->Type) == BLUE_BODY)
+			SunFrame = CaptureDrawable (LoadGraphic (SUNBLUE_MASK_PMAP_ANIM));
+		else if (STAR_COLOR(CurStarDescPtr->Type) == GREEN_BODY)
+			SunFrame = CaptureDrawable (LoadGraphic (SUNGREEN_MASK_PMAP_ANIM));
+		else if (STAR_COLOR(CurStarDescPtr->Type) == ORANGE_BODY)
+			SunFrame = CaptureDrawable (LoadGraphic (SUNORANGE_MASK_PMAP_ANIM));
+		else if (STAR_COLOR(CurStarDescPtr->Type) == RED_BODY)
+			SunFrame = CaptureDrawable (LoadGraphic (SUNRED_MASK_PMAP_ANIM));
+		else if (STAR_COLOR(CurStarDescPtr->Type)== WHITE_BODY)
+			SunFrame = CaptureDrawable (LoadGraphic (SUNWHITE_MASK_PMAP_ANIM));
+		else if (STAR_COLOR(CurStarDescPtr->Type) == YELLOW_BODY)
+			SunFrame = CaptureDrawable (LoadGraphic (SUNYELLOW_MASK_PMAP_ANIM));
 	}
 	
 	if (SpaceJunkFrame == 0)
 	{
-		SpaceJunkFrame = CaptureDrawable (
-				LoadGraphic (IPBKGND_MASK_PMAP_ANIM));
+		SpaceJunkFrame = CaptureDrawable (LoadGraphic (IPBKGND_MASK_PMAP_ANIM));
 		SISIPFrame = CaptureDrawable (LoadGraphic (SISIP_MASK_PMAP_ANIM));
 
 		OrbitalCMap = CaptureColorMap (LoadColorMap (ORBPLAN_COLOR_MAP));
@@ -402,7 +419,11 @@ LoadSolarSys (void)
 
 	old_seed = seedRandomForSolarSys ();
 
-	SunFrame = SetAbsFrameIndex (SunFrame, STAR_TYPE (CurStarDescPtr->Type));
+	// JMS: Animating IP sun in hi-res...
+	if (RESOLUTION_FACTOR < 2)
+		SunFrame = SetAbsFrameIndex (SunFrame, STAR_TYPE (CurStarDescPtr->Type));
+	else
+		SunFrame = SetAbsFrameIndex (SunFrame, (STAR_TYPE (CurStarDescPtr->Type)) * 32);
 
 	pCurDesc = &pSolarSysState->SunDesc[0];
 	pCurDesc->pPrevDesc = 0;
@@ -1159,6 +1180,11 @@ RestoreSystemView (void)
 	DrawStamp (&s);
 }
 
+static void
+AnimateSun (void)
+{
+	pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index * 32);
+}
 // Normally called by DoIpFlight() to process a frame
 static void
 IP_frame (void)
@@ -1197,6 +1223,10 @@ IP_frame (void)
 		UnbatchGraphics ();
 	}
 	
+	// JMS: Animating IP sun in hi-res modes...
+	if (RESOLUTION_FACTOR == 2)
+		AnimateSun ();
+	
 	UnlockMutex (GraphicsLock);
 }
 
@@ -1212,8 +1242,8 @@ CheckZoomLevel (void)
 	else
 		shipLoc = GLOBAL (ip_location);
 
-	pSolarSysState->SunDesc[0].radius = FindRadius (shipLoc,
-			MAX_ZOOM_RADIUS << 1);
+	pSolarSysState->SunDesc[0].radius = FindRadius (shipLoc, MAX_ZOOM_RADIUS << 1);
+	
 	if (!InnerSystem)
 	{	// Update ship stamp since the radius probably changed
 		XFormIPLoc (&shipLoc, &GLOBAL (ShipStamp.origin), TRUE);
@@ -1398,8 +1428,7 @@ InitSolarSys (void)
 			GLOBAL (ShipStamp.origin.y) = SIS_SCREEN_HEIGHT - 2;
 		}
 		
-		GLOBAL (ip_location) = displayToLocation (GLOBAL (ShipStamp.origin),
-				MAX_ZOOM_RADIUS);
+		GLOBAL (ip_location) = displayToLocation (GLOBAL (ShipStamp.origin), MAX_ZOOM_RADIUS);
 	}
 
 	LockMutex (GraphicsLock);
@@ -1578,7 +1607,12 @@ CalcSunSize (PLANET_DESC *pSunDesc, SIZE radius)
 
 	pSunDesc->image.origin.x = SIS_SCREEN_WIDTH >> 1;
 	pSunDesc->image.origin.y = SIS_SCREEN_HEIGHT >> 1;
-	pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index);
+	
+	// JMS: Animating IP sun in hi-res modes...
+	if (RESOLUTION_FACTOR < 2)
+		pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index);
+	else
+		pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index * 32);
 }
 
 static void
