@@ -111,13 +111,167 @@ static RACE_DESC syreen_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES /* DISPLAY_TO_WORLD (8) */ 72
+#define THRUST_INCREMENT_2XRES /* DISPLAY_TO_WORLD (2) */ 18
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (60)
+
+// JMS_GFX
+static RACE_DESC syreen_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		13, /* Super Melee cost */
+		MAX_CREW, SYREEN_MAX_CREW_SIZE,
+		MAX_ENERGY, MAX_ENERGY,
+		SYREEN_RACE_STRINGS,
+		SYREEN_ICON_MASK_PMAP_ANIM,
+		SYREEN_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		350 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
+		{ /* Known location (center of SoI) */
+			9125,9770,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SYREEN_BIG_MASK_PMAP_ANIM,
+			SYREEN_MED_MASK_PMAP_ANIM,
+			SYREEN_SML_MASK_PMAP_ANIM,
+		},
+		{
+			DAGGER_BIG_MASK_PMAP_ANIM,
+			DAGGER_MED_MASK_PMAP_ANIM,
+			DAGGER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			SYREEN_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SYREEN_VICTORY_SONG,
+		SYREEN_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		(MISSILE_SPEED_2XRES * MISSILE_LIFE * 2 / 3),
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES /* DISPLAY_TO_WORLD (8) */ 144
+#define THRUST_INCREMENT_4XRES /* DISPLAY_TO_WORLD (2) */ 36
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (120)
+
+// JMS_GFX
+static RACE_DESC syreen_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		13, /* Super Melee cost */
+		MAX_CREW, SYREEN_MAX_CREW_SIZE,
+		MAX_ENERGY, MAX_ENERGY,
+		SYREEN_RACE_STRINGS,
+		SYREEN_ICON_MASK_PMAP_ANIM,
+		SYREEN_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		350 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
+		{ /* Known location (center of SoI) */
+			9125,9770,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SYREEN_BIG_MASK_PMAP_ANIM,
+			SYREEN_MED_MASK_PMAP_ANIM,
+			SYREEN_SML_MASK_PMAP_ANIM,
+		},
+		{
+			DAGGER_BIG_MASK_PMAP_ANIM,
+			DAGGER_MED_MASK_PMAP_ANIM,
+			DAGGER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			SYREEN_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SYREEN_VICTORY_SONG,
+		SYREEN_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		(MISSILE_SPEED_4XRES * MISSILE_LIFE * 2 / 3),
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static COUNT
 initialize_dagger (ELEMENT *ShipPtr, HELEMENT DaggerArray[])
 {
-#define SYREEN_OFFSET 30
+#define SYREEN_OFFSET (30 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_HITS 1
 #define MISSILE_DAMAGE 2
-#define MISSILE_OFFSET 3
+#define MISSILE_OFFSET (3 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -129,7 +283,7 @@ initialize_dagger (ELEMENT *ShipPtr, HELEMENT DaggerArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = SYREEN_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -193,7 +347,7 @@ spawn_crew (ELEMENT *ElementPtr)
 
 				dx = WORLD_TO_DISPLAY (dx);
 				dy = WORLD_TO_DISPLAY (dy);
-#define ABANDONER_RANGE 208 /* originally SPACE_HEIGHT */
+#define ABANDONER_RANGE (208 << RESOLUTION_FACTOR) // JMS_GFX /* originally SPACE_HEIGHT */
 				if (dx <= ABANDONER_RANGE && dy <= ABANDONER_RANGE
 						&& (d_squared = (DWORD)((UWORD)dx * (UWORD)dx)
 						+ (DWORD)((UWORD)dy * (UWORD)dy)) <=
@@ -269,12 +423,28 @@ init_syreen (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	syreen_desc.postprocess_func = syreen_postprocess;
-	syreen_desc.init_weapon_func = initialize_dagger;
-	syreen_desc.cyborg_control.intelligence_func = syreen_intelligence;
-
-	RaceDescPtr = &syreen_desc;
-
+	if (RESOLUTION_FACTOR == 0)
+	{
+		syreen_desc.postprocess_func = syreen_postprocess;
+		syreen_desc.init_weapon_func = initialize_dagger;
+		syreen_desc.cyborg_control.intelligence_func = syreen_intelligence;
+		RaceDescPtr = &syreen_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		syreen_desc_2xres.postprocess_func = syreen_postprocess;
+		syreen_desc_2xres.init_weapon_func = initialize_dagger;
+		syreen_desc_2xres.cyborg_control.intelligence_func = syreen_intelligence;
+		RaceDescPtr = &syreen_desc_2xres;
+	}
+	else
+	{
+		syreen_desc_4xres.postprocess_func = syreen_postprocess;
+		syreen_desc_4xres.init_weapon_func = initialize_dagger;
+		syreen_desc_4xres.cyborg_control.intelligence_func = syreen_intelligence;
+		RaceDescPtr = &syreen_desc_4xres;
+	}
+	
 	return (RaceDescPtr);
 }
 
