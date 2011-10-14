@@ -43,6 +43,9 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (24)
 #define MISSILE_LIFE 10
 
+// JMS_GFX
+
+// JMS_GFX
 static RACE_DESC shofixti_desc =
 {
 	{ /* SHIP_INFO */
