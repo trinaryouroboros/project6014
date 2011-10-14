@@ -113,6 +113,160 @@ static RACE_DESC orz_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 70
+#define THRUST_INCREMENT_2XRES 10
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (60)
+
+// JMS_GFX
+static RACE_DESC orz_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_SPECIAL,
+		23, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		ORZ_RACE_STRINGS,
+		ORZ_ICON_MASK_PMAP_ANIM,
+		ORZ_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		350 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			8587,8566,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			ORZ_BIG_MASK_PMAP_ANIM,
+			ORZ_MED_MASK_PMAP_ANIM,
+			ORZ_SML_MASK_PMAP_ANIM,
+		},
+		{
+			HOWITZER_BIG_MASK_PMAP_ANIM,
+			HOWITZER_MED_MASK_PMAP_ANIM,
+			HOWITZER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			TURRET_BIG_MASK_PMAP_ANIM,
+			TURRET_MED_MASK_PMAP_ANIM,
+			TURRET_SML_MASK_PMAP_ANIM,
+		},
+		{
+			ORZ_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		ORZ_VICTORY_SONG,
+		ORZ_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_2XRES * MISSILE_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 140
+#define THRUST_INCREMENT_4XRES 20
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (120)
+
+// JMS_GFX
+static RACE_DESC orz_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SEEKING_SPECIAL,
+		23, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		ORZ_RACE_STRINGS,
+		ORZ_ICON_MASK_PMAP_ANIM,
+		ORZ_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		350 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			8587,8566,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			ORZ_BIG_MASK_PMAP_ANIM,
+			ORZ_MED_MASK_PMAP_ANIM,
+			ORZ_SML_MASK_PMAP_ANIM,
+		},
+		{
+			HOWITZER_BIG_MASK_PMAP_ANIM,
+			HOWITZER_MED_MASK_PMAP_ANIM,
+			HOWITZER_SML_MASK_PMAP_ANIM,
+		},
+		{
+			TURRET_BIG_MASK_PMAP_ANIM,
+			TURRET_MED_MASK_PMAP_ANIM,
+			TURRET_SML_MASK_PMAP_ANIM,
+		},
+		{
+			ORZ_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		ORZ_VICTORY_SONG,
+		ORZ_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_4XRES * MISSILE_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static void
 howitzer_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		ELEMENT *ElementPtr1, POINT *pPt1)
@@ -121,7 +275,7 @@ howitzer_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 		weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
 }
 
-#define TURRET_OFFSET 14
+#define TURRET_OFFSET (14 << RESOLUTION_FACTOR) // JMS_GFX
 #define TURRET_WAIT 3
 
 static COUNT
@@ -129,7 +283,7 @@ initialize_turret_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 {
 #define MISSILE_HITS 2
 #define MISSILE_DAMAGE 3
-#define MISSILE_OFFSET 1
+#define MISSILE_OFFSET (1 << RESOLUTION_FACTOR) // JMS_GFX
 	ELEMENT *TurretPtr;
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
@@ -159,7 +313,7 @@ initialize_turret_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = TURRET_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -228,8 +382,7 @@ count_marines (STARSHIP *StarShipPtr, BOOLEAN FindSpot)
 }
 
 static void
-orz_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-		COUNT ConcernCounter)
+orz_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
 	ELEMENT *TurretPtr;
 	STARSHIP *StarShipPtr;
@@ -386,10 +539,9 @@ intruder_preprocess (ELEMENT *ElementPtr)
 			{
 				--ElementPtr->thrust_wait;
 
-				s.origin.x = 16 + (ElementPtr->turn_wait & 3) * 9;
-				s.origin.y = 14 + (ElementPtr->turn_wait >> 2) * 11;
-				s.frame = SetAbsFrameIndex (ElementPtr->next.image.farray[0],
-						GetFrameCount (ElementPtr->next.image.farray[0]) - 2);
+				s.origin.x = (16 + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
+				s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * 11) << RESOLUTION_FACTOR; // JMS_GFX
+				s.frame = SetAbsFrameIndex (ElementPtr->next.image.farray[0], GetFrameCount (ElementPtr->next.image.farray[0]) - 2);
 				ModifySilhouette (ShipPtr, &s, 0);
 			}
 
@@ -401,8 +553,8 @@ intruder_preprocess (ELEMENT *ElementPtr)
 				UnlockElement (hElement);
 				hElement = 0;
 LeftShip:
-				s.origin.x = 16 + (ElementPtr->turn_wait & 3) * 9;
-				s.origin.y = 14 + (ElementPtr->turn_wait >> 2) * 11;
+				s.origin.x = (16 + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
+				s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * 11) << RESOLUTION_FACTOR; // JMS_GFX
 				s.frame = ElementPtr->next.image.frame;
 				ModifySilhouette (ShipPtr, &s, MODIFY_SWAP);
 			}
@@ -418,8 +570,7 @@ LeftShip:
 					ElementPtr->life_span = 0;
 					ElementPtr->state_flags |= DISAPPEARING;
 
-					ProcessSound (SetAbsSoundIndex (
-							StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 4), ElementPtr);
+					ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 4), ElementPtr);
 					goto LeftShip;
 				}
 				else if (randval < (0x0100 / 2 + 0x0100 / 16))
@@ -428,13 +579,11 @@ LeftShip:
 						ShipPtr->life_span = 0;
 
 					++ElementPtr->thrust_wait;
-					s.origin.x = 16 + (ElementPtr->turn_wait & 3) * 9;
-					s.origin.y = 14 + (ElementPtr->turn_wait >> 2) * 11;
-					s.frame = SetAbsFrameIndex (ElementPtr->next.image.farray[0],
-							GetFrameCount (ElementPtr->next.image.farray[0]) - 1);
+					s.origin.x = (16 + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
+					s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * 11) << RESOLUTION_FACTOR; // JMS_GFX
+					s.frame = SetAbsFrameIndex (ElementPtr->next.image.farray[0], GetFrameCount (ElementPtr->next.image.farray[0]) - 1);
 					ModifySilhouette (ShipPtr, &s, 0);
-					ProcessSound (SetAbsSoundIndex (
-							StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 3), ElementPtr);
+					ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 3), ElementPtr);
 				}
 			}
 
@@ -449,8 +598,7 @@ LeftShip:
 	{
 		ElementPtr->state_flags &= ~NONSOLID;
 		ElementPtr->state_flags |= CHANGING | CREW_OBJECT;
-		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex],
-				STAMP_PRIM);
+		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex], STAMP_PRIM);
 
 		ElementPtr->current.image.frame =
 				ElementPtr->next.image.frame =
@@ -494,10 +642,8 @@ spawn_marine_ion_trail (ELEMENT *ElementPtr, STARSHIP *StarShipPtr,
 				START_ION_COLOR);
 		IonElementPtr->colorCycleIndex = 0;
 		IonElementPtr->current.location = ElementPtr->current.location;
-		IonElementPtr->current.location.x +=
-				(COORD)COSINE (angle, DISPLAY_TO_WORLD (2));
-		IonElementPtr->current.location.y +=
-				(COORD)SINE (angle, DISPLAY_TO_WORLD (2));
+		IonElementPtr->current.location.x += (COORD)COSINE (angle, DISPLAY_TO_WORLD (2 << RESOLUTION_FACTOR)); // JMS_GFX
+		IonElementPtr->current.location.y += (COORD)SINE (angle, DISPLAY_TO_WORLD (2 << RESOLUTION_FACTOR));   // JMS_GFX
 		IonElementPtr->death_func = ion_preprocess;
 
 		SetElementStarShip (IonElementPtr, StarShipPtr);
@@ -696,8 +842,8 @@ marine_preprocess (ELEMENT *ElementPtr)
 			// XXX: thrust_wait is abused to store marine speed and
 			//   gravity well flags
 			StarShipPtr->cur_status_flags = ElementPtr->thrust_wait << 6;
-			StarShipPtr->RaceDescPtr->characteristics.thrust_increment = 8;
-			StarShipPtr->RaceDescPtr->characteristics.max_thrust = 32;
+			StarShipPtr->RaceDescPtr->characteristics.thrust_increment = 8 << RESOLUTION_FACTOR; // JMS_GFX
+			StarShipPtr->RaceDescPtr->characteristics.max_thrust = 32 << RESOLUTION_FACTOR; // JMS_GFX
 
 			thrust_status = inertial_thrust (ElementPtr);
 
@@ -777,19 +923,14 @@ marine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 				{
 					ElementPtr0->turn_wait = count_marines (StarShipPtr, TRUE);
 					ElementPtr0->thrust_wait = MARINE_WAIT;
-					ElementPtr0->next.image.frame = SetAbsFrameIndex (
-							ElementPtr0->next.image.farray[0],
-							22 + ElementPtr0->turn_wait
-							);
+					ElementPtr0->next.image.frame = SetAbsFrameIndex (ElementPtr0->next.image.farray[0], 22 + ElementPtr0->turn_wait);
 					ElementPtr0->state_flags |= NONSOLID;
 					ElementPtr0->state_flags &= ~CREW_OBJECT;
-					SetPrimType (&(GLOBAL (DisplayArray))[
-							ElementPtr0->PrimIndex
-							], NO_PRIM);
+					SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr0->PrimIndex], NO_PRIM);
 					ElementPtr0->preprocess_func = intruder_preprocess;
 
-					s.origin.x = 16 + (ElementPtr0->turn_wait & 3) * 9;
-					s.origin.y = 14 + (ElementPtr0->turn_wait >> 2) * 11;
+					s.origin.x = (16 + (ElementPtr0->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
+					s.origin.y = (14 + (ElementPtr0->turn_wait >> 2) * 11) << RESOLUTION_FACTOR; // JMS_GFX
 					s.frame = ElementPtr0->next.image.frame;
 					ModifySilhouette (ElementPtr1, &s, 0);
 				}
@@ -1063,11 +1204,27 @@ init_orz (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	orz_desc.preprocess_func = orz_preprocess;
-	orz_desc.init_weapon_func = initialize_turret_missile;
-	orz_desc.cyborg_control.intelligence_func = orz_intelligence;
-
-	RaceDescPtr = &orz_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		orz_desc.preprocess_func = orz_preprocess;
+		orz_desc.init_weapon_func = initialize_turret_missile;
+		orz_desc.cyborg_control.intelligence_func = orz_intelligence;
+		RaceDescPtr = &orz_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		orz_desc_2xres.preprocess_func = orz_preprocess;
+		orz_desc_2xres.init_weapon_func = initialize_turret_missile;
+		orz_desc_2xres.cyborg_control.intelligence_func = orz_intelligence;
+		RaceDescPtr = &orz_desc_2xres;
+	}
+	else
+	{
+		orz_desc_4xres.preprocess_func = orz_preprocess;
+		orz_desc_4xres.init_weapon_func = initialize_turret_missile;
+		orz_desc_4xres.cyborg_control.intelligence_func = orz_intelligence;
+		RaceDescPtr = &orz_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }

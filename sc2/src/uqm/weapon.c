@@ -258,8 +258,8 @@ ModifySilhouette (ELEMENT *ElementPtr, STAMP *modify_stamp,
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	if (modify_flags & MODIFY_IMAGE)
 	{
-		ShipIntersect.IntersectStamp.frame = SetAbsFrameIndex (
-				StarShipPtr->RaceDescPtr->ship_info.icons, 1);
+		ShipIntersect.IntersectStamp.frame = SetAbsFrameIndex ( StarShipPtr->RaceDescPtr->ship_info.icons, 1);
+		
 		if (ShipIntersect.IntersectStamp.frame == 0)
 			return (0);
 
@@ -268,6 +268,7 @@ ModifySilhouette (ELEMENT *ElementPtr, STAMP *modify_stamp,
 		ShipIntersect.IntersectStamp.origin.x = 0;
 		ShipIntersect.IntersectStamp.origin.y = 0;
 		ShipIntersect.EndPoint = ShipIntersect.IntersectStamp.origin;
+		
 		do
 		{
 			ObjectIntersect.IntersectStamp.origin.x = ((COUNT)TFB_Random ()
@@ -281,7 +282,7 @@ ModifySilhouette (ELEMENT *ElementPtr, STAMP *modify_stamp,
 				&ShipIntersect, MAX_TIME_VALUE));
 
 		ObjectIntersect.IntersectStamp.origin.x += STATUS_WIDTH >> 1;
-		ObjectIntersect.IntersectStamp.origin.y += 31;
+		ObjectIntersect.IntersectStamp.origin.y += (31 << RESOLUTION_FACTOR); // JMS_GFX
 	}
 
 	ObjectIntersect.IntersectStamp.origin.y +=
@@ -291,8 +292,7 @@ ModifySilhouette (ELEMENT *ElementPtr, STAMP *modify_stamp,
 	{
 		or.corner.x += ObjectIntersect.IntersectStamp.origin.x;
 		or.corner.y += ObjectIntersect.IntersectStamp.origin.y;
-		InitShipStatus (&StarShipPtr->RaceDescPtr->ship_info,
-				StarShipPtr, &or);
+		InitShipStatus (&StarShipPtr->RaceDescPtr->ship_info, StarShipPtr, &or);
 	}
 	else
 	{
