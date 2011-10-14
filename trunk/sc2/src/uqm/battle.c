@@ -36,7 +36,7 @@
 #		include "netplay/checksum.h"
 #	endif
 #endif
-#include "pickmele.h"
+#include "supermelee/pickmele.h"
 #include "resinst.h"
 #include "nameref.h"
 #include "setup.h"

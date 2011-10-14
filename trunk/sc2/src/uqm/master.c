@@ -26,7 +26,7 @@
 #include "build.h"
 #include "resinst.h"
 #include "displist.h"
-#include "melee.h"
+#include "supermelee/melee.h"
 
 
 #define NUM_OF_NEW_SHIPS (LAST_MELEE_ID - MMRNMHRM_ID)
