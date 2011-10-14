@@ -60,7 +60,7 @@
 
 #define IP_FRAME_RATE  (ONE_SECOND / 30)
 
-static void AnimateSun (void); // JMS
+static void AnimateSun (SIZE radius); // JMS
 static BOOLEAN DoIpFlight (SOLARSYS_STATE *pSS);
 static void DrawSystem (SIZE radius, BOOLEAN IsInnerSystem);
 static FRAME CreateStarBackGround (void);
@@ -1118,7 +1118,7 @@ ScaleSystem (SIZE new_radius)
 	//   controls are not handled in the loop, and the flagship
 	//   can collide with a group while zooming, and that is not handled
 	//   100% correctly.
-#define NUM_STEPS 10
+#define NUM_STEPS 30
 	COUNT i;
 	SIZE old_radius;
 	SIZE d, step;
@@ -1180,11 +1180,37 @@ RestoreSystemView (void)
 	DrawStamp (&s);
 }
 
+// JMS: This animates the truespace suns!
+#define SUN_ANIMFRAMES_NUM 32
 static void
-AnimateSun (void)
+AnimateSun (SIZE radius)
 {
-	pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index * 32);
+	PLANET_DESC *pSunDesc = &pSolarSysState->SunDesc[0];
+	static COUNT sunAnimIndex = 0;
+	COUNT zoomLevelIndex = 0;
+
+	// Advance to the next frame.
+	sunAnimIndex++;
+	
+	// Go back to start of the anim after advancing past the last frame.
+	if (sunAnimIndex % SUN_ANIMFRAMES_NUM == 0)
+		sunAnimIndex = 0;
+	
+	// Zoom according to how close we are to the sun.
+	if (radius <= (MAX_ZOOM_RADIUS >> 1))
+	{
+		zoomLevelIndex += SUN_ANIMFRAMES_NUM;
+		if (radius <= (MAX_ZOOM_RADIUS >> 2))
+			zoomLevelIndex += SUN_ANIMFRAMES_NUM;
+	}
+	
+	// Tell the imageset which frame it should use.
+	pSunDesc->image.frame = SetRelFrameIndex (SunFrame, zoomLevelIndex + sunAnimIndex);
+	
+	// Draw the image.
+	DrawStamp (&pSunDesc->image);
 }
+
 // Normally called by DoIpFlight() to process a frame
 static void
 IP_frame (void)
@@ -1199,6 +1225,8 @@ IP_frame (void)
 	ProcessShipControls ();
 	
 	locChange = CheckShipLocation (&newRadius);
+	
+	// Transitioning to/from planet or zooming.
 	if (locChange)
 	{
 		if (playerInInnerSystem ())
@@ -1214,18 +1242,20 @@ IP_frame (void)
 			ScaleSystem (newRadius);
 		}
 	}
+	// Just flying around, minding own business..
 	else
-	{	// Just flying around, minding own business..
+	{	
 		BatchGraphics ();
 		RestoreSystemView ();
+		
+		// JMS: Animating IP sun in hi-res modes...
+		if (!playerInInnerSystem () && RESOLUTION_FACTOR == 2)
+			AnimateSun (newRadius);
+		
 		RedrawQueue (FALSE);
 		DrawAutoPilotMessage (FALSE);
 		UnbatchGraphics ();
 	}
-	
-	// JMS: Animating IP sun in hi-res modes...
-	if (RESOLUTION_FACTOR == 2)
-		AnimateSun ();
 	
 	UnlockMutex (GraphicsLock);
 }
@@ -1716,8 +1746,7 @@ DrawSystem (SIZE radius, BOOLEAN IsInnerSystem)
 			pCurDesc = &pSolarSysState->PlanetDesc[index];
 			if (pCurDesc == &pSolarSysState->SunDesc[0])
 			{	// It's a sun
-				SetColorMap (GetColorMapAddress (SetAbsColorMapIndex (
-						SunCMap, STAR_COLOR (CurStarDescPtr->Type))));
+				SetColorMap (GetColorMapAddress (SetAbsColorMapIndex (SunCMap, STAR_COLOR (CurStarDescPtr->Type))));
 			}
 			else
 			{	// It's a planet
