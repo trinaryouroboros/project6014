@@ -358,11 +358,27 @@ init_zoqfotpik (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	zoqfotpik_desc.postprocess_func = zoqfotpik_postprocess;
-	zoqfotpik_desc.init_weapon_func = initialize_spit;
-	zoqfotpik_desc.cyborg_control.intelligence_func = zoqfotpik_intelligence;
-
-	RaceDescPtr = &zoqfotpik_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		zoqfotpik_desc.postprocess_func = zoqfotpik_postprocess;
+		zoqfotpik_desc.init_weapon_func = initialize_spit;
+		zoqfotpik_desc.cyborg_control.intelligence_func = zoqfotpik_intelligence;
+		RaceDescPtr = &zoqfotpik_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		zoqfotpik_desc_2xres.postprocess_func = zoqfotpik_postprocess;
+		zoqfotpik_desc_2xres.init_weapon_func = initialize_spit;
+		zoqfotpik_desc_2xres.cyborg_control.intelligence_func = zoqfotpik_intelligence;
+		RaceDescPtr = &zoqfotpik_desc_2xres;
+	}
+	else
+	{
+		zoqfotpik_desc_4xres.postprocess_func = zoqfotpik_postprocess;
+		zoqfotpik_desc_4xres.init_weapon_func = initialize_spit;
+		zoqfotpik_desc_4xres.cyborg_control.intelligence_func = zoqfotpik_intelligence;
+		RaceDescPtr = &zoqfotpik_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
