@@ -39,6 +39,12 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (20)
 #define MISSILE_LIFE 10
 
+// JMS_GFX
+#define MAX_THRUST 30
+#define THRUST_INCREMENT 6
+#define MISSILE_SPEED DISPLAY_TO_WORLD (20)
+
+// JMS_GFX
 static RACE_DESC yehat_desc =
 {
 	{ /* SHIP_INFO */
