@@ -39,12 +39,6 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (20)
 #define MISSILE_LIFE 10
 
-// JMS_GFX
-#define MAX_THRUST 30
-#define THRUST_INCREMENT 6
-#define MISSILE_SPEED DISPLAY_TO_WORLD (20)
-
-// JMS_GFX
 static RACE_DESC yehat_desc =
 {
 	{ /* SHIP_INFO */
@@ -116,14 +110,168 @@ static RACE_DESC yehat_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 60
+#define THRUST_INCREMENT_2XRES 12
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (40)
+
+// JMS_GFX
+static RACE_DESC yehat_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SHIELD_DEFENSE,
+		23, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		YEHAT_RACE_STRINGS,
+		YEHAT_ICON_MASK_PMAP_ANIM,
+		YEHAT_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		800/ SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			9923, 6294,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			YEHAT_BIG_MASK_PMAP_ANIM,
+			YEHAT_MED_MASK_PMAP_ANIM,
+			YEHAT_SML_MASK_PMAP_ANIM,
+		},
+		{
+			YEHAT_CANNON_BIG_MASK_PMAP_ANIM,
+			YEHAT_CANNON_MED_MASK_PMAP_ANIM,
+			YEHAT_CANNON_SML_MASK_PMAP_ANIM,
+		},
+		{
+			SHIELD_BIG_MASK_ANIM,
+			SHIELD_MED_MASK_ANIM,
+			SHIELD_SML_MASK_ANIM,
+		},
+		{
+			YEHAT_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		YEHAT_VICTORY_SONG,
+		YEHAT_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_2XRES * MISSILE_LIFE / 3,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 120
+#define THRUST_INCREMENT_4XRES 24
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (80)
+
+// JMS_GFX
+static RACE_DESC yehat_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | SHIELD_DEFENSE,
+		23, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		YEHAT_RACE_STRINGS,
+		YEHAT_ICON_MASK_PMAP_ANIM,
+		YEHAT_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		800/ SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			9923, 6294,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			YEHAT_BIG_MASK_PMAP_ANIM,
+			YEHAT_MED_MASK_PMAP_ANIM,
+			YEHAT_SML_MASK_PMAP_ANIM,
+		},
+		{
+			YEHAT_CANNON_BIG_MASK_PMAP_ANIM,
+			YEHAT_CANNON_MED_MASK_PMAP_ANIM,
+			YEHAT_CANNON_SML_MASK_PMAP_ANIM,
+		},
+		{
+			SHIELD_BIG_MASK_ANIM,
+			SHIELD_MED_MASK_ANIM,
+			SHIELD_SML_MASK_ANIM,
+		},
+		{
+			YEHAT_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		YEHAT_VICTORY_SONG,
+		YEHAT_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_4XRES * MISSILE_LIFE / 3,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static COUNT
 initialize_standard_missiles (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 {
-#define YEHAT_OFFSET 16
-#define LAUNCH_OFFS DISPLAY_TO_WORLD (8)
+#define YEHAT_OFFSET (16 << RESOLUTION_FACTOR) // JMS_GFX
+#define LAUNCH_OFFS DISPLAY_TO_WORLD (8 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_HITS 1
 #define MISSILE_DAMAGE 1
-#define MISSILE_OFFSET 1
+#define MISSILE_OFFSET (1 << RESOLUTION_FACTOR) // JMS_GFX
 	SIZE offs_x, offs_y;
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
@@ -134,7 +282,7 @@ initialize_standard_missiles (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = YEHAT_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -156,8 +304,7 @@ initialize_standard_missiles (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 }
 
 static void
-yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-		COUNT ConcernCounter)
+yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
 	SIZE ShieldStatus;
 	STARSHIP *StarShipPtr;
@@ -227,8 +374,7 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 
-		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
-				& IMMEDIATE_WEAPON))
+		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON))
 			lpEvalDesc->MoveState = PURSUE;
 	}
 
@@ -330,10 +476,7 @@ yehat_preprocess (ELEMENT *ElementPtr)
 						== StarShipPtr->RaceDescPtr->ship_data.special))
 		{
 #ifdef NEVER
-			SetPrimType (
-					&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex],
-					STAMP_PRIM
-					);
+			SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex], STAMP_PRIM);
 #endif /* NEVER */
 
 			ElementPtr->next.image.farray = StarShipPtr->RaceDescPtr->ship_data.ship;
@@ -371,12 +514,30 @@ init_yehat (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	yehat_desc.preprocess_func = yehat_preprocess;
-	yehat_desc.postprocess_func = yehat_postprocess;
-	yehat_desc.init_weapon_func = initialize_standard_missiles;
-	yehat_desc.cyborg_control.intelligence_func = yehat_intelligence;
-
-	RaceDescPtr = &yehat_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		yehat_desc.preprocess_func = yehat_preprocess;
+		yehat_desc.postprocess_func = yehat_postprocess;
+		yehat_desc.init_weapon_func = initialize_standard_missiles;
+		yehat_desc.cyborg_control.intelligence_func = yehat_intelligence;
+		RaceDescPtr = &yehat_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		yehat_desc_2xres.preprocess_func = yehat_preprocess;
+		yehat_desc_2xres.postprocess_func = yehat_postprocess;
+		yehat_desc_2xres.init_weapon_func = initialize_standard_missiles;
+		yehat_desc_2xres.cyborg_control.intelligence_func = yehat_intelligence;
+		RaceDescPtr = &yehat_desc_2xres;
+	}
+	else
+	{
+		yehat_desc_4xres.preprocess_func = yehat_preprocess;
+		yehat_desc_4xres.postprocess_func = yehat_postprocess;
+		yehat_desc_4xres.init_weapon_func = initialize_standard_missiles;
+		yehat_desc_4xres.cyborg_control.intelligence_func = yehat_intelligence;
+		RaceDescPtr = &yehat_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
