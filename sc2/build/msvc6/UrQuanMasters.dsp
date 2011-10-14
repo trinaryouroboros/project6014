@@ -4303,6 +4303,34 @@ SOURCE=..\..\src\uqm\ships\zoqfot\zoqfot.c
 SOURCE=..\..\src\uqm\ships\ship.h
 # End Source File
 # End Group
+# Begin Group "supermelee"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\loadmele.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\loadmele.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\melee.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\melee.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\pickmele.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\pickmele.h
+# End Source File
+# End Group
 # Begin Source File
 
 SOURCE=..\..\src\uqm\battle.c
@@ -4589,14 +4617,6 @@ SOURCE=..\..\src\uqm\load.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\uqm\loadmele.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\loadmele.h
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\uqm\loadship.c
 # End Source File
 # Begin Source File
@@ -4606,14 +4626,6 @@ SOURCE=..\..\src\uqm\master.c
 # Begin Source File
 
 SOURCE=..\..\src\uqm\master.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\melee.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\melee.h
 # End Source File
 # Begin Source File
 
@@ -4642,14 +4654,6 @@ SOURCE=..\..\src\uqm\oscill.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\outfit.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\pickmele.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\pickmele.h
 # End Source File
 # Begin Source File
 
