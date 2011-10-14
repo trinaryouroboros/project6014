@@ -43,9 +43,6 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (24)
 #define MISSILE_LIFE 10
 
-// JMS_GFX
-
-// JMS_GFX
 static RACE_DESC shofixti_desc =
 {
 	{ /* SHIP_INFO */
@@ -117,13 +114,167 @@ static RACE_DESC shofixti_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 70
+#define THRUST_INCREMENT_2XRES 10
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (48)
+
+// JMS_GFX
+static RACE_DESC shofixti_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		5, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SHOFIXTI_RACE_STRINGS,
+		SHOFIXTI_ICON_MASK_PMAP_ANIM,
+		SHOFIXTI_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		250 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
+		{ /* Known location (center of SoI) */
+			7908,6269,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SHOFIXTI_BIG_MASK_PMAP_ANIM,
+			SHOFIXTI_MED_MASK_PMAP_ANIM,
+			SHOFIXTI_SML_MASK_PMAP_ANIM,
+		},
+		{
+			DART_BIG_MASK_PMAP_ANIM,
+			DART_MED_MASK_PMAP_ANIM,
+			DART_SML_MASK_PMAP_ANIM,
+		},
+		{
+			DESTRUCT_BIG_MASK_ANIM,
+			DESTRUCT_MED_MASK_ANIM,
+			DESTRUCT_SML_MASK_ANIM,
+		},
+		{
+			SHOFIXTI_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SHOFIXTI_VICTORY_SONG,
+		SHOFIXTI_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_2XRES * MISSILE_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 140
+#define THRUST_INCREMENT_4XRES 20
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (96)
+
+// JMS_GFX
+static RACE_DESC shofixti_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		5, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SHOFIXTI_RACE_STRINGS,
+		SHOFIXTI_ICON_MASK_PMAP_ANIM,
+		SHOFIXTI_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		250 / SPHERE_RADIUS_INCREMENT * 2, /* Initial sphere of influence radius */
+		{ /* Known location (center of SoI) */
+			7908,6269,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SHOFIXTI_BIG_MASK_PMAP_ANIM,
+			SHOFIXTI_MED_MASK_PMAP_ANIM,
+			SHOFIXTI_SML_MASK_PMAP_ANIM,
+		},
+		{
+			DART_BIG_MASK_PMAP_ANIM,
+			DART_MED_MASK_PMAP_ANIM,
+			DART_SML_MASK_PMAP_ANIM,
+		},
+		{
+			DESTRUCT_BIG_MASK_ANIM,
+			DESTRUCT_MED_MASK_ANIM,
+			DESTRUCT_SML_MASK_ANIM,
+		},
+		{
+			SHOFIXTI_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SHOFIXTI_VICTORY_SONG,
+		SHOFIXTI_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_SPEED_4XRES * MISSILE_LIFE,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static COUNT
 initialize_standard_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 {
-#define SHOFIXTI_OFFSET 15
+#define SHOFIXTI_OFFSET (15 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_HITS 1
 #define MISSILE_DAMAGE 1
-#define MISSILE_OFFSET 1
+#define MISSILE_OFFSET (1 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -135,7 +286,7 @@ initialize_standard_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = SHOFIXTI_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -287,7 +438,7 @@ self_destruct (ELEMENT *ElementPtr)
 
 			if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
 			{
-#define DESTRUCT_RANGE 180
+#define DESTRUCT_RANGE (180 << RESOLUTION_FACTOR) // JMS_GFX
 				SIZE delta_x, delta_y;
 				DWORD dist;
 
@@ -401,11 +552,27 @@ init_shofixti (void)
 
 	static RACE_DESC new_shofixti_desc;
 
-	shofixti_desc.postprocess_func = shofixti_postprocess;
-	shofixti_desc.init_weapon_func = initialize_standard_missile;
-	shofixti_desc.cyborg_control.intelligence_func = shofixti_intelligence;
-
-	new_shofixti_desc = shofixti_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		shofixti_desc.postprocess_func = shofixti_postprocess;
+		shofixti_desc.init_weapon_func = initialize_standard_missile;
+		shofixti_desc.cyborg_control.intelligence_func = shofixti_intelligence;
+		new_shofixti_desc = shofixti_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		shofixti_desc_2xres.postprocess_func = shofixti_postprocess;
+		shofixti_desc_2xres.init_weapon_func = initialize_standard_missile;
+		shofixti_desc_2xres.cyborg_control.intelligence_func = shofixti_intelligence;
+		new_shofixti_desc = shofixti_desc_2xres;
+	}
+	else
+	{
+		shofixti_desc_4xres.postprocess_func = shofixti_postprocess;
+		shofixti_desc_4xres.init_weapon_func = initialize_standard_missile;
+		shofixti_desc_4xres.cyborg_control.intelligence_func = shofixti_intelligence;
+		new_shofixti_desc = shofixti_desc_4xres;
+	}
 	
 	// JMS: No more Tanaka/Katana!!
 	//if (LOBYTE (GLOBAL (CurrentActivity)) == IN_ENCOUNTER
