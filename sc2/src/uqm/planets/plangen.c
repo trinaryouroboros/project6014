@@ -41,16 +41,6 @@
 // an additive overlay for the shield effect
 #undef USE_ALPHA_SHIELD
 
-// XXX: these are currently defined in libs/graphics/sdl/3do_getbody.c
-//  they should be sorted out and cleaned up at some point
-extern DWORD frame_mapRGBA (FRAME FramePtr, UBYTE r, UBYTE g,
-		UBYTE b, UBYTE a);
-extern void fill_frame_rgb (FRAME FramePtr, DWORD color, int x0, int y0,
-		int x, int y);
-extern void arith_frame_blit (FRAME srcFrame, const RECT *rsrc,
-		FRAME dstFrame, const RECT *rdst, int num, int denom);
-
-
 #define SHIELD_GLOW_COMP    120
 #define SHIELD_REFLECT_COMP 100
 
@@ -666,26 +656,30 @@ SetShieldThrobEffect (FRAME ShieldFrame, int offset, FRAME ThrobFrame)
 static void
 ApplyShieldTint (BYTE flags)
 {
-	UBYTE a;
-	int blit_type;
-	FRAME tintFrame = pSolarSysState->Orbit.TintFrame;
-	DWORD p;
+	DrawMode mode, oldMode;
+	FRAME oldFrame;
+	Color tint;
+	RECT r;
 	
-#ifdef USE_ALPHA_SHIELD
-	a = 200;
-	blit_type = 0;
-#else
-	//additive_blit
-	a = 255;
-	blit_type = -1;
-#endif
+	// TopoFrame will be permanently changed
+	oldFrame = SetContextFGFrame (pSolarSysState->TopoFrame);
+	SetContextClipRect (NULL);
+	GetContextClipRect (&r);
+
 	if (flags & BLUE_SHIELD)
-		p = frame_mapRGBA (tintFrame, 0, 0, 255, a);
+		tint = BUILD_COLOR_RGBA (0x00, 0x00, 0xff, 0xff);
 	else
-		p = frame_mapRGBA (tintFrame, 255, 0, 0, a);
-	fill_frame_rgb (tintFrame, p, 0, 0, 0, 0);
-	arith_frame_blit (tintFrame, NULL, pSolarSysState->TopoFrame, NULL,
-			0, blit_type);
+		tint = BUILD_COLOR_RGBA (0xff, 0x00, 0x00, 0xff);
+#ifdef USE_ALPHA_SHIELD
+	mode = MAKE_DRAW_MODE (DRAW_ALPHA, 150);
+#else
+	mode = MAKE_DRAW_MODE (DRAW_ADDITIVE, DRAW_FACTOR_1);
+#endif
+	oldMode = SetContextDrawMode (mode);
+	SetContextForeGroundColor (tint);
+	DrawFilledRectangle (&r);
+	SetContextDrawMode (oldMode);
+	SetContextFGFrame (oldFrame);
 }
 
 static inline UBYTE
@@ -1340,7 +1334,7 @@ planet_orbit_init (void)
 	Orbit->SphereFrame = CaptureDrawable (CreateDrawable (
 			WANT_PIXMAP | WANT_ALPHA, DIAMETER, DIAMETER, 2));
 	Orbit->TintFrame = CaptureDrawable (CreateDrawable (
-			WANT_PIXMAP | WANT_ALPHA, MAP_WIDTH, MAP_HEIGHT, 2));
+			WANT_PIXMAP, MAP_WIDTH, MAP_HEIGHT, 1));
 	Orbit->ObjectFrame = 0;
 	Orbit->WorkFrame = 0;
 	Orbit->lpTopoData = HCalloc (MAP_WIDTH * MAP_HEIGHT);
@@ -1777,6 +1771,7 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	old_seed = TFB_SeedRandom (pPlanetDesc->rand_seed);
 
 	TopoContext = CreateContext ("Plangen.TopoContext");
+	LockMutex (GraphicsLock);
 	OldContext = SetContext (TopoContext);
 	planet_orbit_init ();
 
@@ -2002,6 +1997,7 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	}
 
 	SetContext (OldContext);
+	UnlockMutex (GraphicsLock);
 	DestroyContext (TopoContext);
 
 	TFB_SeedRandom (old_seed);
