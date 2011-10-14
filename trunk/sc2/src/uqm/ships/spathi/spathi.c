@@ -108,7 +108,163 @@ static RACE_DESC spathi_desc =
 	0, /* CodeRef */
 };
 
-#define DISCRIMINATOR_SPEED DISPLAY_TO_WORLD (8)
+// JMS_GFX
+#define MAX_THRUST_2XRES 96
+#define THRUST_INCREMENT_2XRES 24
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (60)
+#define MISSILE_RANGE_2XRES (MISSILE_SPEED_2XRES * MISSILE_LIFE)
+
+// JMS_GFX
+static RACE_DESC spathi_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | FIRES_AFT | SEEKING_SPECIAL | DONT_CHASE,
+		18, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SPATHI_RACE_STRINGS,
+		SPATHI_ICON_MASK_PMAP_ANIM,
+		SPATHI_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		50 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			7416, 9687,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SPATHI_BIG_MASK_PMAP_ANIM,
+			SPATHI_MED_MASK_PMAP_ANIM,
+			SPATHI_SML_MASK_PMAP_ANIM,
+		},
+		{
+			MISSILE_BIG_MASK_PMAP_ANIM,
+			MISSILE_MED_MASK_PMAP_ANIM,
+			MISSILE_SML_MASK_PMAP_ANIM,
+		},
+		{
+			DISCRIM_BIG_MASK_PMAP_ANIM,
+			DISCRIM_MED_MASK_PMAP_ANIM,
+			DISCRIM_SML_MASK_PMAP_ANIM,
+		},
+		{
+			SPATHI_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SPATHI_VICTORY_SONG,
+		SPATHI_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_RANGE_2XRES,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 192
+#define THRUST_INCREMENT_4XRES 48
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (120)
+#define MISSILE_RANGE_4XRES (MISSILE_SPEED_2XRES * MISSILE_LIFE)
+
+// JMS_GFX
+static RACE_DESC spathi_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE | FIRES_AFT | SEEKING_SPECIAL | DONT_CHASE,
+		18, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SPATHI_RACE_STRINGS,
+		SPATHI_ICON_MASK_PMAP_ANIM,
+		SPATHI_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		50 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			7416, 9687,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SPATHI_BIG_MASK_PMAP_ANIM,
+			SPATHI_MED_MASK_PMAP_ANIM,
+			SPATHI_SML_MASK_PMAP_ANIM,
+		},
+		{
+			MISSILE_BIG_MASK_PMAP_ANIM,
+			MISSILE_MED_MASK_PMAP_ANIM,
+			MISSILE_SML_MASK_PMAP_ANIM,
+		},
+		{
+			DISCRIM_BIG_MASK_PMAP_ANIM,
+			DISCRIM_MED_MASK_PMAP_ANIM,
+			DISCRIM_SML_MASK_PMAP_ANIM,
+		},
+		{
+			SPATHI_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SPATHI_VICTORY_SONG,
+		SPATHI_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		MISSILE_RANGE_4XRES,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+#define DISCRIMINATOR_SPEED DISPLAY_TO_WORLD (8 << RESOLUTION_FACTOR) // JMS_GFX
 #define TRACK_WAIT 1
 
 static void
@@ -139,11 +295,11 @@ butt_missile_preprocess (ELEMENT *ElementPtr)
 static void
 spawn_butt_missile (ELEMENT *ShipPtr)
 {
-#define SPATHI_REAR_OFFSET 20
+#define SPATHI_REAR_OFFSET (20 << RESOLUTION_FACTOR) // JMS_GFX
 #define DISCRIMINATOR_LIFE 30
 #define DISCRIMINATOR_HITS 1
 #define DISCRIMINATOR_DAMAGE 2
-#define DISCRIMINATOR_OFFSET 4
+#define DISCRIMINATOR_OFFSET (4 << RESOLUTION_FACTOR) // JMS_GFX
 	HELEMENT ButtMissile;
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK ButtMissileBlock;
@@ -238,10 +394,10 @@ spathi_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 static COUNT
 initialize_standard_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 {
-#define SPATHI_FORWARD_OFFSET 16
+#define SPATHI_FORWARD_OFFSET (16 << RESOLUTION_FACTOR) // JMS_GFX
 #define MISSILE_HITS 1
 #define MISSILE_DAMAGE 1
-#define MISSILE_OFFSET 1
+#define MISSILE_OFFSET (1 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -253,7 +409,7 @@ initialize_standard_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = SPATHI_FORWARD_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
@@ -286,11 +442,27 @@ init_spathi (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	spathi_desc.postprocess_func = spathi_postprocess;
-	spathi_desc.init_weapon_func = initialize_standard_missile;
-	spathi_desc.cyborg_control.intelligence_func = spathi_intelligence;
-
-	RaceDescPtr = &spathi_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		spathi_desc.postprocess_func = spathi_postprocess;
+		spathi_desc.init_weapon_func = initialize_standard_missile;
+		spathi_desc.cyborg_control.intelligence_func = spathi_intelligence;
+		RaceDescPtr = &spathi_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		spathi_desc_2xres.postprocess_func = spathi_postprocess;
+		spathi_desc_2xres.init_weapon_func = initialize_standard_missile;
+		spathi_desc_2xres.cyborg_control.intelligence_func = spathi_intelligence;
+		RaceDescPtr = &spathi_desc_2xres;
+	}
+	else
+	{
+		spathi_desc_4xres.postprocess_func = spathi_postprocess;
+		spathi_desc_4xres.init_weapon_func = initialize_standard_missile;
+		spathi_desc_4xres.cyborg_control.intelligence_func = spathi_intelligence;
+		RaceDescPtr = &spathi_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
