@@ -1,5 +1,0 @@
-enum
-{
-	TRANSPORT_CODE_PACKAGE = 1
-};
-

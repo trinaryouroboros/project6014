@@ -28,7 +28,8 @@
 #include "uqm/encount.h"
 // BW: for ORZ_SPACE_PORTAL_DEFINED, no longer included in commall.h
 
-#include "../mycon/imusicre.h" // JMS
+#include "../mycon/resinst.h" // JMS
+// "../mycon/imusicre.h" // BW: i*.h files have been reformed
 
 
 static LOCDATA arilou_desc =
