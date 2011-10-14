@@ -39,6 +39,9 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 10
 
+// JMS_GFX
+
+// JMS_GFX
 static RACE_DESC supox_desc =
 {
 	{ /* SHIP_INFO */
@@ -271,11 +274,27 @@ init_supox (void)
 {
 	RACE_DESC *RaceDescPtr;
 
-	supox_desc.preprocess_func = supox_preprocess;
-	supox_desc.init_weapon_func = initialize_horn;
-	supox_desc.cyborg_control.intelligence_func = supox_intelligence;
-
-	RaceDescPtr = &supox_desc;
+	if (RESOLUTION_FACTOR == 0)
+	{
+		supox_desc.preprocess_func = supox_preprocess;
+		supox_desc.init_weapon_func = initialize_horn;
+		supox_desc.cyborg_control.intelligence_func = supox_intelligence;
+		RaceDescPtr = &supox_desc;
+	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		supox_desc_2xres.preprocess_func = supox_preprocess;
+		supox_desc_2xres.init_weapon_func = initialize_horn;
+		supox_desc_2xres.cyborg_control.intelligence_func = supox_intelligence;
+		RaceDescPtr = &supox_desc_2xres;
+	}
+	else
+	{
+		supox_desc_4xres.preprocess_func = supox_preprocess;
+		supox_desc_4xres.init_weapon_func = initialize_horn;
+		supox_desc_4xres.cyborg_control.intelligence_func = supox_intelligence;
+		RaceDescPtr = &supox_desc_4xres;
+	}
 
 	return (RaceDescPtr);
 }
