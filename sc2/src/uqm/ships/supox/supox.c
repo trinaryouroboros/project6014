@@ -39,9 +39,6 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 10
 
-// JMS_GFX
-
-// JMS_GFX
 static RACE_DESC supox_desc =
 {
 	{ /* SHIP_INFO */
@@ -113,9 +110,162 @@ static RACE_DESC supox_desc =
 	0, /* CodeRef */
 };
 
+// JMS_GFX
+#define MAX_THRUST_2XRES 80
+#define THRUST_INCREMENT_2XRES 16
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (60)
+
+// JMS_GFX
+static RACE_DESC supox_desc_2xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		16, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SUPOX_RACE_STRINGS,
+		SUPOX_ICON_MASK_PMAP_ANIM,
+		SUPOX_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0, 0,
+		},
+	},
+	{
+		MAX_THRUST_2XRES,
+		THRUST_INCREMENT_2XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SUPOX_BIG_MASK_PMAP_ANIM,
+			SUPOX_MED_MASK_PMAP_ANIM,
+			SUPOX_SML_MASK_PMAP_ANIM,
+		},
+		{
+			GOB_BIG_MASK_PMAP_ANIM,
+			GOB_MED_MASK_PMAP_ANIM,
+			GOB_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			SUPOX_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SUPOX_VICTORY_SONG,
+		SUPOX_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		(MISSILE_SPEED_2XRES * MISSILE_LIFE) >> 1,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
+// JMS_GFX
+#define MAX_THRUST_4XRES 160
+#define THRUST_INCREMENT_4XRES 16
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (120)
+
+// JMS_GFX
+static RACE_DESC supox_desc_4xres =
+{
+	{ /* SHIP_INFO */
+		FIRES_FORE,
+		16, /* Super Melee cost */
+		MAX_CREW, MAX_CREW,
+		MAX_ENERGY, MAX_ENERGY,
+		SUPOX_RACE_STRINGS,
+		SUPOX_ICON_MASK_PMAP_ANIM,
+		SUPOX_MICON_MASK_PMAP_ANIM,
+		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
+	},
+	{ /* FLEET_STUFF */
+		0, /* Initial SoI radius */
+		{ /* Known location (center of SoI) */
+			0, 0,
+		},
+	},
+	{
+		MAX_THRUST_4XRES,
+		THRUST_INCREMENT_4XRES,
+		ENERGY_REGENERATION,
+		WEAPON_ENERGY_COST,
+		SPECIAL_ENERGY_COST,
+		ENERGY_WAIT,
+		TURN_WAIT,
+		THRUST_WAIT,
+		WEAPON_WAIT,
+		SPECIAL_WAIT,
+		SHIP_MASS,
+	},
+	{
+		{
+			SUPOX_BIG_MASK_PMAP_ANIM,
+			SUPOX_MED_MASK_PMAP_ANIM,
+			SUPOX_SML_MASK_PMAP_ANIM,
+		},
+		{
+			GOB_BIG_MASK_PMAP_ANIM,
+			GOB_MED_MASK_PMAP_ANIM,
+			GOB_SML_MASK_PMAP_ANIM,
+		},
+		{
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+			NULL_RESOURCE,
+		},
+		{
+			SUPOX_CAPTAIN_MASK_PMAP_ANIM,
+			NULL, NULL, NULL, NULL, NULL
+		},
+		SUPOX_VICTORY_SONG,
+		SUPOX_SHIP_SOUNDS,
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		{ NULL, NULL, NULL },
+		NULL, NULL
+	},
+	{
+		0,
+		(MISSILE_SPEED_4XRES * MISSILE_LIFE) >> 1,
+		NULL,
+	},
+	(UNINIT_FUNC *) NULL,
+	(PREPROCESS_FUNC *) NULL,
+	(POSTPROCESS_FUNC *) NULL,
+	(INIT_WEAPON_FUNC *) NULL,
+	0,
+	0, /* CodeRef */
+};
+
 static void
-supox_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-		COUNT ConcernCounter)
+supox_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
@@ -184,7 +334,7 @@ initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 #define MISSILE_HITS 1
 #define MISSILE_DAMAGE 1
 #define MISSILE_OFFSET 2
-#define SUPOX_OFFSET 23
+#define SUPOX_OFFSET (23 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 
@@ -196,7 +346,7 @@ initialize_horn (ELEMENT *ShipPtr, HELEMENT HornArray[])
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = SUPOX_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED;
+	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
