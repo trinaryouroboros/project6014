@@ -59,8 +59,7 @@ initialize_laser (LASER_BLOCK *pLaserBlock)
 				+ SINE (FACING_TO_ANGLE (pLaserBlock->face),
 				DISPLAY_TO_WORLD (pLaserBlock->pixoffs));
 		SetPrimType (&DisplayArray[LaserElementPtr->PrimIndex], LINE_PRIM);
-		SetPrimColor (&DisplayArray[LaserElementPtr->PrimIndex],
-				pLaserBlock->color);
+		SetPrimColor (&DisplayArray[LaserElementPtr->PrimIndex], pLaserBlock->color);
 		LaserElementPtr->current.image.frame = DecFrameIndex (stars_in_space);
 		LaserElementPtr->current.image.farray = &stars_in_space;
 		SetVelocityComponents (&LaserElementPtr->velocity, 
@@ -120,8 +119,7 @@ initialize_missile (MISSILE_BLOCK *pMissileBlock)
 }
 
 HELEMENT
-weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt,
-		ELEMENT *HitElementPtr, POINT *pHPt)
+weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt, ELEMENT *HitElementPtr, POINT *pHPt)
 {
 	SIZE damage;
 	HELEMENT hBlastElement;
@@ -130,6 +128,7 @@ weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt,
 		return ((HELEMENT)0);
 
 	damage = (SIZE)WeaponElementPtr->mass_points;
+	
 	if (damage
 			&& ((HitElementPtr->state_flags & FINITE_LIFE)
 			|| HitElementPtr->life_span == NORMAL_LIFE))
@@ -156,12 +155,10 @@ weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt,
 			damage = TARGET_DAMAGED_FOR_1_PT + (damage >> 1);
 			if (damage > TARGET_DAMAGED_FOR_6_PLUS_PT)
 				damage = TARGET_DAMAGED_FOR_6_PLUS_PT;
-			ProcessSound (SetAbsSoundIndex (GameSounds, damage),
-					HitElementPtr);
+			ProcessSound (SetAbsSoundIndex (GameSounds, damage), HitElementPtr);
 		}
 
-		if (GetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex])
-				!= LINE_PRIM)
+		if (GetPrimType (&DisplayArray[WeaponElementPtr->PrimIndex]) != LINE_PRIM)
 			WeaponElementPtr->state_flags |= DISAPPEARING;
 
 		WeaponElementPtr->hit_points = 0;
@@ -190,19 +187,14 @@ weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt,
 			angle = GetVelocityTravelAngle (&WeaponElementPtr->velocity);
 			if ((blast_offs = WeaponElementPtr->blast_offset) > 0)
 			{
-				BlastElementPtr->current.location.x +=
-						COSINE (angle, DISPLAY_TO_WORLD (blast_offs));
-				BlastElementPtr->current.location.y +=
-						SINE (angle, DISPLAY_TO_WORLD (blast_offs));
+				BlastElementPtr->current.location.x += COSINE (angle, DISPLAY_TO_WORLD (blast_offs));
+				BlastElementPtr->current.location.y += SINE (angle, DISPLAY_TO_WORLD (blast_offs));
 			}
 
-			blast_index =
-					NORMALIZE_FACING (ANGLE_TO_FACING (angle + HALF_CIRCLE));
-			blast_index = ((blast_index >> 2) << 1) +
-					(blast_index & 0x3 ? 1 : 0);
+			blast_index = NORMALIZE_FACING (ANGLE_TO_FACING (angle + HALF_CIRCLE));
+			blast_index = ((blast_index >> 2) << 1) + (blast_index & 0x3 ? 1 : 0);
 
-			num_blast_frames =
-					GetFrameCount (WeaponElementPtr->next.image.frame);
+			num_blast_frames = GetFrameCount (WeaponElementPtr->next.image.frame);
 			
 			GetElementStarShip (WeaponElementPtr, &StarShipPtr); // JMS: Added for the ISD fighter lasers
 			
@@ -214,21 +206,16 @@ weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt,
 			{
 				BlastElementPtr->life_span = 2;
 				BlastElementPtr->current.image.farray = blast;
-				BlastElementPtr->current.image.frame =
-						SetAbsFrameIndex (blast[0], blast_index);
+				BlastElementPtr->current.image.frame = SetAbsFrameIndex (blast[0], blast_index);
 			}
 			else
 			{
-				BlastElementPtr->life_span = num_blast_frames
-						- ANGLE_TO_FACING (FULL_CIRCLE);
+				BlastElementPtr->life_span = num_blast_frames - ANGLE_TO_FACING (FULL_CIRCLE);
 				BlastElementPtr->turn_wait = BlastElementPtr->next_turn = 0;
 				BlastElementPtr->preprocess_func = animation_preprocess;
-				BlastElementPtr->current.image.farray =
-						WeaponElementPtr->next.image.farray;
+				BlastElementPtr->current.image.farray = WeaponElementPtr->next.image.farray;
 				BlastElementPtr->current.image.frame =
-						SetAbsFrameIndex (
-						BlastElementPtr->current.image.farray[0],
-						ANGLE_TO_FACING (FULL_CIRCLE));
+						SetAbsFrameIndex (BlastElementPtr->current.image.farray[0], ANGLE_TO_FACING (FULL_CIRCLE));
 			}
 
 			UnlockElement (hBlastElement);

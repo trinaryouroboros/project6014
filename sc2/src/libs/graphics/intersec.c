@@ -234,8 +234,7 @@ CheckFirstIntersection:
 }
 
 TIME_VALUE
-DrawablesIntersect (INTERSECT_CONTROL *pControl0,
-		INTERSECT_CONTROL *pControl1, TIME_VALUE max_time_val)
+DrawablesIntersect (INTERSECT_CONTROL *pControl0, INTERSECT_CONTROL *pControl1, TIME_VALUE max_time_val)
 {
 	SIZE dy;
 	SIZE time_y_0, time_y_1;
