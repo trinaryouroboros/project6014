@@ -66,7 +66,7 @@ DrawDefaultPlanetSphere (void)
 {
 	CONTEXT oldContext;
 
-	oldContext = SetContext (SpaceContext);
+	oldContext = SetContext (PlanetContext);
 	DrawPlanetSphere (SIS_SCREEN_WIDTH / 2, PLANET_ORG_Y);
 	SetContext (oldContext);
 }
@@ -195,7 +195,7 @@ ZoomInPlanetSphere (void)
 				* (SCAN_SCREEN_HEIGHT * 6 / 10) + 0.5);
 
 		LockMutex (GraphicsLock);
-		SetContext (SpaceContext);
+		SetContext (PlanetContext);
 
 		BatchGraphics ();
 		if (i > 0)
