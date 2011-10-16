@@ -164,8 +164,7 @@ PreProcess (ELEMENT *ElementPtr)
 		{
 			SIZE delta_x, delta_y;
 
-			GetNextVelocityComponents (&ElementPtr->velocity,
-					&delta_x, &delta_y, 1);
+			GetNextVelocityComponents (&ElementPtr->velocity, &delta_x, &delta_y, 1);
 			if (delta_x != 0 || delta_y != 0)
 			{
 				state_flags |= CHANGING;
@@ -181,8 +180,7 @@ PreProcess (ELEMENT *ElementPtr)
 			--ElementPtr->life_span;
 	}
 
-	ElementPtr->state_flags = (state_flags & ~(POST_PROCESS | COLLISION))
-			| PRE_PROCESS;
+	ElementPtr->state_flags = (state_flags & ~(POST_PROCESS | COLLISION)) | PRE_PROCESS;
 }
 
 static void
@@ -232,8 +230,8 @@ CalcReduction (SDWORD dx, SDWORD dy)
 		if (next_reduction < zoom_out
 				&& zoom_out <= MAX_VIS_REDUCTION)
 		{
-#define HYSTERESIS_X DISPLAY_TO_WORLD(24)
-#define HYSTERESIS_Y DISPLAY_TO_WORLD(20)
+#define HYSTERESIS_X DISPLAY_TO_WORLD(24 << RESOLUTION_FACTOR) // JMS_GFX
+#define HYSTERESIS_Y DISPLAY_TO_WORLD(20 << RESOLUTION_FACTOR) // JMS_GFX
 		if (((sdx + HYSTERESIS_X)
 				<< (MAX_VIS_REDUCTION - next_reduction)) > TRANSITION_WIDTH
 				|| ((sdy + HYSTERESIS_Y)
@@ -242,8 +240,7 @@ CalcReduction (SDWORD dx, SDWORD dy)
 		   next_reduction += REDUCTION_SHIFT;
 		}
 
-		if (next_reduction == 0
-				&& LOBYTE (GLOBAL (CurrentActivity)) == IN_LAST_BATTLE)
+		if (next_reduction == 0 && LOBYTE (GLOBAL (CurrentActivity)) == IN_LAST_BATTLE)
 			next_reduction += REDUCTION_SHIFT;
 	}
 	else
@@ -354,10 +351,8 @@ CalcView (DPOINT *pNewScrollPt, SIZE next_reduction,
 	return (view_state);
 }
 
-
 static ELEMENT_FLAGS
-ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr,
-		TIME_VALUE min_time, ELEMENT_FLAGS process_flags)
+ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr, TIME_VALUE min_time, ELEMENT_FLAGS process_flags)
 {
 	HELEMENT hTestElement;
 
@@ -375,9 +370,9 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr,
 			UnlockElement (hTestElement);
 			continue;
 		}
-
+	
 		if (CollisionPossible (TestElementPtr, ElementPtr))
-		{
+		{		
 			ELEMENT_FLAGS state_flags, test_state_flags;
 			TIME_VALUE time_val;
 
@@ -402,24 +397,21 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr,
 					if (state_flags & COLLISION)
 					{
 						InitIntersectEndPoint (TestElementPtr);
-						TestElementPtr->IntersectControl.IntersectStamp.origin =
-								TestElementPtr->IntersectControl.EndPoint;
-						time_val = DrawablesIntersect (&ElementPtr->IntersectControl,
-								&TestElementPtr->IntersectControl, 1);
+						TestElementPtr->IntersectControl.IntersectStamp.origin = TestElementPtr->IntersectControl.EndPoint;
+						time_val = DrawablesIntersect (&ElementPtr->IntersectControl, &TestElementPtr->IntersectControl, 1);
 						InitIntersectStartPoint (TestElementPtr);
 					}
 
 					if (time_val == 1)
 					{
-						FRAME CurFrame, NextFrame,
-								TestCurFrame, TestNextFrame;
+						FRAME CurFrame, NextFrame, TestCurFrame, TestNextFrame;
 
 						CurFrame = ElementPtr->current.image.frame;
 						NextFrame = ElementPtr->next.image.frame;
 						TestCurFrame = TestElementPtr->current.image.frame;
 						TestNextFrame = TestElementPtr->next.image.frame;
-						if (NextFrame == CurFrame
-								&& TestNextFrame == TestCurFrame)
+						
+						if (NextFrame == CurFrame && TestNextFrame == TestCurFrame)
 						{
 							if (test_state_flags & APPEARING)
 							{
@@ -483,9 +475,7 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr,
 								STARSHIP *StarShipPtr;
 
 								GetElementStarShip (ElementPtr, &StarShipPtr);
-								StarShipPtr->ShipFacing =
-										GetFrameIndex (
-										ElementPtr->next.image.frame);
+								StarShipPtr->ShipFacing = GetFrameIndex (ElementPtr->next.image.frame);
 							}
 
 							InitIntersectStartPoint (TestElementPtr);
@@ -496,9 +486,7 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr,
 								STARSHIP *StarShipPtr;
 
 								GetElementStarShip (TestElementPtr, &StarShipPtr);
-								StarShipPtr->ShipFacing =
-										GetFrameIndex (
-										TestElementPtr->next.image.frame);
+								StarShipPtr->ShipFacing = GetFrameIndex (TestElementPtr->next.image.frame);
 							}
 						}
 					}
@@ -518,8 +506,7 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr,
 				POINT SavePt, TestSavePt;
 
 #ifdef DEBUG_PROCESS
-				log_add (log_Debug, "0x%x <--> 0x%x at %u", ElementPtr,
-						TestElementPtr, time_val);
+				log_add (log_Debug, "0x%x <--> 0x%x at %u", ElementPtr, TestElementPtr, time_val);
 #endif /* DEBUG_PROCESS */
 				SavePt = ElementPtr->IntersectControl.EndPoint;
 				TestSavePt = TestElementPtr->IntersectControl.EndPoint;
@@ -659,16 +646,15 @@ PreProcessQueue (SDWORD *pscroll_x, SDWORD *pscroll_y)
 			PreProcess (ElementPtr);
 		hNextElement = GetSuccElement (ElementPtr);
 
-		if (CollidingElement (ElementPtr)
-				&& !(ElementPtr->state_flags & COLLISION))
-			ProcessCollisions (hNextElement, ElementPtr,
-					MAX_TIME_VALUE, PRE_PROCESS);
+		if (CollidingElement (ElementPtr) && !(ElementPtr->state_flags & COLLISION))
+			ProcessCollisions (hNextElement, ElementPtr, MAX_TIME_VALUE, PRE_PROCESS);
 
 		if (ElementPtr->state_flags & PLAYER_SHIP)
 		{
 			SDWORD dx, dy;
 
 			ships_alive++;
+			
 			if (max_reduction > opt_max_zoom_out
 					&& min_reduction > opt_max_zoom_out)
 			{

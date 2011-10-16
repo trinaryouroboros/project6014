@@ -66,6 +66,7 @@ static void DrawSystem (SIZE radius, BOOLEAN IsInnerSystem);
 static FRAME CreateStarBackGround (void);
 static void DrawInnerSystem (void);
 static void DrawOuterSystem (void);
+static void SetPlanetColorMap (PLANET_DESC *planet);
 static void ValidateOrbits (void);
 
 // SolarSysMenu() items
@@ -1186,6 +1187,7 @@ static void
 AnimateSun (SIZE radius)
 {
 	PLANET_DESC *pSunDesc = &pSolarSysState->SunDesc[0];
+	PLANET_DESC *pNearestPlanetDesc = &pSolarSysState->PlanetDesc[0];
 	static COUNT sunAnimIndex = 0;
 	COUNT zoomLevelIndex = 0;
 
@@ -1209,6 +1211,10 @@ AnimateSun (SIZE radius)
 	
 	// Draw the image.
 	DrawStamp (&pSunDesc->image);
+	
+	// Re-draw the image of the nearest planet, so the sun won't obscure it.
+	SetPlanetColorMap (pNearestPlanetDesc);
+	DrawStamp (&pNearestPlanetDesc->image);
 }
 
 // Normally called by DoIpFlight() to process a frame
