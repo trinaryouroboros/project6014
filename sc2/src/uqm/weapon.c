@@ -28,6 +28,7 @@
 #include "sounds.h"
 #include "units.h"
 #include "libs/mathlib.h"
+#include "libs/log.h"
 
 #include <stdio.h>
 
@@ -62,12 +63,14 @@ initialize_laser (LASER_BLOCK *pLaserBlock)
 		SetPrimColor (&DisplayArray[LaserElementPtr->PrimIndex], pLaserBlock->color);
 		LaserElementPtr->current.image.frame = DecFrameIndex (stars_in_space);
 		LaserElementPtr->current.image.farray = &stars_in_space;
-		SetVelocityComponents (&LaserElementPtr->velocity, 
+		SetVelocityComponents (&LaserElementPtr->velocity,
 			WORLD_TO_VELOCITY ((pLaserBlock->cx + pLaserBlock->ex) - LaserElementPtr->current.location.x),
 			WORLD_TO_VELOCITY ((pLaserBlock->cy + pLaserBlock->ey) - LaserElementPtr->current.location.y));
+		
 		UnlockElement (hLaserElement);
 	}
-
+	
+	
 	return (hLaserElement);
 }
 

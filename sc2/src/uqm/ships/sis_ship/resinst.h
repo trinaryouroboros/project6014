@@ -11,7 +11,7 @@
 #define PULSE_SML_MASK_PMAP_ANIM "ship.explorer.graphics.con.small"
 #define SIS_BIG_MASK_PMAP_ANIM "ship.flagship.graphics.flagship.large"
 #define SIS_CAPTAIN_MASK_PMAP_ANIM "ship.flagship.graphics.captain"
-#define SIS_HYPER_MASK_PMAP_ANIM "ship.flagship.graphics.hyperspace"
+#define SIS_HYPER_MASK_PMAP_ANIM "ship.flagship.graphics.exphyper"
 #define SIS_ICON_MASK_PMAP_ANIM "ship.flagship.icons"
 #define SIS_MED_MASK_PMAP_ANIM "ship.flagship.graphics.flagship.medium"
 #define SIS_ORZ_MASK_PMAP_ANIM "ship.flagship.graphics.exporz"

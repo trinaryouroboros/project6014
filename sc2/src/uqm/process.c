@@ -363,6 +363,7 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr, TIME_VALUE min_ti
 		LockElement (hTestElement, &TestElementPtr);
 		if (!(TestElementPtr->state_flags & process_flags))
 			PreProcess (TestElementPtr);
+		
 		hSuccElement = GetSuccElement (TestElementPtr);
 
 		if (TestElementPtr == ElementPtr)
@@ -441,24 +442,19 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr, TIME_VALUE min_ti
 						}
 						else
 						{
-							if (GetFrameIndex (CurFrame) !=
-									GetFrameIndex (NextFrame))
-								ElementPtr->next.image.frame =
-										SetEquFrameIndex (NextFrame,
-										CurFrame);
+							if (GetFrameIndex (CurFrame) != GetFrameIndex (NextFrame))
+								ElementPtr->next.image.frame = SetEquFrameIndex (NextFrame, CurFrame);
+							
 							else if (NextFrame != CurFrame)
 							{
-								ElementPtr->next.image =
-										ElementPtr->current.image;
+								ElementPtr->next.image = ElementPtr->current.image;
+								
 								if (ElementPtr->life_span > NORMAL_LIFE)
 									ElementPtr->life_span = NORMAL_LIFE;
 							}
 
-							if (GetFrameIndex (TestCurFrame) !=
-									GetFrameIndex (TestNextFrame))
-								TestElementPtr->next.image.frame =
-										SetEquFrameIndex (TestNextFrame,
-										TestCurFrame);
+							if (GetFrameIndex (TestCurFrame) != GetFrameIndex (TestNextFrame))
+								TestElementPtr->next.image.frame = SetEquFrameIndex (TestNextFrame, TestCurFrame);
 							else if (TestNextFrame != TestCurFrame)
 							{
 								TestElementPtr->next.image =
@@ -532,37 +528,22 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr, TIME_VALUE min_ti
 #endif /* DEBUG_PROCESS */
 					if (test_state_flags & PLAYER_SHIP)
 					{
-						(*TestElementPtr->collision_func) (
-								TestElementPtr, &TestSavePt,
-								ElementPtr, &SavePt
-								);
-						(*ElementPtr->collision_func) (
-								ElementPtr, &SavePt,
-								TestElementPtr, &TestSavePt
-								);
+						(*TestElementPtr->collision_func) (TestElementPtr, &TestSavePt,ElementPtr, &SavePt);
+						(*ElementPtr->collision_func) (ElementPtr, &SavePt,TestElementPtr, &TestSavePt);
 					}
 					else
 					{
-						(*ElementPtr->collision_func) (
-								ElementPtr, &SavePt,
-								TestElementPtr, &TestSavePt
-								);
-						(*TestElementPtr->collision_func) (
-								TestElementPtr, &TestSavePt,
-								ElementPtr, &SavePt
-								);
+						(*ElementPtr->collision_func) (ElementPtr, &SavePt,TestElementPtr, &TestSavePt);
+						(*TestElementPtr->collision_func) (TestElementPtr, &TestSavePt,ElementPtr, &SavePt);
 					}
 
 					if (TestElementPtr->state_flags & COLLISION)
 					{
 						if (!(test_state_flags & COLLISION))
 						{
-							TestElementPtr->IntersectControl.IntersectStamp.origin =
-									TestSavePt;
-							TestElementPtr->next.location.x =
-									DISPLAY_TO_WORLD (TestSavePt.x);
-							TestElementPtr->next.location.y =
-									DISPLAY_TO_WORLD (TestSavePt.y);
+							TestElementPtr->IntersectControl.IntersectStamp.origin = TestSavePt;
+							TestElementPtr->next.location.x = DISPLAY_TO_WORLD (TestSavePt.x);
+							TestElementPtr->next.location.y = DISPLAY_TO_WORLD (TestSavePt.y);
 							InitIntersectEndPoint (TestElementPtr);
 						}
 					}
@@ -571,25 +552,20 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr, TIME_VALUE min_ti
 					{
 						if (!(state_flags & COLLISION))
 						{
-							ElementPtr->IntersectControl.IntersectStamp.origin =
-									SavePt;
-							ElementPtr->next.location.x =
-									DISPLAY_TO_WORLD (SavePt.x);
-							ElementPtr->next.location.y =
-									DISPLAY_TO_WORLD (SavePt.y);
+							ElementPtr->IntersectControl.IntersectStamp.origin = SavePt;
+							ElementPtr->next.location.x = DISPLAY_TO_WORLD (SavePt.x);
+							ElementPtr->next.location.y = DISPLAY_TO_WORLD (SavePt.y);
 							InitIntersectEndPoint (ElementPtr);
 
-							if (!(state_flags & FINITE_LIFE) &&
-									!(test_state_flags & FINITE_LIFE))
+							if (!(state_flags & FINITE_LIFE) && !(test_state_flags & FINITE_LIFE))
 							{
 								collide (ElementPtr, TestElementPtr);
 
-								ProcessCollisions (GetHeadElement (), ElementPtr,
-										MAX_TIME_VALUE, process_flags);
-								ProcessCollisions (GetHeadElement (), TestElementPtr,
-										MAX_TIME_VALUE, process_flags);
+								ProcessCollisions (GetHeadElement (), ElementPtr, MAX_TIME_VALUE, process_flags);
+								ProcessCollisions (GetHeadElement (), TestElementPtr, MAX_TIME_VALUE, process_flags);
 							}
 						}
+						
 						UnlockElement (hTestElement);
 						return (COLLISION);
 					}
