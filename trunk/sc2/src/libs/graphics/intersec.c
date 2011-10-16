@@ -21,8 +21,8 @@
 #include "libs/graphics/tfb_draw.h"
 #include "libs/log.h"
 
-//#define DEBUG_INTERSEC
-
+#define DEBUG_INTERSEC
+ 
 static inline BOOLEAN
 images_intersect (IMAGE_BOX *box1, IMAGE_BOX *box2, const RECT *rect)
 {
@@ -30,16 +30,17 @@ images_intersect (IMAGE_BOX *box1, IMAGE_BOX *box2, const RECT *rect)
 			box2->FramePtr->image, box2->Box.corner, rect);
 }
 
+// JMS: Changed SIZEs to SDWORDs to preven overflows. Ditto for COUNTs -> to DWORDs.
 static TIME_VALUE
 frame_intersect (INTERSECT_CONTROL *pControl0, RECT *pr0,
 		INTERSECT_CONTROL *pControl1, RECT *pr1, TIME_VALUE t0,
 		TIME_VALUE t1)
 {
-	SIZE time_error0, time_error1;
-	SIZE cycle0, cycle1;
-	SIZE dx_0, dy_0, dx_1, dy_1;
-	SIZE xincr0, yincr0, xincr1, yincr1;
-	SIZE xerror0, xerror1, yerror0, yerror1;
+	SDWORD time_error0, time_error1;
+	SDWORD cycle0, cycle1;
+	SDWORD dx_0, dy_0, dx_1, dy_1;
+	SDWORD xincr0, yincr0, xincr1, yincr1;
+	SDWORD xerror0, xerror1, yerror0, yerror1;
 	RECT r_intersect;
 	IMAGE_BOX IB0, IB1;
 	BOOLEAN check0, check1;
@@ -109,56 +110,56 @@ frame_intersect (INTERSECT_CONTROL *pControl0, RECT *pr0,
 	}
 	else
 	{
-		SIZE delta;
-		COUNT start;
+		SDWORD delta;
+		DWORD start;
 		long error;
 
-		start = (COUNT)cycle0 * (COUNT)(t0 - 1);
+		start = (DWORD)cycle0 * (DWORD)(t0 - 1);
 		time_error0 = start & ((1 << TIME_SHIFT) - 1);
-		if ((start >>= (COUNT)TIME_SHIFT) > 0)
+		if ((start >>= (DWORD)TIME_SHIFT) > 0)
 		{
 			if ((error = (long)xerror0
 					- (long)dx_0 * (long)start) > 0)
-				xerror0 = (SIZE)error;
+				xerror0 = (SDWORD)error;
 			else
 			{
-				delta = -(SIZE)(error / (long)cycle0) + 1;
+				delta = -(SDWORD)(error / (long)cycle0) + 1;
 				IB0.Box.corner.x += xincr0 * delta;
-				xerror0 = (SIZE)(error + (long)cycle0 * (long)delta);
+				xerror0 = (SDWORD)(error + (long)cycle0 * (long)delta);
 			}
 			if ((error = (long)yerror0
 					- (long)dy_0 * (long)start) > 0)
-				yerror0 = (SIZE)error;
+				yerror0 = (SDWORD)error;
 			else
 			{
-				delta = -(SIZE)(error / (long)cycle0) + 1;
+				delta = -(SDWORD)(error / (long)cycle0) + 1;
 				IB0.Box.corner.y += yincr0 * delta;
-				yerror0 = (SIZE)(error + (long)cycle0 * (long)delta);
+				yerror0 = (SDWORD)(error + (long)cycle0 * (long)delta);
 			}
 			pr0->corner = IB0.Box.corner;
 		}
 	
-		start = (COUNT)cycle1 * (COUNT)(t0 - 1);
+		start = (DWORD)cycle1 * (DWORD)(t0 - 1);
 		time_error1 = start & ((1 << TIME_SHIFT) - 1);
-		if ((start >>= (COUNT)TIME_SHIFT) > 0)
+		if ((start >>= (DWORD)TIME_SHIFT) > 0)
 		{
 			if ((error = (long)xerror1
 					- (long)dx_1 * (long)start) > 0)
-				xerror1 = (SIZE)error;
+				xerror1 = (SDWORD)error;
 			else
 			{
-				delta = -(SIZE)(error / (long)cycle1) + 1;
+				delta = -(SDWORD)(error / (long)cycle1) + 1;
 				IB1.Box.corner.x += xincr1 * delta;
-				xerror1 = (SIZE)(error + (long)cycle1 * (long)delta);
+				xerror1 = (SDWORD)(error + (long)cycle1 * (long)delta);
 			}
 			if ((error = (long)yerror1
 					- (long)dy_1 * (long)start) > 0)
-				yerror1 = (SIZE)error;
+				yerror1 = (SDWORD)error;
 			else
 			{
-				delta = -(SIZE)(error / (long)cycle1) + 1;
+				delta = -(SDWORD)(error / (long)cycle1) + 1;
 				IB1.Box.corner.y += yincr1 * delta;
-				yerror1 = (SIZE)(error + (long)cycle1 * (long)delta);
+				yerror1 = (SDWORD)(error + (long)cycle1 * (long)delta);
 			}
 			pr1->corner = IB1.Box.corner;
 		}
@@ -233,11 +234,12 @@ CheckFirstIntersection:
 	return ((TIME_VALUE)0);
 }
 
+// JMS: Changed SIZEs to SDWORDs to preven overflows.
 TIME_VALUE
 DrawablesIntersect (INTERSECT_CONTROL *pControl0, INTERSECT_CONTROL *pControl1, TIME_VALUE max_time_val)
 {
-	SIZE dy;
-	SIZE time_y_0, time_y_1;
+	SDWORD dy;
+	SDWORD time_y_0, time_y_1;
 	RECT r0, r1;
 	FRAME FramePtr0, FramePtr1;
 
@@ -277,8 +279,8 @@ DrawablesIntersect (INTERSECT_CONTROL *pControl0, INTERSECT_CONTROL *pControl1, 
 			|| (time_y_0 > 0 && dy >= time_y_0)
 			|| (time_y_1 < 0 && dy <= time_y_1))
 	{
-		SIZE dx;
-		SIZE time_x_0, time_x_1;
+		SDWORD dx;
+		SDWORD time_x_0, time_x_1;
 
 		dx = r1.corner.x - r0.corner.x;
 		time_x_0 = dx - GetFrameWidth (FramePtr0) + 1;
@@ -295,7 +297,7 @@ DrawablesIntersect (INTERSECT_CONTROL *pControl0, INTERSECT_CONTROL *pControl1, 
 				time_y_0 = time_y_1 = 0;
 			else
 			{
-				SIZE t;
+				SDWORD t;
 				long time_beg, time_end, fract;
 
 				if (time_y_1 < 0)
@@ -378,14 +380,14 @@ DrawablesIntersect (INTERSECT_CONTROL *pControl0, INTERSECT_CONTROL *pControl1, 
 				if ((time_beg <<= TIME_SHIFT) < fract)
 					time_y_0 = 0;
 				else
-					time_y_0 = (SIZE)(time_beg / fract);
+					time_y_0 = (SDWORD)(time_beg / fract);
 
 				if (time_end >= fract /* just in case of overflow */
 						|| (time_end <<= TIME_SHIFT) >=
 						fract * (long)max_time_val)
 					time_y_1 = max_time_val - 1;
 				else
-					time_y_1 = (SIZE)((time_end + fract - 1) / fract) - 1;
+					time_y_1 = (SDWORD)((time_end + fract - 1) / fract) - 1;
 			}
 
 #ifdef DEBUG_INTERSEC
@@ -404,6 +406,11 @@ DrawablesIntersect (INTERSECT_CONTROL *pControl0, INTERSECT_CONTROL *pControl1, 
 				pControl1->EndPoint.x = r1.corner.x + FramePtr1->HotSpot.x;
 				pControl1->EndPoint.y = r1.corner.y + FramePtr1->HotSpot.y;
 
+#ifdef DEBUG_INTERSEC
+				log_add (log_Debug, "intersecttime = %d",
+						 intersect_time);
+#endif /* DEBUG_INTERSEC */
+				
 				return (intersect_time);
 			}
 		}
