@@ -21,6 +21,7 @@
 //			 -Function call for initing those ones that mysteriously vanished in a hurry
 //			 -Function call for initing Gamma Janus, the supposed precursor artifact
 
+#include "gendef.h"
 #include "encount.h"
 #include "planets/generate.h"
 

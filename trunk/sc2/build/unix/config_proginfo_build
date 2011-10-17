@@ -19,7 +19,6 @@
 
 # JMS 2011: Removed the powerpc flags ('-arch ppc -arch i386'), XCode 4.2 no longer supports that stuff.
 
-
 ##############################################################################
 # System specific build flags                                                #
 ##############################################################################
@@ -65,9 +64,9 @@ useGccBuildTools() {
 case "$HOST_SYSTEM" in
 	Darwin)
 		# JMS: Removed the powerpc flags ('-arch ppc -arch i386'), XCode 4.2 no longer supports that stuff.
-		EXTRA_PLATFORM_GCC_FLAGS_COMPILE_C='-arch i386'
-		EXTRA_PLATFORM_GCC_FLAGS_COMPILE_OBJC='-arch i386'
-		EXTRA_PLATFORM_GCC_FLAGS_LINK='-arch i386'
+		EXTRA_PLATFORM_GCC_FLAGS_COMPILE_C='-mmacosx-version-min=10.4 -arch i386'
+		EXTRA_PLATFORM_GCC_FLAGS_COMPILE_OBJC='-mmacosx-version-min=10.4 -arch i386'
+		EXTRA_PLATFORM_GCC_FLAGS_LINK='-mmacosx-version-min=10.4 -arch i386'
 		useGccBuildTools
 		;;
 	WINSCW)

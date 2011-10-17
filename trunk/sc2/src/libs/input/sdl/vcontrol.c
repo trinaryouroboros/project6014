@@ -66,8 +66,8 @@ static joystick *joysticks;
 
 #endif /* HAVE_JOYSTICK */
 
-static int joycount;
-static int num_sdl_keys = 0;
+static unsigned int joycount;
+static unsigned int num_sdl_keys = 0;
 static keybinding **bindings = NULL;
 
 static keypool *pool;
@@ -112,7 +112,7 @@ create_joystick (int index)
 {
 	SDL_Joystick *stick;
 	int axes, buttons, hats;
-	if (index >= joycount)
+	if ((unsigned int) index >= joycount)
 	{
 		log_add (log_Warning, "VControl warning: Tried to open a non-existent joystick!");
 		return;
@@ -183,7 +183,7 @@ destroy_joystick (int index)
 static void
 key_init (void)
 {
-	int i;
+	unsigned int i;
 	pool = allocate_key_chunk ();
 	(void)SDL_GetKeyState (&num_sdl_keys);
 	bindings = (keybinding **) HMalloc (sizeof (keybinding *) * num_sdl_keys);
@@ -219,7 +219,7 @@ key_init (void)
 static void
 key_uninit (void)
 {
-	int i;
+	unsigned int i;
 	free_key_pool (pool);
 	for (i = 0; i < num_sdl_keys; i++)
 		bindings[i] = NULL;
@@ -250,7 +250,7 @@ int
 VControl_SetJoyThreshold (int port, int threshold)
 {
 #ifdef HAVE_JOYSTICK
-	if (port >= 0 && port < joycount)
+	if (port >= 0 && (unsigned int) port < joycount)
 	{
 		joysticks[port].threshold = threshold;
 		return 0;
@@ -488,7 +488,7 @@ VControl_RemoveGestureBinding (VCONTROL_GESTURE *g, int *target)
 int
 VControl_AddKeyBinding (SDLKey symbol, int *target)
 {
-	if ((symbol < 0) || (symbol >= num_sdl_keys)) {
+	if ((unsigned int) symbol >= num_sdl_keys) {
 		log_add (log_Warning, "VControl: Illegal key index %d", symbol);
 		return -1;
 	}
@@ -499,7 +499,7 @@ VControl_AddKeyBinding (SDLKey symbol, int *target)
 void
 VControl_RemoveKeyBinding (SDLKey symbol, int *target)
 {
-	if ((symbol < 0) || (symbol >= num_sdl_keys)) {
+	if ((unsigned int) symbol >= num_sdl_keys) {
 		log_add (log_Warning, "VControl: Illegal key index %d", symbol);
 		return;
 	}
@@ -510,7 +510,7 @@ int
 VControl_AddJoyAxisBinding (int port, int axis, int polarity, int *target)
 {
 #ifdef HAVE_JOYSTICK
-	if (port >= 0 && port < joycount)
+	if (port >= 0 && (unsigned int) port < joycount)
 	{
 		joystick *j = &joysticks[port];
 		if (!(j->stick))
@@ -555,7 +555,7 @@ void
 VControl_RemoveJoyAxisBinding (int port, int axis, int polarity, int *target)
 {
 #ifdef HAVE_JOYSTICK
-	if (port >= 0 && port < joycount)
+	if (port >= 0 && (unsigned int) port < joycount)
 	{
 		joystick *j = &joysticks[port];
 		if (!(j->stick))
@@ -596,7 +596,7 @@ int
 VControl_AddJoyButtonBinding (int port, int button, int *target)
 {
 #ifdef HAVE_JOYSTICK
-	if (port >= 0 && port < joycount)
+	if (port >= 0 && (unsigned int) port < joycount)
 	{
 		joystick *j = &joysticks[port];
 		if (!(j->stick))
@@ -628,7 +628,7 @@ void
 VControl_RemoveJoyButtonBinding (int port, int button, int *target)
 {
 #ifdef HAVE_JOYSTICK
-	if (port >= 0 && port < joycount)
+	if (port >= 0 && (unsigned int) port < joycount)
 	{
 		joystick *j = &joysticks[port];
 		if (!(j->stick))
@@ -657,7 +657,7 @@ int
 VControl_AddJoyHatBinding (int port, int which, Uint8 dir, int *target)
 {
 #ifdef HAVE_JOYSTICK
-	if (port >= 0 && port < joycount)
+	if (port >= 0 && (unsigned int) port < joycount)
 	{
 		joystick *j = &joysticks[port];
 		if (!(j->stick))
@@ -710,7 +710,7 @@ void
 VControl_RemoveJoyHatBinding (int port, int which, Uint8 dir, int *target)
 {
 #ifdef HAVE_JOYSTICK
-	if (port >= 0 && port < joycount)
+	if (port >= 0 && (unsigned int) port < joycount)
 	{
 		joystick *j = &joysticks[port];
 		if (!(j->stick))
@@ -765,7 +765,7 @@ VControl_RemoveAllBindings (void)
 void
 VControl_ProcessKeyDown (SDLKey symbol)
 {
-	if ((symbol < 0) || (symbol >= num_sdl_keys)) {
+	if (symbol >= num_sdl_keys) {
 		log_add (log_Warning, "VControl: Got unknown key index %d", symbol);
 		return;
 	}
@@ -776,7 +776,7 @@ VControl_ProcessKeyDown (SDLKey symbol)
 void
 VControl_ProcessKeyUp (SDLKey symbol)
 {
-	if ((symbol < 0) || (symbol >= num_sdl_keys))
+	if (symbol >= num_sdl_keys)
 		return;
 
 	deactivate (bindings[symbol]);
@@ -1075,7 +1075,7 @@ next_token (parse_state *state)
 }
 
 static void
-expected_error (parse_state *state, char *expected)
+expected_error (parse_state *state, const char *expected)
 {
 	log_add (log_Warning, "VControl: Expected '%s' on config file line %d",
 			expected, state->linenum);
@@ -1083,7 +1083,7 @@ expected_error (parse_state *state, char *expected)
 }
 
 static void
-consume (parse_state *state, char *expected)
+consume (parse_state *state, const char *expected)
 {
 	if (strcasecmp (expected, state->token))
 	{

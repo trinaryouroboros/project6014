@@ -25,5 +25,6 @@
 
 int TFB_Pure_InitGraphics (int driver, int flags, int width, int height, unsigned int resolutionFactor);  // JMS_GFX: Added resolutionFactor
 int TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int togglefullscreen, unsigned int resolutionFactor);  // JMS_GFX: Added resolutionFactor
+void Scale_PerfTest (void);
 
 #endif

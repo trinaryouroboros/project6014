@@ -17,6 +17,7 @@
  */
 
 #include "../ship.h"
+#include "isd.h"
 #include "resinst.h"
 #include "uqm/colors.h"
 #include "uqm/globdata.h"

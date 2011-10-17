@@ -525,13 +525,6 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 
 		if (SDPtr->Index != MELNORME_HOME_DEFINED)
 		{
-#ifdef NOTYET
-{
-UNICODE buf[256];
-GetClusterName (SDPtr, buf);
-printf ("%s\n", buf);
-}
-#endif /* NOTYET */
 
 			s.origin.x = UNIVERSE_TO_DISPX (SDPtr->star_pt.x);
 			s.origin.y = UNIVERSE_TO_DISPY (SDPtr->star_pt.y);
@@ -1018,9 +1011,13 @@ FindNextStarIndex (STAR_SEARCH_STATE *pSS, int from, BOOLEAN WithinClust)
 			continue;
 		}
 
-		if (!SDPtr->Prefix || WithinClust)
-			// singular star - prefix not checked
-			// or searching within clusters
+		if (pSS->Prefix && !SDPtr->Prefix)
+			// we were given a prefix but found a singular star;
+			// that is a no match
+			continue;
+
+		if (WithinClust)
+			// searching within clusters; any prefix is a match
 			break;
 
 		if (!pSS->Prefix)

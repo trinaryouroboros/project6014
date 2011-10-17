@@ -1,4 +1,19 @@
 Changes towards version 0.7:
+- Fixed ship picking order after a simultaneous destruction, e.g.
+  Shofixti picks last after Glory device (bugs #1087, #1088) - Alex
+- Game no longer locks up after quickly escaping melee (bug #1003) - Alex
+- Reset input delay upon leaving Supermelee (bug #1022) - Alex
+- Properly account for simultaneous destruction of last ships
+  in each fleet in Supermelee (bug #437) - Alex
+- Do not match singular stars when given a prefix in star search
+  (bug #1071) - Alex
+- Preserve character case when editing with joystick (bug #1080) - Alex
+- Fixed misaligned cargo count (bug #1092) - Coredev
+- Fixed the network SuperMelee team configuration protocol - SvdB
+- Fixed fuel reserve bounds checks - SvdB
+- Fixed a crash when filling fuel tanks over 10 (bug #1082) - Alex
+- Got rid of many warnings - SvdB
+- Clean up and some refactoring of the SuperMelee code - SvdB
 - Fixed concurrent screen fades regression (bug #1079) - Alex
 - Removed some legacy source code files related to resources - SvdB
 - Put SuperMelee source files in separate subdirectory - SvdB

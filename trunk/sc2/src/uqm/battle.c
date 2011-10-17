@@ -31,10 +31,11 @@
 		// for flee_preprocess()
 #include "intel.h"
 #ifdef NETPLAY
-#	include "netplay/netmelee.h"
+#	include "supermelee/netplay/netmelee.h"
 #	ifdef NETPLAY_CHECKSUM
-#		include "netplay/checksum.h"
+#		include "supermelee/netplay/checksum.h"
 #	endif
+#	include "supermelee/netplay/notifyall.h"
 #endif
 #include "supermelee/pickmele.h"
 #include "resinst.h"
@@ -59,12 +60,6 @@ size_t battleInputOrder[NUM_SIDES];
 #ifdef NETPLAY
 BattleFrameCounter battleFrameCount;
 		// Used for synchronisation purposes during netplay.
-COUNT currentDeadSide;
-		// When a ship has been destroyed, each side of a network
-		// connection waits until the other side is ready.
-		// When two ships die at the same time, this is handled for one
-		// ship after the other. This variable indicate for which player
-		// we're currently doing this.
 #endif
 
 static BOOLEAN
@@ -190,7 +185,7 @@ ProcessInput (void)
 				if (!(PlayerControl[cur_player] & NETWORK_CONTROL))
 				{
 					BattleInputBuffer *bib = getBattleInputBuffer(cur_player);
-					sendBattleInputConnections (InputState);
+					Netplay_NotifyAll_battleInput (InputState);
 					flushPacketQueues ();
 
 					BattleInputBuffer_push (bib, InputState);
@@ -286,7 +281,7 @@ DoBattle (BATTLE_STATE *bs)
 		crc_processState (&state);
 		checksum = (Checksum) crc_finish (&state);
 
-		sendChecksumConnections ((uint32) battleFrameCount,
+		Netplay_NotifyAll_checksum ((uint32) battleFrameCount,
 				(uint32) checksum);
 		flushPacketQueues ();
 		addLocalChecksum (battleFrameCount, checksum);
@@ -454,7 +449,7 @@ Battle (BattleFrameCallback *callback)
 		initChecksumBuffers ();
 #endif  /* NETPLAY_CHECKSUM */
 		battleFrameCount = 0;
-		currentDeadSide = (COUNT)~0;
+		ResetWinnerStarShip ();
 		setBattleStateConnections (&bs);
 #endif  /* NETPLAY */
 
@@ -518,6 +513,7 @@ AbortBattle:
 		setBattleStateConnections (NULL);
 #endif  /* NETPLAY */
 
+		StopDitty ();
 		StopMusic ();
 		StopSound ();
 	}
