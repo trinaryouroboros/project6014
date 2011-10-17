@@ -290,10 +290,6 @@ SOURCE=..\..\src\libs\graphics\sdl\2xscalers_sse.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\libs\graphics\sdl\3do_getbody.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\libs\graphics\sdl\biadv2x.c
 # End Source File
 # Begin Source File
@@ -2208,174 +2204,6 @@ SOURCE=..\..\src\uqm\comm\zoqfot\zoqfotc.c
 SOURCE=..\..\src\uqm\comm\commall.h
 # End Source File
 # End Group
-# Begin Group "netplay"
-
-# PROP Default_Filter ""
-# Begin Group "proto"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\proto\npconfirm.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\proto\npconfirm.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\proto\ready.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\proto\ready.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\proto\reset.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\proto\reset.h
-# End Source File
-# End Group
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\checkbuf.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\checkbuf.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\checksum.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\checksum.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\crc.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\crc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\nc_connect.ci
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netconnection.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netconnection.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netinput.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netinput.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netmelee.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netmelee.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netmisc.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netmisc.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netoptions.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netoptions.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netplay.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netrcv.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netrcv.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netsend.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netsend.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netstate.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\netstate.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\notify.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\notify.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\packet.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\packet.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\packethandlers.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\packethandlers.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\packetq.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\packetq.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\packetsenders.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\uqm\netplay\packetsenders.h
-# End Source File
-# End Group
 # Begin Group "planets"
 
 # PROP Default_Filter ""
@@ -2644,6 +2472,10 @@ SOURCE=..\..\src\uqm\ships\androsyn\androsyn.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\androsyn\androsyn.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\androsyn\icode.h
 # End Source File
 # Begin Source File
@@ -2657,6 +2489,10 @@ SOURCE=..\..\src\uqm\ships\androsyn\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\arilou\arilou.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\arilou\arilou.h
 # End Source File
 # Begin Source File
 
@@ -2676,6 +2512,10 @@ SOURCE=..\..\src\uqm\ships\blackurq\blackurq.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\blackurq\blackurq.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\blackurq\icode.h
 # End Source File
 # Begin Source File
@@ -2689,6 +2529,10 @@ SOURCE=..\..\src\uqm\ships\blackurq\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\chenjesu\chenjesu.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\chenjesu\chenjesu.h
 # End Source File
 # Begin Source File
 
@@ -2708,6 +2552,10 @@ SOURCE=..\..\src\uqm\ships\chmmr\chmmr.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\chmmr\chmmr.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\chmmr\icode.h
 # End Source File
 # Begin Source File
@@ -2724,6 +2572,10 @@ SOURCE=..\..\src\uqm\ships\druuge\druuge.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\druuge\druuge.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\druuge\icode.h
 # End Source File
 # Begin Source File
@@ -2737,6 +2589,10 @@ SOURCE=..\..\src\uqm\ships\druuge\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\human\human.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\human\human.h
 # End Source File
 # Begin Source File
 
@@ -2760,6 +2616,10 @@ SOURCE=..\..\src\uqm\ships\ilwrath\ilwrath.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\ilwrath\ilwrath.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\ilwrath\resinst.h
 # End Source File
 # End Group
@@ -2773,6 +2633,10 @@ SOURCE=..\..\src\uqm\ships\isd\icode.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\isd\isd.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\isd\isd.h
 # End Source File
 # Begin Source File
 
@@ -2792,6 +2656,10 @@ SOURCE=..\..\src\uqm\ships\lastbat\lastbat.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\lastbat\lastbat.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\lastbat\resinst.h
 # End Source File
 # End Group
@@ -2805,6 +2673,10 @@ SOURCE=..\..\src\uqm\ships\lurg\icode.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\lurg\lurg.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\lurg\lurg.h
 # End Source File
 # Begin Source File
 
@@ -2824,6 +2696,10 @@ SOURCE=..\..\src\uqm\ships\melnorme\melnorme.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\melnorme\melnorme.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\melnorme\resinst.h
 # End Source File
 # End Group
@@ -2837,6 +2713,10 @@ SOURCE=..\..\src\uqm\ships\mmrnmhrm\icode.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\mmrnmhrm\mmrnmhrm.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\mmrnmhrm\mmrnmhrm.h
 # End Source File
 # Begin Source File
 
@@ -2856,6 +2736,10 @@ SOURCE=..\..\src\uqm\ships\mycon\mycon.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\mycon\mycon.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\mycon\resinst.h
 # End Source File
 # End Group
@@ -2869,6 +2753,10 @@ SOURCE=..\..\src\uqm\ships\orz\icode.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\orz\orz.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\orz\orz.h
 # End Source File
 # Begin Source File
 
@@ -2888,6 +2776,10 @@ SOURCE=..\..\src\uqm\ships\pkunk\pkunk.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\uqm\ships\pkunk\pkunk.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\uqm\ships\pkunk\resinst.h
 # End Source File
 # End Group
@@ -2901,6 +2793,10 @@ SOURCE=..\..\src\uqm\ships\probe\icode.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\probe\probe.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\probe\probe.h
 # End Source File
 # Begin Source File
 
@@ -2921,6 +2817,10 @@ SOURCE=..\..\src\uqm\ships\shofixti\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\shofixti\shofixti.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\shofixti\shofixti.h
 # End Source File
 # End Group
 # Begin Group "sis_ship"
@@ -2958,6 +2858,10 @@ SOURCE=..\..\src\uqm\ships\sis_ship\restypes.h
 
 SOURCE=..\..\src\uqm\ships\sis_ship\sis_ship.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\sis_ship\sis_ship.h
+# End Source File
 # End Group
 # Begin Group "slykohr"
 
@@ -2973,6 +2877,10 @@ SOURCE=..\..\src\uqm\ships\slykohr\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\slykohr\slykohr.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slykohr\slykohr.h
 # End Source File
 # End Group
 # Begin Group "slylandr"
@@ -2990,6 +2898,10 @@ SOURCE=..\..\src\uqm\ships\slylandr\resinst.h
 
 SOURCE=..\..\src\uqm\ships\slylandr\slylandr.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\slylandr\slylandr.h
+# End Source File
 # End Group
 # Begin Group "spathi"
 
@@ -3005,6 +2917,10 @@ SOURCE=..\..\src\uqm\ships\spathi\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\spathi\spathi.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\spathi\spathi.h
 # End Source File
 # End Group
 # Begin Group "supox"
@@ -3022,6 +2938,10 @@ SOURCE=..\..\src\uqm\ships\supox\resinst.h
 
 SOURCE=..\..\src\uqm\ships\supox\supox.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\supox\supox.h
+# End Source File
 # End Group
 # Begin Group "syreen"
 
@@ -3037,6 +2957,10 @@ SOURCE=..\..\src\uqm\ships\syreen\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\syreen\syreen.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\syreen\syreen.h
 # End Source File
 # End Group
 # Begin Group "thradd"
@@ -3054,6 +2978,10 @@ SOURCE=..\..\src\uqm\ships\thradd\resinst.h
 
 SOURCE=..\..\src\uqm\ships\thradd\thradd.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\thradd\thradd.h
+# End Source File
 # End Group
 # Begin Group "transport"
 
@@ -3069,6 +2997,10 @@ SOURCE=..\..\src\uqm\ships\transport\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\transport\transport.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\transport\transport.h
 # End Source File
 # End Group
 # Begin Group "umgah"
@@ -3086,6 +3018,10 @@ SOURCE=..\..\src\uqm\ships\umgah\resinst.h
 
 SOURCE=..\..\src\uqm\ships\umgah\umgah.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\umgah\umgah.h
+# End Source File
 # End Group
 # Begin Group "urquan"
 
@@ -3101,6 +3037,10 @@ SOURCE=..\..\src\uqm\ships\urquan\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\urquan\urquan.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\urquan\urquan.h
 # End Source File
 # End Group
 # Begin Group "utwig"
@@ -3118,6 +3058,10 @@ SOURCE=..\..\src\uqm\ships\utwig\resinst.h
 
 SOURCE=..\..\src\uqm\ships\utwig\utwig.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\utwig\utwig.h
+# End Source File
 # End Group
 # Begin Group "vux"
 
@@ -3133,6 +3077,10 @@ SOURCE=..\..\src\uqm\ships\vux\resinst.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\ships\vux\vux.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\vux\vux.h
 # End Source File
 # End Group
 # Begin Group "yehat"
@@ -3150,6 +3098,10 @@ SOURCE=..\..\src\uqm\ships\yehat\resinst.h
 
 SOURCE=..\..\src\uqm\ships\yehat\yehat.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\yehat\yehat.h
+# End Source File
 # End Group
 # Begin Group "zoqfot"
 
@@ -3166,6 +3118,10 @@ SOURCE=..\..\src\uqm\ships\zoqfot\resinst.h
 
 SOURCE=..\..\src\uqm\ships\zoqfot\zoqfot.c
 # End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\ships\zoqfot\zoqfot.h
+# End Source File
 # End Group
 # Begin Source File
 
@@ -3175,6 +3131,190 @@ SOURCE=..\..\src\uqm\ships\ship.h
 # Begin Group "supermelee"
 
 # PROP Default_Filter ""
+# Begin Group "netplay"
+
+# PROP Default_Filter ""
+# Begin Group "proto"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\proto\npconfirm.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\proto\npconfirm.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\proto\ready.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\proto\ready.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\proto\reset.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\proto\reset.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\checkbuf.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\checkbuf.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\checksum.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\checksum.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\crc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\crc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\nc_connect.ci
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netconnection.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netconnection.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netinput.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netinput.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netmelee.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netmelee.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netmisc.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netmisc.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netoptions.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netoptions.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netplay.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netrcv.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netrcv.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netsend.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netsend.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netstate.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\netstate.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\notify.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\notify.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\notifyall.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\notifyall.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\packet.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\packet.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\packethandlers.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\packethandlers.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\packetq.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\packetq.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\packetsenders.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\netplay\packetsenders.h
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\buildpick.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\buildpick.h
+# End Source File
 # Begin Source File
 
 SOURCE=..\..\src\uqm\supermelee\loadmele.c
@@ -3190,6 +3330,14 @@ SOURCE=..\..\src\uqm\supermelee\melee.c
 # Begin Source File
 
 SOURCE=..\..\src\uqm\supermelee\melee.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\meleesetup.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\supermelee\meleesetup.h
 # End Source File
 # Begin Source File
 
@@ -3331,6 +3479,10 @@ SOURCE=..\..\src\uqm\displist.h
 # Begin Source File
 
 SOURCE=..\..\src\uqm\dummy.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\uqm\dummy.h
 # End Source File
 # Begin Source File
 

@@ -17,6 +17,7 @@
  */
 
 #include "../ship.h"
+#include "slykohr.h"
 #include "resinst.h"
 
 #include "uqm/battle.h"

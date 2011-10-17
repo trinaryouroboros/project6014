@@ -70,8 +70,10 @@ ConfirmSaveLoad (STAMP *MsgStamp)
 	t.CharCount = (COUNT)~0;
 	if (MsgStamp)
 		t.pStr = GAME_STRING (SAVEGAME_STRING_BASE + 0);
+				// "Saving . . ."
 	else
 		t.pStr = GAME_STRING (SAVEGAME_STRING_BASE + 1);
+				// "Loading . . ."
 	TextRect (&t, &r, NULL);
 	r.corner.x -= 4 << RESOLUTION_FACTOR; // JMS_GFX
 	r.corner.y -= 4 << RESOLUTION_FACTOR; // JMS_GFX

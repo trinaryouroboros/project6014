@@ -18,7 +18,7 @@
 
 // JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
 
-#if defined (GFXMODULE_SDL) && defined (HAVE_OPENGL)
+#ifdef HAVE_OPENGL
 
 #include "libs/graphics/sdl/opengl.h"
 #include "libs/graphics/bbox.h"

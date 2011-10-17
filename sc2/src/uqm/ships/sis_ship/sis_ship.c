@@ -19,6 +19,7 @@
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #include "../ship.h"
+#include "sis_ship.h"
 #include "resinst.h"
 #include "uqm/colors.h"
 #include "uqm/controls.h"

@@ -22,7 +22,7 @@
 #include "intel.h"
 		// For computer_intelligence
 #ifdef NETPLAY
-#	include "netplay/netmelee.h"
+#	include "supermelee/netplay/netmelee.h"
 #endif
 #include "settings.h"
 #include "sounds.h"
@@ -318,7 +318,7 @@ FlushInput (void)
 	_clear_menu_state ();
 }
 
-MENU_SOUND_FLAGS
+static MENU_SOUND_FLAGS
 MenuKeysToSoundFlags (const CONTROLLER_INPUT_STATE *state)
 {
 	MENU_SOUND_FLAGS soundFlags;

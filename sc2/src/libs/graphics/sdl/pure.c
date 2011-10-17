@@ -17,8 +17,6 @@
 
 // JMS_GFX 2011: Merged resolution Factor stuff from UQM-HD.
 
-#ifdef GFXMODULE_SDL
-
 #include "pure.h"
 #include "libs/graphics/bbox.h"
 #include "scalers.h"
@@ -502,4 +500,3 @@ Scale_PerfTest (void)
 	SDL_UnlockSurface (SDL_Screen);
 }
 
-#endif

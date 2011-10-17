@@ -1376,7 +1376,7 @@ GetCPodCapacity (POINT *ppt)
 ////////////////////////////////////////////////////////////////////////////
 
 // Get the total amount of minerals aboard the SIS.
-COUNT
+static COUNT
 GetElementMass (void)
 {
 	return GLOBAL_SIS (TotalElementMass);
@@ -1502,7 +1502,7 @@ GetSBayCapacity (POINT *ppt)
 ////////////////////////////////////////////////////////////////////////////
 
 // Get the total amount of fuel aboard the SIS.
-DWORD
+static DWORD
 GetFuelTotal (void)
 {
 	return GLOBAL_SIS (FuelOnBoard);
@@ -1548,11 +1548,14 @@ GetFuelTankCapacity (void)
 // crew pod, where the Nth unit of fuel would be located.
 // If the unit does not fit, false is returned, and *slotNr and
 // *compartmentNr are unchanged.
+// Pre: unitNr >= FUEL_RESERER
 static bool
 GetFuelTankForFuelUnit (DWORD unitNr, COUNT *slotNr, DWORD *compartmentNr)
 {
 	COUNT slotI;
 	DWORD capacity = FUEL_RESERVE;
+
+	assert (unitNr >= FUEL_RESERVE);
 
 	slotI = NUM_MODULE_SLOTS;
 	while (slotI--) {
@@ -1578,6 +1581,10 @@ GetFuelTankForFuelUnit (DWORD unitNr, COUNT *slotNr, DWORD *compartmentNr)
 DWORD
 GetFTankCapacity (POINT *ppt)
 {
+	DWORD capacity;
+
+	capacity = GetFuelTankCapacity();
+
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	{
 		if (ppt)
@@ -1587,7 +1594,7 @@ GetFTankCapacity (POINT *ppt)
 	  
 			which_row = (COUNT)(GetFuelTotal() * 20
 					    / (EXPLORER_FUEL_CAPACITY));
-				
+	
 			ppt->x = 31+which_row;
 			ppt->y = 22;
 		
@@ -1597,8 +1604,6 @@ GetFTankCapacity (POINT *ppt)
 			SetContextForeGroundColor (fuel_colors[which_row]);
 			SetContextBackGroundColor (fuel_colors[which_row + 1]);
 		}
-
-		return GetFuelTankCapacity ();
 	}
 	else
 	{
@@ -1613,10 +1618,16 @@ GetFTankCapacity (POINT *ppt)
 		static const Color fuelColors[] = FUEL_COLOR_TABLE;
 
 		fuelAmount = GetFuelTotal ();
+		if (fuelAmount < FUEL_RESERVE)
+		{
+			// Fuel is in the SIS reserve, not in a fuel tank.
+			// *ppt is unchanged
+			return capacity;
+		}
 		if (!GetFuelTankForFuelUnit (fuelAmount, &slotNr, &compartmentNr))
 		{
 			// Fuel does not fit. *ppt is unchanged.
-			return GetFuelTankCapacity ();
+			return capacity;
 		}
 
 		moduleType = GLOBAL_SIS (ModuleSlots[slotNr]);
@@ -1630,11 +1641,12 @@ GetFTankCapacity (POINT *ppt)
 		else
 			ppt->y = 30 - rowNr;
 
+		assert (rowNr + 1 < (COUNT) (sizeof fuelColors / sizeof fuelColors[0]));
 		SetContextForeGroundColor (fuelColors[rowNr]);
 		SetContextBackGroundColor (fuelColors[rowNr + 1]);
-
-		return GetFuelTankCapacity ();
 	}
+
+	return capacity;
 }
 
 

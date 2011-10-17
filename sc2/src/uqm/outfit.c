@@ -104,12 +104,14 @@ RedistributeFuel (void)
 	DWORD FuelVolume;
 	RECT r;
 
-	if ((FuelVolume = GLOBAL_SIS (FuelOnBoard)) < FUEL_RESERVE) // <= FUEL_RESERVE)
-	  return;
+	FuelVolume = GLOBAL_SIS (FuelOnBoard);
+	if (FuelVolume < FUEL_RESERVE) // <= FUEL_RESERVE)
+		return;
 	// BW: small hack to make fuel display correctly (as per issue 4)
 	// There's still a discrepancy when player has 10n+1 fuel units
 	// This may cause trouble with a moddable flagship
 	
+
 	GLOBAL_SIS (FuelOnBoard) = 0;
 	m = FUEL_VOLUME_PER_ROW;
 
@@ -574,8 +576,7 @@ ChangeFuelQuantity (void)
 		LockMutex (GraphicsLock);
 		SetContext (SpaceContext);
 		if (GetFTankCapacity (&r.corner) > GLOBAL_SIS (FuelOnBoard)
-			&& GLOBAL_SIS (ResUnits) >=
-			(DWORD)GLOBAL (FuelCost))
+			&& GLOBAL_SIS (ResUnits) >= (DWORD)GLOBAL (FuelCost))
 		{
 			RedistributeFuel();
 			DeltaSISGauges (0, FUEL_TANK_SCALE, -GLOBAL (FuelCost));

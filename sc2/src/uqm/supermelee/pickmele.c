@@ -22,15 +22,19 @@
 #include "pickmele.h"
 
 #include "../battlecontrols.h"
+#include "../battle.h"
+#include "../build.h"
 #include "../controls.h"
 #include "../flash.h"
+#include "../igfxres.h"
 #include "../intel.h"
-#include "../battle.h"
+#include "../master.h"
+#include "../nameref.h"
 #include "melee.h"
 #ifdef NETPLAY
-#	include "../netplay/netmelee.h"
-#	include "../netplay/netmisc.h"
-#	include "../netplay/notify.h"
+#	include "netplay/netmelee.h"
+#	include "netplay/netmisc.h"
+#	include "netplay/notify.h"
 #endif
 #include "../races.h"
 #include "../setup.h"
@@ -39,14 +43,48 @@
 #include "libs/mathlib.h"
 
 
-#define NUM_MELEE_COLS_ORIG NUM_MELEE_COLUMNS
+#define NUM_PICKMELEE_ROWS 2
+#define NUM_PICKMELEE_COLUMNS 7
+
 #define PICK_X_OFFS (57 << RESOLUTION_FACTOR) // JMS_GFX
 #define PICK_Y_OFFS (24 << RESOLUTION_FACTOR) // JMS_GFX
 #define PICK_SIDE_OFFS (100 << RESOLUTION_FACTOR) // JMS_GFX
 
+#define NAME_AREA_HEIGHT (7 << RESOLUTION_FACTOR) // JMS_GFX
+#define MELEE_WIDTH (149 << RESOLUTION_FACTOR) // JMS_GFX
+#define MELEE_HEIGHT ((48 << RESOLUTION_FACTOR) + NAME_AREA_HEIGHT) // JMS_GFX
+
+#define PICKSHIP_TEAM_NAME_TEXT_COLOR \
+		BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09)
+#define PICKSHIP_TEAM_START_VALUE_COLOR \
+		BUILD_COLOR (MAKE_RGB15 (0x04, 0x05, 0x1F), 0x4B)
+
+
 #ifdef NETPLAY
 static void reportShipSelected (GETMELEE_STATE *gms, COUNT index);
 #endif
+
+
+FRAME PickMeleeFrame;
+
+
+static FleetShipIndex
+PickMelee_GetShipIndex (BYTE row, BYTE col)
+{
+	return row * NUM_PICKMELEE_COLUMNS + col;
+}
+
+static BYTE
+PickMelee_GetShipRow (FleetShipIndex index)
+{
+	return index / NUM_PICKMELEE_COLUMNS;
+}
+
+static BYTE
+PickMelee_GetShipColumn (int index)
+{
+	return index % NUM_PICKMELEE_COLUMNS;
+}
 
 // Returns the <index>th ship in the queue, or 0 if it is not available.
 static HSTARSHIP
@@ -163,13 +201,13 @@ SelectShip_processInput (GETMELEE_STATE *gms, COUNT playerI,
 {
 	if (inputState & BATTLE_WEAPON)
 	{
-		if (gms->player[playerI].col == NUM_MELEE_COLS_ORIG &&
+		if (gms->player[playerI].col == NUM_PICKMELEE_COLUMNS &&
 				gms->player[playerI].row == 0)
 		{
 			// Random ship
 			(void) setShipSelected (gms, playerI, (COUNT) ~0, TRUE);
 		}
-		else if (gms->player[playerI].col == NUM_MELEE_COLS_ORIG &&
+		else if (gms->player[playerI].col == NUM_PICKMELEE_COLUMNS &&
 				gms->player[playerI].row == 1)
 		{
 			// Selected exit
@@ -179,10 +217,9 @@ SelectShip_processInput (GETMELEE_STATE *gms, COUNT playerI,
 		else
 		{
 			// Selection is on a ship slot.
-			COUNT shipI =
-					(gms->player[playerI].row * NUM_MELEE_COLS_ORIG)
-					+ gms->player[playerI].col;
-			(void) setShipSelected (gms, playerI, shipI, TRUE);
+			COUNT slotNr = PickMelee_GetShipIndex (gms->player[playerI].row,
+					gms->player[playerI].col);
+			(void) setShipSelected (gms, playerI, slotNr, TRUE);
 					// If the choice is not valid, setShipSelected()
 					// will not set .done.
 		}
@@ -197,21 +234,21 @@ SelectShip_processInput (GETMELEE_STATE *gms, COUNT playerI,
 		if (inputState & BATTLE_LEFT)
 		{
 			if (new_col-- == 0)
-				new_col = NUM_MELEE_COLS_ORIG;
+				new_col = NUM_PICKMELEE_COLUMNS;
 		}
 		else if (inputState & BATTLE_RIGHT)
 		{
-			if (new_col++ == NUM_MELEE_COLS_ORIG)
+			if (new_col++ == NUM_PICKMELEE_COLUMNS)
 				new_col = 0;
 		}
 		if (inputState & BATTLE_THRUST)
 		{
 			if (new_row-- == 0)
-				new_row = NUM_MELEE_ROWS - 1;
+				new_row = NUM_PICKMELEE_ROWS - 1;
 		}
 		else if (inputState & BATTLE_DOWN)
 		{
-			if (++new_row == NUM_MELEE_ROWS)
+			if (++new_row == NUM_PICKMELEE_ROWS)
 				new_row = 0;
 		}
 		
@@ -349,15 +386,6 @@ aborted:
 	return FALSE;
 }
 
-#ifdef NETPLAY
-static void
-endMeleeCallback (NetConnection *conn, void *arg)
-{
-	NetMelee_reenterState_inSetup (conn);
-	(void) arg;
-}
-#endif
-
 static COUNT
 GetRaceQueueValue (const QUEUE *queue) {
 	COUNT result;
@@ -386,17 +414,19 @@ GetRaceQueueValue (const QUEUE *queue) {
 // 'shipI' is the index in the ship list.
 // Pre: caller holds the graphics lock.
 static void
-CrossOutShip (FRAME frame, COUNT shipI)
+CrossOutShip (FRAME frame, COUNT shipNr)
 {
 	CONTEXT OldContext;
 	STAMP s;
+	BYTE row = PickMelee_GetShipRow (shipNr);
+	BYTE col = PickMelee_GetShipColumn (shipNr);
 
 	OldContext = SetContext (OffScreenContext);
 	
 	SetContextFGFrame (frame);
 
-	s.origin.x = (3 << RESOLUTION_FACTOR) + ((ICON_WIDTH + (2 << RESOLUTION_FACTOR)) * (shipI % NUM_MELEE_COLS_ORIG));// JMS_GFX
-	s.origin.y = (9 << RESOLUTION_FACTOR) + ((ICON_HEIGHT + (2 << RESOLUTION_FACTOR)) * (shipI / NUM_MELEE_COLS_ORIG));// JMS_GFX
+	s.origin.x = (3 << RESOLUTION_FACTOR) + ((ICON_WIDTH + (2 << RESOLUTION_FACTOR)) * col);
+	s.origin.y = (9 << RESOLUTION_FACTOR) + ((ICON_HEIGHT + (2 << RESOLUTION_FACTOR)) * row);
 	s.frame = SetAbsFrameIndex (StatusFrame, 3);
 			// Cross for through the ship image.
 	DrawStamp (&s);
@@ -444,6 +474,158 @@ UpdatePickMeleeFleetValue (FRAME frame, COUNT which_player)
 	SetContext (OldContext);
 }
 
+// Create a frame for each player to display their current fleet in,
+// to be used when selecting the next ship to fight with.
+void
+BuildPickMeleeFrame (void)
+{
+	STAMP s;
+	CONTEXT	OldContext = SetContext (OffScreenContext);
+
+	if (PickMeleeFrame)
+		DestroyDrawable (ReleaseDrawable (PickMeleeFrame));
+
+	PickMeleeFrame = CaptureDrawable (CreateDrawable (
+			WANT_PIXMAP, MELEE_WIDTH, MELEE_HEIGHT, 2));
+	s.origin.x = 0;
+	s.origin.y = 0;
+
+	s.frame = CaptureDrawable (LoadGraphic (MELEE_PICK_MASK_PMAP_ANIM));
+	SetContextFGFrame (PickMeleeFrame);
+	DrawStamp (&s);
+
+	s.frame = IncFrameIndex (s.frame);
+	SetContextFGFrame (IncFrameIndex (PickMeleeFrame));
+	DrawStamp (&s);
+
+	DestroyDrawable (ReleaseDrawable (s.frame));
+
+	SetContext (OldContext);
+}
+
+// Put the ship icons in the PickMeleeFrame, and create a queue
+// for each player.
+// XXX TODO: split off creating the queue into a separate function.
+void
+FillPickMeleeFrame (MeleeSetup *setup)
+{
+	COUNT sideI;
+	CONTEXT OldContext;
+
+	OldContext = SetContext (OffScreenContext);
+
+	for (sideI = 0; sideI < NUM_SIDES; ++sideI)
+	{
+		COUNT side;
+		RECT r;
+		TEXT t;
+		STAMP s;
+		UNICODE buf[30];
+		FleetShipIndex index;
+
+		side = !sideI;
+
+		s.frame = SetAbsFrameIndex (PickMeleeFrame, side);
+		SetContextFGFrame (s.frame);
+
+		GetFrameRect (s.frame, &r);
+		t.baseline.x = r.extent.width >> 1;
+		t.baseline.y = r.extent.height - NAME_AREA_HEIGHT + 4;
+
+		r.corner.x += 2 << RESOLUTION_FACTOR; // JMS_GFX
+		r.corner.y += 2 << RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width -=( (2 * 2) + ((ICON_WIDTH >> RESOLUTION_FACTOR) + 2) + 1) << RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.height -=( (2 * (2 << RESOLUTION_FACTOR)) + NAME_AREA_HEIGHT) << RESOLUTION_FACTOR; // JMS_GFX
+		SetContextForeGroundColor (PICK_BG_COLOR);
+		DrawFilledRectangle (&r);
+
+		r.corner.x += 2 << RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width += ((ICON_WIDTH + 2) - (2 * 2)) << RESOLUTION_FACTOR; // JMS_GFX
+		r.corner.y += r.extent.height;
+		r.extent.height = NAME_AREA_HEIGHT;
+		DrawFilledRectangle (&r);
+
+		// Team name at the bottom of the frame:
+		t.align = ALIGN_CENTER;
+		t.pStr = MeleeSetup_getTeamName (setup, sideI);
+		t.CharCount = (COUNT) ~0;
+		SetContextFont (TinyFont);
+		SetContextForeGroundColor (PICKSHIP_TEAM_NAME_TEXT_COLOR);
+		font_DrawText (&t);
+
+		// Total team value of the starting team:
+		sprintf (buf, "%u", MeleeSetup_getFleetValue (setup, sideI));
+		t.baseline.x = 4 << RESOLUTION_FACTOR; // JMS_GFX
+		t.baseline.y = 7 << RESOLUTION_FACTOR; // JMS_GFX
+		t.align = ALIGN_LEFT;
+		t.pStr = buf;
+		t.CharCount = (COUNT)~0;
+		SetContextForeGroundColor (PICKSHIP_TEAM_START_VALUE_COLOR);
+		font_DrawText (&t);
+
+		assert (CountLinks (&race_q[side]) == 0);
+
+		for (index = 0; index < MELEE_FLEET_SIZE; index++)
+		{
+			MeleeShip StarShip;
+
+			StarShip = MeleeSetup_getShip (setup, sideI, index);
+			if (StarShip == MELEE_NONE)
+				continue;
+
+			{
+				BYTE row, col;
+				BYTE ship_cost;
+				HMASTERSHIP hMasterShip;
+				HSTARSHIP hBuiltShip;
+				MASTER_SHIP_INFO *MasterPtr;
+				STARSHIP *BuiltShipPtr;
+				BYTE captains_name_index;
+
+				hMasterShip = GetStarShipFromIndex (&master_q, StarShip);
+				MasterPtr = LockMasterShip (&master_q, hMasterShip);
+
+				captains_name_index = NameCaptain (&race_q[side],
+						MasterPtr->SpeciesID);
+				hBuiltShip = Build (&race_q[side], MasterPtr->SpeciesID);
+
+				// Draw the icon.
+				row = PickMelee_GetShipRow (index);
+				col = PickMelee_GetShipColumn (index);
+				s.origin.x = (4 << RESOLUTION_FACTOR) + ((ICON_WIDTH + (2 << RESOLUTION_FACTOR)) * col);
+				s.origin.y = (10 << RESOLUTION_FACTOR) + ((ICON_HEIGHT + (2 << RESOLUTION_FACTOR)) * row);
+				s.frame = MasterPtr->ShipInfo.icons;
+				DrawStamp (&s);
+
+				ship_cost = MasterPtr->ShipInfo.ship_cost;
+				UnlockMasterShip (&master_q, hMasterShip);
+
+				BuiltShipPtr = LockStarShip (&race_q[side], hBuiltShip);
+				BuiltShipPtr->index = index;
+				BuiltShipPtr->ship_cost = ship_cost;
+				BuiltShipPtr->playerNr = side;
+				BuiltShipPtr->captains_name_index = captains_name_index;
+				// The next ones are not used in Melee
+				BuiltShipPtr->crew_level = 0;
+				BuiltShipPtr->max_crew = 0;
+				BuiltShipPtr->race_strings = 0;
+				BuiltShipPtr->icons = 0;
+				BuiltShipPtr->RaceDescPtr = 0;
+				UnlockStarShip (&race_q[side], hBuiltShip);
+			}
+		}
+	}
+
+	SetContext (OldContext);
+}
+
+void
+DestroyPickMeleeFrame (void)
+{
+	DestroyDrawable (ReleaseDrawable (PickMeleeFrame));
+	PickMeleeFrame = 0;
+}
+
 // Pre: caller holds the graphics lock.
 static void
 DrawPickMeleeFrame (COUNT which_player)
@@ -472,9 +654,14 @@ MeleeGameOver (void)
 	// Show the battle result.
 	for (playerI = 0; playerI < NUM_PLAYERS; playerI++)
 		DrawPickMeleeFrame (playerI);
+	
+	UnlockMutex (GraphicsLock);
+
+#ifdef NETPLAY
+	negotiateReadyConnections(true, NetState_inSetup);
+#endif
 
 	TimeOut = GetTimeCounter () + (ONE_SECOND * 4);
-	UnlockMutex (GraphicsLock);
 
 	PressState = PulsedInputState.menu[KEY_MENU_SELECT] ||
 			PulsedInputState.menu[KEY_MENU_CANCEL];
@@ -494,32 +681,20 @@ MeleeGameOver (void)
 			&& (!(PlayerControl[0] & PlayerControl[1] & PSYTRON_CONTROL)
 			|| GetTimeCounter () < TimeOut)));
 
-#ifdef NETPLAY
-	setStateConnections (NetState_endMelee);
-	localReadyConnections (endMeleeCallback, NULL, true);
-#endif
-
 	LockMutex (GraphicsLock);
 }
 
-BOOLEAN
-MeleeShipDeath (STARSHIP *ship, COUNT which_player) {
+void
+MeleeShipDeath (STARSHIP *ship)
+{
 	FRAME frame;
 
 	// Deactivate fleet position.
 	ship->SpeciesID = NO_ID;
 
-	frame = SetAbsFrameIndex (PickMeleeFrame, which_player);
+	frame = SetAbsFrameIndex (PickMeleeFrame, ship->playerNr);
 	CrossOutShip (frame, ship->index);
-	UpdatePickMeleeFleetValue (frame, which_player);
-	
-	if (battle_counter[0] == 0 || battle_counter[1] == 0)
-	{
-		// One side is out of ships. Game over.
-		return FALSE;
-	}
-
-	return TRUE;
+	UpdatePickMeleeFleetValue (frame, ship->playerNr);
 }
 
 // Post: the NetState for all players is NetState_interBattle
@@ -576,7 +751,7 @@ GetMeleeStarShips (COUNT playerMask, HSTARSHIP *ships)
 
 		gmstate.player[playerI].timeIn = now;
 		gmstate.player[playerI].row = 0;
-		gmstate.player[playerI].col = NUM_MELEE_COLS_ORIG;
+		gmstate.player[playerI].col = NUM_PICKMELEE_COLUMNS;
 #ifdef NETPLAY
 		gmstate.player[playerI].remoteSelected = FALSE;
 #endif
@@ -709,6 +884,7 @@ GetInitialMeleeStarShips (HSTARSHIP *result)
 	return GetMeleeStarShips (playerMask, result);
 }
 
+// Get the next ship to use in SuperMelee.
 BOOLEAN
 GetNextMeleeStarShip (COUNT which_player, HSTARSHIP *result)
 {
@@ -766,7 +942,7 @@ reportShipSelected (GETMELEE_STATE *gms, COUNT index)
 		if (!NetConnection_isConnected (conn))
 			continue;
 
-		Netplay_selectShip (conn, index);
+		Netplay_Notify_shipSelected (conn, index);
 	}
 	(void) gms;
 }
