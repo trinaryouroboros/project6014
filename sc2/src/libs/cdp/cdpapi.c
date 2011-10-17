@@ -242,8 +242,8 @@ cdp_Host_GetApiVersion (void)
 static uint32
 cdp_Host_GetVersion (void)
 {
-	return (UQM_MAJOR_VERSION << 20) | (UQM_MINOR_VERSION << 15) |
-			UQM_PATCH_VERSION;
+	return (P6014_MAJOR_VERSION << 20) | (P6014_MINOR_VERSION << 15) |
+			P6014_PATCH_VERSION;
 }
 
 static cdp_Error
