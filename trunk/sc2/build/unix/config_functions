@@ -500,7 +500,7 @@ have_library() {
 	if [ -n "$TEMP_PRESENT" ]; then
 		return "$TEMP_PRESENT"
 	fi
-	
+
 	# If a detection method is specified, try that one first.
 	TEMP_DETECT=`evalVar "LIB_${LIB}_DETECT"`
 	if [ -n "$TEMP_DETECT" ]; then

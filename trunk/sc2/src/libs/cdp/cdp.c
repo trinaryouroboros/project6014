@@ -25,7 +25,7 @@
 #include "port.h"
 #include "cdpint.h"
 #include "cdpmod.h"
-#include "uio.h"
+#include "../uio.h"
 #include "uqmversion.h"
 #ifdef WIN32
 #	include "windl.h"
@@ -54,14 +54,14 @@ cdp_ModuleInfo cdp_kernel_info =
 {
 	sizeof (cdp_ModuleInfo),
 	CDPAPI_VERSION,              // API version we are using
-	UQM_MAJOR_VERSION, UQM_MINOR_VERSION, UQM_PATCH_VERSION,
-	UQM_MAJOR_VERSION, UQM_MINOR_VERSION, UQM_PATCH_VERSION,
+	P6014_MAJOR_VERSION, P6014_MINOR_VERSION, P6014_PATCH_VERSION,
+	P6014_MAJOR_VERSION, P6014_MINOR_VERSION, P6014_PATCH_VERSION,
 	CDP_MODINFO_RESERVED1,
 	"UQM",                       // CDP context cannonical name
 	"UQM Kernel",                // CDP mod name
 #	define S(i) #i
 	// CDP mod version
-	S(UQM_MAJOR_VERSION) "." S(UQM_MINOR_VERSION) UQM_EXTRA_VERSION,
+	S(P6014_MAJOR_VERSION) "." S(P6014_MINOR_VERSION) P6014_EXTRA_VERSION,
 #	undef S
 	"UQM Team",                  // CDP mod author
 	"http://sc2.sf.net",         // CDP mod URL
