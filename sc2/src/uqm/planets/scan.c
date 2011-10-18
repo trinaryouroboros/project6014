@@ -777,13 +777,13 @@ DoPickPlanetSide (MENU_STATE *pMS)
 		new_pt = planetLoc;
 
 		if (CurrentInputState.menu[KEY_MENU_LEFT])
-			dx = -(1 + RESOLUTION_FACTOR); // JMS_GFX
+			dx = -(1 << RESOLUTION_FACTOR); // JMS_GFX
 		if (CurrentInputState.menu[KEY_MENU_RIGHT])
-			dx = (1 + RESOLUTION_FACTOR); // JMS_GFX
+			dx = (1 << RESOLUTION_FACTOR); // JMS_GFX
 		if (CurrentInputState.menu[KEY_MENU_UP])
-			dy = -(1 + RESOLUTION_FACTOR);	 // JMS_GFX
+			dy = -(1 << RESOLUTION_FACTOR);	 // JMS_GFX
 		if (CurrentInputState.menu[KEY_MENU_DOWN])
-			dy = (1 + RESOLUTION_FACTOR);	 // JMS_GFX
+			dy = (1 << RESOLUTION_FACTOR);	 // JMS_GFX
 
 		LockMutex (GraphicsLock);
 		BatchGraphics ();

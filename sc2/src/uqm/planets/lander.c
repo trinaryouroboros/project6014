@@ -747,7 +747,7 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 				NotPositional (), NULL, GAME_SOUND_PRIORITY);
 	}
 
-	s.origin.x = ((11 + (6 * (crew_delta % NUM_CREW_COLS))) << RESOLUTION_FACTOR) - RESOLUTION_FACTOR  * 2; // JMS_GFX
+	s.origin.x = ((11 + ((6 << RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)))); // JMS_GFX
 	s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) << RESOLUTION_FACTOR; // JMS_GFX
 
 	OldContext = SetContext (RadarContext);
