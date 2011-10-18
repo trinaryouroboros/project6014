@@ -566,7 +566,7 @@ setPlanetLoc (POINT new_pt, BOOLEAN restoreOld)
 static void
 flashPlanetLocation (void)
 {
-#define FLASH_FRAME_DELAY  (ONE_SECOND / 16)
+#define FLASH_FRAME_DELAY  (ONE_SECOND / (16 << RESOLUTION_FACTOR))
 	static BYTE c = 0x00;
 	static int val = -2;
 	static POINT prevPt;
@@ -574,8 +574,7 @@ flashPlanetLocation (void)
 	BOOLEAN locChanged;
 	TimeCount Now = GetTimeCounter ();
 
-	locChanged = prevPt.x != cursorRect.corner.x
-				|| prevPt.y != cursorRect.corner.y;
+	locChanged = prevPt.x != cursorRect.corner.x || prevPt.y != cursorRect.corner.y;
 
 	if (!locChanged && Now < NextTime)
 		return; // nothing to do
@@ -777,13 +776,13 @@ DoPickPlanetSide (MENU_STATE *pMS)
 		new_pt = planetLoc;
 
 		if (CurrentInputState.menu[KEY_MENU_LEFT])
-			dx = -(1 << RESOLUTION_FACTOR); // JMS_GFX
+			dx = -1;//-(1 << RESOLUTION_FACTOR); // JMS_GFX
 		if (CurrentInputState.menu[KEY_MENU_RIGHT])
-			dx = (1 << RESOLUTION_FACTOR); // JMS_GFX
+			dx = 1;//(1 << RESOLUTION_FACTOR); // JMS_GFX
 		if (CurrentInputState.menu[KEY_MENU_UP])
-			dy = -(1 << RESOLUTION_FACTOR);	 // JMS_GFX
+			dy = -1;//-(1 << RESOLUTION_FACTOR);	 // JMS_GFX
 		if (CurrentInputState.menu[KEY_MENU_DOWN])
-			dy = (1 << RESOLUTION_FACTOR);	 // JMS_GFX
+			dy = 1;//(1 << RESOLUTION_FACTOR);	 // JMS_GFX
 
 		LockMutex (GraphicsLock);
 		BatchGraphics ();
