@@ -48,6 +48,7 @@ static NUMBER_SPEECH_DESC melnorme_numbers_english;
 
 static LOCDATA melnorme_desc =
 {
+	MELNORME_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
 	NULL, /* post_encounter_func */
 	NULL, /* uninit_encounter_func */

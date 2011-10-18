@@ -90,63 +90,55 @@ typedef struct
 	double x, y, z;
 } POINT3;
 
+// BW : changed rendering method to direct SDL routines like in
+// RenderPlanetSphere to improve performance at 4x
 static void
-RenderTopography (FRAME DstFrame, SBYTE *pTopoData, int w, int h)
+RenderTopography (FRAME DstFrame, SBYTE *pTopoData, int w, int h, BOOLEAN SurfDef)
 {
-	FRAME OldFrame;
-
-	OldFrame = SetContextFGFrame (DstFrame);
-
 	if (pSolarSysState->XlatRef == 0)
 	{
 		// There is currently nothing we can do w/o an xlat table
 		// This is still called for Earth for 4x scaled topo, but we
 		// do not need it because we cannot land on Earth.
+		log_add(log_Warning, "No xlat table -- could not generate surface.\n");
 	}
 	else
 	{
-		COUNT i;
 		BYTE AlgoType;
 		SIZE base, d;
 		const XLAT_DESC *xlatDesc;
 		POINT pt;
 		const PlanetFrame *PlanDataPtr;
-		PRIMITIVE BatchArray[NUM_BATCH_POINTS];
-		PRIMITIVE *pBatch;
 		SBYTE *pSrc;
 		const BYTE *xlat_tab;
 		BYTE *cbase;
-		POINT oldOrigin;
-		RECT ClipRect;
+		Color *pix;
+		Color *map;
 
-		oldOrigin = SetContextOrigin (MAKE_POINT (0, 0));
-		GetContextClipRect (&ClipRect);
-		SetContextClipRect (NULL);
-
-		pBatch = &BatchArray[0];
-		for (i = 0; i < NUM_BATCH_POINTS; ++i, ++pBatch)
-		{
-			SetPrimNextLink (pBatch, i + 1);
-			SetPrimType (pBatch, POINT_PRIM);
-		}
-		SetPrimNextLink (&pBatch[-1], END_OF_LIST);
+		map = HMalloc (sizeof (Color) * w * h);
+		pix = map;
 
 		PlanDataPtr = &PlanData[
 				pSolarSysState->pOrbitalDesc->data_index & ~PLANET_SHIELDED
 				];
 		AlgoType = PLANALGO (PlanDataPtr->Type);
-		base = PlanDataPtr->base_elevation;
+		if (SurfDef)
+			{
+				// Planets given by a pixmap have elevations between -128 and +128
+				base = 256;
+			}
+		else
+			{
+				base = PlanDataPtr->base_elevation;
+			}
 		xlatDesc = (const XLAT_DESC *) pSolarSysState->XlatPtr;
 		xlat_tab = (const BYTE *) xlatDesc->xlat_tab;
 		cbase = GetColorMapAddress (pSolarSysState->OrbitalCMap);
 
-		i = NUM_BATCH_POINTS;
-		pBatch = &BatchArray[i];
 		pSrc = pTopoData;
-
 		for (pt.y = 0; pt.y < h; ++pt.y)
 		{
-			for (pt.x = 0; pt.x < w; ++pt.x, ++pSrc)
+			for (pt.x = 0; pt.x < w; ++pt.x, ++pSrc, ++pix)
 			{
 				BYTE *ctab;
 
@@ -164,37 +156,18 @@ RenderTopography (FRAME DstFrame, SBYTE *pTopoData, int w, int h)
 						d = 255;
 				}
 
-				--pBatch;
-				pBatch->Object.Point.x = pt.x;
-				pBatch->Object.Point.y = pt.y;
-
 				d = xlat_tab[d] - cbase[0];
 				ctab = (cbase + 2) + d * 3;
 
 				// fixed planet surfaces being too dark
 				// ctab shifts were previously >> 3 .. -Mika
-				SetPrimColor (pBatch, BUILD_COLOR (MAKE_RGB15 (ctab[0] >> 1,
-								ctab[1] >> 1, ctab[2] >> 1), d));
-				
-				if (--i == 0)
-				{	// flush the batch and start the next one
-					DrawBatch (BatchArray, 0, 0);
-					i = NUM_BATCH_POINTS;
-					pBatch = &BatchArray[i];
-				}
+				*pix = BUILD_COLOR (MAKE_RGB15 (ctab[0] >> 1, ctab[1] >> 1, ctab[2] >> 1), d);				
 			}
 		}
 
-		if (i < NUM_BATCH_POINTS)
-		{
-			DrawBatch (BatchArray, i, 0);
-		}
-
-		SetContextClipRect (&ClipRect);
-		SetContextOrigin (oldOrigin);
+		WriteFramePixelColors (DstFrame, map, w, h);
+		HFree(map);
 	}
-
-	SetContextFGFrame (OldFrame);
 }
 
 static inline void
@@ -1768,6 +1741,7 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	CONTEXT OldContext;
 	CONTEXT TopoContext;
 	PLANET_ORBIT *Orbit = &pSolarSysState->Orbit;
+	BOOLEAN SurfDef = FALSE;
 	BOOLEAN shielded = (pPlanetDesc->data_index & PLANET_SHIELDED) != 0;
 
 	old_seed = TFB_SeedRandom (pPlanetDesc->rand_seed);
@@ -1783,9 +1757,11 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 	{	// This is a defined planet; pixmap for the topography and
 		// elevation data is supplied in Surface Definition frame
 		BOOLEAN DeleteDef = FALSE;
+		BOOLEAN DeleteElev = FALSE;
 		FRAME ElevFrame;
 		
 		// surface pixmap
+		SurfDef = TRUE;
 		SurfDefFrame = SetAbsFrameIndex (SurfDefFrame, 0);
 		if (GetFrameWidth (SurfDefFrame) != MAP_WIDTH
 				|| GetFrameHeight (SurfDefFrame) != MAP_HEIGHT)
@@ -1809,6 +1785,7 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 			{
 				ElevFrame = CaptureDrawable (RescaleFrame (ElevFrame,
 						MAP_WIDTH, MAP_HEIGHT));
+				DeleteElev = TRUE;
 			}
 
 			// grab the elevation data in 1 byte per pixel format
@@ -1829,6 +1806,8 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 
 		if (DeleteDef)
 			DestroyDrawable (ReleaseDrawable (SurfDefFrame));
+		if (DeleteElev)
+			DestroyDrawable (ReleaseDrawable (ElevFrame));
 	}
 	else
 	{	// Generate planet surface elevation data and look
@@ -1931,7 +1910,7 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 		}
 		pSolarSysState->XlatPtr = GetStringAddress (pSolarSysState->XlatRef);
 		RenderTopography (pSolarSysState->TopoFrame,
-				Orbit->lpTopoData, MAP_WIDTH, MAP_HEIGHT);
+				  Orbit->lpTopoData, MAP_WIDTH, MAP_HEIGHT, FALSE);
 
 	}
 
@@ -1947,7 +1926,7 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 					PlanDataPtr->num_faults, PlanDataPtr->fault_depth
 					* (PLANALGO (PlanDataPtr->Type) == CRATERED_ALGO ? 2 : 1  ));
 			RenderTopography (Orbit->TopoZoomFrame, pScaledTopo,
-					MAP_WIDTH * 4, MAP_HEIGHT * 4);
+					  MAP_WIDTH * 4, MAP_HEIGHT * 4, SurfDef);
 			
 			HFree (pScaledTopo);
 		}

@@ -11,6 +11,7 @@ comm.chmmr.graphics = GFXRES:addons/hires4x/comm/chmmr/chmmr.ani
 comm.commander.colortable = BINTAB:addons/hires4x/comm/commander/commander.ct
 comm.commander.font = FONTRES:addons/hires4x/fonts/player.fon
 comm.commander.graphics = GFXRES:addons/hires4x/comm/commander/commander.ani
+comm.computer.font = FONTRES:addons/hires4x/fonts/computer.fon
 comm.druuge.colortable = BINTAB:addons/hires4x/comm/druuge/druuge.ct
 comm.druuge.font = FONTRES:addons/hires4x/fonts/micro.fon
 comm.druuge.graphics = GFXRES:addons/hires4x/comm/druuge/druuge.ani

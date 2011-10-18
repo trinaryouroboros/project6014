@@ -15,6 +15,7 @@ BATTLE_MUSIC,music.battle,uqm/imusicre.h,MUSICRES,base/battle/battle.mod
 CREDITS_MUSIC,music.credits,uqm/imusicre.h,--,--
 MELEE_MUSIC,music.meleemenu,uqm/imusicre.h,--,--
 MAINMENU_MUSIC,music.mainmenu,uqm/imusicre.h,--,--
+COMPUTER_FONT,font.computer,uqm/ifontres.h,FONTRES,base/fonts/computer.fon
 FALLBACK_FONT,font.fallback,uqm/ifontres.h,FONTRES,base/fonts/fallback.fon
 STARCON_FONT,font.starcon,uqm/ifontres.h,FONTRES,base/fonts/starcon.fon
 TINY_FONT,font.tiny,uqm/ifontres.h,FONTRES,base/fonts/tiny.fon
