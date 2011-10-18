@@ -26,6 +26,7 @@ comm.commander.dialogue = CONVERSATION:base/comm/commander/commander.txt
 comm.commander.font = FONTRES:base/fonts/player.fon
 comm.commander.graphics = GFXRES:base/comm/commander/commander.ani
 comm.commander.music = MUSICRES:base/comm/commander/commander.mod
+comm.computer.font = FONTRES:base/fonts/computer.fon
 comm.druuge.colortable = BINTAB:base/comm/druuge/druuge.ct
 comm.druuge.dialogue = CONVERSATION:base/comm/druuge/druuge.txt
 comm.druuge.font = FONTRES:base/fonts/micro.fon

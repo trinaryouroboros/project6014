@@ -29,6 +29,7 @@
 
 static LOCDATA syreenhome_desc =
 {
+	SYREENHOME_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
 	NULL, /* post_encounter_func */
 	NULL, /* uninit_encounter_func */

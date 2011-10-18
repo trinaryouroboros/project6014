@@ -32,6 +32,7 @@
 
 static LOCDATA transport_desc =
 {
+	TRANSPORT_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
 	NULL, /* post_encounter_func */
 	NULL, /* uninit_encounter_func */

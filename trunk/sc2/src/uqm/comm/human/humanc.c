@@ -33,6 +33,7 @@
 
 static LOCDATA human_desc =
 {
+	HUMAN_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
 	NULL, /* post_encounter_func */
 	NULL, /* uninit_encounter_func */
@@ -168,6 +169,7 @@ static LOCDATA human_desc =
 
 static LOCDATA human_desc2 =
 {
+	HUMAN_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
 	NULL, /* post_encounter_func */
 	NULL, /* uninit_encounter_func */

@@ -78,6 +78,7 @@ static CONTEXT AnimContext;
 
 LOCDATA CommData;
 UNICODE shared_phrase_buf[2048];
+FONT ComputerFont;
 
 static BOOLEAN TalkingFinished;
 static CommIntroMode curIntroMode = CIM_DEFAULT;
@@ -168,6 +169,7 @@ add_text (int status, TEXT *pTextIn)
 	static COORD last_baseline;
 	BOOLEAN eol;
 	CONTEXT OldContext = NULL;
+	COUNT computerOn = 0;
 	
 	BatchGraphics ();
 
@@ -283,8 +285,109 @@ add_text (int status, TEXT *pTextIn)
 		else
 		{
 			// Alien speech
-			font_DrawTracedText (pText,
-					CommData.AlienTextFColor, CommData.AlienTextBColor);
+			if (CommData.AlienConv == ORZ_CONVERSATION)
+			{
+				// BW : special case for the Orz conversations
+				// the character $ is recycled as a marker to
+				// switch from and to computer font
+				
+				const char *ptr;
+				RECT rect;
+				COORD baselinex = pText->baseline.x;
+				COORD width = 0;
+				COUNT remChars = pText->CharCount;
+			        // Remaining chars until end of line within width
+				const char *bakptr;
+				COUNT bakChars = remChars;
+				COUNT bakcompOn = computerOn;
+				FONT bakFont = SetContextFont(ComputerFont);
+				
+				SetContextFont(bakFont);
+				ptr = pText->pStr;
+				bakptr = ptr;
+				
+				// We need to manually center the line because
+				// the computer font is larger than the Orzfont
+				
+				// This loop computes the width of the line
+				while (remChars > 0)
+					{
+						while ((*ptr != '$') && remChars > 0)
+							{
+								getCharFromString (&ptr);
+								remChars--;
+							}
+						
+						pText->CharCount -= remChars;
+						TextRect (pText, &rect, NULL);
+						
+						width += rect.extent.width;
+						
+						if (*ptr == '$')
+							{
+								getCharFromString (&ptr);
+								remChars--;
+								computerOn = 1 - computerOn;
+								if (computerOn)
+									SetContextFont (ComputerFont);
+								else
+									SetContextFont (CommData.AlienFont);
+							}
+						pText->CharCount = remChars;
+						pText->pStr = ptr;
+					}
+
+				// This to simulate a centered line
+				pText->baseline.x = baselinex - (width >> 1);
+				pText->align = ALIGN_LEFT;
+				
+				// Put everything back in place for the
+				// actual display 
+				remChars = bakChars;
+				pText->CharCount = bakChars;
+				ptr = bakptr;
+				pText->pStr = bakptr;
+				computerOn = bakcompOn;
+				SetContextFont(bakFont);
+				
+				// This loop is used to look up for $
+				while (remChars > 0)
+					{
+						while ((*ptr != '$') && remChars > 0)
+							{
+								getCharFromString (&ptr);
+								remChars--;
+							}
+						
+						pText->CharCount -= remChars;
+						TextRect (pText, &rect, NULL);
+						
+						font_DrawTracedText (pText,
+								     CommData.AlienTextFColor, CommData.AlienTextBColor);
+						
+						pText->baseline.x += rect.extent.width;
+						
+						if (*ptr == '$')
+							{
+								getCharFromString (&ptr);
+								remChars--;
+								computerOn = 1 - computerOn;
+								if (computerOn)
+									SetContextFont (ComputerFont);
+								else
+									SetContextFont (CommData.AlienFont);
+							}
+						pText->CharCount = remChars;
+						pText->pStr = ptr;
+					}
+				pText->baseline.x = baselinex;
+				pText->align = ALIGN_CENTER;
+			}
+			else
+			{
+				// Normal case : other races than Orz
+				font_DrawTracedText (pText, CommData.AlienTextFColor, CommData.AlienTextBColor);
+			}
 		}
 	} while (!eol && maxchars);
 	pText->pStr = pStr;
@@ -1222,6 +1325,7 @@ HailAlien (void)
 
 	ES.InputFunc = DoCommunication;
 	PlayerFont = LoadFont (PLAYER_FONT);
+	ComputerFont = LoadFont (COMPUTER_FONT);
 
 	CommData.AlienFrame = CaptureDrawable (
 			LoadGraphic (CommData.AlienFrameRes));
@@ -1347,6 +1451,7 @@ HailAlien (void)
 	DestroyDrawable (ReleaseDrawable (TextCacheFrame));
 
 	DestroyFont (PlayerFont);
+	DestroyFont (ComputerFont);
 
 	// Some support code tests either of these to see if the
 	// game is currently in comm or encounter
