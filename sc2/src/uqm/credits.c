@@ -32,10 +32,10 @@
 #include <math.h>
 
 // Rates in pixel lines per second
-#define CREDITS_BASE_RATE   9
-#define CREDITS_MAX_RATE    130
+#define CREDITS_BASE_RATE   (15 << RESOLUTION_FACTOR) // JMS_GFX
+#define CREDITS_MAX_RATE    (130 << RESOLUTION_FACTOR) // JMS_GFX
 // Maximum frame rate
-#define CREDITS_FRAME_RATE  36
+#define CREDITS_FRAME_RATE  (36 << RESOLUTION_FACTOR) // JMS_GFX
 
 #define CREDITS_TIMEOUT   (ONE_SECOND * 5)
 
