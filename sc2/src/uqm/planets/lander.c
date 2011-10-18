@@ -2328,7 +2328,7 @@ IdlePlanetSide (LanderInputState *inputState, TimeCount howLong)
 	while (GetTimeCounter () < TimeOut)
 	{
 		// 10 to clear the lander off of the screen
-		ScrollPlanetSide (0, 0, -(SURFACE_HEIGHT / 2 + 10));
+		ScrollPlanetSide (0, 0, -(SURFACE_HEIGHT / 2 + (10 << RESOLUTION_FACTOR))); // JMS_GFX
 		SleepThreadUntil (inputState->NextTime);
 		inputState->NextTime += PLANET_SIDE_RATE;
 	}

@@ -1648,7 +1648,7 @@ CalcSunSize (PLANET_DESC *pSunDesc, SIZE radius)
 	if (RESOLUTION_FACTOR < 2)
 		pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index);
 	else
-		pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index * 32);
+		pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index * SUN_ANIMFRAMES_NUM);
 }
 
 static void
