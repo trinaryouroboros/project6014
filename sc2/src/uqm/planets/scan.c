@@ -747,6 +747,7 @@ DoPickPlanetSide (MENU_STATE *pMS)
 	PICK_PLANET_STATE *pickState = pMS->privData;
 	DWORD TimeIn = GetTimeCounter ();
 	BOOLEAN select, cancel;
+	POINT	new_pt;
 
 	select = PulsedInputState.menu[KEY_MENU_SELECT];
 	cancel = PulsedInputState.menu[KEY_MENU_CANCEL];
@@ -769,52 +770,86 @@ DoPickPlanetSide (MENU_STATE *pMS)
 	}
 	else
 	{
-		SIZE dx = 0;
-		SIZE dy = 0;
-		POINT new_pt;
+		COUNT	i, j = 0; // JMS_GFX
+		SIZE	dx = 0;
+		SIZE	dy = 0;
 
 		new_pt = planetLoc;
 
 		if (CurrentInputState.menu[KEY_MENU_LEFT])
-			dx = -1;//-(1 << RESOLUTION_FACTOR); // JMS_GFX
+			dx = -1;
 		if (CurrentInputState.menu[KEY_MENU_RIGHT])
-			dx = 1;//(1 << RESOLUTION_FACTOR); // JMS_GFX
+			dx = 1;
 		if (CurrentInputState.menu[KEY_MENU_UP])
-			dy = -1;//-(1 << RESOLUTION_FACTOR);	 // JMS_GFX
+			dy = -1;
 		if (CurrentInputState.menu[KEY_MENU_DOWN])
-			dy = 1;//(1 << RESOLUTION_FACTOR);	 // JMS_GFX
-
-		LockMutex (GraphicsLock);
-		BatchGraphics ();
+			dy = 1;
 
 		dx = dx << MAG_SHIFT;
-		if (dx)
-		{
-			new_pt.x += dx;
-			if (new_pt.x < 0)
-				new_pt.x += (MAP_WIDTH << MAG_SHIFT);
-			else if (new_pt.x >= (MAP_WIDTH << MAG_SHIFT))
-				new_pt.x -= (MAP_WIDTH << MAG_SHIFT);
-		}
 		dy = dy << MAG_SHIFT;
-		if (dy)
+		
+		// JMS_GFX: 1 for 320x240, 3 for 640x480, 7 for 1280x960
+		j = (1 << (RESOLUTION_FACTOR + 1)) - 1;
+		
+		// JMS_GFX: This makes the scan cursor faster in hi-res modes.
+		// (Originally there was no loop, just the contents.)
+		for (i = 0; i < j; i++)
 		{
-			new_pt.y += dy;
-			if (new_pt.y < 0 || new_pt.y >= (MAP_HEIGHT << MAG_SHIFT))
-				new_pt.y = planetLoc.y;
-		}
+			LockMutex (GraphicsLock);
+			BatchGraphics ();
+		
+			if (dx)
+			{
+				new_pt.x += dx;
+				if (new_pt.x < 0)
+					new_pt.x += (MAP_WIDTH << MAG_SHIFT);
+				else if (new_pt.x >= (MAP_WIDTH << MAG_SHIFT))
+					new_pt.x -= (MAP_WIDTH << MAG_SHIFT);
+			}
+		
+			if (dy)
+			{
+				new_pt.y += dy;
+				if (new_pt.y < 0 || new_pt.y >= (MAP_HEIGHT << MAG_SHIFT))
+					new_pt.y = planetLoc.y;
+			}
 
+			if (!pointsEqual (new_pt, planetLoc))
+				setPlanetLoc (new_pt, TRUE);
+			
+			flashPlanetLocation ();
+		
+			// JMS_GFX: Just upping the denominator wouldn't do no good since
+			// something else limits entering this function to about once per 1/40 secs...
+			// Since I couldn't find that mysterious element, I had to do speed things up
+			// with a loop and this thing here.
+			if (RESOLUTION_FACTOR == 0)
+				SleepThreadUntil (TimeIn + ONE_SECOND / 40);
+			else if (RESOLUTION_FACTOR == 1)
+				SleepThreadUntil (TimeIn + ONE_SECOND / 120);
+			else
+				SleepThreadUntil (TimeIn + ONE_SECOND / 280);
+			
+			UnbatchGraphics ();
+			UnlockMutex (GraphicsLock);
+		}
+	}
+	
+	// JMS_GFX: For some reason, 1280x960 is choppy, no matter how many iterations
+	// the loop has or how short the sleepthread is. This final redraw makes things
+	// a bit smoother.
+	if (RESOLUTION_FACTOR == 2)
+	{
+		LockMutex (GraphicsLock);
+		BatchGraphics ();
+	
 		if (!pointsEqual (new_pt, planetLoc))
-		{
 			setPlanetLoc (new_pt, TRUE);
-		}
-
+	
 		flashPlanetLocation ();
-
+	
 		UnbatchGraphics ();
 		UnlockMutex (GraphicsLock);
-
-		SleepThreadUntil (TimeIn + ONE_SECOND / 40);
 	}
 
 	return TRUE;
