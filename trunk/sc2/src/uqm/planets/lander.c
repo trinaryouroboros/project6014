@@ -2341,7 +2341,7 @@ LandingTakeoffSequence (LanderInputState *inputState, BOOLEAN landing)
 #define MAX_OFFSETS  20
 #define MAX_OFFSETS_4X 400 // JMS_GFX
 // 10 << RESOLUTION_FACTOR to clear the lander off of the screen
-#define DISTANCE_COVERED  (SURFACE_HEIGHT / 2 + (10 << RESOLUTION_FACTOR))
+#define DISTANCE_COVERED  ((SURFACE_HEIGHT / 2) + (10 << RESOLUTION_FACTOR))
 	
 	int landingOfs[MAX_OFFSETS];
 	int start;
