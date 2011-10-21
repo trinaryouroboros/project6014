@@ -37,6 +37,7 @@
 #include "libs/mathlib.h"
 #include "libs/log.h"
 
+#include <math.h>
 
 static bool GenerateSol_initNpcs (SOLARSYS_STATE *solarSys);
 static bool GenerateSol_reinitNpcs (SOLARSYS_STATE *solarSys);
@@ -119,14 +120,13 @@ GenerateSol_generatePlanets (SOLARSYS_STATE *solarSys)
 	solarSys->SunDesc[0].NumPlanets = 9;
 	for (planetI = 0; planetI < 9; ++planetI)
 	{
-		COUNT angle;
 		DWORD rand_val;
 		UWORD word_val;
 		PLANET_DESC *pCurDesc = &solarSys->PlanetDesc[planetI];
 
 		pCurDesc->rand_seed = rand_val = TFB_Random ();
 		word_val = LOWORD (rand_val);
-		angle = NORMALIZE_ANGLE ((COUNT)HIBYTE (word_val));
+		pCurDesc->angle = NORMALIZE_ANGLE ((COUNT)HIBYTE (word_val));
 
 		switch (planetI)
 		{
@@ -139,7 +139,7 @@ GenerateSol_generatePlanets (SOLARSYS_STATE *solarSys)
 				pCurDesc->data_index = PRIMORDIAL_WORLD;
 				pCurDesc->radius = EARTH_RADIUS * 72L / 100;
 				pCurDesc->NumPlanets = 0;
-				angle = NORMALIZE_ANGLE (FULL_CIRCLE - angle);
+				pCurDesc->angle = NORMALIZE_ANGLE (FULL_CIRCLE - pCurDesc->angle);
 				break;
 			case 2: /* EARTH */
 				pCurDesc->data_index = WATER_WORLD;
@@ -176,12 +176,13 @@ GenerateSol_generatePlanets (SOLARSYS_STATE *solarSys)
 				pCurDesc->data_index = PELLUCID_WORLD;
 				pCurDesc->radius = EARTH_RADIUS * 1550L /* 3937L */ / 100;
 				pCurDesc->NumPlanets = 0;
-				angle = FULL_CIRCLE - OCTANT;
+				pCurDesc->angle = FULL_CIRCLE - OCTANT;
 				break;
 		}
 
-		pCurDesc->location.x = COSINE (angle, pCurDesc->radius);
-		pCurDesc->location.y = SINE (angle, pCurDesc->radius);
+		pCurDesc->orb_speed = FULL_CIRCLE / (365.25 * pow((float)pCurDesc->radius / EARTH_RADIUS, 1.5));
+		pCurDesc->location.x = COSINE (pCurDesc->angle, pCurDesc->radius);
+		pCurDesc->location.y = SINE (pCurDesc->angle, pCurDesc->radius);
 	}
 
 	return true;
@@ -210,6 +211,7 @@ GenerateSol_generateMoons (SOLARSYS_STATE *solarSys, PLANET_DESC *planet)
 					COSINE (angle, solarSys->MoonDesc[0].radius);
 			solarSys->MoonDesc[0].location.y =
 					SINE (angle, solarSys->MoonDesc[0].radius);
+			solarSys->MoonDesc[0].orb_speed = FULL_CIRCLE / 11.46;
 
 			/* Luna: */
 			solarSys->MoonDesc[1].data_index = SELENIC_WORLD;
@@ -221,24 +223,33 @@ GenerateSol_generateMoons (SOLARSYS_STATE *solarSys, PLANET_DESC *planet)
 					COSINE (angle, solarSys->MoonDesc[1].radius);
 			solarSys->MoonDesc[1].location.y =
 					SINE (angle, solarSys->MoonDesc[1].radius);
+			solarSys->MoonDesc[1].orb_speed = FULL_CIRCLE / 29;
 			break;
 		}
 		case 4: /* moons of JUPITER */
 			solarSys->MoonDesc[0].data_index = RADIOACTIVE_WORLD;
+			solarSys->MoonDesc[0].orb_speed = FULL_CIRCLE / 1.77;
 					/* Io */
 			solarSys->MoonDesc[1].data_index = HALIDE_WORLD;
+			solarSys->MoonDesc[1].orb_speed = FULL_CIRCLE / 3.55;
 					/* Europa */
 			solarSys->MoonDesc[2].data_index = CYANIC_WORLD;
+			solarSys->MoonDesc[2].orb_speed = FULL_CIRCLE / 7.16;
 					/* Ganymede */
 			solarSys->MoonDesc[3].data_index = PELLUCID_WORLD;
+			solarSys->MoonDesc[3].orb_speed = FULL_CIRCLE / 16.69;
 					/* Callisto */
 			break;
 		case 5: /* moons of SATURN */
 			solarSys->MoonDesc[0].data_index = ALKALI_WORLD;
+			solarSys->MoonDesc[0].radius = MIN_MOON_RADIUS
+					+ (MAX_MOONS - 1) * MOON_DELTA;
+			solarSys->MoonDesc[0].orb_speed = FULL_CIRCLE / 15.95;
 					/* Titan */
 			break;
 		case 7: /* moons of NEPTUNE */
 			solarSys->MoonDesc[0].data_index = VINYLOGOUS_WORLD;
+			solarSys->MoonDesc[0].orb_speed = FULL_CIRCLE / -5.88;
 					/* Triton */
 			break;
 	}
@@ -407,8 +418,18 @@ GenerateSol_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 		solarSys->SysInfo.PlanetInfo.SurfaceGravity =
 				CalcGravity (solarSys->SysInfo.PlanetInfo.PlanetDensity,
 				solarSys->SysInfo.PlanetInfo.PlanetRadius);
-		LoadPlanet (planetNr == 2 ?
-				CaptureDrawable (LoadGraphic (EARTH_MASK_ANIM)) : NULL);
+		switch (planetNr)
+			{
+			case 2: /* EARTH */
+				LoadPlanet (CaptureDrawable (LoadGraphic (EARTH_MASK_ANIM)));
+				break;
+			case 3: /* MARS */
+				LoadPlanet (CaptureDrawable (LoadGraphic (MARS_MASK_ANIM)));
+				break;
+			default:
+				LoadPlanet (NULL);
+				break;
+			}
 	}
 	else
 	{

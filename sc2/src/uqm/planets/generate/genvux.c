@@ -79,6 +79,7 @@ GenerateVux_generatePlanets (SOLARSYS_STATE *solarSys)
 				COSINE (angle, solarSys->PlanetDesc[0].radius);
 		solarSys->PlanetDesc[0].location.y =
 				SINE (angle, solarSys->PlanetDesc[0].radius);
+		ComputeSpeed(&solarSys->PlanetDesc[0], FALSE, 1);
 	}
 	else
 	{
@@ -89,6 +90,7 @@ GenerateVux_generatePlanets (SOLARSYS_STATE *solarSys)
 			solarSys->PlanetDesc[0].NumPlanets = 2;
 			solarSys->PlanetDesc[0].radius = EARTH_RADIUS * 42L / 100;
 			angle = HALF_CIRCLE + OCTANT;
+			ComputeSpeed(&solarSys->PlanetDesc[0], FALSE, 1);
 		}
 		else /* if (CurStarDescPtr->Index == VUX_BEAST_DEFINED) */
 		{
@@ -101,6 +103,7 @@ GenerateVux_generatePlanets (SOLARSYS_STATE *solarSys)
 			solarSys->PlanetDesc[0].data_index = WATER_WORLD;
 			solarSys->PlanetDesc[0].radius = EARTH_RADIUS * 110L / 100;
 			solarSys->PlanetDesc[0].NumPlanets = 0;
+			ComputeSpeed(&solarSys->PlanetDesc[0], FALSE, 1);
 		}
 
 		solarSys->PlanetDesc[0].location.x =
@@ -130,6 +133,7 @@ GenerateVux_generateMoons (SOLARSYS_STATE *solarSys, PLANET_DESC *planet)
 			COSINE (QUADRANT, pSolarSysState->MoonDesc[0].radius);
 		solarSys->MoonDesc[0].location.y =
 			SINE (QUADRANT, pSolarSysState->MoonDesc[0].radius);
+		ComputeSpeed(&solarSys->MoonDesc[0], TRUE, 1);
 	}
 
 	return true;

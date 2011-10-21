@@ -121,6 +121,7 @@ graphics.circles_a = GFXRES:addons/hires4x/lander/energy/circles_a.ani
 graphics.circles_b = GFXRES:addons/hires4x/lander/energy/circles_b.ani
 graphics.circles_c = GFXRES:addons/hires4x/lander/energy/circles_c.ani
 graphics.earthmask = GFXRES:addons/hires4x/planets/earthmask.ani
+graphics.marsmask = GFXRES:addons/hires4x/planets/marsmask.ani
 graphics.eggcase = GFXRES:addons/hires4x/lander/energy/eggcase.ani
 graphics.flagship = GFXRES:addons/hires4x/nav/explorer_ip.ani
 graphics.flagshipstatus = GFXRES:addons/hires4x/ui/flagshipstatus.ani

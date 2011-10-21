@@ -191,6 +191,7 @@ graphics.circles_a = GFXRES:base/lander/energy/circles_a.ani
 graphics.circles_b = GFXRES:base/lander/energy/circles_b.ani
 graphics.circles_c = GFXRES:base/lander/energy/circles_c.ani
 graphics.earthmask = GFXRES:base/planets/earthmask.ani
+graphics.marsmask = GFXRES:base/planets/marsmask.ani
 graphics.eggcase = GFXRES:base/lander/energy/eggcase.ani
 graphics.flagship = GFXRES:base/nav/explorer_ip.ani
 graphics.flagshipskeleton = GFXRES:base/cutscene/ending/fs_skeleton.ani

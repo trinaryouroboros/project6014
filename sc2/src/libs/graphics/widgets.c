@@ -141,10 +141,10 @@ DrawLabelAsWindow (WIDGET_LABEL *label, RECT *windowRect)
 		// Add the outer border added by DrawShadowedBox.
 		// XXX: It may be nicer to add a border size parameter to
 		// DrawShadowedBox, instead of assuming 2 here.
-		windowRect->corner.x = r.corner.x - 2;
-		windowRect->corner.y = r.corner.y - 2;
-		windowRect->extent.width = r.extent.width + 4;
-		windowRect->extent.height = r.extent.height + 4;
+		windowRect->corner.x = r.corner.x - 2 * (1 + resolutionFactor);
+		windowRect->corner.y = r.corner.y - 2 * (1 + resolutionFactor);
+		windowRect->extent.width = r.extent.width + 4 * (1 + resolutionFactor);
+		windowRect->extent.height = r.extent.height + 4 * (1 + resolutionFactor);
 	}
 }
 

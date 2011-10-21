@@ -227,6 +227,7 @@ LANDER_LAUNCH_MASK_PMAP_ANIM,graphics.landerlaunch,uqm/igfxres.h,GFXRES,base/lan
 LANDER_RETURN_MASK_PMAP_ANIM,graphics.landerreturn,uqm/igfxres.h,GFXRES,base/lander/return.ani
 ORBIT_VIEW_ANIM,graphics.orbview,uqm/igfxres.h,GFXRES,base/nav/orbview.ani
 EARTH_MASK_ANIM,graphics.earthmask,uqm/igfxres.h,GFXRES,base/planets/earthmask.ani
+MARS_MASK_ANIM,graphics.marsmask,uqm/igfxres.h,GFXRES,base/planets/marsmask.ani
 CANNISTER_MASK_PMAP_ANIM,graphics.lifecan,uqm/igfxres.h,GFXRES,base/lander/bio/lifecan.ani
 LIFE00_MASK_PMAP_ANIM,graphics.life.0,uqm/igfxres.h,GFXRES,base/lander/bio/lifea.ani
 LIFE01_MASK_PMAP_ANIM,graphics.life.1,uqm/igfxres.h,GFXRES,base/lander/bio/lifeb.ani

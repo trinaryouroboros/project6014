@@ -90,6 +90,7 @@
 #define LIFE50_MASK_PMAP_ANIM "graphics.life.50"
 #define LIGHTNING_MASK_ANIM "graphics.lightning"
 #define MAIDENS_MASK_PMAP_ANIM "graphics.maidens"
+#define MARS_MASK_ANIM "graphics.marsmask"
 #define MELEE_PICK_MASK_PMAP_ANIM "graphics.meleepickship"
 #define MELEE_SCREEN_PMAP_ANIM "graphics.meleemenu"
 #define MENUBKG_PMAP_ANIM "graphics.setupmenu"
