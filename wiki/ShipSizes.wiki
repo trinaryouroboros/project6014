@@ -27,23 +27,24 @@ Actual Dimensions  : 56x58
 
 ==Baul==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 31x31 (?)
+Perfect Dimensions : 124x124
+Actual Dimensions  : 124x125
 }}}
 
 ==Chenjesu Broodhome==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 34x34
+Perfect Dimensions : 136x136
+Actual Dimensions  : 272x266
 }}}
+_This appears to have accidentally got doubled in size. Will re-size later._
 
 ==CHMMR Avatar==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 37x38
+Perfect Dimensions : 148x152
+Actual Dimensions  : 125x152
 }}}
 
 ==Drone Satellite==
@@ -51,44 +52,44 @@ _N/A_
 
 ==Druuge Mauler==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 15x34
+Perfect Dimensions : 60x136
+Actual Dimensions  : 39x136
 }}}
 
 ==CHMMR Explorer==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 37x38
+Perfect Dimensions : 148x152
+Actual Dimensions  : 125x152
 }}}
 
 ==Foon-Foon Typhoon==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 32x32
+Perfect Dimensions : 128x128
+Actual Dimensions  : 127x127
 }}}
 
 ==Human - Cruiser==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 13x35
+Perfect Dimensions : 52x140
+Actual Dimensions  : 43x134
 }}}
 
 ==Ilwrath Avenger==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 38x31
+Perfect Dimensions : 152x124
+Actual Dimensions  : 126x124
 }}}
 
 ==ISD==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 53x51
+Perfect Dimensions : 212x204
+Actual Dimensions  : 157x209
 }}}
 
 ==Kohr-Ah Marauder==
@@ -141,6 +142,7 @@ Actual Dimensions  :
 }}}
 
 ==SaMatra==
+
 _Not currently needed in-game, but listed here for reference._
 
 ==Shofixti Scout==
@@ -192,7 +194,7 @@ Perfect Dimensions :
 Actual Dimensions  : 
 }}}
 
-==Ur-Quan Dreadnaught==
+==Ur-Quan Kzer-Za Dreadnaught==
 {{{
 Original Dimensions: 
 Perfect Dimensions : 
