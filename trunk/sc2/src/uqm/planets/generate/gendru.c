@@ -74,6 +74,7 @@ GenerateDruuge_generatePlanets (SOLARSYS_STATE *solarSys)
 	solarSys->PlanetDesc[0].rand_seed = MAKE_DWORD (
 			solarSys->PlanetDesc[0].location.x,
 			solarSys->PlanetDesc[0].location.y);
+	ComputeSpeed(&solarSys->PlanetDesc[0], FALSE, 1);
 
 	return true;
 }

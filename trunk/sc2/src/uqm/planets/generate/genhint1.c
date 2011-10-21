@@ -86,7 +86,8 @@ static bool GenerateHint1_generatePlanets (SOLARSYS_STATE *solarSys)
 				solarSys->PlanetDesc[0].location.y);
 		solarSys->PlanetDesc[0].location.x = COSINE (angle, solarSys->PlanetDesc[0].radius);
 		solarSys->PlanetDesc[0].location.y = SINE (angle, solarSys->PlanetDesc[0].radius);
-		
+		ComputeSpeed(&solarSys->PlanetDesc[0], FALSE, 1);
+
 		solarSys->PlanetDesc[1].data_index = PRIMORDIAL_WORLD;
 		solarSys->PlanetDesc[1].radius = EARTH_RADIUS * 352L / 100;
 		solarSys->PlanetDesc[1].NumPlanets = 1;
@@ -95,6 +96,7 @@ static bool GenerateHint1_generatePlanets (SOLARSYS_STATE *solarSys)
 				solarSys->PlanetDesc[1].location.y);
 		solarSys->PlanetDesc[1].location.x = COSINE (angle, solarSys->PlanetDesc[1].radius);
 		solarSys->PlanetDesc[1].location.y = SINE (angle, solarSys->PlanetDesc[1].radius);
+		ComputeSpeed(&solarSys->PlanetDesc[1], FALSE, 1);
 	}
 	return true;
 }
@@ -118,6 +120,7 @@ static bool GenerateHint1_generateMoons (SOLARSYS_STATE *solarSys,
 		angle = NORMALIZE_ANGLE (LOWORD (rand_val));
 		solarSys->MoonDesc[0].location.x = COSINE (angle, solarSys->MoonDesc[0].radius);
 		solarSys->MoonDesc[0].location.y = SINE (angle, solarSys->MoonDesc[0].radius);
+		ComputeSpeed(&solarSys->MoonDesc[0], TRUE, 1);
 	}	
 	return true;
 }

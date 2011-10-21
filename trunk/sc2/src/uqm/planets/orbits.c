@@ -21,6 +21,7 @@
 #include "planets.h"
 // XXX: for CurStarDescPtr
 #include "../encount.h"
+#include "../clock.h"
 #include "libs/compiler.h"
 #include "libs/mathlib.h"
 #include "libs/log.h"
@@ -472,6 +473,24 @@ YellowDistribution (BYTE which_world)
 #define SUPERGIANT_ROCK_DIST SCALE_RADIUS (16)
 #define SUPERGIANT_GASG_DIST SCALE_RADIUS (33)
 
+void ComputeSpeed(PLANET_DESC *planet, BOOLEAN GeneratingMoons, UWORD rand_val)
+{
+	//BW : empiric values, which would give roughly correct
+	// rotation periods for most moons in the solar system
+	if (GeneratingMoons)
+		{
+			planet->orb_speed = FULL_CIRCLE / (29 * pow((double)planet->radius / (MIN_MOON_RADIUS + (MAX_MOONS - 1) * MOON_DELTA), 1.5));
+			if ((planet->pPrevDesc->data_index & ~PLANET_SHIELDED) >= FIRST_GAS_GIANT)
+				planet->orb_speed *= 2;
+			if (!(rand_val % 7))
+				planet->orb_speed = - planet->orb_speed;
+		}
+		else
+		{
+			planet->orb_speed = FULL_CIRCLE / (ONE_YEAR * pow((double)planet->radius / EARTH_RADIUS, 1.5));
+		}
+}
+
 void
 FillOrbits (SOLARSYS_STATE *system, BYTE NumPlanets,
 		PLANET_DESC *pBaseDesc, BOOLEAN TypesDefined)
@@ -524,7 +543,7 @@ char scolor[] = {'B', 'G', 'O', 'R', 'W', 'Y'};
 	{
 		BYTE chance;
 		DWORD rand_val;
-		DWORD min_radius, angle; // JMS_GFX: Was COUNT. Changed to avoid overflows in 1280x960.
+		DWORD min_radius; //, angle; // JMS_GFX: Was COUNT. Changed to avoid overflows in 1280x960.
 		SIZE delta_r;
 		PLANET_DESC *pLocPD;
 
@@ -594,10 +613,25 @@ RelocatePlanet:
 		}
 
 		rand_val = TFB_Random ();
-		angle = NORMALIZE_ANGLE (LOWORD (rand_val));
-		pPD->location.x = COSINE (angle, pPD->radius);
-		pPD->location.y = SINE (angle, pPD->radius);
-		pPD->rand_seed = MAKE_DWORD (pPD->location.x, pPD->location.y);
+		// Initial angle & coordinates as in Vanilla UQM
+		// Still used to compute rand_seed and the position
+		// of the planet at the start of the game
+		pPD->angle = NORMALIZE_ANGLE (LOWORD (rand_val));
+		pPD->location.x = COSINE (pPD->angle, pPD->radius);
+		pPD->location.y = SINE (pPD->angle, pPD->radius);
+		if (GeneratingMoons)
+		{
+		pPD->rand_seed = MAKE_DWORD (
+		     COSINE (pPD->angle, pPD->radius >> RESOLUTION_FACTOR),
+		     SINE (pPD->angle, pPD->radius >> RESOLUTION_FACTOR));
+		}
+		else
+		{
+			pPD->rand_seed = MAKE_DWORD (pPD->location.x, pPD->location.y);
+		}
+		// Angle is kept for reference but location will be adjusted
+		// to take orbiting into account
+		ComputeSpeed(pPD, GeneratingMoons, HIWORD (rand_val));
 
 		++pPD;
 	}

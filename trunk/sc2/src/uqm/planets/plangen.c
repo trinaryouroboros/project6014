@@ -20,6 +20,11 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
+// BW 2011: fixed using pixmaps to define planet surfaces so it actually works
+// on planets you can land on. The second frame of planetmask.ani has to be a
+// (Black & White) indexed pic with 128 colors top. Lesser indices (black)
+// will correspond to lower altitudes.
+
 #include "planets.h"
 #include "scan.h"
 #include "../nameref.h"
@@ -1803,6 +1808,27 @@ GeneratePlanetSurface (PLANET_DESC *pPlanetDesc, FRAME SurfDefFrame)
 		{	// no elevation data -- planet flat as a pancake
 			memset (Orbit->lpTopoData, 0, MAP_WIDTH * MAP_HEIGHT);
 		}
+
+		pSolarSysState->OrbitalCMap = CaptureColorMap (
+				LoadColorMap (PlanDataPtr->CMapInstance));
+		pSolarSysState->XlatRef = CaptureStringTable (
+				LoadStringTable (PlanDataPtr->XlatTabInstance));
+
+		if (PlanetInfo->SurfaceTemperature > HOT_THRESHOLD)
+		{
+			pSolarSysState->OrbitalCMap = SetAbsColorMapIndex (
+					pSolarSysState->OrbitalCMap, 2);
+			pSolarSysState->XlatRef = SetAbsStringTableIndex (
+					pSolarSysState->XlatRef, 2);
+		}
+		else if (PlanetInfo->SurfaceTemperature > COLD_THRESHOLD)
+		{
+			pSolarSysState->OrbitalCMap = SetAbsColorMapIndex (
+					pSolarSysState->OrbitalCMap, 1);
+			pSolarSysState->XlatRef = SetAbsStringTableIndex (
+					pSolarSysState->XlatRef, 1);
+		}
+		pSolarSysState->XlatPtr = GetStringAddress (pSolarSysState->XlatRef);
 
 		if (DeleteDef)
 			DestroyDrawable (ReleaseDrawable (SurfDefFrame));

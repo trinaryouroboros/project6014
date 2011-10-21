@@ -25,6 +25,15 @@
 
 #define END_INTERPLANETARY START_INTERPLANETARY
 
+#define ORBITING_PLANETS TRUE
+#define ROTATING_PLANETS TRUE
+#define TEXTURED_PLANETS (TRUE || ROTATING_PLANETS)
+// TEXTURED_PLANETS should always be defined TRUE if ROTATING_PLANETS is.
+#define ONE_YEAR 365.25
+#ifndef M_PI
+#define M_PI 3.141592653589
+#endif
+
 enum PlanetScanTypes
 {
 	MINERAL_SCAN = 0,
@@ -115,36 +124,6 @@ typedef struct solarsys_state SOLARSYS_STATE;
 #include "plandata.h"
 #include "sundata.h"
 
-
-struct planet_desc
-{
-	DWORD rand_seed;
-
-	BYTE data_index;
-	BYTE flags;
-	BYTE NumPlanets;
-	SIZE radius;
-	POINT location;
-
-	Color temp_color;
-	COUNT NextIndex;
-	STAMP image;
-
-	PLANET_DESC *pPrevDesc;
-			// The Sun or planet that this world is orbiting around.
-};
-
-struct star_desc
-{
-	POINT star_pt;
-	BYTE Type;
-	BYTE Index;
-	BYTE Prefix;
-	BYTE Postfix;
-};
-
-typedef void (*PLAN_GEN_FUNC) (BYTE control);
-
 typedef struct 
 {
 	POINT p[4];
@@ -174,7 +153,47 @@ struct planet_orbit
 			// temp RGBA data for whatever transforms (nuked often)
 	FRAME WorkFrame;
 			// any extra frame workspace (for dynamic objects)
+	// BW: extra stuff for animated IP
+	DWORD **light_diff;
+	MAP3D_POINT **map_rotate;
+	// doubly dynamically allocated depending on map size
 };
+
+struct planet_desc
+{
+	DWORD rand_seed;
+
+	BYTE data_index;
+	BYTE flags;
+	BYTE NumPlanets;
+	SIZE radius;
+	POINT location;
+
+	Color temp_color;
+	COUNT NextIndex;
+	STAMP image;
+
+	PLANET_DESC *pPrevDesc;
+			// The Sun or planet that this world is orbiting around.
+	// BW : new stuff for animated solar systems
+	PLANET_ORBIT orbit;
+	COUNT size;
+	COUNT angle;
+	double orb_speed;
+	double rot_speed;
+	int rotFrameIndex, rotPointIndex, rotDirection, rotwidth, rotheight;
+};
+
+struct star_desc
+{
+	POINT star_pt;
+	BYTE Type;
+	BYTE Index;
+	BYTE Prefix;
+	BYTE Postfix;
+};
+
+typedef void (*PLAN_GEN_FUNC) (BYTE control);
 
 // See doc/devel/generate for information on how this structure is
 // filled.
@@ -281,6 +300,7 @@ extern void XFormIPLoc (POINT *pIn, POINT *pOut, BOOLEAN ToDisplay);
 extern PLAN_GEN_FUNC GenerateIP (BYTE Index);
 extern void DrawOval (RECT *pRect, BYTE num_off_pixels);
 extern void DrawFilledOval (RECT *pRect);
+extern void ComputeSpeed(PLANET_DESC *planet, BOOLEAN GeneratingMoons, UWORD rand_val);
 extern void FillOrbits (SOLARSYS_STATE *system, BYTE NumPlanets,
 		PLANET_DESC *pBaseDesc, BOOLEAN TypesDefined);
 extern void InitLander (BYTE LanderFlags);

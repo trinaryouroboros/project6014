@@ -118,6 +118,7 @@ GenerateShofixtiCrashSite_generatePlanets (SOLARSYS_STATE *solarSys)
 	angle = ARCTAN (solarSys->PlanetDesc[2].location.x, solarSys->PlanetDesc[2].location.y);
 	solarSys->PlanetDesc[2].location.x = COSINE (angle, solarSys->PlanetDesc[2].radius);
 	solarSys->PlanetDesc[2].location.y = SINE (angle, solarSys->PlanetDesc[2].radius);
+	ComputeSpeed(&solarSys->PlanetDesc[2], FALSE, 1);
 	return true;
 }
 
@@ -140,6 +141,7 @@ GenerateShofixtiCrashSite_generateMoons (SOLARSYS_STATE *solarSys,
 		angle = NORMALIZE_ANGLE (LOWORD (rand_val));
 		solarSys->MoonDesc[0].location.x = COSINE (angle, solarSys->MoonDesc[0].radius);
 		solarSys->MoonDesc[0].location.y = SINE (angle, solarSys->MoonDesc[0].radius);
+		ComputeSpeed(&solarSys->MoonDesc[0], TRUE, 1);
 	}
 	return true;
 }

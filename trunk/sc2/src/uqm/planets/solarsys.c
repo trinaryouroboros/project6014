@@ -54,6 +54,7 @@
 #include "libs/log.h"
 #include "libs/misc.h"
 
+#include <math.h>
 
 //#define DEBUG_SOLARSYS
 //#define SMOOTH_SYSTEM_ZOOM  1
@@ -67,6 +68,7 @@ static FRAME CreateStarBackGround (void);
 static void DrawInnerSystem (void);
 static void DrawOuterSystem (void);
 static void SetPlanetColorMap (PLANET_DESC *planet);
+static void ValidateInnerOrbits (void);
 static void ValidateOrbits (void);
 
 // SolarSysMenu() items
@@ -233,11 +235,6 @@ GenerateMoons (SOLARSYS_STATE *system, PLANET_DESC *planet)
 
 	old_seed = TFB_SeedRandom (planet->rand_seed);
 
-	(*system->genFuncs->generateName) (system, planet);
-	(*system->genFuncs->generateMoons) (system, planet);
-
-	facing = NORMALIZE_FACING (ANGLE_TO_FACING (
-			ARCTAN (planet->location.x, planet->location.y)));
 	for (i = 0, pMoonDesc = &system->MoonDesc[0];
 			i < MAX_MOONS; ++i, ++pMoonDesc)
 	{
@@ -248,6 +245,11 @@ GenerateMoons (SOLARSYS_STATE *system, PLANET_DESC *planet)
 		pMoonDesc->temp_color = planet->temp_color;
 	}
 
+	(*system->genFuncs->generateName) (system, planet);
+	(*system->genFuncs->generateMoons) (system, planet);
+
+	facing = NORMALIZE_FACING (ANGLE_TO_FACING (
+			ARCTAN (planet->location.x, planet->location.y)));
 	TFB_SeedRandom (old_seed);
 }
 
@@ -724,6 +726,19 @@ ValidateOrbit (PLANET_DESC *planet, int sizeNumer, int dyNumer, int denom)
 {
 	COUNT index;
 
+	if (ORBITING_PLANETS)
+	{
+		// BW: recompute planet position to account for orbiting
+		// COUNT newAngle;
+		// newAngle = NORMALIZE_ANGLE(planet->angle + (COUNT)(daysElapsed() * planet->orb_speed));
+		// planet->location.x = COSINE (newAngle, planet->radius);
+		// planet->location.y = SINE (newAngle, planet->radius);
+		double newAngle;
+		newAngle = (planet->angle + daysElapsed() * planet->orb_speed) * M_PI / 32 - M_PI/2 ;
+		planet->location.x = (COORD)(cos(newAngle) * planet->radius);
+		planet->location.y = (COORD)(sin(newAngle) * planet->radius);
+	} // #endif ORBITING_PLANETS
+
 	if (sizeNumer <= DISPLAY_FACTOR)
 	{	// All planets in outer view, and moons in inner
 		RECT r;
@@ -997,6 +1012,11 @@ leaveInnerSystem (PLANET_DESC *planet)
 	pSolarSysState->pOrbitalDesc = NULL;
 
 	outerPlanetWait = MAKE_WORD (planet - pSolarSysState->PlanetDesc + 1, 0);
+	// BW: planet may have moved while we were into Inner System
+	ValidateOrbit (planet, DISPLAY_FACTOR, DISPLAY_FACTOR / 4,
+		       pSolarSysState->SunDesc[0].radius);
+	pSolarSysState->SunDesc[0].location =
+			planetOuterLocation (planetIndex (pSolarSysState, planet));
 	GLOBAL (ip_location) = pSolarSysState->SunDesc[0].location;
 	XFormIPLoc (&GLOBAL (ip_location), &GLOBAL (ShipStamp.origin), TRUE);
 	ZeroVelocityComponents (&GLOBAL (velocity));
@@ -1223,11 +1243,13 @@ IP_frame (void)
 {
 	BOOLEAN locChange;
 	SIZE newRadius;
+	static SIZE frameCounter;
 
 	LockMutex (GraphicsLock);
 	SetContext (SpaceContext);
 
 	GameClockTick ();
+	++frameCounter;
 	ProcessShipControls ();
 	
 	locChange = CheckShipLocation (&newRadius);
@@ -1248,11 +1270,22 @@ IP_frame (void)
 			ScaleSystem (newRadius);
 		}
 	}
-	// Just flying around, minding own business..
-	else
-	{	
+	else if (!pSolarSysState->InOrbit)
+	{	// Just flying around, minding own business..
 		BatchGraphics ();
 		RestoreSystemView ();
+		
+		if (ORBITING_PLANETS)
+		{	// BW: recompute planet position to account for orbiting
+			if (playerInInnerSystem ())
+			{	// Draw the inner system view
+				ValidateInnerOrbits ();
+			}
+			else
+			{	// Draw the outer system view
+				ValidateOrbits ();
+			}
+		}
 		
 		// JMS: Animating IP sun in hi-res modes...
 		if (!playerInInnerSystem () && RESOLUTION_FACTOR == 2)
