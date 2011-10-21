@@ -1,0 +1,235 @@
+#labels Phase-Implementation
+# Original, idealized and actual dimensions for the in-game 4x models.
+
+= Introduction =
+
+When up-scaling the graphics to 4 times their original size, certain changes have been made since it's very difficult for a model to fit the exact dimensions of the original sprite model perfectly. 
+
+When re-sizing the models, the focus should on height, or as close to the 'perfect' dimensions as possible. All dimensions are listed using the BIG-000 model. The largest in-game ship facing 12 o'clock (up)
+
+
+= Ship Sizes =
+_Listed alphabetically by folder name_
+
+==Androsynth Guardian==
+{{{
+Original Dimensions: 16x21
+Perfect Dimensions : 64x84
+Actual Dimensions  : 63x100
+}}}
+
+==Arilou Skiff==
+{{{
+Original Dimensions: 17x14
+Perfect Dimensions : 68x56
+Actual Dimensions  : 56x58
+}}}
+
+==Baul==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Chenjesu Broodhome==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==CHMMR Avatar==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Drone Satellite==
+_N/A_
+
+==Druuge Mauler==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==CHMMR Explorer==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Foon-Foon Typhoon==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Human - Cruiser==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Ilwrath Avenger==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==ISD==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Kohr-Ah Marauder==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Lurg Prawn==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Melnorme Trader==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Mmrnmhrm X-Form==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Mycon Podship==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Orz Nemesis==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Pkunk Fury==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==SaMatra==
+_Not currently needed in-game, but listed here for reference._
+
+==Shofixti Scout==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Slylandro Probe==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Spathi==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Supox Blade==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Syreen Penetrator==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Thraddash Torch==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Umgah Drone==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Ur-Quan Dreadnaught==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Utwig Jugger==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Vux Intruder==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+==Yehat Terminator==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
+
+Zenzmurfy Model
+{{{
+Original Dimensions: 19x13
+Perfect Dimensions : 76x52
+Actual Dimensions  : 80x52
+}}}
+
+==Zot-Fot-Pik Stinger==
+{{{
+Original Dimensions: 
+Perfect Dimensions : 
+Actual Dimensions  : 
+}}}
