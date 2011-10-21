@@ -66,9 +66,9 @@ Actual Dimensions  : 125x152
 
 ==Foon-Foon Typhoon==
 {{{
-Original Dimensions: 32x32
-Perfect Dimensions : 128x128
-Actual Dimensions  : 127x127
+Original Dimensions: 32x16
+Perfect Dimensions : 128x64
+Actual Dimensions  : 126x64
 }}}
 
 ==Human - Cruiser==
@@ -94,112 +94,137 @@ Actual Dimensions  : 157x209
 
 ==Kohr-Ah Marauder==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 22x38
+Perfect Dimensions : 88x152
+Actual Dimensions  : 88x152
 }}}
 
 ==Lurg Prawn==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 21x46
+Perfect Dimensions : 84x184
+Actual Dimensions  : 71x158
 }}}
+
+_Problems exist with the 4x model and it will be re-sized_
 
 ==Melnorme Trader==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 31x31
+Perfect Dimensions : 124x124
+Actual Dimensions  : 111x118
 }}}
 
-==Mmrnmhrm X-Form==
+==Mmrnmhrm==
+
+===X-Form===
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 26x18
+Perfect Dimensions : 104x72
+Actual Dimensions  : 112x76
+}}}
+
+===Y-Form===
+{{{
+Original Dimensions: 17x24
+Perfect Dimensions : 68x96
+Actual Dimensions  : 75x104
 }}}
 
 ==Mycon Podship==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 26x25
+Perfect Dimensions : 104x100
+Actual Dimensions  : 97x117
 }}}
 
 ==Orz Nemesis==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 29x33
+Perfect Dimensions : 116x132
+Actual Dimensions  : 109x83
 }}}
 
 ==Pkunk Fury==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 27x20
+Perfect Dimensions : 108x80
+Actual Dimensions  : 27x20
 }}}
+
+_Error: Hi-Res files have been overwritten with the original files!_
 
 ==SaMatra==
 
 _Not currently needed in-game, but listed here for reference._
 
+{{{
+Original Dimensions: 296x148?
+Perfect Dimensions : 1184x592?
+Actual Dimensions  : 807x407
+}}}
+
+_Project 6014's SaMatra files may be damaged or altered._
+
 ==Shofixti Scout==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 9x15
+Perfect Dimensions : 36x60
+Actual Dimensions  : 41x55
 }}}
 
 ==Slylandro Probe==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 28x45
+Perfect Dimensions : 112x180
+Actual Dimensions  : 103x180
 }}}
 
-==Spathi==
+==Spathi Eluder==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 28x22
+Perfect Dimensions : 112x88
+Actual Dimensions  : 112x93
 }}}
 
 ==Supox Blade==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 13x30
+Perfect Dimensions : 52x120
+Actual Dimensions  : 47x120
 }}}
 
 ==Syreen Penetrator==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 17x30
+Perfect Dimensions : 68x120
+Actual Dimensions  : 59x128
 }}}
 
 ==Thraddash Torch==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 22x22
+Perfect Dimensions : 88x88
+Actual Dimensions  : 59x121
 }}}
+
+Torch is a temporary model. Plans are in place to replace it.
 
 ==Umgah Drone==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 12x14
+Perfect Dimensions : 48x56
+Actual Dimensions  : 31x52
 }}}
 
 ==Ur-Quan Kzer-Za Dreadnaught==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 29x33
+Perfect Dimensions : 116x132
+Actual Dimensions  : 132x208
 }}}
+
+If scaled down, 
 
 ==Utwig Jugger==
 {{{
