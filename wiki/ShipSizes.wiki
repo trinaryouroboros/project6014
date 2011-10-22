@@ -188,6 +188,7 @@ Actual Dimensions  : 112x93
 }}}
 
 ==Supox Blade==
+This is just a temporary model.
 {{{
 Original Dimensions: 13x30
 Perfect Dimensions : 52x120
@@ -224,29 +225,24 @@ Perfect Dimensions : 116x132
 Actual Dimensions  : 132x208
 }}}
 
-If scaled down, 
+If scaled down, it would be 84x132 pixels in size (32 pixels thinner or a 27.5% than the ideal perfect width)
 
 ==Utwig Jugger==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 33x31
+Perfect Dimensions : 132x124
+Actual Dimensions  : 152x108
 }}}
 
 ==Vux Intruder==
+This is just a temporary model.
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 15x18
+Perfect Dimensions : 60x72
+Actual Dimensions  : 77x103
 }}}
 
 ==Yehat Terminator==
-{{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
-}}}
-
 Zenzmurfy Model
 {{{
 Original Dimensions: 19x13
@@ -256,7 +252,9 @@ Actual Dimensions  : 80x52
 
 ==Zot-Fot-Pik Stinger==
 {{{
-Original Dimensions: 
-Perfect Dimensions : 
-Actual Dimensions  : 
+Original Dimensions: 23x24
+Perfect Dimensions : 92x96
+Actual Dimensions  : 88x81
+
+This is just a temporary model.
 }}}
