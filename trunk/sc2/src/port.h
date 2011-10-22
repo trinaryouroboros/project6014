@@ -162,7 +162,6 @@ typedef unsigned short mode_t;
 #	include <stdarg.h>
 // Defined in port.c
 int snprintf(char *str, size_t size, const char *format, ...);
-int vsnprintf(char *str, size_t size, const char *format, va_list args);
 #endif  /* _MSC_VER */
 
 // setenv()

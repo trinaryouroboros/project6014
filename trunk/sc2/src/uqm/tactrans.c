@@ -720,10 +720,6 @@ cycle_ion_trail (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 	SHIP_INFO *ShipInfoPtr;
-	// JMS: Get the pointers to element's owner ship.
-	// They are needed to see if the ship's thrust is damaged
-	GetElementStarShip (ElementPtr, &StarShipPtr);
-	ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
 
 	// Color table for fully functional thrusters
 	static const Color colorTab[] =
@@ -761,6 +757,11 @@ cycle_ion_trail (ELEMENT *ElementPtr)
 	
 	const size_t colorTabCount = sizeof colorTab / sizeof colorTab[0];
 			
+	// JMS: Get the pointers to element's owner ship.
+	// They are needed to see if the ship's thrust is damaged
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	ShipInfoPtr = &StarShipPtr->RaceDescPtr->ship_info;
+
 	assert (!(ElementPtr->state_flags & PLAYER_SHIP));
 
 	ElementPtr->colorCycleIndex++;

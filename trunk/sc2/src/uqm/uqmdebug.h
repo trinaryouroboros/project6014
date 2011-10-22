@@ -188,9 +188,11 @@ void dumpStrings(FILE *out);
 // JMS: Toggle shofixt distress site triangulation spheres on / off
 void ToggleTriangulationSpheres (BOOLEAN triangSphereSwitch);
 
+#ifdef DEBUG
 // Graphically and textually show all the contexts.
 // Should be called from debugHook.
 void debugContexts (void);
+#endif
 
 
 // To add some day:

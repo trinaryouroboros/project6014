@@ -1704,6 +1704,7 @@ hsvaToRgba (double hue, double sat, double val, BYTE alpha)
 	return BUILD_COLOR_RGBA (0, 0, 0, alpha);
 }
 
+#ifdef DEBUG
 // Returns true iff this context has a visible FRAME.
 static bool
 isContextVisible (CONTEXT context)
@@ -1825,6 +1826,7 @@ describeContext (FILE *out, const CONTEXT context) {
 	
 	SetContext (oldContext);
 }
+#endif
 
 
 typedef struct wait_state
@@ -1879,6 +1881,7 @@ putScreen (FRAME savedFrame) {
 	(void) SetContext (oldContext);
 }
 
+#ifdef DEBUG
 // Show the contexts on the screen.
 // Must be called from the main thread.
 void
@@ -1975,6 +1978,7 @@ debugContexts (void)
 out:
 	inDebugContexts = false;
 }
+#endif
 
 #endif  /* DEBUG */
 

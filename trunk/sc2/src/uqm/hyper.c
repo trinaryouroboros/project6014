@@ -1726,6 +1726,7 @@ SeedUniverse (void)
 		while ((SDPtr = FindStar (SDPtr, &universe, XOFFS, YOFFS)))
 		{
 			BYTE star_type;
+			int which_spaces_star_gfx;
 
 			ex = SDPtr->star_pt.x - universe.x;
 			if (ex < 0)
@@ -1736,7 +1737,6 @@ SeedUniverse (void)
 			if (ex > (XOFFS / NUM_RADAR_SCREENS)
 					|| ey > (YOFFS / NUM_RADAR_SCREENS))
 				continue;
-				int which_spaces_star_gfx;
 				
 			hHyperSpaceElement = AllocHyperElement (SDPtr);
 			if (hHyperSpaceElement == 0)

@@ -2501,6 +2501,7 @@ Melee_LocalChange_team (MELEE_STATE *pMS, size_t teamNr,
 }
 
 ///////////////////////////////////////////////////////////////////////////
+#ifdef NETPLAY
 
 // Send the entire team to the remote side. Used when the connection has
 // just been established, or after the setup menu is reentered after battle.
@@ -2530,14 +2531,11 @@ Melee_bootstrapSyncTeam (MELEE_STATE *meleeState, size_t teamNr)
 	MeleeSetup_setSentTeamName (setup, teamNr, teamName);
 }
 
-///////////////////////////////////////////////////////////////////////////
-
 // Melee_RemoteChange_xxx() functions are called when some value in the
 // supermelee fleet setup screen has changed remotely.
 // The behavior of these functions (and the comments therein) follow the
 // description in doc/devel/netplay/protocol.
 
-#ifdef NETPLAY
 void
 Melee_RemoteChange_ship (MELEE_STATE *pMS, NetConnection *conn, COUNT side,
 		FleetShipIndex index, MeleeShip ship)

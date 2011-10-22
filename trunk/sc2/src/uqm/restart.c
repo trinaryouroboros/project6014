@@ -22,6 +22,7 @@
 
 #include "restart.h"
 
+#include "options.h"
 #include "colors.h"
 #include "controls.h"
 #include "credits.h"
