@@ -12,7 +12,7 @@
 #elif defined (__MINGW32__) || defined (__CYGWIN__)
 	/* If we're compiling on MS Windows using build.sh, use
 	 * config_win.h, generated from src/config_win.h.in. */
-#	include "config_win.h"
+//#	include "config_win.h"
 #else
 	/* If we're compiling in unix, use config_unix.h, generated from
 	 * src/config_unix.h.in by build.sh. */

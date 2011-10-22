@@ -45,6 +45,11 @@
 /* Defined if your system has stricmp of its own */
 #define HAVE_STRICMP
 
+/* Defined if your system has vsprintf of its own */
+#if (_MSC_VER >= 1400)
+#define HAVE_VSNPRINTF
+#endif
+
 /* Defined if your system has getopt_long */
 #undef HAVE_GETOPT_LONG
 

@@ -133,6 +133,7 @@ snprintf(char *str, size_t size, const char *format, ...)
 	return result;
 }
 
+#ifndef HAVE_VSNPRINTF
 int
 vsnprintf(char *str, size_t size, const char *format, va_list args)
 {
@@ -141,5 +142,6 @@ vsnprintf(char *str, size_t size, const char *format, va_list args)
 		str[size - 1] = '\0';
 	return result;
 }
+#endif
 #endif  /* _MSC_VER */
 
