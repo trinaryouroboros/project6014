@@ -22,18 +22,24 @@
 #( "Chunk3" will be right-justified at point 250.         )
 #(===                                                  ===)
 
+#(Game Name)
+15 C
+PROJECT 6014
+...................................................
+
 #(Port caption)
 13 C
-Project 6014 - A fan sequel for
-The Ur-Quan Masters
+A fan sequel for The Ur-Quan Masters
 (Demo version)
 
-CREW
+#(crew name)
+14 C
+6014 CREW
 ...................................................
  
 
 #(Project coordination)
-13 C
+14 C
 PROJECT COORDINATION
 
 #(Project coordinator)
@@ -42,44 +48,61 @@ Cedric Horner
 Jaakko Markus Seppälä
  
 
-#(Art)
+
+#(HD Project coordination)
+14 C
+HD PROJECT COORDINATION
+
+#(HD Project coordinator)
 13 C
-ART
+Damon Czanik 
+
+
+
+#(Art)
+14 C
+
+ART TEAM
 
 #(Art team)
 13 C
 Damon Czanik
-Gergely Sink�
+Gergely Sink�o
 Aki Rissanen
 Mike Ling
 Amir Keren
+Kevin Page
+
+
+
 
 #(Dialogue and plot)
-13 C
+14 C
 DIALOGUE AND PLOT
 
 #(Dialogue and plot crew)
 13 C
 Cedric Horner
 Jaakko Markus Seppälä
-Gergely Sink�
+Gergely Sinko�
 Damon Czanik
 
+
 #(Programming)
-13 C
+14 C
 PROGRAMMING
 
 #(Programming guys)
 13 C
-Tristan Glaeser
-Edmund Horner
 Jaakko Markus Seppälä
 Benjamin Wack
+Tristan Glaeser
+Edmund Horner
 Damon Czanik
  
 
 #(Sounds)
-13 C
+14 C
 MUSIC AND SOUND EFFECTS
 
 #(Musicians)
@@ -87,24 +110,32 @@ MUSIC AND SOUND EFFECTS
 Mark McGill-Smith (The Mister Cat)
  
 
-#(Shipdesign)
-13 C
-SHIP DESIGN
+#(ShipAI)
+14 C
+SHIP AI
 
 #(Ship designers)
 13 C
 Tristan Glaeser
  
+ 
+#(macstuff)
+14 C
+MAC PORT
 
-#(Linuxstuff)
+#(macguys)
 13 C
-LINUX STUFF
+Jaakko Markus Seppälä
+ 
+#(Linuxstuff)
+14 C
+LINUX PORT
 
 #(Linuxers)
 13 C
 Joris van de Donk 
- 
 
+ 
 ...A Great big thanks
 to everyone at...
 UQM forums
@@ -113,8 +144,12 @@ www.star-control.com
  
 
 #(Port caption)
-13 C
+15 C
+...................................................
 The Ur-Quan Masters port
+
+#(Port caption)
+14 C
 CREW
 ...................................................
  
@@ -217,7 +252,9 @@ Yukki
 (v0.1 Win32 installer graphics)
  
 #(Original Game caption)
-13 C
+14  
+ C
+...................................................
 Original Game
 CREW
 ...................................................
