@@ -337,10 +337,10 @@ umgah_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		else
 			this_turn = (BYTE)lpEvalDesc->which_turn;
 
-		EnoughJuice = (BOOLEAN)(WORLD_TO_TURN (
+		EnoughJuice = (BOOLEAN)((WORLD_TO_TURN (
 				JUMP_DIST * StarShipPtr->RaceDescPtr->ship_info.energy_level
 				/ SPECIAL_ENERGY_COST
-				) > this_turn);
+				) >> RESOLUTION_FACTOR) > this_turn); // JMS_GFX
 		delta_x = lpEvalDesc->ObjectPtr->next.location.x -
 				ShipPtr->next.location.x;
 		delta_y = lpEvalDesc->ObjectPtr->next.location.y -

@@ -270,8 +270,6 @@ universeToLogy (COORD uy)
 #define NORMALIZE_ANGLE(a) ((COUNT)((a)&(FULL_CIRCLE-1)))
 #define NORMALIZE_FACING(f) ((COUNT)((f)&((1 << FACING_SHIFT)-1)))
 
-#define NORMALIZE_ANGLE_DWORD(a) ((DWORD)((a)&(FULL_CIRCLE-1)))
-
 #define DEGREES_TO_ANGLE(d) NORMALIZE_ANGLE((((d) % 360) * FULL_CIRCLE \
 				+ HALF_CIRCLE) / 360)
 #define ANGLE_TO_DEGREES(d) (NORMALIZE_ANGLE(d) * 360 / FULL_CIRCLE)
@@ -289,7 +287,6 @@ extern SIZE sinetab[];
 #define SINE(a,m) ((SIZE)((((long)SINVAL(a))*(long)(m))>>SIN_SHIFT))
 #define COSINE(a,m) SINE((a)+QUADRANT,m)
 extern COUNT ARCTAN (SIZE delta_x, SIZE delta_y);
-extern COUNT ARCTANSDWORD (SDWORD delta_x, SDWORD delta_y);
 
 #define WRAP_VAL(v,w) ((DWORD)((v)<0?((v)+(w)):((v)>=(w)?((v)-(w)):(v)))) // JMS: DWORD was COUNT. Changed to avoid overflows in hires.
 #define WRAP_X(x) WRAP_VAL(x,LOG_SPACE_WIDTH)

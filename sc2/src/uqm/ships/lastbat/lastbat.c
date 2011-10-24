@@ -545,10 +545,10 @@ sentinel_preprocess (ELEMENT *ElementPtr)
 					- ElementPtr->current.location.y;
 			delta_y = WRAP_DELTA_Y (delta_y);
 
-			if ((num_frames = WORLD_TO_TURN (
+			if ((num_frames = (WORLD_TO_TURN (
 					square_root ((long)delta_x * delta_x
 					+ (long)delta_y * delta_y)
-					)) == 0)
+					)) >> RESOLUTION_FACTOR) == 0)
 				num_frames = 1;
 
 			TargetVelocity = TargetPtr->velocity;
