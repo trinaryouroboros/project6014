@@ -41,16 +41,20 @@ GetNextVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy, COU
 
 	e = (COUNT)((COUNT)velocityptr->error.width +
 			((COUNT)velocityptr->fract.width * num_frames));
+	
 	*pdx = (velocityptr->vector.width * num_frames)
 			+ ((SIZE)((SBYTE)LOBYTE (velocityptr->incr.width))
 			* (e >> VELOCITY_SHIFT));
+	
 	velocityptr->error.width = VELOCITY_REMAINDER (e);
 
 	e = (COUNT)((COUNT)velocityptr->error.height +
 			((COUNT)velocityptr->fract.height * num_frames));
+	
 	*pdy = (velocityptr->vector.height * num_frames)
 			+ ((SIZE)((SBYTE)LOBYTE (velocityptr->incr.height))
 			* (e >> VELOCITY_SHIFT));
+	
 	velocityptr->error.height = VELOCITY_REMAINDER (e);
 }
 
@@ -62,17 +66,21 @@ GetNextVelocityComponentsSdword (VELOCITY_DESC *velocityptr, SDWORD *pdx, SDWORD
 	
 	e = (DWORD)((DWORD)velocityptr->error.width +
 				((DWORD)velocityptr->fract.width * num_frames));
+	
 	*pdx = ((SDWORD)velocityptr->vector.width * num_frames)
 	+ ((SDWORD)((SBYTE)LOBYTE (velocityptr->incr.width))
 	   * (e >> VELOCITY_SHIFT));
-	velocityptr->error.width = (VELOCITY_REMAINDER ((COUNT)e));
+	
+	velocityptr->error.width = VELOCITY_REMAINDER (e);
 	
 	e = (DWORD)((DWORD)velocityptr->error.height +
 				((DWORD)velocityptr->fract.height * num_frames));
+	
 	*pdy = ((SDWORD)velocityptr->vector.height * num_frames)
 	+ ((SDWORD)((SBYTE)LOBYTE (velocityptr->incr.height))
 	   * (e >> VELOCITY_SHIFT));
-	velocityptr->error.height = (VELOCITY_REMAINDER ((COUNT)e));
+	
+	velocityptr->error.height = VELOCITY_REMAINDER (e);
 }
 
 // JMS_GFX: Preventing overflows in hi-res: The SDWORD in this function's parameters was SIZE.

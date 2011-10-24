@@ -151,6 +151,12 @@ typedef struct extent
 	COORD width, height;
 } EXTENT;
 
+// JMS: Extent with larger values to avoid overflows in hires modes.
+typedef struct dextent
+{
+	SDWORD width, height;
+} DEXTENT;
+
 typedef struct point
 {
 	COORD x, y;
