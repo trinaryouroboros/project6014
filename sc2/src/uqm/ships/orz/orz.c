@@ -787,7 +787,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 					ElementPtr->state_flags |= CHANGING;
 				}
 
-				num_frames = WORLD_TO_TURN (square_root ((long)delta_x * delta_x + (long)delta_y * delta_y));
+				num_frames = (WORLD_TO_TURN (square_root ((long)delta_x * delta_x + (long)delta_y * delta_y))) >> RESOLUTION_FACTOR; // JMS_GFX
 				
 				if (num_frames == 0)
 					num_frames = 1;
