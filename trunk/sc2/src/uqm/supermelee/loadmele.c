@@ -178,8 +178,7 @@ DrawFileString (const MeleeTeam *team, const POINT *origin,
 
 		sprintf (buf, "%u", MeleeTeam_getValue (team));
 		Text.baseline = *origin;
-		Text.baseline.x += NUM_MELEE_COLUMNS *
-				(LOAD_MELEE_BOX_WIDTH + LOAD_MELEE_BOX_SPACE) - 1;
+		Text.baseline.x += NUM_MELEE_COLUMNS * (LOAD_MELEE_BOX_WIDTH + LOAD_MELEE_BOX_SPACE) - 1;
 		Text.align = ALIGN_RIGHT;
 		Text.pStr = buf;
 		Text.CharCount = (COUNT)~0;

@@ -139,8 +139,7 @@ ARCTAN (SIZE delta_x, SIZE delta_y)
 	if (v2 < 0)
 		v2 = -v2;
 	if (v1 > v2)
-		v1 = QUADRANT
-				- atantab[(((DWORD)v2 << (CIRCLE_SHIFT - 1)) + (v1 >> 1)) / v1];
+		v1 = QUADRANT - atantab[(((DWORD)v2 << (CIRCLE_SHIFT - 1)) + (v1 >> 1)) / v1];
 	else
 		v1 = atantab[(((DWORD)v1 << (CIRCLE_SHIFT - 1)) + (v2 >> 1)) / v2];
 
@@ -150,5 +149,69 @@ ARCTAN (SIZE delta_x, SIZE delta_y)
 		v1 = HALF_CIRCLE - v1;
 
 	return (NORMALIZE_ANGLE (v1));
+}
+
+COUNT
+ARCTANSDWORD (SDWORD delta_x, SDWORD delta_y)
+{
+	SDWORD v1, v2;
+	static COUNT atantab[] =
+	{
+		0,
+		0,
+		1,
+		1,
+		1,
+		2,
+		2,
+		2,
+		2,
+		3,
+		3,
+		3,
+		4,
+		4,
+		4,
+		4,
+		5,
+		5,
+		5,
+		5,
+		6,
+		6,
+		6,
+		6,
+		7,
+		7,
+		7,
+		7,
+		7,
+		7,
+		8,
+		8,
+		8,
+	};
+	
+	v1 = delta_x;
+	v2 = delta_y;
+	if (v1 == 0 && v2 == 0)
+		return (FULL_CIRCLE);
+	
+	if (v1 < 0)
+		v1 = -v1;
+	if (v2 < 0)
+		v2 = -v2;
+	if (v1 > v2)
+		v1 = QUADRANT
+		- atantab[(((DWORD)v2 << (CIRCLE_SHIFT - 1)) + (v1 >> 1)) / v1];
+	else
+		v1 = atantab[(((DWORD)v1 << (CIRCLE_SHIFT - 1)) + (v2 >> 1)) / v2];
+	
+	if (delta_x < 0)
+		v1 = FULL_CIRCLE - v1;
+	if (delta_y > 0)
+		v1 = HALF_CIRCLE - v1;
+	
+	return (NORMALIZE_ANGLE_DWORD (v1));
 }
 
