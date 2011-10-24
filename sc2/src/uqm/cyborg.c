@@ -458,7 +458,7 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					|| (ObjectsOfConcern->ObjectPtr->state_flags & CREW_OBJECT)
 					|| MANEUVERABILITY (
 							&StarShipPtr->RaceDescPtr->cyborg_control
-							) >= MEDIUM_SHIP))
+							) >= (MEDIUM_SHIP << RESOLUTION_FACTOR))) // JMS_GFX
 			{
 				ship_movement (ShipPtr, ObjectsOfConcern);
 				ShipMoved = TRUE;
@@ -624,7 +624,7 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 		GetElementStarShip (OtherObjPtr, &EnemyStarShipPtr);
 		if ((MANEUVERABILITY (
 				&StarShipPtr->RaceDescPtr->cyborg_control
-				) >= FAST_SHIP
+				) >= (FAST_SHIP << RESOLUTION_FACTOR) // JMS_GFX
 				&& WEAPON_RANGE (&StarShipPtr->RaceDescPtr->cyborg_control)
 				> (CLOSE_RANGE_WEAPON << RESOLUTION_FACTOR)) // JMS_GFX
 				|| (EvalDescPtr->which_turn >= 24
@@ -638,7 +638,7 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 						/* you're maneuverable */
 			if (MANEUVERABILITY (
 					&StarShipPtr->RaceDescPtr->cyborg_control
-					) >= MEDIUM_SHIP)
+					) >= (MEDIUM_SHIP << RESOLUTION_FACTOR)) // JMS_GFX
 			{
 				UWORD fire_flags;
 				COUNT facing;
@@ -1068,7 +1068,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 	UltraManeuverable = (BOOLEAN)(
 			RDPtr->characteristics.thrust_increment ==
 			RDPtr->characteristics.max_thrust
-			&& MANEUVERABILITY (&RDPtr->cyborg_control) >= MEDIUM_SHIP
+			&& MANEUVERABILITY (&RDPtr->cyborg_control) >= (MEDIUM_SHIP << RESOLUTION_FACTOR) // JMS_GFX
 			);
 
 	if (Ship.turn_wait == 0)
@@ -1108,7 +1108,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 
 				if (UltraManeuverable)
 					maneuver_turn = 16;
-				else if (MANEUVERABILITY (&RDPtr->cyborg_control) <= MEDIUM_SHIP)
+				else if (MANEUVERABILITY (&RDPtr->cyborg_control) <= (MEDIUM_SHIP << RESOLUTION_FACTOR)) // JMS_GFX
 					maneuver_turn = 48;
 				else
 					maneuver_turn = 32;

@@ -96,7 +96,7 @@ CalculateGravity (ELEMENT *ElementPtr)
 #ifdef NEVER
 					COUNT magnitude;
 
-#define DIFUSE_GRAVITY 175
+#define DIFUSE_GRAVITY (175 << RESOLUTION_FACTOR) // JMS_GFX
 					dist_squared += (DWORD)abs_dx * (DIFUSE_GRAVITY << 1)
 							+ (DWORD)abs_dy * (DIFUSE_GRAVITY << 1)
 							+ ((DWORD)(DIFUSE_GRAVITY * DIFUSE_GRAVITY) << 1);

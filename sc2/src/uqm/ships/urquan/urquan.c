@@ -655,7 +655,7 @@ urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				&& (StarShipPtr->RaceDescPtr->characteristics.special_wait < 6
 				|| (MANEUVERABILITY (
 						&EnemyStarShipPtr->RaceDescPtr->cyborg_control
-						) <= SLOW_SHIP
+						) <= (SLOW_SHIP << RESOLUTION_FACTOR) // JMS_GFX
 				&& !(EnemyStarShipPtr->cur_status_flags & SHIP_BEYOND_MAX_SPEED))
 				|| (lpEvalDesc->which_turn <= 12
 				&& (StarShipPtr->ship_input_state & (LEFT | RIGHT))

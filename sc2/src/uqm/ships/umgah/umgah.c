@@ -358,7 +358,7 @@ umgah_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				|| (this_turn > 6
 				&& MANEUVERABILITY (
 				&EnemyStarShipPtr->RaceDescPtr->cyborg_control
-				) <= SLOW_SHIP)
+				) <= (SLOW_SHIP << RESOLUTION_FACTOR)) // JMS_GFX
 				|| (this_turn >= 16 && this_turn <= 24)))
 			StarShipPtr->RaceDescPtr->cyborg_control.WeaponRange = (LONG_RANGE_WEAPON << 3);
 		else
