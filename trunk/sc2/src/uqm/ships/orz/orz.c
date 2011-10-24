@@ -798,7 +798,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 				delta_x = ((SDWORD)ObjectPtr->current.location.x + delta_x) - (SDWORD)ElementPtr->current.location.x;
 				delta_y = ((SDWORD)ObjectPtr->current.location.y + delta_y) - (SDWORD)ElementPtr->current.location.y;
 
-				delta_facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTANSDWORD (delta_x, delta_y)) - facing);
+				delta_facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN ((SIZE)delta_x, (SIZE)delta_y)) - facing);
 
 				if (delta_facing > 0)
 				{

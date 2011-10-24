@@ -1154,8 +1154,8 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 				if (EnemyRDPtr->cyborg_control.ManeuverabilityIndex == 0)
 					InitCyborg (EnemyStarShipPtr);
 
-				ed.which_turn = WORLD_TO_TURN (
-						square_root ((long)dx * dx + (long)dy * dy));
+				ed.which_turn = (WORLD_TO_TURN (square_root ((long)dx * dx + (long)dy * dy))) >> RESOLUTION_FACTOR; // JMS_GFX
+				
 				if (ed.which_turn >
 						ObjectsOfConcern[ENEMY_SHIP_INDEX].which_turn)
 				{
@@ -1208,9 +1208,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 			{
 				if (!(ed.ObjectPtr->state_flags & FINITE_LIFE))
 				{
-					ed.which_turn = WORLD_TO_TURN (
-							square_root ((long)dx * dx + (long)dy * dy)
-							);
+					ed.which_turn = (WORLD_TO_TURN (square_root ((long)dx * dx + (long)dy * dy))) >> RESOLUTION_FACTOR; // JMS_GFX
 
 					if (ed.which_turn <
 							ObjectsOfConcern[FIRST_EMPTY_INDEX].which_turn)
@@ -1247,9 +1245,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 						ed.which_turn = 0;
 					else
 					{
-						ed.which_turn = WORLD_TO_TURN (
-								square_root ((long)dx * dx + (long)dy * dy)
-								);
+						ed.which_turn = (WORLD_TO_TURN (square_root ((long)dx * dx + (long)dy * dy))) >> RESOLUTION_FACTOR; // JMS_GFX;
 
 						ed.MoveState = ENTICE;
 
@@ -1292,9 +1288,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 					|| ed.ObjectPtr->preprocess_func == crew_preprocess)
 					&& ObjectsOfConcern[CREW_OBJECT_INDEX].which_turn > 1)
 			{
-				ed.which_turn = WORLD_TO_TURN (
-						square_root ((long)dx * dx + (long)dy * dy)
-						);
+				ed.which_turn = (WORLD_TO_TURN (square_root ((long)dx * dx + (long)dy * dy))) >> RESOLUTION_FACTOR; // JMS_GFX
 
 				if (ed.which_turn == 0)
 					ed.which_turn = 1;

@@ -345,8 +345,7 @@ initialize_cannon (ELEMENT *ShipPtr, HELEMENT CannonArray[])
 }
 
 static void
-druuge_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-		COUNT ConcernCounter)
+druuge_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
 	UWORD ship_flags = 0;
 	STARSHIP *StarShipPtr;
@@ -359,7 +358,7 @@ druuge_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	if (StarShipPtr->cur_status_flags & SHIP_BEYOND_MAX_SPEED)
 		lpEvalDesc->MoveState = ENTICE;
 	else if (lpEvalDesc->ObjectPtr
-			&& lpEvalDesc->which_turn <= WORLD_TO_TURN ((MISSILE_RANGE << RESOLUTION_FACTOR) * 3 / 4)) // JMS_GFX
+			&& lpEvalDesc->which_turn <= (WORLD_TO_TURN ((MISSILE_RANGE << RESOLUTION_FACTOR) * 3 / 4)) >> RESOLUTION_FACTOR) // JMS_GFX
 	{
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 		ship_flags = EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags;
