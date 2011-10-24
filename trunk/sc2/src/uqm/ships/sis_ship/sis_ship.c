@@ -855,7 +855,7 @@ static void exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (lpEvalDesc->ObjectPtr)
 	{
-		if (MANEUVERABILITY (&StarShipPtr->RaceDescPtr->cyborg_control) < MEDIUM_SHIP
+		if (MANEUVERABILITY (&StarShipPtr->RaceDescPtr->cyborg_control) < (MEDIUM_SHIP << RESOLUTION_FACTOR) // JMS_GFX
 				&& lpEvalDesc->MoveState == ENTICE
 				&& (!(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT)
 				|| lpEvalDesc->which_turn <= 8)

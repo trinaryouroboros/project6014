@@ -309,7 +309,7 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
 
 		// Be more responsive against slow ships.
-		if (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control) <= SLOW_SHIP)
+		if (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control) <= (SLOW_SHIP << RESOLUTION_FACTOR)) // JMS_GFX
 			lpEvalDesc->which_turn = lpEvalDesc->which_turn * 4/5;
 
 		// Start of crazy calculations //

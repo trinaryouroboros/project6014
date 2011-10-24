@@ -556,10 +556,10 @@ chenjesu_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		if ((lpEvalDesc->which_turn <= 16
 				&& MANEUVERABILITY (
 				&EnemyStarShipPtr->RaceDescPtr->cyborg_control
-				) >= MEDIUM_SHIP)
+				) >= (MEDIUM_SHIP << RESOLUTION_FACTOR)) // JMS_GFX
 				|| (MANEUVERABILITY (
 				&EnemyStarShipPtr->RaceDescPtr->cyborg_control
-				) <= SLOW_SHIP
+				) <= (SLOW_SHIP << RESOLUTION_FACTOR) // JMS_GFX
 				&& WEAPON_RANGE (
 				&EnemyStarShipPtr->RaceDescPtr->cyborg_control
 				) >= (LONG_RANGE_WEAPON << RESOLUTION_FACTOR) * 3 / 4 // JMS_GFX
