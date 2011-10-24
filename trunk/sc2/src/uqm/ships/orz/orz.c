@@ -684,8 +684,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 	else
 	{
 		COUNT facing, pfacing = 0;
-		SIZE delta_facing;
-		SDWORD delta_x, delta_y;
+		SDWORD delta_x, delta_y, delta_facing;
 		HELEMENT hObject, hNextObject, hTarget;
 		ELEMENT *ObjectPtr;
 
@@ -745,6 +744,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 
 		facing = HINIBBLE (ElementPtr->turn_wait);
 		
+		// There was no ship available to chase.
 		if (hTarget == 0)
 			delta_facing = -1;
 		
@@ -793,13 +793,6 @@ marine_preprocess (ELEMENT *ElementPtr)
 					num_frames = 1;
 
 				ShipVelocity = ObjectPtr->velocity;
-				
-				//delta_x_temp = (SIZE)delta_x;
-				//delta_y_temp = (SIZE)delta_y;
-				// GetNextVelocityComponents (&ShipVelocity, &delta_x_temp, &delta_y_temp, num_frames);
-				//delta_x = (SDWORD) delta_x_temp;
-				//delta_y = (SDWORD) delta_y_temp;
-				
 				GetNextVelocityComponentsSdword (&ShipVelocity, &delta_x, &delta_y, num_frames);
 
 				delta_x = ((SDWORD)ObjectPtr->current.location.x + delta_x) - (SDWORD)ElementPtr->current.location.x;

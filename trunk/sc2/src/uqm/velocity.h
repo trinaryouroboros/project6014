@@ -27,7 +27,7 @@ typedef struct velocity_desc
 	COUNT TravelAngle;
 	EXTENT vector;
 	EXTENT fract;
-	EXTENT error;
+	DEXTENT error;
 	EXTENT incr;
 } VELOCITY_DESC;
 
