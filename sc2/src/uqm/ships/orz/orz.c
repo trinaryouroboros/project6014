@@ -515,10 +515,8 @@ intruder_preprocess (ELEMENT *ElementPtr)
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	LockElement (StarShipPtr->hShip, &ShipPtr);
-	if (ShipPtr->crew_level == 0
-			&& ShipPtr->life_span == 1
-			&& (ShipPtr->state_flags & (FINITE_LIFE | NONSOLID)) ==
-			(FINITE_LIFE | NONSOLID))
+	if (ShipPtr->crew_level == 0 && ShipPtr->life_span == 1
+		&& (ShipPtr->state_flags & (FINITE_LIFE | NONSOLID)) == (FINITE_LIFE | NONSOLID))
 	{
 		ElementPtr->life_span = 0;
 		ElementPtr->state_flags |= DISAPPEARING;
@@ -540,7 +538,7 @@ intruder_preprocess (ELEMENT *ElementPtr)
 			{
 				--ElementPtr->thrust_wait;
 
-				s.origin.x = (16 + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
+				s.origin.x = ((16 + RESOLUTION_FACTOR) + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
 				s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * 11) << RESOLUTION_FACTOR; // JMS_GFX
 				s.frame = SetAbsFrameIndex (ElementPtr->next.image.farray[0], GetFrameCount (ElementPtr->next.image.farray[0]) - 2);
 				ModifySilhouette (ShipPtr, &s, 0);
@@ -553,7 +551,7 @@ intruder_preprocess (ELEMENT *ElementPtr)
 				UnlockElement (hElement);
 				hElement = 0;
 LeftShip:
-				s.origin.x = (16 + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
+				s.origin.x = ((16 + RESOLUTION_FACTOR) + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
 				s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * 11) << RESOLUTION_FACTOR; // JMS_GFX
 				s.frame = ElementPtr->next.image.frame;
 				ModifySilhouette (ShipPtr, &s, MODIFY_SWAP);
@@ -579,7 +577,7 @@ LeftShip:
 						ShipPtr->life_span = 0;
 
 					++ElementPtr->thrust_wait;
-					s.origin.x = (16 + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
+					s.origin.x = ((16 + RESOLUTION_FACTOR) + (ElementPtr->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
 					s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * 11) << RESOLUTION_FACTOR; // JMS_GFX
 					s.frame = SetAbsFrameIndex (ElementPtr->next.image.farray[0], GetFrameCount (ElementPtr->next.image.farray[0]) - 1);
 					ModifySilhouette (ShipPtr, &s, 0);
@@ -686,7 +684,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 	else
 	{
 		COUNT facing, pfacing = 0;
-		SIZE delta_facing, delta_x_temp, delta_y_temp;
+		SIZE delta_facing;
 		SDWORD delta_x, delta_y;
 		HELEMENT hObject, hNextObject, hTarget;
 		ELEMENT *ObjectPtr;
@@ -701,7 +699,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 			LockElement (hObject, &ObjectPtr);
 			hNextObject = GetSuccElement (ObjectPtr);
 			
-			//
+			// Accelerate near planet.
 			if (GRAVITY_MASS (ObjectPtr->mass_points))
 			{
 				delta_x = (SDWORD)ObjectPtr->current.location.x - (SDWORD)ElementPtr->current.location.x;
@@ -729,7 +727,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 				}
 			}
 			
-			// Enemy ship is cloaked -> head home.
+			// Enemy ship. If it's alive and not cloaked, choose it as a target.
 			else if ((ObjectPtr->state_flags & PLAYER_SHIP)
 					&& ObjectPtr->crew_level
 					&& !OBJECT_CLOAKED (ObjectPtr))
@@ -758,6 +756,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 			delta_y = (SDWORD)ObjectPtr->current.location.y - (SDWORD)ElementPtr->current.location.y;
 			delta_y = WRAP_DELTA_Y (delta_y);
 			
+			// ? Something to do with the planet.
 			if (GRAVITY_MASS (ObjectPtr->mass_points))
 			{
 				delta_facing = NORMALIZE_FACING (pfacing - facing + ANGLE_TO_FACING (OCTANT));
@@ -774,38 +773,39 @@ marine_preprocess (ELEMENT *ElementPtr)
 						--facing;
 				}
 			}
+			
+			// Chase the enemy ship.
 			else
 			{
-				COUNT num_frames;
+				DWORD num_frames; // JMS_GFX: Was COUNT
 				VELOCITY_DESC ShipVelocity;
 
 				if (elementsOfSamePlayer (ObjectPtr, ElementPtr) && (ElementPtr->state_flags & IGNORE_SIMILAR))
 				{
-					ElementPtr->next.image.frame = SetAbsFrameIndex (
-							StarShipPtr->RaceDescPtr->ship_data.special[0],
-							21);
+					ElementPtr->next.image.frame = SetAbsFrameIndex (StarShipPtr->RaceDescPtr->ship_data.special[0],21);
 					ElementPtr->state_flags &= ~IGNORE_SIMILAR;
 					ElementPtr->state_flags |= CHANGING;
 				}
 
 				num_frames = WORLD_TO_TURN (square_root ((long)delta_x * delta_x + (long)delta_y * delta_y));
+				
 				if (num_frames == 0)
 					num_frames = 1;
 
 				ShipVelocity = ObjectPtr->velocity;
 				
-				delta_x_temp = (SIZE)delta_x;
-				delta_y_temp = (SIZE)delta_y;
+				//delta_x_temp = (SIZE)delta_x;
+				//delta_y_temp = (SIZE)delta_y;
+				// GetNextVelocityComponents (&ShipVelocity, &delta_x_temp, &delta_y_temp, num_frames);
+				//delta_x = (SDWORD) delta_x_temp;
+				//delta_y = (SDWORD) delta_y_temp;
 				
-				GetNextVelocityComponents (&ShipVelocity, &delta_x_temp, &delta_y_temp, num_frames);
-				
-				delta_x = (SDWORD) delta_x_temp;
-				delta_y = (SDWORD) delta_y_temp;
+				GetNextVelocityComponentsSdword (&ShipVelocity, &delta_x, &delta_y, num_frames);
 
 				delta_x = ((SDWORD)ObjectPtr->current.location.x + delta_x) - (SDWORD)ElementPtr->current.location.x;
 				delta_y = ((SDWORD)ObjectPtr->current.location.y + delta_y) - (SDWORD)ElementPtr->current.location.y;
 
-				delta_facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN ((SIZE)delta_x, (SIZE)delta_y)) - facing);
+				delta_facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTANSDWORD (delta_x, delta_y)) - facing);
 
 				if (delta_facing > 0)
 				{
@@ -821,6 +821,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 		}
 
 		ElementPtr->turn_wait = MAKE_BYTE (0, NORMALIZE_FACING (facing));
+		
 		if (delta_facing == 0
 				 || ((ElementPtr->thrust_wait & (SHIP_BEYOND_MAX_SPEED >> 6))
 				 && !(ElementPtr->thrust_wait & (SHIP_IN_GRAVITY_WELL >> 6))))
@@ -879,10 +880,8 @@ marine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 	{
 		if (!elementsOfSamePlayer (ElementPtr0, ElementPtr1))
 		{
-			ElementPtr0->turn_wait =
-					MAKE_BYTE (5, HINIBBLE (ElementPtr0->turn_wait));
-			ElementPtr0->thrust_wait &=
-					~((SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED) >> 6);
+			ElementPtr0->turn_wait = MAKE_BYTE (5, HINIBBLE (ElementPtr0->turn_wait));
+			ElementPtr0->thrust_wait &= ~((SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED) >> 6);
 			ElementPtr0->state_flags |= COLLISION;
 		}
 
@@ -902,10 +901,9 @@ marine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 			{
 				DeltaCrew (ElementPtr1, 1);
 
-				ElementPtr0->state_flags |=
-						DISAPPEARING | NONSOLID | FINITE_LIFE;
-				ElementPtr0->hit_points = 0;
-				ElementPtr0->life_span = 0;
+				ElementPtr0->state_flags |= DISAPPEARING | NONSOLID | FINITE_LIFE;
+				ElementPtr0->hit_points	  = 0;
+				ElementPtr0->life_span	  = 0;
 			}
 			else if ((ElementPtr0->state_flags & IGNORE_SIMILAR)
 					&& ElementPtr1->crew_level
@@ -930,7 +928,7 @@ marine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 					SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr0->PrimIndex], NO_PRIM);
 					ElementPtr0->preprocess_func = intruder_preprocess;
 
-					s.origin.x = (16 + (ElementPtr0->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
+					s.origin.x = ((16 + RESOLUTION_FACTOR) + (ElementPtr0->turn_wait & 3) * 9) << RESOLUTION_FACTOR; // JMS_GFX
 					s.origin.y = (14 + (ElementPtr0->turn_wait >> 2) * 11) << RESOLUTION_FACTOR; // JMS_GFX
 					
 					// JMS: Draw the shadow.

@@ -54,6 +54,27 @@ GetNextVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy, COU
 	velocityptr->error.height = VELOCITY_REMAINDER (e);
 }
 
+// JMS_GFX: New function to prevent overflows in hi-res.
+void
+GetNextVelocityComponentsSdword (VELOCITY_DESC *velocityptr, SDWORD *pdx, SDWORD *pdy, DWORD num_frames)
+{
+	DWORD e;
+	
+	e = (DWORD)((DWORD)velocityptr->error.width +
+				((DWORD)velocityptr->fract.width * num_frames));
+	*pdx = ((SDWORD)velocityptr->vector.width * num_frames)
+	+ ((SDWORD)((SBYTE)LOBYTE (velocityptr->incr.width))
+	   * (e >> VELOCITY_SHIFT));
+	velocityptr->error.width = (VELOCITY_REMAINDER ((COUNT)e));
+	
+	e = (DWORD)((DWORD)velocityptr->error.height +
+				((DWORD)velocityptr->fract.height * num_frames));
+	*pdy = ((SDWORD)velocityptr->vector.height * num_frames)
+	+ ((SDWORD)((SBYTE)LOBYTE (velocityptr->incr.height))
+	   * (e >> VELOCITY_SHIFT));
+	velocityptr->error.height = (VELOCITY_REMAINDER ((COUNT)e));
+}
+
 // JMS_GFX: Preventing overflows in hi-res: The SDWORD in this function's parameters was SIZE.
 void
 SetVelocityVector (VELOCITY_DESC *velocityptr, SDWORD magnitude, COUNT facing)

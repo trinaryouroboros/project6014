@@ -485,8 +485,7 @@ BuildPickMeleeFrame (void)
 	if (PickMeleeFrame)
 		DestroyDrawable (ReleaseDrawable (PickMeleeFrame));
 
-	PickMeleeFrame = CaptureDrawable (CreateDrawable (
-			WANT_PIXMAP, MELEE_WIDTH, MELEE_HEIGHT, 2));
+	PickMeleeFrame = CaptureDrawable (CreateDrawable (WANT_PIXMAP, MELEE_WIDTH, MELEE_HEIGHT, 2));
 	s.origin.x = 0;
 	s.origin.y = 0;
 
@@ -530,17 +529,17 @@ FillPickMeleeFrame (MeleeSetup *setup)
 
 		GetFrameRect (s.frame, &r);
 		t.baseline.x = r.extent.width >> 1;
-		t.baseline.y = r.extent.height - NAME_AREA_HEIGHT + 4;
+		t.baseline.y = r.extent.height - NAME_AREA_HEIGHT + (4 << RESOLUTION_FACTOR); // JMS_GFX
 
 		r.corner.x += 2 << RESOLUTION_FACTOR; // JMS_GFX
 		r.corner.y += 2 << RESOLUTION_FACTOR; // JMS_GFX
 		r.extent.width -=( (2 * 2) + ((ICON_WIDTH >> RESOLUTION_FACTOR) + 2) + 1) << RESOLUTION_FACTOR; // JMS_GFX
-		r.extent.height -=( (2 * (2 << RESOLUTION_FACTOR)) + NAME_AREA_HEIGHT) << RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.height -=( ((2 * 2) << RESOLUTION_FACTOR) + NAME_AREA_HEIGHT); // JMS_GFX
 		SetContextForeGroundColor (PICK_BG_COLOR);
 		DrawFilledRectangle (&r);
 
 		r.corner.x += 2 << RESOLUTION_FACTOR; // JMS_GFX
-		r.extent.width += ((ICON_WIDTH + 2) - (2 * 2)) << RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.width += (((ICON_WIDTH >> RESOLUTION_FACTOR) + 2) - (2 * 2)) << RESOLUTION_FACTOR; // JMS_GFX
 		r.corner.y += r.extent.height;
 		r.extent.height = NAME_AREA_HEIGHT;
 		DrawFilledRectangle (&r);

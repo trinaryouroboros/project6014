@@ -439,10 +439,8 @@ GetTeamStringRect (COUNT side, RECT *r)
 static void
 GetFleetValueRect (COUNT side, RECT *r)
 {
-	r->corner.x = MELEE_X_OFFS
-			+ NUM_MELEE_COLUMNS * (MELEE_BOX_WIDTH + MELEE_BOX_SPACE) - 30;
-	r->corner.y = (side + 1) * (MELEE_Y_OFFS
-			+ ((MELEE_BOX_HEIGHT + MELEE_BOX_SPACE) * NUM_MELEE_ROWS + 2));
+	r->corner.x = MELEE_X_OFFS + NUM_MELEE_COLUMNS * (MELEE_BOX_WIDTH + MELEE_BOX_SPACE) - (30 << RESOLUTION_FACTOR); // JMS_GFX
+	r->corner.y = (side + 1) * (MELEE_Y_OFFS + ((MELEE_BOX_HEIGHT + MELEE_BOX_SPACE) * NUM_MELEE_ROWS + 2));
 	r->extent.width = 29 << RESOLUTION_FACTOR; // JMS_GFX
 	r->extent.height = 13 << RESOLUTION_FACTOR; // JMS_GFX
 }

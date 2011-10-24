@@ -38,6 +38,9 @@ extern void GetCurrentVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx,
 
 extern void GetNextVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy, COUNT num_frames);
 
+// JMS_GFX: New function to prevent overflows in hi-res.
+extern void GetNextVelocityComponentsSdword (VELOCITY_DESC *velocityptr, SDWORD *pdx, SDWORD *pdy, DWORD num_frames);
+
 extern void SetVelocityVector (VELOCITY_DESC *velocityptr, SDWORD magnitude, COUNT facing); // JMS_GFX: Changed SIZE to SDWORD to prevent overflows
 
 extern void SetVelocityComponents (VELOCITY_DESC *velocityptr, SDWORD dx, SDWORD dy); // JMS_GFX: Changed SIZE to SDWORD to prevent overflows
