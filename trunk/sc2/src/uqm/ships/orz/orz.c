@@ -538,7 +538,7 @@ intruder_preprocess (ELEMENT *ElementPtr)
 			{
 				--ElementPtr->thrust_wait;
 
-				s.origin.x = (16 - RESOLUTION_FACTOR + (ElementPtr->turn_wait & 3) * (9 + RESOLUTION_FACTOR)) << RESOLUTION_FACTOR; // JMS_GFX
+				s.origin.x = (16 - (RESOLUTION_FACTOR * 3 / 2) + (ElementPtr->turn_wait & 3) * (9 + RESOLUTION_FACTOR * 3 / 2)) << RESOLUTION_FACTOR; // JMS_GFX
 				s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * (11 + RESOLUTION_FACTOR)) << RESOLUTION_FACTOR; // JMS_GFX
 				s.frame = SetAbsFrameIndex (ElementPtr->next.image.farray[0], GetFrameCount (ElementPtr->next.image.farray[0]) - 2);
 				ModifySilhouette (ShipPtr, &s, 0);
@@ -551,7 +551,7 @@ intruder_preprocess (ELEMENT *ElementPtr)
 				UnlockElement (hElement);
 				hElement = 0;
 LeftShip:
-				s.origin.x = (16 - RESOLUTION_FACTOR + (ElementPtr->turn_wait & 3) * (9 + RESOLUTION_FACTOR)) << RESOLUTION_FACTOR; // JMS_GFX
+				s.origin.x = (16 - (RESOLUTION_FACTOR * 3 / 2) + (ElementPtr->turn_wait & 3) * (9 + RESOLUTION_FACTOR * 3 / 2)) << RESOLUTION_FACTOR; // JMS_GFX
 				s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * (11 + RESOLUTION_FACTOR)) << RESOLUTION_FACTOR; // JMS_GFX
 				s.frame = ElementPtr->next.image.frame;
 				ModifySilhouette (ShipPtr, &s, MODIFY_SWAP);
@@ -577,7 +577,7 @@ LeftShip:
 						ShipPtr->life_span = 0;
 
 					++ElementPtr->thrust_wait;
-					s.origin.x = (16 - RESOLUTION_FACTOR + (ElementPtr->turn_wait & 3) * (9 + RESOLUTION_FACTOR)) << RESOLUTION_FACTOR; // JMS_GFX
+					s.origin.x = (16 - (RESOLUTION_FACTOR * 3 / 2) + (ElementPtr->turn_wait & 3) * (9 + RESOLUTION_FACTOR * 3 / 2)) << RESOLUTION_FACTOR; // JMS_GFX
 					s.origin.y = (14 + (ElementPtr->turn_wait >> 2) * (11 + RESOLUTION_FACTOR)) << RESOLUTION_FACTOR; // JMS_GFX
 					s.frame = SetAbsFrameIndex (ElementPtr->next.image.farray[0], GetFrameCount (ElementPtr->next.image.farray[0]) - 1);
 					ModifySilhouette (ShipPtr, &s, 0);
@@ -921,7 +921,7 @@ marine_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 					SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr0->PrimIndex], NO_PRIM);
 					ElementPtr0->preprocess_func = intruder_preprocess;
 
-					s.origin.x = (16 - RESOLUTION_FACTOR + (ElementPtr0->turn_wait & 3) * (9 + RESOLUTION_FACTOR)) << RESOLUTION_FACTOR; // JMS_GFX
+					s.origin.x = (16 - (RESOLUTION_FACTOR * 3 / 2) + (ElementPtr0->turn_wait & 3) * (9 + RESOLUTION_FACTOR * 3 / 2)) << RESOLUTION_FACTOR; // JMS_GFX
 					s.origin.y = (14 + (ElementPtr0->turn_wait >> 2) * (11 + RESOLUTION_FACTOR)) << RESOLUTION_FACTOR; // JMS_GFX
 					
 					// JMS: Draw the shadow.
