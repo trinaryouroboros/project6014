@@ -253,7 +253,7 @@ DoRestart (MENU_STATE *pMS)
 				DrawRestartMenuGraphic (pMS);
 				ScreenTransition (3, NULL);
 				DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
-				Flash_continue(pMS->flashContext);
+				Flash_continue (pMS->flashContext);
 				UnbatchGraphics ();
 				return TRUE;
 			case QUIT_GAME:
