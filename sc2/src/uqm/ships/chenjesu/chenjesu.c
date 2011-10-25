@@ -379,7 +379,7 @@ crystal_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 	}
 }
 
-#define DOGGY_OFFSET (18 << RESOLUTION_FACTOR) // JMS_GFX
+#define DOGGY_OFFSET ((18 << RESOLUTION_FACTOR) + 10 * RESOLUTION_FACTOR) // JMS_GFX: Let's ensure the doggy doesn't spawn on top of Chenjesu ship and die.
 #define DOGGY_SPEED DISPLAY_TO_WORLD (8 << RESOLUTION_FACTOR) // JMS_GFX
 
 static void
@@ -396,10 +396,8 @@ doggy_preprocess (ELEMENT *ElementPtr)
 		COUNT facing, orig_facing;
 		SIZE delta_facing;
 
-		facing = orig_facing =
-				NORMALIZE_FACING (ANGLE_TO_FACING (
-				GetVelocityTravelAngle (&ElementPtr->velocity)
-				));
+		facing = orig_facing = NORMALIZE_FACING (ANGLE_TO_FACING (GetVelocityTravelAngle (&ElementPtr->velocity)));
+		
 		if ((delta_facing = TrackShip (ElementPtr, &facing)) < 0)
 			facing = NORMALIZE_FACING (TFB_Random ());
 		else
@@ -413,8 +411,7 @@ doggy_preprocess (ELEMENT *ElementPtr)
 					ShipPtr->current.location.y -
 					ElementPtr->current.location.y)
 					));
-			delta_facing = NORMALIZE_FACING (facing -
-					GetFrameIndex (ShipPtr->current.image.frame));
+			delta_facing = NORMALIZE_FACING (facing - GetFrameIndex (ShipPtr->current.image.frame));
 			UnlockElement (ElementPtr->hTarget);
 
 			if (delta_facing > ANGLE_TO_FACING (HALF_CIRCLE - OCTANT) &&
@@ -430,8 +427,7 @@ doggy_preprocess (ELEMENT *ElementPtr)
 		}
 
 		if (facing != orig_facing)
-			SetVelocityVector (&ElementPtr->velocity,
-					DOGGY_SPEED, facing);
+			SetVelocityVector (&ElementPtr->velocity, DOGGY_SPEED, facing);
 	}
 }
 
@@ -524,8 +520,7 @@ spawn_doggy (ELEMENT *ElementPtr)
 		DoggyElementPtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
 		DoggyElementPtr->current.image.frame = StarShipPtr->RaceDescPtr->ship_data.special[0];
 
-		SetVelocityVector (&DoggyElementPtr->velocity,
-				DOGGY_SPEED, NORMALIZE_FACING (ANGLE_TO_FACING (angle)));
+		SetVelocityVector (&DoggyElementPtr->velocity, DOGGY_SPEED, NORMALIZE_FACING (ANGLE_TO_FACING (angle)));
 
 		SetElementStarShip (DoggyElementPtr, StarShipPtr);
 

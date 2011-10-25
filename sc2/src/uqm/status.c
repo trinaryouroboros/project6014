@@ -190,15 +190,17 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 
 	BatchGraphics ();
 	
+	// Grey area under and around captain's window.
 	assert (StarShipPtr->playerNr >= 0);
 	y_offs = status_y_offsets[StarShipPtr->playerNr];
 	r.corner.x = CAPTAIN_XOFFS - RES_STAT_SCALE(4);
 	r.corner.y = y_offs + SHIP_INFO_HEIGHT;
-	r.extent.width = STATUS_WIDTH - CAPTAIN_XOFFS;
+	r.extent.width = STATUS_WIDTH - 2;
 	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + (4 << RESOLUTION_FACTOR); // JMS_GFX
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	DrawFilledRectangle (&r);
 
+	// Left border of the status panel.
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 	r.corner.x = 1;
 	r.corner.y = y_offs + SHIP_INFO_HEIGHT;
@@ -209,6 +211,7 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	++r.extent.height;
 	DrawFilledRectangle (&r);
 
+	// Lower and right border of the status panel.
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
 	r.corner.x = STATUS_WIDTH - 1;
 	r.corner.y = y_offs + SHIP_INFO_HEIGHT;
@@ -230,8 +233,7 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	y = y_offs + CAPTAIN_YOFFS;
 
 	// Darker grey rectangle at bottom and right of captain's window
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 	r.corner.x = CAPTAIN_WIDTH + CAPTAIN_XOFFS; // JMS_GFX
 	r.corner.y = y;
 	r.extent.width = 1;
@@ -244,8 +246,7 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	DrawFilledRectangle (&r);
 
 	// Light grey rectangle at top and left of captains window
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
 	r.corner.x = CAPTAIN_XOFFS - 1; // JMS_GFX
 	r.extent.width = CAPTAIN_WIDTH + 2;
 	r.corner.y = y - 1;
