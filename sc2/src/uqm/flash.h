@@ -210,6 +210,5 @@ void Flash_postUpdate (FlashContext *context);
 void Flash_setCacheSize (FlashContext *context, COUNT size);
 COUNT Flash_getCacheSize (const FlashContext *context);
 
-
 #endif  /* _FLASH_H */
 
