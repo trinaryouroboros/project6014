@@ -244,11 +244,9 @@ DoRestart (MENU_STATE *pMS)
 				break;
 			case SETUP_GAME:
 				Flash_pause(pMS->flashContext);
-				Flash_setState(pMS->flashContext, FlashState_fadeIn,
-						(3 * ONE_SECOND) / 16);
+				Flash_setState(pMS->flashContext, FlashState_fadeIn, (3 * ONE_SECOND) / 16);
 				SetupMenu ();
-				SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN,
-						MENU_SOUND_SELECT);
+				SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);
 				LastInputTime = GetTimeCounter ();
 				SetTransitionSource (NULL);
 				BatchGraphics ();
