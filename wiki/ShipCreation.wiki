@@ -22,6 +22,7 @@ Create (or edit) the ship's .ANI file.
   * SML is 50% the size of MED files.
 
 ===Ship Angles===
+{{{
 000 - 0 degrees  (12 o'clock)
 001- 22.5 degrees
 002 - 45 degrees
@@ -38,6 +39,7 @@ Create (or edit) the ship's .ANI file.
 013 - 292.5 degrees
 014 - 315 degrees
 015 - 337.5 degrees
+}}}
 
 ===Filenames:===
 Generally this is the name of the ship. Otherwise it's usually the name of the alien. There are 3 views. BIG, MED, and SML.  BIG is the largest size. MED is 50% the size of BIG.  SML is 50% the size of MED.
