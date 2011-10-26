@@ -12,7 +12,7 @@
 ==What's Required==
 
 ===Creating the Ship:===
-  * 16 PNG images of the ship.
+  * 16 PNG images of the ship (for each of the 3 sizes).
   * 000 is the first file. It starts off facing 12 o clock (0 degrees).
   * Every image after 000 is rotated 22.5 degrees. (16 x 22.5 = 360 degrees)
 Create (or edit) the ship's .ANI file.
@@ -24,7 +24,7 @@ Create (or edit) the ship's .ANI file.
 ===Ship Angles===
 {{{
 000 - 0 degrees  (12 o'clock)
-001- 22.5 degrees
+001 - 22.5 degrees
 002 - 45 degrees
 003 - 67.5 degrees
 004 - 90 degrees (facing completely and perfectly to the right)
