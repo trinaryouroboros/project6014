@@ -382,14 +382,12 @@ InitCredits (void)
 	oldContext = SetContext (LocalContext);
 	// Local screen copy. We draw everything to this frame, then cut
 	// the Outtakes rect out and draw this frame to the screen.
-	CreditsFrame = Credits_MakeTransFrame (CreditsExtent.width,
-			CreditsExtent.height, TRANS_COLOR);
+	CreditsFrame = Credits_MakeTransFrame (CreditsExtent.width, CreditsExtent.height, TRANS_COLOR);
 	SetContextFGFrame (CreditsFrame);
 	
 	// The first credits frame is fake, the height of the screen,
 	// so that the credits can roll in from the bottom
-	textFrames[0].frame = Credits_MakeTransFrame (1, CreditsExtent.height,
-			TRANS_COLOR);
+	textFrames[0].frame = Credits_MakeTransFrame (1, CreditsExtent.height, TRANS_COLOR);
 	textFrames[0].strIndex = -1;
 	firstFrame = 0;
 	lastFrame = firstFrame + 1;
@@ -617,7 +615,15 @@ LoadCredits (void)
 	CreditsTab = CaptureStringTable (LoadStringTable (CREDITS_STRTAB));
 	if (!CreditsTab)
 		return FALSE;
-	CreditsBack = CaptureDrawable (LoadGraphic (CREDITS_BACK_ANIM));
+	
+	// JMS: Load the different menus depending on the resolution factor.
+	if (resolutionFactor < 1)
+		CreditsBack = CaptureDrawable (LoadGraphic (CREDITS_BACK_ANIM));
+	if (resolutionFactor == 1)
+		CreditsBack = CaptureDrawable (LoadGraphic (CREDITS_BACK_ANIM2X));
+	if (resolutionFactor > 1)
+		CreditsBack = CaptureDrawable (LoadGraphic (CREDITS_BACK_ANIM4X));
+	
 	// load fonts
 	for (fdef = CreditsFont; fdef->size; ++fdef)
 		fdef->font = LoadFont (fdef->res);
@@ -803,8 +809,7 @@ Credits (BOOLEAN WithOuttakes)
 	UnlockMutex (GraphicsLock);
 
 	// set the position of outtakes comm
-	CommWndRect.corner.x = (screenRect.extent.width - CommWndRect.extent.width)
-			/ 2;
+	CommWndRect.corner.x = (screenRect.extent.width - CommWndRect.extent.width) / 2;
 	CommWndRect.corner.y = 5;
 	
 	InitCredits ();

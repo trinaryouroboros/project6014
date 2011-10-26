@@ -91,7 +91,6 @@ comm.yehat.graphics = GFXRES:addons/hires4x/comm/yehat/yehat.ani
 comm.zoqfotpik.colortable = BINTAB:addons/hires4x/comm/zoqfotpik/zoqfotpik.ct
 comm.zoqfotpik.font = FONTRES:addons/hires4x/fonts/zoqfotpik.fon
 comm.zoqfotpik.graphics = GFXRES:addons/hires4x/comm/zoqfotpik/zoqfotpik.ani
-credits.background = GFXRES:addons/hires4x/cutscene/credits/credback.ani
 credits.font.pt13 = FONTRES:addons/hires4x/fonts/pt13.fon
 credits.font.pt17 = FONTRES:addons/hires4x/fonts/pt17.fon
 credits.font.pt45 = FONTRES:addons/hires4x/fonts/pt45.fon
