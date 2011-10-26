@@ -1292,7 +1292,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	}
 
 	if (oldResFactor != resolutionFactor)
-		resFactorWasChanged=TRUE;
+		resFactorWasChanged = TRUE;
 	
 	res_PutInteger ("config.reswidth", NewWidth);
 	res_PutInteger ("config.resheight", NewHeight);
@@ -1359,6 +1359,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 			ScreenHeight = 240 << resolutionFactor; // res_GetInteger ("config.resheight");
 		
 			// Change how big area of the screen is update-able.
+			DestroyDrawable (ReleaseDrawable (Screen));
 			Screen = CaptureDrawable (CreateDisplay (WANT_MASK | WANT_PIXMAP, &screen_width, &screen_height));
 			SetContext (ScreenContext);
 			SetContextFGFrame (Screen);

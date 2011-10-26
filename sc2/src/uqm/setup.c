@@ -48,6 +48,7 @@
 #include <errno.h>
 #include <string.h>
 
+#include "libs/graphics/drawable.h"
 
 ACTIVITY LastActivity;
 BYTE PlayerControl[NUM_PLAYERS];
