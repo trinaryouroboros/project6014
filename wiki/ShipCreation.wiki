@@ -14,7 +14,7 @@
 ===Creating the Ship:===
   * 16 PNG images of the ship.
   * 000 is the first file. It starts off facing 12 o clock (0 degrees).
-  * Every image after 000 is rotated 22.5 degrees. (16 * 22.5 = 360 degrees)
+  * Every image after 000 is rotated 22.5 degrees. (16 x 22.5 = 360 degrees)
 Create (or edit) the ship's .ANI file.
   * 015 is the last image file. 
   * There are 3 sets of these 16 images: Big, Medium, and small for a total of 48 images.
