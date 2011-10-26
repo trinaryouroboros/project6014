@@ -212,7 +212,6 @@ graphics.quasispace = GFXRES:addons/hires4x/nav/quasispace.ani
 graphics.ruins = GFXRES:addons/hires4x/lander/energy/ruins.ani
 graphics.segue = GFXRES:addons/hires4x/ui/segue.ani
 graphics.segue_orzspaceportal = GFXRES:addons/hires4x/nav/segue_orzspaceportal.ani
-graphics.setupmenu = GFXRES:addons/hires4x/ui/setupmenu.ani
 graphics.shipyard = GFXRES:addons/hires4x/ui/shipyard.ani
 graphics.starbase = GFXRES:addons/hires4x/ui/starbase.ani
 graphics.starbase_gaia = GFXRES:addons/hires4x/ui/starbase_gaia.ani
