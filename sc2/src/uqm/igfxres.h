@@ -94,6 +94,8 @@
 #define MELEE_PICK_MASK_PMAP_ANIM "graphics.meleepickship"
 #define MELEE_SCREEN_PMAP_ANIM "graphics.meleemenu"
 #define MENUBKG_PMAP_ANIM "graphics.setupmenu"
+#define MENUBKG_PMAP_ANIM2X "graphics.setupmenu2x"
+#define MENUBKG_PMAP_ANIM4X "graphics.setupmenu4x"
 #define MISCDATA_MASK_PMAP_ANIM "graphics.miscdata"
 #define MODULES_PMAP_ANIM "graphics.modulesmenu"
 #define MOONBASE_MASK_PMAP_ANIM "graphics.moonbase"
