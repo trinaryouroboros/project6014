@@ -97,6 +97,7 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 	ClearDrawable ();
 	FlushColorXForms ();
 	LockMutex (GraphicsLock);
+ 
 	DrawStamp (&s);
 
 	// Put the version number in the bottom right corner.
@@ -106,8 +107,7 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 	t.baseline.y = SCREEN_HEIGHT - 2;
 	t.align = ALIGN_RIGHT;
 	t.CharCount = (COUNT)~0;
-	sprintf (buf, "v%d.%d.%d%s", P6014_MAJOR_VERSION, P6014_MINOR_VERSION,
-			P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
+	sprintf (buf, "v%d.%d.%d%s", P6014_MAJOR_VERSION, P6014_MINOR_VERSION, P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
 	SetContextForeGroundColor (WHITE_COLOR);
 	font_DrawText (&t);
 
@@ -115,13 +115,14 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 	UnbatchGraphics ();
 }
 
+// JMS_GFX: The cleanup boolean can be used to avoid drawing a wrong-sized "Setup" flash overlay.
 static void
-DrawRestartMenu (MENU_STATE *pMS, BYTE NewState, FRAME f)
+DrawRestartMenu (MENU_STATE *pMS, BYTE NewState, FRAME f, BOOLEAN cleanup)
 {
 	POINT origin;
 	origin.x = 0;
 	origin.y = 0;
-	Flash_setOverlay(pMS->flashContext, &origin, SetAbsFrameIndex (f, NewState + 1));
+	Flash_setOverlay (pMS->flashContext, &origin, SetAbsFrameIndex (f, NewState + 1), cleanup);
 }
 
 static BOOLEAN
@@ -147,15 +148,12 @@ DoRestart (MENU_STATE *pMS)
 		}
 		pMS->hMusic = LoadMusic (MAINMENU_MUSIC);
 		InactTimeOut = (pMS->hMusic ? 120 : 20) * ONE_SECOND;
-		pMS->flashContext = Flash_createOverlay (ScreenContext,
-				NULL, NULL);
+		pMS->flashContext = Flash_createOverlay (ScreenContext, NULL, NULL);
 		Flash_setMergeFactors (pMS->flashContext, -3, 3, 16);
-		Flash_setSpeed (pMS->flashContext, (6 * ONE_SECOND) / 16, 0,
-				(6 * ONE_SECOND) / 16, 0);
+		Flash_setSpeed (pMS->flashContext, (6 * ONE_SECOND) / 16, 0, (6 * ONE_SECOND) / 16, 0);
 		Flash_setFrameTime (pMS->flashContext, ONE_SECOND / 16);
-		Flash_setState(pMS->flashContext, FlashState_fadeIn,
-				(3 * ONE_SECOND) / 16);
-		DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
+		Flash_setState(pMS->flashContext, FlashState_fadeIn, (3 * ONE_SECOND) / 16);
+		DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
 		Flash_start (pMS->flashContext);
 		PlayMusic (pMS->hMusic, TRUE, 1);
 		LastInputTime = GetTimeCounter ();
@@ -169,6 +167,8 @@ DoRestart (MENU_STATE *pMS)
 	}
 	else if (PulsedInputState.menu[KEY_MENU_SELECT])
 	{
+		COUNT oldresfactor;
+		
 		switch (pMS->CurState)
 		{
 			case LOAD_SAVED_GAME:
@@ -183,7 +183,7 @@ DoRestart (MENU_STATE *pMS)
 					SetTransitionSource (NULL);
 					BatchGraphics ();
 					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
+					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
 					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
@@ -207,7 +207,7 @@ DoRestart (MENU_STATE *pMS)
 					SetTransitionSource (NULL);
 					BatchGraphics ();
 					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
+					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
 					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
@@ -231,7 +231,7 @@ DoRestart (MENU_STATE *pMS)
 					SetTransitionSource (NULL);
 					BatchGraphics ();
 					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
+					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
 					ScreenTransition (3, NULL);
 					UnbatchGraphics ();
 					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
@@ -243,6 +243,7 @@ DoRestart (MENU_STATE *pMS)
 				}
 				break;
 			case SETUP_GAME:
+				oldresfactor = resolutionFactor;
 				Flash_pause(pMS->flashContext);
 				Flash_setState(pMS->flashContext, FlashState_fadeIn, (3 * ONE_SECOND) / 16);
 				SetupMenu ();
@@ -252,9 +253,14 @@ DoRestart (MENU_STATE *pMS)
 				BatchGraphics ();
 				DrawRestartMenuGraphic (pMS);
 				ScreenTransition (3, NULL);
-				DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
-				Flash_continue (pMS->flashContext);
+				
+				// JMS_GFX: This prevents drawing an annoying wrong-sized "Setup" frame when changing resolution. 
+				if (oldresfactor < resolutionFactor)
+					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, TRUE);
+				
+				DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
 				UnbatchGraphics ();
+				Flash_continue(pMS->flashContext);
 				return TRUE;
 			case QUIT_GAME:
 				SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND / 2));
@@ -289,7 +295,7 @@ DoRestart (MENU_STATE *pMS)
 		if (NewState != pMS->CurState)
 		{
 			BatchGraphics ();
-			DrawRestartMenu (pMS, NewState, pMS->CurFrame);
+			DrawRestartMenu (pMS, NewState, pMS->CurFrame, FALSE);
 			UnbatchGraphics ();
 			pMS->CurState = NewState;
 		}
@@ -310,7 +316,7 @@ DoRestart (MENU_STATE *pMS)
 		SetTransitionSource (NULL);
 		BatchGraphics ();
 		DrawRestartMenuGraphic (pMS);
-		DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame);
+		DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
 		ScreenTransition (3, NULL);
 		UnbatchGraphics ();
 		Flash_continue(pMS->flashContext);
@@ -352,10 +358,8 @@ RestartMenu (MENU_STATE *pMS)
 	{	// player blew himself up with Utwig bomb
 		SET_GAME_STATE (UTWIG_BOMB_ON_SHIP, 0);
 
-		SleepThreadUntil (FadeScreen (FadeAllToWhite, ONE_SECOND / 8)
-				+ ONE_SECOND / 60);
-		SetContextBackGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F));
+		SleepThreadUntil (FadeScreen (FadeAllToWhite, ONE_SECOND / 8) + ONE_SECOND / 60);
+		SetContextBackGroundColor (BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F));
 		ClearDrawable ();
 		FlushColorXForms ();
 
@@ -385,6 +389,7 @@ RestartMenu (MENU_STATE *pMS)
 	SleepThreadUntil (FadeScreen (FadeAllToBlack, TimeOut));
 	if (TimeOut == ONE_SECOND / 8)
 		SleepThread (ONE_SECOND * 3);
+	
 	DrawRestartMenuGraphic (pMS);
 	GLOBAL (CurrentActivity) &= ~CHECK_ABORT;
 	SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);

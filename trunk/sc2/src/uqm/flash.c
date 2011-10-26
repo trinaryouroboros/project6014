@@ -14,6 +14,8 @@
  *  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+// JMS_GFX: Hi-res fixes to Flash_setOverlay().
+
 // NOTE: A lot of this code is untested. Only highlite and overlay flash
 //       areas, drawing directly to the screen, using a cache, are
 //       currently in use.
@@ -155,7 +157,7 @@ Flash_createOverlay (CONTEXT gfxContext, const POINT *origin, FRAME overlay)
 		context->rect.extent.width = 0;
 		context->rect.extent.height = 0;
 	} else
-		Flash_setOverlay (context, origin, overlay);
+		Flash_setOverlay (context, origin, overlay, FALSE);
 	
 	return context;
 }
@@ -449,18 +451,23 @@ Flash_getRect (FlashContext *context, RECT *rect)
 	*rect = context->rect;
 }
 
+// JMS_GFX: The cleanup boolean can be used when changing between normal and hi-res modes.
+// It ensures that an ugly wrong-sized flash overlay from previous resolution is cleaned
+// from the flash process.
 void
-Flash_setOverlay (FlashContext *context, const POINT *origin, FRAME overlay)
+Flash_setOverlay (FlashContext *context, const POINT *origin, FRAME overlay, BOOLEAN cleanup)
 {
 	assert(context->type == FlashType_overlay);
 
-	if (context->started)
+	if (context->started && !cleanup)
 	{
 		Flash_drawFrame (context, context->original);
 		Flash_clearCache (context);
 	}
 	
-	context->u.overlay.frame = overlay;
+	if (!cleanup)
+		context->u.overlay.frame = overlay;
+	
 	GetFrameRect (overlay, &context->rect);
 	context->rect.corner.x += origin->x;
 	context->rect.corner.y += origin->y;
