@@ -1,11 +1,6 @@
 #labels Phase-Implementation
 #How to create ships for the game
 
-= Introduction =
-
-Add your content here.
-
-
 = Developer's Guide: Creating Ships  =
 
   * 2D or 3D work is okay. 
@@ -94,5 +89,3 @@ Zoq-Fot-Pik Stinger: singer-big-000.png
   * Wordpad, or other text editor. 
 
 Using the UQM-Animation tool, align the red dot so it's on the pivot point (usually the center) of the ship. You'll need to do change the X,Y coordinates in the ship's .ANI file to do so. These are the last 2 numbers on each line of the .ANI file.
-
-
