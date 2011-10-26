@@ -23,6 +23,8 @@
 #define CIRCLES_B_MASK_PMAP_ANIM "graphics.circles_b"
 #define CIRCLES_C_MASK_PMAP_ANIM "graphics.circles_c"
 #define CREDITS_BACK_ANIM "credits.background"
+#define CREDITS_BACK_ANIM2X "credits.background2x"
+#define CREDITS_BACK_ANIM4X "credits.background4x"
 #define EARTH_MASK_ANIM "graphics.earthmask"
 #define EGG_CASE_MASK_PMAP_ANIM "graphics.eggcase"
 #define FLAGSTAT_MASK_PMAP_ANIM "graphics.flagshipstatus"

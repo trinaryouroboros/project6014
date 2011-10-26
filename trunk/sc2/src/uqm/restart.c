@@ -19,6 +19,7 @@
 // JMS 2010: Upon finding black orb & new ship, initiate Lurg cutscene
 
 // JMS_GFX: 1x, 2x and 4x restart menu graphics.
+//#define FLASH_INTERNAL
 
 #include "restart.h"
 
@@ -108,6 +109,7 @@ DrawRestartMenuGraphic (MENU_STATE *pMS)
 	t.align = ALIGN_RIGHT;
 	t.CharCount = (COUNT)~0;
 	sprintf (buf, "v%d.%d.%d%s", P6014_MAJOR_VERSION, P6014_MINOR_VERSION, P6014_PATCH_VERSION, P6014_EXTRA_VERSION);
+	//sprintf (buf, "X:%d.Y:%d", ScreenContext->ForeGroundFrame->Bounds.width, ScreenContext->ForeGroundFrame->Bounds.height);
 	SetContextForeGroundColor (WHITE_COLOR);
 	font_DrawText (&t);
 

@@ -497,9 +497,13 @@ PLANET58_BIG_MASK_PMAP_ANIM,planet.yellowgas.large,uqm/igfxres.h,GFXRES,base/pla
 PLANET58_MED_MASK_PMAP_ANIM,planet.yellowgas.medium,uqm/igfxres.h,GFXRES,base/planets/yellowgas-med.ani
 PLANET58_SML_MASK_PMAP_ANIM,planet.yellowgas.small,uqm/igfxres.h,GFXRES,base/planets/yellowgas-sml.ani
 CREDITS_BACK_ANIM,credits.background,uqm/igfxres.h,GFXRES,base/cutscene/credits/credback.ani
+CREDITS_BACK_ANIM2X,credits.background2x,uqm/igfxres.h,GFXRES,base/cutscene/credits/credback2x.ani
+CREDITS_BACK_ANIM4X,credits.background4x,uqm/igfxres.h,GFXRES,base/cutscene/credits/credback4x.ani
 SISSKEL_MASK_PMAP_ANIM,graphics.flagshipskeleton,uqm/igfxres.h,GFXRES,base/cutscene/ending/fs_skeleton.ani
 ORBENTER_PMAP_ANIM,graphics.orbitenter,uqm/igfxres.h,GFXRES,base/nav/orbitenter.ani
 MENUBKG_PMAP_ANIM,graphics.setupmenu,uqm/igfxres.h,GFXRES,base/ui/setupmenu.ani
+MENUBKG_PMAP_ANIM2X,graphics.setupmenu2x,uqm/igfxres.h,GFXRES,base/ui/setupmenu2x.ani
+MENUBKG_PMAP_ANIM4X,graphics.setupmenu4x,uqm/igfxres.h,GFXRES,base/ui/setupmenu4x.ani
 FONTGRAD_PMAP_ANIM,graphics.fontgradient,uqm/igfxres.h,GFXRES,base/fonts/fontgradient.ani
 LANDER_FONTEFF_PMAP_ANIM,graphics.landerfonteffect,uqm/igfxres.h,GFXRES,base/lander/fonteffect.ani
 DRUUGE_MUSIC,comm.druuge.music,uqm/comm/druuge/imusicre.h,MUSICRES,base/comm/druuge/druuge.mod
