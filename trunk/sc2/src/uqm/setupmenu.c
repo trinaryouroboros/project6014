@@ -1368,6 +1368,7 @@ SetGlobalOptions (GLOBALOPTS *opts)
 			DestroyDrawable (ReleaseDrawable (Screen));
 			Screen = CaptureDrawable (CreateDisplay (WANT_MASK | WANT_PIXMAP, &screen_width, &screen_height));
 			SetContext (ScreenContext);
+			SetContextFGFrame ((FRAME)NULL);
 			SetContextFGFrame (Screen);
 		}
 		
