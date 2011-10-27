@@ -206,7 +206,8 @@ static LOCDATA vux_desc =
 	},
 };
 
-
+static void
+Intro (RESPONSE_REF R);
 
 
 static void
@@ -215,79 +216,253 @@ ExitConversation (RESPONSE_REF R)
 	(void) R; // satisfy compiler
 	NPCPhrase (GOODBYE_EARTHLING);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
+}
 
+static void
+ExitConversationSilent (RESPONSE_REF R)
+{
+	(void) R; // satisfy compiler
+	NPCPhrase (SILENT);
+	SET_GAME_STATE (BATTLE_SEGUE, 0);	
 }
 
 
+
 static void
-HumanSubversion (RESPONSE_REF R)
+ApologyMenu6 (RESPONSE_REF R)
 {	
-	if (PLAYER_SAID (R, safe_under_shield))
+	if (PLAYER_SAID (R, a5apology_3))
+		NPCPhrase (A5APOLOGY_3_ANSWER);
+	
+	Response (a6apology_1, Intro);
+	Response (a6apology_2, Intro);
+	Response (a6apology_3, Intro);
+}
+
+static void
+ApologyMenu5 (RESPONSE_REF R)
+{	
+	if (PLAYER_SAID (R, a4apology_1))
+		NPCPhrase (A4APOLOGY_1_ANSWER);
+	if (PLAYER_SAID (R, a4apology_2))
+		NPCPhrase (A4APOLOGY_2_ANSWER);
+	
+	Response (a5apology_1, Intro);
+	Response (a5apology_2, Intro);
+	Response (a5apology_3, ApologyMenu6);
+	Response (a5apology_4, Intro);
+}
+
+static void
+ApologyMenu4 (RESPONSE_REF R)
+{	
+	if (PLAYER_SAID (R, a3apology_1))
+		NPCPhrase (A3APOLOGY_1_ANSWER);
+	if (PLAYER_SAID (R, a3apology_4))
+		NPCPhrase (A3APOLOGY_4_ANSWER);
+	
+	Response (a4apology_1, ApologyMenu5);
+	Response (a4apology_2, ApologyMenu5);
+	Response (a4apology_3, Intro);
+	Response (a4apology_4, Intro);
+}
+
+static void
+ApologyMenu3 (RESPONSE_REF R)
+{	
+	if (PLAYER_SAID (R, a2apology_2))
+		NPCPhrase (A2APOLOGY_2_ANSWER);
+	if (PLAYER_SAID (R, a2apology_3))
+		NPCPhrase (A2APOLOGY_3_ANSWER);
+	
+	Response (a3apology_1, ApologyMenu4);
+	Response (a3apology_2, Intro);
+	Response (a3apology_3, Intro);
+	Response (a3apology_4, ApologyMenu4);
+}
+
+static void
+ApologyMenu2 (RESPONSE_REF R)
+{	
+	if (PLAYER_SAID (R, apology_1))
+		NPCPhrase (APOLOGY_1_ANSWER);
+	if (PLAYER_SAID (R, apology_2))
+		NPCPhrase (APOLOGY_2_ANSWER);
+	if (PLAYER_SAID (R, apology_3))
+		NPCPhrase (APOLOGY_3_ANSWER);
+	
+	Response (a2apology_1, Intro);
+	Response (a2apology_2, ApologyMenu3);
+	Response (a2apology_3, ApologyMenu3);
+	Response (a2apology_4, ExitConversationSilent);
+}
+
+static void
+ApologyMenu1 (RESPONSE_REF R)
+{	
+	if (PLAYER_SAID (R, greeting_1_to_apology))
 	{
-		NPCPhrase (VALUE_FREEDOM);
-		DISABLE_PHRASE (safe_under_shield);
+		if (GET_GAME_STATE (VUX_APOLOGY_TRIED) == 0)
+			NPCPhrase (KILL_LIKE_OTHERS);
+		else
+			NPCPhrase (SILENT);
+		
+		SET_GAME_STATE (VUX_APOLOGY_TRIED, 1);
+		DISABLE_PHRASE (greeting_1_to_apology);
 	}
 	
-
+	Response (apology_1, ApologyMenu2);
+	Response (apology_2, ApologyMenu2);
+	Response (apology_3, ApologyMenu2);
+	Response (apology_4, Intro);
 }
 
+
 static void
-AskMenu1 (RESPONSE_REF R)
+StarBaseMenu (RESPONSE_REF R)
 {	
+	static BYTE spiteful_answers = 0;
+	
 	/* Alien speech */
+	if (PLAYER_SAID (R, greeting_1_whats_like))
+	{
+		NPCPhrase (SILENT);
+	}
+	
+	else if (PLAYER_SAID (R, sb1_science_teams))
+	{
+		NPCPhrase (SILENT);
+		DISABLE_PHRASE (sb1_science_teams);
+	}
+	
+	else if (PLAYER_SAID (R, sb2_neglect_mismanagement))
+	{
+		NPCPhrase (NOT_IDIOTS);
+		DISABLE_PHRASE (sb2_neglect_mismanagement);
+	}
+	
+	else if (PLAYER_SAID (R, sb3_rethinking_position))
+	{
+		NPCPhrase (ARGUMENT_SUBJECT);
+		DISABLE_PHRASE (sb3_rethinking_position);
+	}
+	
+	else if (PLAYER_SAID (R, sb4_seriously_how_is))
+	{
+		if (GET_GAME_STATE (VUX_RANT_HEARD) == 0)
+			NPCPhrase (RANT);
+		else
+			NPCPhrase (AFTER_RANT);
+		
+		SET_GAME_STATE (VUX_RANT_HEARD, 1);
+		DISABLE_PHRASE (sb4_seriously_how_is);
+	}
+	
+	else if (PLAYER_SAID (R, sb5_safe_under_shield))
+	{
+		if (spiteful_answers)
+			NPCPhrase (SPITEFUL_VUX_2);
+		else
+			NPCPhrase (SPITEFUL_VUX_1);
+		
+		DISABLE_PHRASE (sb5_safe_under_shield);
+			
+		spiteful_answers++;
+		spiteful_answers %= 2;
+	}
+
+	/* Human speech options */
+    if (PHRASE_ENABLED (sb1_science_teams))
+		Response (sb1_science_teams, StarBaseMenu);
+	
+	if (PHRASE_ENABLED (sb2_neglect_mismanagement))
+		Response (sb2_neglect_mismanagement, StarBaseMenu);
+	
+	if (PHRASE_ENABLED (sb3_rethinking_position))
+		Response (sb3_rethinking_position, StarBaseMenu);
+	
+	if (!(PHRASE_ENABLED (sb1_science_teams)) && !(PHRASE_ENABLED (sb2_neglect_mismanagement)) 
+		&& !(PHRASE_ENABLED (sb3_rethinking_position)) && PHRASE_ENABLED (sb4_seriously_how_is))
+		Response (sb4_seriously_how_is, StarBaseMenu);
+	
+	if (PHRASE_ENABLED (sb5_safe_under_shield) && (GET_GAME_STATE (VUX_RANT_HEARD) == 1))
+		Response (sb5_safe_under_shield, StarBaseMenu);
+
+	Response (sb6_okay_then, Intro);
+}
 
 
 
-	if (PLAYER_SAID (R, whats_news))
+static void
+Intro (RESPONSE_REF R)
+{
+	/* Alien speech */
+	if (PLAYER_SAID (R, greeting_1_who_you))
+	{
+		NPCPhrase (STRONG_STOMACH);
+		SET_GAME_STATE (VUX_MET, 1);
+	}
+	
+	else if (PLAYER_SAID (R, a2apology_1))
+		NPCPhrase (A2APOLOGY_1_ANSWER);
+	
+	else if (PLAYER_SAID (R, apology_4))
+		NPCPhrase (APOLOGY_4_ANSWER);
+	
+	else if (PLAYER_SAID (R, a3apology_2))
+		NPCPhrase (A3APOLOGY_2_ANSWER);
+	
+	else if (PLAYER_SAID (R, a3apology_3))
+		NPCPhrase (A3APOLOGY_3_ANSWER);
+	
+	else if (PLAYER_SAID (R, a4apology_3))
+		NPCPhrase (A4APOLOGY_3_ANSWER);
+	
+	else if (PLAYER_SAID (R, a4apology_4))
+		NPCPhrase (A4APOLOGY_4_ANSWER);
+	
+	else if (PLAYER_SAID (R, a5apology_1))
+		NPCPhrase (A5APOLOGY_1_ANSWER);
+	
+	else if (PLAYER_SAID (R, a5apology_2))
+		NPCPhrase (A5APOLOGY_2_ANSWER);
+	
+	else if (PLAYER_SAID (R, a5apology_4))
+		NPCPhrase (A5APOLOGY_4_ANSWER);
+	
+	else if (PLAYER_SAID (R, whats_news))
 	{
 		NPCPhrase (DAX_INFORMATION);
 		DISABLE_PHRASE (whats_news);
 	}
-	else if (PLAYER_SAID (R, how_is_slave_shield))
-	{
-		NPCPhrase (SPITEFUL_VUX);
-		DISABLE_PHRASE (how_is_slave_shield);
-
-	Response (safe_under_shield, HumanSubversion);
-	}
 	
+	else if (PLAYER_SAID (R, sb6_okay_then))
+		NPCPhrase (SILENT);
 	
-	
-
 	/* Human speech options */
+	if (PHRASE_ENABLED (greeting_1_who_you) && GET_GAME_STATE (VUX_MET) == 0)
+		Response (greeting_1_who_you, Intro);
+	
+	Response (greeting_1_whats_like, StarBaseMenu);
+	
+	if (PHRASE_ENABLED (greeting_1_to_apology))
+		Response (greeting_1_to_apology, ApologyMenu1);
 	
 	if (PHRASE_ENABLED (whats_news))
-	{
-		Response (whats_news, AskMenu1);
-	}
-
-    if (PHRASE_ENABLED (how_is_slave_shield))
-	{
-		Response (how_is_slave_shield, AskMenu1);
-	}
+		Response (whats_news, Intro);
 	
-	if (PHRASE_ENABLED (goodbye_vux))
-	{
-		Response (goodbye_vux, ExitConversation);
-	}
+	Response (goodbye_vux, ExitConversation);
 }
 
-
-
 static void
-Intro (void)
+StartComm (void)
 {
 	if (GET_GAME_STATE (VUX_MET) == 0)
-	{
-		SET_GAME_STATE (VUX_MET, 1);
-	}
+		NPCPhrase (VUX_GREETING1);
+	else
+		NPCPhrase (VUX_GREETING2);
 
-	NPCPhrase (VUX_GREETING1);
-
-
-	Response (whats_news, AskMenu1);
-	Response (how_is_slave_shield, AskMenu1);
-	Response (goodbye_vux, ExitConversation);
+	Intro (0);
 }
 
 
@@ -308,12 +483,11 @@ init_vux_comm (void)
 {
 	LOCDATA *retval;
 
-	vux_desc.init_encounter_func = Intro;
+	vux_desc.init_encounter_func = StartComm;
 	vux_desc.post_encounter_func = post_vux_enc;
 	vux_desc.uninit_encounter_func = uninit_vux;
 
-	vux_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1)
-			+ (SIS_TEXT_WIDTH >> 2);
+	vux_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1) + (SIS_TEXT_WIDTH >> 2);
 	vux_desc.AlienTextBaseline.y = 0;
 	vux_desc.AlienTextWidth = (SIS_TEXT_WIDTH - 16) >> 1;
 
