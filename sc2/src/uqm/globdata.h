@@ -1138,6 +1138,10 @@ START_GAME_STATE
 	// JMS: Stupid joke in Chmmr & Melnorme encounters...
 	ADD_GAME_STATE (TZZRAK_TZON_PICS, 1)
 
+	// JMS: Has player yet tried to apologize to the VUX.
+	ADD_GAME_STATE (VUX_APOLOGY_TRIED, 1)
+	ADD_GAME_STATE (VUX_RANT_HEARD, 1)
+
 
 END_GAME_STATE
 
