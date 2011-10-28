@@ -16,7 +16,7 @@ The one with the strongest stomach.
 So, what's it like over there?
 
 #(SILENT)
-...
+. . .
 
 #(greeting_1_to_apology)
 I never quite got around to finishing my apology for our unfortunate first contact. You ready?
@@ -39,7 +39,7 @@ Should you stumble across him in your travels, please do the right thing
 and dispose of him and his weirdo henchmen.
 
 #(sb1_science_teams)
-Did you have any science teams out investigating precursor factories? No aces up your sleeves?
+Did you have any science teams out investigating Precursor factories? No aces up your sleeves?
 
 #(sb2_neglect_mismanagement)
 Are you suffering from critical shortages due to neglect and mismanagement?
@@ -78,8 +78,7 @@ The next thing we knew we were overwhelmed by the Chmmr.
 They confined us to one planet, and blocked the natural light we need.
 In order to survive, our people live most of their lives indoors under carefully made lamps.
 And of course some of us are compelled to come up here and offer assistance to the ones who imprisoned us.
-...
-Not so good!
+...Not so good!
 
 #(AFTER_RANT)
 ...you're joking.
@@ -93,7 +92,7 @@ Not quite as bad as the Ur-Quan! Such high standards you keep.
 #(SPITEFUL_VUX_2)
 You humans must know from experience how humiliating this is. 
 VUX were intergalactic masters while your species were still twigging on to the industrial revolution. 
-You'll excuse me if I sound a little spiteful ... it's because I am.
+You'll excuse me if I sound a little spiteful... it's because I am.
 
 #(sb6_okay_then)
 Okay, then.
@@ -114,13 +113,13 @@ You used a peace offer to cover your invasion, complete with wiping out fleets.
 No.
 
 #(APOLOGY_3_ANSWER)
-...
+. . .
 
 #(apology_4)
 If you're going to be like that, never mind!
 
 #(APOLOGY_4_ANSWER)
-...
+. . .
 
 #(2apology_1)
 Eh, whatever.
@@ -138,13 +137,13 @@ Go on.
 I'm sorry captain Rand judged your appearance by standards that shouldn't apply to it.
 
 #(2APOLOGY_3_ANSWER)
-He was! Go on.
+Certainly not! Go on.
 
 #(2apology_4)
 I'm sorry you guys heard his honest opinion. You shouldn't have been subjected to the truth that way.
 
 #(2APOLOGY_4_ANSWER)
-...
+. . .
 
 #(3apology_1)
 I'm sorry that Star Control did not ensure that its captains were capable of controlling themselves.
@@ -156,7 +155,7 @@ Go on. Back down to a single captain again. A different one... *ahem*
 What? I just apologized.
 
 #(3APOLOGY_2_ANSWER)
-...
+. . .
 
 #(3apology_3)
 I'm sorry that humans find you extremely ugly. It's really a shame.

@@ -327,6 +327,7 @@ StarBaseMenu (RESPONSE_REF R)
 	if (PLAYER_SAID (R, greeting_1_whats_like))
 	{
 		NPCPhrase (SILENT);
+		DISABLE_PHRASE (greeting_1_whats_like);
 	}
 	
 	else if (PLAYER_SAID (R, sb1_science_teams))
@@ -430,6 +431,15 @@ Intro (RESPONSE_REF R)
 	else if (PLAYER_SAID (R, a5apology_4))
 		NPCPhrase (A5APOLOGY_4_ANSWER);
 	
+	else if (PLAYER_SAID (R, a6apology_1))
+		NPCPhrase (A6APOLOGY_1_ANSWER);
+	
+	else if (PLAYER_SAID (R, a6apology_2))
+		NPCPhrase (A6APOLOGY_2_ANSWER);
+	
+	else if (PLAYER_SAID (R, a6apology_3))
+		NPCPhrase (A6APOLOGY_3_ANSWER);
+	
 	else if (PLAYER_SAID (R, whats_news))
 	{
 		NPCPhrase (DAX_INFORMATION);
@@ -443,7 +453,8 @@ Intro (RESPONSE_REF R)
 	if (PHRASE_ENABLED (greeting_1_who_you) && GET_GAME_STATE (VUX_MET) == 0)
 		Response (greeting_1_who_you, Intro);
 	
-	Response (greeting_1_whats_like, StarBaseMenu);
+	if (PHRASE_ENABLED (greeting_1_whats_like))
+		Response (greeting_1_whats_like, StarBaseMenu);
 	
 	if (PHRASE_ENABLED (greeting_1_to_apology))
 		Response (greeting_1_to_apology, ApologyMenu1);
