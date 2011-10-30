@@ -10,9 +10,7 @@ I wrote this because I've now done it 5 times, each time having a couple of mont
 
 Any way, enough talk, let's walk the walk.
 
-= Do it! =
-
-*CODE:*
+= Code: =
 
 _1. Races.h:_
 a) Add a NEWRACE_ID (into the SPECIES_ID enum list), preferably after ISD_ID, and before SLYLANDRO_KOHRAH_ID.
@@ -58,9 +56,7 @@ Add your new ship files by creating folder sc2/src/uqm/ships/newrace. Remember t
 _10. New files, comm:_
 Add your new comm files into sc2/src/uqm/comm/newrace. Edit the makeinfo files also, as in the previous item. (newracec.c, strings.h, Makeinfo, resinst.h, plus the files the gen_refiles.py utility SHOULD create.)
  
-
-
-*CONTENTS:*
+= Contents: =
 
 _11. New content files, ship:_ 
 Add your race's ship's new graphics, sound files and captainnames to sc2/content/base/ships
