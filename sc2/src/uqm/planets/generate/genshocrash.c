@@ -74,8 +74,8 @@ init_lurg_teaser (void)
 		GroupPtr->task = FLEE;
 		GroupPtr->sys_loc = 0; 
 		GroupPtr->dest_loc = 0; 
-		GroupPtr->loc.x = 7500;
-		GroupPtr->loc.y = 7000;
+		GroupPtr->loc.x = 9500;
+		GroupPtr->loc.y = 9000;
 		GroupPtr->group_counter = 0;
 		UnlockIpGroup (&GLOBAL (ip_group_q), hGroup);
 		return 1;
@@ -232,8 +232,8 @@ GenerateShofixtiCrashSite_generateEnergy (SOLARSYS_STATE *solarSys,
 		old_rand = TFB_SeedRandom (solarSys->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]);
 		rand_val = TFB_Random ();
 		
-		solarSys->SysInfo.PlanetInfo.CurPt.x = 187;
-		solarSys->SysInfo.PlanetInfo.CurPt.y = MAP_HEIGHT - 16;
+		solarSys->SysInfo.PlanetInfo.CurPt.x = 187 << RESOLUTION_FACTOR;
+		solarSys->SysInfo.PlanetInfo.CurPt.y = MAP_HEIGHT - (16 << RESOLUTION_FACTOR);
 		solarSys->SysInfo.PlanetInfo.CurDensity = 0;
 		solarSys->SysInfo.PlanetInfo.CurType = 0; // JMS: Fake picking the blip up upon finding...
 		

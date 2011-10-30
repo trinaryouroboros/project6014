@@ -101,13 +101,13 @@ DrawPickFrame (MELEE_STATE *pMS)
 
 	s.frame = SetAbsFrameIndex (BuildPickFrame, 0);
 	GetFrameRect (s.frame, &r);
-	r.corner.x = -(ship_r.corner.x
-			+ ((ship_r.extent.width - r.extent.width) >> 1));
+	r.corner.x = -(ship_r.corner.x + ((ship_r.extent.width - r.extent.width) >> 1));
+	
 	if (pMS->side)
 		r.corner.y = -ship_r.corner.y;
 	else
-		r.corner.y = -(ship_r.corner.y
-				+ (ship_r.extent.height - r.extent.height));
+		r.corner.y = -(ship_r.corner.y + (ship_r.extent.height - r.extent.height));
+	
 	SetFrameHot (s.frame, MAKE_HOT_SPOT (r.corner.x, r.corner.y));
 	s.origin.x = 0;
 	s.origin.y = 0;

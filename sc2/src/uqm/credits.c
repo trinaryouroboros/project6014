@@ -653,11 +653,10 @@ FreeCredits (void)
 static void
 OutTakes (void)
 {
-#define NUM_OUTTAKES 15
+#define NUM_OUTTAKES 14 // JMS: Removed talking pet conversation.
 	static CONVERSATION outtake_list[NUM_OUTTAKES] =
 	{
 		ZOQFOTPIK_CONVERSATION,
-		TALKING_PET_CONVERSATION,
 		ORZ_CONVERSATION,
 		UTWIG_CONVERSATION,
 		THRADD_CONVERSATION,

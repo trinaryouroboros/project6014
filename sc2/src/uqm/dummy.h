@@ -21,10 +21,12 @@
 
 #include "ships/androsyn/androsyn.h"
 #include "ships/arilou/arilou.h"
+#include "ships/baul/baul.h"
 #include "ships/blackurq/blackurq.h"
 #include "ships/chenjesu/chenjesu.h"
 #include "ships/chmmr/chmmr.h"
 #include "ships/druuge/druuge.h"
+#include "ships/foonfoon/foonfoon.h"
 #include "ships/human/human.h"
 #include "ships/ilwrath/ilwrath.h"
 #include "ships/melnorme/melnorme.h"

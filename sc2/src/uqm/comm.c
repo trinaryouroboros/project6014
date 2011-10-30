@@ -1625,7 +1625,7 @@ RaceCommunication (void)
 		/* Going into talking pet conversation */
 		ReinitQueue (&GLOBAL (npc_built_ship_q));
 		CloneShipFragment (SAMATRA_SHIP, &GLOBAL (npc_built_ship_q), 0);
-		InitCommunication (TALKING_PET_CONVERSATION);
+		InitCommunication (INVALID_CONVERSATION); // JMS: Quick fix after removing talking_pet_conversation enum.
 		if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD))
 				&& GLOBAL_SIS (CrewEnlisted) != (COUNT)~0)
 		{
@@ -1642,7 +1642,7 @@ RaceCommunication (void)
 		if (GET_GAME_STATE (FOUND_PLUTO_SPATHI) == 1)
 			InitCommunication (SPATHI_CONVERSATION);
 		else if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) == 0)
-			InitCommunication (TALKING_PET_CONVERSATION);
+			InitCommunication (INVALID_CONVERSATION);  // JMS: Quick fix after removing talking_pet_conversation enum.
 		else if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) &
 				((1 << 4) | (1 << 5)))
 			// Communicate with the Ilwrath using a Hyperwave Broadcaster.

@@ -52,7 +52,6 @@ extern GenerateFunctions generateSolFunctions;
 extern GenerateFunctions generateSpathiFunctions;
 extern GenerateFunctions generateSupoxFunctions;
 extern GenerateFunctions generateSyreenFunctions;
-extern GenerateFunctions generateTalkingPetFunctions;
 extern GenerateFunctions generateThraddashFunctions;
 extern GenerateFunctions generateTrapFunctions;
 extern GenerateFunctions generateUtwigFunctions;
@@ -86,8 +85,6 @@ getGenerateFunctions (BYTE Index)
 		case MELNORME7_DEFINED:
 		case MELNORME8_DEFINED:
 			return &generateMelnormeFunctions;
-		case TALKING_PET_DEFINED:
-			return &generateTalkingPetFunctions;
 		case CHMMR_DEFINED:
 			return &generateChmmrFunctions;
 		case SYREEN_DEFINED:

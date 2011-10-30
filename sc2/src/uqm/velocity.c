@@ -71,7 +71,7 @@ GetNextVelocityComponentsSdword (VELOCITY_DESC *velocityptr, SDWORD *pdx, SDWORD
 	+ ((SDWORD)((SBYTE)LOBYTE (velocityptr->incr.width))
 	   * (e >> VELOCITY_SHIFT));
 	
-	velocityptr->error.width = VELOCITY_REMAINDER (e);
+	velocityptr->error.width = (COUNT)(VELOCITY_REMAINDER (e));
 	
 	e = (DWORD)((DWORD)velocityptr->error.height +
 				((DWORD)velocityptr->fract.height * num_frames));
@@ -80,7 +80,7 @@ GetNextVelocityComponentsSdword (VELOCITY_DESC *velocityptr, SDWORD *pdx, SDWORD
 	+ ((SDWORD)((SBYTE)LOBYTE (velocityptr->incr.height))
 	   * (e >> VELOCITY_SHIFT));
 	
-	velocityptr->error.height = VELOCITY_REMAINDER (e);
+	velocityptr->error.height = (COUNT)(VELOCITY_REMAINDER (e));
 }
 
 // JMS_GFX: Preventing overflows in hi-res: The SDWORD in this function's parameters was SIZE.

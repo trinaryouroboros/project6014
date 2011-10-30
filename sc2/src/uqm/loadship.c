@@ -19,6 +19,7 @@
 // JMS 2010: -Added code resource for slylandros-riding-kohrah-vessels
 //			 -Added code resource for Lurg
 //			 -Added code resource for ISD
+// JMS 2011: -Added code resources for Baul & Foon-foon
 
 #include "build.h"
 #include "coderes.h"
@@ -55,9 +56,11 @@ static RESOURCE code_resources[] = {
 		ANDROSYNTH_CODE,
 		CHENJESU_CODE,
 		MMRNMHRM_CODE,
-		SLYLANDRO_KOHRAH_CODE, // JMS
-		LURG_CODE, // JMS
-		ISD_CODE, // JMS
+		BAUL_CODE,				// JMS
+		FOONFOON_CODE,			// JMS
+		LURG_CODE,				// JMS
+		ISD_CODE,				// JMS
+		SLYLANDRO_KOHRAH_CODE,	// JMS
 		SIS_CODE,
 		SAMATRA_CODE,
 		URQUAN_DRONE_CODE };

@@ -72,10 +72,11 @@ typedef enum
 	VUX_CODE_RES,
 	YEHAT_CODE_RES,
 	ZOQFOT_CODE_RES,
-	SLYLANDRO_KOHRAH_CODE_RES,	// JMS
+	BAUL_CODE_RES,				// JMS
+	FOONFOON_CODE_RES,			// JMS
 	LURG_CODE_RES,				// JMS
 	ISD_CODE_RES,				// JMS
-	
+	SLYLANDRO_KOHRAH_CODE_RES,	// JMS	
 	EXP_CODE_RES,
 	TRANSPORT_CODE_RES,			// JMS
 	SAMATRA_CODE_RES,			// JMS: Moved this under EXP_CODE_RES and TRANSPORT_CODE_RES
@@ -113,12 +114,14 @@ CodeResToInitFunc(ShipCodeRes res)
 		case VUX_CODE_RES: return &init_vux;
 		case YEHAT_CODE_RES: return &init_yehat;
 		case ZOQFOT_CODE_RES: return &init_zoqfotpik;
-		case SAMATRA_CODE_RES: return &init_samatra;
-		case EXP_CODE_RES: return &init_exp;
-		case TRANSPORT_CODE_RES: return &init_transport;
-		case SLYLANDRO_KOHRAH_CODE_RES: return &init_slylandro_kohrah;
+		case BAUL_CODE_RES: return &init_baul;
+		case FOONFOON_CODE_RES: return &init_foonfoon;
 		case LURG_CODE_RES: return &init_lurg;
 		case ISD_CODE_RES: return &init_isd;
+		case SLYLANDRO_KOHRAH_CODE_RES: return &init_slylandro_kohrah;
+		case EXP_CODE_RES: return &init_exp;
+		case SAMATRA_CODE_RES: return &init_samatra;
+		case TRANSPORT_CODE_RES: return &init_transport;
 		default:
 		{
 			log_add (log_Warning, "Unknown SHIP identifier '%d'", res);
