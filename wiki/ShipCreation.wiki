@@ -1,5 +1,5 @@
 #labels Phase-Implementation
-#How to create ships for the game
+#How to create ship graphics for the game
 
 = Developer's Guide: Creating Ships  =
 
