@@ -19,10 +19,12 @@
 
 #include "ships/androsyn/icode.h"
 #include "ships/arilou/icode.h"
+#include "ships/baul/icode.h"
 #include "ships/blackurq/icode.h"
 #include "ships/chenjesu/icode.h"
 #include "ships/chmmr/icode.h"
 #include "ships/druuge/icode.h"
+#include "ships/foonfoon/icode.h"
 #include "ships/human/icode.h"
 #include "ships/isd/icode.h"
 #include "ships/ilwrath/icode.h"

@@ -215,8 +215,7 @@ InitGameStructures (void)
 		COUNT num_ships;
 		SPECIES_ID s_id = ARILOU_ID;
 
-		num_ships = ISD_ID - s_id + 1	// JMS: ISD_ID now replaces KOHR_AH_ID here
-		+ 2; /* Yehat Rebels and Transport ship */
+		num_ships = LAST_MELEE_ID - s_id + 2; /* Yehat Rebels and Transport ship */
 		
 		InitQueue (&GLOBAL (avail_race_q), num_ships, sizeof (FLEET_INFO));
 		for (i = 0; i < num_ships; ++i)

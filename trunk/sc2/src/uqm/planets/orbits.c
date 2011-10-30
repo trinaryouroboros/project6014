@@ -26,6 +26,8 @@
 #include "libs/mathlib.h"
 #include "libs/log.h"
 
+#include <math.h> // JMS: For 'pow'
+
 
 //#define DEBUG_ORBITS
 

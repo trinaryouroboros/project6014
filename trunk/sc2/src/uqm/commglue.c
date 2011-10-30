@@ -349,8 +349,6 @@ init_race (CONVERSATION comm_id)
 			return init_syreenbase_comm ();
 		case SYREENHOME_CONVERSATION:
 			return init_syreenhome_comm ();
-		case TALKING_PET_CONVERSATION:
-			return init_talkpet_comm ();
 		case THRADD_CONVERSATION:
 			return init_thradd_comm ();
 		case TRANSPORT_CONVERSATION:			// BY JMS - Hook to transport ship dialogue screen

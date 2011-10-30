@@ -463,8 +463,8 @@ LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 	cread_16s (fh, &GSPtr->velocity.vector.height);
 	cread_16s (fh, &GSPtr->velocity.fract.width);
 	cread_16s (fh, &GSPtr->velocity.fract.height);
-	cread_32s (fh, &GSPtr->velocity.error.width);
-	cread_32s (fh, &GSPtr->velocity.error.height);
+	cread_16s (fh, &GSPtr->velocity.error.width);
+	cread_16s (fh, &GSPtr->velocity.error.height);
 	cread_16s (fh, &GSPtr->velocity.incr.width);
 	cread_16s (fh, &GSPtr->velocity.incr.height);
 	cread_16  (fh, NULL); /* VELOCITY_DESC padding */

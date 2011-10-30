@@ -397,8 +397,8 @@ SaveGameState (const GAME_STATE *GSPtr, DECODE_REF fh)
 	cwrite_16  (fh, GSPtr->velocity.vector.height);
 	cwrite_16  (fh, GSPtr->velocity.fract.width);
 	cwrite_16  (fh, GSPtr->velocity.fract.height);
-	cwrite_32  (fh, GSPtr->velocity.error.width);
-	cwrite_32  (fh, GSPtr->velocity.error.height);
+	cwrite_16  (fh, GSPtr->velocity.error.width);
+	cwrite_16  (fh, GSPtr->velocity.error.height);
 	cwrite_16  (fh, GSPtr->velocity.incr.width);
 	cwrite_16  (fh, GSPtr->velocity.incr.height);
 	cwrite_16  (fh, 0); /* VELOCITY_DESC padding */

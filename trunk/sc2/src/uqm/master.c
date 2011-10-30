@@ -21,12 +21,16 @@
 //			 -Lurg ship likewise!
 //			 -As well as ISD
 
+// JMS 2011: - Added Baul & Foon-foon
+
 #include "master.h"
 
 #include "build.h"
 #include "resinst.h"
 #include "displist.h"
 #include "supermelee/melee.h"
+
+#include "libs/log.h"
 
 
 #define NUM_OF_NEW_SHIPS (LAST_MELEE_ID - MMRNMHRM_ID)
@@ -72,8 +76,7 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 		BuiltPtr->Fleet = RDPtr->fleet;
 		free_ship (RDPtr, FALSE, FALSE);
 
-		builtName = GetStringAddress (SetAbsStringTableIndex (
-				BuiltPtr->ShipInfo.race_strings, 2));
+		builtName = GetStringAddress (SetAbsStringTableIndex (BuiltPtr->ShipInfo.race_strings, 2));
 		UnlockMasterShip (&master_q, hBuiltShip);
 
 		// Insert the ship in the master queue in the right location
@@ -85,38 +88,60 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 
 			MasterPtr = LockMasterShip (&master_q, hStarShip);
 			hNextShip = _GetSuccLink (MasterPtr);
-			curName = GetStringAddress (SetAbsStringTableIndex (
-					MasterPtr->ShipInfo.race_strings, 2));
+			curName = GetStringAddress (SetAbsStringTableIndex (MasterPtr->ShipInfo.race_strings, 2));
 			UnlockMasterShip (&master_q, hStarShip);
+			
+			// JMS: Debug stuff.
+			// log_add (log_Debug, "%d:%s", num_entries, curName);
 
 			if (strcmp (builtName, curName) < 0)
 				break;
 		}
 		
-		if(num_entries > (NUM_OF_NEW_SHIPS - 1)) // JMS: Deal with original melee ships normally.
-				InsertQueue (&master_q, hBuiltShip, hStarShip);
-		else 
+		// JMS: Deal with original melee ships normally.
+		if(num_entries > (NUM_OF_NEW_SHIPS - 1))
+			InsertQueue (&master_q, hBuiltShip, hStarShip);
+
+		// JMS: New ships have to go last so they don't break the existing
+		// saved ship lists (in addition to creating all sorts of freaky shit).
+		else
 		{
-			// JMS: Slylandro_kohrah ship goes last.
-			if(BuiltPtr->SpeciesID==SLYLANDRO_KOHRAH_ID)
+			// JMS: Baul goes last.
+			if(BuiltPtr->SpeciesID==BAUL_ID)
 				PutQueue (&master_q, hBuiltShip);
 			
-			// JMS: ISD goes before the last.
-			else if(BuiltPtr->SpeciesID==ISD_ID)
-			{
-				hStarShip = GetTailLink (&master_q);			
-				InsertQueue (&master_q, hBuiltShip, hStarShip);
-			}
+			// JMS: Foon-foon goes last.
+			else if(BuiltPtr->SpeciesID==FOONFOON_ID)
+				PutQueue (&master_q, hBuiltShip);
 			
-			// JMS: Lurg goes before the last.
+			// JMS: Lurg goes last.
 			else if(BuiltPtr->SpeciesID==LURG_ID)
+				PutQueue (&master_q, hBuiltShip);
+			
+			// JMS: ISD goes last.
+			else if(BuiltPtr->SpeciesID==ISD_ID)
+				PutQueue (&master_q, hBuiltShip);
+			
+			// JMS: Slykohr goes last.
+			else if(BuiltPtr->SpeciesID==SLYLANDRO_KOHRAH_ID)
+				PutQueue (&master_q, hBuiltShip);
+			
+			// JMS: Explorer goes second last, right before the Slykohr.
+			else if(BuiltPtr->SpeciesID==SIS_SHIP_ID)
 			{
 				hStarShip = GetTailLink (&master_q);			
 				InsertQueue (&master_q, hBuiltShip, hStarShip);
 			}
 			
-			// JMS: Explorer goes before the last.
-			else if(BuiltPtr->SpeciesID==SIS_SHIP_ID)
+			// JMS: You can use the following lines to insert a ship before the last ship.
+			/*if (BuiltPtr->SpeciesID==SOME_SHIP_ID)
+			 {
+			 hStarShip = GetTailLink (&master_q);			
+			 InsertQueue (&master_q, hBuiltShip, hStarShip);
+			 }*/
+			
+			// JMS: Alternative way to do the same thing.
+			/*else if(BuiltPtr->SpeciesID==SIS_SHIP_ID)
 			{
 				MASTER_SHIP_INFO *MasterPtr;
 				
@@ -125,7 +150,7 @@ LoadMasterShipList (void (* YieldProcessing)(void))
 				hNextShip = _GetPredLink (MasterPtr);
 				InsertQueue (&master_q, hBuiltShip, hNextShip);
 				UnlockMasterShip (&master_q, hStarShip);
-			}
+			}*/
 			
 		}
 	}		

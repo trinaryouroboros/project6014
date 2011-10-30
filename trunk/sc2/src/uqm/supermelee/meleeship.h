@@ -29,10 +29,12 @@ typedef enum MeleeShip {
 	MELEE_VUX,
 	MELEE_YEHAT,
 	MELEE_ZOQFOTPIK,
-	MELEE_SLYKOHR,   // JMS
+	MELEE_BAUL,
+	MELEE_FOONFOON,
 	MELEE_LURG,		 // JMS
 	MELEE_ISD,		 // JMS
 	MELEE_EXPLORER,  // JMS
+	MELEE_SLYKOHR,   // JMS
 	
 	MELEE_UNSET = ((BYTE) ~0) - 1,
 			// Used with the Update protocol, to register in the sentTeam
