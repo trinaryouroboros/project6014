@@ -1,0 +1,112 @@
+#summary How to add a new race to the game's source code.
+#labels Phase-Implementation
+
+= Introduction =
+
+Ok, ya dirty little scurvy-eaten wretches. This page is all about adding a new race into the game.
+
+ 
+I wrote this because I've now done it 5 times, each time having a couple of months in between - just enough to make one forget completely how it was actually done, resulting in several extra hours of programming 'fun'.
+
+Any way, enough talk, let's walk the walk.
+
+*CODE:*
+
+_1. Races.h:_
+a) Add a NEWRACE_ID (into the SPECIES_ID enum list), preferably after ISD_ID, and before SLYLANDRO_KOHRAH_ID.
+
+b) Add a NEWRACE_SHIP (into the enum list which ends in NUM_AVAILABLE_RACES.)
+Put it in the same position as in the SPECIES_ID enum list.
+
+c) Add your new race's CONVERSATION, SHIP, SHIP COST, IP SPEED, HYPERSPACE SPEED, IP ENCOUNTER PERCENT, HYPERSPACE ENCOUNTER PERCENT, TASKFORCE SHIP STRENGTH BOUNDS, and RACE COLOR into the  corresponding #define lists.
+(Note: If you add the new ship after SLYLANDRO_KOHRAH_ID, you're gonna have to muck around the master.c file. And if you add the new ship after LAST_MELEE_ID, you will have to mess with InitGameStructures in globdata.c also.)
+
+
+_2. globdata.h:_ 
+Add NEWRACE_CONVERSATION to globdata.h's CONVERSATION enum list (with the same name you added it to races.h's RACE_COMMUNICATION define list).
+
+_3. dummy.c:_
+Add your NEWRACE_CODE_RES into the ShipCodeRes enum list. The order of the original SCII races differs from races.h's lists: here they are ordered by alphabet. However, always add your new races AFTER all the original SCII races regardless of the alphabetic order, don't mix original and new races.
+Otherwise the universe explodes.
+
+_4. dummy.h:_
+Add "#include "ships/newrace/newrace.h"
+This makes dummy.c see which source files your NEWRACE_CODE_RES points to.
+
+_5. Loadship.c:_
+Add a NEWRACE_CODE into the code list. Put it into the same position as in races.h's lists.
+This list acts as a "link" between the numberings different in dummy.c and races.h.
+
+_6. corecode.h:_
+Add #include "ships/newrace/icode.h". 
+This makes loadship.c see which source files your NEWRACE_CODE points to.
+
+_7. master.c:_
+Edit LoadMasterShipList in such way that your new race is loaded into the supermelee ship pick
+list as one of the last races (see examples in the file). This ensures your race isn't loaded
+in place of the original SCII ones.
+
+_8. grpinfo.c:_
+Add your NEWRACE_SHIP into the BuildGroups function. Put it into the same position as in races.h's
+lists. This ensures your race's homeworld/other important systems work OK.
+
+_9. New files, ship:_
+Add your new ship files by creating folder sc2/src/uqm/ships/newrace. Remember to edit the makeinfo files in sc2/src/uqm/ships/newrace and sc2/src/uqm/ships to compile your new files. (newrace.c, newrace.h, Makeinfo, resinst.h, plus the files the gen_refiles.py utility SHOULD create.)
+
+_10. New files, comm:_
+Add your new comm files into sc2/src/uqm/comm/newrace. Edit the makeinfo files also, as in the previous item. (newracec.c, strings.h, Makeinfo, resinst.h, plus the files the gen_refiles.py utility SHOULD create.)
+ 
+
+
+*CONTENTS:*
+
+_11. New content files, ship:_ 
+Add your race's ship's new graphics, sound files and captainnames to sc2/content/base/ships
+
+_12. New content files, comm:_
+Add your race's comm graphics, music and dialogue into sc2/content/base/comm
+
+_13. resources.csv:_ 
+Then, let's modify the resources.csv file in tools/resmap.
+a) Add your race's communication resource identifiers: 
+(NEWRACE_MUSIC,  NEWRACE_FONT, NEWRACE_CONVERSATION_PHRASES,  NEWRACE_COLOR_MAP and NEWRACE_PMAP_ANIM)
+
+b) Add your race's ship resource identifiers:
+(NEWRACE_CODE,
+NEWRACE_VICTORY_SONG,
+NEWRACE_RACE_STRINGS,
+NEWRACE_SHIP_SOUNDS,
+NEWRACE_ICON_MASK_PMAP_ANIM,
+NEWRACE_MICON_MASK_PMAP_ANIM,
+NEWRACE_BIG_MASK_PMAP_ANIM,
+NEWRACE_MED_MASK_PMAP_ANIM,
+NEWRACE_SML_MASK_PMAP_ANIM,
+NEWRACEPRIMARY_BIG_MASK_PMAP_ANIM,
+NEWRACEPRIMARY_MED_MASK_PMAP_ANIM,
+NEWRACEPRIMARY_SML_MASK_PMAP_ANIM,
+NEWRACESECONDARY_BIG_MASK_PMAP_ANIM,
+NEWRACESECONDARY_MED_MASK_PMAP_ANIM,
+NEWRACESECONDARY_SML_MASK_PMAP_ANIM and
+NEWRACE_CAPTAIN_MASK_PMAP_ANIM)
+
+-Remember to make these identifiers to point into your new files. 
+
+-Remember to change also the 'ship.xxx.graphics' in addition to the NEWRACE_XXX constants.
+
+-Remember to change your 'ship.xxx.code' to correspond to its location in the DUMMY.C's list.
+
+-Remember to increment also other ships' 'ship.xxx.code's after you've changed your race's ship code.
+
+_14. gen_resfiles.py:_
+Run the gen_resfiles utility at the tools/resmap folder to propagate the changes to resources.csv
+to all the necessary .h files in the source code.
+
+_15. resinst.h:_
+In sc2/src/uqm/ships/newrace, copy the resource identifiers from igfxres.h, imusicre.h, isndres.h 
+and istrtab.h to resinst.h.
+
+_16. COMPILE!!!_
+
+
+
+Well, my young padawan. Now that I've guided you through this little exercise we can all agree that this has been as fun as pulling rotten, inflamed, plague-ridden wisdom teeth that have their twisted roots stuck so deep that they're tickling your rectum, if you know what I mean.
