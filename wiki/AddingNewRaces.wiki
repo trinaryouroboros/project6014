@@ -10,6 +10,8 @@ I wrote this because I've now done it 5 times, each time having a couple of mont
 
 Any way, enough talk, let's walk the walk.
 
+= Do it! =
+
 *CODE:*
 
 _1. Races.h:_
@@ -108,5 +110,6 @@ and istrtab.h to resinst.h.
 _16. COMPILE!!!_
 
 
+= Epilogue =
 
 Well, my young padawan. Now that I've guided you through this little exercise we can all agree that this has been as fun as pulling rotten, inflamed, plague-ridden wisdom teeth that have their twisted roots stuck so deep that they're tickling your rectum, if you know what I mean.
