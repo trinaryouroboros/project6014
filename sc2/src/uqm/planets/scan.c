@@ -516,6 +516,7 @@ savePlanetLocationImage (void)
 	r = cursorRect;
 	r.corner.x -= hs.x;
 	r.corner.y -= hs.y;
+		
 	eraseFrame = CaptureDrawable (CopyContextRect (&r));
 	SetFrameHot (eraseFrame, hs);
 }
