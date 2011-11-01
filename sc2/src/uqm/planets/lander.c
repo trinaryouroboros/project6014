@@ -226,7 +226,7 @@ extern PRIM_LINKS DisplayLinks;
 #define ADD_AT_END (1 << 4)
 #define REPAIR_COUNT (0xf)
 
-#define LANDER_SPEED_DENOM (10 >> RESOLUTION_FACTOR) // JMS_GFX
+#define LANDER_SPEED_DENOM (10) // JMS_GFX
 
 static BYTE lander_flags;
 static POINT curLanderLoc;
@@ -2114,11 +2114,11 @@ DoPlanetSide (LanderInputState *pMS)
 
 		angle = FACING_TO_ANGLE (GetFrameIndex (LanderFrame[0]));
 		landerSpeedNumer = GET_GAME_STATE (IMPROVED_LANDER_SPEED) ?
-				WORLD_TO_VELOCITY (2 * 14) :
-				WORLD_TO_VELOCITY (2 * 8);
+				WORLD_TO_VELOCITY (2 * (14 << RESOLUTION_FACTOR)) :
+				WORLD_TO_VELOCITY (2 * (8 << RESOLUTION_FACTOR));
 
 #ifdef FAST_FAST
-landerSpeedNumer = WORLD_TO_VELOCITY (48); // JMS
+landerSpeedNumer = WORLD_TO_VELOCITY (48 << RESOLUTION_FACTOR); // JMS
 #endif
 
 		SetVelocityComponents (&GLOBAL (velocity),
@@ -2161,7 +2161,7 @@ landerSpeedNumer = WORLD_TO_VELOCITY (48); // JMS
 	else
 	{
 		PLANETSIDE_DESC *pPSD;	// JMS
-		pPSD = planetSideDesc; // JMS
+		pPSD = planetSideDesc;	// JMS
 
 		if (crew_left)
 		{
@@ -2184,8 +2184,8 @@ landerSpeedNumer = WORLD_TO_VELOCITY (48); // JMS
 
 				angle = FACING_TO_ANGLE (index);
 				landerSpeedNumer = GET_GAME_STATE (IMPROVED_LANDER_SPEED) ?
-						WORLD_TO_VELOCITY ((2 * 14) - pPSD->LimpetLevel) :
-						WORLD_TO_VELOCITY ((2 * 8) - pPSD->LimpetLevel);
+						WORLD_TO_VELOCITY (((2 * 14) - pPSD->LimpetLevel) << RESOLUTION_FACTOR) :
+						WORLD_TO_VELOCITY (((2 * 8) - pPSD->LimpetLevel) << RESOLUTION_FACTOR);
 
 #ifdef FAST_FAST
 landerSpeedNumer = WORLD_TO_VELOCITY (48 - pPSD->LimpetLevel);
