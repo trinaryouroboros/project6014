@@ -142,8 +142,11 @@ Actual Dimensions  : 97x117
 {{{
 Original Dimensions: 29x33
 Perfect Dimensions : 116x132
-Actual Dimensions  : 109x83
+Actual Dimensions  : 166x131
 }}}
+
+_The width is far off on this. Might need to re-size._
+
 ===Orz Turret===
 {{{
 Original Dimensions: 13x17
