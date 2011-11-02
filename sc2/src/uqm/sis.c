@@ -61,7 +61,7 @@ static const COORD crew_lines_y_coords[16] =
 };
 ****/
 
-/**** Enlarged blueprint ****/
+/**** Enlarged BW blueprint
 static const COUNT crew_lines_sizes[16] =
 {
   4,3,3,2,2,2,1,1,1,2,9,8,7,2,2,1
@@ -75,6 +75,28 @@ static const COORD crew_lines_x_coords[16] =
 static const COORD crew_lines_y_coords[16] = 
 {
   20,18,16,14,12,10,8,18,16,14,12,10,8,12,10,8
+};
+ ****/
+
+/**** Damon's blueprint ****/
+static const COUNT crew_lines_sizes[11] =
+{
+	4,4,3,2,10,9,7,3,3,3,2
+};
+
+static const COORD crew_lines_x_coords_1x[16] = 
+{
+	86,83,82,81,59,60,63,46,49,52,55
+};
+
+static const COORD crew_lines_x_coords_4x[16] = 
+{
+	98,95,94,93,69,70,73,53,56,59,62
+};
+
+static const COORD crew_lines_y_coords[16] = 
+{
+	13,11,9,7,11,9,7,13,11,9,7
 };
 
 static const UNICODE *describeWeapon (BYTE moduleType);
@@ -1320,18 +1342,27 @@ GetCPodCapacity (POINT *ppt)
 			i++;
 		}
 
-		x = crew_lines_x_coords[i];
+		switch (RESOLUTION_FACTOR)
+		{
+			case 2:
+				x = crew_lines_x_coords_4x[i];
+				break;
+			case 0:
+			default:
+				x = crew_lines_x_coords_1x[i];
+				break;
+		}			
 		y = crew_lines_y_coords[i];
   
 		if (ppt)
 		{
 			static const Color crew_rows[] = PC_EXPLORER_CREW_COLOR_TABLE;
       
-			ppt->x = x + 2 * line_remainder - 1;
-			ppt->y = y + 6;
+			ppt->x = (x + 2 * line_remainder) << RESOLUTION_FACTOR;
+			ppt->y = (y << RESOLUTION_FACTOR) + RES_CASE(12,24,34);
       
 			if (optWhichFonts == OPT_PC)
-				SetContextForeGroundColor (crew_rows[(y-8)/2]);
+				SetContextForeGroundColor (crew_rows[(y-7)/2]);
 			else
 				SetContextForeGroundColor (THREEDO_CREW_COLOR);
 		}
@@ -1363,8 +1394,8 @@ GetCPodCapacity (POINT *ppt)
 		else
 			SetContextForeGroundColor (THREEDO_CREW_COLOR);
 		
-		ppt->x = 27 + (slotNr * SHIP_PIECE_OFFSET) - (colNr * 2);
-		ppt->y = 34 - (rowNr * 2);
+		ppt->x = (27 << RESOLUTION_FACTOR) + (slotNr * SHIP_PIECE_OFFSET) - ((colNr * 2) << RESOLUTION_FACTOR); // JMS_GFX
+		ppt->y = (34 - (rowNr * 2)) << RESOLUTION_FACTOR; // JMS_GFX
 
 		return GetCrewPodCapacity ();
 	}
@@ -1592,13 +1623,13 @@ GetFTankCapacity (POINT *ppt)
 			COUNT which_row;
 			static const Color fuel_colors[] = FUEL_COLOR_TABLE;
 	  
-			which_row = (COUNT)(GetFuelTotal() * 20
+			which_row = (COUNT)(GetFuelTotal() * EXPLORER_MAX_FUEL_BARS
 					    / (EXPLORER_FUEL_CAPACITY));
 	
-			ppt->x = 31+which_row;
-			ppt->y = 22;
+			ppt->x = (31 << RESOLUTION_FACTOR) + which_row; // JMS_GFX
+			ppt->y = RES_CASE(22, 44, 97); // JMS_GFX
 		
-			which_row = (COUNT)(GetFuelTotal() * MAX_FUEL_BARS
+			which_row = (COUNT)(GetFuelTotal() * 10
 					    / (EXPLORER_FUEL_CAPACITY));
 				
 			SetContextForeGroundColor (fuel_colors[which_row]);
@@ -1635,11 +1666,11 @@ GetFTankCapacity (POINT *ppt)
 
 		rowNr = ((volume - compartmentNr) * MAX_FUEL_BARS / HEFUEL_TANK_CAPACITY);
 		
-		ppt->x = 21 + (slotNr * SHIP_PIECE_OFFSET);
+		ppt->x = (21 << RESOLUTION_FACTOR) + (slotNr * SHIP_PIECE_OFFSET);
 		if (volume == FUEL_TANK_CAPACITY)
-			ppt->y = 27 - rowNr;
+			ppt->y = (27 << RESOLUTION_FACTOR) - rowNr;
 		else
-			ppt->y = 30 - rowNr;
+			ppt->y = (30 << RESOLUTION_FACTOR) - rowNr;
 
 		assert (rowNr + 1 < (COUNT) (sizeof fuelColors / sizeof fuelColors[0]));
 		SetContextForeGroundColor (fuelColors[rowNr]);

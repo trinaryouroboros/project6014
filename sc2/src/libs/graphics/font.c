@@ -327,7 +327,7 @@ getCharFrame (FONT_DESC *fontPtr, UniChar ch)
 	}
 	else
 	{
-		//log_add (log_Debug, "Character %u not present", (unsigned int) ch);
+		log_add (log_Debug, "Character %u not present", (unsigned int) ch);
 		return NULL;
 	}
 }

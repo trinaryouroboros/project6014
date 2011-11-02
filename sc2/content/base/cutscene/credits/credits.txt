@@ -1,4 +1,4 @@
-#(======== This is the Credit Roll script ================)
+﻿#(======== This is the Credit Roll script ================)
 #(===                                                  ===)
 #( Each text line has the following format:               )
 #(   font-size SP alignment SP text                       )
@@ -67,7 +67,7 @@ ART TEAM
 #(Art team)
 13 C
 Damon Czanik
-Gergely Sink�o
+Gergely Sinkó
 Aki Rissanen
 Mike Ling
 Amir Keren
@@ -84,7 +84,7 @@ DIALOGUE AND PLOT
 13 C
 Cedric Horner
 Jaakko Markus Seppälä
-Gergely Sinko�
+Gergely Sinkó
 Damon Czanik
 
 

@@ -522,7 +522,7 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 	s.origin.x = RADAR_X - r.corner.x;
 	s.origin.y = RADAR_Y - r.corner.y;
 	r.corner.x = s.origin.x - 1;
-	r.corner.y = s.origin.y - 11; // JMS_GFX
+	r.corner.y = s.origin.y - (11 << RESOLUTION_FACTOR); // JMS_GFX
 	r.extent.width = RADAR_WIDTH + 2;
 	BatchGraphics ();
 	SetContextForeGroundColor (
@@ -571,7 +571,7 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 					break;
 			}
 		}
-		r.extent.height = STATUS_HEIGHT - r.corner.y - 2;// RADAR_HEIGHT + 11; // JMS_GFX
+		r.extent.height = RADAR_HEIGHT + (11 << RESOLUTION_FACTOR); // STATUS_HEIGHT - r.corner.y - 2; // JMS_GFX
 		DrawPCMenu (beg_index, end_index, (BYTE)NewState, hilite, &r);
 		s.frame = 0;
 	}
@@ -581,10 +581,10 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 		{
 			r.corner.x -= 1;
 			r.extent.width += 1;
-			r.extent.height =  STATUS_HEIGHT - r.corner.y - 2;// RADAR_HEIGHT + 11; // JMS_GFX
+			r.extent.height = RADAR_HEIGHT + (11 << RESOLUTION_FACTOR); // STATUS_HEIGHT - r.corner.y - 2; // JMS_GFX
 		}
 		else
-			r.extent.height = 11;
+			r.extent.height = 11 << RESOLUTION_FACTOR;
 		
 		DrawFilledRectangle (&r);
 	}
