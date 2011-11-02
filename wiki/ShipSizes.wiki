@@ -144,6 +144,13 @@ Original Dimensions: 29x33
 Perfect Dimensions : 116x132
 Actual Dimensions  : 109x83
 }}}
+===Orz Turret===
+{{{
+Original Dimensions: 13x17
+Perfect Dimensions : 52x68
+Actual Dimensions  : 109x83
+}}}
+
 
 ==Pkunk Fury==
 {{{
