@@ -201,14 +201,19 @@ CalcTemp (SYSTEM_INFO *SysInfoPtr, SIZE radius)
 }
 
 static COUNT
-CalcRotation (PLANET_INFO *PlanetInfoPtr)
+CalcRotation (PLANET_INFO *PlanetInfoPtr, PLANET_DESC *planet)
 {
+	COUNT period;
 	if (PLANSIZE (PlanetInfoPtr->PlanDataPtr->Type) == GAS_GIANT)
-		return ((COUNT)CalcFromBase (80, 80));
+		period = ((COUNT)CalcFromBase (80, 80));
 	else if (((BYTE)TFB_Random () % 10) == 0)
-		return ((COUNT)CalcFromBase ((UWORD)50 * 240, (UWORD)200 * 240));
+		period = ((COUNT)CalcFromBase ((UWORD)50 * 240, (UWORD)200 * 240));
 	else
-		return ((COUNT)CalcFromBase (150, 150));
+		period = ((COUNT)CalcFromBase (150, 150));
+	// BW 2011: Research shows that most major moons have a synchronous rotation
+	if (planet->pPrevDesc != pSolarSysState->SunDesc)
+		period = ((COUNT)(FULL_CIRCLE * 240 / planet->orb_speed));
+	return period;
 }
 
 static SIZE
@@ -324,7 +329,7 @@ DoPlanetaryAnalysis (SYSTEM_INFO *SysInfoPtr, PLANET_DESC *pPlanetDesc)
 				break;
 		}
 
-		SysInfoPtr->PlanetInfo.RotationPeriod = CalcRotation (&SysInfoPtr->PlanetInfo);
+		SysInfoPtr->PlanetInfo.RotationPeriod = CalcRotation (&SysInfoPtr->PlanetInfo, pPlanetDesc);
 		SysInfoPtr->PlanetInfo.SurfaceGravity =
 				CalcGravity (SysInfoPtr->PlanetInfo.PlanetDensity,
 				SysInfoPtr->PlanetInfo.PlanetRadius);

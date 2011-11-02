@@ -50,8 +50,8 @@ static bool GenerateSol_generateOrbital (SOLARSYS_STATE *solarSys,
 		PLANET_DESC *world);
 // static bool GenerateSol_generateEnergy (SOLARSYS_STATE *solarSys,
 //		PLANET_DESC *world, COUNT *whichNode);
-// static bool GenerateSol_generateLife (SOLARSYS_STATE *solarSys,
-//		PLANET_DESC *world, COUNT *whichNode);
+static bool GenerateSol_generateLife (SOLARSYS_STATE *solarSys,
+		PLANET_DESC *world, COUNT *whichNode);
 
 // static int init_probe (void);
 // static void check_probe (void);
@@ -67,7 +67,7 @@ const GenerateFunctions generateSolFunctions = {
 	/* .generateOrbital  = */ GenerateSol_generateOrbital,
 	/* .generateMinerals = */ GenerateDefault_generateMinerals,
 	/* .generateEnergy   = */ GenerateDefault_generateEnergy, //GenerateSol_generateEnergy,
-	/* .generateLife     = */ GenerateDefault_generateLife, //GenerateSol_generateLife,
+	/* .generateLife     = */ GenerateSol_generateLife,
 };
 
 
@@ -523,24 +523,17 @@ GenerateSol_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 	return true;
 }
 
-/***
-    static bool
-GenerateSol_generateEnergy (SOLARSYS_STATE *solarSys, PLANET_DESC *world,
-		COUNT *whichNode)
-{
-	*whichNode = 0;
-	return true;
-}
 
 static bool
 GenerateSol_generateLife (SOLARSYS_STATE *solarSys, PLANET_DESC *world,
 		COUNT *whichNode)
 {
-	if (!matchWorld (solarSys, world, 2, 1))
+	if (!matchWorld (solarSys, world, 2, MATCH_PLANET))
 	{
 		*whichNode = 0;
 	}
-	else // Earth Moon
+	else // Earth is thriving with life but can't be landed on anyways
+		// Actually they're tanks :)
 	{
 		COUNT i;
 		COUNT nodeI;
@@ -565,12 +558,21 @@ GenerateSol_generateLife (SOLARSYS_STATE *solarSys, PLANET_DESC *world,
 					& (1L << i)))
 				break;
 			++nodeI;
-		} while (++i < 10);
+		} while (++i < 30);
 		*whichNode = nodeI;
 
 		TFB_SeedRandom (old_rand);
 	}
 
+	return true;
+}
+
+/***
+    static bool
+GenerateSol_generateEnergy (SOLARSYS_STATE *solarSys, PLANET_DESC *world,
+		COUNT *whichNode)
+{
+	*whichNode = 0;
 	return true;
 }
 
