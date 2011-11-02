@@ -59,9 +59,9 @@ DrawModuleStrings (MENU_STATE *pMS, BYTE NewModule)
 	s.origin.x = RADAR_X - r.corner.x;
 	s.origin.y = RADAR_Y - r.corner.y;
 	r.corner.x = s.origin.x - 1;
-	r.corner.y = s.origin.y - 11;
+	r.corner.y = s.origin.y - (11 << RESOLUTION_FACTOR);
 	r.extent.width = RADAR_WIDTH + 2;
-	r.extent.height = 11;
+	r.extent.height = 11 << RESOLUTION_FACTOR;
 	BatchGraphics ();
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
@@ -105,36 +105,31 @@ RedistributeFuel (void)
 	RECT r;
 
 	FuelVolume = GLOBAL_SIS (FuelOnBoard);
-	if (FuelVolume < FUEL_RESERVE) // <= FUEL_RESERVE)
+	if (FuelVolume <= EXPLORER_FUEL_VOLUME_PER_ROW) // FUEL_RESERVE)
 		return;
-	// BW: small hack to make fuel display correctly (as per issue 4)
-	// There's still a discrepancy when player has 10n+1 fuel units
-	// This may cause trouble with a moddable flagship
-	
 
 	GLOBAL_SIS (FuelOnBoard) = 0;
-	m = FUEL_VOLUME_PER_ROW;
+	m = EXPLORER_FUEL_VOLUME_PER_ROW;
 
 	r.extent.width = 1;
-	r.extent.height = 5;
 	while (FuelVolume -= m)
 	{
-		GLOBAL_SIS (FuelOnBoard) += FUEL_VOLUME_PER_ROW;
+		GLOBAL_SIS (FuelOnBoard) += EXPLORER_FUEL_VOLUME_PER_ROW;
 		GetFTankCapacity (&r.corner);
-		DrawPoint (&r.corner);
-		r.corner.y += r.extent.height + 1;
-		DrawPoint (&r.corner);
-		r.corner.y -= r.extent.height;
+		r.extent.height = RES_CASE(7, 14, 19); // JMS_GFX
+		DrawFilledRectangle (&r);
+		r.corner.y += RES_CASE(1,2,2);
+		r.extent.height = RES_CASE(5, 10, 15);
 		SetContextForeGroundColor (SetContextBackGroundColor (BLACK_COLOR));
 		DrawFilledRectangle (&r);
-		if (FuelVolume < FUEL_VOLUME_PER_ROW)
+		if (FuelVolume < EXPLORER_FUEL_VOLUME_PER_ROW)
 			m = (COUNT)FuelVolume;
 	}
 
 	FuelVolume = GLOBAL_SIS (FuelOnBoard) + m;
 
-	r.extent.height = 7;
-	while ((GLOBAL_SIS (FuelOnBoard) += FUEL_VOLUME_PER_ROW) <
+	r.extent.height = RES_CASE(7, 14, 19); // JMS_GFX
+	while ((GLOBAL_SIS (FuelOnBoard) += EXPLORER_FUEL_VOLUME_PER_ROW) <
 			GetFTankCapacity (&r.corner))
 	{
 		SetContextForeGroundColor (
@@ -515,10 +510,10 @@ InitFlash:
 				{
 					case PLANET_LANDER:
 					case EMPTY_SLOT + 3:
-						pMS->flash_rect0.corner.x = LANDER_X - 1;
-						pMS->flash_rect0.corner.y = LANDER_Y - 1;
-						pMS->flash_rect0.extent.width = 11 + 2;
-						pMS->flash_rect0.extent.height = 13 + 2;
+						pMS->flash_rect0.corner.x = LANDER_X - (1 << RESOLUTION_FACTOR); // JMS_GFX
+						pMS->flash_rect0.corner.y = LANDER_Y - (1 << RESOLUTION_FACTOR); // JMS_GFX
+						pMS->flash_rect0.extent.width = RES_CASE(11 + 2, 22 + 4, 40 + 8); // JMS_GFX
+						pMS->flash_rect0.extent.height = RES_CASE(13 + 2, 26 + 4, 48 + 8); // JMS_GFX
 
 						w = LANDER_WIDTH;
 						break;
@@ -526,23 +521,23 @@ InitFlash:
 					case EMPTY_SLOT + 0:
 						pMS->flash_rect0.corner.x = DRIVE_TOP_X - 1;
 						pMS->flash_rect0.corner.y = DRIVE_TOP_Y - 1;
-						pMS->flash_rect0.extent.width = 8;
-						pMS->flash_rect0.extent.height = 6;
+						pMS->flash_rect0.extent.width = 8 << RESOLUTION_FACTOR; // JMS_GFX
+						pMS->flash_rect0.extent.height = 6 << RESOLUTION_FACTOR; // JMS_GFX
 
 						break;
 					case TURNING_JETS:
 					case EMPTY_SLOT + 1:
 						pMS->flash_rect0.corner.x = JET_TOP_X - 1;
 						pMS->flash_rect0.corner.y = JET_TOP_Y - 1;
-						pMS->flash_rect0.extent.width = 9;
-						pMS->flash_rect0.extent.height = 10;
+						pMS->flash_rect0.extent.width = 9 << RESOLUTION_FACTOR; // JMS_GFX
+						pMS->flash_rect0.extent.height = 10 << RESOLUTION_FACTOR; // JMS_GFX
 
 						break;
 					default:
 						pMS->flash_rect0.corner.x = MODULE_TOP_X - 1;
 						pMS->flash_rect0.corner.y = MODULE_TOP_Y - 1;
 						pMS->flash_rect0.extent.width = SHIP_PIECE_OFFSET + 2;
-						pMS->flash_rect0.extent.height = 34;
+						pMS->flash_rect0.extent.height = 34 << RESOLUTION_FACTOR; // JMS_GFX
 
 						break;
 				}
@@ -569,7 +564,7 @@ ChangeFuelQuantity (void)
 {
 	RECT r;
 	
-	r.extent.width = 1;
+	r.extent.width = 1 << RESOLUTION_FACTOR; // JMS_GFX
 	
 	if (PulsedInputState.menu[KEY_MENU_UP])
 	{
