@@ -305,12 +305,13 @@ extern void FillOrbits (SOLARSYS_STATE *system, BYTE NumPlanets,
 		PLANET_DESC *pBaseDesc, BOOLEAN TypesDefined);
 extern void InitLander (BYTE LanderFlags);
 
-extern void InitSphereRotation (int direction, BOOLEAN shielded);
+extern void InitSphereRotation (int direction, BOOLEAN shielded, COUNT width, COUNT height);
 extern void UninitSphereRotation (void);
 extern void PrepareNextRotationFrame (void);
+extern void PrepareNextRotationFrameForIP (PLANET_DESC *pPlanetDesc, SIZE frameCounter);
 extern void DrawPlanetSphere (int x, int y);
 extern void DrawDefaultPlanetSphere (void);
-extern void RenderPlanetSphere (FRAME Frame, int offset, BOOLEAN doThrob);
+extern void RenderPlanetSphere (PLANET_ORBIT *Orbit, FRAME Frame, int offset, BOOLEAN shielded, BYTE flags, BOOLEAN doThrob, COUNT width, COUNT height, COUNT radius);
 extern void SetShieldThrobEffect (FRAME FromFrame, int offset, FRAME ToFrame);
 
 extern void ZoomInPlanetSphere (void);
@@ -319,6 +320,8 @@ extern void RotatePlanetSphere (BOOLEAN keepRate);
 extern void DrawScannedObjects (BOOLEAN Reversed);
 extern void GeneratePlanetSurface (PLANET_DESC *pPlanetDesc,
 		FRAME SurfDefFrame);
+extern void GeneratePlanetSurfaceForIP (PLANET_DESC *pPlanetDesc,
+		FRAME SurfDefFrame, COUNT width, COUNT height);
 extern void DeltaTopography (COUNT num_iterations, SBYTE *DepthArray,
 		RECT *pRect, SIZE depth_delta);
 
