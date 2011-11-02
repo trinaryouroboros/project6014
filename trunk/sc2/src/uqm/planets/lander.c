@@ -747,8 +747,16 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 				NotPositional (), NULL, GAME_SOUND_PRIORITY);
 	}
 
-	s.origin.x = ((11 + ((6 << RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)))); // JMS_GFX
-	s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) << RESOLUTION_FACTOR; // JMS_GFX
+	if (RESOLUTION_FACTOR == 0)
+	{
+		s.origin.x = ((11 + ((6 << RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)))); // JMS_GFX
+		s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) << RESOLUTION_FACTOR; // JMS_GFX
+	}
+	else
+	{
+		s.origin.x = ((30 + ((9 * RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)))); // JMS_GFX
+		s.origin.y = (53 * RESOLUTION_FACTOR - (9 * RESOLUTION_FACTOR * (crew_delta / NUM_CREW_COLS))); // JMS_GFX
+	}
 
 	OldContext = SetContext (RadarContext);
 	DrawStamp (&s);
