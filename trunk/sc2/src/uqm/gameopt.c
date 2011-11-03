@@ -265,6 +265,7 @@ DrawNameString (bool nameCaptain, UNICODE *Str, COUNT CursorPos,
 		BYTE *pchar_deltas;
 
 		TextRect (&lf, &text_r, char_deltas);
+		
 		if ((text_r.extent.width + 2) >= r.extent.width)
 		{	// the text does not fit the input box size and so
 			// will not fit when displayed later
