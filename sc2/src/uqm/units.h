@@ -81,7 +81,7 @@ extern unsigned int resolutionFactor; // JMS_GFX
 #define STATUS_MESSAGE_WIDTH   (STATUS_WIDTH - RES_STAT_SCALE(4))				// JMS_GFX
 #define STATUS_MESSAGE_HEIGHT  (7 << RESOLUTION_FACTOR)							// JMS_GFX
 
-#define SHIP_NAME_WIDTH        (STATUS_WIDTH - RES_STAT_SCALE(4))				// JMS_GFX
+#define SHIP_NAME_WIDTH        (STATUS_WIDTH - RES_STAT_SCALE(4) + RESOLUTION_FACTOR)// JMS_GFX
 #define SHIP_NAME_HEIGHT       RES_STAT_SCALE(7)								// JMS_GFX
 
 				/* A lot of other shit. */
