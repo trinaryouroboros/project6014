@@ -86,6 +86,9 @@ Cedric Horner
 Jaakko Markus Seppälä
 Gergely Sinkó
 Damon Czanik
+Chris Pearce
+Ariel Azia
+Luke Somers
 
 
 #(Programming)
@@ -99,6 +102,7 @@ Benjamin Wack
 Tristan Glaeser
 Edmund Horner
 Damon Czanik
+David Neuburger 
  
 
 #(Sounds)

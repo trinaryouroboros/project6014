@@ -178,7 +178,7 @@ DrawFileString (const MeleeTeam *team, const POINT *origin,
 
 		sprintf (buf, "%u", MeleeTeam_getValue (team));
 		Text.baseline = *origin;
-		Text.baseline.x += NUM_MELEE_COLUMNS * (LOAD_MELEE_BOX_WIDTH + LOAD_MELEE_BOX_SPACE) - 1;
+		Text.baseline.x += NUM_MELEE_COLUMNS * (LOAD_MELEE_BOX_WIDTH + LOAD_MELEE_BOX_SPACE) - 1 - 2 * RESOLUTION_FACTOR;
 		Text.align = ALIGN_RIGHT;
 		Text.pStr = buf;
 		Text.CharCount = (COUNT)~0;
@@ -232,7 +232,7 @@ FillFileView (MELEE_STATE *pMS)
 }
 
 #define FILE_STRING_ORIGIN_X (5 << RESOLUTION_FACTOR) // JMS_GFX
-#define FILE_STRING_ORIGIN_Y  ((34 << RESOLUTION_FACTOR) + (RESOLUTION_FACTOR * 21)) // JMS_GFX
+#define FILE_STRING_ORIGIN_Y  ((34 << RESOLUTION_FACTOR) - 2 * RESOLUTION_FACTOR) // JMS_GFX
 #define ENTRY_HEIGHT (32 << RESOLUTION_FACTOR) // JMS_GFX
 
 static void
