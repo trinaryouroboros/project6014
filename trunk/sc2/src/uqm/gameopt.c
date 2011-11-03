@@ -83,11 +83,24 @@ ConfirmSaveLoad (STAMP *MsgStamp)
 	{
 		*MsgStamp = SaveContextFrame (&r);
 	}
-	DrawStarConBox (&r, 2,
+	
+	if (RESOLUTION_FACTOR == 0)
+	{
+		DrawStarConBox (&r, 2,
 			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19),
 			BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F),
 			TRUE, BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
-	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x14, 0x14, 0x14), 0x0F));
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x14, 0x14, 0x14), 0x0F));
+	}
+	else
+	{
+		DrawStarConBox (&r, 2,
+			PCMENU_TOP_LEFT_BORDER_COLOR,
+			PCMENU_BOTTOM_RIGHT_BORDER_COLOR,
+			TRUE, PCMENU_BACKGROUND_COLOR);
+		SetContextForeGroundColor (PCMENU_SELECTION_TEXT_COLOR);
+	}
+	
 	font_DrawText (&t);
 }
 
