@@ -1,5 +1,5 @@
 comm.androsyn.colortable = BINTAB:addons/hires4x/comm/commander/commander.ct
-comm.androsyn.font = FONTRES:addons/hires4x/fonts/commander.fon
+comm.androsyn.font = FONTRES:addons/hires4x/fonts/androsynth.fon
 comm.androsyn.graphics = GFXRES:addons/hires4x/comm/androsyn/androsyn.ani
 comm.arilou.colortable = BINTAB:addons/hires4x/comm/arilou/arilou.ct
 comm.arilou.font = FONTRES:addons/hires4x/fonts/arilou.fon
@@ -27,7 +27,7 @@ comm.kohrah.colortable = BINTAB:addons/hires4x/comm/kohrah/kohrah.ct
 comm.kohrah.font = FONTRES:addons/hires4x/fonts/kohrah.fon
 comm.kohrah.graphics = GFXRES:addons/hires4x/comm/kohrah/kohrah.ani
 comm.lurg.colortable = BINTAB:addons/hires4x/comm/supox/supox.ct
-comm.lurg.font = FONTRES:addons/hires4x/fonts/supox.fon
+comm.lurg.font = FONTRES:addons/hires4x/fonts/lurg.fon
 comm.lurg.graphics = GFXRES:addons/hires4x/comm/lurg/lurg.ani
 comm.melnorme.colortable = BINTAB:addons/hires4x/comm/melnorme/melnorme.ct
 comm.melnorme.font = FONTRES:addons/hires4x/fonts/micro.fon
