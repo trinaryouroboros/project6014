@@ -175,6 +175,7 @@ PrepareNextRotationFrameForIP (PLANET_DESC *pPlanetDesc, SIZE frameCounter)
 	default: framerate = 1;
 		break;
 	}
+	framerate = 2 * framerate; //Skip every other frame for performance
 	if ((frameCounter % framerate) != 0)
 		return;
 

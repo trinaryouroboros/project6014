@@ -457,6 +457,7 @@ DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in,
 	SIZE i;
 	DWORD TimeIn;
 	TEXT t1, t2;
+	RECT r1, r2;
 	static const Color fade_cycle[] =
 	{
 		BUILD_COLOR (MAKE_RGB15_INIT (0x0A, 0x0A, 0x0A), 0x1D),
@@ -512,9 +513,11 @@ DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in,
 			TimeIn = GetTimeCounter ();
 		}
 		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
-		font_DrawText (&t1);
-		font_DrawText (&t2);
+				   BUILD_COLOR_RGBA (0x50, 0x50, 0x50, 0xff));
+		TextRect(&t1, &r1, NULL);
+		TextRect(&t2, &r2, NULL);
+		DrawFilledRectangle (&r1);
+		DrawFilledRectangle (&r2);
 	}
 }
 
