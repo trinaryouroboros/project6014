@@ -114,6 +114,7 @@ static void
 DrawBaseStateStrings (STARBASE_STATE OldState, STARBASE_STATE NewState)
 {
 	TEXT t;
+	RECT r;
 	//STRING locString;
 
 	SetContext (ScreenContext);
@@ -140,6 +141,12 @@ DrawBaseStateStrings (STARBASE_STATE OldState, STARBASE_STATE NewState)
 
 	t.baseline.y = ((106 + 28 + ((23 - 4) * OldState)) << RESOLUTION_FACTOR) + (SAFE_Y + 4); // JMS_GFX
 	t.pStr = GAME_STRING (STARBASE_STRING_BASE + 1 + OldState);
+	// BW: erase previously selected string before redrawing it
+	TextRect(&t, &r, NULL);
+	SetContextForeGroundColor (
+			   BUILD_COLOR_RGBA (0x88, 0x88, 0x88, 0xff));
+	DrawFilledRectangle (&r);
+	SetContextForeGroundColor (BLACK_COLOR);
 	t.CharCount = (COUNT)~0;
 	font_DrawText (&t);
 

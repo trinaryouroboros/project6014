@@ -754,8 +754,8 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 	}
 	else
 	{
-		s.origin.x = ((30 + ((9 * RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)))); // JMS_GFX
-		s.origin.y = (53 * RESOLUTION_FACTOR - (9 * RESOLUTION_FACTOR * (crew_delta / NUM_CREW_COLS))); // JMS_GFX
+		s.origin.x = 27 + ((9 * RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)); // JMS_GFX
+		s.origin.y = (53 * RESOLUTION_FACTOR - (9 * RESOLUTION_FACTOR * (crew_delta / NUM_CREW_COLS))) - 3; // JMS_GFX
 	}
 
 	OldContext = SetContext (RadarContext);
@@ -808,14 +808,14 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		}
 		
 		creature_data_index = -1;	 
-		start_count = (pPSD->BiologicalLevel) << RESOLUTION_FACTOR; // JMS_GFX
+		start_count = RES_STAT_SCALE(pPSD->BiologicalLevel); // JMS_GFX
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 41);
 
 		pPSD->BiologicalLevel += NumRetrieved;
 	}
 	else
 	{
-		start_count = (pPSD->ElementLevel) << RESOLUTION_FACTOR; // JMS_GFX
+		start_count = RES_STAT_SCALE(pPSD->ElementLevel); // JMS_GFX
 		pPSD->ElementLevel += NumRetrieved;
 		if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
 		{
@@ -826,8 +826,8 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 43);
 	}
 
-	s.origin.x = RESOLUTION_FACTOR; // JMS_GFX
-	s.origin.y = RESOLUTION_FACTOR * 50 - (int)start_count; // JMS_GFX XXX TODO: Is this right, or should the (RESOLUTION_FACTOR * 50) be deleted
+	s.origin.x = 0; // JMS_GFX
+	s.origin.y = - (int)start_count;
 	if (!(start_count & 1))
 		s.frame = IncFrameIndex (s.frame);
 
@@ -2642,8 +2642,8 @@ InitLander (BYTE LanderFlags)
 		if ((int)free_space < (int)(MAX_SCROUNGED << capacity_shift))
 		{
 			r.corner.x = 1;
-			r.extent.width = 4;
-			r.extent.height = MAX_SCROUNGED - (free_space >> capacity_shift) + 1;
+			r.extent.width = RES_STAT_SCALE(4);
+			r.extent.height = RES_STAT_SCALE(MAX_SCROUNGED - (free_space >> capacity_shift) + 1);
 			SetContextForeGroundColor (BLACK_COLOR);
 			DrawFilledRectangle (&r);
 		}

@@ -21,7 +21,7 @@
 #include "libs/graphics/tfb_draw.h"
 #include "libs/log.h"
 
-#define DEBUG_INTERSEC
+// #define DEBUG_INTERSEC
  
 static inline BOOLEAN
 images_intersect (IMAGE_BOX *box1, IMAGE_BOX *box2, const RECT *rect)

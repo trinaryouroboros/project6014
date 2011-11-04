@@ -1070,7 +1070,7 @@ ScanPlanet (COUNT scanType)
 		TimeCount TimeOut;
 
 		t.baseline.x = SIS_SCREEN_WIDTH >> 1;
-		t.baseline.y = SIS_SCREEN_HEIGHT - MAP_HEIGHT - 7;
+		t.baseline.y = SIS_SCREEN_HEIGHT - MAP_HEIGHT - (7 << RESOLUTION_FACTOR);
 		t.align = ALIGN_CENTER;
 		t.CharCount = (COUNT)~0;
 

@@ -1513,8 +1513,8 @@ GetSBayCapacity (POINT *ppt)
 			SetContextForeGroundColor (colorBars[rowNr]);
 		}
 		
-		ppt->x = 19 + (slotNr * SHIP_PIECE_OFFSET);
-		ppt->y = 34 - (rowNr * 2);
+		ppt->x = (19 << RESOLUTION_FACTOR) + (slotNr * SHIP_PIECE_OFFSET);
+		ppt->y = (34 - (rowNr * 2)) << RESOLUTION_FACTOR;
 		/*** Graphics positionning for tentative Explorer storage bay
 		     ppt->y = 27 - rowNr;
 		     if (rowNr == 9)
