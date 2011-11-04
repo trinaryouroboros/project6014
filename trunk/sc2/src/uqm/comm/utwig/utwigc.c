@@ -974,7 +974,7 @@ init_utwig_comm (void)
 	utwig_desc.uninit_encounter_func = uninit_utwig;
 
 	utwig_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	utwig_desc.AlienTextBaseline.y = 70;
+	utwig_desc.AlienTextBaseline.y = RES_SIS_SCALE(70);
 	utwig_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	if (GET_GAME_STATE (UTWIG_HAVE_ULTRON))

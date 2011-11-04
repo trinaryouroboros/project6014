@@ -713,9 +713,9 @@ init_commander_comm ()
 		commander_desc.AlienSongFlags |= LDASF_USE_ALTERNATE;
 	}
 
-	commander_desc.AlienTextWidth = 143;
-	commander_desc.AlienTextBaseline.x = 164;
-	commander_desc.AlienTextBaseline.y = 20;
+	commander_desc.AlienTextWidth = RES_SIS_SCALE(143); // JMS_GFX
+	commander_desc.AlienTextBaseline.x = RES_SIS_SCALE(164); // JMS_GFX
+	commander_desc.AlienTextBaseline.y = RES_SIS_SCALE(20); // JMS_GFX
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	retval = &commander_desc;

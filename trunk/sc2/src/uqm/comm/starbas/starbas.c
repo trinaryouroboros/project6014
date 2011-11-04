@@ -1109,9 +1109,9 @@ init_starbase_comm ()
 	commander_desc.post_encounter_func = post_starbase_enc;
 	commander_desc.uninit_encounter_func = uninit_starbase;
 
-	commander_desc.AlienTextWidth = 143 << RESOLUTION_FACTOR;
-	commander_desc.AlienTextBaseline.x = 164 << RESOLUTION_FACTOR;
-	commander_desc.AlienTextBaseline.y = 20 << RESOLUTION_FACTOR;
+	commander_desc.AlienTextWidth = RES_SIS_SCALE(143);
+	commander_desc.AlienTextBaseline.x = RES_SIS_SCALE(164);
+	commander_desc.AlienTextBaseline.y = RES_SIS_SCALE(20);
 
 	// use alternate Starbase track if available
 	commander_desc.AlienAltSongRes = STARBASE_ALT_MUSIC;

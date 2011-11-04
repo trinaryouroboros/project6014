@@ -884,7 +884,7 @@ DrawStorageBays (BOOLEAN Refresh)
 				SetContextForeGroundColor (STORAGE_BAY_EMPTY_COLOR);
 				DrawFilledRectangle (&r);
 			}
-			r.corner.x += r.extent.width + 1;
+			r.corner.x += r.extent.width + RES_STAT_SCALE(1);
 
 			--i;
 		}
@@ -894,7 +894,7 @@ DrawStorageBays (BOOLEAN Refresh)
 		while (i--)
 		{
 			DrawFilledRectangle (&r);
-			r.corner.x += r.extent.width + 1;
+			r.corner.x += r.extent.width + RES_STAT_SCALE(1);
 		}
 	}
 
@@ -963,7 +963,7 @@ DrawThrusters (void)
 	STAMP s;
 	COUNT i;
 
-	s.origin.x = 1;
+	s.origin.x = RES_STAT_SCALE(1);
 	s.origin.y = 0;
 	for (i = 0; i < NUM_DRIVE_SLOTS; ++i)
 	{
@@ -986,7 +986,7 @@ DrawTurningJets (void)
 	STAMP s;
 	COUNT i;
 
-	s.origin.x = 1;
+	s.origin.x = RES_STAT_SCALE(1);
 	s.origin.y = 0;
 	for (i = 0; i < NUM_JET_SLOTS; ++i)
 	{
@@ -1009,8 +1009,8 @@ DrawModules (void)
 	STAMP s;
 	COUNT i;
 
-	s.origin.x = 1; // This properly centers the modules.
-	s.origin.y = 1;
+	s.origin.x = RES_STAT_SCALE(1); // This properly centers the modules.
+	s.origin.y = RES_STAT_SCALE(1);
 	for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 	{
 		BYTE which_piece = GLOBAL_SIS (ModuleSlots[i]);
@@ -1048,7 +1048,7 @@ DrawSupportShips (void)
 
 		s.origin.x = RES_STAT_SCALE(pship_pos->x);
 		s.origin.y = RES_STAT_SCALE(pship_pos->y);
-		s.frame = StarShipPtr->icons;
+		s.frame = SetAbsFrameIndex (StarShipPtr->icons, 2);
 		LockMutex (GraphicsLock);
 		DrawStamp (&s);
 		UnlockMutex (GraphicsLock);
