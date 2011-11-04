@@ -88,7 +88,7 @@ getSupportShipIcon (ROSTER_STATE *rosterState)
 	if (!ShipFragPtr)
 		return;
 
-	rosterState->curShipFrame = ShipFragPtr->icons;
+	rosterState->curShipFrame = SetAbsFrameIndex (ShipFragPtr->icons, 2);
 	UnlockShipFrag (&GLOBAL (built_ship_q), hShipFrag);
 }
 

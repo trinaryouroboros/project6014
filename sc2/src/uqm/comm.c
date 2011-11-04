@@ -1147,7 +1147,7 @@ PlayerResponseInput (ENCOUNTER_STATE *pES)
 
 			LockMutex (GraphicsLock);
 			BatchGraphics ();
-			add_text (-2, &pES->response_list[pES->cur_response].response_text);
+			// add_text (-2, &pES->response_list[pES->cur_response].response_text);
 
 			pES->cur_response = response;
 
@@ -1156,13 +1156,14 @@ PlayerResponseInput (ENCOUNTER_STATE *pES)
 			if (response < pES->top_response)
 			{
 				pES->top_response = 0;
-				RefreshResponses (pES);
+				// RefreshResponses (pES);
 			}
 			else if (y > SIS_SCREEN_HEIGHT)
 			{
 				pES->top_response = response;
-				RefreshResponses (pES);
+				// RefreshResponses (pES);
 			}
+			RefreshResponses (pES);
 			UnbatchGraphics ();
 			UnlockMutex (GraphicsLock);
 		}

@@ -423,7 +423,7 @@ init_lurg_comm (void)
 	lurg_desc.uninit_encounter_func = uninit_lurg;
 
 	lurg_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	lurg_desc.AlienTextBaseline.y = 100;
+	lurg_desc.AlienTextBaseline.y = RES_SIS_SCALE(100);
 	lurg_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 1);

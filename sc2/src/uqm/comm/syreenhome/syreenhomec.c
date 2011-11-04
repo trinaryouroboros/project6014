@@ -27,7 +27,7 @@
 #include "uqm/gameev.h"
 
 
-static LOCDATA syreenhome_desc =
+static LOCDATA syreenhome_desc_1x =
 {
 	SYREENHOME_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
@@ -173,6 +173,80 @@ static LOCDATA syreenhome_desc =
 	},
 };
 
+static LOCDATA syreenhome_desc_4x =
+{
+	SYREENHOME_CONVERSATION, /* AlienConv */
+	NULL, /* init_encounter_func */
+	NULL, /* post_encounter_func */
+	NULL, /* uninit_encounter_func */
+	SYREEN_HOME_PMAP_ANIM, /* AlienFrame */
+	SYREEN_HOME_FONT, /* AlienFont */
+	WHITE_COLOR_INIT, /* AlienTextFColor */
+	BLACK_COLOR_INIT, /* AlienTextBColor */
+	{0, 0}, /* AlienTextBaseline */
+	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
+	ALIGN_CENTER, /* AlienTextAlign */
+	VALIGN_BOTTOM, /* AlienTextValign */
+	SYREEN_HOME_COLOR_MAP, /* AlienColorMap */
+	SYREEN_HOME_MUSIC, /* AlienSong */
+	NULL_RESOURCE, /* AlienAltSong */
+	0, /* AlienSongFlags */
+	SYREEN_HOME_CONVERSATION_PHRASES, /* PlayerPhrases */
+	3, /* NumAnimations */
+	{ /* AlienAmbientArray (ambient animations) */
+	  {             // 0 - blinking eyes
+			7, /* StartIndex */
+			2, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
+			ONE_SECOND * 7, ONE_SECOND * 6, /* RestartRate */
+			0, /* BlockMask */
+		},
+	  {             // 1 - left girl manipulating starmap
+			9, /* StartIndex */
+			9, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND * 3, ONE_SECOND * 5, /* RestartRate */
+			0, /* BlockMask */
+		},
+	  {             // 2 - right girl moving pieces
+			18, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 5, ONE_SECOND / 5, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+	},
+	{ /* AlienTransitionDesc */
+		0, /* StartIndex */
+		0, /* NumFrames */
+		0, /* AnimFlags */
+		0, 0, /* FrameRate */
+		0, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	{ /* AlienTalkDesc */
+		1, /* StartIndex */
+		6, /* NumFrames */
+		0, /* AnimFlags */
+		ONE_SECOND / 20, 0, /* FrameRate */
+		ONE_SECOND / 12, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	NULL, /* AlienNumberSpeech - none */
+	/* Filler for loaded resources */
+	NULL, NULL, NULL,
+	NULL,
+	NULL,
+	0, /* NumFeatures */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
+	},
+	{0 /* AlienFeatureChoice (will be computed later) */
+	},
+};
+
 static void
 ExitConversation (RESPONSE_REF R)
 {
@@ -301,14 +375,26 @@ post_syreenhome_enc (void)
 LOCDATA*
 init_syreenhome_comm (void)
 {
+	LOCDATA syreenhome_desc;
 	LOCDATA *retval;
 
+	switch (RESOLUTION_FACTOR)
+	{
+	case 2:
+		syreenhome_desc = syreenhome_desc_4x;
+		break;
+	case 0:
+	default:
+		syreenhome_desc = syreenhome_desc_1x;
+		break;
+	}
+	
 	syreenhome_desc.init_encounter_func = Intro;
 	syreenhome_desc.post_encounter_func = post_syreenhome_enc;
 	syreenhome_desc.uninit_encounter_func = uninit_syreenhome;
 
 	syreenhome_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreenhome_desc.AlienTextBaseline.y = 100;
+	syreenhome_desc.AlienTextBaseline.y = RES_SIS_SCALE(100);
 	syreenhome_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
