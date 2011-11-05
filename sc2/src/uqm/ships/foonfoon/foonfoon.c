@@ -20,20 +20,20 @@
 #include "foonfoon.h"
 #include "resinst.h"
 
-#define MAX_CREW 30
-#define MAX_ENERGY 10
+#define MAX_CREW 10
+#define MAX_ENERGY 32
 #define ENERGY_REGENERATION 1
-#define WEAPON_ENERGY_COST 2
+#define WEAPON_ENERGY_COST 5
 #define SPECIAL_ENERGY_COST 3
-#define ENERGY_WAIT 10
-#define MAX_THRUST 48
+#define ENERGY_WAIT 2
+#define MAX_THRUST 50
 #define THRUST_INCREMENT 12
 #define TURN_WAIT 1
 #define THRUST_WAIT 1
 #define WEAPON_WAIT 0
 #define SPECIAL_WAIT 7
 
-#define SHIP_MASS 5
+#define SHIP_MASS 2
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 10
 #define MISSILE_RANGE (MISSILE_SPEED * MISSILE_LIFE)
@@ -396,8 +396,8 @@ static COUNT
 initialize_standard_missile (ELEMENT *ShipPtr, HELEMENT MissileArray[])
 {
 #define FOONFOON_FORWARD_OFFSET (16 << RESOLUTION_FACTOR) // JMS_GFX
-#define MISSILE_HITS 1
-#define MISSILE_DAMAGE 1
+#define MISSILE_HITS 100
+#define MISSILE_DAMAGE 2
 #define MISSILE_OFFSET (1 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;

@@ -958,7 +958,7 @@ SellMinerals (RESPONSE_REF R)
 	LockMutex (GraphicsLock);
 	ClearSISRect (DRAW_SIS_DISPLAY);
 	UnlockMutex (GraphicsLock);
-// DrawStorageBays (FALSE);
+	//DrawStorageBays (FALSE);
 
 	if (total < 1000)
 	{
@@ -1073,11 +1073,11 @@ SellMinerals (RESPONSE_REF R)
 	}
 
 	NPCPhrase (pStr1);
-	if (speechVolumeScale == 0.0f)
+	/*if (speechVolumeScale == 0.0f)
 	{
 		NPCPhrase (SPACE);
 		NPCPhrase (GLOBAL_PLAYER_NAME);
-	}
+	}*/
 	NPCPhrase (pStr2);
 
 	NormalStarbase (R);

@@ -23,22 +23,22 @@
 #include "uqm/globdata.h"
 
 
-#define MAX_CREW 8
-#define MAX_ENERGY 24
-#define ENERGY_REGENERATION 1
-#define WEAPON_ENERGY_COST 2
-#define SPECIAL_ENERGY_COST 1
-#define ENERGY_WAIT 6
-#define MAX_THRUST 28
-#define THRUST_INCREMENT 7
-#define TURN_WAIT 1
-#define THRUST_WAIT 0
-#define WEAPON_WAIT 12
+#define MAX_CREW 16
+#define MAX_ENERGY 12
+#define ENERGY_REGENERATION 3
+#define WEAPON_ENERGY_COST 1
+#define SPECIAL_ENERGY_COST 4
+#define ENERGY_WAIT 24
+#define MAX_THRUST 32
+#define THRUST_INCREMENT 6
+#define TURN_WAIT 3
+#define THRUST_WAIT 5
+#define WEAPON_WAIT 1
 #define SPECIAL_WAIT 0
 
-#define SHIP_MASS 7
+#define SHIP_MASS 9
 #define BAUL_OFFSET 9
-#define MISSILE_SPEED DISPLAY_TO_WORLD (30)
+#define MISSILE_SPEED DISPLAY_TO_WORLD (20)
 #define MISSILE_LIFE 15
 
 static RACE_DESC baul_desc =
@@ -113,9 +113,9 @@ static RACE_DESC baul_desc =
 };
 
 // JMS_GFX
-#define MAX_THRUST_2XRES 56
-#define THRUST_INCREMENT_2XRES 14
-#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (60)
+#define MAX_THRUST_2XRES 64
+#define THRUST_INCREMENT_2XRES 12
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (40)
 
 // JMS_GFX
 static RACE_DESC baul_desc_2xres =
@@ -190,9 +190,9 @@ static RACE_DESC baul_desc_2xres =
 };
 
 // JMS_GFX
-#define MAX_THRUST_4XRES 112
-#define THRUST_INCREMENT_4XRES 28
-#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (120)
+#define MAX_THRUST_4XRES 128
+#define THRUST_INCREMENT_4XRES 24
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (80)
 
 // JMS_GFX
 static RACE_DESC baul_desc_4xres =
@@ -356,45 +356,173 @@ baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	}
 }
 
-#define GAS_WAIT 1
 
+#define GAS_SPEED DISPLAY_TO_WORLD (1 << RESOLUTION_FACTOR) // JMS_GFX
 static void
 gas_preprocess (ELEMENT *ElementPtr)
 {
-	ZeroVelocityComponents (&ElementPtr->velocity);
+	BYTE thrust_wait, turn_wait;
+	
+	thrust_wait = HINIBBLE (ElementPtr->turn_wait);
+	turn_wait = LONIBBLE (ElementPtr->turn_wait);
+	
+	if (turn_wait > 0)
+		--turn_wait;
+	else
+	{
+		COUNT facing;
+		facing = (COUNT)TFB_Random ();
+		SetVelocityVector (&ElementPtr->velocity, GAS_SPEED, facing);
+		turn_wait = 4;
+	}
+	
+	ElementPtr->turn_wait = MAKE_BYTE (turn_wait, thrust_wait);
 	
 	if (ElementPtr->state_flags & NONSOLID)
 	{
-		ElementPtr->state_flags &= ~NONSOLID;
-		ElementPtr->state_flags |= APPEARING;
-		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex],
-					 STAMP_PRIM);
+		ELEMENT *eptr;
 		
-		InitIntersectStartPoint (ElementPtr);
-		InitIntersectEndPoint (ElementPtr);
-		InitIntersectFrame (ElementPtr);
-	}
-	else if (ElementPtr->turn_wait > 0)
-		--ElementPtr->turn_wait;
-	else
-	{
-#define NUM_GAS_FADES 6
-		if (ElementPtr->life_span <= NUM_GAS_FADES * (GAS_WAIT + 1)
-			|| GetFrameIndex (
-							  ElementPtr->current.image.frame
-							  ) != NUM_GAS_FADES)
-			ElementPtr->next.image.frame =
-			DecFrameIndex (ElementPtr->current.image.frame);
-		else if (ElementPtr->life_span > NUM_GAS_FADES * (GAS_WAIT + 1))
-			ElementPtr->next.image.frame = SetAbsFrameIndex (
-															 ElementPtr->current.image.frame,
-															 GetFrameCount (ElementPtr->current.image.frame) - 1
-															 );
+		LockElement (ElementPtr->hTarget, &eptr);
+		ElementPtr->next.location = eptr->next.location;
 		
-		ElementPtr->turn_wait = GAS_WAIT;
-		ElementPtr->state_flags |= CHANGING;
+		if (ElementPtr->turn_wait)
+		{
+			HELEMENT hEffect;
+			STARSHIP *StarShipPtr;
+			
+			if (GetFrameIndex (ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame)) == 0)
+				ElementPtr->next.image.frame = SetRelFrameIndex (ElementPtr->next.image.frame, -8);
+			
+			GetElementStarShip (eptr, &StarShipPtr);
+			
+			hEffect = AllocElement ();
+			if (hEffect)
+			{
+				LockElement (hEffect, &eptr);
+				eptr->playerNr = ElementPtr->playerNr;
+				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
+				eptr->life_span = 1;
+				eptr->current = eptr->next = ElementPtr->next;
+				eptr->preprocess_func = gas_preprocess;
+				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
+				
+				GetElementStarShip (ElementPtr, &StarShipPtr);
+				SetElementStarShip (eptr, StarShipPtr);
+				eptr->hTarget = ElementPtr->hTarget;
+				
+				UnlockElement (hEffect);
+				PutElement (hEffect);
+			}
+		}
+		
+		UnlockElement (ElementPtr->hTarget);
 	}
 }
+
+static void
+gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+{
+	if (ElementPtr1->state_flags & PLAYER_SHIP)
+	{
+		HELEMENT hGasElement, hNextElement;
+		ELEMENT *GasPtr;
+		STARSHIP *StarShipPtr;
+		
+		GetElementStarShip (ElementPtr0, &StarShipPtr);
+		for (hGasElement = GetHeadElement ();
+			 hGasElement; hGasElement = hNextElement)
+		{
+			LockElement (hGasElement, &GasPtr);
+			if (elementsOfSamePlayer (GasPtr, ElementPtr0)
+				&& GasPtr->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.special
+				&& (GasPtr->state_flags & NONSOLID))
+			{
+				UnlockElement (hGasElement);
+				break;
+			}
+			
+			hNextElement = GetSuccElement (GasPtr);
+			UnlockElement (hGasElement);
+		}
+		
+		if (hGasElement || (hGasElement = AllocElement ()))
+		{
+			LockElement (hGasElement, &GasPtr);
+			
+			if (GasPtr->state_flags == 0) /* not allocated before */
+			{
+				InsertElement (hGasElement, GetHeadElement ());
+				
+				GasPtr->current = ElementPtr0->next;
+				GasPtr->current.image.frame = SetAbsFrameIndex (GasPtr->current.image.frame, 8);
+				GasPtr->next = GasPtr->current;
+				GasPtr->playerNr = ElementPtr0->playerNr;
+				GasPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
+				GasPtr->preprocess_func = gas_preprocess;
+				SetPrimType (&(GLOBAL (DisplayArray))[GasPtr->PrimIndex],NO_PRIM);
+				SetElementStarShip (GasPtr, StarShipPtr);
+				GetElementStarShip (ElementPtr1, &StarShipPtr);
+				GasPtr->hTarget = StarShipPtr->hShip;
+			}
+			
+			GasPtr->life_span = ElementPtr0->life_span;
+			UnlockElement (hGasElement);
+		}
+		
+		ElementPtr0->hit_points = 0;
+		ElementPtr0->life_span = 0;
+		ElementPtr0->state_flags |= DISAPPEARING | COLLISION | NONSOLID;
+	}
+	(void) pPt0;  /* Satisfying compiler (unused parameter) */
+	(void) pPt1;  /* Satisfying compiler (unused parameter) */
+}
+
+#define GAS_HITS 100
+#define GAS_DAMAGE 1
+#define GAS_LIFE 480
+#define GAS_OFFSET 100
+#define GAS_INIT_SPEED DISPLAY_TO_WORLD (4 << RESOLUTION_FACTOR) // JMS_GFX
+#define GAS_SPREAD_MINIMUM 6
+#define GAS_SPREAD_VARIATION 4
+static void spawn_gas (ELEMENT *ShipPtr)
+{
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	HELEMENT Missile;
+		
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	MissileBlock.cx = ShipPtr->next.location.x;
+	MissileBlock.cy = ShipPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+	MissileBlock.face = (StarShipPtr->ShipFacing - 7 - (((COUNT)TFB_Random ()) % 3)) % 16;
+	MissileBlock.index = GetFrameCount (StarShipPtr->RaceDescPtr->ship_data.special[0]) - 1;
+	MissileBlock.sender = ShipPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
+	MissileBlock.pixoffs = GAS_OFFSET;
+	MissileBlock.speed = GAS_INIT_SPEED;
+	MissileBlock.hit_points = GAS_HITS;
+	MissileBlock.damage = GAS_DAMAGE;
+	MissileBlock.life = GAS_LIFE;
+	MissileBlock.preprocess_func = gas_preprocess;
+	MissileBlock.blast_offs = GAS_OFFSET;
+	Missile = initialize_missile (&MissileBlock);
+	
+	if (Missile)
+	{
+		ELEMENT *GasPtr;
+		
+		LockElement (Missile, &GasPtr);
+		// GasPtr->turn_wait affects how long the projectile travels at GAS_INIT_SPEED.
+		GasPtr->turn_wait = GAS_SPREAD_MINIMUM + ((COUNT)TFB_Random () & GAS_SPREAD_VARIATION);
+		GasPtr->collision_func = gas_collision;
+		SetElementStarShip (GasPtr, StarShipPtr);
+		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), GasPtr);
+		UnlockElement (Missile);
+		PutElement (Missile);
+	}
+}
+
+
 
 static COUNT
 initialize_baulfire (ELEMENT *ShipPtr, HELEMENT BaulfireArray[])
@@ -424,101 +552,36 @@ initialize_baulfire (ELEMENT *ShipPtr, HELEMENT BaulfireArray[])
 	return (1);
 }
 
+#define GAS_BATCH_SIZE 3
+static void
+baul_postprocess (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	if ((StarShipPtr->cur_status_flags & SPECIAL)
+		&& StarShipPtr->special_counter == 0
+		&& DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST))
+	{
+		int i;
+		
+		ProcessSound (SetAbsSoundIndex // Spawn gas.
+					  (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+		
+		for (i = 0; i < GAS_BATCH_SIZE; i++)
+			spawn_gas (ElementPtr);
+		
+		StarShipPtr->special_counter = SPECIAL_WAIT;
+	}
+}
+
 static void
 baul_preprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
-	if (!(StarShipPtr->cur_status_flags & SPECIAL))
-	{
-		if ((StarShipPtr->old_status_flags & SPECIAL)
-			&& (StarShipPtr->cur_status_flags & SHIP_AT_MAX_SPEED))
-			StarShipPtr->cur_status_flags |= SHIP_BEYOND_MAX_SPEED;
-	}
-	else if (DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST))
-	{
-#define SPECIAL_THRUST_INCREMENT (12 << RESOLUTION_FACTOR) // JMS_GFX
-#define SPECIAL_MAX_THRUST (72 << RESOLUTION_FACTOR) // JMS_GFX
-		COUNT max_thrust, thrust_increment;
-		STATUS_FLAGS thrust_status;
-		HELEMENT hTrailElement;
-		
-		if (!(StarShipPtr->old_status_flags & SPECIAL))
-			StarShipPtr->cur_status_flags &=
-			~(SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED);
-		
-		if (ElementPtr->thrust_wait == 0)
-			++ElementPtr->thrust_wait;
-		
-		thrust_increment =
-		StarShipPtr->RaceDescPtr->characteristics.thrust_increment;
-		max_thrust = StarShipPtr->RaceDescPtr->characteristics.max_thrust;
-		StarShipPtr->RaceDescPtr->characteristics.thrust_increment =
-		SPECIAL_THRUST_INCREMENT;
-		StarShipPtr->RaceDescPtr->characteristics.max_thrust =
-		SPECIAL_MAX_THRUST;
-		
-		thrust_status = inertial_thrust (ElementPtr);
-		StarShipPtr->cur_status_flags &=
-		~(SHIP_AT_MAX_SPEED
-		  | SHIP_BEYOND_MAX_SPEED
-		  | SHIP_IN_GRAVITY_WELL);
-		StarShipPtr->cur_status_flags |= thrust_status;
-		
-		StarShipPtr->RaceDescPtr->characteristics.thrust_increment =
-		thrust_increment;
-		StarShipPtr->RaceDescPtr->characteristics.max_thrust = max_thrust;
-		
-		{
-#define GAS_HITS 1
-#define GAS_DAMAGE 2
-#define GAS_LIFE 48
-#define GAS_OFFSET 0
-			MISSILE_BLOCK MissileBlock;
-			
-			MissileBlock.cx = ElementPtr->next.location.x;
-			MissileBlock.cy = ElementPtr->next.location.y;
-			MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-			MissileBlock.face = 0;
-			MissileBlock.index = GetFrameCount (StarShipPtr->RaceDescPtr->ship_data.special[0]) - 1;
-			MissileBlock.sender = ElementPtr->playerNr;
-			MissileBlock.flags = IGNORE_SIMILAR;
-			MissileBlock.pixoffs = 0;
-			MissileBlock.speed = 0;
-			MissileBlock.hit_points = GAS_HITS;
-			MissileBlock.damage = GAS_DAMAGE;
-			MissileBlock.life = GAS_LIFE;
-			MissileBlock.preprocess_func = gas_preprocess;
-			MissileBlock.blast_offs = GAS_OFFSET;
-			
-			hTrailElement = initialize_missile (&MissileBlock);
-			if (hTrailElement)
-			{
-				ELEMENT *TrailElementPtr;
-				
-				LockElement (hTrailElement, &TrailElementPtr);
-				SetElementStarShip (TrailElementPtr, StarShipPtr);
-				TrailElementPtr->hTarget = 0;
-				TrailElementPtr->turn_wait = GAS_WAIT;
-				
-				TrailElementPtr->state_flags |= NONSOLID;
-				SetPrimType (&(GLOBAL (DisplayArray))[TrailElementPtr->PrimIndex],NO_PRIM);
-				
-				/* normally done during preprocess, but because
-				 * object is being inserted at head rather than
-				 * appended after tail it may never get preprocessed.
-				 */
-				TrailElementPtr->next = TrailElementPtr->current;
-				TrailElementPtr->state_flags |= PRE_PROCESS;
-				
-				UnlockElement (hTrailElement);
-				InsertElement (hTrailElement, GetHeadElement ());
-				
-				ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
-			}
-		}
-	}
 }
 
 RACE_DESC*
@@ -529,6 +592,7 @@ init_baul (void)
 	if (RESOLUTION_FACTOR == 0)
 	{
 		baul_desc.preprocess_func = baul_preprocess;
+		baul_desc.postprocess_func = baul_postprocess;
 		baul_desc.init_weapon_func = initialize_baulfire;
 		baul_desc.cyborg_control.intelligence_func = baul_intelligence;
 		RaceDescPtr = &baul_desc;
@@ -536,6 +600,7 @@ init_baul (void)
 	else if (RESOLUTION_FACTOR == 1)
 	{
 		baul_desc_2xres.preprocess_func = baul_preprocess;
+		baul_desc_2xres.postprocess_func = baul_postprocess;
 		baul_desc_2xres.init_weapon_func = initialize_baulfire;
 		baul_desc_2xres.cyborg_control.intelligence_func = baul_intelligence;
 		RaceDescPtr = &baul_desc_2xres;
@@ -543,6 +608,7 @@ init_baul (void)
 	else
 	{
 		baul_desc_4xres.preprocess_func = baul_preprocess;
+		baul_desc_4xres.postprocess_func = baul_postprocess;
 		baul_desc_4xres.init_weapon_func = initialize_baulfire;
 		baul_desc_4xres.cyborg_control.intelligence_func = baul_intelligence;
 		RaceDescPtr = &baul_desc_4xres;

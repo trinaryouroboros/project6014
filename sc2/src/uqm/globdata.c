@@ -328,11 +328,12 @@ InitGameStructures (void)
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) != CHMMR_EXPLORER_SHIP)
 		for (i = 0; i < NUM_MODULE_SLOTS; ++i)
 			GLOBAL_SIS (ModuleSlots[i]) = EMPTY_SLOT + 2;
+	
 	/*GLOBAL_SIS (ModuleSlots[15]) = GUN_WEAPON;
 	GLOBAL_SIS (ModuleSlots[2]) = CREW_POD;
-	GLOBAL_SIS (ModuleSlots[8]) = STORAGE_BAY;
 	GLOBAL_SIS (ModuleSlots[1]) = FUEL_TANK;*/
-	//	GLOBAL_SIS (ModuleSlots[0]) = STORAGE_BAY; // BW: no storage if commented
+	
+	GLOBAL_SIS (ModuleSlots[0]) = STORAGE_BAY; // BW: no storage if commented
 	GLOBAL_SIS (CrewEnlisted) = EXPLORER_CREW_CAPACITY;
 	GLOBAL_SIS (FuelOnBoard) = EXPLORER_FUEL_CAPACITY;
 
