@@ -688,47 +688,55 @@ DrawFlagshipStats (void)
 	   fact that the leading is way more than is generally needed.
 	*/
 	leading -= 3;
-	t.baseline.x = SIS_SCREEN_WIDTH / 6; //wild-assed guess, but it worked
-	t.baseline.y = r.corner.y + leading + 3;
-	t.align = ALIGN_RIGHT;
-	t.CharCount = (COUNT)~0;
+	
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)!= CHMMR_EXPLORER_SHIP)
+	{
+		if (RESOLUTION_FACTOR == 0)
+			t.baseline.x = SIS_SCREEN_WIDTH / 6; //wild-assed guess, but it worked
+		else
+			t.baseline.x = SIS_SCREEN_WIDTH / 8; //wild-assed guess number two
+	
+		t.baseline.y = r.corner.y + leading + 3;
+		t.align = ALIGN_RIGHT;
+		t.CharCount = (COUNT)~0;
 
-	SetContextFontEffect (SetAbsFrameIndex (FontGradFrame, 4));
+		SetContextFontEffect (SetAbsFrameIndex (FontGradFrame, 4));
 
-	t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 0); // "nose:"
-	font_DrawText (&t);
-	t.baseline.y += leading;
-	t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 1); // "spread:"
-	font_DrawText (&t);
-	t.baseline.y += leading;
-	t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 2); // "side:"
-	font_DrawText (&t);
-	t.baseline.y += leading;
-	t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 3); // "tail:"
-	font_DrawText (&t);
+		t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 0); // "nose:"
+		font_DrawText (&t);
+		t.baseline.y += leading;
+		t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 1); // "spread:"
+		font_DrawText (&t);
+		t.baseline.y += leading;
+		t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 2); // "side:"
+		font_DrawText (&t);
+		t.baseline.y += leading;
+		t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 3); // "tail:"
+		font_DrawText (&t);
 
-	t.baseline.x += 5;
-	t.baseline.y = r.corner.y + leading + 3;
-	t.align = ALIGN_LEFT;
-	t.pStr = buf;
+		t.baseline.x += 5;
+		t.baseline.y = r.corner.y + leading + 3;
+		t.align = ALIGN_LEFT;
+		t.pStr = buf;
 
-	snprintf (buf, sizeof buf, "%-7.7s",
+		snprintf (buf, sizeof buf, "%-7.7s",
 			describeWeapon (GLOBAL_SIS (ModuleSlots[15])));
-	font_DrawText (&t);
-	t.baseline.y += leading;
-	snprintf (buf, sizeof buf,
-			"%-7.7s", describeWeapon (GLOBAL_SIS (ModuleSlots[14])));
-	font_DrawText (&t);
-	t.baseline.y += leading;
-	snprintf (buf, sizeof buf,
-			"%-7.7s", describeWeapon (GLOBAL_SIS (ModuleSlots[13])));
-	font_DrawText (&t);
-	t.baseline.y += leading;
-	snprintf (buf, sizeof buf,
-			"%-7.7s", describeWeapon (GLOBAL_SIS (ModuleSlots[0])));
-	font_DrawText (&t);
+		font_DrawText (&t);
+		t.baseline.y += leading;
+		snprintf (buf, sizeof buf,
+				  "%-7.7s", describeWeapon (GLOBAL_SIS (ModuleSlots[14])));
+		font_DrawText (&t);
+		t.baseline.y += leading;
+		snprintf (buf, sizeof buf,
+				  "%-7.7s", describeWeapon (GLOBAL_SIS (ModuleSlots[13])));
+		font_DrawText (&t);
+		t.baseline.y += leading;
+		snprintf (buf, sizeof buf,
+				  "%-7.7s", describeWeapon (GLOBAL_SIS (ModuleSlots[0])));
+		font_DrawText (&t);
+	}
 
-	t.baseline.x = r.extent.width - 25;
+	t.baseline.x = r.extent.width - 25 - 12 * RESOLUTION_FACTOR; // JMS_GFX
 	t.baseline.y = r.corner.y + leading + 3;
 	t.align = ALIGN_RIGHT;
 
@@ -746,7 +754,7 @@ DrawFlagshipStats (void)
 	t.pStr = GAME_STRING (FLAGSHIP_STRING_BASE + 7); // "maximum fuel:"
 	font_DrawText (&t);
 
-	t.baseline.x = r.extent.width - 2;
+	t.baseline.x = r.extent.width - (2 << RESOLUTION_FACTOR); // JMS_GFX
 	t.baseline.y = r.corner.y + leading + 3;
 	t.pStr = buf;
 
@@ -848,7 +856,7 @@ DrawStorageBays (BOOLEAN Refresh)
 
 	OldContext = SetContext (StatusContext);
 
-	r.extent.width = RES_STAT_SCALE(2); // JMS_GFX
+	r.extent.width  = RES_STAT_SCALE(2); // JMS_GFX
 	r.extent.height = RES_STAT_SCALE(4); // JMS_GFX
 	r.corner.y = RES_STAT_SCALE(123) + RESOLUTION_FACTOR * 2; // JMS_GFX
 	
@@ -870,7 +878,7 @@ DrawStorageBays (BOOLEAN Refresh)
 
 		r.corner.x = (STATUS_WIDTH >> 1) - ((i * (r.extent.width + 1)) >> 1);
 		
-		// Filled part of the bay.
+		// Draw full bays.
 		SetContextForeGroundColor (STORAGE_BAY_FULL_COLOR);
 		for (j = GLOBAL_SIS (TotalElementMass); j >= StorageBayCapacity; j -= StorageBayCapacity)
 		{
@@ -880,18 +888,19 @@ DrawStorageBays (BOOLEAN Refresh)
 			--i;
 		}
 
-		r.extent.height = (4 * j + (StorageBayCapacity - 1)) / StorageBayCapacity;
+		// This sets how full a partially filled bay is.
+		r.extent.height = (RES_STAT_SCALE (4) * j + (StorageBayCapacity - 1)) / StorageBayCapacity;
 		
 		if (r.extent.height)
 		{
 			// Filled part of the bay.
-			//r.corner.y += RES_STAT_SCALE (4 - r.extent.height);
-			r.corner.y += 4 - r.extent.height;
+			r.corner.y += RES_STAT_SCALE (4) - r.extent.height;
+			//r.corner.y += 4 - r.extent.height;
 			DrawFilledRectangle (&r);
 			
 			//
-			//r.extent.height = RES_STAT_SCALE(4 - r.extent.height);
-			r.extent.height = 4 - r.extent.height;
+			r.extent.height = RES_STAT_SCALE(4) - r.extent.height;
+			// r.extent.height = 4 - r.extent.height;
 			if (r.extent.height)
 			{
 				r.corner.y = RES_STAT_SCALE(123) + RESOLUTION_FACTOR * 2;
@@ -903,9 +912,9 @@ DrawStorageBays (BOOLEAN Refresh)
 
 			--i;
 		}
-		
-		//r.extent.height = RES_STAT_SCALE(4)
-		r.extent.height = 4;
+
+		// Draw totally empty bays.
+		r.extent.height = RES_STAT_SCALE(4);
 		SetContextForeGroundColor (STORAGE_BAY_EMPTY_COLOR);
 		while (i--)
 		{

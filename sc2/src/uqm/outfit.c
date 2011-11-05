@@ -63,16 +63,14 @@ DrawModuleStrings (MENU_STATE *pMS, BYTE NewModule)
 	r.extent.width = RADAR_WIDTH + 2;
 	r.extent.height = 11 << RESOLUTION_FACTOR;
 	BatchGraphics ();
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	DrawFilledRectangle (&r);
 	if (NewModule >= EMPTY_SLOT)
 	{
 		r.corner = s.origin;
 		r.extent.width = RADAR_WIDTH;
 		r.extent.height = RADAR_HEIGHT;
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00));
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x00), 0x00));
 		DrawFilledRectangle (&r);
 	}
 	else if (pMS->CurFrame)
@@ -129,11 +127,9 @@ RedistributeFuel (void)
 	FuelVolume = GLOBAL_SIS (FuelOnBoard) + m;
 
 	r.extent.height = RES_CASE(7, 14, 19); // JMS_GFX
-	while ((GLOBAL_SIS (FuelOnBoard) += EXPLORER_FUEL_VOLUME_PER_ROW) <
-			GetFTankCapacity (&r.corner))
+	while ((GLOBAL_SIS (FuelOnBoard) += EXPLORER_FUEL_VOLUME_PER_ROW) < GetFTankCapacity (&r.corner))
 	{
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x0B, 0x00, 0x00), 0x2E));
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0B, 0x00, 0x00), 0x2E));
 		DrawFilledRectangle (&r);
 	}
 
