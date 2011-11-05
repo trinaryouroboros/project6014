@@ -8,8 +8,8 @@ in the area of spacecraft engineering.
 Although to be fair, the Chmmr easily pitched in most of the tech.
 Designed mainly for long-range discovery missions and planetary exploration
 the Explorer is a first-response ship, fast, yet versatile.
-It is not a mining ship, so you won't have any room for mineral cargo
-nor have you any need for that: The Chmmr provide all we need from their
+It is not a mining ship, so you have very limited room for mineral cargo
+nor have you much need for that: The Chmmr provide all we need from their
 vast pools of mineral wealth. 
 In spite of that, you still have room for three planetary landers
 and highly sophisticated analysis/containment system exists for taking samples

@@ -59,8 +59,7 @@ ShowRemainingCapacity (void)
 	r.corner.x = RES_STAT_SCALE(40); // JMS_GFX
 	r.corner.y = FREE_ORG_Y; // JMS_GFX
 	
-	snprintf (buf, sizeof buf, "%u",
-			GetStorageBayCapacity () - GLOBAL_SIS (TotalElementMass));
+	snprintf (buf, sizeof buf, "%u", GetStorageBayCapacity () - GLOBAL_SIS (TotalElementMass));
 	
 	t.baseline.x = ELEMENT_COL_2 + RES_STAT_SCALE(1); // JMS_GFX
 	t.baseline.y = r.corner.y + TEXT_BASELINE;

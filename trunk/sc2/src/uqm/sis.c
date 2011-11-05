@@ -838,12 +838,20 @@ DrawStorageBays (BOOLEAN Refresh)
 	BYTE i;
 	RECT r;
 	CONTEXT OldContext;
+	COUNT StorageBayCapacity; // JMS
+	
+	// JMS: Due to popular demand, let's give Explorer a small mineral storage bay!
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+		StorageBayCapacity = EXPLORER_STORAGE_BAY_CAPACITY;
+	else
+		StorageBayCapacity = STORAGE_BAY_CAPACITY;
 
 	OldContext = SetContext (StatusContext);
 
 	r.extent.width = RES_STAT_SCALE(2); // JMS_GFX
 	r.extent.height = RES_STAT_SCALE(4); // JMS_GFX
-	r.corner.y = RES_STAT_SCALE(123); // JMS_GFX
+	r.corner.y = RES_STAT_SCALE(123) + RESOLUTION_FACTOR * 2; // JMS_GFX
+	
 	if (Refresh)
 	{
 		r.extent.width = NUM_MODULE_SLOTS * (r.extent.width + 1);
@@ -853,17 +861,18 @@ DrawStorageBays (BOOLEAN Refresh)
 		DrawFilledRectangle (&r);
 		r.extent.width = RES_STAT_SCALE(2); // JMS_GFX
 	}
-
+	
 	i = (BYTE)CountSISPieces (STORAGE_BAY);
+	
 	if (i)
 	{
 		COUNT j;
 
-		r.corner.x = (STATUS_WIDTH >> 1)
-				- ((i * (r.extent.width + 1)) >> 1);
+		r.corner.x = (STATUS_WIDTH >> 1) - ((i * (r.extent.width + 1)) >> 1);
+		
+		// Filled part of the bay.
 		SetContextForeGroundColor (STORAGE_BAY_FULL_COLOR);
-		for (j = GLOBAL_SIS (TotalElementMass);
-				j >= STORAGE_BAY_CAPACITY; j -= STORAGE_BAY_CAPACITY)
+		for (j = GLOBAL_SIS (TotalElementMass); j >= StorageBayCapacity; j -= StorageBayCapacity)
 		{
 			DrawFilledRectangle (&r);
 			r.corner.x += r.extent.width + RES_STAT_SCALE(1); // JMS_GFX;
@@ -871,25 +880,32 @@ DrawStorageBays (BOOLEAN Refresh)
 			--i;
 		}
 
-		r.extent.height = (4 * j + (STORAGE_BAY_CAPACITY - 1)) /
-				STORAGE_BAY_CAPACITY;
+		r.extent.height = (4 * j + (StorageBayCapacity - 1)) / StorageBayCapacity;
+		
 		if (r.extent.height)
 		{
-			r.corner.y += RES_STAT_SCALE(4 - r.extent.height);
+			// Filled part of the bay.
+			//r.corner.y += RES_STAT_SCALE (4 - r.extent.height);
+			r.corner.y += 4 - r.extent.height;
 			DrawFilledRectangle (&r);
-			r.extent.height = RES_STAT_SCALE(4 - r.extent.height);
+			
+			//
+			//r.extent.height = RES_STAT_SCALE(4 - r.extent.height);
+			r.extent.height = 4 - r.extent.height;
 			if (r.extent.height)
 			{
-				r.corner.y = RES_STAT_SCALE(123);
+				r.corner.y = RES_STAT_SCALE(123) + RESOLUTION_FACTOR * 2;
 				SetContextForeGroundColor (STORAGE_BAY_EMPTY_COLOR);
 				DrawFilledRectangle (&r);
 			}
+			
 			r.corner.x += r.extent.width + RES_STAT_SCALE(1);
 
 			--i;
 		}
-		r.extent.height = RES_STAT_SCALE(4);
-
+		
+		//r.extent.height = RES_STAT_SCALE(4)
+		r.extent.height = 4;
 		SetContextForeGroundColor (STORAGE_BAY_EMPTY_COLOR);
 		while (i--)
 		{
@@ -904,10 +920,10 @@ DrawStorageBays (BOOLEAN Refresh)
 void
 GetGaugeRect (RECT *pRect, BOOLEAN IsCrewRect)
 {
-	pRect->extent.width = RES_STAT_SCALE(24); // JMS_GFX
-	pRect->corner.x = (STATUS_WIDTH >> 1) - (pRect->extent.width >> 1);
+	pRect->extent.width = RES_STAT_SCALE(24) - RESOLUTION_FACTOR * 3; // JMS_GFX
+	pRect->corner.x = (STATUS_WIDTH >> 1) - (pRect->extent.width >> 1) + RESOLUTION_FACTOR * 2;
 	pRect->extent.height = RES_STAT_SCALE(5); // JMS_GFX
-	pRect->corner.y = RES_STAT_SCALE((IsCrewRect ? 117 : 38) + RESOLUTION_FACTOR); // JMS_GFX
+	pRect->corner.y = RES_STAT_SCALE((IsCrewRect ? 117 : 38)) + RESOLUTION_FACTOR * 3; // JMS_GFX
 }
 
 static void
@@ -1417,8 +1433,16 @@ GetElementMass (void)
 COUNT
 GetModuleStorageCapacity (BYTE moduleType)
 {
+	COUNT StorageBayCapacity; // JMS
+	
+	// JMS: Due to popular demand, let's give Explorer a small mineral storage bay!
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+		StorageBayCapacity = EXPLORER_STORAGE_BAY_CAPACITY;
+	else
+		StorageBayCapacity = STORAGE_BAY_CAPACITY;
+	
 	if (moduleType == STORAGE_BAY)
-		return STORAGE_BAY_CAPACITY;
+		return StorageBayCapacity;
 
 	return 0;
 }
@@ -1427,23 +1451,16 @@ GetModuleStorageCapacity (BYTE moduleType)
 COUNT
 GetStorageBayCapacity (void)
 {
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
-	{
-		return 0;
-	}
-	else
-	{
-		COUNT capacity = 0;
-		COUNT slotI;
+	COUNT capacity = 0;
+	COUNT slotI;
 
-		for (slotI = 0; slotI < NUM_MODULE_SLOTS; slotI++)
-		{
-			BYTE moduleType = GLOBAL_SIS (ModuleSlots[slotI]);
-			capacity += GetModuleStorageCapacity (moduleType);
-		}
-
-		return capacity;
+	for (slotI = 0; slotI < NUM_MODULE_SLOTS; slotI++)
+	{
+		BYTE moduleType = GLOBAL_SIS (ModuleSlots[slotI]);
+		capacity += GetModuleStorageCapacity (moduleType);
 	}
+
+	return capacity;
 }
 
 // Find the slot number of the storage bay and "storage cell" number in that
@@ -1480,51 +1497,45 @@ GetStorageCellForMineralUnit (COUNT unitNr, COUNT *slotNr, COUNT *cellNr)
 COUNT
 GetSBayCapacity (POINT *ppt)
 {
-	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+	COUNT massCount;
+	COUNT slotNr;
+	COUNT cellNr;
+
+	COUNT rowNr;
+	COUNT colNr;
+				
+	static const Color colorBars[] = STORAGE_BAY_COLOR_TABLE;
+
+	massCount = GetElementMass ();
+	if (!GetStorageCellForMineralUnit (massCount, &slotNr, &cellNr))
 	{
+		// Crew does not fit. *ppt is unchanged.
 		return GetStorageBayCapacity ();
 	}
+
+	rowNr = cellNr / SBAY_MASS_PER_ROW;
+	colNr = cellNr % SBAY_MASS_PER_ROW;
+
+	if (rowNr == 0)
+		SetContextForeGroundColor (BLACK_COLOR);
 	else
 	{
-		COUNT massCount;
-		COUNT slotNr;
-		COUNT cellNr;
-
-		COUNT rowNr;
-		COUNT colNr;
-				
-		static const Color colorBars[] = STORAGE_BAY_COLOR_TABLE;
-
-		massCount = GetElementMass ();
-		if (!GetStorageCellForMineralUnit (massCount, &slotNr, &cellNr))
-		{
-			// Crew does not fit. *ppt is unchanged.
-			return GetStorageBayCapacity ();
-		}
-
-		rowNr = cellNr / SBAY_MASS_PER_ROW;
-		colNr = cellNr % SBAY_MASS_PER_ROW;
-
-		if (rowNr == 0)
-			SetContextForeGroundColor (BLACK_COLOR);
-		else
-		{
-			rowNr--;
-			SetContextForeGroundColor (colorBars[rowNr]);
-		}
-		
-		ppt->x = (19 << RESOLUTION_FACTOR) + (slotNr * SHIP_PIECE_OFFSET);
-		ppt->y = (34 - (rowNr * 2)) << RESOLUTION_FACTOR;
-		/*** Graphics positionning for tentative Explorer storage bay
-		     ppt->y = 27 - rowNr;
-		     if (rowNr == 9)
-		     {
-		     ppt->x = 40;
-		     }
-		***/
-
-		return GetStorageBayCapacity ();
+		rowNr--;
+		SetContextForeGroundColor (colorBars[rowNr]);
 	}
+		
+	ppt->x = (19 << RESOLUTION_FACTOR) + (slotNr * SHIP_PIECE_OFFSET);
+	ppt->y = (34 - (rowNr * 2)) << RESOLUTION_FACTOR;
+	
+	// Graphics positioning for tentative Explorer storage bay
+	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
+	{
+		ppt->y = (27 - rowNr) << RESOLUTION_FACTOR;
+		if (rowNr == 9)
+			ppt->x = (40 << RESOLUTION_FACTOR);
+	}
+
+	return GetStorageBayCapacity ();
 }
 
 
