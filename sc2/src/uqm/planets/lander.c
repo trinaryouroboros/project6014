@@ -754,8 +754,8 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 	}
 	else
 	{
-		s.origin.x = 27 + ((9 * RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)); // JMS_GFX
-		s.origin.y = (53 * RESOLUTION_FACTOR - (9 * RESOLUTION_FACTOR * (crew_delta / NUM_CREW_COLS))) - 3; // JMS_GFX
+		s.origin.x = 32 + ((9 * RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)); // JMS_GFX
+		s.origin.y = (52 * RESOLUTION_FACTOR - (9 * RESOLUTION_FACTOR * (crew_delta / NUM_CREW_COLS))); // JMS_GFX
 	}
 
 	OldContext = SetContext (RadarContext);
@@ -1466,6 +1466,7 @@ AddLightning (void)
 		LightningElementPtr->playerNr = PS_NON_PLAYER;
 		LightningElementPtr->state_flags = FINITE_LIFE;
 		LightningElementPtr->preprocess_func = lightning_process;
+		
 		if (TFB_Random () % 100 >= 25)
 			LightningElementPtr->mass_points = 0; /* harmless */
 		else
@@ -1473,14 +1474,29 @@ AddLightning (void)
 
 		rand_val = TFB_Random ();
 		LightningElementPtr->life_span = 10 + (HIWORD (rand_val) % 10) + 1;
-		LightningElementPtr->next.location.x = (curLanderLoc.x
+		
+		if (RESOLUTION_FACTOR == 0)
+		{
+			LightningElementPtr->next.location.x = (curLanderLoc.x
 				+ ((MAP_WIDTH << MAG_SHIFT) - ((SURFACE_WIDTH >> 1) - 6))
 				+ (LOBYTE (rand_val) % (SURFACE_WIDTH - 12))
 				) % (MAP_WIDTH << MAG_SHIFT);
-		LightningElementPtr->next.location.y = (curLanderLoc.y
+			LightningElementPtr->next.location.y = (curLanderLoc.y
 				+ ((MAP_HEIGHT << MAG_SHIFT) - ((SURFACE_HEIGHT >> 1) - 6))
 				+ (HIBYTE (rand_val) % (SURFACE_HEIGHT - 12))
 				) % (MAP_HEIGHT << MAG_SHIFT);
+		}
+		else
+		{
+			LightningElementPtr->next.location.x = (curLanderLoc.x
+				+ ((MAP_WIDTH << MAG_SHIFT) - ((SURFACE_WIDTH >> 1) - 6))
+				+ (rand_val % (SURFACE_WIDTH - (12 << RESOLUTION_FACTOR)))
+				) % (MAP_WIDTH << MAG_SHIFT);
+			LightningElementPtr->next.location.y = (curLanderLoc.y
+				+ ((MAP_HEIGHT << MAG_SHIFT) - ((SURFACE_HEIGHT >> 1) - 6))
+				+ (rand_val % (SURFACE_HEIGHT - (12 << RESOLUTION_FACTOR)))
+				) % (MAP_HEIGHT << MAG_SHIFT);
+		}
 
 		LightningElementPtr->cycle = LightningElementPtr->life_span;
 		
