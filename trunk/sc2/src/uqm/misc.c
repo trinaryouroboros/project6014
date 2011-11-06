@@ -96,8 +96,13 @@ spawn_rubble (ELEMENT *AsteroidElementPtr)
 		RubbleElementPtr->turn_wait = RubbleElementPtr->next_turn = 0;
 		SetPrimType (&DisplayArray[RubbleElementPtr->PrimIndex], STAMP_PRIM);
 		RubbleElementPtr->current.image.farray = asteroid;
-		RubbleElementPtr->current.image.frame =
-				SetAbsFrameIndex (asteroid[0], ANGLE_TO_FACING (FULL_CIRCLE));
+		
+		// JMS_GFX
+		if (RESOLUTION_FACTOR == 0)
+			RubbleElementPtr->current.image.frame = SetAbsFrameIndex (asteroid[0], ANGLE_TO_FACING (FULL_CIRCLE));
+		else
+			RubbleElementPtr->current.image.frame = SetAbsFrameIndex (asteroid[0], 30);
+		
 		RubbleElementPtr->current.location = AsteroidElementPtr->current.location;
 		RubbleElementPtr->preprocess_func = animation_preprocess;
 		RubbleElementPtr->death_func = spawn_asteroid;
@@ -115,15 +120,19 @@ asteroid_preprocess (ELEMENT *ElementPtr)
 		COUNT frame_index;
 
 		frame_index = GetFrameIndex (ElementPtr->current.image.frame);
+		
 		if (ElementPtr->thrust_wait & (1 << 7))
 			--frame_index;
 		else
 			++frame_index;
-		ElementPtr->next.image.frame =
-				SetAbsFrameIndex (ElementPtr->current.image.frame,
-				NORMALIZE_FACING (frame_index));
+		
+		// JMS_GFX
+		if (RESOLUTION_FACTOR == 0)
+			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, NORMALIZE_FACING (frame_index));
+		else
+			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, frame_index % 30);
+		
 		ElementPtr->state_flags |= CHANGING;
-
 		ElementPtr->turn_wait = (unsigned char)(ElementPtr->thrust_wait & ((1 << 7) - 1));
 	}
 }
@@ -154,19 +163,20 @@ spawn_asteroid (ELEMENT *ElementPtr)
 		AsteroidElementPtr->state_flags = APPEARING;
 		AsteroidElementPtr->life_span = NORMAL_LIFE;
 		SetPrimType (&DisplayArray[AsteroidElementPtr->PrimIndex], STAMP_PRIM);
+		
 		if ((val = (COUNT)TFB_Random ()) & (1 << 0))
 		{
 			if (!(val & (1 << 1)))
 				AsteroidElementPtr->current.location.x = 0;
 			else
 				AsteroidElementPtr->current.location.x = LOG_SPACE_WIDTH;
-			AsteroidElementPtr->current.location.y =
-					WRAP_Y (DISPLAY_ALIGN_Y (TFB_Random ()));
+			
+			AsteroidElementPtr->current.location.y = WRAP_Y (DISPLAY_ALIGN_Y (TFB_Random ()));
 		}
 		else
 		{
-			AsteroidElementPtr->current.location.x =
-					WRAP_X (DISPLAY_ALIGN_X (TFB_Random ()));
+			AsteroidElementPtr->current.location.x = WRAP_X (DISPLAY_ALIGN_X (TFB_Random ()));
+			
 			if (!(val & (1 << 1)))
 				AsteroidElementPtr->current.location.y = 0;
 			else
@@ -177,11 +187,9 @@ spawn_asteroid (ELEMENT *ElementPtr)
 			// Using these temporary variables because the execution order
 			// of function arguments may vary per system, which may break
 			// synchronisation on network games.
-			SIZE magnitude =
-					DISPLAY_TO_WORLD (((SIZE)TFB_Random () & 7) + 4);
+			SIZE magnitude = DISPLAY_TO_WORLD (((SIZE)TFB_Random () & 7) + 4);
 			COUNT facing = (COUNT)TFB_Random ();
-			SetVelocityVector (&AsteroidElementPtr->velocity, magnitude,
-					facing);
+			SetVelocityVector (&AsteroidElementPtr->velocity, magnitude, facing);
 		}
 		AsteroidElementPtr->current.image.farray = asteroid;
 		AsteroidElementPtr->current.image.frame =
