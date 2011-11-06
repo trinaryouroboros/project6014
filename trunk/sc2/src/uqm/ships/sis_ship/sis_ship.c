@@ -344,11 +344,17 @@ static void electrify (ELEMENT *ElementPtr)
 		{
 			HELEMENT hEffect;
 			STARSHIP *StarShipPtr;
-
+			COUNT firstElectrifyFrame;
+			
+			if (RESOLUTION_FACTOR == 0)
+				firstElectrifyFrame = 15;
+			else
+				firstElectrifyFrame = 27;
+				
 			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 
-			if (GetFrameIndex (ElementPtr->next.image.frame) < 15)
-				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, 15);
+			if (GetFrameIndex (ElementPtr->next.image.frame) < firstElectrifyFrame)
+				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, firstElectrifyFrame);
 
 			GetElementStarShip (eptr, &StarShipPtr);
 
@@ -407,6 +413,13 @@ static void animate_blaster (ELEMENT *ElementPtr)
 // Stun ball collision.
 static void stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {
+	COUNT firstElectrifyFrame;
+	
+	if (RESOLUTION_FACTOR == 0)
+		firstElectrifyFrame = 15;
+	else
+		firstElectrifyFrame = 27;
+	
 	if (ElementPtr1->state_flags & PLAYER_SHIP)
 	{
 		HELEMENT hStunElement, hNextElement;
@@ -440,7 +453,7 @@ static void stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *Eleme
 				InsertElement (hStunElement, GetHeadElement ());
 
 				StunPtr->current = ElementPtr0->next;
-				StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, 15);
+				StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, firstElectrifyFrame);
 				StunPtr->next = StunPtr->current;
 				StunPtr->playerNr = ElementPtr0->playerNr;
 				StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
@@ -476,8 +489,7 @@ static void stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *Eleme
 			BlastElementPtr->preprocess_func = animate;
 
 			BlastElementPtr->current.image.farray = ElementPtr0->next.image.farray;
-			BlastElementPtr->current.image.frame =
-				SetAbsFrameIndex (BlastElementPtr->current.image.farray[0], 15);
+			BlastElementPtr->current.image.frame = SetAbsFrameIndex (BlastElementPtr->current.image.farray[0], firstElectrifyFrame);
 
 			ZeroVelocityComponents (&ElementPtr0->velocity);
 
@@ -490,20 +502,33 @@ static void stunner_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *Eleme
 // Stunner explosion.
 static void shockwave (ELEMENT *ElementPtr)
 {
+	COUNT firstShockwaveFrame, lastShockwaveFrame, firstElectrifyFrame;
+	
+	if (RESOLUTION_FACTOR == 0)
+	{
+		firstShockwaveFrame = 3;
+		lastShockwaveFrame = 14;
+		firstElectrifyFrame = 15;
+	}
+	else
+	{
+		firstShockwaveFrame = 1;
+		lastShockwaveFrame = 26;
+		firstElectrifyFrame = 27;
+	}
+	
 	ZeroVelocityComponents (&ElementPtr->velocity);
 
 	ElementPtr->state_flags |= (FINITE_LIFE | NONSOLID | CHANGING);
 	
-	ElementPtr->next.image.frame =
-		IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 
-	if (GetFrameIndex (ElementPtr->next.image.frame) > 14
-			|| GetFrameIndex (ElementPtr->next.image.frame) < 3)
-		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, 3);
+	if (GetFrameIndex (ElementPtr->next.image.frame) > lastShockwaveFrame 
+		|| GetFrameIndex (ElementPtr->next.image.frame) < firstShockwaveFrame)
+		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, firstShockwaveFrame);
 	
 	// A shockwave hit will occur at two different intervals.
-	if (ElementPtr->life_span == 6
-		|| ElementPtr->life_span == 2)
+	if (ElementPtr->life_span == 6 || ElementPtr->life_span == 2)
 	{
 		HELEMENT hElement, hNextElement, hTarget;
 		STARSHIP *StarShipPtr, *EnemyStarShipPtr;
@@ -585,7 +610,7 @@ static void shockwave (ELEMENT *ElementPtr)
 					InsertElement (hElement, GetHeadElement ());
 				
 					StunPtr->current = ElementPtr->next;
-					StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, 16);
+					StunPtr->current.image.frame = SetAbsFrameIndex (StunPtr->current.image.frame, firstElectrifyFrame + 1);
 					StunPtr->next = StunPtr->current;
 					StunPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
 					StunPtr->playerNr = ElementPtr->playerNr;
@@ -611,14 +636,19 @@ static void shockwave (ELEMENT *ElementPtr)
 static void stunner_preprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
+	COUNT lastStunballFrame;
+	
+	if (RESOLUTION_FACTOR == 0)
+		lastStunballFrame = 2;
+	else
+		lastStunballFrame = 0;
 
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 
-	ElementPtr->next.image.frame =
-		IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 	ElementPtr->state_flags |= CHANGING;
 	
-	if (GetFrameIndex (ElementPtr->current.image.frame) == 2)
+	if (GetFrameIndex (ElementPtr->current.image.frame) == lastStunballFrame)
 		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
 
 	if (StarShipPtr->cur_status_flags & SPECIAL)
@@ -634,8 +664,7 @@ static void stunner_preprocess (ELEMENT *ElementPtr)
 		ProcessSound (SetAbsSoundIndex // Shockwave!
 					(StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr);
 
-		ElementPtr->current.image.frame =
-			SetAbsFrameIndex (ElementPtr->current.image.frame, 3);
+		ElementPtr->current.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, lastStunballFrame + 1);
 	}
 }
 
