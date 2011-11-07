@@ -473,12 +473,10 @@ self_destruct (ELEMENT *ElementPtr)
 						+ (DWORD)(delta_y * delta_y)) <=
 						(DWORD)(DESTRUCT_RANGE * DESTRUCT_RANGE))
 				{
-#define MAX_DESTRUCTION (DESTRUCT_RANGE / 10)
+#define MAX_DESTRUCTION ((DESTRUCT_RANGE >> RESOLUTION_FACTOR) / 10) // JMS_GFX
 					SIZE destruction;
 
-					destruction = ((MAX_DESTRUCTION
-							* (DESTRUCT_RANGE - square_root (dist)))
-							/ DESTRUCT_RANGE) + 1;
+					destruction = ((MAX_DESTRUCTION * (DESTRUCT_RANGE - square_root (dist))) / DESTRUCT_RANGE) + 1;
 
 					if (ObjPtr->state_flags & PLAYER_SHIP)
 					{
