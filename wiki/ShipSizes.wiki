@@ -75,7 +75,7 @@ Actual Dimensions  : 126x64
 {{{
 Original Dimensions: 13x35
 Perfect Dimensions : 52x140
-Actual Dimensions  : 43x134
+Actual Dimensions  : 39x139
 }}}
 
 ==Ilwrath Avenger==
