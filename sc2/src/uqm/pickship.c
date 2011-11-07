@@ -172,22 +172,17 @@ ChangeSelection:
 				// JMS: Chmmr Explorer graphics
 				if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 				{
-					pMS->flash_rect0.corner.x =
-						pMS->flash_rect1.corner.x - (2 << RESOLUTION_FACTOR) + FLAGSHIP_EXPLORER_X_OFFS; // JMS_GFX
-					pMS->flash_rect0.corner.y =
-						pMS->flash_rect1.corner.y - (2 << RESOLUTION_FACTOR) + 
-						FLAGSHIP_EXPLORER_Y_OFFS + (2 << RESOLUTION_FACTOR);// - 1; // JMS_GFX
-					pMS->flash_rect0.extent.width = FLAGSHIP_EXPLORER_WIDTH + (4 << RESOLUTION_FACTOR); // JMS_GFX
-					pMS->flash_rect0.extent.height = FLAGSHIP_EXPLORER_HEIGHT + (4 << RESOLUTION_FACTOR) - 4 * RESOLUTION_FACTOR;
+					pMS->flash_rect0.corner.x = pMS->flash_rect1.corner.x + FLAGSHIP_EXPLORER_X_OFFS - (2 << RESOLUTION_FACTOR) - 1 * RESOLUTION_FACTOR; // JMS_GFX
+					pMS->flash_rect0.corner.y = pMS->flash_rect1.corner.y + FLAGSHIP_EXPLORER_Y_OFFS - 3 * RESOLUTION_FACTOR; // JMS_GFX
+					pMS->flash_rect0.extent.width  = FLAGSHIP_EXPLORER_WIDTH  + (4 << RESOLUTION_FACTOR); // JMS_GFX
+					pMS->flash_rect0.extent.height = FLAGSHIP_EXPLORER_HEIGHT + (4 << RESOLUTION_FACTOR) - 3 * RESOLUTION_FACTOR; // JMS_GFX
 				}
 				// JMS: Precursor vessel graphics
 				else if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == PRECURSOR_SERVICE_VEHICLE)
 				{
-					pMS->flash_rect0.corner.x =
-						pMS->flash_rect1.corner.x - (2 << RESOLUTION_FACTOR) + FLAGSHIP_X_OFFS; // JMS_GFX
-					pMS->flash_rect0.corner.y =
-						pMS->flash_rect1.corner.y - (2 << RESOLUTION_FACTOR) + FLAGSHIP_Y_OFFS; // JMS_GFX
-					pMS->flash_rect0.extent.width = FLAGSHIP_WIDTH + (4 << RESOLUTION_FACTOR); // JMS_GFX
+					pMS->flash_rect0.corner.x = pMS->flash_rect1.corner.x - (2 << RESOLUTION_FACTOR) + FLAGSHIP_X_OFFS; // JMS_GFX
+					pMS->flash_rect0.corner.y = pMS->flash_rect1.corner.y - (2 << RESOLUTION_FACTOR) + FLAGSHIP_Y_OFFS; // JMS_GFX
+					pMS->flash_rect0.extent.width  = FLAGSHIP_WIDTH  + (4 << RESOLUTION_FACTOR); // JMS_GFX
 					pMS->flash_rect0.extent.height = FLAGSHIP_HEIGHT + 4;
 				}
 

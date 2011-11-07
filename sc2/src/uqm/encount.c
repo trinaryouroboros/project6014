@@ -34,8 +34,7 @@
 #include "gameopt.h"
 #include "gamestr.h"
 #include "globdata.h"
-#include "sis.h"
-		// for DrawStatusMessage(), SetStatusMessageMode()
+#include "sis.h" // for DrawStatusMessage(), SetStatusMessageMode()
 #include "init.h"
 #include "pickship.h"
 #include "intel.h"
@@ -44,18 +43,16 @@
 #include "settings.h"
 #include "setup.h"
 #include "sounds.h"
+#include "util.h" // JMS: For SaveContextFrame()
 #include "libs/graphics/gfx_common.h"
 #include "libs/log.h"
 #include "libs/mathlib.h"
 #include "libs/inplib.h"
 #include "libs/misc.h"
-
 #include "libs/log.h"
 
 
-static void DrawFadeText (const UNICODE *str1, const UNICODE *str2,
-		BOOLEAN fade_in, RECT *pRect);
-
+static void DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in, RECT *pRect);
 
 static BOOLEAN
 DoSelectAction (MENU_STATE *pMS)
@@ -451,13 +448,13 @@ InitEncounter (void)
 }
 
 static void
-DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in,
-		RECT *pRect)
+DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in, RECT *pRect)
 {
 	SIZE i;
 	DWORD TimeIn;
 	TEXT t1, t2;
 	RECT r1, r2;
+	
 	static const Color fade_cycle[] =
 	{
 		BUILD_COLOR (MAKE_RGB15_INIT (0x0A, 0x0A, 0x0A), 0x1D),
@@ -512,12 +509,15 @@ DrawFadeText (const UNICODE *str1, const UNICODE *str2, BOOLEAN fade_in,
 			SleepThreadUntil (TimeIn + (ONE_SECOND / 20));
 			TimeIn = GetTimeCounter ();
 		}
-		SetContextForeGroundColor (
-				   BUILD_COLOR_RGBA (0x50, 0x50, 0x50, 0xff));
+		SetContextForeGroundColor (BUILD_COLOR_RGBA (0x50, 0x50, 0x50, 0xff));
 		TextRect(&t1, &r1, NULL);
 		TextRect(&t2, &r2, NULL);
-		DrawFilledRectangle (&r1);
-		DrawFilledRectangle (&r2);
+		
+		if (RESOLUTION_FACTOR == 0)
+		{
+			DrawFilledRectangle (&r1);
+			DrawFilledRectangle (&r2);
+		}
 	}
 }
 
@@ -558,6 +558,11 @@ UninitEncounter (void)
 		UNICODE buf[80];
 		HSHIPFRAG hStarShip;
 		SHIP_FRAGMENT *FragPtr;
+		
+		// JMS: These are for fixing a bug at drawing "debris scavenged" in hires4x
+		RECT	save_r;
+		STAMP	saveMetallicFrame;
+		
 		static const Color fade_ship_cycle[] =
 		{
 			BUILD_COLOR (MAKE_RGB15_INIT (0x07, 0x00, 0x00), 0x2F),
@@ -661,8 +666,7 @@ UninitEncounter (void)
 								ship_s.origin.y = scavenge_r.corner.y + (56 << RESOLUTION_FACTOR); // JMS_GFX
 								ship_s.frame = IncFrameIndex (FragPtr->icons);
 								DrawStamp (&ship_s);
-								SetContextForeGroundColor (
-										BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
+								SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 								SetContextFont (TinyFont);
 
 								utf8StringCopy (buf, sizeof buf,
@@ -686,11 +690,27 @@ UninitEncounter (void)
 								ship_s.frame = FragPtr->icons;
 
 								SetContextFont (MicroFont);
-								str1 = GAME_STRING (
-										ENCOUNTER_STRING_BASE + 4);
+								
+								// JMS: Let's store the rectangle behind "Enemy ships destroyed" (before drawing the text on it).
+								if (RESOLUTION_FACTOR != 0)
+								{
+									// These values are inferred from DrawFadeText.
+									// However, they're not the same (100 and 45) because the text there is centered,
+									// but these rect coords are for the upper-left corner, not center.
+									save_r.corner.x = scavenge_r.corner.x + (70 << RESOLUTION_FACTOR); // JMS_GFX
+									save_r.corner.y = scavenge_r.corner.y + (35 << RESOLUTION_FACTOR); // JMS_GFX
+									
+									// These are wild-assed guesses.
+									save_r.extent.width  = 60 << RESOLUTION_FACTOR;
+									save_r.extent.height = 30 << RESOLUTION_FACTOR; 
+									
+									// Now that we have the size and placement of the rectangle, let's store it.
+									saveMetallicFrame = SaveContextFrame (&save_r);
+								}
+								
+								str1 = GAME_STRING (ENCOUNTER_STRING_BASE + 4);
 										// "Enemy Ships"
-								str2 = GAME_STRING (
-										ENCOUNTER_STRING_BASE + 5),
+								str2 = GAME_STRING (ENCOUNTER_STRING_BASE + 5),
 										// "Destroyed"
 								DrawFadeText (str1, str2, TRUE, &scavenge_r);
 							}
@@ -710,7 +730,7 @@ UninitEncounter (void)
 							j = race_bounty[EncounterRace] >> 3;
 							RecycleAmount += j;
 							sprintf (buf, "%u", RecycleAmount);
-							t.baseline.x = r.corner.x + r.extent.width - 1;
+							t.baseline.x = r.corner.x + r.extent.width - 1 - 5 * RESOLUTION_FACTOR; // JMS_GFX;
 							t.baseline.y = r.corner.y + (14 << RESOLUTION_FACTOR); // JMS_GFX
 							t.align = ALIGN_RIGHT;
 							t.pStr = buf;
@@ -787,27 +807,35 @@ UninitEncounter (void)
 					r.corner.x = scavenge_r.corner.x + (10 << RESOLUTION_FACTOR); // JMS_GFX
 					r.extent.width = 132 << RESOLUTION_FACTOR; // JMS_GFX
 					DrawFilledRectangle (&r);
-					sprintf (buf, "%u %s", RecycleAmount,
-							GAME_STRING (STATUS_STRING_BASE + 1)); // "RU"
+					sprintf (buf, "%u %s", RecycleAmount, GAME_STRING (STATUS_STRING_BASE + 1)); // "RU"
 					t.baseline.x = r.corner.x + (r.extent.width >> 1);
 					t.baseline.y = r.corner.y + (14 << RESOLUTION_FACTOR); // JMS_GFX
 					t.align = ALIGN_CENTER;
 					t.pStr = buf;
 					t.CharCount = (COUNT)~0;
-					SetContextForeGroundColor (
-							BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x18), 0x50));
+					SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x18), 0x50));
 					font_DrawText (&t);
 
 					str1 = GAME_STRING (ENCOUNTER_STRING_BASE + 6);
 							// "Debris"
 					str2 = GAME_STRING (ENCOUNTER_STRING_BASE + 7);
 							// "Scavenged"
+					
+					// JMS: Now we draw the clean metallic frame to erase the "Enemy ships destroyed"
+					// text before drawing "debris scavenged."
+					if(RESOLUTION_FACTOR != 0)
+						DrawStamp (&saveMetallicFrame);
+					
 					DrawFadeText (str1, str2, TRUE, &scavenge_r);
 					UnlockMutex (GraphicsLock);
 					WaitForAnyButton (TRUE, ONE_SECOND * 2, FALSE);
 					LockMutex (GraphicsLock);
 					if (!CurrentInputState.key[PlayerControls[0]][KEY_ESCAPE])
 						DrawFadeText (str1, str2, FALSE, &scavenge_r);
+					
+					// JMS: The final cleanup of the "Debris scavenged". Without this, an ugly grey ghost-text would remain.
+					if(RESOLUTION_FACTOR != 0)
+						DrawStamp (&saveMetallicFrame);
 				}
 			}
 
