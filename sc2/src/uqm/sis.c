@@ -419,8 +419,8 @@ DateToString (char *buf, size_t bufLen,
 void
 GetStatusMessageRect (RECT *r)
 {
-	r->corner.x = RES_STAT_SCALE(2);
-	r->corner.y = RES_STAT_SCALE(130);
+	r->corner.x = RES_STAT_SCALE(2) + RESOLUTION_FACTOR;
+	r->corner.y = RES_STAT_SCALE(130) + 2 * RESOLUTION_FACTOR;
 	r->extent.width = STATUS_MESSAGE_WIDTH;
 	r->extent.height = STATUS_MESSAGE_HEIGHT;
 }
@@ -485,7 +485,7 @@ DrawStatusMessage (const UNICODE *pStr)
 	}
 
 	t.baseline.x = STATUS_MESSAGE_WIDTH >> 1;
-	t.baseline.y = STATUS_MESSAGE_HEIGHT - (1 << RESOLUTION_FACTOR) - RESOLUTION_FACTOR; // JMS_GFX
+	t.baseline.y = STATUS_MESSAGE_HEIGHT - 1 - (RESOLUTION_FACTOR >> 1); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
@@ -1203,8 +1203,8 @@ DeltaSISGauges_resunitDelta (SIZE resunit_delta)
 	{
 		RECT r;
 
-		r.corner.x = RES_STAT_SCALE(2); // JMS_GFX
-		r.corner.y = RES_STAT_SCALE(130); // JMS_GFX
+		r.corner.x = RES_STAT_SCALE(2) + RESOLUTION_FACTOR; // JMS_GFX
+		r.corner.y = RES_STAT_SCALE(130) + 2 * RESOLUTION_FACTOR; // JMS_GFX
 		r.extent.width = STATUS_MESSAGE_WIDTH;
 		r.extent.height = STATUS_MESSAGE_HEIGHT;
 		SetContextForeGroundColor (
