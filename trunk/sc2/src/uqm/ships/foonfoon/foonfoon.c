@@ -443,64 +443,6 @@ initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[])
 	return (1);
 }
 
-static void
-saber_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
-{
-	if (ElementPtr1->state_flags & PLAYER_SHIP)
-	{
-		HELEMENT hSaberElement, hNextElement;
-		ELEMENT *SaberPtr;
-		STARSHIP *StarShipPtr;
-		
-		GetElementStarShip (ElementPtr0, &StarShipPtr);
-		for (hSaberElement = GetHeadElement (); hSaberElement; hSaberElement = hNextElement)
-		{
-			LockElement (hSaberElement, &SaberPtr);
-			if (elementsOfSamePlayer (SaberPtr, ElementPtr0)
-				&& SaberPtr->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.weapon
-				&& (SaberPtr->state_flags & NONSOLID))
-			{
-				UnlockElement (hSaberElement);
-				break;
-			}
-			
-			hNextElement = GetSuccElement (SaberPtr);
-			UnlockElement (hSaberElement);
-		}
-		
-		if (hSaberElement || (hSaberElement = AllocElement ()))
-		{
-			LockElement (hSaberElement, &SaberPtr);
-			
-			if (SaberPtr->state_flags == 0) /* not allocated before */
-			{
-				InsertElement (hSaberElement, GetHeadElement ());
-				SaberPtr->current = ElementPtr0->next;
-				SaberPtr->current.image.frame = SetAbsFrameIndex (SaberPtr->current.image.frame, 8);
-				SaberPtr->next = SaberPtr->current;
-				SaberPtr->playerNr = ElementPtr0->playerNr;
-				SaberPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
-				SetPrimType (&(GLOBAL (DisplayArray))[SaberPtr->PrimIndex],NO_PRIM);
-				SetElementStarShip (SaberPtr, StarShipPtr);
-				GetElementStarShip (ElementPtr1, &StarShipPtr);
-				SaberPtr->hTarget = StarShipPtr->hShip;
-			}
-			
-			SaberPtr->life_span = 400;
-			SaberPtr->turn_wait =
-			(BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
-			
-			UnlockElement (hSaberElement);
-		}
-		
-		ElementPtr0->hit_points = 0;
-		ElementPtr0->life_span = 0;
-		ElementPtr0->state_flags |= DISAPPEARING | COLLISION | NONSOLID;
-	}
-	(void) pPt0;  /* Satisfying compiler (unused parameter) */
-	(void) pPt1;  /* Satisfying compiler (unused parameter) */
-}
-
 // This generates the wide saber.
 static COUNT
 initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[])
@@ -511,18 +453,18 @@ initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[])
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
-	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
-	MissileBlock.face = StarShipPtr->ShipFacing;
-	MissileBlock.index = StarShipPtr->ShipFacing;
-	MissileBlock.sender = ShipPtr->playerNr;
-	MissileBlock.flags = NONSOLID | IGNORE_SIMILAR;
+	MissileBlock.farray  = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.face    = StarShipPtr->ShipFacing;
+	MissileBlock.index   = StarShipPtr->ShipFacing;
+	MissileBlock.sender  = ShipPtr->playerNr;
+	MissileBlock.flags   = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
-	MissileBlock.speed = DERVISH_THRUST;
+	MissileBlock.speed   = DERVISH_THRUST;
+	MissileBlock.damage  = 1;
+	MissileBlock.life    = 1;
 	MissileBlock.hit_points = 100;
-	MissileBlock.damage = 1;
-	MissileBlock.life = 1;
 	MissileBlock.preprocess_func = 0;
-	MissileBlock.blast_offs = 0;
+	MissileBlock.blast_offs      = 0;
 	SaberArray[0] = initialize_missile (&MissileBlock);
 	
 	if (SaberArray[0])
@@ -530,7 +472,7 @@ initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[])
 		ELEMENT *SaberPtr;
 		
 		LockElement (SaberArray[0], &SaberPtr);
-		SaberPtr->collision_func = saber_collision;
+		SetElementStarShip (SaberPtr, StarShipPtr);
 		UnlockElement (SaberArray[0]);
 	}
 	
