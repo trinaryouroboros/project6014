@@ -109,10 +109,11 @@ Actual Dimensions  : 71x158
 _Problems exist with the 4x model and it will be re-sized_
 
 ==Melnorme Trader==
+Model by Zenzmurfy
 {{{
 Original Dimensions: 31x31
 Perfect Dimensions : 124x124
-Actual Dimensions  : 111x118
+Actual Dimensions  : 113x124
 }}}
 
 ==Mmrnmhrm==
