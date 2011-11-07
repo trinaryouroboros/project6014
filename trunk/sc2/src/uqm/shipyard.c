@@ -202,9 +202,9 @@ DrawRaceStrings (MENU_STATE *pMS, BYTE NewRaceItem)
 	s.origin.x = RADAR_X - r.corner.x;
 	s.origin.y = RADAR_Y - r.corner.y;
 	r.corner.x = s.origin.x - 1;
-	r.corner.y = s.origin.y - 11;
+	r.corner.y = s.origin.y - (11 << RESOLUTION_FACTOR);
 	r.extent.width = RADAR_WIDTH + 2;
-	r.extent.height = 11;
+	r.extent.height = 11 << RESOLUTION_FACTOR;
 	BatchGraphics ();
 	ClearSISRect (CLEAR_SIS_RADAR);
 	SetContextForeGroundColor (
@@ -293,9 +293,9 @@ ShowShipCrew (SHIP_FRAGMENT *StarShipPtr, RECT *pRect)
 	t.CharCount = (COUNT)~0;
 	if (r.corner.y)
 	{
-		r.corner.y = t.baseline.y - 6;
+		r.corner.y = t.baseline.y - (6 << RESOLUTION_FACTOR); //JMS_GFX
 		r.extent.width = SHIP_WIN_WIDTH;
-		r.extent.height = 6;
+		r.extent.height = 6 << RESOLUTION_FACTOR; // JMS_GFX
 		SetContextForeGroundColor (BLACK_COLOR);
 		DrawFilledRectangle (&r);
 	}
@@ -785,7 +785,7 @@ DoModifyShips (MENU_STATE *pMS)
 									-((int)ShipCost[Index]));
 							r.corner.x = pMS->flash_rect0.corner.x;
 							r.corner.y = pMS->flash_rect0.corner.y
-									+ pMS->flash_rect0.extent.height - 6;
+								+ pMS->flash_rect0.extent.height - (6 << RESOLUTION_FACTOR);
 							r.extent.width = SHIP_WIN_WIDTH;
 							r.extent.height = 5 << RESOLUTION_FACTOR; // JMS_GFX
 							SetContext (SpaceContext);
@@ -878,7 +878,7 @@ DoModifyShips (MENU_STATE *pMS)
 					{
 						r.corner.x = pMS->flash_rect0.corner.x;
 						r.corner.y = pMS->flash_rect0.corner.y
-								+ pMS->flash_rect0.extent.height - 6;
+							+ pMS->flash_rect0.extent.height - (6 << RESOLUTION_FACTOR);
 						r.extent.width = SHIP_WIN_WIDTH;
 						r.extent.height = (5 << RESOLUTION_FACTOR); // JMS_GFX
 						SetContext (SpaceContext);
@@ -951,7 +951,7 @@ DoModifyShips (MENU_STATE *pMS)
 								ShowShipCrew (StarShipPtr, &pMS->flash_rect0);
 								r.corner.x = pMS->flash_rect0.corner.x;
 								r.corner.y = pMS->flash_rect0.corner.y
-										+ pMS->flash_rect0.extent.height - 6;
+									+ pMS->flash_rect0.extent.height - (6 << RESOLUTION_FACTOR);
 								r.extent.width = SHIP_WIN_WIDTH;
 								r.extent.height = 5 << RESOLUTION_FACTOR; // JMS_GFX
 								SetContext (SpaceContext);
@@ -1017,7 +1017,7 @@ DoModifyShips (MENU_STATE *pMS)
 							ShowShipCrew (StarShipPtr, &pMS->flash_rect0);
 							r.corner.x = pMS->flash_rect0.corner.x;
 							r.corner.y = pMS->flash_rect0.corner.y
-									+ pMS->flash_rect0.extent.height - 6;
+								+ pMS->flash_rect0.extent.height - (6 << RESOLUTION_FACTOR);
 							r.extent.width = SHIP_WIN_WIDTH;
 							r.extent.height = 5 << RESOLUTION_FACTOR; // JMS_GFX
 							SetContext (SpaceContext);
