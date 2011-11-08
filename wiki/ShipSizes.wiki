@@ -242,7 +242,7 @@ If scaled down, it would be 84x132 pixels in size (32 pixels thinner or a 27.5% 
 {{{
 Original Dimensions: 33x31
 Perfect Dimensions : 132x124
-Actual Dimensions  : 152x108
+Actual Dimensions  : 140x125
 }}}
 
 ==Vux Intruder==
