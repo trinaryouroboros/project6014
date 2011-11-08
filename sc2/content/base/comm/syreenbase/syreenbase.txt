@@ -1,23 +1,34 @@
-#(MOOSY_GREETING)
+#(lucielle_GREETING)
 Sorry handsome, but your princess is in another castle.
 
 #(holy_crap)
 Yeah, my girlfriend used to work here and I was just... Holy Crap! I mean, uhh... Greetings. 
 
+#(hello)
+Hi there! I'm just visiting. My girlfriend used to work here.
+
 #(am_i_lost)
-Whoa. Am I lost? This is the Syreen homeworld, right?
+Am I lost? This is the Syreen homeworld, right?
 
 #(had_to_stop_by)
 Talana asked I stop by to say "hi".
 
 #(MOOSY_SAYS_HI)
-Awww. Isn't she just a sweetheart? You tell her Moosy says "Hi".
+Awww. Isn't she just a sweetheart? You tell her Lucielle says "Hi".
 
 #(i_ll_tell_her)
-Alright... Moosy. I'll tell her.
+Alright, Lucielle. I'll tell her.
 
 #(perfect_name)
-Moosy? Ha! What a perfect name. Err...a lovely name.
+What a lovely name.
+
+#(minerals_here)
+I've got some minerals to drop off.
+
+#(WELCOME)
+Welcome back to our home Captain! We all know about you here.
+I'm just filling in since Talana left.
+I suggest talking to our Syreen Commander on the planet below.
 
 #(THANKS_SUGAR) 
 Why, thank you, sugar!
@@ -28,6 +39,9 @@ Sugar, she was right about you. You are a cutie.
 #(TALK_TO_COMMANDER)
 Sure is! I suggest you talk to the Syreen Commander
 on the planet below for any questions. 
+
+#(MINERALS)
+We don't have many transport ships, so the minerals help. Thanks!
 
 #(huge_fan)
 BIG fan of the Syreen. Err... No, huge Fan. I mean, Syreen are awesome.
@@ -47,5 +61,5 @@ your loss Captain. Most Syreen are skinny.
 #(must_be_going)
 Well, ummm, I really must be going now.
 
-#(COME_BACK_ANYTIME_MOOSY)
+#(COME_BACK_ANYTIME_lucielle)
 Come back anytime, sugar!
