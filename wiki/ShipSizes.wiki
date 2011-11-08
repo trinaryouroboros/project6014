@@ -33,12 +33,12 @@ Actual Dimensions  : 124x125
 }}}
 
 ==Chenjesu Broodhome==
+Damon Czanik Model:
 {{{
 Original Dimensions: 34x34
 Perfect Dimensions : 136x136
-Actual Dimensions  : 272x266
+Actual Dimensions  : 138x136
 }}}
-_This appears to have accidentally got doubled in size. Will re-size later._
 
 ==CHMMR Avatar==
 {{{
