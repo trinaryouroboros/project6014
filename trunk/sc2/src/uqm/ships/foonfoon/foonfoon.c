@@ -393,7 +393,7 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		
 		if (StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON)
 			StarShipPtr->weapon_counter = WEAPON_WAIT;
-		else if (!(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & SPECIAL))
+		else
 		{
 			EPtr->life_span = 0;
 			EPtr->preprocess_func = focusball_preprocess;
@@ -475,7 +475,7 @@ initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
 	
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
-	MissileBlock.farray  = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.farray  = StarShipPtr->RaceDescPtr->ship_data.special;
 	MissileBlock.index   = MissileBlock.face = facing;
 	MissileBlock.sender  = ShipPtr->playerNr;
 	MissileBlock.flags   = IGNORE_SIMILAR;
@@ -496,7 +496,7 @@ initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
 		SaberPtr->collision_func = saber_collision;
 		InitIntersectStartPoint (SaberPtr);
 		InitIntersectEndPoint (SaberPtr);
-		SaberPtr->IntersectControl.IntersectStamp.frame = StarShipPtr->RaceDescPtr->ship_data.weapon[facing];
+		SaberPtr->IntersectControl.IntersectStamp.frame = StarShipPtr->RaceDescPtr->ship_data.special[facing];
 		UnlockElement (SaberArray[0]);
 	}
 	
