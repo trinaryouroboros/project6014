@@ -129,7 +129,7 @@ Actual Dimensions  : 112x76
 {{{
 Original Dimensions: 17x24
 Perfect Dimensions : 68x96
-Actual Dimensions  : 104x106
+Actual Dimensions  : 92x94
 }}}
 
 ==Mycon Podship==
