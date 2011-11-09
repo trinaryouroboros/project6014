@@ -67,7 +67,7 @@ The Chmmr.
 
 #(CHMMR_INFO_SB)
 The Chmmr have been the de facto leaders of the Alliance
-since the end of the war.
+since the defeat of the Ur-Quan forces.
 They are effective and thorough in their undertakings
 sometimes almost overzealously so.
 For example, they established the well-instrumented lines of defence
