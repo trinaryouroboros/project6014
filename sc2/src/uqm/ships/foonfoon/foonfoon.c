@@ -829,6 +829,7 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 	STATUS_FLAGS cur_status_flags;
 	BYTE frame_index;
 	static BYTE released_special_since_last = 1;
+	static BYTE turn_direction = 0;
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	cur_status_flags = StarShipPtr->cur_status_flags;
@@ -850,9 +851,9 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 			cur_status_flags &= ~(SPECIAL);
 			StarShipPtr->old_status_flags &= ~(SPECIAL);
 			released_special_since_last = 0;
+			turn_direction = 0;
 		}
-		else if (released_special_since_last
-				 && StarShipPtr->cur_status_flags & (LEFT | RIGHT))
+		else if (released_special_since_last)
 		{
 			COUNT facing;
 			SIZE  speedx, speedy;
@@ -867,7 +868,8 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 			if (//!(StarShipPtr->old_status_flags & SPECIAL)
 				//|| (/*StarShipPtr->old_status_flags & SPECIAL 
 				frame_index < NUM_SHIP_FACINGS
-				//&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST
+				&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST
+				&& StarShipPtr->cur_status_flags & (LEFT | RIGHT)
 				)//&& totalspeed < DERVISH_THRUST)
 			{
 				// Decrement battery.
@@ -878,23 +880,30 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 				
 				// Dervish swoosh sound.
 				ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+				
+				if (StarShipPtr->cur_status_flags & LEFT)
+					turn_direction = 1;
+				else if (StarShipPtr->cur_status_flags & RIGHT)
+					turn_direction = 2;
 			}
 			
 			// Can't turn or use primary weapon in dervish mode.
 			cur_status_flags &= ~(THRUST | WEAPON | LEFT | RIGHT);
 			
 			// Turn ship around whilst in dervish mode.
-			if (StarShipPtr->cur_status_flags & LEFT)
+			if (turn_direction == 1)
 				facing -= 2;
-			else
+			else if (turn_direction == 2)
 				facing += 2;
 			facing %= NUM_SHIP_FACINGS;
 			StarShipPtr->ShipFacing = facing;
 			
 			// Change to blur graphics.
-			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, facing + NUM_SHIP_FACINGS);
-			
-			cur_status_flags |= SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED;
+			if (turn_direction)
+			{
+				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, facing + NUM_SHIP_FACINGS);
+				cur_status_flags |= SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED;
+			}
 		}
 	}
 	// The player must let go of the special key between dervishes.
@@ -902,7 +911,10 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 	else if (!(StarShipPtr->old_status_flags & SPECIAL) 
 			 && !(StarShipPtr->cur_status_flags & SPECIAL)
 			 && StarShipPtr->RaceDescPtr->ship_info.energy_level > SPECIAL_ENERGY_COST)
+	{
 		released_special_since_last = 1;
+		turn_direction = 0;
+	}
 	
 	StarShipPtr->cur_status_flags = cur_status_flags;
 }
