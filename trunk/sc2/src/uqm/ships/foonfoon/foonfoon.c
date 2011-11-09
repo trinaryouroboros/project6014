@@ -577,7 +577,7 @@ initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
 	MissileBlock.speed = DISPLAY_TO_WORLD (FOCUSBALL_OFFSET);
 	MissileBlock.hit_points = 100;
-	MissileBlock.damage = 0;
+	MissileBlock.damage = 1;
 	MissileBlock.life = 2;
 	MissileBlock.preprocess_func = 0;
 	MissileBlock.blast_offs = 0;
@@ -600,6 +600,7 @@ initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	}
 	
 	// Focusball
+	MissileBlock.damage = 0;
 	MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
 	MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
 	BeamArray[1] = initialize_missile (&MissileBlock);
@@ -826,14 +827,15 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 	STATUS_FLAGS cur_status_flags;
-	static BYTE turning_left = 1;
+	BYTE frame_index;
 	static BYTE released_special_since_last = 1;
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	cur_status_flags = StarShipPtr->cur_status_flags;
 	
+	frame_index = GetFrameIndex (ElementPtr->current.image.frame);
+	
 	if (StarShipPtr->cur_status_flags & SPECIAL
-		&& StarShipPtr->cur_status_flags & (LEFT | RIGHT)
 		//&& StarShipPtr->special_counter == 0 
 		&& released_special_since_last)
 	{
@@ -849,7 +851,8 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 			StarShipPtr->old_status_flags &= ~(SPECIAL);
 			released_special_since_last = 0;
 		}
-		else if (released_special_since_last)
+		else if (released_special_since_last
+				 && StarShipPtr->cur_status_flags & (LEFT | RIGHT))
 		{
 			COUNT facing;
 			SIZE  speedx, speedy;
@@ -861,9 +864,11 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 			totalspeed = sqrt (speedx * speedx + speedy * speedy);
 
 			// Upon pressing the special key, speed rapidly to the direction which the ship was heading to.
-			if (!(StarShipPtr->old_status_flags & SPECIAL)
-				|| (StarShipPtr->old_status_flags & SPECIAL && StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST
-					&& totalspeed < DERVISH_THRUST))
+			if (//!(StarShipPtr->old_status_flags & SPECIAL)
+				//|| (/*StarShipPtr->old_status_flags & SPECIAL 
+				frame_index < NUM_SHIP_FACINGS
+				//&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST
+				)//&& totalspeed < DERVISH_THRUST)
 			{
 				// Decrement battery.
 				DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST);
@@ -871,28 +876,22 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 				// Go FAAAAST!
 				SetVelocityVector (&ElementPtr->velocity, DERVISH_THRUST, NORMALIZE_FACING (facing));
 				
-				// Change to blur graphics.
-				ElementPtr->state_flags |= CHANGING;
-				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, StarShipPtr->ShipFacing + NUM_SHIP_FACINGS);
-				
 				// Dervish swoosh sound.
 				ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
-				
-				// Next time, turn into another direction.
-				turning_left++;
-				turning_left %=2;
 			}
 			
 			// Can't turn or use primary weapon in dervish mode.
 			cur_status_flags &= ~(THRUST | WEAPON | LEFT | RIGHT);
 			
 			// Turn ship around whilst in dervish mode.
-			if (turning_left)
-				facing += 2;
-			else
+			if (StarShipPtr->cur_status_flags & LEFT)
 				facing -= 2;
+			else
+				facing += 2;
 			facing %= NUM_SHIP_FACINGS;
 			StarShipPtr->ShipFacing = facing;
+			
+			// Change to blur graphics.
 			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, facing + NUM_SHIP_FACINGS);
 			
 			cur_status_flags |= SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED;
