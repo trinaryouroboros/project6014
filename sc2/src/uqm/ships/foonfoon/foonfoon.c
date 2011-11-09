@@ -359,13 +359,10 @@ focusball_preprocess (ELEMENT *ElementPtr)
 		
 		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex],  NO_PRIM);
 		ElementPtr->state_flags |= NONSOLID;
-		
-		//ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, FOCUSBALL_FRAME_STARTINDEX + frame_index);
-		//ElementPtr->state_flags |= CHANGING;
 	}
 }
 
-// This animates the focusball between frames 0...2 and creates sound for activating the focusball.
+// This animates the focusball between frames 0...2.
 static void
 focusball_postprocess (ELEMENT *ElementPtr)
 {
@@ -415,6 +412,63 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		ElementPtr->state_flags |= NONSOLID;
 	}
 }
+
+// Collision function for both the primary beam and the secondary saber.
+static void
+saber_beam_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+{
+	HELEMENT hBlastElement;
+	
+	hBlastElement = weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+	if (hBlastElement)
+	{
+		RemoveElement (hBlastElement);
+		FreeElement (hBlastElement);
+		
+		ElementPtr0->state_flags &= ~DISAPPEARING;
+	}
+}
+
+// This makes the beam primary stay alive for an indefinite time.
+static void
+beam_postprocess (ELEMENT *ElementPtr)
+{
+	if (ElementPtr->state_flags & APPEARING)
+		ZeroVelocityComponents (&ElementPtr->velocity);
+	else
+	{
+		HELEMENT hBeam;
+		ELEMENT *EPtr;
+		ELEMENT *ShipPtr;
+		STARSHIP *StarShipPtr;
+		
+		GetElementStarShip (ElementPtr, &StarShipPtr);
+		LockElement (StarShipPtr->hShip, &ShipPtr);
+		initialize_beam (ShipPtr, &hBeam);
+		DeltaEnergy (ShipPtr, 0);
+		UnlockElement (StarShipPtr->hShip);
+		
+		LockElement (hBeam, &EPtr);
+		SetElementStarShip (EPtr, StarShipPtr);
+		
+		if (StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON)
+			StarShipPtr->weapon_counter = WEAPON_WAIT;
+		else
+		{
+			EPtr->life_span = 0;
+			EPtr->preprocess_func = 0;
+			EPtr->postprocess_func = 0;
+			
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 0), EPtr);
+		}
+		
+		UnlockElement (hBeam);
+		PutElement (hBeam);
+		
+		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex],  NO_PRIM);
+	}
+}
+
 
 // This generates the focus ball.
 static COUNT
@@ -493,60 +547,63 @@ initialize_special_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[])
 	return (1);
 }
 
-// Collision function for both the primary beam and the secondary saber.
-static void
-saber_beam_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+// This generates the narrow beam AND a focusball.
+static COUNT
+initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 {
-	HELEMENT hBlastElement;
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
 	
-	hBlastElement = weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
-	if (hBlastElement)
-	{
-		RemoveElement (hBlastElement);
-		FreeElement (hBlastElement);
-		
-		ElementPtr0->state_flags &= ~DISAPPEARING;
-	}
-}
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	
+	MissileBlock.cx = ShipPtr->next.location.x;
+	MissileBlock.cy = ShipPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = StarShipPtr->ShipFacing;
+	MissileBlock.sender = ShipPtr->playerNr;
+	MissileBlock.flags =  IGNORE_SIMILAR;
+	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
+	MissileBlock.speed = DISPLAY_TO_WORLD (FOCUSBALL_OFFSET);
+	MissileBlock.hit_points = 100;
+	MissileBlock.damage = 0;
+	MissileBlock.life = 2;
+	MissileBlock.preprocess_func = 0;
+	MissileBlock.blast_offs = 0;
 
-// This makes the beam primary stay alive for an indefinite time.
-static void
-beam_postprocess (ELEMENT *ElementPtr)
-{
-	if (ElementPtr->state_flags & APPEARING)
-		ZeroVelocityComponents (&ElementPtr->velocity);
-	else
+	// Beam
+	BeamArray[0] = initialize_missile (&MissileBlock);
+
+	if (BeamArray[0])
 	{
-		HELEMENT hBeam;
-		ELEMENT *EPtr;
-		ELEMENT *ShipPtr;
-		STARSHIP *StarShipPtr;
+		ELEMENT *BeamPtr;
 		
-		GetElementStarShip (ElementPtr, &StarShipPtr);
-		LockElement (StarShipPtr->hShip, &ShipPtr);
-		initialize_beam (ShipPtr, &hBeam);
-		DeltaEnergy (ShipPtr, 0);
-		UnlockElement (StarShipPtr->hShip);
-		
-		LockElement (hBeam, &EPtr);
-		SetElementStarShip (EPtr, StarShipPtr);
-		
-		if (StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON)
-			StarShipPtr->weapon_counter = WEAPON_WAIT;
-		else
-		{
-			EPtr->life_span = 0;
-			EPtr->preprocess_func = 0;
-			EPtr->postprocess_func = 0;
-			
-			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 0), EPtr);
-		}
-		
-		UnlockElement (hBeam);
-		PutElement (hBeam);
-		
-		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex],  NO_PRIM);
+		LockElement (BeamArray[0], &BeamPtr);
+		SetElementStarShip (BeamPtr, StarShipPtr);
+		BeamPtr->collision_func = saber_beam_collision;
+		BeamPtr->postprocess_func = beam_postprocess;
+		InitIntersectStartPoint (BeamPtr);
+		InitIntersectEndPoint (BeamPtr);
+		BeamPtr->IntersectControl.IntersectStamp.frame = StarShipPtr->RaceDescPtr->ship_data.weapon[StarShipPtr->ShipFacing];
+		UnlockElement (BeamArray[0]);
 	}
+	
+	// Focusball
+	MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
+	MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
+	BeamArray[1] = initialize_missile (&MissileBlock);
+	
+	if (BeamArray[1])
+	{
+		ELEMENT *FocusPtr;
+		
+		LockElement (BeamArray[1], &FocusPtr);
+		FocusPtr->postprocess_func = focusball_postprocess;
+		UnlockElement (BeamArray[1]);
+	}
+	
+	// 2: Beam is first and focusball is the second
+	return (2);
 }
 
 // This generates the narrow beam.
@@ -572,8 +629,9 @@ initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	MissileBlock.life = 2;
 	MissileBlock.preprocess_func = 0;
 	MissileBlock.blast_offs = 0;
+	
 	BeamArray[0] = initialize_missile (&MissileBlock);
-
+	
 	if (BeamArray[0])
 	{
 		ELEMENT *BeamPtr;
@@ -589,6 +647,62 @@ initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	}
 	
 	return (1);
+}
+
+// This generates the wide saber AND a focusball.
+static COUNT
+initialize_saber_and_focusball (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
+{
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	COUNT facing; 
+	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	facing = (StarShipPtr->ShipFacing + NUM_SABERS - facingfix) % 16;
+	
+	MissileBlock.cx = ShipPtr->next.location.x;
+	MissileBlock.cy = ShipPtr->next.location.y;
+	MissileBlock.farray  = StarShipPtr->RaceDescPtr->ship_data.special;
+	MissileBlock.index   = MissileBlock.face = facing;
+	MissileBlock.sender  = ShipPtr->playerNr;
+	MissileBlock.flags   = IGNORE_SIMILAR;
+	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
+	MissileBlock.speed   = DERVISH_THRUST;
+	MissileBlock.damage  = 1;
+	MissileBlock.life    = 1;
+	MissileBlock.hit_points = 100;
+	MissileBlock.preprocess_func = 0;
+	MissileBlock.blast_offs      = 0;
+	
+	if ((SaberArray[0] = initialize_missile (&MissileBlock)))
+	{
+		ELEMENT *SaberPtr;
+		
+		LockElement (SaberArray[0], &SaberPtr);
+		SetElementStarShip (SaberPtr, StarShipPtr);
+		SaberPtr->collision_func = saber_beam_collision;
+		InitIntersectStartPoint (SaberPtr);
+		InitIntersectEndPoint (SaberPtr);
+		SaberPtr->IntersectControl.IntersectStamp.frame = StarShipPtr->RaceDescPtr->ship_data.special[facing];
+		UnlockElement (SaberArray[0]);
+	}
+	
+	// Focusball
+	MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
+	MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
+	SaberArray[1] = initialize_missile (&MissileBlock);
+	
+	if (SaberArray[1])
+	{
+		ELEMENT *FocusPtr;
+		
+		LockElement (SaberArray[1], &FocusPtr);
+		FocusPtr->postprocess_func = focusball_postprocess;
+		UnlockElement (SaberArray[1]);
+	}
+	
+	// 2: Beam is first and focusball is the second
+	return (2);
 }
 
 // This generates the wide saber.
@@ -681,7 +795,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 		{
 			HELEMENT Saber;
 			
-			initialize_saber (ElementPtr, &Saber, i);
+			initialize_saber_and_focusball (ElementPtr, &Saber, i);
 			if (Saber)
 			{
 				ELEMENT *SMissilePtr;
@@ -737,6 +851,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 		&& StarShipPtr->RaceDescPtr->ship_info.energy_level > SPECIAL_ENERGY_COST)
 		had_pause = 1;
 	
+	/* XXX TODO: Remove this.
 	// Graphical nicety: Let's add a focusball to the mouth of the ship when using primary weapon.
 	if (StarShipPtr->cur_status_flags & WEAPON)
 	{
@@ -751,7 +866,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 			UnlockElement (FocusBall);
 			PutElement (FocusBall);
 		}
-	}
+	}*/
 }
 
 static void
@@ -840,7 +955,7 @@ init_foonfoon (void)
 	{
 		foonfoon_desc.postprocess_func = foonfoon_postprocess;
 		foonfoon_desc.preprocess_func  = foonfoon_preprocess;
-		foonfoon_desc.init_weapon_func = initialize_beam;
+		foonfoon_desc.init_weapon_func = initialize_beam_and_focusball;
 		foonfoon_desc.cyborg_control.intelligence_func = foonfoon_intelligence;
 		RaceDescPtr = &foonfoon_desc;
 	}
@@ -848,7 +963,7 @@ init_foonfoon (void)
 	{
 		foonfoon_desc_2xres.postprocess_func = foonfoon_postprocess;
 		foonfoon_desc_2xres.preprocess_func  = foonfoon_preprocess;
-		foonfoon_desc_2xres.init_weapon_func = initialize_beam;
+		foonfoon_desc_2xres.init_weapon_func = initialize_beam_and_focusball;
 		foonfoon_desc_2xres.cyborg_control.intelligence_func = foonfoon_intelligence;
 		RaceDescPtr = &foonfoon_desc_2xres;
 	}
@@ -856,7 +971,7 @@ init_foonfoon (void)
 	{
 		foonfoon_desc_4xres.postprocess_func = foonfoon_postprocess;
 		foonfoon_desc_4xres.preprocess_func  = foonfoon_preprocess;
-		foonfoon_desc_4xres.init_weapon_func = initialize_beam;
+		foonfoon_desc_4xres.init_weapon_func = initialize_beam_and_focusball;
 		foonfoon_desc_4xres.cyborg_control.intelligence_func = foonfoon_intelligence;
 		RaceDescPtr = &foonfoon_desc_4xres;
 	}
