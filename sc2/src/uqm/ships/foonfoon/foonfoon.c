@@ -326,42 +326,8 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 static COUNT 
 initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[]);
 
-static COUNT 
-initialize_special_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[]);
-
 static COUNT
 initialize_beam (ELEMENT *ShipPtr, HELEMENT FocusArray[]);
-
-// This animates the focusball between frames 0...2.
-static void
-focusball_preprocess (ELEMENT *ElementPtr)
-{
-	COUNT frame_index;
-
-	if (ElementPtr->state_flags & APPEARING)
-		ZeroVelocityComponents (&ElementPtr->velocity);
-	else
-	{
-		frame_index = GetFrameIndex (ElementPtr->current.image.frame) - FOCUSBALL_FRAME_STARTINDEX;
-		
-		if (    ((ElementPtr->turn_wait & REVERSE_DIR) && (frame_index % NUM_FOCUSBALL_ANIMS) != 0)
-			|| (!(ElementPtr->turn_wait & REVERSE_DIR) && ((frame_index + 1) % NUM_FOCUSBALL_ANIMS) == 0))
-		{
-			--frame_index;
-			ElementPtr->turn_wait |= REVERSE_DIR;
-		}
-		else
-		{
-			++frame_index;
-			ElementPtr->turn_wait &= ~REVERSE_DIR;
-		}
-		
-		ElementPtr->current.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, FOCUSBALL_FRAME_STARTINDEX + frame_index);
-		
-		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex],  NO_PRIM);
-		ElementPtr->state_flags |= NONSOLID;
-	}
-}
 
 // This animates the focusball between frames 0...2.
 static void
@@ -375,11 +341,13 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		ELEMENT *EPtr;
 		ELEMENT *ShipPtr;
 		STARSHIP *StarShipPtr;
+		COUNT frame_index;
 		
 		GetElementStarShip (ElementPtr, &StarShipPtr);
 		LockElement (StarShipPtr->hShip, &ShipPtr);
 		initialize_focusball (ShipPtr, &hFocusBall);
-		DeltaEnergy (ShipPtr, 0);
+		if ((StarShipPtr->cur_status_flags | StarShipPtr->old_status_flags) & WEAPON)
+			DeltaEnergy (ShipPtr, 0);
 		UnlockElement (StarShipPtr->hShip);
 		
 		LockElement (hFocusBall, &EPtr);
@@ -389,11 +357,9 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		
 		SetElementStarShip (EPtr, StarShipPtr);
 		
-			COUNT frame_index;
-			
-			frame_index = GetFrameIndex (EPtr->current.image.frame) - FOCUSBALL_FRAME_STARTINDEX;
-			if		(((EPtr->turn_wait & REVERSE_DIR) && (frame_index % NUM_FOCUSBALL_ANIMS) != 0)
-				||  (!(EPtr->turn_wait & REVERSE_DIR) && ((frame_index + 1) % NUM_FOCUSBALL_ANIMS) == 0))
+		frame_index = GetFrameIndex (EPtr->current.image.frame) - FOCUSBALL_FRAME_STARTINDEX;
+		if		(((EPtr->turn_wait & REVERSE_DIR) && (frame_index % NUM_FOCUSBALL_ANIMS) != 0)
+			||  (!(EPtr->turn_wait & REVERSE_DIR) && ((frame_index + 1) % NUM_FOCUSBALL_ANIMS) == 0))
 		{
 			--frame_index;
 			EPtr->turn_wait |= REVERSE_DIR;
@@ -406,8 +372,9 @@ focusball_postprocess (ELEMENT *ElementPtr)
 			
 		EPtr->current.image.frame = SetAbsFrameIndex (EPtr->current.image.frame, FOCUSBALL_FRAME_STARTINDEX + frame_index);
 		
-		// When player releases WEAPON key, kill the focusball.
-		if (!(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON))
+		// When player releases WEAPON or SPECIAL key, kill the focusball.
+		if (!(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON)
+			&& !(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & SPECIAL))
 		{
 			EPtr->life_span = 0;
 			EPtr->preprocess_func = 0;
@@ -518,55 +485,15 @@ initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[])
 	return (1);
 }
 
-// This generates the focus ball in conjunction with the special key.
-// In contrast to the focusball of the primary weapon, this focusball is not postprocessed, but preprocessed.
-// (For some reason, postprocessing crashes when initialize_focusball is called from foonfoon_postprocess)
-static COUNT
-initialize_special_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[])
-{
-	STARSHIP *StarShipPtr;
-	MISSILE_BLOCK MissileBlock;
-	
-	GetElementStarShip (ShipPtr, &StarShipPtr);
-	
-	MissileBlock.cx = ShipPtr->current.location.x;
-	MissileBlock.cy = ShipPtr->current.location.y;
-	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
-	MissileBlock.face = StarShipPtr->ShipFacing;
-	MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
-	MissileBlock.sender = ShipPtr->playerNr;
-	MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
-	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
-	MissileBlock.speed = 0;
-	MissileBlock.hit_points = 1;
-	MissileBlock.damage = 0;
-	MissileBlock.life = 2;
-	MissileBlock.preprocess_func = 0;
-	MissileBlock.blast_offs = 0;
-	FocusArray[0] = initialize_missile (&MissileBlock);
-	
-	if (FocusArray[0])
-	{
-		ELEMENT *FocusPtr;
-		
-		LockElement (FocusArray[0], &FocusPtr);
-		SetElementStarShip (FocusPtr, StarShipPtr);
-		FocusPtr->preprocess_func = focusball_preprocess;
-		UnlockElement (FocusArray[0]);
-	}
-	
-	return (1);
-}
-
 // This generates the narrow beam AND a focusball.
 static COUNT
 initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 {
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
-	static BYTE damage_amount = 0;
+	static BYTE damage_amount[NUM_SIDES] = {0};
 	
-	damage_amount = (damage_amount + 1) % 4;
+	damage_amount[ShipPtr->playerNr] = (damage_amount[ShipPtr->playerNr] + 1) % 4;
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
 	MissileBlock.cx = ShipPtr->next.location.x;
@@ -579,7 +506,7 @@ initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
 	MissileBlock.speed = DISPLAY_TO_WORLD (FOCUSBALL_OFFSET);
 	MissileBlock.hit_points = 100;
-	MissileBlock.damage = (damage_amount == 0);
+	MissileBlock.damage = (damage_amount[ShipPtr->playerNr] == 0);
 	MissileBlock.life = 2;
 	MissileBlock.preprocess_func = 0;
 	MissileBlock.blast_offs = 0;
@@ -626,7 +553,9 @@ initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 {
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
+	static BYTE damage_amount[NUM_SIDES] = {0};
 	
+	damage_amount[ShipPtr->playerNr] = (damage_amount[ShipPtr->playerNr] + 1) % 4;
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
 	MissileBlock.cx = ShipPtr->next.location.x;
@@ -639,7 +568,7 @@ initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
 	MissileBlock.speed = DISPLAY_TO_WORLD (FOCUSBALL_OFFSET);
 	MissileBlock.hit_points = 100;
-	MissileBlock.damage = 0;
+	MissileBlock.damage = (damage_amount[ShipPtr->playerNr] == 0);
 	MissileBlock.life = 2;
 	MissileBlock.preprocess_func = 0;
 	MissileBlock.blast_offs = 0;
@@ -672,7 +601,7 @@ initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
 	COUNT facing; 
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-	facing = (StarShipPtr->ShipFacing + NUM_SABERS - facingfix) % NUM_SHIP_FACINGS;
+	facing = (StarShipPtr->ShipFacing + NUM_SABERS - 1 - facingfix) % NUM_SHIP_FACINGS;
 	
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
@@ -711,7 +640,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 	STATUS_FLAGS cur_status_flags;
 	BYTE frame_index, i;
-	static BYTE had_pause = 1;
+	static BYTE not_had_pause[NUM_SIDES] = {0};
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	RDPtr = StarShipPtr->RaceDescPtr;
@@ -742,11 +671,11 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	else if /*(StarShipPtr->cur_status_flags & SPECIAL
 		&& StarShipPtr->special_counter == 0
 		&& RDPtr->ship_info.energy_level > 0
-		&& had_pause)*/ // XXX TODO: Remove the old conditions
+		&& !not_had_pause[ElementPtr->playerNr])*/ // XXX TODO: Remove the old conditions
 		(StarShipPtr->cur_status_flags & SPECIAL
 		 && RDPtr->ship_info.energy_level > 0
 		 && frame_index >= NUM_SHIP_FACINGS
-		 && had_pause)
+		 && !not_had_pause[ElementPtr->playerNr])
 	{
 		// Add sabre elements.
 		// The more sabres there are, the wider it is (and the more damage it deals).
@@ -762,6 +691,23 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 			
 				UnlockElement (Saber);
 				PutElement (Saber);
+			}
+		}
+		
+		// Add a nice little focusball.
+		{
+			HELEMENT Focusball;
+			
+			initialize_focusball (ElementPtr, &Focusball);
+			if (Focusball)
+			{
+				ELEMENT *FBMissilePtr;
+				LockElement (Focusball, &FBMissilePtr);
+				
+				SetElementStarShip (FBMissilePtr, StarShipPtr);
+				
+				UnlockElement (Focusball);
+				PutElement (Focusball);
 			}
 		}
 		
@@ -802,7 +748,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 			// Prevent spamming the special key.
 			cur_status_flags &= ~(SPECIAL);
 			StarShipPtr->cur_status_flags = cur_status_flags;
-			had_pause = 0;
+			not_had_pause[ElementPtr->playerNr] = 1;
 		}
 		
 		// Turning rate & max speed are normal when not in dervish mode.
@@ -821,7 +767,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	if (!(StarShipPtr->old_status_flags & SPECIAL) 
 		&& !(StarShipPtr->cur_status_flags & SPECIAL)
 		&& StarShipPtr->RaceDescPtr->ship_info.energy_level > SPECIAL_ENERGY_COST)
-		had_pause = 1;
+		not_had_pause[ElementPtr->playerNr] = 0;
 }
 
 static void
@@ -830,8 +776,8 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 	STATUS_FLAGS cur_status_flags;
 	BYTE frame_index;
-	static BYTE released_special_since_last = 1;
-	static BYTE turn_direction = 0;
+	static BYTE not_had_pause[NUM_SIDES] = {0};
+	static BYTE turn_direction[NUM_SIDES] = {0};
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	cur_status_flags = StarShipPtr->cur_status_flags;
@@ -840,8 +786,11 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 	
 	if (StarShipPtr->cur_status_flags & SPECIAL
 		//&& StarShipPtr->special_counter == 0 
-		&& released_special_since_last)
+		&& !not_had_pause[ElementPtr->playerNr])
 	{
+		// Can't use primary weapon and special simultaneously.
+		cur_status_flags &= ~(WEAPON);
+		
 		// Not enough juice for dervish mode.
 		if ((StarShipPtr->RaceDescPtr->ship_info.energy_level < SPECIAL_ENERGY_COST && !(StarShipPtr->old_status_flags & SPECIAL))
 			|| StarShipPtr->RaceDescPtr->ship_info.energy_level == 0)
@@ -852,10 +801,10 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 			// Prevent spamming the special key.
 			cur_status_flags &= ~(SPECIAL);
 			StarShipPtr->old_status_flags &= ~(SPECIAL);
-			released_special_since_last = 0;
-			turn_direction = 0;
+			not_had_pause[ElementPtr->playerNr] = 1;
+			turn_direction[ElementPtr->playerNr] = 0;
 		}
-		else if (released_special_since_last)
+		else if (!not_had_pause[ElementPtr->playerNr])
 		{
 			COUNT facing;
 			SIZE  speedx, speedy;
@@ -884,24 +833,25 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 				ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
 				
 				if (StarShipPtr->cur_status_flags & LEFT)
-					turn_direction = 1;
+					turn_direction[ElementPtr->playerNr] = 1;
 				else if (StarShipPtr->cur_status_flags & RIGHT)
-					turn_direction = 2;
+					turn_direction[ElementPtr->playerNr] = 2;
 			}
 			
+
 			// Can't turn or use primary weapon in dervish mode.
 			cur_status_flags &= ~(THRUST | WEAPON | LEFT | RIGHT);
 			
 			// Turn ship around whilst in dervish mode.
-			if (turn_direction == 1)
+			if (turn_direction[ElementPtr->playerNr] == 1)
 				facing -= 2;
-			else if (turn_direction == 2)
+			else if (turn_direction[ElementPtr->playerNr] == 2)
 				facing += 2;
 			facing %= NUM_SHIP_FACINGS;
 			StarShipPtr->ShipFacing = facing;
 			
 			// Change to blur graphics.
-			if (turn_direction)
+			if (turn_direction[ElementPtr->playerNr])
 			{
 				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, facing + NUM_SHIP_FACINGS);
 				cur_status_flags |= SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED;
@@ -911,11 +861,11 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 	// The player must let go of the special key between dervishes.
 	// This requirement eliminates all sorts of bugs.
 	else if (!(StarShipPtr->old_status_flags & SPECIAL) 
-			 && !(StarShipPtr->cur_status_flags & SPECIAL)
-			 && StarShipPtr->RaceDescPtr->ship_info.energy_level > SPECIAL_ENERGY_COST)
+		&& !(StarShipPtr->cur_status_flags & SPECIAL)
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level > SPECIAL_ENERGY_COST)
 	{
-		released_special_since_last = 1;
-		turn_direction = 0;
+		not_had_pause[ElementPtr->playerNr] = 0;
+		turn_direction[ElementPtr->playerNr] = 0;
 	}
 	
 	StarShipPtr->cur_status_flags = cur_status_flags;
