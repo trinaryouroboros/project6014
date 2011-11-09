@@ -921,8 +921,8 @@ static BOOLEAN
 DoConvSummary (SUMMARY_STATE *pSS)
 {
 #define DELTA_Y_SUMMARY ((8 << RESOLUTION_FACTOR) - 2 * RESOLUTION_FACTOR) // JMS_GFX
-#define MAX_SUMM_ROWS ((SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT) \
-			/ DELTA_Y_SUMMARY) - (1 << RESOLUTION_FACTOR) // JMS_GFX
+//#define MAX_SUMM_ROWS ((SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT) / DELTA_Y_SUMMARY
+#define MAX_SUMM_ROWS (SLIDER_Y	/ DELTA_Y_SUMMARY) - (1 << RESOLUTION_FACTOR) // JMS_GFX
 
 	if (!pSS->Initialized)
 	{
@@ -959,7 +959,7 @@ DoConvSummary (SUMMARY_STATE *pSS)
 		r.corner.x = 0;
 		r.corner.y = 0;
 		r.extent.width = SIS_SCREEN_WIDTH;
-		r.extent.height = SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + (2 << RESOLUTION_FACTOR) + 16 * RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.height = SLIDER_Y; //SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + (2 << RESOLUTION_FACTOR) + 16 * RESOLUTION_FACTOR; // JMS_GFX
 
 		LockMutex (GraphicsLock);
 		SetContext (AnimContext);
@@ -1147,7 +1147,7 @@ PlayerResponseInput (ENCOUNTER_STATE *pES)
 
 			LockMutex (GraphicsLock);
 			BatchGraphics ();
-			// add_text (-2, &pES->response_list[pES->cur_response].response_text);
+			add_text (-2, &pES->response_list[pES->cur_response].response_text);
 
 			pES->cur_response = response;
 

@@ -59,6 +59,9 @@
 #define XOFFS ((RADAR_SCAN_WIDTH + (UNIT_SCREEN_WIDTH << 2)) >> 1)
 #define YOFFS ((RADAR_SCAN_HEIGHT + (UNIT_SCREEN_HEIGHT << 2)) >> 1)
 
+static FRAME hyperspacesuns; // BW: array of all the truespace suns needed
+static FRAME hyperholes[4];			// BW: One for each flavour of space
+// hyperholes[0] is never used for numbering consistency with hyperstars
 static FRAME hyperstars[4];			// JMS: Extra slot for ORZ space star gfx
 static COLORMAP hypercmaps[3];		// JMS: Extra slot for ORZ space color map
 static BYTE fuel_ticks;
@@ -342,6 +345,19 @@ check_hyperspace_encounter (void)
 void
 FreeHyperData (void)
 {
+	if (RESOLUTION_FACTOR == 2)
+	{
+		DestroyDrawable (ReleaseDrawable (hyperholes[1]));
+		hyperholes[1] = 0;
+		// BW: TODO left out for demo
+		// DestroyDrawable (ReleaseDrawable (hyperholes[1]));
+		// hyperholes[2] = 0;
+		// DestroyDrawable (ReleaseDrawable (hyperholes[2]));
+		// hyperholes[3] = 0;
+		DestroyDrawable (ReleaseDrawable (hyperspacesuns));
+		hyperspacesuns = 0;
+	}
+
 	DestroyDrawable (ReleaseDrawable (hyperstars[0]));
 	hyperstars[0] = 0;
 	DestroyDrawable (ReleaseDrawable (hyperstars[1]));
@@ -362,6 +378,21 @@ FreeHyperData (void)
 static void
 LoadHyperData (void)
 {
+	if (RESOLUTION_FACTOR == 2)
+	{
+		if (hyperholes[1] == 0)
+		{
+			hyperholes[1] = CaptureDrawable (
+					LoadGraphic (HYPERHOLES_MASK_PMAP_ANIM));
+			// BW: TODO left out for demo
+			// hyperholes[2] = CaptureDrawable (
+			// 		LoadGraphic (ARIHOLES_MASK_PMAP_ANIM));
+			// hyperstars[3] = CaptureDrawable (
+			// 		LoadGraphic (ORZHOLES_MASK_PMAP_ANIM));
+		}
+		hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
+	}
+
 	if (hyperstars[0] == 0)
 	{
 		hyperstars[0] = CaptureDrawable (
@@ -1545,6 +1576,9 @@ ProcessEncounters (POINT *puniverse, COORD ox, COORD oy)
 	}
 }
 
+#define NUM_HOLES_FRAMES 32
+#define NUM_SUNS_FRAMES 32
+
 void
 SeedUniverse (void)
 {
@@ -1557,7 +1591,9 @@ SeedUniverse (void)
 	STAR_DESC *SDPtr;
 	HELEMENT hHyperSpaceElement;
 	ELEMENT *HyperSpaceElementPtr;
+	static COUNT frameCounter;
 
+	frameCounter++;
 	universe.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
 	universe.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
 
@@ -1738,43 +1774,132 @@ SeedUniverse (void)
 					|| ey > (YOFFS / NUM_RADAR_SCREENS))
 				continue;
 				
-			hHyperSpaceElement = AllocHyperElement (SDPtr);
-			if (hHyperSpaceElement == 0)
-				continue;
-
 			star_type = SDPtr->Type;
 
-			LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+			if (RESOLUTION_FACTOR == 0)
+			{
+				hHyperSpaceElement = AllocHyperElement (SDPtr);
+				if (hHyperSpaceElement == 0)
+					continue;
 
-			// DEBUG BY JMS: ORZ space element gfx
+				LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+
+				// DEBUG BY JMS: ORZ space element gfx
 			
-			if (GET_GAME_STATE (ORZ_SPACE_SIDE))
-				which_spaces_star_gfx = 3;
-			else 
-				which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
+				if (GET_GAME_STATE (ORZ_SPACE_SIDE))
+					which_spaces_star_gfx = 3;
+				else
+					which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
 
-			HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
+				HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
 					hyperstars[which_spaces_star_gfx],
 					STAR_TYPE (star_type) * NUM_STAR_COLORS
 					+ STAR_COLOR (star_type));
-			HyperSpaceElementPtr->preprocess_func = NULL;
-			HyperSpaceElementPtr->postprocess_func = NULL;
-			HyperSpaceElementPtr->collision_func = hyper_collision;
+				HyperSpaceElementPtr->preprocess_func = NULL;
+				HyperSpaceElementPtr->postprocess_func = NULL;
+				HyperSpaceElementPtr->collision_func = hyper_collision;
 
-			SetUpElement (HyperSpaceElementPtr);
+				SetUpElement (HyperSpaceElementPtr);
 
-			if (SDPtr == CurStarDescPtr
-					&& GET_GAME_STATE (PORTAL_COUNTER) == 0)
-				HyperSpaceElementPtr->death_func = hyper_death;
+				if (SDPtr == CurStarDescPtr
+				    && GET_GAME_STATE (PORTAL_COUNTER) == 0)
+					HyperSpaceElementPtr->death_func = hyper_death;
+				else
+				{
+					HyperSpaceElementPtr->death_func = NULL;
+					HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
+						DecFrameIndex (stars_in_space);
+				}
+				UnlockElement (hHyperSpaceElement);
+
+				InsertElement (hHyperSpaceElement, GetHeadElement ());
+			}
 			else
 			{
-				HyperSpaceElementPtr->death_func = NULL;
-				HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
-						DecFrameIndex (stars_in_space);
-			}
-			UnlockElement (hHyperSpaceElement);
+ 				// BW: first the actual star
+				hHyperSpaceElement = AllocHyperElement (SDPtr);
+				if (hHyperSpaceElement == 0)
+					continue;
 
-			InsertElement (hHyperSpaceElement, GetHeadElement ());
+				LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+
+				HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
+				      hyperspacesuns, STAR_COLOR (star_type) * NUM_STAR_TYPES * NUM_SUNS_FRAMES
+				      + STAR_TYPE (star_type) * NUM_SUNS_FRAMES
+				      + frameCounter % NUM_SUNS_FRAMES);
+				// The color, then the size and finally
+				// the frame offset for the actual animation
+
+				HyperSpaceElementPtr->current.image.farray = &hyperspacesuns;
+				HyperSpaceElementPtr->preprocess_func = NULL;
+				HyperSpaceElementPtr->postprocess_func = NULL;
+				HyperSpaceElementPtr->collision_func = hyper_collision;
+
+				SetUpElement (HyperSpaceElementPtr);
+
+				if (SDPtr == CurStarDescPtr
+					&& GET_GAME_STATE (PORTAL_COUNTER) == 0)
+					HyperSpaceElementPtr->death_func = hyper_death;
+				else
+				{
+					HyperSpaceElementPtr->death_func = NULL;
+					HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
+						DecFrameIndex (stars_in_space);
+				}
+				UnlockElement (hHyperSpaceElement);
+
+				InsertElement (hHyperSpaceElement, GetHeadElement ());				
+				// BW: and then the animated hyperspace portal
+				hHyperSpaceElement = AllocHyperElement (SDPtr);
+				if (hHyperSpaceElement == 0)
+					continue;
+
+				LockElement (hHyperSpaceElement, &HyperSpaceElementPtr);
+
+				if (GET_GAME_STATE (ORZ_SPACE_SIDE))
+					which_spaces_star_gfx = 3;
+				else
+					which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
+
+				// Most holes go 100, 150, 250 or 150, 200, 300
+				HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
+                                        hyperholes[which_spaces_star_gfx],
+                                        (STAR_TYPE (star_type) * 3 / 2) * NUM_HOLES_FRAMES);
+				// Green, orange and yellow need bigger holes
+				if (STAR_COLOR (star_type) == GREEN_BODY || STAR_COLOR (star_type) == ORANGE_BODY || STAR_COLOR (star_type) == YELLOW_BODY)
+					HyperSpaceElementPtr->current.image.frame = SetRelFrameIndex (
+                                        HyperSpaceElementPtr->current.image.frame,
+                                        NUM_HOLES_FRAMES);
+				// Super giant blue needs a bigger hole
+				if (STAR_COLOR (star_type) == BLUE_BODY && STAR_TYPE (star_type) == SUPER_GIANT_STAR)
+                                        HyperSpaceElementPtr->current.image.frame = SetRelFrameIndex (
+                                        HyperSpaceElementPtr->current.image.frame,
+                                        NUM_HOLES_FRAMES);
+				// The actual animation
+				HyperSpaceElementPtr->current.image.frame = SetRelFrameIndex (
+                                        HyperSpaceElementPtr->current.image.frame,
+                                        frameCounter % NUM_HOLES_FRAMES);
+
+				HyperSpaceElementPtr->current.image.farray = &hyperholes[which_spaces_star_gfx];
+				HyperSpaceElementPtr->preprocess_func = NULL;
+				HyperSpaceElementPtr->postprocess_func = NULL;
+				HyperSpaceElementPtr->collision_func = hyper_collision;
+
+				SetUpElement (HyperSpaceElementPtr);
+
+				if (SDPtr == CurStarDescPtr
+					&& GET_GAME_STATE (PORTAL_COUNTER) == 0)
+					HyperSpaceElementPtr->death_func = hyper_death;
+				else
+				{
+					HyperSpaceElementPtr->death_func = NULL;
+					HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
+						DecFrameIndex (stars_in_space);
+				}
+				UnlockElement (hHyperSpaceElement);
+
+				InsertElement (hHyperSpaceElement, GetHeadElement ());				
+			}
 		}
 		
 		// JMS: If player left system before transport ship and the transport ship was on its way to leaving system,
