@@ -301,11 +301,9 @@ do_engine_damage(ELEMENT *ElementPtr)
 		else
 		{
 			COUNT num_thrusts;
-			num_thrusts = RDPtr->characteristics.max_thrust /
-			RDPtr->characteristics.thrust_increment;
+			num_thrusts = RDPtr->characteristics.max_thrust / RDPtr->characteristics.thrust_increment;
 			--RDPtr->characteristics.thrust_increment;
-			RDPtr->characteristics.max_thrust =
-			RDPtr->characteristics.thrust_increment * num_thrusts;
+			RDPtr->characteristics.max_thrust = RDPtr->characteristics.thrust_increment * num_thrusts;
 		}
 		RDPtr->cyborg_control.ManeuverabilityIndex = 0;
 		ShipInfoPtr2->damage_flags |= DAMAGE_THRUST;

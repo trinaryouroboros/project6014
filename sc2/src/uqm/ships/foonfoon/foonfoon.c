@@ -27,7 +27,7 @@
 #define MAX_CREW 10
 #define MAX_ENERGY 32
 #define ENERGY_REGENERATION 1
-#define WEAPON_ENERGY_COST 5
+#define WEAPON_ENERGY_COST 2 
 #define SPECIAL_ENERGY_COST 10
 #define ENERGY_WAIT 2
 #define MAX_THRUST 52
@@ -44,12 +44,13 @@
 
 // Weapon specific
 #define REVERSE_DIR (BYTE)(1 << 7)
+#define NUM_SHIP_FACINGS 16
 #define FOCUSBALL_OFFSET (7 << RESOLUTION_FACTOR)
 #define FOCUSBALL_FRAME_STARTINDEX 16
 #define NUM_FOCUSBALL_ANIMS 3
 #define NUM_SABERS 3
 #define DERVISH_DEGENERATION (-1)
-#define DERVISH_COOLDOWN_TIME 36
+#define DERVISH_COOLDOWN_TIME 36 
 #define DERVISH_THRUST (80 << RESOLUTION_FACTOR) // JMS_GFX
 
 static RACE_DESC foonfoon_desc =
@@ -405,6 +406,14 @@ focusball_postprocess (ELEMENT *ElementPtr)
 			
 		EPtr->current.image.frame = SetAbsFrameIndex (EPtr->current.image.frame, FOCUSBALL_FRAME_STARTINDEX + frame_index);
 		
+		// When player releases WEAPON key, kill the focusball.
+		if (!(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON))
+		{
+			EPtr->life_span = 0;
+			EPtr->preprocess_func = 0;
+			EPtr->postprocess_func = 0;
+		}
+		
 		UnlockElement (hFocusBall);
 		PutElement (hFocusBall);
 		
@@ -418,6 +427,10 @@ static void
 saber_beam_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {
 	HELEMENT hBlastElement;
+	STARSHIP *StarShipPtr;	
+
+	GetElementStarShip (ElementPtr0, &StarShipPtr);
+	StarShipPtr->weapon_counter = 0;
 	
 	hBlastElement = weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
 	if (hBlastElement)
@@ -458,8 +471,6 @@ beam_postprocess (ELEMENT *ElementPtr)
 			EPtr->life_span = 0;
 			EPtr->preprocess_func = 0;
 			EPtr->postprocess_func = 0;
-			
-			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 0), EPtr);
 		}
 		
 		UnlockElement (hBeam);
@@ -649,62 +660,6 @@ initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	return (1);
 }
 
-// This generates the wide saber AND a focusball.
-static COUNT
-initialize_saber_and_focusball (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
-{
-	STARSHIP *StarShipPtr;
-	MISSILE_BLOCK MissileBlock;
-	COUNT facing; 
-	
-	GetElementStarShip (ShipPtr, &StarShipPtr);
-	facing = (StarShipPtr->ShipFacing + NUM_SABERS - facingfix) % 16;
-	
-	MissileBlock.cx = ShipPtr->next.location.x;
-	MissileBlock.cy = ShipPtr->next.location.y;
-	MissileBlock.farray  = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.index   = MissileBlock.face = facing;
-	MissileBlock.sender  = ShipPtr->playerNr;
-	MissileBlock.flags   = IGNORE_SIMILAR;
-	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
-	MissileBlock.speed   = DERVISH_THRUST;
-	MissileBlock.damage  = 1;
-	MissileBlock.life    = 1;
-	MissileBlock.hit_points = 100;
-	MissileBlock.preprocess_func = 0;
-	MissileBlock.blast_offs      = 0;
-	
-	if ((SaberArray[0] = initialize_missile (&MissileBlock)))
-	{
-		ELEMENT *SaberPtr;
-		
-		LockElement (SaberArray[0], &SaberPtr);
-		SetElementStarShip (SaberPtr, StarShipPtr);
-		SaberPtr->collision_func = saber_beam_collision;
-		InitIntersectStartPoint (SaberPtr);
-		InitIntersectEndPoint (SaberPtr);
-		SaberPtr->IntersectControl.IntersectStamp.frame = StarShipPtr->RaceDescPtr->ship_data.special[facing];
-		UnlockElement (SaberArray[0]);
-	}
-	
-	// Focusball
-	MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
-	MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
-	SaberArray[1] = initialize_missile (&MissileBlock);
-	
-	if (SaberArray[1])
-	{
-		ELEMENT *FocusPtr;
-		
-		LockElement (SaberArray[1], &FocusPtr);
-		FocusPtr->postprocess_func = focusball_postprocess;
-		UnlockElement (SaberArray[1]);
-	}
-	
-	// 2: Beam is first and focusball is the second
-	return (2);
-}
-
 // This generates the wide saber.
 static COUNT
 initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
@@ -714,7 +669,7 @@ initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
 	COUNT facing; 
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-	facing = (StarShipPtr->ShipFacing + NUM_SABERS - facingfix) % 16;
+	facing = (StarShipPtr->ShipFacing + NUM_SABERS - facingfix) % NUM_SHIP_FACINGS;
 	
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
@@ -752,50 +707,51 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	RACE_DESC *RDPtr;
 	STARSHIP *StarShipPtr;
 	STATUS_FLAGS cur_status_flags;
-	BYTE i;
+	BYTE frame_index, i;
 	static BYTE had_pause = 1;
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	RDPtr = StarShipPtr->RaceDescPtr;
 	cur_status_flags = StarShipPtr->cur_status_flags;
 	
+	frame_index = GetFrameIndex (ElementPtr->current.image.frame);
+	
 	// After using special: Thrust is sloooow for a while.
 	if (StarShipPtr->special_counter > 0)
+	//if (RDPtr->ship_info.energy_level < SPECIAL_ENERGY_COST)
 	{
+		// Slooooow.
 		RDPtr->characteristics.max_thrust   = (MAX_THRUST << RESOLUTION_FACTOR) / 4;
-		RDPtr->characteristics.thrust_wait	= THRUST_WAIT;
-		RDPtr->characteristics.turn_wait	= TURN_WAIT;
+		RDPtr->characteristics.thrust_wait	= 3;
+
+		// Blue ion trail tells the player when dervish mode is unusable.
+		StarShipPtr->RaceDescPtr->ship_info.damage_flags |= DAMAGE_THRUST;
+		
+		// Turning just returns to normal.
+		RDPtr->characteristics.turn_wait = TURN_WAIT;
 		
 		// Battery charges normally when not in dervish mode.
 		RDPtr->characteristics.energy_regeneration = ENERGY_REGENERATION;
+		ElementPtr->state_flags |= CHANGING;
 	}
 	
 	// Special: The dervish mode.
-	else if (StarShipPtr->cur_status_flags & SPECIAL
+	else if /*(StarShipPtr->cur_status_flags & SPECIAL
 		&& StarShipPtr->special_counter == 0
 		&& RDPtr->ship_info.energy_level > 0
-		&& had_pause)
+		&& had_pause)*/ // XXX TODO: Remove the old conditions
+		(StarShipPtr->cur_status_flags & SPECIAL
+		 && RDPtr->ship_info.energy_level > 0
+		 && frame_index >= NUM_SHIP_FACINGS
+		 && had_pause)
 	{
-		HELEMENT FocusBall;
-		
-		// Graphical nicety: Let's add a focusball to the mouth of the ship.
-		initialize_special_focusball (ElementPtr, &FocusBall);
-		if (FocusBall)
-		{
-			ELEMENT *FBMissilePtr;
-			LockElement (FocusBall, &FBMissilePtr);
-			
-			UnlockElement (FocusBall);
-			PutElement (FocusBall);
-		}
-		
 		// Add sabre elements.
 		// The more sabres there are, the wider it is (and the more damage it deals).
 		for (i = 0; i < NUM_SABERS; i++)
 		{
 			HELEMENT Saber;
 			
-			initialize_saber_and_focusball (ElementPtr, &Saber, i);
+			initialize_saber (ElementPtr, &Saber, i);
 			if (Saber)
 			{
 				ELEMENT *SMissilePtr;
@@ -810,24 +766,35 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 		RDPtr->characteristics.thrust_wait = 0;
 		RDPtr->characteristics.turn_wait   = 0;
 		RDPtr->characteristics.max_thrust  = DERVISH_THRUST;
+		StarShipPtr->RaceDescPtr->ship_info.damage_flags &= ~(DAMAGE_THRUST);
 		
 		// Battery slowly drops.
 		RDPtr->characteristics.energy_regeneration = (BYTE)DERVISH_DEGENERATION;
+		ElementPtr->state_flags |= CHANGING;
 	}
 	// Not using special.
 	else
 	{
 		// When dervish ends...
-		if (StarShipPtr->old_status_flags & SPECIAL && StarShipPtr->special_counter == 0 && had_pause)
+		if (StarShipPtr->old_status_flags & SPECIAL 
+			//&& StarShipPtr->special_counter == 0
+			&& frame_index >= NUM_SHIP_FACINGS)
 		{
 			// Set a cooldown period before next dervish.
 			StarShipPtr->special_counter = DERVISH_COOLDOWN_TIME;
 			
-			// Play the ending sound.
-			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+			// Using dervish always drains the battery totally.
+			DeltaEnergy (ElementPtr, -StarShipPtr->RaceDescPtr->ship_info.energy_level);
 			
 			// Slow down.
 			SetVelocityVector (&ElementPtr->velocity, ((MAX_THRUST << RESOLUTION_FACTOR) / 4), NORMALIZE_FACING (StarShipPtr->ShipFacing));
+			
+			// Return to normal graphics.
+			if ((GetFrameIndex (ElementPtr->current.image.frame)) >= NUM_SHIP_FACINGS)
+				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, frame_index - NUM_SHIP_FACINGS);
+			
+			// Play the ending sound.
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
 			
 			// Prevent spamming the special key.
 			cur_status_flags &= ~(SPECIAL);
@@ -839,9 +806,11 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 		RDPtr->characteristics.thrust_wait	= THRUST_WAIT;
 		RDPtr->characteristics.turn_wait	= TURN_WAIT;
 		RDPtr->characteristics.max_thrust   = MAX_THRUST << RESOLUTION_FACTOR;
+		StarShipPtr->RaceDescPtr->ship_info.damage_flags &= ~(DAMAGE_THRUST);
 		
 		// Battery charges normally when not in dervish mode.
 		RDPtr->characteristics.energy_regeneration = ENERGY_REGENERATION;
+		ElementPtr->state_flags |= CHANGING;
 	}
 	
 	// The player must let go of the special key between dervishes.
@@ -850,23 +819,6 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 		&& !(StarShipPtr->cur_status_flags & SPECIAL)
 		&& StarShipPtr->RaceDescPtr->ship_info.energy_level > SPECIAL_ENERGY_COST)
 		had_pause = 1;
-	
-	/* XXX TODO: Remove this.
-	// Graphical nicety: Let's add a focusball to the mouth of the ship when using primary weapon.
-	if (StarShipPtr->cur_status_flags & WEAPON)
-	{
-		HELEMENT FocusBall;
-		
-		initialize_special_focusball (ElementPtr, &FocusBall);
-		if (FocusBall)
-		{
-			ELEMENT *FBMissilePtr;
-			LockElement (FocusBall, &FBMissilePtr);
-			
-			UnlockElement (FocusBall);
-			PutElement (FocusBall);
-		}
-	}*/
 }
 
 static void
@@ -880,8 +832,9 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	cur_status_flags = StarShipPtr->cur_status_flags;
 	
-	if (StarShipPtr->cur_status_flags & SPECIAL 
-		&& StarShipPtr->special_counter == 0 
+	if (StarShipPtr->cur_status_flags & SPECIAL
+		&& StarShipPtr->cur_status_flags & (LEFT | RIGHT)
+		//&& StarShipPtr->special_counter == 0 
 		&& released_special_since_last)
 	{
 		// Not enough juice for dervish mode.
@@ -902,9 +855,6 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 			SIZE  speedx, speedy;
 			SDWORD totalspeed;
 			
-			// Can't turn or use primary weapon in dervish mode.
-			cur_status_flags &= ~(THRUST | WEAPON | LEFT | RIGHT);
-			
 			// Find out the ship facing and speed.
 			facing = StarShipPtr->ShipFacing;
 			GetCurrentVelocityComponents (&ElementPtr->velocity, &speedx, &speedy);
@@ -915,8 +865,15 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 				|| (StarShipPtr->old_status_flags & SPECIAL && StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST
 					&& totalspeed < DERVISH_THRUST))
 			{
+				// Decrement battery.
 				DeltaEnergy (ElementPtr, -SPECIAL_ENERGY_COST);
+				
+				// Go FAAAAST!
 				SetVelocityVector (&ElementPtr->velocity, DERVISH_THRUST, NORMALIZE_FACING (facing));
+				
+				// Change to blur graphics.
+				ElementPtr->state_flags |= CHANGING;
+				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, StarShipPtr->ShipFacing + NUM_SHIP_FACINGS);
 				
 				// Dervish swoosh sound.
 				ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
@@ -926,18 +883,23 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 				turning_left %=2;
 			}
 			
+			// Can't turn or use primary weapon in dervish mode.
+			cur_status_flags &= ~(THRUST | WEAPON | LEFT | RIGHT);
+			
 			// Turn ship around whilst in dervish mode.
 			if (turning_left)
 				facing += 2;
 			else
 				facing -= 2;
-			facing %= 16;
+			facing %= NUM_SHIP_FACINGS;
 			StarShipPtr->ShipFacing = facing;
-			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, facing);
+			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, facing + NUM_SHIP_FACINGS);
 			
 			cur_status_flags |= SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED;
 		}
 	}
+	// The player must let go of the special key between dervishes.
+	// This requirement eliminates all sorts of bugs.
 	else if (!(StarShipPtr->old_status_flags & SPECIAL) 
 			 && !(StarShipPtr->cur_status_flags & SPECIAL)
 			 && StarShipPtr->RaceDescPtr->ship_info.energy_level > SPECIAL_ENERGY_COST)
