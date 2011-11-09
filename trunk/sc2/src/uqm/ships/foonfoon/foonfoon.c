@@ -27,7 +27,7 @@
 #define MAX_CREW 10
 #define MAX_ENERGY 32
 #define ENERGY_REGENERATION 1
-#define WEAPON_ENERGY_COST 2 
+#define WEAPON_ENERGY_COST 1 
 #define SPECIAL_ENERGY_COST 10
 #define ENERGY_WAIT 2
 #define MAX_THRUST 52
@@ -564,7 +564,9 @@ initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 {
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
+	static BYTE damage_amount = 0;
 	
+	damage_amount = (damage_amount + 1) % 4;
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
 	MissileBlock.cx = ShipPtr->next.location.x;
@@ -577,7 +579,7 @@ initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
 	MissileBlock.speed = DISPLAY_TO_WORLD (FOCUSBALL_OFFSET);
 	MissileBlock.hit_points = 100;
-	MissileBlock.damage = 1;
+	MissileBlock.damage = (damage_amount == 0);
 	MissileBlock.life = 2;
 	MissileBlock.preprocess_func = 0;
 	MissileBlock.blast_offs = 0;
