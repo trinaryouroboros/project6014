@@ -59,6 +59,7 @@
 #define XOFFS ((RADAR_SCAN_WIDTH + (UNIT_SCREEN_WIDTH << 2)) >> 1)
 #define YOFFS ((RADAR_SCAN_HEIGHT + (UNIT_SCREEN_HEIGHT << 2)) >> 1)
 
+static FRAME npcbubble; // BW: animated bubble
 static FRAME hyperspacesuns; // BW: array of all the truespace suns needed
 static FRAME hyperholes[4];			// BW: One for each flavour of space
 // hyperholes[0] is never used for numbering consistency with hyperstars
@@ -356,6 +357,8 @@ FreeHyperData (void)
 		// hyperholes[3] = 0;
 		DestroyDrawable (ReleaseDrawable (hyperspacesuns));
 		hyperspacesuns = 0;
+		DestroyDrawable (ReleaseDrawable (npcbubble));
+		npcbubble = 0;
 	}
 
 	DestroyDrawable (ReleaseDrawable (hyperstars[0]));
@@ -391,6 +394,7 @@ LoadHyperData (void)
 			// 		LoadGraphic (ORZHOLES_MASK_PMAP_ANIM));
 		}
 		hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
+		npcbubble = CaptureDrawable (LoadGraphic (NPCBUBBLE_MASK_PMAP_ANIM));
 	}
 
 	if (hyperstars[0] == 0)
@@ -1036,7 +1040,17 @@ encounter_transition (ELEMENT *ElementPtr)
 			if (f != ElementPtr->current.image.farray[0])
 				ElementPtr->next.image.frame = f;
 			else
+			{
 				ElementPtr->death_func = NULL;
+				// BW: the bubble has reached full size so we start animation
+				if (RESOLUTION_FACTOR == 2)
+				{
+					ElementPtr->current.image.farray = &npcbubble;
+					ElementPtr->next.image.farray = &npcbubble;
+					ElementPtr->current.image.frame = SetAbsFrameIndex(npcbubble, 0);
+					ElementPtr->next.image.frame = SetAbsFrameIndex(npcbubble, 0);
+				}			
+			}
 		}
 
 		ElementPtr->turn_wait = VORTEX_WAIT;
@@ -1117,7 +1131,7 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 	BOOLEAN NewEncounter;
 	HELEMENT hElement;
 	STAR_DESC SD;
-	
+
 	if (GET_GAME_STATE (ARILOU_SPACE_SIDE) >= 2)
 		return 0;
 	
@@ -1251,8 +1265,18 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 			}
 			else
 			{
-				ElementPtr->current.image.frame =
-				DecFrameIndex (ElementPtr->current.image.farray[0]);
+				if (RESOLUTION_FACTOR == 2)
+				{
+					ElementPtr->current.image.farray = &npcbubble;
+					ElementPtr->next.image.farray = &npcbubble;
+					ElementPtr->current.image.frame = SetAbsFrameIndex(npcbubble, 0);
+					ElementPtr->next.image.frame = SetAbsFrameIndex(npcbubble, 0);
+				}
+				else
+				{
+					ElementPtr->current.image.frame =
+						DecFrameIndex (ElementPtr->current.image.farray[0]);
+				}
 			}
 		}
 
@@ -1438,6 +1462,7 @@ ProcessEncounter (ENCOUNTER *EncounterPtr, POINT *puniverse,
 		EncounterPtr->log_y -= delta_y;
 		EncounterPtr->SD.star_pt.x = LOGX_TO_UNIVERSE (EncounterPtr->log_x);
 		EncounterPtr->SD.star_pt.y = LOGY_TO_UNIVERSE (EncounterPtr->log_y);
+		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 
 		encounter_radius = EncounterPtr->radius + (GRID_OFFSET >> 1);
 		delta_x = EncounterPtr->SD.star_pt.x - EncounterPtr->origin.x;
@@ -1861,10 +1886,10 @@ SeedUniverse (void)
 				else
 					which_spaces_star_gfx = 1 + (GET_GAME_STATE (ARILOU_SPACE_SIDE) >> 1);
 
-				// Most holes go 100, 150, 250 or 150, 200, 300
+				// Most holes go 100, 150, 200 or 150, 200, 250
 				HyperSpaceElementPtr->current.image.frame = SetAbsFrameIndex (
                                         hyperholes[which_spaces_star_gfx],
-                                        (STAR_TYPE (star_type) * 3 / 2) * NUM_HOLES_FRAMES);
+                                        STAR_TYPE (star_type) * NUM_HOLES_FRAMES);
 				// Green, orange and yellow need bigger holes
 				if (STAR_COLOR (star_type) == GREEN_BODY || STAR_COLOR (star_type) == ORANGE_BODY || STAR_COLOR (star_type) == YELLOW_BODY)
 					HyperSpaceElementPtr->current.image.frame = SetRelFrameIndex (

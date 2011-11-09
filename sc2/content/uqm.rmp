@@ -273,6 +273,7 @@ graphics.moonbase = GFXRES:base/lander/energy/moonbase.ani
 graphics.newgame = GFXRES:base/ui/newgame.ani
 graphics.newgame2x = GFXRES:base/ui/newgame2x.ani
 graphics.newgame4x = GFXRES:base/ui/newgame4x.ani
+graphics.npcbubble = GFXRES:base/nav/hyperstars.ani
 graphics.orbitbackground = GFXRES:base/nav/orbitbackground.ani
 graphics.orbitenter = GFXRES:base/nav/orbitenter.ani
 graphics.orbview = GFXRES:base/nav/orbview.ani
