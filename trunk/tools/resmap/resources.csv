@@ -206,6 +206,7 @@ AMBIENT_MASK_PMAP_ANIM,graphics.ambient,uqm/igfxres.h,GFXRES,base/nav/ambient.an
 HYPERHOLES_MASK_PMAP_ANIM,graphics.hyperholes,uqm/igfxres.h,GFXRES,base/nav/hyperstars.ani
 HYPERSTARS_MASK_PMAP_ANIM,graphics.hyperstars,uqm/igfxres.h,GFXRES,base/nav/hyperstars.ani
 HYPERSUNS_MASK_PMAP_ANIM,graphics.hypersuns,uqm/igfxres.h,GFXRES,base/nav/hyperstars.ani
+NPCBUBBLE_MASK_PMAP_ANIM,graphics.npcbubble,uqm/igfxres.h,GFXRES,base/nav/hyperstars.ani
 ARISPACE_MASK_PMAP_ANIM,graphics.quasispace,uqm/igfxres.h,GFXRES,base/nav/quasispace.ani
 ORZSPACE_MASK_PMAP_ANIM,graphics.orzspace,uqm/igfxres.h,GFXRES,base/nav/orzspace.ani
 IPBKGND_MASK_PMAP_ANIM,graphics.orbitbackground,uqm/igfxres.h,GFXRES,base/nav/orbitbackground.ani
