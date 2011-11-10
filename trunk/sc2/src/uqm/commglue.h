@@ -137,6 +137,8 @@ extern LOCDATA* init_vux_comm (void);
 
 extern LOCDATA* init_yehat_comm (void);
 
+extern LOCDATA* init_yehatpkunk_comm (void);
+
 extern LOCDATA* init_zoqfot_comm (void);
 
 extern LOCDATA* init_umgah_comm (void);
