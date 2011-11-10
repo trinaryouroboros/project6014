@@ -46,6 +46,7 @@
 #include "settings.h"
 #include "sounds.h"
 #include "libs/mathlib.h"
+#include "libs/sound/sound.h"
 
 #include "libs/log.h"
 
@@ -296,6 +297,7 @@ cleanup_dead_ship (ELEMENT *DeadShipPtr)
 	ProcessSound ((SOUND)~0, NULL);
 
 	GetElementStarShip (DeadShipPtr, &DeadStarShipPtr);
+	
 	{
 		// Ship explosion has finished, or ship has just warped out
 		// if DeadStarShipPtr->crew_level != 0
@@ -634,6 +636,24 @@ ship_death (ELEMENT *ShipPtr)
 	StopMusic ();
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
+	
+	// JMS: Make sure the Foon-foon's spinning blade sound ends when the ship dies.
+	if (StarShipPtr->SpeciesID == FOONFOON_ID)
+	{
+		COUNT i;
+		
+		for (i = FIRST_SFX_CHANNEL; i <= LAST_SFX_CHANNEL; ++i)
+		{
+			ELEMENT *posobj;
+			if (!ChannelPlaying(i))
+				continue;
+			
+			posobj = GetPositionalObject (i);
+			
+			if (posobj)
+				StopSource (i);
+		}
+	}
 
 	if (ShipPtr->mass_points <= MAX_SHIP_MASS)
 	{	// Not running away and not reincarnating (Pkunk)
