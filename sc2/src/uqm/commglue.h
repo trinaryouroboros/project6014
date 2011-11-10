@@ -103,6 +103,8 @@ extern LOCDATA* init_rebel_yehat_comm (void);
 
 extern LOCDATA* init_shofixti_comm (void);
 
+extern LOCDATA* init_shofixticolony_comm (void);
+
 extern LOCDATA* init_slyland_comm (void);
 
 extern LOCDATA* init_slylandro_comm (void);
