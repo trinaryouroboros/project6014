@@ -28,6 +28,13 @@ Most of these things are pretty self-explanatory. The NEWRACE_ID is used in most
 _2. globdata.h:_ 
 Add NEWRACE_CONVERSATION to globdata.h's CONVERSATION enum list (with the same name you added it to races.h's RACE_COMMUNICATION define list).
 
+_2b. commglue.h:_ 
+In commglue.h, declare the init_newrace_comm function you'll define in comm/newrace/newracec.c.
+
+_2c. commglue.c:_ 
+Add the case NEWRACE_CONVERSATION to commglue.c's init_race switch function.
+
+
 _3. dummy.c:_
 Add your NEWRACE_CODE_RES into the ShipCodeRes enum list. Confusingly enough, the order of the races in dummy.c differs from the lists in races.h: in dummy.c the original SCII races are ordered by alphabet. However, always add your new races AFTER all the original SCII races regardless of the alphabetic order, don't mix original and new races.
 Otherwise the universe explodes.
