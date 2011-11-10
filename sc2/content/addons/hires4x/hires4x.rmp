@@ -86,6 +86,7 @@ comm.vux.graphics = GFXRES:addons/hires4x/comm/vux/vux.ani
 comm.yehat.colortable = BINTAB:addons/hires4x/comm/yehat/yehat.ct
 comm.yehat.font = FONTRES:addons/hires4x/fonts/yehat.fon
 comm.yehat.graphics = GFXRES:addons/hires4x/comm/yehat/yehat.ani
+comm.yehatpkunk.graphics = GFXRES:addons/hires4x/comm/yehatpkunk/yehatpkunk.ani
 comm.zoqfotpik.colortable = BINTAB:addons/hires4x/comm/zoqfotpik/zoqfotpik.ct
 comm.zoqfotpik.font = FONTRES:addons/hires4x/fonts/zoqfotpik.fon
 comm.zoqfotpik.graphics = GFXRES:addons/hires4x/comm/zoqfotpik/zoqfotpik.ani

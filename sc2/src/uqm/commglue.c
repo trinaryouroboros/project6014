@@ -365,6 +365,8 @@ init_race (CONVERSATION comm_id)
 			return init_rebel_yehat_comm ();
 		case YEHAT_CONVERSATION:
 			return init_yehat_comm ();
+		case YEHATPKUNK_CONVERSATION:
+			return init_yehatpkunk_comm ();
 		case ZOQFOTPIK_CONVERSATION:
 			return init_zoqfot_comm ();
 		default:

@@ -633,9 +633,11 @@ YEHAT_MUSIC,comm.yehat.music,uqm/comm/yehat/imusicre.h,MUSICRES,base/comm/yehat/
 REBEL_MUSIC,comm.yehat.rebel.music,uqm/comm/yehat/imusicre.h,--,--
 YEHAT_FONT,comm.yehat.font,uqm/comm/yehat/ifontres.h,FONTRES,base/fonts/yehat.fon
 YEHAT_CONVERSATION_PHRASES,comm.yehat.dialogue,uqm/comm/yehat/istrtab.h,CONVERSATION,base/comm/yehat/yehat.txt
+YEHATPKUNK_CONVERSATION_PHRASES,comm.yehatpkunk.dialogue,uqm/comm/yehatpkunk/istrtab.h,CONVERSATION,base/comm/yehatpkunk/yehatpkunk.txt
 REBEL_CONVERSATION_PHRASES,comm.yehat.rebel.dialogue,uqm/comm/yehat/istrtab.h,CONVERSATION,base/comm/yehatrebels/yehatrebels.txt
 YEHAT_COLOR_MAP,comm.yehat.colortable,uqm/comm/yehat/istrtab.h,BINTAB,base/comm/yehat/yehat.ct
 YEHAT_PMAP_ANIM,comm.yehat.graphics,uqm/comm/yehat/igfxres.h,GFXRES,base/comm/yehat/yehat.ani
+YEHATPKUNK_PMAP_ANIM,comm.yehatpkunk.graphics,uqm/comm/yehatpkunk/igfxres.h,GFXRES,base/comm/yehatpkunk/yehatpkunk.ani
 THRADD_MUSIC,comm.thraddash.music,uqm/comm/thradd/imusicre.h,MUSICRES,base/comm/thraddash/thraddash.mod
 THRADD_FONT,comm.thraddash.font,uqm/comm/thradd/ifontres.h,FONTRES,base/fonts/thraddash.fon
 THRADD_CONVERSATION_PHRASES,comm.thraddash.dialogue,uqm/comm/thradd/istrtab.h,CONVERSATION,base/comm/thraddash/thraddash.txt
