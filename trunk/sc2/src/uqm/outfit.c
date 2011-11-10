@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
+// JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD. 
 
 #include "options.h"
 #include "colors.h"

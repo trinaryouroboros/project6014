@@ -4,11 +4,11 @@ I feel I must apologize for the mess.
 You see, we're trying to rebuild 
 our entire civilization.
 
-#(SHO_GREETING)
+#(SHO_GREETING2)
 Welcome back Captain.
 
 #(a_woman)
-I've never met a woman Shofixti! Well, except for some frozen ones.
+I've never met a female Shofixti! Well, except for some frozen ones.
 
 #(YES_WOMAN)
 Well, our culture dictates that women stay at home.
@@ -18,28 +18,26 @@ Not that I'm upset about it.
 Hey baby. You're kind of cute for a space dog.
 
 #(BACK_OFF_CREEP)
-Captain, with a due respect...
-By your standards, I may be young.
-And, I may be small...
-But if you try to harass me again,
-I'll kick your butt so hard it will make a
-Shofixti Glory Device look like a firecracker.
+Captain, with a due respect
+By your standards, I may be young, and I may be small
+but if you try to harass me again,
+I'll kick your butt so hard it will make a Glory Device look like a firecracker.
 
 #(you_sound_upset)
 You sure? You sound upset about it.
 
-#(glad_your_not_upset)
+#(glad_youre_not_upset)
 Well, I'm glad you're not upset about it.
 
 #(SINCE_YOU_MENTIONED_IT)
-Well, now that you mention it...
+Well, now that you mention it
 The Shofixti males go flying around,
-looking for fights, and when they find one....
-They just end up just blowing themselves up!
+looking for fights, and when they find one
+they just end up just blowing themselves up!
 Really? Is that really the best way settle a fight?
 While the women must stay home, and run everything.
 Government, manufacturing, food, all done by females.
-Shofixti men are loving, noble creatures, fearsome fighters,
+Shofixti men are loving, noble creatures, fearsome fighters
 but they are also stupid. 
 
 #(thats_sad)
@@ -61,7 +59,6 @@ Actually.... she's back home on Unzervault. Taking care of our things there.
 ...
 I see.
 
-
 #(DIFFERENT_INDEED)
 Oh yes. Different indeed.
 
@@ -76,10 +73,10 @@ Or perhaps your jokes need to be better.
 
 #(DISRESPECTFUL_REPLY)
 Well since you did save our civilization from extinction,
-I guess I can forgive you. Apology Accepted.
+I guess I can forgive you. Apology accepted.
 
 #(tell_me_about_distress_call)
-Is there any information you can give me about the Shofixti distress calls.
+Is there any information you can give me about the lost patrol's distress call.
 
 #(DISTRESS_CALL)
 I cannot comment on matters on which I don't know. 
@@ -89,4 +86,9 @@ They're the ones patrolling this area just looking for a fight.
 Oh sure, they say they are looking for a new world for us.
 But they're also looking for a fight. Be careful.
 
+#(goodbye)
+Ohh... look at the time! I really must be going.
+
+#(GOODBYE_CAPTAIN)
+Goodbye, Captain.
 
