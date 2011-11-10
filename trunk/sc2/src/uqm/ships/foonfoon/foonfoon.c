@@ -144,9 +144,9 @@ static RACE_DESC foonfoon_desc_2xres =
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
-		50 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			7416, 9687,
+			0, 0,
 		},
 	},
 	{
@@ -222,9 +222,9 @@ static RACE_DESC foonfoon_desc_4xres =
 		NULL, NULL, NULL, SHIP_IS_NOT_DAMAGED
 	},
 	{ /* FLEET_STUFF */
-		50 / SPHERE_RADIUS_INCREMENT * 2, /* Initial SoI radius */
+		0, /* Initial SoI radius */
 		{ /* Known location (center of SoI) */
-			7416, 9687,
+			0, 0,
 		},
 	},
 	{
@@ -641,6 +641,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	STATUS_FLAGS cur_status_flags;
 	BYTE frame_index, i;
 	static BYTE not_had_pause[NUM_SIDES] = {0};
+	static BYTE focusball_exists[NUM_SIDES] = {0};
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	RDPtr = StarShipPtr->RaceDescPtr;
@@ -695,6 +696,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 		}
 		
 		// Add a nice little focusball.
+		if (!focusball_exists[ElementPtr->playerNr])
 		{
 			HELEMENT Focusball;
 			
@@ -709,6 +711,10 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 				UnlockElement (Focusball);
 				PutElement (Focusball);
 			}
+			
+			// Don't create multiple focusballs. This makes 
+			// a) the game run better, b) focusball animation visible. 
+			focusball_exists[ElementPtr->playerNr] = 1;
 		}
 		
 		// Turning rate & max speed increase.
@@ -744,6 +750,9 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 			
 			// Play the ending sound.
 			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+			
+			// The focusball dies with the dervish mode.
+			focusball_exists[ElementPtr->playerNr] = 0;
 			
 			// Prevent spamming the special key.
 			cur_status_flags &= ~(SPECIAL);
