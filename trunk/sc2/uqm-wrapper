@@ -1,4 +1,4 @@
 #!/bin/sh
 # Wrapper script for starting The Ur-Quan Masters: Project 6014
-exec "/usr/lib/games/p6014/p6014" "--contentdir=/usr/share/games/p6014/content" "$@"
+exec "/p6014/p6014" "--contentdir=/p6014/content" "$@"
 
