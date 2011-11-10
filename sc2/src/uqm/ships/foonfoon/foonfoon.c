@@ -22,9 +22,10 @@
 
 #include "uqm/globdata.h"
 #include "libs/mathlib.h"
-#include <math.h>
+#include "libs/sound/sound.h" // For StopSource
+#include <math.h> // For sqrt
 
-#define MAX_CREW 10
+#define MAX_CREW 20
 #define MAX_ENERGY 32
 #define ENERGY_REGENERATION 1
 #define WEAPON_ENERGY_COST 1 
@@ -48,7 +49,7 @@
 #define FOCUSBALL_OFFSET (7 << RESOLUTION_FACTOR)
 #define FOCUSBALL_FRAME_STARTINDEX 16
 #define NUM_FOCUSBALL_ANIMS 3
-#define NUM_SABERS 3
+#define NUM_SABERS 4
 #define DERVISH_DEGENERATION (-1)
 #define DERVISH_COOLDOWN_TIME 36 
 #define DERVISH_THRUST (80 << RESOLUTION_FACTOR) // JMS_GFX
@@ -492,8 +493,10 @@ initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 	static BYTE damage_amount[NUM_SIDES] = {0};
-	
-	damage_amount[ShipPtr->playerNr] = (damage_amount[ShipPtr->playerNr] + 1) % 4;
+	BYTE num_of_created_elements = 1;
+
+	// Do not deal damage on every frame. This makes the beam weaker.
+	damage_amount[ShipPtr->playerNr] = (damage_amount[ShipPtr->playerNr] + 1) % 3;
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
 	MissileBlock.cx = ShipPtr->next.location.x;
@@ -529,22 +532,27 @@ initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	}
 	
 	// Focusball
-	MissileBlock.damage = 0;
-	MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
-	MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
-	BeamArray[1] = initialize_missile (&MissileBlock);
-	
-	if (BeamArray[1])
+	if (!(StarShipPtr->old_status_flags & WEAPON))
 	{
-		ELEMENT *FocusPtr;
+		MissileBlock.damage = 0;
+		MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
+		MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
+		BeamArray[1] = initialize_missile (&MissileBlock);
+	
+		if (BeamArray[1])
+		{
+			ELEMENT *FocusPtr;
 		
-		LockElement (BeamArray[1], &FocusPtr);
-		FocusPtr->postprocess_func = focusball_postprocess;
-		UnlockElement (BeamArray[1]);
+			LockElement (BeamArray[1], &FocusPtr);
+			FocusPtr->postprocess_func = focusball_postprocess;
+			UnlockElement (BeamArray[1]);
+		
+			num_of_created_elements++;
+		}
 	}
 	
-	// 2: Beam is first and focusball is the second
-	return (2);
+	// Beam is the first and (possible) focusball is the second.
+	return (num_of_created_elements);
 }
 
 // This generates the narrow beam.
@@ -555,7 +563,8 @@ initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	MISSILE_BLOCK MissileBlock;
 	static BYTE damage_amount[NUM_SIDES] = {0};
 	
-	damage_amount[ShipPtr->playerNr] = (damage_amount[ShipPtr->playerNr] + 1) % 4;
+	// Do not deal damage on every frame. This makes the beam weaker.
+	damage_amount[ShipPtr->playerNr] = (damage_amount[ShipPtr->playerNr] + 1) % 3;
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
 	MissileBlock.cx = ShipPtr->next.location.x;
@@ -669,14 +678,10 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	}
 	
 	// Special: The dervish mode.
-	else if /*(StarShipPtr->cur_status_flags & SPECIAL
-		&& StarShipPtr->special_counter == 0
-		&& RDPtr->ship_info.energy_level > 0
-		&& !not_had_pause[ElementPtr->playerNr])*/ // XXX TODO: Remove the old conditions
-		(StarShipPtr->cur_status_flags & SPECIAL
-		 && RDPtr->ship_info.energy_level > 0
-		 && frame_index >= NUM_SHIP_FACINGS
-		 && !not_had_pause[ElementPtr->playerNr])
+	else if (StarShipPtr->cur_status_flags & SPECIAL
+			 && RDPtr->ship_info.energy_level > 0
+			 && frame_index >= NUM_SHIP_FACINGS
+			 && !not_had_pause[ElementPtr->playerNr])
 	{
 		// Add sabre elements.
 		// The more sabres there are, the wider it is (and the more damage it deals).
@@ -731,10 +736,12 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	else
 	{
 		// When dervish ends...
-		if (StarShipPtr->old_status_flags & SPECIAL 
+		if ((StarShipPtr->old_status_flags & SPECIAL || RDPtr->ship_info.energy_level == 0)
 			//&& StarShipPtr->special_counter == 0
 			&& frame_index >= NUM_SHIP_FACINGS)
 		{
+			COUNT i;
+			
 			// Set a cooldown period before next dervish.
 			StarShipPtr->special_counter = DERVISH_COOLDOWN_TIME;
 			
@@ -744,12 +751,27 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 			// Slow down.
 			SetVelocityVector (&ElementPtr->velocity, ((MAX_THRUST << RESOLUTION_FACTOR) / 4), NORMALIZE_FACING (StarShipPtr->ShipFacing));
 			
+			// We're not past max speed any more.
+			cur_status_flags &= ~(SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED);
+			
 			// Return to normal graphics.
 			if ((GetFrameIndex (ElementPtr->current.image.frame)) >= NUM_SHIP_FACINGS)
 				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, frame_index - NUM_SHIP_FACINGS);
 			
+			// End the spinning blade sound.
+			for (i = FIRST_SFX_CHANNEL; i <= LAST_SFX_CHANNEL; ++i)
+			{
+				ELEMENT *posobj;
+				if (!ChannelPlaying(i))
+					continue;
+				
+				posobj = GetPositionalObject (i);
+				if (posobj == ElementPtr)
+					StopSource (i);
+			}
+			
 			// Play the ending sound.
-			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);			
 			
 			// The focusball dies with the dervish mode.
 			focusball_exists[ElementPtr->playerNr] = 0;
@@ -840,6 +862,9 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 				
 				// Dervish swoosh sound.
 				ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+				
+				// Spinning blade sound.
+				ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr);
 				
 				if (StarShipPtr->cur_status_flags & LEFT)
 					turn_direction[ElementPtr->playerNr] = 1;
