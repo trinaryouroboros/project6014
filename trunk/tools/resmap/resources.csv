@@ -589,6 +589,11 @@ SHOFIXTI_FONT,comm.shofixti.font,uqm/comm/shofixt/ifontres.h,FONTRES,base/fonts/
 SHOFIXTI_CONVERSATION_PHRASES,comm.shofixti.dialogue,uqm/comm/shofixt/istrtab.h,CONVERSATION,base/comm/shofixti/shofixti.txt
 SHOFIXTI_COLOR_MAP,comm.shofixti.colortable,uqm/comm/shofixt/istrtab.h,BINTAB,base/comm/shofixti/shofixti.ct
 SHOFIXTI_PMAP_ANIM,comm.shofixti.graphics,uqm/comm/shofixt/igfxres.h,GFXRES,base/comm/shofixti/shofixti.ani
+SHOFIXTI_COLONY_MUSIC,comm.shofixticolony.music,uqm/comm/shofixticolony/imusicre.h,MUSICRES,base/comm/shofixti/shofixti.mod
+SHOFIXTI_COLONY_FONT,comm.shofixticolony.font,uqm/comm/shofixticolony/ifontres.h,FONTRES,base/fonts/shofixti.fon
+SHOFIXTI_COLONY_CONVERSATION_PHRASES,comm.shofixticolony.dialogue,uqm/comm/shofixticolony/istrtab.h,CONVERSATION,base/comm/shofixticolony/shofixticolony.txt
+SHOFIXTI_COLONY_COLOR_MAP,comm.shofixticolony.colortable,uqm/comm/shofixticolony/istrtab.h,BINTAB,base/comm/shofixti/shofixti.ct
+SHOFIXTI_COLONY_PMAP_ANIM,comm.shofixticolony.graphics,uqm/comm/shofixticolony/igfxres.h,GFXRES,base/comm/shofixticolony/shofixticolony.ani
 UMGAH_MUSIC,comm.umgah.music,uqm/comm/umgah/imusicre.h,MUSICRES,base/comm/umgah/umgah.mod
 UMGAH_FONT,comm.umgah.font,uqm/comm/umgah/ifontres.h,FONTRES,base/fonts/umgah.fon
 UMGAH_CONVERSATION_PHRASES,comm.umgah.dialogue,uqm/comm/umgah/istrtab.h,CONVERSATION,base/comm/umgah/umgah.txt
