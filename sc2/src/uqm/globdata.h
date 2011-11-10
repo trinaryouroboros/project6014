@@ -1100,6 +1100,8 @@ START_GAME_STATE
 	ADD_GAME_STATE (SHOFIXTI_PATROL_RETURNED, 1)
 	// JMS: Player has heard shofixti tell the patrol returned home
 	ADD_GAME_STATE (SHOFIXTI_GREAT_NEWS_HEARD, 1)
+	// JMS: Player has visited Shofixti Colony
+	ADD_GAME_STATE (SHOFIXTI_COLONY_MET, 1)
 
 	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
 	ADD_GAME_STATE (CRASH_SITE_UNPROTECTED, 1)

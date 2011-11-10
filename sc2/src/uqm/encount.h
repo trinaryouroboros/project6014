@@ -141,6 +141,7 @@ enum
 	ORZ_SPACE_PORTAL_DEFINED,		// JMS: Portal to ORZ space
 	HINT_DEFINED,					// JMS: Those guys that have mysteriously vanished
 	HINT2_DEFINED,					// JMS: Gamma Janus, the supposed precursor artifact that Yehat tell player about
+	SHOFIXTI_COLONY_DEFINED,		// JMS: Crappy Shofixti colony
 };
 
 #define UMGAH_DEFINED TALKING_PET_DEFINED

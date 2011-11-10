@@ -46,6 +46,7 @@ extern GenerateFunctions generateRainbowWorldFunctions;
 extern GenerateFunctions generateSaMatraFunctions;
 extern GenerateFunctions generateShofixtiFunctions;
 extern GenerateFunctions generateShofixtiCrashSiteFunctions;
+extern GenerateFunctions generateShofixtiColonyFunctions;
 extern GenerateFunctions generateSlaveraceFunctions;
 extern GenerateFunctions generateSlylandroFunctions;
 extern GenerateFunctions generateSolFunctions;
@@ -148,6 +149,8 @@ getGenerateFunctions (BYTE Index)
 			return &generateHint1Functions;	 // JMS - hook to generating hint for those ones mysteriously vanished in a hurry
 		case HINT2_DEFINED:
 			return &generateHint2Functions; // JMS - hook to generating hint in Gamma Janus for the supposed precursor artifact
+		case SHOFIXTI_COLONY_DEFINED:
+			return &generateShofixtiColonyFunctions;	 // JMS - hook to generating Shofixti colony
 			break;
 		default:
 			return &generateDefaultFunctions;
