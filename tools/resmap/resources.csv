@@ -1112,9 +1112,9 @@ BAUL_MICON_MASK_PMAP_ANIM,ship.baul.meleeicons,uqm/ships/baul/igfxres.h,GFXRES,b
 BAUL_BIG_MASK_PMAP_ANIM,ship.baul.graphics.punisher.large,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/baul-big.ani
 BAUL_MED_MASK_PMAP_ANIM,ship.baul.graphics.punisher.medium,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/baul-med.ani
 BAUL_SML_MASK_PMAP_ANIM,ship.baul.graphics.punisher.small,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/baul-sml.ani
-BAULFIRE_BIG_MASK_PMAP_ANIM,ship.baul.graphics.baulfire.large,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/baulfire-big.ani
-BAULFIRE_MED_MASK_PMAP_ANIM,ship.baul.graphics.baulfire.medium,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/baulfire-med.ani
-BAULFIRE_SML_MASK_PMAP_ANIM,ship.baul.graphics.baulfire.small,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/baulfire-sml.ani
+BAULSPRAY_BIG_MASK_PMAP_ANIM,ship.baul.graphics.baulspray.large,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/spray-big.ani
+BAULSPRAY_MED_MASK_PMAP_ANIM,ship.baul.graphics.baulspray.medium,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/spray-med.ani
+BAULSPRAY_SML_MASK_PMAP_ANIM,ship.baul.graphics.baulspray.small,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/spray-sml.ani
 BAULGAS_BIG_MASK_PMAP_ANIM,ship.baul.graphics.baulgas.large,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/gas-big.ani
 BAULGAS_MED_MASK_PMAP_ANIM,ship.baul.graphics.baulgas.medium,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/gas-med.ani
 BAULGAS_SML_MASK_PMAP_ANIM,ship.baul.graphics.baulgas.small,uqm/ships/baul/igfxres.h,GFXRES,base/ships/baul/gas-sml.ani

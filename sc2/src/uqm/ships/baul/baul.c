@@ -79,9 +79,9 @@ static RACE_DESC baul_desc =
 			BAUL_SML_MASK_PMAP_ANIM,
 		},
 		{
-			BAULFIRE_BIG_MASK_PMAP_ANIM,
-			BAULFIRE_MED_MASK_PMAP_ANIM,
-			BAULFIRE_SML_MASK_PMAP_ANIM,
+			BAULSPRAY_BIG_MASK_PMAP_ANIM,
+			BAULSPRAY_MED_MASK_PMAP_ANIM,
+			BAULSPRAY_SML_MASK_PMAP_ANIM,
 		},
 		{
 			BAULGAS_BIG_MASK_PMAP_ANIM,
@@ -156,9 +156,9 @@ static RACE_DESC baul_desc_2xres =
 			BAUL_SML_MASK_PMAP_ANIM,
 		},
 		{
-			BAULFIRE_BIG_MASK_PMAP_ANIM,
-			BAULFIRE_MED_MASK_PMAP_ANIM,
-			BAULFIRE_SML_MASK_PMAP_ANIM,
+			BAULSPRAY_BIG_MASK_PMAP_ANIM,
+			BAULSPRAY_MED_MASK_PMAP_ANIM,
+			BAULSPRAY_SML_MASK_PMAP_ANIM,
 		},
 		{
 			BAULGAS_BIG_MASK_PMAP_ANIM,
@@ -233,9 +233,9 @@ static RACE_DESC baul_desc_4xres =
 			BAUL_SML_MASK_PMAP_ANIM,
 		},
 		{
-			BAULFIRE_BIG_MASK_PMAP_ANIM,
-			BAULFIRE_MED_MASK_PMAP_ANIM,
-			BAULFIRE_SML_MASK_PMAP_ANIM,
+			BAULSPRAY_BIG_MASK_PMAP_ANIM,
+			BAULSPRAY_MED_MASK_PMAP_ANIM,
+			BAULSPRAY_SML_MASK_PMAP_ANIM,
 		},
 		{
 			BAULGAS_BIG_MASK_PMAP_ANIM,
@@ -507,7 +507,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 
 
 static COUNT
-initialize_baulfire (ELEMENT *ShipPtr, HELEMENT BaulfireArray[])
+initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 {
 #define MISSILE_HITS 2
 #define MISSILE_DAMAGE 1
@@ -529,7 +529,7 @@ initialize_baulfire (ELEMENT *ShipPtr, HELEMENT BaulfireArray[])
 	MissileBlock.life = MISSILE_LIFE;
 	MissileBlock.preprocess_func = NULL;
 	MissileBlock.blast_offs = MISSILE_OFFSET;
-	BaulfireArray[0] = initialize_missile (&MissileBlock);
+	SprayArray[0] = initialize_missile (&MissileBlock);
 	
 	return (1);
 }
@@ -575,7 +575,7 @@ init_baul (void)
 	{
 		baul_desc.preprocess_func = baul_preprocess;
 		baul_desc.postprocess_func = baul_postprocess;
-		baul_desc.init_weapon_func = initialize_baulfire;
+		baul_desc.init_weapon_func = initialize_spray;
 		baul_desc.cyborg_control.intelligence_func = baul_intelligence;
 		RaceDescPtr = &baul_desc;
 	}
@@ -583,7 +583,7 @@ init_baul (void)
 	{
 		baul_desc_2xres.preprocess_func = baul_preprocess;
 		baul_desc_2xres.postprocess_func = baul_postprocess;
-		baul_desc_2xres.init_weapon_func = initialize_baulfire;
+		baul_desc_2xres.init_weapon_func = initialize_spray;
 		baul_desc_2xres.cyborg_control.intelligence_func = baul_intelligence;
 		RaceDescPtr = &baul_desc_2xres;
 	}
@@ -591,7 +591,7 @@ init_baul (void)
 	{
 		baul_desc_4xres.preprocess_func = baul_preprocess;
 		baul_desc_4xres.postprocess_func = baul_postprocess;
-		baul_desc_4xres.init_weapon_func = initialize_baulfire;
+		baul_desc_4xres.init_weapon_func = initialize_spray;
 		baul_desc_4xres.cyborg_control.intelligence_func = baul_intelligence;
 		RaceDescPtr = &baul_desc_4xres;
 	}
