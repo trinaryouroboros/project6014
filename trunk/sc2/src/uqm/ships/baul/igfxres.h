@@ -2,12 +2,12 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define BAULFIRE_BIG_MASK_PMAP_ANIM "ship.baul.graphics.baulfire.large"
-#define BAULFIRE_MED_MASK_PMAP_ANIM "ship.baul.graphics.baulfire.medium"
-#define BAULFIRE_SML_MASK_PMAP_ANIM "ship.baul.graphics.baulfire.small"
 #define BAULGAS_BIG_MASK_PMAP_ANIM "ship.baul.graphics.baulgas.large"
 #define BAULGAS_MED_MASK_PMAP_ANIM "ship.baul.graphics.baulgas.medium"
 #define BAULGAS_SML_MASK_PMAP_ANIM "ship.baul.graphics.baulgas.small"
+#define BAULSPRAY_BIG_MASK_PMAP_ANIM "ship.baul.graphics.baulspray.large"
+#define BAULSPRAY_MED_MASK_PMAP_ANIM "ship.baul.graphics.baulspray.medium"
+#define BAULSPRAY_SML_MASK_PMAP_ANIM "ship.baul.graphics.baulspray.small"
 #define BAUL_BIG_MASK_PMAP_ANIM "ship.baul.graphics.punisher.large"
 #define BAUL_CAPTAIN_MASK_PMAP_ANIM "ship.baul.graphics.captain"
 #define BAUL_ICON_MASK_PMAP_ANIM "ship.baul.icons"
