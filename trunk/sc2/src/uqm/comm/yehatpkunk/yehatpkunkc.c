@@ -19,6 +19,7 @@
 #include "../commall.h"
 #include "resinst.h"
 #include "strings.h"
+#include "uqm/nameref.h"
 
 #include "uqm/build.h"
 #include "uqm/gameev.h"
@@ -27,14 +28,14 @@
 #define YEHAT_FG_COLOR WHITE_COLOR
 #define YEHAT_BG_COLOR BLACK_COLOR
 #define YEHAT_BASE_X (TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 2))
-#define YEHAT_BASE_Y RES_SIS_SCALE(24)
+#define YEHAT_BASE_Y RES_SIS_SCALE(75)
 #define YEHAT_TALK_INDEX 35
 #define YEHAT_TALK_FRAMES 3
 
 #define PKUNK_FG_COLOR WHITE_COLOR
 #define PKUNK_BG_COLOR BLACK_COLOR
 #define PKUNK_BASE_X (SIS_SCREEN_WIDTH - (TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 2)))
-#define PKUNK_BASE_Y RES_SIS_SCALE(24)
+#define PKUNK_BASE_Y RES_SIS_SCALE(70)
 #define PKUNK_TALK_INDEX 14
 #define PKUNK_TALK_FRAMES 2
 
@@ -62,8 +63,7 @@ static LOCDATA yehatpkunk_desc =
 		{ /* 0 Pkunk eye blink */
 			1, /* StartIndex */
 			4, /* NumFrames */
-			YOYO_ANIM /* AnimFlags */
-			| WAIT_TALKING,
+			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
 			(1 << 1), /* BlockMask */
@@ -71,8 +71,7 @@ static LOCDATA yehatpkunk_desc =
 		{ /* 1 Pkunk eye roll */
 			5, /* StartIndex */
 			4, /* NumFrames */
-			YOYO_ANIM /* AnimFlags */
-			| WAIT_TALKING,
+			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 10, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
 			(1 << 0), /* BlockMask */
@@ -80,7 +79,7 @@ static LOCDATA yehatpkunk_desc =
 		{ /* 2 Gulp */
 			9, /* StartIndex */
 			5, /* NumFrames */
-			CIRCULAR_ANIM | WAIT_TALKING, /* AnimFlags */
+			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
 			0, /* BlockMask */
@@ -91,7 +90,7 @@ static LOCDATA yehatpkunk_desc =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			0, /* BlockMask */
+			(1 << 4) | (1 << 5), /* BlockMask */
 		},
 		{ /* 4 Pkunk light */
 			19, /* StartIndex */
@@ -99,7 +98,7 @@ static LOCDATA yehatpkunk_desc =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			0, /* BlockMask */
+			(1 << 3) | (1 << 5), /* BlockMask */
 		},
 		{ /* 5 Pkunk light */
 			22, /* StartIndex */
@@ -107,7 +106,7 @@ static LOCDATA yehatpkunk_desc =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			0, /* BlockMask */
+			(1 << 3) | (1 << 4), /* BlockMask */
 		},
 		{ /* 6 Pkunk left hand */
 			25, /* StartIndex */
@@ -147,7 +146,7 @@ static LOCDATA yehatpkunk_desc =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 20, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1L << 14), /* BlockMask */
+			(1 << 14), /* BlockMask */
 		},
 		{ /* 11 Yehat light */
 			47, /* StartIndex */
@@ -155,7 +154,7 @@ static LOCDATA yehatpkunk_desc =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			0, /* BlockMask */
+			(1 << 12) | (1 << 13), /* BlockMask */
 		},
 		{ /* 12 Yehat light */
 			50, /* StartIndex */
@@ -163,7 +162,7 @@ static LOCDATA yehatpkunk_desc =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			0, /* BlockMask */
+			(1 << 11) | (1 << 13), /* BlockMask */
 		},
 		{ /* 13 Yehat light */
 			53, /* StartIndex */
@@ -171,23 +170,23 @@ static LOCDATA yehatpkunk_desc =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			0, /* BlockMask */
+			(1 << 11) | (1 << 12), /* BlockMask */
 		},
 		{ /* 14 Yehat eye blink */
 			56, /* StartIndex */
 			4, /* NumFrames */
-			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1L << 10), /* BlockMask */
+			(1 << 10), /* BlockMask */
 		},
 	},
 	{ /* AlienTransitionDesc */
 		47, /* StartIndex */
 		3, /* NumFrames */
-		0, /* AnimFlags */
+		YOYO_ANIM, /* AnimFlags */
 		ONE_SECOND / 30, 0, /* FrameRate */
-		0, 0, /* RestartRate */
+		ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
@@ -217,6 +216,7 @@ enum
 };
 
 static int LastAlien;
+static FONT PkunkFont, YehatFont;
 
 static void
 SelectAlienYEHAT (void)
@@ -237,11 +237,14 @@ SelectAlienYEHAT (void)
 		CommData.AlienAmbientArray[0].AnimFlags &= ~WAIT_TALKING;
 		CommData.AlienAmbientArray[1].AnimFlags &= ~WAIT_TALKING;
 		CommData.AlienAmbientArray[2].AnimFlags &= ~WAIT_TALKING;
+		CommData.AlienAmbientArray[8].AnimFlags |= WAIT_TALKING;
+		CommData.AlienAmbientArray[9].AnimFlags |= WAIT_TALKING;
 
 		CommData.AlienTextBaseline.x = (SWORD)YEHAT_BASE_X;
 		CommData.AlienTextBaseline.y = YEHAT_BASE_Y;
 		CommData.AlienTextFColor = YEHAT_FG_COLOR;
 		CommData.AlienTextBColor = YEHAT_BG_COLOR;
+		CommData.AlienFont = YehatFont;
 	}
 }
 
@@ -265,11 +268,14 @@ SelectAlienPKUNK (void)
 		CommData.AlienAmbientArray[0].AnimFlags |= WAIT_TALKING;
 		CommData.AlienAmbientArray[1].AnimFlags |= WAIT_TALKING;
 		CommData.AlienAmbientArray[2].AnimFlags |= WAIT_TALKING;
+		CommData.AlienAmbientArray[8].AnimFlags &= ~WAIT_TALKING;
+		CommData.AlienAmbientArray[9].AnimFlags &= ~WAIT_TALKING;
 
 		CommData.AlienTextBaseline.x = (SWORD)PKUNK_BASE_X;
 		CommData.AlienTextBaseline.y = PKUNK_BASE_Y;
 		CommData.AlienTextFColor = PKUNK_FG_COLOR;
 		CommData.AlienTextBColor = PKUNK_BG_COLOR;
+		CommData.AlienFont = PkunkFont;
 	}
 }
 
@@ -359,6 +365,8 @@ ExitConversation (RESPONSE_REF R)
 static void
 Intro (void)
 {
+	YehatFont = CommData.AlienFont;
+	
 	NPCPhrase_cb (Y_HELLO, &SelectAlienYEHAT);
 	NPCPhrase_cb (P_HELLO, &SelectAlienPKUNK);
 	NPCPhrase_cb (Y_BYEBYE, &SelectAlienYEHAT);
@@ -375,6 +383,7 @@ uninit_yehatpkunk (void)
 static void
 post_yehatpkunk_enc (void)
 {
+	DestroyFont(PkunkFont);
 	// nothing defined so far
 }
 
@@ -390,7 +399,7 @@ init_yehatpkunk_comm (void)
 	yehatpkunk_desc.AlienTextWidth = (SIS_TEXT_WIDTH >> 1) - TEXT_X_OFFS;
 	yehatpkunk_desc.AlienTextBaseline.x = (SWORD)YEHAT_BASE_X;
 	yehatpkunk_desc.AlienTextBaseline.y = YEHAT_BASE_Y;
-
+	PkunkFont = LoadFont (PKUNK_FONT);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	
 	retval = &yehatpkunk_desc;
