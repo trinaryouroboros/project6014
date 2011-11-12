@@ -311,7 +311,8 @@ laser_death (ELEMENT *ElementPtr)
 			IonSpotsPtr->playerNr = ElementPtr->playerNr;
 			IonSpotsPtr->state_flags = FINITE_LIFE | NONSOLID | IGNORE_SIMILAR | APPEARING;
 			IonSpotsPtr->turn_wait = IonSpotsPtr->next_turn = 0;
-			IonSpotsPtr->life_span = 9;
+			IonSpotsPtr->life_span = RES_CASE(9,9,14);
+			// BW: account for the extra frames in the hires version
 
 			angle = ARCTAN (dx, dy);
 			magnitude = ((COUNT)TFB_Random ()
