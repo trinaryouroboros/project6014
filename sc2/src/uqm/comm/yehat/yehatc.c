@@ -27,7 +27,7 @@
 #include "libs/mathlib.h"
 
 
-static LOCDATA yehat_desc =
+static LOCDATA yehat_desc_1x =
 {
 	YEHAT_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
@@ -199,6 +199,112 @@ static LOCDATA yehat_desc =
 	},
 };
 
+static LOCDATA yehat_desc_4x =
+{
+	YEHAT_CONVERSATION, /* AlienConv */
+	NULL, /* init_encounter_func */
+	NULL, /* post_encounter_func */
+	NULL, /* uninit_encounter_func */
+	YEHAT_PMAP_ANIM, /* AlienFrame */
+	YEHAT_FONT, /* AlienFont */
+	WHITE_COLOR_INIT, /* AlienTextFColor */
+	BLACK_COLOR_INIT, /* AlienTextBColor */
+	{0, 0}, /* AlienTextBaseline */
+	0, /* (SIS_TEXT_WIDTH - 16) * 2 / 3, */ /* AlienTextWidth */
+	ALIGN_CENTER, /* AlienTextAlign */
+	VALIGN_MIDDLE, /* AlienTextValign */
+	YEHAT_COLOR_MAP, /* AlienColorMap */
+	YEHAT_MUSIC, /* AlienSong */
+	NULL_RESOURCE, /* AlienAltSong */
+	0, /* AlienSongFlags */
+	YEHAT_CONVERSATION_PHRASES, /* PlayerPhrases */
+	7, /* NumAnimations */
+	{ /* AlienAmbientArray (ambient animations) */
+		{ /* 0 Yehat right hand */
+			4, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			ONE_SECOND / 10, ONE_SECOND / 10, /* FrameRate */
+			ONE_SECOND / 4, ONE_SECOND / 2,/* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 1 Yehat left hand */
+			7, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			ONE_SECOND / 10, ONE_SECOND / 10, /* FrameRate */
+			ONE_SECOND / 4, ONE_SECOND / 2,/* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 2 Yehat eye glow */
+			10, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, 0, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			(1 << 6), /* BlockMask */
+		},
+		{ /* 3 Yehat light */
+			13, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
+			(1 << 4) | (1 << 5), /* BlockMask */
+		},
+		{ /* 4 Yehat light */
+			16, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
+			(1 << 3) | (1 << 5), /* BlockMask */
+		},
+		{ /* 5 Yehat light */
+			19, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
+			(1 << 3) | (1 << 4), /* BlockMask */
+		},
+		{ /* 6 Yehat eye blink */
+			22, /* StartIndex */
+			4, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, 0, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			(1 << 2), /* BlockMask */
+		},
+	},
+	{ /* AlienTransitionDesc - empty */
+		0, /* StartIndex */
+		0, /* NumFrames */
+		0, /* AnimFlags */
+		0, 0, /* FrameRate */
+		0, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	{ /* AlienTalkDesc */
+		1, /* StartIndex */
+		3, /* NumFrames */
+		0, /* AnimFlags */
+		ONE_SECOND / 15, 0, /* FrameRate */
+		ONE_SECOND / 12, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	NULL, /* AlienNumberSpeech - none */
+	/* Filler for loaded resources */
+	NULL, NULL, NULL,
+	NULL,
+	NULL,
+	0, /* NumFeatures */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
+	},
+	{0 /* AlienFeatureChoice (will be computed later) */
+	},
+};
+
 static void
 ExitConversation (RESPONSE_REF R)
 {
@@ -327,8 +433,20 @@ post_yehat_enc (void)
 LOCDATA*
 init_yehat_comm (void)
 {
+	static LOCDATA yehat_desc;
 	LOCDATA *retval;
 
+	switch (RESOLUTION_FACTOR)
+	{
+	case 2:
+		yehat_desc = yehat_desc_4x;
+		break;
+	case 0:
+	default:
+		yehat_desc = yehat_desc_1x;
+		break;
+	}
+	
 	yehat_desc.init_encounter_func = Intro;
 	yehat_desc.post_encounter_func = post_yehat_enc;
 	yehat_desc.uninit_encounter_func = uninit_yehat;
