@@ -22,11 +22,14 @@
 #include "../commall.h"
 #include "resinst.h"
 #include "strings.h"
+#include "libs/mathlib.h"
 #include "libs/sound/sound.h"
 #include "uqm/build.h"
+#include "uqm/encount.h"
+// BW: for EncounterGroup, no longer included in commall.h
 
 
-static LOCDATA syreen_desc =
+static LOCDATA syreen_desc_1x =
 {
 	SYREEN_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
@@ -125,6 +128,81 @@ static LOCDATA syreen_desc =
 		8, /* NumFrames */
 		0, /* AnimFlags */
 		ONE_SECOND / 30, 0, /* FrameRate */
+		0, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	{ /* AlienTalkDesc */
+		174, /* StartIndex */
+		8, /* NumFrames */
+		TALK_INTRO, /* AnimFlags */
+		ONE_SECOND / 16, ONE_SECOND / 30, /* FrameRate */
+		ONE_SECOND / 10, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	NULL, /* AlienNumberSpeech - none */
+	/* Filler for loaded resources */
+	NULL, NULL, NULL,
+	NULL,
+	NULL,
+	0, /* NumFeatures */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
+	},
+	{0 /* AlienFeatureChoice (will be computed later) */
+	},
+};
+
+
+static LOCDATA syreen_desc_4x =
+{
+	SYREEN_CONVERSATION, /* AlienConv */
+	NULL, /* init_encounter_func */
+	NULL, /* post_encounter_func */
+	NULL, /* uninit_encounter_func */
+	SYREEN_PMAP_ANIM, /* AlienFrame */
+	SYREEN_FONT, /* AlienFont */
+	WHITE_COLOR_INIT, /* AlienTextFColor */
+	BLACK_COLOR_INIT, /* AlienTextBColor */
+	{0, 0}, /* AlienTextBaseline */
+	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
+	ALIGN_CENTER, /* AlienTextAlign */
+	VALIGN_BOTTOM, /* AlienTextValign */
+	SYREEN_COLOR_MAP, /* AlienColorMap */
+	SYREEN_MUSIC, /* AlienSong */
+	NULL_RESOURCE, /* AlienAltSong */
+	0, /* AlienSongFlags */
+	SYREEN_CONVERSATION_PHRASES, /* PlayerPhrases */
+	3, /* NumAnimations */
+	{ /* AlienAmbientArray (ambient animations) */
+		{	// 0 - Eyes blink
+			1, /* StartIndex */
+			2, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 2, ONE_SECOND * 2, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{	// 1 - Oscilloscope view
+			10, /* StartIndex */
+			6, /* NumFrames */
+			RANDOM_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			0, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{	// 2 - Electricity on Tesla coil
+			16, /* StartIndex */
+			5, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND * 2, /* RestartRate */
+			0, /* BlockMask */
+		},
+	},
+	{ /* AlienTransitionDesc */
+		0, /* StartIndex */
+		0, /* NumFrames */
+		0, /* AnimFlags */
+		0, 0, /* FrameRate */
 		0, 0, /* RestartRate */
 		0, /* BlockMask */
 	},
@@ -271,13 +349,38 @@ LOCDATA*
 init_syreen_comm (void)
 {
 	LOCDATA *retval;
+	BOOLEAN captain;
+	static LOCDATA syreen_desc;
+
+	switch (RESOLUTION_FACTOR)
+	{
+	case 2:
+		syreen_desc = syreen_desc_4x;
+		break;
+	case 0:
+	default:
+		syreen_desc = syreen_desc_1x;
+		break;
+	}
+
+	if(LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
+		captain = (TFB_Random()%2);
+	// JMS: In Interplanetary pick graphics based on battle group index number.
+	// This way the same ship has always the same captain as long as it exists.
+	else
+		captain = (EncounterGroup%2);
+
+	if (captain)
+	{
+		syreen_desc.AlienFrameRes = SYREEN2_PMAP_ANIM;
+	}
 
 	syreen_desc.init_encounter_func = Intro;
 	syreen_desc.post_encounter_func = post_syreen_enc;
 	syreen_desc.uninit_encounter_func = uninit_syreen;
 
 	syreen_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreen_desc.AlienTextBaseline.y = RES_SIS_SCALE(100);
+	syreen_desc.AlienTextBaseline.y = RES_CASE(100,200,400);
 	syreen_desc.AlienTextWidth = SIS_TEXT_WIDTH - 4;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
