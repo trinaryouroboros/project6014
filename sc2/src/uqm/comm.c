@@ -23,6 +23,8 @@
 //
 //			 -Freight transport ships do not disappear after encountering in hyperspace.
 //			 -Increased maximum number of communication responses from 8 to 10
+//
+// JMS 2011: -Changed COMM_ANIM_RATE to 120 fps since hires4x seems to like it... 
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
@@ -72,7 +74,9 @@
 // The rate was originally 120fps which allowed for more animation
 // precision which is ultimately wasted on the human eye anyway.
 // The highest known stable animation rate is 40fps, so that's what we use.
-#define COMM_ANIM_RATE   (ONE_SECOND / 40)
+//
+// JMS: Changed this back to 120 fps since hires4x seems to like it... 
+#define COMM_ANIM_RATE   (ONE_SECOND / 120)
 
 static CONTEXT AnimContext;
 

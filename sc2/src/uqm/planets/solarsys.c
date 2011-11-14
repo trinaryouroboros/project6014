@@ -1584,7 +1584,6 @@ DrawTexturedBody (PLANET_DESC* planet, STAMP s)
 	int oldScale;
 	int oldMode;
 
-	LockMutex (GraphicsLock);
 	//SetContext (SpaceContext);
 	
 	BatchGraphics ();
@@ -1604,7 +1603,6 @@ DrawTexturedBody (PLANET_DESC* planet, STAMP s)
 	SetGraphicScaleMode (oldMode);
 	
 	UnbatchGraphics ();
-	UnlockMutex (GraphicsLock);
 }
 
 static void
