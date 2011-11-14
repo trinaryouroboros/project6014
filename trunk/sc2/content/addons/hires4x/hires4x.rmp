@@ -657,7 +657,6 @@ ship.ilwrath.graphics.fire.medium = GFXRES:addons/hires4x/ships/ilwrath/fire-med
 ship.ilwrath.graphics.fire.small = GFXRES:addons/hires4x/ships/ilwrath/fire-sml.ani
 ship.ilwrath.icons = GFXRES:addons/hires4x/ships/ilwrath/avenger-icons.ani
 ship.ilwrath.meleeicons = GFXRES:addons/hires4x/ships/ilwrath/avenger-meleeicons.ani
-ship.ilwrath.sounds = SNDRES:addons/hires4x/ships/ilwrath/avenger.snd
 ship.isd.graphics.captain = GFXRES:addons/hires4x/ships/isd/isd-cap.ani
 ship.isd.graphics.fighter.large = GFXRES:addons/hires4x/ships/isd/fight-big.ani
 ship.isd.graphics.fighter.medium = GFXRES:addons/hires4x/ships/isd/fight-med.ani
