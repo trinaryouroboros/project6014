@@ -326,7 +326,7 @@ StarBaseMenu (RESPONSE_REF R)
 	/* Alien speech */
 	if (PLAYER_SAID (R, greeting_1_whats_like))
 	{
-		NPCPhrase (SILENT);
+		NPCPhrase (TAKE_GUESS);
 		DISABLE_PHRASE (greeting_1_whats_like);
 	}
 	

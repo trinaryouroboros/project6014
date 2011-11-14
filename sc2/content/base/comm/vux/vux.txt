@@ -15,6 +15,9 @@ The one with the strongest stomach.
 #(greeting_1_whats_like)
 So, what's it like over there?
 
+#(TAKE_GUESS)
+...Take a guess.
+
 #(SILENT)
 . . .
 

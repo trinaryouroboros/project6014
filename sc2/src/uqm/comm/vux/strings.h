@@ -27,6 +27,7 @@ enum
 	greeting_1_who_you,
 	STRONG_STOMACH,
 	greeting_1_whats_like,
+	TAKE_GUESS,
 	SILENT,
 	greeting_1_to_apology,
 	KILL_LIKE_OTHERS,
