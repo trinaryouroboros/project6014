@@ -25,7 +25,7 @@
 #include "uqm/gameev.h"
 
 
-static LOCDATA slylandro_desc =
+static LOCDATA slylandro_desc_1x =
 {
 	SLYLANDRO_HOME_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
@@ -149,6 +149,80 @@ static LOCDATA slylandro_desc =
 			ONE_SECOND / 15, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
 			(1 << 10) | (1 << 11), /* BlockMask */
+		},
+	},
+	{ /* AlienTransitionDesc - empty */
+		0, /* StartIndex */
+		0, /* NumFrames */
+		0, /* AnimFlags */
+		0, 0, /* FrameRate */
+		0, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	{ /* AlienTalkDesc - empty */
+		0, /* StartIndex */
+		0, /* NumFrames */
+		0, /* AnimFlags */
+		0, 0, /* FrameRate */
+		0, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	NULL, /* AlienNumberSpeech - none */
+	/* Filler for loaded resources */
+	NULL, NULL, NULL,
+	NULL,
+	NULL,
+	0, /* NumFeatures */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
+	},
+	{0 /* AlienFeatureChoice (will be computed later) */
+	},
+};
+
+static LOCDATA slylandro_desc_4x =
+{
+	SLYLANDRO_HOME_CONVERSATION, /* AlienConv */
+	NULL, /* init_encounter_func */
+	NULL, /* post_encounter_func */
+	NULL, /* uninit_encounter_func */
+	SLYLANDRO_PMAP_ANIM, /* AlienFrame */
+	SLYLANDRO_FONT, /* AlienFont */
+	WHITE_COLOR_INIT, /* AlienTextFColor */
+	BLACK_COLOR_INIT, /* AlienTextBColor */
+	{0, 0}, /* AlienTextBaseline */
+	0, /* SIS_TEXT_WIDTH, */ /* AlienTextWidth */
+	ALIGN_CENTER, /* AlienTextAlign */
+	VALIGN_TOP, /* AlienTextValign */
+	SLYLANDRO_COLOR_MAP, /* AlienColorMap */
+	SLYLANDRO_MUSIC, /* AlienSong */
+	NULL_RESOURCE, /* AlienAltSong */
+	0, /* AlienSongFlags */
+	SLYLANDRO_CONVERSATION_PHRASES, /* PlayerPhrases */
+	3, /* NumAnimations */
+	{ /* AlienAmbientArray (ambient animations) */
+		{
+			4, /* StartIndex */
+			8, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, 0, /* FrameRate */
+			ONE_SECOND / 15, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{
+			12, /* StartIndex */
+			9, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{
+			21, /* StartIndex */
+			9, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, 0, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
 		},
 	},
 	{ /* AlienTransitionDesc - empty */
@@ -401,8 +475,20 @@ post_slylandro_enc (void)
 LOCDATA*
 init_slylandro_comm (void)
 {
+	static LOCDATA slylandro_desc;
 	LOCDATA *retval;
 
+	switch (RESOLUTION_FACTOR)
+	{
+	case 2:
+		slylandro_desc = slylandro_desc_4x;
+		break;
+	case 0:
+	default:
+		slylandro_desc = slylandro_desc_1x;
+		break;
+	}
+	
 	slylandro_desc.init_encounter_func = Intro;
 	slylandro_desc.post_encounter_func = post_slylandro_enc;
 	slylandro_desc.uninit_encounter_func = uninit_slylandro;
