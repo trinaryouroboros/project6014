@@ -26,6 +26,7 @@ comm.slylandro.graphics = GFXRES:addons/hires4x/comm/slylandro/slylandro.ani
 comm.spathi.font = FONTRES:addons/hires4x/fonts/spathi.fon
 comm.syreen.font = FONTRES:addons/hires4x/fonts/syreen.fon
 comm.syreen.graphics = GFXRES:addons/hires4x/comm/syreen/syreen-captain.ani
+comm.syreen2.graphics = GFXRES:addons/hires4x/comm/syreen/syreen-captain2.ani
 comm.syreenbase.font = FONTRES:addons/hires4x/fonts/syreen.fon
 comm.syreenbase.graphics = GFXRES:addons/hires4x/comm/syreenaddons/hires4x/syreenbase.ani
 comm.syreenhome.font = FONTRES:addons/hires4x/fonts/syreen.fon

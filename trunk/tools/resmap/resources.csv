@@ -609,6 +609,7 @@ SYREEN_FONT,comm.syreen.font,uqm/comm/syreen/ifontres.h,FONTRES,base/fonts/syree
 SYREEN_CONVERSATION_PHRASES,comm.syreen.dialogue,uqm/comm/syreen/istrtab.h,CONVERSATION,base/comm/syreen/syreen.txt
 SYREEN_COLOR_MAP,comm.syreen.colortable,uqm/comm/syreen/istrtab.h,BINTAB,base/comm/syreen/syreen.ct
 SYREEN_PMAP_ANIM,comm.syreen.graphics,uqm/comm/syreen/igfxres.h,GFXRES,base/comm/syreen/syreen-captain.ani
+SYREEN2_PMAP_ANIM,comm.syreen2.graphics,uqm/comm/syreen/igfxres.h,GFXRES,base/comm/syreen/syreen-captain.ani
 SYREEN_BASE_MUSIC,comm.syreenbase.music,uqm/comm/syreenbase/imusicre.h,MUSICRES,base/comm/syreenbase/syreenbase.mod
 SYREEN_BASE_FONT,comm.syreenbase.font,uqm/comm/syreenbase/ifontres.h,FONTRES,base/fonts/syreen.fon
 SYREEN_BASE_CONVERSATION_PHRASES,comm.syreenbase.dialogue,uqm/comm/syreenbase/istrtab.h,CONVERSATION,base/comm/syreenbase/syreenbase.txt
