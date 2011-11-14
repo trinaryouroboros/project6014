@@ -46,114 +46,72 @@ static LOCDATA shofixti_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SHOFIXTI_CONVERSATION_PHRASES, /* PlayerPhrases */
-	13, /* NumAnimations */
+	8, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
-		{
-			5, /* StartIndex */
-			15, /* NumFrames */
+		{ /* 0 bottom left star */
+			1, /* StartIndex */
+			6, /* NumFrames */
 			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 30, 0, /* FrameRate */
-			ONE_SECOND / 30, 0, /* RestartRate */
-			0, /* BlockMask */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
+			(1 << 2), /* BlockMask */
 		},
-		{
-			20, /* StartIndex */
-			3, /* NumFrames */
-			RANDOM_ANIM, /* AnimFlags */
-			ONE_SECOND / 10, 0, /* FrameRate */
-			(ONE_SECOND >> 1), (ONE_SECOND >> 1) * 3, /* RestartRate */
-			0, /* BlockMask */
+		{ /* 1 bottom right star */
+			7, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
+			(1 << 3), /* BlockMask */
 		},
-		{
+		{ /* 2 top left star */
+			13, /* StartIndex */
+			5, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
+			(1 << 0), /* BlockMask */
+		},
+		{ /* 3 top right star */
+			18, /* StartIndex */
+			5, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
+			(1 << 1), /* BlockMask */
+		},
+		{ /* 4 eye blink */
 			23, /* StartIndex */
 			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, 0, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 5 right hand */
+			26, /* StartIndex */
+			3, /* NumFrames */
 			RANDOM_ANIM, /* AnimFlags */
 			ONE_SECOND / 10, 0, /* FrameRate */
 			(ONE_SECOND >> 1), (ONE_SECOND >> 1) * 3, /* RestartRate */
 			0, /* BlockMask */
 		},
-		{
-			26, /* StartIndex */
+		{ /* 6 radar */
+			34, /* StartIndex */
+			8, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 10, 0, /* FrameRate */
+			ONE_SECOND / 10, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 7 left hand */
+			42, /* StartIndex */
 			3, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 30, 0, /* FrameRate */
-			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			RANDOM_ANIM, /* AnimFlags */
+			ONE_SECOND / 10, 0, /* FrameRate */
+			(ONE_SECOND >> 1), (ONE_SECOND >> 1) * 3, /* RestartRate */
 			0, /* BlockMask */
 		},
-		{
-			29, /* StartIndex */
-			4, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 15, 0, /* FrameRate */
-			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			0, /* BlockMask */
-		},
-
-		{
-			33, /* StartIndex */
-			6, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{
-			39, /* StartIndex */
-			7, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
-			(1 << 7), /* BlockMask */
-		},
-		{
-			46, /* StartIndex */
-			6, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
-			(1 << 6), /* BlockMask */
-		},
-		{
-			52, /* StartIndex */
-			4, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{
-			56, /* StartIndex */
-			7, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
-			(1 << 10), /* BlockMask */
-		},
-		{
-			63, /* StartIndex */
-			6, /* NumFrames */
-			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
-			(1 << 9), /* BlockMask */
-		},
-		{
-			69, /* StartIndex */
-			3, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 30, 0, /* FrameRate */
-			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			0, /* BlockMask */
-		},
-		{	// JMS: Viewscreen animation is this one.
-			72, /* StartIndex */
-			14, /* NumFrames */
-			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, 0, /* FrameRate */
-			ONE_SECOND * 2, ONE_SECOND * 4, /* RestartRate */
-			0, /* BlockMask */
-		},
-
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
@@ -164,8 +122,8 @@ static LOCDATA shofixti_desc =
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
-		1, /* StartIndex */
-		4, /* NumFrames */
+		29, /* StartIndex */
+		5, /* NumFrames */
 		0, /* AnimFlags */
 		ONE_SECOND / 20, 0, /* FrameRate */
 		ONE_SECOND / 15, 0, /* RestartRate */
