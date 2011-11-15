@@ -145,7 +145,7 @@ static LOCDATA shofixti_desc =
 static void
 ExitConversation (RESPONSE_REF R)
 {
-	if (PLAYER_SAID (R, pearshaped))
+	if (PLAYER_SAID (R, no_joke_attack))
 	{
 		NPCPhrase (KYAIEE);
 		SET_GAME_STATE (SHOFIXTI_ANGRY, 2);
@@ -153,10 +153,30 @@ ExitConversation (RESPONSE_REF R)
 	}	
 	else if (PLAYER_SAID (R, farewell_shofixti))
 	{
+		BYTE NumVisits = GET_GAME_STATE (SHOFIXTI_VISITS);
+		
 		if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
+		{
 			NPCPhrase (MIFFED_GOODBYE_EARTHLING);
+		}
 		else
-			NPCPhrase (GOODBYE_EARTHLING);
+		{
+			switch (NumVisits++)
+			{
+				case 1:
+					NPCPhrase (GOODBYE_EARTHLING_1);
+					break;
+				case 2:
+					NPCPhrase (GOODBYE_EARTHLING_2);
+					break;
+				case 3:
+					NPCPhrase (GOODBYE_EARTHLING_3);
+					break;
+				case 4:
+					NPCPhrase (GOODBYE_EARTHLING_4);
+					break;
+			}
+		}
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
 	}
 	else if (PLAYER_SAID (R, will_attack))
@@ -178,7 +198,11 @@ static void
 ThankYou (RESPONSE_REF R)
 {	
 	(void) R; // satisfy compiler
-	NPCPhrase (THANK_YOU);
+	if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
+		NPCPhrase (THANK_YOU_MIFFED);
+	else
+		NPCPhrase (THANK_YOU);
+	
 	DISABLE_PHRASE (sorry_to_hear);	
 
 	Response (farewell_shofixti, ExitConversation);
@@ -189,6 +213,12 @@ static void
 HowReconstruction (RESPONSE_REF R)
 {	
 	(void) R; // satisfy compiler
+	
+	if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
+		NPCPhrase (NOT_GOOD_RECONSTRUCTION_PRE_MIFFED);
+	else
+		NPCPhrase (NOT_GOOD_RECONSTRUCTION_PRE);
+	
 	NPCPhrase (NOT_GOOD_RECONSTRUCTION);
 	DISABLE_PHRASE (how_goes_reconstruction);	
 
@@ -288,6 +318,10 @@ SmallTalk1 (RESPONSE_REF R)
 	{
 		NPCPhrase (SHARE_NEWS);
 	}
+	else if (PLAYER_SAID (R, take_a_joke))
+	{
+		NPCPhrase (DONT_JOKE);
+	}
 
 	if (!(GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI)))
 		Response (where_patrol, SmallTalk2);
@@ -310,6 +344,16 @@ DoShofixtiAngry (RESPONSE_REF R)
 	Response (will_attack, ExitConversation);
 }
 
+static void
+LastChanceToBackUp (RESPONSE_REF R)
+{
+	(void) R; // satisfy compiler
+	NPCPhrase (WHAT);
+	
+	Response (take_a_joke, SmallTalk1);
+	Response (no_joke_attack, ExitConversation);
+}
+
 
 static void
 Intro (void)
@@ -330,6 +374,9 @@ Intro (void)
 				break;
 			case 3:
 				NPCPhrase (MIFFED_SHOFIXTI_GREETING_3);
+				break;
+			case 4:
+				NPCPhrase (MIFFED_SHOFIXTI_GREETING_4);
 				--NumVisits;
 				break;
 		}
@@ -364,6 +411,12 @@ Intro (void)
 					break;
 				case 2:
 					NPCPhrase (SHOFIXTI_GREETING_3);
+					break;
+				case 3:
+					NPCPhrase (SHOFIXTI_GREETING_4);
+					break;
+				case 4:
+					NPCPhrase (SHOFIXTI_GREETING_4);
 					--NumVisits;
 					break;
 			}
@@ -376,7 +429,7 @@ Intro (void)
 			SET_GAME_STATE(SHOFIXTI_MET, 1);
 			Response (chmmr_hunt_kohrah, SmallTalk1);
 			Response (no_idea, SmallTalk1);
-			Response (pearshaped, ExitConversation);
+			Response (pearshaped, LastChanceToBackUp);
 			Response (farewell_shofixti, ExitConversation);
 		}
 		else
