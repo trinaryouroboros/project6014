@@ -673,8 +673,8 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 				}
 			}
 
-			// This code prevents Ur-Quan and ISD from turning around mid-chase while pursuing Earthling.
-			if (StarShipPtr->SpeciesID == (UR_QUAN_ID | ISD_ID)
+			// This code prevents Kohr-Ah, Ur-Quan and ISD from turning around mid-chase while pursuing Earthling.
+			if (StarShipPtr->SpeciesID == (KOHR_AH_ID | UR_QUAN_ID | ISD_ID)
 				&& EnemyStarShipPtr->SpeciesID == EARTHLING_ID 
 				&& !(EnemyStarShipPtr->cur_status_flags &
 					 (SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL)))
