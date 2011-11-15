@@ -98,11 +98,11 @@ Honorable Captain, I cannot lie. It is strange new age for us Shofixti.
 #(NOT_GOOD_RECONSTRUCTION_PRE_MIFFED)
 Not well.
 
-#(NOT_GOOD_RECONSTRUCTION)
+#(RECONSTRUCTION_TECHNOLOGY)
 As you know when the Ur-Quan horde approached our homeworld we 'novaed our sun. 
 Unfortunately that wiped life from the planet's surface
 and turned it into an infertile wasteland. 
-We have attempted to rebuild a home at Beta Gorno
+Some of us are trying to rebuild a home at Beta Gorno
 but none of the planets are fertile enough.  
 Our attempts to find a habitable planet in other star systems has so far been useless
 so, we stay with our roots. 
@@ -117,6 +117,42 @@ Thank you Earthling, your help is greatly appreciated once again.
 
 #(THANK_YOU_MIFFED)
 If you do that, Earthling, that should atone for your last blunder.
+
+#(you_talk_differently_tech)
+You seem to have a different view on things than some Shofixti I've met. What's the catch?
+
+#(YOU_MET_RELIGIOUS)
+Ah... you've met Kishi-Bojin's followers.
+We honor their steadfastness and endurance 
+in trying to colonize the rocky worlds in Beta Gorno.
+However, they cling to our old religions in a tenacious and narrow-minded way.
+They do not even consider finding a new colony planet outside the Gorno system
+as the outside galaxy is in their opinion 'impure'.
+
+#(RECONSTRUCTION_KISHIBOJIN)
+When the Ur-Quan approached we released the soul of our sun goddess. 
+She burned the enemy, but with great cost to us
+our sacred home, Kyabetsu, was consumed in flames and left devoid of life. 
+We have yet to find a permanent new home. By the wisdom of Kishi-Bojin
+we are to settle in the third tier of the heavenly realm.
+...Oh, I see you know not the truths of old. In your words our colony
+is on Beta Gorno I.
+
+#(who_is_kishibojin)
+Kishi-Bojin, who is he?
+
+#(SHE_IS_KISHIBOJIN)
+SHE is our Third litter Grandmother
+wise in the ways of the ancients and the spirits. 
+It is her leadership that gives us comfort in these sunless times.
+
+#(you_talk_differently_religious)
+You talk in a different way than the other Shofixti I've met. What's the catch?
+
+#(YOU_MET_NONBELIEVERS)
+You must have spoken with our non-believing brethren.
+Whilst they mean good by their efforts in finding a new home for us
+they are misguided in their attempts to seek it outside our sacred birthground.
 
 #(ask_scar)
 What's with that scar? Old Tanaka had one just like it.
