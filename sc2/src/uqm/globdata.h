@@ -320,6 +320,7 @@ START_GAME_STATE
 	ADD_GAME_STATE (SHOFIXTI_RELIGIOUS_MET, 1)
 	ADD_GAME_STATE (SHOFIXTI_TECH_MET, 1)
 	ADD_GAME_STATE (SHOFIXTI_MET, 1)
+	ADD_GAME_STATE (SHOFIXTI_RELIGIOUS_GROUP, 1) // JMS: Is the current Shofixti group talking to us religious or not.
 	ADD_GAME_STATE (SHOFIXTI_ANGRY, 2) // JMS: How angry the shofixti are.
 									   // 0: Friendly, 1: Pissed, but peaceful, 2: Attack, but can be calmed, 3: All is lost.
 	ADD_GAME_STATE (SHOFIXTI_MAIDENS, 1) /* Did you find the babes yet? */
