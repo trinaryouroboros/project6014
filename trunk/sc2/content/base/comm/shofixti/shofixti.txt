@@ -1,5 +1,5 @@
 #(SHOFIXTI_GREETING_1)
-Greetings Captain! Welcome back to Shofixti Space!
+Greetings, honorable Captain! Welcome back to Shofixti Space!
 It's been too long. What news from the New Alliance of Free Stars?
 
 #(SHOFIXTI_GREETING_2)
@@ -7,6 +7,9 @@ Well met, brave Captain!
 I trust I greet you in strong health!
 
 #(SHOFIXTI_GREETING_3)
+Honorable savior, how may one assist you?
+
+#(SHOFIXTI_GREETING_4)
 Hello again, Captain!
 What tidings do you bear?
 
@@ -21,6 +24,9 @@ What is the reason for your visit?
 #(MIFFED_SHOFIXTI_GREETING_3)
 So, the glorious Captain returns.
 Do you need something?
+
+#(MIFFED_SHOFIXTI_GREETING_4)
+You sure seem to like it around here.
 
 #(ANGRY_SHOFIXTI_GREETING_1)
 Look! The disgusting, shriveled-up pile of dung has returned!
@@ -64,6 +70,20 @@ We've had little contact with the other races in this new Alliance.
 #(pearshaped)
 Oooh, actually it all turned pear-shaped. The Ur-Quan are back in charge and we're here to conquer you!
 
+#(WHAT)
+WHAT!
+
+#(take_a_joke)
+Hey, hey, now. Can't you guys take a joke?
+
+#(DONT_JOKE)
+Earthling, do not toy with the warriorkind.
+You might find yourself on the wrong end of a Mendokusai dart gun
+or worse.
+
+#(no_joke_attack)
+Damn straight. As the old line goes - Submit or be destroyed!
+
 #(KYAIEE)
 Traitor!
 It is for occasions like this that we developed our extra-powerful Glory Annihilators
@@ -72,23 +92,31 @@ Kyaiee!
 #(how_goes_reconstruction)
 How goes the reconstruction of your society, culture, population, civilisation and everything else?
 
+#(NOT_GOOD_RECONSTRUCTION_PRE)
+Honorable Captain, I cannot lie. It is strange new age for us Shofixti.
+
+#(NOT_GOOD_RECONSTRUCTION_PRE_MIFFED)
+Not well.
+
 #(NOT_GOOD_RECONSTRUCTION)
-Oh captain, not well. 
-As you know when the Ur-Quan hordes approached our homeworld we 'novaed our sun. 
+As you know when the Ur-Quan horde approached our homeworld we 'novaed our sun. 
 Unfortunately that wiped life from the planet's surface
 and turned it into an infertile wasteland. 
-We have attempted to rebuild a home at Delta Gorno
+We have attempted to rebuild a home at Beta Gorno
 but none of the planets are fertile enough.  
 Our attempts to find a habitable planet in other star systems has so far been useless
 so, we stay with our roots. 
 We know there must be technology to regenerate life on planets. 
-We hope that the Chmmr could help us but they seem to be occupied elsewhere.
+We hope that the Chmmr could help us but they seem to be busy elsewhere.
 
 #(sorry_to_hear)
 We're sorry to hear that. We'll remind the Chmmr of your Struggle. I'm sure they will assist you.
 
 #(THANK_YOU)
-Thank you Earthling, your assistance is greatly appreciated once again.
+Thank you Earthling, your help is greatly appreciated once again.
+
+#(THANK_YOU_MIFFED)
+If you do that, Earthling, that should atone for your last blunder.
 
 #(ask_scar)
 What's with that scar? Old Tanaka had one just like it.
@@ -111,7 +139,7 @@ Tell me about the lost scout patrol.
 Can you give me a recap on the lost scout patrols?
 
 #(HERE_GOES)
-Here goes, captain...
+Here goes, Captain...
 
 #(LOST_PATROLS)
 As you know, the Alliance has been all but too busy with the Kohr-Ah
@@ -142,7 +170,7 @@ so we had no option but to give each patrol a lot of autonomy
 and a large area of stars to investigate.
 They all knew they would be on their own once they left
 yet they volunteered with joy.
-Please, captain, find out what has happened to them
+Please, Captain, find out what has happened to them
 A lot of those brave ones are my friends.
 
 #(TRANSFER_COORDINATES)
@@ -177,8 +205,17 @@ not on a planetary scale at least.
 #(farewell_shofixti)
 Farewell Shofixti, see you next time!
 
-#(GOODBYE_EARHTLING)
+#(GOODBYE_EARHTLING_1)
 Goodbye Earthling, come back soon!
+
+#(GOODBYE_EARHTLING_2)
+May Success and Serenity keep watch over your soul!
+
+#(GOODBYE_EARHTLING_3)
+May your ancestors bless your path!
+
+#(GOODBYE_EARHTLING_4)
+Good tidings to you and the Earthling kind!
 
 #(MIFFED_GOODBYE_EARHTLING)
 Later.

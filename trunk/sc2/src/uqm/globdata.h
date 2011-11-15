@@ -319,7 +319,7 @@ START_GAME_STATE
 	ADD_GAME_STATE (SHOFIXTI_RECRUITED, 1)
 	ADD_GAME_STATE (SHOFIXTI_MET, 1)
 	ADD_GAME_STATE (SHOFIXTI_ANGRY, 2) // JMS: How angry the shofixti are.
-									   // Can be calmed down at 1. At 2 all is lost.
+									   // 0: Friendly, 1: Pissed, but peaceful, 2: Attack, but can be calmed, 3: All is lost.
 	ADD_GAME_STATE (SHOFIXTI_MAIDENS, 1) /* Did you find the babes yet? */
 	ADD_GAME_STATE (MAIDENS_ON_SHIP, 1)
 
