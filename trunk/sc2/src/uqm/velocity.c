@@ -35,6 +35,15 @@ GetCurrentVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy)
 }
 
 void
+GetCurrentVelocityComponentsSdword (VELOCITY_DESC *velocityptr, SDWORD *pdx, SDWORD *pdy)
+{
+	*pdx = WORLD_TO_VELOCITY (velocityptr->vector.width)
+	+ ((SDWORD)velocityptr->fract.width - (SDWORD)HIBYTE (velocityptr->incr.width));
+	*pdy = WORLD_TO_VELOCITY (velocityptr->vector.height)
+	+ ((SDWORD)velocityptr->fract.height - (SDWORD)HIBYTE (velocityptr->incr.height));
+}
+
+void
 GetNextVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy, COUNT num_frames)
 {
 	COUNT e;

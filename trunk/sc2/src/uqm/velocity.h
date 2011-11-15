@@ -36,6 +36,9 @@ typedef struct velocity_desc
 
 extern void GetCurrentVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy);
 
+// JMS_GFX: New function to prevent overflows in hi-res.
+extern void GetCurrentVelocityComponentsSdword (VELOCITY_DESC *velocityptr, SDWORD *pdx, SDWORD *pdy);
+
 extern void GetNextVelocityComponents (VELOCITY_DESC *velocityptr, SIZE *pdx, SIZE *pdy, COUNT num_frames);
 
 // JMS_GFX: New function to prevent overflows in hi-res.

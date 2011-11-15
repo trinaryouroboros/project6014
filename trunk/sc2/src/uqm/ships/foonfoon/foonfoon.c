@@ -57,7 +57,7 @@
 static RACE_DESC foonfoon_desc =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | FIRES_AFT | SEEKING_SPECIAL | DONT_CHASE,
+		FIRES_FORE | IMMEDIATE_WEAPON,
 		18, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -135,7 +135,7 @@ static RACE_DESC foonfoon_desc =
 static RACE_DESC foonfoon_desc_2xres =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | FIRES_AFT | SEEKING_SPECIAL | DONT_CHASE,
+		FIRES_FORE | IMMEDIATE_WEAPON,
 		18, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
@@ -213,7 +213,7 @@ static RACE_DESC foonfoon_desc_2xres =
 static RACE_DESC foonfoon_desc_4xres =
 {
 	{ /* SHIP_INFO */
-		FIRES_FORE | FIRES_AFT | SEEKING_SPECIAL | DONT_CHASE,
+		FIRES_FORE | IMMEDIATE_WEAPON,
 		18, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,

@@ -39,13 +39,13 @@ COUNT
 PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 		COUNT max_turns, COUNT margin_of_error)
 {
-	SIZE dy;
-	SIZE time_y_0, time_y_1;
-	POINT dst[2];
+	SDWORD dy;
+	SDWORD time_y_0, time_y_1;
+	DPOINT dst[2];
 	RECT r0 = {{0, 0}, {0, 0}};
 	RECT r1 = {{0, 0}, {0, 0}};
-	SIZE dx_0, dy_0, dx_1, dy_1;
-
+	SDWORD dx_0, dy_0, dx_1, dy_1;
+	
 	if ((ElementPtr0->state_flags | ElementPtr1->state_flags) & FINITE_LIFE)
 	{
 		if (!(ElementPtr0->state_flags & FINITE_LIFE))
@@ -67,15 +67,17 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 		}
 	}
 
-	dst[0] = ElementPtr0->current.location;
-	GetCurrentVelocityComponents (&ElementPtr0->velocity, &dx_0, &dy_0);
-	dx_0 = (SIZE)VELOCITY_TO_WORLD ((long)dx_0 * (long)max_turns);
-	dy_0 = (SIZE)VELOCITY_TO_WORLD ((long)dy_0 * (long)max_turns);
+	dst[0].x = (SDWORD)ElementPtr0->current.location.x;
+	dst[0].y = (SDWORD)ElementPtr0->current.location.y;
+	GetCurrentVelocityComponentsSdword (&ElementPtr0->velocity, &dx_0, &dy_0);
+	dx_0 = (SDWORD)VELOCITY_TO_WORLD ((long)dx_0 * (long)max_turns);
+	dy_0 = (SDWORD)VELOCITY_TO_WORLD ((long)dy_0 * (long)max_turns);
 
-	dst[1] = ElementPtr1->current.location;
-	GetCurrentVelocityComponents (&ElementPtr1->velocity, &dx_1, &dy_1);
-	dx_1 = (SIZE)VELOCITY_TO_WORLD ((long)dx_1 * (long)max_turns);
-	dy_1 = (SIZE)VELOCITY_TO_WORLD ((long)dy_1 * (long)max_turns);
+	dst[1].x = (SDWORD)ElementPtr1->current.location.x;
+	dst[1].y = (SDWORD)ElementPtr1->current.location.y;
+	GetCurrentVelocityComponentsSdword (&ElementPtr1->velocity, &dx_1, &dy_1);
+	dx_1 = (SDWORD)VELOCITY_TO_WORLD ((long)dx_1 * (long)max_turns);
+	dy_1 = (SDWORD)VELOCITY_TO_WORLD ((long)dy_1 * (long)max_turns);
 
 	if (margin_of_error)
 	{
@@ -103,8 +105,8 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 			|| (time_y_0 > 0 && dy >= time_y_0)
 			|| (time_y_1 < 0 && dy <= time_y_1))
 	{
-		SIZE dx;
-		SIZE time_x_0, time_x_1;
+		SDWORD dx;
+		SDWORD time_x_0, time_x_1;
 
 		if (margin_of_error)
 		{
@@ -133,7 +135,7 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 				time_y_0 = time_y_1 = 0;
 			else
 			{
-				SIZE t;
+				SDWORD t;
 				long time_beg, time_end, fract;
 
 				if (time_y_1 < 0)
@@ -200,12 +202,12 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 				if ((time_beg *= max_turns) < fract)
 					time_y_0 = 0;
 				else
-					time_y_0 = (SIZE)(time_beg / fract);
+					time_y_0 = (SDWORD)(time_beg / fract);
 
 				if (time_end >= fract) /* just in case of overflow */
 					time_y_1 = max_turns - 1;
 				else
-					time_y_1 = (SIZE)((time_end * max_turns) / fract);
+					time_y_1 = (SDWORD)((time_end * max_turns) / fract);
 			}
 
 			if (time_y_0 <= time_y_1)
@@ -214,27 +216,29 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 					return ((COUNT)time_y_0 + 1);
 				else
 				{
-					POINT Pt0, Pt1;
+					DPOINT Pt0, Pt1;
 					VELOCITY_DESC Velocity0, Velocity1;
 					INTERSECT_CONTROL Control0, Control1;
 
-					Pt0 = ElementPtr0->current.location;
+					Pt0.x = (SDWORD)ElementPtr0->current.location.x;
+					Pt0.y = (SDWORD)ElementPtr0->current.location.y;
 					Velocity0 = ElementPtr0->velocity;
 					Control0 = ElementPtr0->IntersectControl;
 
-					Pt1 = ElementPtr1->current.location;
+					Pt1.x = (SDWORD)ElementPtr1->current.location.x;
+					Pt1.y = (SDWORD)ElementPtr1->current.location.y;
 					Velocity1 = ElementPtr1->velocity;
 					Control1 = ElementPtr1->IntersectControl;
 
 					if (time_y_0)
 					{
-						GetNextVelocityComponents (&Velocity0, &dx_0, &dy_0, time_y_0);
+						GetNextVelocityComponentsSdword (&Velocity0, &dx_0, &dy_0, time_y_0);
 						Pt0.x += dx_0;
 						Pt0.y += dy_0;
 						Control0.EndPoint.x = WORLD_TO_DISPLAY (Pt0.x);
 						Control0.EndPoint.y = WORLD_TO_DISPLAY (Pt0.y);
 						
-						GetNextVelocityComponents (&Velocity1, &dx_1, &dy_1, time_y_0);
+						GetNextVelocityComponentsSdword (&Velocity1, &dx_1, &dy_1, time_y_0);
 						Pt1.x += dx_1;
 						Pt1.y += dy_1;
 						Control1.EndPoint.x = WORLD_TO_DISPLAY (Pt1.x);
@@ -247,11 +251,11 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 
 						++time_y_0;
 
-						GetNextVelocityComponents (&Velocity0, &dx_0, &dy_0, 1);
+						GetNextVelocityComponentsSdword (&Velocity0, &dx_0, &dy_0, 1);
 						Pt0.x += dx_0;
 						Pt0.y += dy_0;
 
-						GetNextVelocityComponents (&Velocity1, &dx_1, &dy_1, 1);
+						GetNextVelocityComponentsSdword (&Velocity1, &dx_1, &dy_1, 1);
 						Pt1.x += dx_1;
 						Pt1.y += dy_1;
 
@@ -262,8 +266,9 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 						Control1.IntersectStamp.origin = Control1.EndPoint;
 						Control1.EndPoint.x = WORLD_TO_DISPLAY (Pt1.x);
 						Control1.EndPoint.y = WORLD_TO_DISPLAY (Pt1.y);
-						when = DrawablesIntersect (&Control0,
-								&Control1, MAX_TIME_VALUE);
+						
+						when = DrawablesIntersect (&Control0, &Control1, MAX_TIME_VALUE);
+						
 						if (when)
 						{
 							if (when == 1
@@ -440,7 +445,7 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	}
 
 	if (StarShipPtr->control & AWESOME_RATING)
-		margin_of_error = 0;
+		margin_of_error = 2 * RESOLUTION_FACTOR; // JMS: Gave some room for error in high resolutions.
 	else if (StarShipPtr->control & GOOD_RATING)
 		margin_of_error = DISPLAY_TO_WORLD (20 << RESOLUTION_FACTOR); // JMS_GFX
 	else /* if (StarShipPtr->control & STANDARD_RATING) */

@@ -30,7 +30,7 @@ images_intersect (IMAGE_BOX *box1, IMAGE_BOX *box2, const RECT *rect)
 			box2->FramePtr->image, box2->Box.corner, rect);
 }
 
-// JMS: Changed SIZEs to SDWORDs to preven overflows. Ditto for COUNTs -> to DWORDs.
+// JMS: Changed SIZEs to SDWORDs to prevent overflows. Ditto for COUNTs -> to DWORDs.
 static TIME_VALUE
 frame_intersect (INTERSECT_CONTROL *pControl0, RECT *pr0,
 		INTERSECT_CONTROL *pControl1, RECT *pr1, TIME_VALUE t0,
