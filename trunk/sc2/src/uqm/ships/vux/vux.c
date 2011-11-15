@@ -306,18 +306,15 @@ limpet_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 #define MIN_THRUST_INCREMENT DISPLAY_TO_WORLD (1 << RESOLUTION_FACTOR) // JMS_GFX
 		if (RDPtr->characteristics.thrust_increment <= MIN_THRUST_INCREMENT)
 		{
-			RDPtr->characteristics.max_thrust =
-					RDPtr->characteristics.thrust_increment << 1;
+			RDPtr->characteristics.max_thrust = RDPtr->characteristics.thrust_increment << 1;
 		}
 		else
 		{
 			COUNT num_thrusts;
 
-			num_thrusts = RDPtr->characteristics.max_thrust /
-					RDPtr->characteristics.thrust_increment;
-			--RDPtr->characteristics.thrust_increment;
-			RDPtr->characteristics.max_thrust =
-					RDPtr->characteristics.thrust_increment * num_thrusts;
+			num_thrusts = RDPtr->characteristics.max_thrust / RDPtr->characteristics.thrust_increment;
+			RDPtr->characteristics.thrust_increment -= 1 << RESOLUTION_FACTOR; // JMS_GFX
+			RDPtr->characteristics.max_thrust = RDPtr->characteristics.thrust_increment * num_thrusts;
 		}
 		RDPtr->cyborg_control.ManeuverabilityIndex = 0;
 
