@@ -24,7 +24,14 @@
 #include "resinst.h"
 #include "strings.h"
 
+#include "uqm/races.h"
+#include "uqm/grpinfo.h"
 #include "uqm/gameev.h"
+#include "uqm/encount.h"
+// BW: for EncounterGroup, no longer included in commall.h
+
+#include "libs/mathlib.h" // for TFB_Random
+#include "libs/log.h"
 
 
 static LOCDATA shofixti_desc =
@@ -141,6 +148,8 @@ static LOCDATA shofixti_desc =
 	},
 };
 
+static void
+SmallTalk2 (RESPONSE_REF R);
 
 static void
 ExitConversation (RESPONSE_REF R)
@@ -195,41 +204,78 @@ ExitConversation (RESPONSE_REF R)
 }
 
 static void
-ThankYou (RESPONSE_REF R)
-{	
-	(void) R; // satisfy compiler
-	if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
-		NPCPhrase (THANK_YOU_MIFFED);
-	else
-		NPCPhrase (THANK_YOU);
-	
-	DISABLE_PHRASE (sorry_to_hear);	
-
-	Response (farewell_shofixti, ExitConversation);
-
-}
-
-static void
 HowReconstruction (RESPONSE_REF R)
 {	
+	BYTE ThisGroupIsReligious;
+	
 	(void) R; // satisfy compiler
+	
+	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY)
+		ThisGroupIsReligious = EncounterGroup % 2;
+	else
+		ThisGroupIsReligious = TFB_Random () % 2;
 	
 	if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
 		NPCPhrase (NOT_GOOD_RECONSTRUCTION_PRE_MIFFED);
 	else
 		NPCPhrase (NOT_GOOD_RECONSTRUCTION_PRE);
 	
-	NPCPhrase (NOT_GOOD_RECONSTRUCTION);
+	if (ThisGroupIsReligious)
+	{
+		NPCPhrase (RECONSTRUCTION_KISHIBOJIN); // Religious faction
+		SET_GAME_STATE(SHOFIXTI_RELIGIOUS_MET, 1);
+	}
+	else
+	{
+		NPCPhrase (RECONSTRUCTION_TECHNOLOGY); // Tech faction
+		SET_GAME_STATE(SHOFIXTI_TECH_MET, 1);
+	}
+
 	DISABLE_PHRASE (how_goes_reconstruction);	
 
-	Response (sorry_to_hear, ThankYou);
+	if (ThisGroupIsReligious)
+		Response (who_is_kishibojin, SmallTalk2);
+	else
+		Response (sorry_to_hear, SmallTalk2);
+	
+	if (PHRASE_ENABLED (ask_scar))
+		Response (ask_scar, SmallTalk2);
+	
 	Response (farewell_shofixti, ExitConversation);
 }
 
 static void
 SmallTalk2 (RESPONSE_REF R)
 {	
-	if (PLAYER_SAID (R, where_patrol)
+	if (PLAYER_SAID (R, sorry_to_hear))
+	{
+		if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
+			NPCPhrase (THANK_YOU_MIFFED);
+		else
+			NPCPhrase (THANK_YOU);
+		
+		DISABLE_PHRASE (sorry_to_hear);
+	}	
+	else if (PLAYER_SAID (R, who_is_kishibojin))
+	{
+		NPCPhrase (SHE_IS_KISHIBOJIN);
+
+		DISABLE_PHRASE (who_is_kishibojin);
+	}
+	else if (PLAYER_SAID (R, you_talk_differently_tech))
+	{
+		NPCPhrase (YOU_MET_RELIGIOUS);
+
+		DISABLE_PHRASE (you_talk_differently_tech);
+	}
+	else if (PLAYER_SAID (R, you_talk_differently_religious))
+	{
+		NPCPhrase (YOU_MET_NONBELIEVERS);
+		
+		DISABLE_PHRASE (you_talk_differently_religious);
+	}
+	
+	else if (PLAYER_SAID (R, where_patrol)
 		|| PLAYER_SAID (R, where_patrol_2))
 	{
 		if (PLAYER_SAID (R, where_patrol_2))
@@ -250,6 +296,7 @@ SmallTalk2 (RESPONSE_REF R)
 		else if (PLAYER_SAID (R, where_patrol_2))
 			DISABLE_PHRASE (where_patrol_2);
 	}
+	
 	else if (PLAYER_SAID (R, why_not_call))
 	{
 		NPCPhrase (NO_RESOURCES_TO_CALL);
@@ -277,30 +324,27 @@ SmallTalk2 (RESPONSE_REF R)
 		DISABLE_PHRASE (ask_scar);
 	}
 	
+	/* Player's answers */
+	
 	if (PHRASE_ENABLED (where_patrol) && !(GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI)))
-	{
 		Response (where_patrol, SmallTalk2);
-	}
 				 
 	if (PHRASE_ENABLED (where_patrol_2) && GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI))
-	{
 		Response (where_patrol_2, SmallTalk2);
-	}
 	
-	if ( (PLAYER_SAID (R, where_patrol) || PLAYER_SAID (R, where_patrol_2)) && PHRASE_ENABLED (why_not_call))
-	{
+	if ((PLAYER_SAID (R, where_patrol) || PLAYER_SAID (R, where_patrol_2)) && PHRASE_ENABLED (why_not_call))
 		Response (why_not_call, SmallTalk2);
-	}
 
 	if (PHRASE_ENABLED (how_goes_reconstruction))
-	{
 		Response (how_goes_reconstruction, HowReconstruction);
-	}
+	
+	if (PLAYER_SAID (R, who_is_kishibojin) && PHRASE_ENABLED (you_talk_differently_tech) && GET_GAME_STATE(SHOFIXTI_TECH_MET))
+		Response (you_talk_differently_religious, SmallTalk2);
+	else if (PLAYER_SAID (R, sorry_to_hear) && PHRASE_ENABLED (you_talk_differently_religious) && GET_GAME_STATE(SHOFIXTI_RELIGIOUS_MET))
+		Response (you_talk_differently_tech, SmallTalk2);
 
 	if (PHRASE_ENABLED (ask_scar))
-	{
 		Response (ask_scar, SmallTalk2);
-	}
 	
 	Response (farewell_shofixti, ExitConversation);
 }
