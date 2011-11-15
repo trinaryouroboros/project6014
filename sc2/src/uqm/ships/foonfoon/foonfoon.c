@@ -293,34 +293,7 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 	StarShipPtr->ship_input_state &= ~SPECIAL;
 	
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	if (StarShipPtr->special_counter == 0
-		&& lpEvalDesc->ObjectPtr
-		&& lpEvalDesc->which_turn <= 24)
-	{
-		COUNT travel_facing, direction_facing;
-		SIZE delta_x, delta_y;
-		
-		travel_facing = NORMALIZE_FACING (ANGLE_TO_FACING (GetVelocityTravelAngle (&ShipPtr->velocity) + HALF_CIRCLE) );
-		delta_x = lpEvalDesc->ObjectPtr->current.location.x - ShipPtr->current.location.x;
-		delta_y = lpEvalDesc->ObjectPtr->current.location.y - ShipPtr->current.location.y;
-		direction_facing = NORMALIZE_FACING (ANGLE_TO_FACING (ARCTAN (delta_x, delta_y)));
-		
-		if (NORMALIZE_FACING (direction_facing
-							  - (StarShipPtr->ShipFacing + ANGLE_TO_FACING (HALF_CIRCLE))
-							  + ANGLE_TO_FACING (QUADRANT))
-			<= ANGLE_TO_FACING (HALF_CIRCLE)
-			&& (lpEvalDesc->which_turn <= 8
-				|| NORMALIZE_FACING (direction_facing
-					+ ANGLE_TO_FACING (HALF_CIRCLE)
-					- ANGLE_TO_FACING (GetVelocityTravelAngle (&lpEvalDesc->ObjectPtr->velocity))
-					+ ANGLE_TO_FACING (QUADRANT))
-				<= ANGLE_TO_FACING (HALF_CIRCLE))
-			&& (!(StarShipPtr->cur_status_flags &
-				  (SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL))
-				|| NORMALIZE_FACING (direction_facing - travel_facing + ANGLE_TO_FACING (QUADRANT))
-				<= ANGLE_TO_FACING (HALF_CIRCLE)))
-			StarShipPtr->ship_input_state |= SPECIAL;
-	}
+	
 }
 
 // Forward declarations.
@@ -649,28 +622,51 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 	STATUS_FLAGS cur_status_flags;
 	BYTE frame_index, i;
-	static BYTE not_had_pause[NUM_SIDES] = {0};
-	static BYTE focusball_exists[NUM_SIDES] = {0};
+	static BYTE not_had_pause[NUM_SIDES]	= {0};
+	static BYTE focusball_exists[NUM_SIDES]	= {0};
+	
+	// For keeping the VUX limpet effects after spinning blade.
+	static BYTE basic_max_thrust[3 * NUM_SIDES] = {MAX_THRUST, MAX_THRUST, MAX_THRUST_2XRES, MAX_THRUST_2XRES, MAX_THRUST_4XRES, MAX_THRUST_4XRES};
+	static BYTE basic_thrust_wait[NUM_SIDES]= {THRUST_WAIT, THRUST_WAIT};
+	static BYTE basic_turn_wait[NUM_SIDES]	= {TURN_WAIT, TURN_WAIT};
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	RDPtr = StarShipPtr->RaceDescPtr;
+	
 	cur_status_flags = StarShipPtr->cur_status_flags;
 	
 	frame_index = GetFrameIndex (ElementPtr->current.image.frame);
 	
+	// Store the original turning rate & max speed if not in dervish mode, or the slow state after dervish.
+	if (StarShipPtr->special_counter == 0 
+		&& RDPtr->characteristics.turn_wait > 0
+		&& frame_index < NUM_SHIP_FACINGS
+		&& !(StarShipPtr->RaceDescPtr->ship_info.damage_flags & DAMAGE_THRUST))
+	{
+		basic_max_thrust[2 * RESOLUTION_FACTOR + ElementPtr->playerNr]  = RDPtr->characteristics.max_thrust;
+		basic_thrust_wait[ElementPtr->playerNr] = RDPtr->characteristics.thrust_wait;
+		basic_turn_wait[ElementPtr->playerNr]	= RDPtr->characteristics.turn_wait;
+	}
+	
 	// After using special: Thrust is sloooow for a while.
 	if (StarShipPtr->special_counter > 0)
-	//if (RDPtr->ship_info.energy_level < SPECIAL_ENERGY_COST)
 	{
 		// Slooooow.
-		RDPtr->characteristics.max_thrust   = (MAX_THRUST << RESOLUTION_FACTOR) / 4;
-		RDPtr->characteristics.thrust_wait	= 3;
+		if ((MAX_THRUST << RESOLUTION_FACTOR) / 4 < basic_max_thrust[2 * RESOLUTION_FACTOR + ElementPtr->playerNr])
+			RDPtr->characteristics.max_thrust = (MAX_THRUST << RESOLUTION_FACTOR) / 4;
+		else
+			RDPtr->characteristics.max_thrust = basic_max_thrust[2 * RESOLUTION_FACTOR + ElementPtr->playerNr];
+		
+		if (basic_thrust_wait[ElementPtr->playerNr] > 3)
+			RDPtr->characteristics.thrust_wait	= basic_thrust_wait[ElementPtr->playerNr];
+		else
+			RDPtr->characteristics.thrust_wait	= 3;
 
 		// Blue ion trail tells the player when dervish mode is unusable.
 		StarShipPtr->RaceDescPtr->ship_info.damage_flags |= DAMAGE_THRUST;
 		
 		// Turning just returns to normal.
-		RDPtr->characteristics.turn_wait = TURN_WAIT;
+		RDPtr->characteristics.turn_wait = basic_turn_wait[ElementPtr->playerNr];
 		
 		// Battery charges normally when not in dervish mode.
 		RDPtr->characteristics.energy_regeneration = ENERGY_REGENERATION;
@@ -756,7 +752,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 			
 			// Return to normal graphics.
 			if ((GetFrameIndex (ElementPtr->current.image.frame)) >= NUM_SHIP_FACINGS)
-				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, frame_index - NUM_SHIP_FACINGS);
+				ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->next.image.frame, StarShipPtr->ShipFacing);
 			
 			// End the spinning blade sound.
 			for (i = FIRST_SFX_CHANNEL; i <= LAST_SFX_CHANNEL; ++i)
@@ -783,9 +779,9 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 		}
 		
 		// Turning rate & max speed are normal when not in dervish mode.
-		RDPtr->characteristics.thrust_wait	= THRUST_WAIT;
-		RDPtr->characteristics.turn_wait	= TURN_WAIT;
-		RDPtr->characteristics.max_thrust   = MAX_THRUST << RESOLUTION_FACTOR;
+		RDPtr->characteristics.max_thrust	= basic_max_thrust[2 * RESOLUTION_FACTOR + ElementPtr->playerNr];
+		RDPtr->characteristics.thrust_wait	= basic_thrust_wait[ElementPtr->playerNr];
+		RDPtr->characteristics.turn_wait	= basic_turn_wait[ElementPtr->playerNr];
 		StarShipPtr->RaceDescPtr->ship_info.damage_flags &= ~(DAMAGE_THRUST);
 		
 		// Battery charges normally when not in dervish mode.
