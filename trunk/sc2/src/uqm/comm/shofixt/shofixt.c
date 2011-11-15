@@ -151,9 +151,12 @@ static LOCDATA shofixti_desc =
 static void
 SmallTalk2 (RESPONSE_REF R);
 
+// Religious Shofixti groups have different goodbyes than tech-oriented groups.
 static void
 ExitConversation (RESPONSE_REF R)
 {
+	BYTE ThisGroupIsReligious = GET_GAME_STATE (SHOFIXTI_RELIGIOUS_GROUP); // Set already in Intro
+	
 	if (PLAYER_SAID (R, no_joke_attack))
 	{
 		NPCPhrase (KYAIEE);
@@ -162,28 +165,46 @@ ExitConversation (RESPONSE_REF R)
 	}	
 	else if (PLAYER_SAID (R, farewell_shofixti))
 	{
-		BYTE NumVisits = GET_GAME_STATE (SHOFIXTI_VISITS);
+		BYTE RandomGoodbye = 1 + (TFB_Random () % 4);
 		
 		if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
 		{
 			NPCPhrase (MIFFED_GOODBYE_EARTHLING);
 		}
-		else
+		else if (ThisGroupIsReligious)
 		{
-			switch (NumVisits++)
+			switch (RandomGoodbye)
 			{
 				case 1:
-					NPCPhrase (GOODBYE_EARTHLING_1);
+					NPCPhrase (GOODBYE_RELIGIOUS_EARTHLING_1);
 					break;
 				case 2:
-					NPCPhrase (GOODBYE_EARTHLING_2);
+					NPCPhrase (GOODBYE_RELIGIOUS_EARTHLING_2);
 					break;
 				case 3:
-					NPCPhrase (GOODBYE_EARTHLING_3);
+					NPCPhrase (GOODBYE_RELIGIOUS_EARTHLING_3);
 					break;
 				case 4:
-					NPCPhrase (GOODBYE_EARTHLING_4);
+					NPCPhrase (GOODBYE_RELIGIOUS_EARTHLING_4);
 					break;
+			}
+		}
+		else
+		{
+			switch (RandomGoodbye)
+			{
+				case 1:
+					NPCPhrase (GOODBYE_TECH_EARTHLING_1);
+					break;
+				case 2:
+					NPCPhrase (GOODBYE_TECH_EARTHLING_2);
+					break;
+				case 3:
+					NPCPhrase (GOODBYE_TECH_EARTHLING_3);
+					break;
+				case 4:
+					NPCPhrase (GOODBYE_TECH_EARTHLING_4);
+					break;	
 			}
 		}
 		SET_GAME_STATE (BATTLE_SEGUE, 0);
@@ -209,11 +230,9 @@ HowReconstruction (RESPONSE_REF R)
 	BYTE ThisGroupIsReligious;
 	
 	(void) R; // satisfy compiler
+	ThisGroupIsReligious = GET_GAME_STATE (SHOFIXTI_RELIGIOUS_GROUP); // Set already in Intro
 	
-	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY)
-		ThisGroupIsReligious = EncounterGroup % 2;
-	else
-		ThisGroupIsReligious = TFB_Random () % 2;
+	/* Shofixti answers */
 	
 	if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
 		NPCPhrase (NOT_GOOD_RECONSTRUCTION_PRE_MIFFED);
@@ -233,6 +252,9 @@ HowReconstruction (RESPONSE_REF R)
 
 	DISABLE_PHRASE (how_goes_reconstruction);	
 
+	
+	/* Player's answers */
+	
 	if (ThisGroupIsReligious)
 		Response (who_is_kishibojin, SmallTalk2);
 	else
@@ -247,6 +269,8 @@ HowReconstruction (RESPONSE_REF R)
 static void
 SmallTalk2 (RESPONSE_REF R)
 {	
+	/* Shofixti answers */
+	
 	if (PLAYER_SAID (R, sorry_to_hear))
 	{
 		if (GET_GAME_STATE(SHOFIXTI_ANGRY) > 0)
@@ -354,6 +378,8 @@ SmallTalk2 (RESPONSE_REF R)
 static void
 SmallTalk1 (RESPONSE_REF R)
 {	
+	/* Shofixti answers */
+	
 	if (PLAYER_SAID (R, chmmr_hunt_kohrah))
 	{
 		NPCPhrase (SLAVE_SHIELD_BEST_PLACE);
@@ -366,7 +392,10 @@ SmallTalk1 (RESPONSE_REF R)
 	{
 		NPCPhrase (DONT_JOKE);
 	}
+	
 
+	/* Player's answers */
+	
 	if (!(GET_GAME_STATE(TRIANGULATION_SPHERES_SHOFIXTI)))
 		Response (where_patrol, SmallTalk2);
 	else
@@ -398,12 +427,27 @@ LastChanceToBackUp (RESPONSE_REF R)
 	Response (no_joke_attack, ExitConversation);
 }
 
-
+// Religious Shofixti groups have different hellos than tech-oriented groups.
 static void
 Intro (void)
 {
-
 	BYTE NumVisits;
+	BYTE ThisGroupIsReligious;
+	
+		/* Decide whether this is a religious battlegroup or not. */
+	
+	if (LOBYTE (GLOBAL (CurrentActivity)) == IN_INTERPLANETARY)
+		ThisGroupIsReligious = EncounterGroup % 2;
+	else
+		ThisGroupIsReligious = TFB_Random () % 2;
+	
+	if (ThisGroupIsReligious)
+		SET_GAME_STATE (SHOFIXTI_RELIGIOUS_GROUP, 1);
+	else
+		SET_GAME_STATE (SHOFIXTI_RELIGIOUS_GROUP, 0);
+	
+	
+		/* Shofixti answers */
 	
 	if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 1)
 	{
@@ -428,13 +472,16 @@ Intro (void)
 		SmallTalk1 (0);
 		SET_GAME_STATE (SHOFIXTI_VISITS, NumVisits);
 	}
+	
 	else if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 2)
 		DoShofixtiAngry (0);
+	
 	else if (GET_GAME_STATE (SHOFIXTI_ANGRY) == 3)
 	{
 		SET_GAME_STATE (BATTLE_SEGUE, 1);
 		NPCPhrase (ANGRY_SHOFIXTI_GREETING_2);
 	}
+	
 	else
 	{
 		NumVisits = GET_GAME_STATE (SHOFIXTI_VISITS);
@@ -443,7 +490,7 @@ Intro (void)
 			NPCPhrase (GREAT_NEWS);
 			SET_GAME_STATE(SHOFIXTI_GREAT_NEWS_HEARD, 1);
 		}
-		else 
+		else if (ThisGroupIsReligious)
 		{
 			switch (NumVisits++)
 			{
@@ -451,22 +498,47 @@ Intro (void)
 					NPCPhrase (SHOFIXTI_GREETING_1);
 					break;
 				case 1:
-					NPCPhrase (SHOFIXTI_GREETING_2);
+					NPCPhrase (RELIGIOUS_SHOFIXTI_GREETING_2);
 					break;
 				case 2:
-					NPCPhrase (SHOFIXTI_GREETING_3);
+					NPCPhrase (RELIGIOUS_SHOFIXTI_GREETING_3);
 					break;
 				case 3:
-					NPCPhrase (SHOFIXTI_GREETING_4);
+					NPCPhrase (RELIGIOUS_SHOFIXTI_GREETING_4);
 					break;
 				case 4:
-					NPCPhrase (SHOFIXTI_GREETING_4);
+					NPCPhrase (RELIGIOUS_SHOFIXTI_GREETING_4);
+					--NumVisits;
+					break;
+			}
+		}
+		else
+		{
+			switch (NumVisits++)
+			{
+				case 0:
+					NPCPhrase (SHOFIXTI_GREETING_1);
+					break;
+				case 1:
+					NPCPhrase (TECH_SHOFIXTI_GREETING_2);
+					break;
+				case 2:
+					NPCPhrase (TECH_SHOFIXTI_GREETING_3);
+					break;
+				case 3:
+					NPCPhrase (TECH_SHOFIXTI_GREETING_4);
+					break;
+				case 4:
+					NPCPhrase (TECH_SHOFIXTI_GREETING_4);
 					--NumVisits;
 					break;
 			}
 		}
 		
 		SET_GAME_STATE (SHOFIXTI_VISITS, NumVisits);
+		
+		
+		/* Player's answers */
 		
 		if (GET_GAME_STATE(SHOFIXTI_MET) == 0)
 		{
@@ -506,6 +578,8 @@ init_shofixti_comm (void)
 	shofixti_desc.AlienTextBaseline.y = 0;
 	shofixti_desc.AlienTextWidth = SIS_TEXT_WIDTH - 4;
 
+	// The Shofixti are ready to attack if pissed off badly enough.
+	// At 2 player may still soothe them, but at 3 all is lost.
 	if (GET_GAME_STATE (SHOFIXTI_ANGRY) > 1)
 		SET_GAME_STATE (BATTLE_SEGUE, 1);
 	else

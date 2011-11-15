@@ -2,16 +2,26 @@
 Greetings, honorable Captain! Welcome back to Shofixti Space!
 It's been too long. What news from the New Alliance of Free Stars?
 
-#(SHOFIXTI_GREETING_2)
+#(TECH_SHOFIXTI_GREETING_2)
 Well met, brave Captain!
 I trust I greet you in strong health!
 
-#(SHOFIXTI_GREETING_3)
-Honorable savior, how may one assist you?
+#(TECH_SHOFIXTI_GREETING_3)
+Honorable Captain. How good it is to see you again.
 
-#(SHOFIXTI_GREETING_4)
+#(TECH_SHOFIXTI_GREETING_4)
 Hello again, Captain!
 What tidings do you bear?
+
+#(RELIGIOUS_SHOFIXTI_GREETING_2)
+Greetings, great Captain!
+I pray the spirits will favor you this day.
+
+#(RELIGIOUS_SHOFIXTI_GREETING_3)
+Captain, Your humble servant awaits your request.
+
+#(RELIGIOUS_SHOFIXTI_GREETING_4)
+Honorable savior, how may one assist you?
 
 #(MIFFED_SHOFIXTI_GREETING_1)
 Ah, the Earthling who pulled the funniest prank on us.
@@ -241,17 +251,29 @@ not on a planetary scale at least.
 #(farewell_shofixti)
 Farewell Shofixti, see you next time!
 
-#(GOODBYE_EARHTLING_1)
+#(GOODBYE_TECH_EARHTLING_1)
 Goodbye Earthling, come back soon!
 
-#(GOODBYE_EARHTLING_2)
+#(GOODBYE_TECH_EARHTLING_2)
+Good tidings to you and the Earthling kind!
+
+#(GOODBYE_TECH_EARHTLING_3)
+Goodbye Earthling, come back soon!
+
+#(GOODBYE_TECH_EARHTLING_4)
+Good tidings to you and the Earthling kind!
+
+#(GOODBYE_RELIGIOUS_EARHTLING_1)
 May Success and Serenity keep watch over your soul!
 
-#(GOODBYE_EARHTLING_3)
+#(GOODBYE_RELIGIOUS_EARHTLING_2)
+Gods great and small bless your voyage!
+
+#(GOODBYE_RELIGIOUS_EARHTLING_3)
 May your ancestors bless your path!
 
-#(GOODBYE_EARHTLING_4)
-Good tidings to you and the Earthling kind!
+#(GOODBYE_RELIGIOUS_EARHTLING_4)
+Gods great and small bless your voyage!
 
 #(MIFFED_GOODBYE_EARHTLING)
 Later.
