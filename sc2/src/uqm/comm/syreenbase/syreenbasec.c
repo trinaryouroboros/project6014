@@ -22,9 +22,14 @@
 #include "resinst.h"
 #include "strings.h"
 #include "libs/sound/sound.h"
+#include "libs/inplib.h"
 
 #include "uqm/build.h"
+#include "uqm/setup.h"
+#include "uqm/shipcont.h"
 
+
+static void SellMinerals (RESPONSE_REF R);
 
 static LOCDATA syreenbase_desc =
 {
@@ -89,7 +94,7 @@ static void
 ExitConversation (RESPONSE_REF R)
 {
 	(void) R; // satisfy compiler
-	NPCPhrase (COME_BACK_ANYTIME_MOOSY);
+	NPCPhrase (COME_BACK_ANYTIME_LUCIELLE);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }
 
@@ -118,11 +123,14 @@ AskMenu1 (RESPONSE_REF R)
 		Response (not_hot, AskMenu1);
 	}
 
-    if (PHRASE_ENABLED (huge_fan))
+	if (PHRASE_ENABLED (huge_fan))
 	{
 		Response (huge_fan, AskMenu1);
 	}
 	
+	if (GLOBAL_SIS (TotalElementMass))
+		Response (minerals_here, SellMinerals);
+
 	if (PHRASE_ENABLED (must_be_going))
 	{
 		Response (must_be_going, ExitConversation);
@@ -145,6 +153,8 @@ SyreenResponse1 (RESPONSE_REF R)
 
 	Response (huge_fan, AskMenu1);
 	Response (not_hot, AskMenu1);
+	if (GLOBAL_SIS (TotalElementMass))
+		Response (minerals_here, SellMinerals);
 	Response (must_be_going, ExitConversation);
 }
 
@@ -154,11 +164,13 @@ NiceComplement (RESPONSE_REF R)
 {	
 	if (PLAYER_SAID (R, had_to_stop_by))
 	{
-		NPCPhrase (MOOSY_SAYS_HI);
+		NPCPhrase (LUCY_SAYS_HI);
 	}
 	
 	Response (i_ll_tell_her, SyreenResponse1);
 	Response (perfect_name, SyreenResponse1);
+	if (GLOBAL_SIS (TotalElementMass))
+		Response (minerals_here, SellMinerals);
 	Response (must_be_going, ExitConversation);
 }
 
@@ -175,11 +187,87 @@ AnyAssistance (RESPONSE_REF R)
 		NPCPhrase (YOU_CUTIE);
 	}
 
+	else if  (PLAYER_SAID (R, hello))
+	{
+		NPCPhrase (WELCOME);
+	}
+
 	Response (huge_fan, AskMenu1);
 	Response (not_hot, AskMenu1);
+	if (GLOBAL_SIS (TotalElementMass))
+		Response (minerals_here, SellMinerals);
 	Response (must_be_going, ExitConversation);
 }
 
+static void
+SellMinerals (RESPONSE_REF R)
+{
+	COUNT i, total;
+	BOOLEAN Sleepy;
+
+	total = 0;
+	Sleepy = TRUE;
+	for (i = 0; i < NUM_ELEMENT_CATEGORIES; ++i)
+	{
+		COUNT amount;
+		DWORD TimeIn = 0;
+
+		if (i == 0)
+		{
+			DrawCargoStrings ((BYTE)~0, (BYTE)~0);
+			SleepThread (ONE_SECOND / 2);
+			TimeIn = GetTimeCounter ();
+			DrawCargoStrings ((BYTE)0, (BYTE)0);
+		}
+		else if (Sleepy)
+		{
+			DrawCargoStrings ((BYTE)(i - 1), (BYTE)i);
+			TimeIn = GetTimeCounter ();
+		}
+
+		if ((amount = GLOBAL_SIS (ElementAmounts[i])) != 0)
+		{
+			total += amount * GLOBAL (ElementWorth[i]);
+			do
+			{
+				if (!Sleepy || AnyButtonPress (TRUE) ||
+						(GLOBAL (CurrentActivity) & CHECK_ABORT))
+				{
+					Sleepy = FALSE;
+					GLOBAL_SIS (ElementAmounts[i]) = 0;
+					GLOBAL_SIS (TotalElementMass) -= amount;
+					LockMutex (GraphicsLock);
+					DeltaSISGauges (0, 0, amount * GLOBAL (ElementWorth[i]));
+					UnlockMutex (GraphicsLock);
+					break;
+				}
+				
+				--GLOBAL_SIS (ElementAmounts[i]);
+				--GLOBAL_SIS (TotalElementMass);
+				TaskSwitch ();
+				TimeIn = GetTimeCounter ();
+				DrawCargoStrings ((BYTE)i, (BYTE)i);
+				LockMutex (GraphicsLock);
+				ShowRemainingCapacity ();
+				DeltaSISGauges (0, 0, GLOBAL (ElementWorth[i]));
+				UnlockMutex (GraphicsLock);
+			} while (--amount);
+		}
+		if (Sleepy) {
+			SleepThreadUntil (TimeIn + (ONE_SECOND / 4));
+			TimeIn = GetTimeCounter ();
+		}
+	}
+	SleepThread (ONE_SECOND / 2);
+
+	LockMutex (GraphicsLock);
+	ClearSISRect (DRAW_SIS_DISPLAY);
+	UnlockMutex (GraphicsLock);
+
+	NPCPhrase (MINERALS);
+
+	AskMenu1 (R);
+}
 
 static void
 Intro (void)
@@ -189,9 +277,10 @@ Intro (void)
 		SET_GAME_STATE (SYREEN_MET, 1);
 	}
 
-	NPCPhrase (MOOSY_GREETING);
+	NPCPhrase (LUCIELLE_GREETING);
 
 	Response (holy_crap, AnyAssistance);
+	Response (hello, AnyAssistance);
 	Response (am_i_lost, AnyAssistance);
 	Response (had_to_stop_by, NiceComplement);
 }
@@ -219,7 +308,7 @@ init_syreenbase_comm (void)
 	syreenbase_desc.uninit_encounter_func = uninit_syreen;
 
 	syreenbase_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreenbase_desc.AlienTextBaseline.y = RES_SIS_SCALE(100);
+	syreenbase_desc.AlienTextBaseline.y = 100 << RESOLUTION_FACTOR;
 	syreenbase_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);

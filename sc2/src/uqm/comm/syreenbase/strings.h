@@ -22,22 +22,26 @@
 enum
 {
 	NULL_PHRASE,
-	MOOSY_GREETING,
+	LUCIELLE_GREETING,
 	holy_crap,
+	hello,
 	am_i_lost,
 	had_to_stop_by,
-	MOOSY_SAYS_HI,
+	LUCY_SAYS_HI,
 	i_ll_tell_her,
 	perfect_name,
+	minerals_here,
+	WELCOME,
 	THANKS_SUGAR, 
 	YOU_CUTIE,
 	TALK_TO_COMMANDER,
+	MINERALS,
 	huge_fan,
 	JEALOUS,
         not_hot,
 	MUCH_WOMAN,
 	must_be_going,
-	COME_BACK_ANYTIME_MOOSY,
+	COME_BACK_ANYTIME_LUCIELLE,
 
 };
 

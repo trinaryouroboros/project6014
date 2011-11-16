@@ -1,4 +1,4 @@
-#(lucielle_GREETING)
+#(LUCIELLE_GREETING)
 Sorry handsome, but your princess is in another castle.
 
 #(holy_crap)
@@ -13,7 +13,7 @@ Am I lost? This is the Syreen homeworld, right?
 #(had_to_stop_by)
 Talana asked I stop by to say "hi".
 
-#(MOOSY_SAYS_HI)
+#(LUCY_SAYS_HI)
 Awww. Isn't she just a sweetheart? You tell her Lucielle says "Hi".
 
 #(i_ll_tell_her)
@@ -61,5 +61,5 @@ your loss Captain. Most Syreen are skinny.
 #(must_be_going)
 Well, ummm, I really must be going now.
 
-#(COME_BACK_ANYTIME_lucielle)
+#(COME_BACK_ANYTIME_LUCIELLE)
 Come back anytime, sugar!
