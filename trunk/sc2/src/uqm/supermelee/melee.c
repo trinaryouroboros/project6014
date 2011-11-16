@@ -1641,8 +1641,8 @@ DoConnectingDialog (MELEE_STATE *pMS)
 		oldfont = SetContextFont (StarConFont);
 		oldcolor = SetContextForeGroundColor (BLACK_COLOR);
 		BatchGraphics ();
-		r.extent.width = 200;
-		r.extent.height = 30;
+		r.extent.width = 200 << RESOLUTION_FACTOR;
+		r.extent.height = 30 << RESOLUTION_FACTOR;
 		r.corner.x = (SCREEN_WIDTH - r.extent.width) >> 1;
 		r.corner.y = (SCREEN_HEIGHT - r.extent.height) >> 1;
 		DrawShadowedBox (&r, SHADOWBOX_BACKGROUND_COLOR, 
@@ -1658,7 +1658,7 @@ DoConnectingDialog (MELEE_STATE *pMS)
 			t.pStr = GAME_STRING (NETMELEE_STRING_BASE + 2);
 					/* "Awaiting outgoing connection */
 		}
-		t.baseline.y = r.corner.y + 10;
+		t.baseline.y = r.corner.y + (10 << RESOLUTION_FACTOR);
 		t.baseline.x = SCREEN_WIDTH >> 1;
 		t.align = ALIGN_CENTER;
 		t.CharCount = ~0;
@@ -1666,7 +1666,7 @@ DoConnectingDialog (MELEE_STATE *pMS)
 
 		t.pStr = GAME_STRING (NETMELEE_STRING_BASE + 18);
 				/* "Press SPACE to cancel" */
-		t.baseline.y += 16;
+		t.baseline.y += 16 << RESOLUTION_FACTOR;
 		font_DrawText (&t);
 
 		// Restore original graphics
