@@ -29,8 +29,8 @@
 #include "libs/graphics/widgets.h"
 #include "supermelee/netplay/netoptions.h"
 
-#define MCD_WIDTH 260
-#define MCD_HEIGHT 110
+#define MCD_WIDTH (260 << RESOLUTION_FACTOR)
+#define MCD_HEIGHT (110 << RESOLUTION_FACTOR)
 
 #define MENU_FRAME_RATE (ONE_SECOND / 20)
 
@@ -80,12 +80,12 @@ MCD_DrawMenuScreen (WIDGET *_self, int x, int y)
 
 	WIDGET_MENU_SCREEN *self = (WIDGET_MENU_SCREEN *)_self;
 	
-	widget_y = y + 8;
+	widget_y = y + (8 << RESOLUTION_FACTOR);
 	for (widget_index = 0; widget_index < self->num_children; widget_index++)
 	{
 		WIDGET *c = self->child[widget_index];
 		(*c->draw)(c, x, widget_y);
-		widget_y += (*c->height)(c) + 8;
+		widget_y += (*c->height)(c) + (8 << RESOLUTION_FACTOR);
 	}
 }
 
@@ -102,7 +102,7 @@ MCD_DrawButton (WIDGET *_self, int x, int y)
 	selected = MENU_HIGHLIGHT_COLOR;
 	inactive = MENU_TEXT_COLOR;
 
-	t.baseline.x = 160;
+	t.baseline.x = 160 << RESOLUTION_FACTOR;
 	t.baseline.y = y;
 	t.align = ALIGN_CENTER;
 	t.CharCount = ~0;
@@ -153,14 +153,14 @@ MCD_DrawSlider (WIDGET *_self, int x, int y)
 	font_DrawText (&t);
 
 	r.corner.x = t.baseline.x + 3 * tick;
-	r.corner.y = t.baseline.y - 4;
-	r.extent.height = 2;
+	r.corner.y = t.baseline.y - (4 << RESOLUTION_FACTOR);
+	r.extent.height = 2 << RESOLUTION_FACTOR;
 	r.extent.width = 3 * tick;
 	DrawFilledRectangle (&r);
 
-	r.extent.width = 3;
-	r.extent.height = 8;
-	r.corner.y = t.baseline.y - 7;
+	r.extent.width = 3 << RESOLUTION_FACTOR;
+	r.extent.height = 8 << RESOLUTION_FACTOR;
+	r.corner.y = t.baseline.y - (7 << RESOLUTION_FACTOR);
 	r.corner.x = t.baseline.x + 3 * tick + (3 * tick *
 			(self->value - self->min) / (self->max - self->min)) - 1;
 	DrawFilledRectangle (&r);
@@ -212,7 +212,7 @@ MCD_DrawTextEntry (WIDGET *_self, int x, int y)
 
 	if (!(self->state & WTE_EDITING))
 	{	// normal or selected state
-		t.baseline.x = 160;
+		t.baseline.x = 160 << RESOLUTION_FACTOR;
 		t.align = ALIGN_CENTER;
 
 		if (widget_focus == _self)
@@ -234,7 +234,7 @@ MCD_DrawTextEntry (WIDGET *_self, int x, int y)
 		RECT r;
 		SIZE leading;
 
-		t.baseline.x = x + 90;
+		t.baseline.x = x + (90 << RESOLUTION_FACTOR);
 		t.align = ALIGN_LEFT;
 
 		// calc background box dimensions
@@ -245,7 +245,7 @@ MCD_DrawTextEntry (WIDGET *_self, int x, int y)
 		GetContextFontLeading (&leading);
 		r.corner.x = t.baseline.x - 1;
 		r.corner.y = t.baseline.y - leading + BOX_VERT_OFFSET;
-		r.extent.width = MCD_WIDTH - r.corner.x - 10;
+		r.extent.width = MCD_WIDTH - r.corner.x - (10 << RESOLUTION_FACTOR);
 		r.extent.height = leading + 2;
 
 		TextRect (&t, &text_r, char_deltas);
@@ -536,7 +536,7 @@ DrawConnectDialog (void)
 	DrawShadowedBox (&r, SHADOWBOX_BACKGROUND_COLOR,
 			SHADOWBOX_DARK_COLOR, SHADOWBOX_MEDIUM_COLOR);
 
-	menu.draw ((WIDGET *)&menu, r.corner.x + 10, r.corner.y + 10);
+	menu.draw ((WIDGET *)&menu, r.corner.x + (10 << RESOLUTION_FACTOR), r.corner.y + (10 << RESOLUTION_FACTOR));
 
 	UnlockMutex (GraphicsLock);
 }

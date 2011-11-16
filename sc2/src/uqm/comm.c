@@ -1371,7 +1371,7 @@ HailAlien (void)
 	TextCacheContext = CreateContext ("TextCacheContext");
 	TextCacheFrame = CaptureDrawable (
 			CreateDrawable (WANT_PIXMAP, SIS_SCREEN_WIDTH,
-			SIS_SCREEN_HEIGHT - SLIDER_Y - SLIDER_HEIGHT + (2 << RESOLUTION_FACTOR), 1));
+			SLIDER_Y + 2, 1));
 	SetContext (TextCacheContext);
 	SetContextFGFrame (TextCacheFrame);
 	TextBack = BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x10), 0x00);
