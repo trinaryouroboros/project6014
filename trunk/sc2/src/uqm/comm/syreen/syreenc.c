@@ -380,7 +380,7 @@ init_syreen_comm (void)
 	syreen_desc.uninit_encounter_func = uninit_syreen;
 
 	syreen_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-	syreen_desc.AlienTextBaseline.y = RES_CASE(100,200,400);
+	syreen_desc.AlienTextBaseline.y = 100 << RESOLUTION_FACTOR;
 	syreen_desc.AlienTextWidth = SIS_TEXT_WIDTH - 4;
 
 	SET_GAME_STATE (BATTLE_SEGUE, 0);

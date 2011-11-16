@@ -1032,9 +1032,9 @@ turret_postprocess (ELEMENT *ElementPtr)
 							&& (hTurretEffect = AllocElement ()))
 					{
 						TurretPtr->current.location.x -=
-								COSINE (facing, DISPLAY_TO_WORLD (2));
+							COSINE (facing, DISPLAY_TO_WORLD (2) << RESOLUTION_FACTOR);
 						TurretPtr->current.location.y -=
-								SINE (facing, DISPLAY_TO_WORLD (2));
+							SINE (facing, DISPLAY_TO_WORLD (2) << RESOLUTION_FACTOR);
 
 						LockElement (hTurretEffect, &TurretEffectPtr);
 						TurretEffectPtr->playerNr = ElementPtr->playerNr;
@@ -1109,10 +1109,10 @@ turret_postprocess (ELEMENT *ElementPtr)
 				facing = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 				SpaceMarinePtr->current.location.x =
 						ShipPtr->current.location.x
-						- COSINE (facing, DISPLAY_TO_WORLD (TURRET_OFFSET));
+					- COSINE (facing, DISPLAY_TO_WORLD (TURRET_OFFSET << ((RESOLUTION_FACTOR + 1)/2)));
 				SpaceMarinePtr->current.location.y =
 						ShipPtr->current.location.y
-						- SINE (facing, DISPLAY_TO_WORLD (TURRET_OFFSET));
+						- SINE (facing, DISPLAY_TO_WORLD (TURRET_OFFSET << ((RESOLUTION_FACTOR + 1)/2)));
 				SpaceMarinePtr->current.image.farray =
 						StarShipPtr->RaceDescPtr->ship_data.special;
 				SpaceMarinePtr->current.image.frame = SetAbsFrameIndex (
