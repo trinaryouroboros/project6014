@@ -1,0 +1,2395 @@
+#(Denebola )
+Denebola
+
+
+#(Acamar)
+Acamar
+
+
+#(Acoreus)
+Acoreus
+
+
+#(Adrastus)
+Adrastus
+
+
+#(Aeolus)
+Aeolus
+
+
+#(Alcyone)
+Alcyone
+
+
+#(Angstrom)
+Angstrom
+
+
+#(Apollonius)
+Apollonius
+
+
+#(Arachne)
+Arachne
+
+
+#(Caeli)
+Caeli
+
+
+#(Archimedes)
+Archimedes
+
+
+#(Archytas)
+Archytas
+
+
+#(Ares)
+Ares
+
+
+#(Aristillus)
+Aristillus
+
+
+#(Artemis)
+Artemis
+
+
+#(Ascella)
+Ascella
+
+
+#(Auster)
+Auster
+
+
+#(Bellona)
+Bellona
+
+
+#(Bessel)
+Bessel
+
+
+#(Canis Majoris)
+Canis Majoris
+
+
+#(Canis Minoris)
+Canis Minoris
+
+
+#(Cassini)
+Cassini
+
+
+#(Celaeno)
+Celaeno
+
+
+#(Conon)
+Conon
+
+
+#(Demeter)
+Demeter
+
+
+#(Electra)
+Electra
+
+
+#(Eltanin)
+Eltanin
+
+
+#(Eurus)
+Eurus
+
+
+#(Faunus)
+Faunus
+
+
+#(Favonius)
+Favonius
+
+
+#(Fortuna)
+Fortuna
+
+
+#(Fraunhofer)
+Fraunhofer
+
+
+#(Gacrux )
+Gacrux 
+
+
+#(Galilei)
+Galilei
+
+
+#(Halley)
+Halley
+
+
+#(Hecate)
+Hecate
+
+
+#(Heraclides)
+Heraclides
+
+
+#(Hespera)
+Hespera
+
+
+#(Hestia)
+Hestia
+
+
+#(Hicetas)
+Hicetas
+
+
+#(Hulse)
+Hulse
+
+
+#(Huygens)
+Huygens
+
+
+#(Hydri)
+Hydri
+
+
+#(Hygea)
+Hygea
+
+
+#(Hyginus)
+Hyginus
+
+
+#(Hymen)
+Hymen
+
+
+#(Hypnos)
+Hypnos
+
+
+#(Janus)
+Janus
+
+
+#(Juno)
+Juno
+
+
+#(Juturna)
+Juturna
+
+
+#(Juventus)
+Juventus
+
+
+#(Kapteyn)
+Kapteyn
+
+
+#(Kornephoros)
+Kornephoros
+
+
+#(Lemaitre)
+Lemaitre
+
+
+#(Eris)
+Eris
+
+
+#(Libitina)
+Libitina
+
+
+#(Lupi)
+Lupi
+
+
+#(Lycaeus)
+Lycaeus
+
+
+#(Macrobius)
+Macrobius
+
+
+#(Menelaus)
+Menelaus
+
+
+#(Menkent)
+Menkent
+
+
+#(Messier)
+Messier
+
+
+#(Meton)
+Meton
+
+
+#(Minerva)
+Minerva
+
+
+#(Naos)
+Naos
+
+
+#(Notus)
+Notus
+
+
+#(Pales)
+Pales
+
+
+#(Morpheus)
+Morpheus
+
+
+#(Poena)
+Poena
+
+
+#(Priapus)
+Priapus
+
+
+#(Proclus)
+Proclus
+
+
+#(Riccioli)
+Riccioli
+
+
+#(Sylvanus)
+Sylvanus
+
+
+#(Syrma)
+Syrma
+
+
+#(Serpentis)
+Serpentis
+
+
+#(Sextantis)
+Sextantis
+
+
+#(Tauri)
+Tauri
+
+
+#(Ursae Minoris)
+Ursae Minoris
+
+
+#(Bootis)
+Bootis
+
+
+#(Olber)
+Olber
+
+
+#(Centauri)
+Centauri
+
+
+#(Ptolemae)
+Ptolemae
+
+
+#(Gorno)
+Gorno
+
+
+#(Velorum)
+Velorum
+
+
+#(Virginis)
+Virginis
+
+
+#(Volantis)
+Volantis
+
+
+#(Vulpeculae)
+Vulpeculae
+
+
+#(Lalande)
+Lalande
+
+
+#(Luyten)
+Luyten
+
+
+#(Indi)
+Indi
+
+
+#(Lacaille)
+Lacaille
+
+
+#(Giclas)
+Giclas
+
+
+#(Krueger)
+Krueger
+
+
+#(Lyrae)
+Lyrae
+
+
+#(Wolf)
+Wolf
+
+
+#(Saurus)
+Saurus
+
+
+#(Raynet)
+Raynet
+
+
+#(Zeeman)
+Zeeman
+
+
+#(Vela)
+Vela
+
+
+#(Mira)
+Mira
+
+
+#(Cerenkov)
+Cerenkov
+
+
+#(Parmenides)
+Parmenides
+
+
+#(Penzias)
+Penzias
+
+
+#(Persipina)
+Persipina
+
+
+#(Phosphor)
+Phosphor
+
+
+#(Mensae)
+Mensae
+
+
+#(Illuminati)
+Illuminati
+
+
+#(Vitalis)
+Vitalis
+
+
+#(Herculis)
+Herculis
+
+
+#(Gruis)
+Gruis
+
+
+#(Squidi)
+Squidi
+
+
+#(Pleione)
+Pleione
+
+
+#(Ursae Majoris)
+Ursae Majoris
+
+
+#(Polydectes)
+Polydectes
+
+
+#(Betelgeuse)
+Betelgeuse
+
+
+#(Vertumnus)
+Vertumnus
+
+
+#(Nereus)
+Nereus
+
+
+#(Procyon)
+Procyon
+
+
+#(Rigel)
+Rigel
+
+
+#(Eidolonii)
+Eidolonii
+
+
+#(Mizar)
+Mizar
+
+
+#(Pythagoras)
+Pythagoras
+
+
+#(Regulus)
+Regulus
+
+
+#(Vindemiatrix)
+Vindemiatrix
+
+
+#(Somnus)
+Somnus
+
+
+#(Capella)
+Capella
+
+
+#(Deneb)
+Deneb
+
+
+#(Canopus)
+Canopus
+
+
+#(Sirius)
+Sirius
+
+
+#(Sol)
+Sol
+
+
+#(Coronae)
+Coronae
+
+
+#(UNKNOWN)
+UNKNOWN
+
+
+#(devices)
+devices
+
+
+#(Quasi Portal)
+Quasi Portal
+
+
+#(Talking Pet)
+Talking Pet
+
+
+#(Utwig Bomb)
+Utwig Bomb
+
+
+#(Sun Device)
+Sun Device
+
+
+#(Black Orb)
+Black Orb
+
+
+#(Aqua Helix)
+Aqua Helix
+
+
+#(Shield Buster)
+Shield Buster
+
+
+#(Broken Ultron)
+Broken Ultron
+
+
+#(Broken Ultron)
+Broken Ultron
+
+
+#(Broken Ultron)
+Broken Ultron
+
+
+#(Perfect Ultron)
+Perfect Ultron
+
+
+#(Temporal Wrapper)
+Temporal Wrapper
+
+
+#(Umgah Caster)
+Umgah Caster
+
+
+#(Burvix Caster)
+Burvix Caster
+
+
+#(1 DataPlate)
+1 DataPlate
+
+
+#(2 DataPlate)
+2 DataPlate
+
+
+#(3 DataPlate)
+3 DataPlate
+
+
+#(Taalo Shield)
+Taalo Shield
+
+
+#(Egg Case)
+Egg Case
+
+
+#(Egg Case)
+Egg Case
+
+
+#(Egg Case)
+Egg Case
+
+
+#(Syreen Shuttle)
+Syreen Shuttle
+
+
+#(VUX Beast)
+VUX Beast
+
+
+#(Destruct Code)
+Destruct Code
+
+
+#(Warp Pod)
+Warp Pod
+
+
+#(Wimbli's Trident)
+Wimbli's Trident
+
+
+#(Glowing Rod)
+Glowing Rod
+
+
+#(Moon Base)
+Moon Base
+
+
+#(cargo)
+cargo
+
+
+#(Free)
+Free
+
+
+#(Common)
+Common
+
+
+#(Corrosive)
+Corrosive
+
+
+#(Base Metal)
+Base Metal
+
+
+#(Noble Gas)
+Noble Gas
+
+
+#(Rare Earth)
+Rare Earth
+
+
+#(Precious)
+Precious
+
+
+#(Radioactive)
+Radioactive
+
+
+#(Exotic)
+Exotic
+
+
+#(Hydrogen)
+Hydrogen
+
+
+#(Helium)
+Helium
+
+
+#(Lithium)
+Lithium
+
+
+#(Beryllium)
+Beryllium
+
+
+#(Boron)
+Boron
+
+
+#(Carbon)
+Carbon
+
+
+#(Nitrogen)
+Nitrogen
+
+
+#(Oxygen)
+Oxygen
+
+
+#(Fluorine)
+Fluorine
+
+
+#(Neon)
+Neon
+
+
+#(Sodium)
+Sodium
+
+
+#(Magnesium)
+Magnesium
+
+
+#(Aluminum)
+Aluminum
+
+
+#(Silicon)
+Silicon
+
+
+#(Phosphorus)
+Phosphorus
+
+
+#(Sulfur)
+Sulfur
+
+
+#(Chlorine)
+Chlorine
+
+
+#(Argon)
+Argon
+
+
+#(Potassium)
+Potassium
+
+
+#(Calcium)
+Calcium
+
+
+#(Scandium)
+Scandium
+
+
+#(Titanium)
+Titanium
+
+
+#(Vanadium)
+Vanadium
+
+
+#(Chromium)
+Chromium
+
+
+#(Manganese)
+Manganese
+
+
+#(Iron)
+Iron
+
+
+#(Cobalt)
+Cobalt
+
+
+#(Nickel)
+Nickel
+
+
+#(Copper)
+Copper
+
+
+#(Zinc)
+Zinc
+
+
+#(Gallium)
+Gallium
+
+
+#(Germanium)
+Germanium
+
+
+#(Arsenic)
+Arsenic
+
+
+#(Selenium)
+Selenium
+
+
+#(Bromine)
+Bromine
+
+
+#(Krypton)
+Krypton
+
+
+#(Rubidium)
+Rubidium
+
+
+#(Strontium)
+Strontium
+
+
+#(Yttrium)
+Yttrium
+
+
+#(Zirconium)
+Zirconium
+
+
+#(Niobium)
+Niobium
+
+
+#(Molybdenum)
+Molybdenum
+
+
+#(Technetium)
+Technetium
+
+
+#(Ruthenium)
+Ruthenium
+
+
+#(Rhodium)
+Rhodium
+
+
+#(Palladium)
+Palladium
+
+
+#(Silver)
+Silver
+
+
+#(Cadmium)
+Cadmium
+
+
+#(Indium)
+Indium
+
+
+#(Tin)
+Tin
+
+
+#(Antimony)
+Antimony
+
+
+#(Tellurium)
+Tellurium
+
+
+#(Iodine)
+Iodine
+
+
+#(Xenon)
+Xenon
+
+
+#(Cesium)
+Cesium
+
+
+#(Barium)
+Barium
+
+
+#(Lanthanum)
+Lanthanum
+
+
+#(Cerium)
+Cerium
+
+
+#(Praseo- dymium)
+Praseo- dymium
+
+
+#(Neodymium)
+Neodymium
+
+
+#(Promethium)
+Promethium
+
+
+#(Samarium)
+Samarium
+
+
+#(Europium)
+Europium
+
+
+#(Gadolinium)
+Gadolinium
+
+
+#(Terbium)
+Terbium
+
+
+#(Dyprosium)
+Dyprosium
+
+
+#(Holmium)
+Holmium
+
+
+#(Erbium)
+Erbium
+
+
+#(Thulium)
+Thulium
+
+
+#(Ytterbium)
+Ytterbium
+
+
+#(Lutetium)
+Lutetium
+
+
+#(Hafnium)
+Hafnium
+
+
+#(Tantalum)
+Tantalum
+
+
+#(Tungsten)
+Tungsten
+
+
+#(Rhenium)
+Rhenium
+
+
+#(Osmium)
+Osmium
+
+
+#(Iridium)
+Iridium
+
+
+#(Platinum)
+Platinum
+
+
+#(Gold)
+Gold
+
+
+#(Mercury)
+Mercury
+
+
+#(Thallium)
+Thallium
+
+
+#(Lead)
+Lead
+
+
+#(Bismuth)
+Bismuth
+
+
+#(Polonium)
+Polonium
+
+
+#(Astatine)
+Astatine
+
+
+#(Radon)
+Radon
+
+
+#(Francium)
+Francium
+
+
+#(Radium)
+Radium
+
+
+#(Actinium)
+Actinium
+
+
+#(Thorium)
+Thorium
+
+
+#(Protactinium)
+Protactinium
+
+
+#(Uranium)
+Uranium
+
+
+#(Neptunium)
+Neptunium
+
+
+#(Plutonium)
+Plutonium
+
+
+#(Ozone)
+Ozone
+
+
+#(Free Radicals)
+Free Radicals
+
+
+#(Carbon Dioxide)
+Carbon Dioxide
+
+
+#(Carbon Monoxide)
+Carbon Monoxide
+
+
+#(Ammonia)
+Ammonia
+
+
+#(Methane)
+Methane
+
+
+#(Sulfuric Acid)
+Sulfuric Acid
+
+
+#(Hydrochloric Acid)
+Hydrochloric Acid
+
+
+#(Hydrocyanic Acid)
+Hydrocyanic Acid
+
+
+#(Formic Acid)
+Formic Acid
+
+
+#(Phosphoric Acid)
+Phosphoric Acid
+
+
+#(Formaldehyde)
+Formaldehyde
+
+
+#(Cyano- acetylene)
+Cyano- acetylene
+
+
+#(Methanol)
+Methanol
+
+
+#(Ethanol)
+Ethanol
+
+
+#(Silicon Monoxide)
+Silicon Monoxide
+
+
+#(Titanium Oxide)
+Titanium Oxide
+
+
+#(Zirconium Oxide)
+Zirconium Oxide
+
+
+#(Water)
+Water
+
+
+#(Silicon Compounds)
+Silicon Compounds
+
+
+#(Metal Oxides)
+Metal Oxides
+
+
+#(Quantum Black Holes)
+Quantum Black Holes
+
+
+#(Neutronium)
+Neutronium
+
+
+#(Magnetic Monopoles)
+Magnetic Monopoles
+
+
+#(Degenerate Matter)
+Degenerate Matter
+
+
+#(Super Fluids)
+Super Fluids
+
+
+#(Aguuti Nodules)
+Aguuti Nodules
+
+
+#(Iron Compounds)
+Iron Compounds
+
+
+#(Aluminum Compounds)
+Aluminum Compounds
+
+
+#(Nitrous Oxide)
+Nitrous Oxide
+
+
+#(Radioactives)
+Radioactives
+
+
+#(Hydro- carbons)
+Hydro- carbons
+
+
+#(Carbon Compounds)
+Carbon Compounds
+
+
+#(Antimatter)
+Antimatter
+
+
+#(Charon Dust)
+Charon Dust
+
+
+#(Reisburg Helices)
+Reisburg Helices
+
+
+#(Tzo Crystals)
+Tzo Crystals
+
+
+#(Calcium Compounds)
+Calcium Compounds
+
+
+#(Nitric Acid)
+Nitric Acid
+
+
+#(MINERAL SCAN)
+MINERAL SCAN
+
+
+#(ENERGY SCAN)
+ENERGY SCAN
+
+
+#(BIOLOGICAL SCAN)
+BIOLOGICAL SCAN
+
+
+#((MORE))
+(MORE)
+
+
+#(Oolite)
+Oolite
+
+
+#(Yttric)
+Yttric
+
+
+#(Quasi-Degenerate)
+Quasi-Degenerate
+
+
+#(Lanthanide)
+Lanthanide
+
+
+#(Treasure)
+Treasure
+
+
+#(Urea)
+Urea
+
+
+#(Metal)
+Metal
+
+
+#(Radioactive)
+Radioactive
+
+
+#(Opalescent)
+Opalescent
+
+
+#(Cyanic)
+Cyanic
+
+
+#(Acid)
+Acid
+
+
+#(Alkali)
+Alkali
+
+
+#(Halide)
+Halide
+
+
+#(Green)
+Green
+
+
+#(Copper)
+Copper
+
+
+#(Carbide)
+Carbide
+
+
+#(Ultramarine)
+Ultramarine
+
+
+#(Noble)
+Noble
+
+
+#(Azure)
+Azure
+
+
+#(Chondrite)
+Chondrite
+
+
+#(Purple)
+Purple
+
+
+#(Super-Dense)
+Super-Dense
+
+
+#(Pellucid)
+Pellucid
+
+
+#(Dust)
+Dust
+
+
+#(Crimson)
+Crimson
+
+
+#(Cimmerian)
+Cimmerian
+
+
+#(Infrared)
+Infrared
+
+
+#(Selenic)
+Selenic
+
+
+#(Auric)
+Auric
+
+
+#(Fluorescent)
+Fluorescent
+
+
+#(Ultraviolet)
+Ultraviolet
+
+
+#(Plutonic)
+Plutonic
+
+
+#(Rainbow)
+Rainbow
+
+
+#(Shattered)
+Shattered
+
+
+#(Sapphire)
+Sapphire
+
+
+#(Organic)
+Organic
+
+
+#(Xenolithic)
+Xenolithic
+
+
+#(Redux)
+Redux
+
+
+#(Primordial)
+Primordial
+
+
+#(Emerald)
+Emerald
+
+
+#(Chlorine)
+Chlorine
+
+
+#(Magnetic)
+Magnetic
+
+
+#(Water)
+Water
+
+
+#(Telluric)
+Telluric
+
+
+#(Hydrocarbon)
+Hydrocarbon
+
+
+#(Iodine)
+Iodine
+
+
+#(Vinylogous)
+Vinylogous
+
+
+#(Ruby)
+Ruby
+
+
+#(Magma)
+Magma
+
+
+#(Maroon)
+Maroon
+
+
+#(World)
+World
+
+
+#(Gas Giant)
+Gas Giant
+
+
+#(Alpha)
+Alpha
+
+
+#(Beta)
+Beta
+
+
+#(Gamma)
+Gamma
+
+
+#(Delta)
+Delta
+
+
+#(Epsilon)
+Epsilon
+
+
+#(Zeta)
+Zeta
+
+
+#(Eta)
+Eta
+
+
+#(Theta)
+Theta
+
+
+#(Iota)
+Iota
+
+
+#(Kappa)
+Kappa
+
+
+#(Lambda)
+Lambda
+
+
+#(Mu)
+Mu
+
+
+#(Nu)
+Nu
+
+
+#(Xi)
+Xi
+
+
+#(Omicron)
+Omicron
+
+
+#(Mercury)
+Mercury
+
+
+#(Venus)
+Venus
+
+
+#(Earth)
+Earth
+
+
+#(Mars)
+Mars
+
+
+#(Jupiter)
+Jupiter
+
+
+#(Saturn)
+Saturn
+
+
+#(Uranus)
+Uranus
+
+
+#(Neptune)
+Neptune
+
+
+#(Pluto)
+Pluto
+
+
+#(Luna)
+Luna
+
+
+#(Io)
+Io
+
+
+#(Europa)
+Europa
+
+
+#(Ganymede)
+Ganymede
+
+
+#(Callisto)
+Callisto
+
+
+#(Titan)
+Titan
+
+
+#(Triton)
+Triton
+
+
+#(Planet I)
+Planet I
+
+
+#(Planet II)
+Planet II
+
+
+#(Planet III)
+Planet III
+
+
+#(Planet IV)
+Planet IV
+
+
+#(Planet V)
+Planet V
+
+
+#(Planet VI)
+Planet VI
+
+
+#(Planet VII)
+Planet VII
+
+
+#(Planet VIII)
+Planet VIII
+
+
+#(Planet IX)
+Planet IX
+
+
+#(Planet X)
+Planet X
+
+
+#(Planet XI)
+Planet XI
+
+
+#(Planet XII)
+Planet XII
+
+
+#(Planet XIII)
+Planet XIII
+
+
+#(Planet XIV)
+Planet XIV
+
+
+#(Planet XV)
+Planet XV
+
+
+#(Planet XVI)
+Planet XVI
+
+#(Sa-Matra)
+Sa-Matra
+
+#(JAN)
+JAN
+
+
+#(FEB)
+FEB
+
+
+#(MAR)
+MAR
+
+
+#(APR)
+APR
+
+
+#(MAY)
+MAY
+
+
+#(JUN)
+JUN
+
+
+#(JUL)
+JUL
+
+
+#(AUG)
+AUG
+
+
+#(SEP)
+SEP
+
+
+#(OCT)
+OCT
+
+
+#(NOV)
+NOV
+
+
+#(DEC)
+DEC
+
+
+#((In response to your statement))
+(In response to your statement)
+
+
+#(MORE)
+MORE
+
+
+#(Starbase)
+Starbase
+
+
+#(Starbase Commander)
+Starbase Commander
+
+
+#(Outfit Starship)
+Outfit Starship
+
+
+#(Shipyard)
+Shipyard
+
+
+#(Depart StarBase)
+Depart StarBase
+
+
+#(ENCOUNTER IN)
+ENCOUNTER IN
+
+
+#(Deep Space)
+Deep Space
+
+
+#(ENCOUNTER AT)
+ENCOUNTER AT
+
+
+#(BATTLE GROUP)
+BATTLE GROUP
+
+
+#(Enemy Ships)
+Enemy Ships
+
+
+#(Destroyed)
+Destroyed
+
+
+#(Debris)
+Debris
+
+
+#(Scavenged)
+Scavenged
+
+
+#(HyperSpace)
+HyperSpace
+
+
+#(QuasiSpace)
+QuasiSpace
+
+
+#(OUT OF FUEL)
+OUT OF FUEL
+
+
+#(AUTO-PILOT)
+AUTO-PILOT
+
+
+#(Fuel:)
+Fuel:
+
+
+#(Fuel Use:)
+Fuel Use:
+
+#(*Below*)
+* Below *
+
+#(Enter name)
+Enter name
+
+
+#(FLAGSHIP)
+FLAGSHIP
+
+
+#(Vindicator)
+Discovery
+
+
+#(Zelnick)
+Zelnick
+
+
+#(Empty)
+Empty
+
+
+#(Slot)
+Slot
+
+
+#(Team)
+Team
+
+
+#(Name)
+Name
+
+
+#(Balanced Team 1)
+Balanced Team 1
+
+
+#(Balanced Team 2)
+Balanced Team 2
+
+
+#(200 points)
+200 points
+
+
+#(Behemoth Zenith)
+Behemoth Zenith
+
+
+#(The Peeled Eyes)
+The Peeled Eyes
+
+
+#(Saving . . .)
+Saving . . .
+
+
+#(Loading . . .)
+Loading . . .
+
+
+#(Unable to save game!)
+Unable to save game!
+
+
+#(Empty Slot)
+Empty Slot
+
+
+#(Saved Game - Date:)
+Saved Game - Date:
+
+
+#(Sound)
+Sound
+
+
+#(Music)
+Music
+
+
+#(Voice)
+Voice
+
+
+#(Cyborg)
+Cyborg
+
+
+#(OFF)
+OFF
+
+
+#(ON)
+ON
+
+
+#(Really Quit)
+Really Quit?
+
+
+#(Yes)
+Yes
+
+
+#(No)
+No
+
+
+#(Cr)
+Cr
+
+
+#(RU)
+RU
+
+
+#(UNLIMITED)
+UNLIMITED
+
+
+#(FUEL)
+FUEL
+
+
+#(CREW)
+CREW
+
+
+#(CAPTAIN)
+CAPTAIN
+
+
+#(nose:)
+nose:
+
+
+#(spread:)
+spread:
+
+
+#(side:)
+side:
+
+
+#(tail:)
+tail:
+
+
+#(maximum velocity:)
+maximum velocity:
+
+
+#(turning rate:)
+turning rate:
+
+
+#(combat energy:)
+combat energy:
+
+
+#(maximum fuel:)
+maximum fuel:
+
+
+#(gun)
+gun
+
+
+#(blaster)
+blaster
+
+
+#(cannon)
+cannon
+
+
+#(n/a)
+n/a
+
+
+#(none)
+none
+
+
+#(Orbit: )
+Orbit: 
+
+
+#( a.u.)
+ a.u.
+
+
+#(Atmo: )
+Atmo: 
+
+
+#(Super Thick)
+Super Thick
+
+
+#(Vacuum)
+Vacuum
+
+
+#( atm)
+ atm
+
+
+#(Temp: )
+Temp: 
+
+
+#(Weather: )
+Weather: 
+
+
+#(None)
+None
+
+
+#(Class)
+Class
+
+
+#(Tectonics: )
+Tectonics: 
+
+
+#(Mass: )
+Mass: 
+
+
+#( e.s.)
+ e.s.
+
+
+#(Radius: )
+Radius: 
+
+
+#(Gravity: )
+Gravity: 
+
+
+#( g.)
+ g.
+
+
+#(Day: )
+Day: 
+
+
+#( days)
+ days
+
+
+#(Tilt: )
+Tilt: 
+
+
+#(Scan)
+Scan
+
+
+#(Starmap)
+Starmap
+
+
+#(Devices)
+Devices
+
+
+#(Cargo)
+Cargo
+
+
+#(Roster)
+Roster
+
+
+#(Game)
+Game
+
+
+#(Navigate)
+Navigate
+
+
+#(Mineral)
+Mineral
+
+
+#(Energy)
+Energy
+
+
+#(Biological)
+Biological
+
+
+#(Exit menu)
+Exit menu
+
+
+#(Autoscan)
+Autoscan
+
+
+#(Dispatch)
+Dispatch
+
+
+#(Save game)
+Save game
+
+
+#(Load game)
+Load game
+
+
+#(Quit game)
+Quit game
+
+
+#(Settings)
+Settings
+
+
+#(Exit menu)
+Exit menu
+
+
+#(Converse)
+Converse
+
+
+#(Attack!)
+Attack!
+
+
+#(Game)
+Game
+
+
+#(Fuel)
+Fuel
+
+
+#(Module)
+Module
+
+
+#(Game)
+Game
+
+
+#(exit menu)
+Exit menu
+
+
+#(Crew)
+Crew
+
+
+#(Game)
+Game
+
+
+#(Exit menu)
+Exit menu
+
+
+#(Sound)
+Sound
+
+
+#(Music)
+Music
+
+
+#(Voice)
+Voice
+
+
+#(Cyborg)
+Cyborg
+
+
+#(Captain)
+Captain
+
+
+#(Flagship)
+Flagship
+
+
+#(Exit menu)
+Exit menu
+
+
+#(must restart)
+Switching to/from high resolution
+graphic mode requires restarting the game.
+
+The game will shut down now -
+we apologise for the inconvenience!
+
+
+#(hires_not_done)
+We're sorry, but the experimental
+mega-graphic mode is impossible to
+implement.
+
+Estimated time of completion: never
+
+
+#()
+
+
+
+#()
+
+
+
+#()
+
+
+
+#()
+
+
+
+#(Scan)
+Scan
+
+
+#(Starmap)
+Starmap
+
+
+#(Manifest)
+Manifest
+
+
+#(Game)
+Game
+
+
+#(Navigate)
+Navigate
+
+
+#(Cargo)
+Cargo
+
+
+#(Devices)
+Devices
+
+
+#(Roster)
+Roster
+
+
+#(Exit menu)
+Exit menu
+
+
+#(Mineral)
+Mineral
+
+
+#(Energy)
+Energy
+
+
+#(Biological)
+Biological
+
+
+#(Autoscan)
+Autoscan
+
+
+#(Dispatch)
+Dispatch
+
+
+#(Exit menu)
+Exit menu
+
+
+#(mouse_err)
+Mouse input is not supported in UQM.
+Use the keyboard or joystick instead.
+
+Please press ENTER or SPACE to return.
+
+#(Unconnected. Press LEFT to connect.)
+Unconnected. Press LEFT to connect.
+
+
+#(Awaiting incoming connection...)
+Awaiting incoming connection
+
+#(Attempting outgoing connection...)
+Attempting outgoing connection
+
+#(Connected. Change the control method to disconnect.)
+Connected. Change the control method to disconnect.
+
+
+#(Confirmation cancelled. Press FIRE to reconfirm.)
+Confirmation cancelled. Press FIRE to reconfirm.
+
+
+#(Connection for bottom player not established.)
+Connection for bottom player not established.
+
+
+#(Connection for top player not established.)
+Connection for top player not established.
+
+
+#(Waiting for remote confirmation.)
+Waiting for remote confirmation.
+
+
+#(Bottom player is connected.)
+Bottom player is connected.
+
+
+#(Top player is connected.)
+Top player is connected.
+
+
+#(Bottom player: connection failed.)
+Bottom player: connection failed.
+
+
+#(Top player: connection failed.)
+Top player: connection failed.
+
+
+#(Bottom player: connection closed.)
+Bottom player: connection closed.
+
+
+#(Top player: connection closed.)
+Top player: connection closed.
+
+
+#(Connection for bottom player not ready.)
+Connection for bottom player not ready.
+
+
+#(Connection for top player not ready.)
+Connection for top player not ready.
+
+
+#(Bottom player changed something -- need to reconfirm.)
+Bottom player changed something -- need to reconfirm.
+
+
+#(Top player changed something -- need to reconfirm.)
+Top player changed something -- need to reconfirm.
+
+
+#(Press SPACE to cancel)
+Press SPACE to cancel
+
+
+#(Connect to remote host)
+Connect to remote host
+
+
+#(Wait for incoming connection)
+Wait for incoming connection
+
+
+#(Cancel)
+Cancel
+
+
+#(Host)
+Host
+
+
+#(Port)
+Port
+
+
+#(Net Delay)
+Net Delay
+
+
+#(Disconnect for an unspecified reason.)
+Disconnect for an unspecified reason.
+
+
+#(Connection aborted due to version mismatch.)
+Connection aborted due to version mismatch.
+
+
+#(Connection aborted due to an internal protocol error.)
+Connection aborted due to an internal protocol error.
+
+
+#(Connection aborted because the remote side sent a fake signature.)
+Connection aborted because the remote side sent a fake signature.
+
+
+#(Game aborted for an unspecified reason.)
+Game aborted for an unspecified reason.
+
+
+#(Game aborted due to loss of synchronisation.)
+Game aborted due to loss of synchronisation.
+
+
+#(Game aborted by the remote player.)
+Game aborted by the remote player.
+
+
+#(Only one side at a time can be network controlled.)
+Only one side at a time can be network controlled.
+
+
+#(Netplay with a computer-controlled side is currently not possible.)
+Netplay with a computer-controlled side is currently not possible.
+
