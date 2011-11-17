@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: - Amended Pursue -function: Ur-Quan pursues Earthling slowly but surely. Now it won't turn away mid-chase.
+// JMS 2010: - Amended Pursue -function: Ur-Quan, Kohr-Ah and ISD pursue Earthling slowly but surely. Now they won't turn away mid-chase.
 //			 - Enable Down key in melee (comment tag JMS_KEYS)
 
 // JMS_GFX:	 - Added RESOLUTION_FACTORs to LONG_RANGE_WEAPONs and CLOSE_RANGE_WEAPONs
@@ -445,7 +445,7 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	}
 
 	if (StarShipPtr->control & AWESOME_RATING)
-		margin_of_error = 2 * RESOLUTION_FACTOR; // JMS: Gave some room for error in high resolutions.
+		margin_of_error = 0;
 	else if (StarShipPtr->control & GOOD_RATING)
 		margin_of_error = DISPLAY_TO_WORLD (20 << RESOLUTION_FACTOR); // JMS_GFX
 	else /* if (StarShipPtr->control & STANDARD_RATING) */
