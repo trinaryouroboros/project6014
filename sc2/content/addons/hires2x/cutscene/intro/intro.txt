@@ -12,7 +12,7 @@ DIMS 1280 960
 CLS
 
 #(Set sequence dimensions; param1=width; param2=height)
-DIMS 1280 800
+DIMS 640 400
 #(Everything is drawn within the clipping rect defined by DIMS, from 0, 0)
 
 #(Fade all to black; param1=fade time)
