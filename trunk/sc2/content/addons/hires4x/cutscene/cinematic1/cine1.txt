@@ -1,14 +1,15 @@
 #(=========== This is the Demo End =========================)
 # Documentation is all wrong. Modified from the intro.
+CLS
 
 #(Clear entire screen first; set size...)
-DIMS 320 240
+DIMS 1280 960
 
 #(... and clear)
 CLS
 
 #(Set sequence dimensions; param1=width; param2=height)
-DIMS 320 200
+DIMS 1280 960
 #(Everything is drawn within the clipping rect defined by DIMS, from 0, 0)
 
 #(Fade all to black; param1=fade time)
@@ -17,14 +18,14 @@ FTB 0
 #(Set text fore color; 0xRRGGBB)
 TC FFFFFF
 #(Set text back color; 0xRRGGBB)
-TBC 000000
+TBC 00000
 #(Set text effect; Traced, None, others when added)
 TE TRACED
 
 #(Load font to use later)
-FONT 0 base/fonts/starcon.fon
+FONT 0 addons/hires4x/fonts/starcon.fon
 #(Load font to use later)
-FONT 1 base/fonts/slides.fon
+FONT 1 addons/hires4x/fonts/slides.fon
 
 
 #(Play music)
@@ -53,7 +54,7 @@ TVA B
 FONT 1
 
 #(Set ANIM to draw slides from)
-ANI base/cutscene/cinematic1/cine1.ani
+ANI addons/hires4x/cutscene/cinematic1/cine1.ani
 
 #(Set text vertical position; can be T=top, B=bottom, M=middle)
 TVA T
