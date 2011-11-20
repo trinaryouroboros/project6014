@@ -36,6 +36,7 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
     * New races
       * [Androsynth]
       * [Faz]
+      * [FleeingRace]
       * [Lurg]
       * [MasterRace]
       * [Mmrnmhrm]
