@@ -197,14 +197,23 @@ ExitConversation (RESPONSE_REF R)
 }
 
 static void
-WomanMenu (RESPONSE_REF R)
+CultureLoop (RESPONSE_REF R)
 {	
-	if (PLAYER_SAID (R, you_sound_upset) || PLAYER_SAID (R, glad_youre_not_upset))
+	static BYTE historystack = 1;
+	
+	if (PLAYER_SAID (R, tell_me_about_culture))
+	{
+		NPCPhrase (GO_TO_CULTURE);
+		historystack = 1;
+	}
+	
+	else if (PLAYER_SAID (R, how_it_works_out))
 	{
 		NPCPhrase (SINCE_YOU_MENTIONED_IT);
+		DISABLE_PHRASE (how_it_works_out);
 		
-		Response (thats_sad, WomanMenu);
-		Response (humans_are_different, WomanMenu);
+		Response (thats_sad, CultureLoop);
+		Response (humans_are_different, CultureLoop);
 	}
 	
 	else if (PLAYER_SAID (R, thats_sad) || PLAYER_SAID (R, humans_are_different))
@@ -214,50 +223,141 @@ WomanMenu (RESPONSE_REF R)
 		else if (PLAYER_SAID (R, humans_are_different))
 			NPCPhrase (SO_DIFFERENT);
 		
-		Response (gf_at_home, MainLoop);
+		Response (gf_at_home, CultureLoop);
 	}
 	
+	else if (PLAYER_SAID (R, gf_at_home))
+	{
+		NPCPhrase (YOURE_JUST_AS_BAD);
+	}
+	
+	else if (PLAYER_SAID (R, surprised_seeing_female))
+	{
+		NPCPhrase (SURPRISED_ANSWER);
+		DISABLE_PHRASE (surprised_seeing_female);
+	}
+	
+	else if (PLAYER_SAID (R, history_question_1))
+	{
+		NPCPhrase (HISTORY_ANSWER_1);
+		DISABLE_PHRASE (history_question_1);
+		historystack++;
+	}
+	else if (PLAYER_SAID (R, history_question_2_admire) || PLAYER_SAID (R, history_question_2_sarcasm))
+	{
+		NPCPhrase (HISTORY_ANSWER_2);
+		DISABLE_PHRASE (history_question_2_admire);
+		DISABLE_PHRASE (history_question_2_sarcasm);
+		historystack++;
+	}
+	else if (PLAYER_SAID (R, history_question_3))
+	{
+		NPCPhrase (HISTORY_ANSWER_3);
+		DISABLE_PHRASE (history_question_3);
+		historystack++;
+	}
+	else if (PLAYER_SAID (R, history_question_4))
+	{
+		NPCPhrase (HISTORY_ANSWER_4);
+		DISABLE_PHRASE (history_question_4);
+		historystack++;
+	}
+
+	
+	if (PHRASE_ENABLED(surprised_seeing_female))
+		Response (surprised_seeing_female, CultureLoop);
+	
+	if (PHRASE_ENABLED(how_it_works_out))
+		Response (how_it_works_out, CultureLoop);
+	
+	if (PHRASE_ENABLED(history_question_1) && historystack == 1)
+		Response (history_question_1, CultureLoop);
+	
+	else if (historystack == 2)
+	{
+		if (PHRASE_ENABLED(history_question_2_admire))
+			Response (history_question_2_admire, CultureLoop);
+		if (PHRASE_ENABLED(history_question_2_sarcasm))
+			Response (history_question_2_sarcasm, CultureLoop);
+	}
+	
+	else if (PHRASE_ENABLED(history_question_3) && historystack == 3)
+		Response (history_question_3, CultureLoop);
+	
+	else if (PHRASE_ENABLED(history_question_4) && historystack == 4)
+		Response (history_question_4, CultureLoop);
+	
+	Response (enough_culture, MainLoop);
 	Response (goodbye, ExitConversation);
 }
 
 static void
 MainLoop (RESPONSE_REF R)
 {	
-	BYTE prevent_goodbye = 0;
+	if (GET_GAME_STATE (SHOFIXTI_COLONY_INTRODUCED) == 0)
+		SET_GAME_STATE (SHOFIXTI_COLONY_INTRODUCED, 1);
 	
-	if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
+	if (PLAYER_SAID (R, courteous_hello) || PLAYER_SAID (R, condescending))
 	{
-		SET_GAME_STATE (SHOFIXTI_COLONY_MET, 1);
-		NPCPhrase (SHO_GREETING1);
-			
-		Response (a_woman, MainLoop);
-		Response (i_luv_furries, MainLoop);
+		NPCPhrase (INTRODUCING_HIROKU);
 	}
-	
-	else if (PLAYER_SAID (R, a_woman))
+	else if (PLAYER_SAID (R, just_joking))
 	{
-		NPCPhrase (YES_WOMAN);
-	
-		Response (you_sound_upset, WomanMenu);
-		Response (glad_youre_not_upset, WomanMenu);
+		NPCPhrase (JUST_JOKING_REPLY);
 	}
-
-	else if (PLAYER_SAID (R, i_luv_furries))
+	else if (PLAYER_SAID (R, sorry_disrespectful))
 	{
-		prevent_goodbye = 1;
-		
-		NPCPhrase (BACK_OFF_CREEP);
-		
-		Response (just_joking, MainLoop);
-		Response (sorry_disrespectful, MainLoop);
+		NPCPhrase (DISRESPECTFUL_REPLY);
+		NPCPhrase (INTRODUCING_HIROKU);
+	}
+	else if (PLAYER_SAID (R, enough_culture))
+	{
+		NPCPhrase (LEAVE_CULTURE);
+		DISABLE_PHRASE (tell_me_about_culture);
+	}
+	else if (PLAYER_SAID (R, what_is_going_on))
+	{
+		if (GET_GAME_STATE (SHOFIXTICOL_CURRENT_NEWS_STACK) == 0)
+		{
+			NPCPhrase (THIS_IS_GOING_ON);
+			SET_GAME_STATE (SHOFIXTICOL_CURRENT_NEWS_STACK, 1);
+		}
+		else
+			NPCPhrase (THIS_IS_GOING_ON2);
+		DISABLE_PHRASE (what_is_going_on);
 	}
 	else if (PLAYER_SAID (R, tell_me_about_distress_call))
 	{
 		NPCPhrase (DISTRESS_CALL);
 		DISABLE_PHRASE (tell_me_about_distress_call);
 	}
-	else if (PLAYER_SAID (R, gf_at_home))
-		NPCPhrase (YOURE_JUST_AS_BAD);
+	
+	if (PHRASE_ENABLED(what_is_going_on))
+		Response (what_is_going_on, MainLoop);
+
+	if (PHRASE_ENABLED(tell_me_about_culture))
+		Response (tell_me_about_culture, CultureLoop);
+	
+	if (PHRASE_ENABLED(tell_me_about_distress_call))
+		Response (tell_me_about_distress_call, MainLoop);
+	
+	Response (goodbye, ExitConversation);
+}
+
+static void
+ProperIntroduction (RESPONSE_REF R)
+{	
+	if (PLAYER_SAID (R, a_woman) || PLAYER_SAID (R, i_luv_furries))
+	{
+		if (PLAYER_SAID (R, a_woman))
+			NPCPhrase (YES_WOMAN);
+		else if (PLAYER_SAID (R, i_luv_furries))
+			NPCPhrase (BACK_OFF_CREEP);
+		
+		Response (condescending, MainLoop);
+		Response (just_joking, MainLoop);
+		Response (sorry_disrespectful, MainLoop);
+	}
 	
 	else if (PLAYER_SAID (R, just_joking))
 		NPCPhrase (JUST_JOKING_REPLY);
@@ -265,11 +365,20 @@ MainLoop (RESPONSE_REF R)
 	else if (PLAYER_SAID (R, sorry_disrespectful))
 		NPCPhrase (DISRESPECTFUL_REPLY);
 	
-	if (PHRASE_ENABLED(tell_me_about_distress_call) && !prevent_goodbye)
-		Response (tell_me_about_distress_call, MainLoop);
-	
-	if (!prevent_goodbye)
-		Response (goodbye, ExitConversation);
+	else if (GET_GAME_STATE (SHOFIXTI_COLONY_INTRODUCED) == 0)
+	{
+		if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
+		{
+			SET_GAME_STATE (SHOFIXTI_COLONY_MET, 1);
+			NPCPhrase (SHO_GREETING1);
+		}
+		
+		Response (a_woman, ProperIntroduction);
+		Response (i_luv_furries, ProperIntroduction);
+		Response (courteous_hello, MainLoop);
+	}
+
+	Response (goodbye, ExitConversation);
 }
 
 static void
@@ -279,7 +388,7 @@ BlackScreen3 (RESPONSE_REF R)
 	
 	NPCPhrase (BLACKSCREEN_LAST);
 	
-	MainLoop ((RESPONSE_REF)0);
+	ProperIntroduction ((RESPONSE_REF)0);
 }
 
 static void
@@ -326,16 +435,16 @@ Intro (void)
 	{
 		NPCPhrase (BLACKSCREEN);
 		Response (hello_blackscreen, BlackScreen1);
+		Response (goodbye, ExitConversation);
 	}
 	else
 	{
 		NPCPhrase (SHO_GREETING2);
-		Response (a_woman, MainLoop);
-		Response (i_luv_furries, MainLoop);
-		Response (tell_me_about_distress_call, MainLoop);
+		if (GET_GAME_STATE (SHOFIXTI_COLONY_INTRODUCED) == 0)
+			ProperIntroduction ((RESPONSE_REF)0);
+		else
+			MainLoop ((RESPONSE_REF)0);
 	}
-	
-	Response (goodbye, ExitConversation);
 }
 
 

@@ -1,14 +1,14 @@
 #(BLACKSCREEN)
-$... . ... ...$
+$... . .#. .../<CH_...$
 
 #(hello_blackscreen)
 Eh... hello?
 
 #(BLACKSCREEN_GOODBYE)
-$...$
+$... ...$
 
 #(BLACKSCREEN_SIGNAL_DEGRADED)
-$*Message from comm application: Incoming communication signal highly degraded.*$
+$*Message from communication application: Incoming signal highly degraded.*$
 $*Proceed with error tolerant reconstruction protocol?*$
 
 #(go_ahead)
@@ -18,8 +18,8 @@ Yes, yes, go ahead.
 Reason for the degradation?
 
 #(REASON_DEGRADED)
-$*Query submitted to analytical application, please wait...*$
-$*Query returned (0.001 ms runtime) with following result:*$
+$*Query submitted to analytical application, please wait.*$
+$*Query returned _0.001 ms runtime_ with following result.*$
 $*Severe weather event has dropped most communication grid.*$
 $*All signals are routed through a single class-3 communication satellite.*$
 
@@ -36,21 +36,26 @@ Sounds nasty down there.
 What is going on?
 
 #(BLACKSCREEN_LAST)
-$*Message from communication application: sufficient bandwidth now available for...*$ 
-$*...standard communication, please stand by.*$
+$*Message from communication application: sufficient bandwidth now available...*$ 
+$*...for standard communication, please stand by.*$
 
 #(SHO_GREETING1)
 Greetings, Captain.
 
 #(SHO_GREETING2)
-Welcome back Captain.
+Welcome back, Captain.
 
 #(a_woman)
-I've never met a female Shofixti! Well, except for some frozen ones.
+Hey, you are a female.
 
 #(YES_WOMAN)
-Well, our culture dictates that women stay at home.
-Not that I'm upset about it.
+Astute observation, Captain. I would suggest that you withhold yourself from
+sharing similar truisms in future dealings with members of alien races. 
+My understanding is that the reproductive capacities of oneself
+are generally considered a delicate subject.
+
+#(condescending)
+Well, that's nice. Now can you please be a dear and connect me to whomever is in charge?
 
 #(i_luv_furries)
 Hey baby. You're kind of cute for a space dog.
@@ -59,33 +64,59 @@ Hey baby. You're kind of cute for a space dog.
 Captain, with a due respect
 By your standards, I may be young, and I may be small
 but if you try to harass me again,
-I'll kick your butt so hard it will make a Glory Device look like a firecracker.
+I shall kick your butt so hard it will make a Glory Device look like a firecracker.
 
-#(you_sound_upset)
-You sure? You sound upset about it.
+#(just_joking)
+Sorry! You Shofixti can't take a joke! 
 
-#(glad_youre_not_upset)
-Well, I'm glad you're not upset about it.
+#(sorry_disrespectful)
+I don't know what got into me. I apologize.
+
+#(JUST_JOKING_REPLY)
+Or perhaps your jokes need to be better.
+Just in case you wanted to know...
+I am Administrator Hiroku. I am in charge of this colony.
+
+#(DISRESPECTFUL_REPLY)
+Well since you did... save our civilization from extinction
+Apology accepted. Allow me to introduce myself.
+
+#(courteous_hello)
+Well met, Madam. With whom do I have the pleasure?
+
+#(INTRODUCING_HIROKU)
+Captain, I am Administrator Hiroku. I am in charge of this colony.
+I am sure you have many questions. I have a few moments in my schedule
+to bring you up to date on pertinent matters.
+
+#(tell_me_about_culture)
+I am deeply fascinated by your culture. Can you shed light on some specifics?
+
+#(GO_TO_CULTURE)
+I would be glad to, Captain. What do you want to know?
+
+#(how_it_works_out)
+So, I've heard the Shofixti society is pretty... gender-inequal, right?
 
 #(SINCE_YOU_MENTIONED_IT)
 Well, now that you mention it
-The Shofixti males go flying around,
-looking for fights, and when they find one
-they just end up just blowing themselves up!
-Really? Is that really the best way settle a fight?
-While the women must stay home, and run everything.
-Government, manufacturing, food, all done by females.
+the Shofixti males still prefer flying around looking for fights
+and when they find one
+they just end up just blowing themselves up.
+One could wonder if that is the best way settle a fight.
+Meanwhile the women stay home, and run everything.
+Education, manufacturing, food, all done by females.
 Shofixti men are loving, noble creatures, fearsome fighters
 but they are also stupid. 
 
 #(thats_sad)
-I didn't think about it that way. I understand your heavy burden.
+I didn't think about it that way. I understand your burden.
 
 #(humans_are_different)
 Humans are different. You should follow our example.
 
 #(SO_DIFFERENT)
-Oh really? Tell me, where is your mate?
+Oh, really? Tell me, where is your mate?
 
 #(YOU_UNDERSTAND)
 You do? A truly enlightened male! I'm sure your mate is with you now.
@@ -99,29 +130,95 @@ Actually.... she's back home on Unzervault. Taking care of our things there.
 #(DIFFERENT_INDEED)
 Oh yes. Different indeed.
 
-#(just_joking)
-Sorry! You Shofixti can't take a joke! 
+#(surprised_seeing_female)
+To be honest, I am a bit surprised to see a female in such a critical position in Shofixti society.
 
-#(sorry_disrespectful)
-I don't know what got into me. I apologize.
+#(SURPRISED_ANSWER)
+It saddens me but your surprise is an appropriate response. You see, Shofixti culture
+has never had the chance for female suffrage to occur before it was tossed into the war.
+As you are very well aware, we have returned from the brink of extinction. We cannot afford
+to keep half the workforce tending to homekeeping and similar such trivialities.
+We must utilize each person's potential  to survive. We need scientists, engineers, technicians
+so everyone receives the best education possible tailored to his or hers capabilities.
 
-#(JUST_JOKING_REPLY)
-Or perhaps your jokes need to be better.
+#(history_question_1)
+How have you managed to organize here on such a short timescale? And how were you selected for this post?
 
-#(DISRESPECTFUL_REPLY)
-Well since you did save our civilization from extinction,
-I guess I can forgive you. Apology accepted.
+#(HISTORY_ANSWER_1)
+As for organization
+we are constantly reducing our reliance on Alliance aid, and per the severe circumstances
+we are within potential success ranges in all simulations.
+Captain, I beg you to forgive my lack of humility, but I am one of a selected few Shofixti
+that were brought up on Chmmr prime. The Chmmr found 157 pivotal roles that, if efficiently
+maintained, may increase the chances of our reaching goal of sufficient population variance
+up to 2.3%. One of these roles, obviously, is the colony administrator.
+I am educated in disaster scenario management, resource planning, sociology, and political science.
+In your earthling terminology, I acquired 4 PhDs within the last 4 years.
+
+#(history_question_2_admire)
+Sounds like you got things covered, your race in such capable hands will strengthen the Alliance.
+
+#(history_question_2_sarcasm)
+2.3%? Guess Shofixti resurrection is one task I can wipe of my todo list.
+
+#(HISTORY_ANSWER_2)
+Captain, regardless of your opinion of my situation, we are fighting for our lives daily.
+Beta Gorno I is hardly suitable for Shofixtikind to rekindle its flame.
+
+#(history_question_3)
+Why did you settle here? I saw plenty of habitable planets during the war, even, hmm... depopulated some of them.
+
+#(HISTORY_ANSWER_3)
+Captain, in order for you to understand this ridiculous choice, you must understand that
+the current Shofixti population has become very religious.
+We were quite a superstitious race before the war, but now it affects decision making.
+We can thank this lapse of judgement mainly to the dominance
+of Kishi-Bojin, my mother, third grandmother.
+
+#(history_question_4)
+Third grandmother? Are you talking about the maidens I have rescued from Zex's vaults?
+
+#(HISTORY_ANSWER_4)
+In spite all evidence, it seems you have not yet figured out Shofixti physiology.
+How old am I, Captain? Or rather how old can I possibly be? 
+I'll answer that for you. I am seven years old.
+Captain, we are already raising our third generation. 
+Under different circumstances we could replenish our
+population with 10 years, probably returning to our
+senseless feuds and local wars to keep our population in check.
+With the number of Kishi-Bojin's supporters in a sharp rise
+we might see one of those wars pretty soon.
+
+#(enough_culture)
+That's enough on your culture for now, thanks.
+
+#(LEAVE_CULTURE)
+Very well.
+
+#(whats_going_on)
+What is going on down there? Do you require assistance?
+
+#(THIS_IS_GOING_ON)
+As you must be aware, we are experiencing a severe weather event. 
+Several of the new habitats were destroyed
+our ongoing search and rescue effort approximate 20 casualties and 100 injured.
+I kindly acknowledge your help offer but there is nothing more that can be done now.
+
+#(THIS_IS_GOING_ON2)
+We have managed to clear up most of the debris left by the storm
+and repairs are underway, as you can see.
+I thank you for your concern, but we will cope by ourselves.
 
 #(tell_me_about_distress_call)
 Is there any information you can give me about the lost patrol's distress call.
 
 #(DISTRESS_CALL)
-I cannot comment on matters on which I don't know. 
-I suggest contacting some of the Shofixti males.
-You can find them easily.
-They're the ones patrolling this area just looking for a fight.
-Oh sure, they say they are looking for a new world for us.
-But they're also looking for a fight. Be careful.
+The long-range survey patrols are the best hope for us to survive as a species
+and their existence is solely due to the non-fanatic faction of our government.
+Alas, since I have been tasked with leading this colony
+I have no further information about their success. 
+I suggest contacting our scout fleet in the nearby area. 
+You can find them easily enough in the nearby systems.
 
 #(goodbye)
 Ohh... look at the time! I really must be going.

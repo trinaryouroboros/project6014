@@ -1108,6 +1108,13 @@ START_GAME_STATE
 		// 0 - Not met
 		// 1 - Met, playing "lights up" transition graphics.
 		// 2 - Met, lights are up.
+		// 3 - Talking allowed.
+
+	// JMS: Player has been introduced to Hiroku.
+	ADD_GAME_STATE (SHOFIXTI_COLONY_INTRODUCED, 1)
+
+	// JMS: News 'n' shit at the colony.
+	ADD_GAME_STATE (SHOFIXTICOL_CURRENT_NEWS_STACK, 3)
 
 	// JMS: Are the Lurg hanging out at the Shofixti distress site planet
 	ADD_GAME_STATE (CRASH_SITE_UNPROTECTED, 1)
