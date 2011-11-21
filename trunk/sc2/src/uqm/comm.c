@@ -289,11 +289,13 @@ add_text (int status, TEXT *pTextIn)
 		else
 		{
 			// Alien speech
-			if (CommData.AlienConv == ORZ_CONVERSATION)
+			if (CommData.AlienConv == ORZ_CONVERSATION || CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION)
 			{
 				// BW : special case for the Orz conversations
 				// the character $ is recycled as a marker to
-				// switch from and to computer font
+				// switch from and to computer font.
+				//
+				// JMS: Computer font also used when first encountering Shofixti colony.
 				
 				const char *ptr;
 				RECT rect;
@@ -887,7 +889,11 @@ AlienTalkSegue (COUNT wait_track)
 		LockMutex (GraphicsLock);
 		SetColorMap (GetColorMapAddress (CommData.AlienColorMap));
 		SetContext (AnimContext);
-		DrawAlienFrame (NULL, 0, TRUE);
+		
+		// JMS: Shofixti Colony comm screen is blacked out upon the first encounter.
+		if (!(CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION && GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0))
+			DrawAlienFrame (NULL, 0, TRUE);
+		
 		UpdateSpeechGraphics ();
 		CommIntroTransition ();
 		UnlockMutex (GraphicsLock);

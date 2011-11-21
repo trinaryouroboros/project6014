@@ -45,7 +45,7 @@ static LOCDATA shofixticolony_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SHOFIXTI_COLONY_CONVERSATION_PHRASES, /* PlayerPhrases */
-	12, /* NumAnimations */
+	13, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{ /* 0 moving sleeves */
 			1, /* StartIndex */
@@ -143,6 +143,14 @@ static LOCDATA shofixticolony_desc =
 			ONE_SECOND * 4, ONE_SECOND * 4, /* RestartRate */
 			0, /* BlockMask */
 		},
+		{ /* 12 Black screen */
+			71, /* StartIndex */
+			1, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND, 0, /* FrameRate */
+			ONE_SECOND * 10, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
@@ -180,6 +188,7 @@ ExitConversation (RESPONSE_REF R)
 {
 	(void) R; // satisfy compiler. Fucking compiler.
 	NPCPhrase (GOODBYE_CAPTAIN);
+	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }
 
@@ -215,6 +224,9 @@ MainLoop (RESPONSE_REF R)
 	if (PLAYER_SAID (R, a_woman))
 	{
 		NPCPhrase (YES_WOMAN);
+		
+		if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
+			SET_GAME_STATE (SHOFIXTI_COLONY_MET, 1);
 		
 		Response (you_sound_upset, WomanMenu);
 		Response (glad_youre_not_upset, WomanMenu);
@@ -253,10 +265,9 @@ MainLoop (RESPONSE_REF R)
 
 static void
 Intro (void)
-{
+{	
 	if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
 	{
-		SET_GAME_STATE (SHOFIXTI_COLONY_MET, 1);
 		NPCPhrase (SHO_GREETING1);
 	}
 	else

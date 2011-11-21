@@ -16,6 +16,8 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
+// JMS 2011: Shofixti Colony comm screen is blacked out upon the first encounter.
+
 #ifndef _COMM_H
 #define _COMM_H
 
@@ -38,7 +40,11 @@ extern LOCDATA CommData;
 static inline BOOLEAN
 haveTalkingAnim (void)
 {
-	return CommData.AlienTalkDesc.NumFrames > 0;
+	// JMS: Shofixti Colony comm screen is blacked out upon the first encounter.
+	if (CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION && GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
+		return 0;
+	else
+		return CommData.AlienTalkDesc.NumFrames > 0;
 }
 
 static inline BOOLEAN

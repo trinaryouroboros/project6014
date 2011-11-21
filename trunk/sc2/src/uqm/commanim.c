@@ -21,6 +21,8 @@
 // BW: to be checked. I've tried to remove what's supposed to be removed while keeping the Syreen zoom-in feature.
 // It may have to be re-programmed in the new commanim style.
 
+// JMS 2011: Shofixti Colony comm screen is blacked out upon the first encounter.
+
 #define COMM_INTERNAL
 #include "commanim.h"
 
@@ -30,6 +32,8 @@
 #include "libs/compiler.h"
 #include "libs/graphics/cmap.h"
 #include "libs/mathlib.h"
+
+#include "libs/graphics/gfx_common.h"
 
 
 static TimeCount LastTime;
@@ -359,10 +363,29 @@ AdvanceTransitSequence (SEQUENCE *pSeq, DWORD ElapsedTicks)
 void
 InitCommAnimations (void)
 {
+	COUNT i;
+	
 	ActiveMask = 0;
 
 	TalkDesc = CommData.AlienTalkDesc;
 	TransitDesc = CommData.AlienTransitionDesc;
+	
+	// JMS: Shofixti Colony comm screen is blacked out upon the first encounter.
+	if (CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION)
+	{
+		TalkDesc.AnimFlags |= ANIM_DISABLED;
+	
+		for (i = 0; i < CommData.NumAnimations; ++i)
+		{
+			ANIMATION_DESC *ADPtr = &CommData.AlienAmbientArray[i];
+		
+			// JMS: Turn on the anims & disable black screen when the time is right.
+			if ((GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0 && i < CommData.NumAnimations - 1)
+				|| (GET_GAME_STATE (SHOFIXTI_COLONY_MET) >= 1 && i == CommData.NumAnimations - 1)
+				)
+				ADPtr->AnimFlags |= ANIM_DISABLED;
+		}
+	}
 
 	// Animation sequences have to be drawn in reverse, and
 	// talk animations have to be drawn last (so we add them first)
@@ -411,8 +434,24 @@ ProcessCommAnimations (BOOLEAN FullRedraw, BOOLEAN paused)
 		{
 			ANIMATION_DESC *ADPtr = pSeq->ADPtr;
 			DWORD ActiveBit = 1L << i;
+			
+			// JMS: Shofixti Colony comm screen anims start after lighting up.
+			if (ADPtr->AnimFlags & ANIM_DISABLED
+				&& CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION 
+				&& GET_GAME_STATE (SHOFIXTI_COLONY_MET) > 1
+				&& i < CommData.NumAnimations - 1
+				)
+				ADPtr->AnimFlags &= ~ANIM_DISABLED;
 
-			if (ADPtr->AnimFlags & ANIM_DISABLED)
+			// JMS: Shofixti Colony comm screen is blacked out upon the first encounter.
+			if ((ADPtr->AnimFlags & ANIM_DISABLED) 
+				|| (CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION 
+					&& GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0
+					&& i < CommData.NumAnimations - 1)
+				|| (CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION 
+					&& GET_GAME_STATE (SHOFIXTI_COLONY_MET) >= 1
+					&& i == CommData.NumAnimations - 1)
+				)
 				continue;
 			
 			if (pSeq->Direction == NO_DIR)
@@ -503,7 +542,7 @@ ProcessCommAnimations (BOOLEAN FullRedraw, BOOLEAN paused)
 		}
 		// All ambient animations have been processed. Advance the mask.
 		ActiveMask = NextActiveMask;
-
+		
 		// Process the talking and transition animations
 		if (CanTalk	&& haveTalkingAnim () && runningTalkingAnim ())
 		{
@@ -562,6 +601,18 @@ ProcessCommAnimations (BOOLEAN FullRedraw, BOOLEAN paused)
 
 			if (ColorChange)
 				FullRedraw = TRUE;
+			
+			// JMS: Shofixti Colony comm screen lights up.
+			if (CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION 
+				&& GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 1)
+			{
+				LockMutex (GraphicsLock);
+				DrawAlienFrame (NULL, 0, TRUE);
+				ScreenTransition (3, NULL);
+				UnlockMutex (GraphicsLock);
+				SET_GAME_STATE (SHOFIXTI_COLONY_MET, 2);
+				CommData.AlienAmbientArray[CommData.NumAnimations-1].AnimFlags |= ANIM_DISABLED;
+			}
 
 			// Colormap animations are processed separately
 			// from picture anims (see XFormColorMap_step)
