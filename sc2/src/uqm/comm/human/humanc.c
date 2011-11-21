@@ -31,7 +31,7 @@
 #include "libs/log.h"
 
 
-static LOCDATA human_desc =
+static LOCDATA human_desc_1x =
 {
 	HUMAN_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
@@ -154,11 +154,131 @@ static LOCDATA human_desc =
 	NULL, NULL, NULL,
 	NULL,
 	NULL,
-	1, /* NumFeatures */
+	0, /* NumFeatures */
 	{ /* AlienFeaturesArray (alternative features) */
 	  { /* Hair colour */
-	    297, /* StartIndex */
-	    3, /* NumFrames */
+	    0, /* StartIndex */
+	    0, /* NumFrames */
+	    {0 /* BlockMaskArray */
+	    },
+	  },
+	},
+	{0 /* AlienFeatureChoice (will be computed later) */
+	},
+};
+
+static LOCDATA human_desc_4x =
+{
+	HUMAN_CONVERSATION, /* AlienConv */
+	NULL, /* init_encounter_func */
+	NULL, /* post_encounter_func */
+	NULL, /* uninit_encounter_func */
+	HUMAN_PMAP_ANIM, /* AlienFrame */
+	HUMAN_FONT, /* AlienFont */
+	WHITE_COLOR_INIT, /* AlienTextFColor */
+	BLACK_COLOR_INIT, /* AlienTextBColor */
+	{0, 0}, /* AlienTextBaseline */
+	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
+	ALIGN_CENTER, /* AlienTextAlign */
+	VALIGN_TOP, /* AlienTextValign */
+	HUMAN_COLOR_MAP, /* AlienColorMap */
+	HUMAN_MUSIC, /* AlienSong */
+	NULL_RESOURCE, /* AlienAltSong */
+	0, /* AlienSongFlags */
+	HUMAN_CONVERSATION_PHRASES, /* PlayerPhrases */
+	8, /* NumAnimations */
+	{ /* AlienAmbientArray (ambient animations) */
+		{ /* Blink */
+			1, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND, (ONE_SECOND / 10) * 22, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Captain's "Picard Tug" */
+			11, /* StartIndex */
+			4, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 6, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND * 5, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Big Ceiling Monitor */
+			15, /* StartIndex */
+			108, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 4, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Small Monitor - left */
+			123, /* StartIndex */
+			93, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 2, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Small Monitor - Right */
+			216, /* StartIndex */
+			26, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 1, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Green Pulsing Stuff and girl */
+			242, /* StartIndex */
+			16, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND / 12, (ONE_SECOND / 12) * 15, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Back Wall Computer */
+			258, /* StartIndex */
+			11, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			0, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Guy in the Back */
+			269, /* StartIndex */
+			5, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			(ONE_SECOND / 10) * 2, (ONE_SECOND / 10) * 13, /* RestartRate */
+			0, /* BlockMask */
+		},
+	},
+	{ /* AlienTransitionDesc */
+		0, /* StartIndex */
+		0, /* NumFrames */
+		0, /* AnimFlags */
+		0, 0, /* FrameRate */
+		0, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	{ /* AlienTalkDesc */
+		4, /* StartIndex */
+		7, /* NumFrames */
+		RANDOM_ANIM, /* AnimFlags */
+		ONE_SECOND / 12, ONE_SECOND / 15, /* FrameRate */
+		ONE_SECOND * 7 / 60, ONE_SECOND / 12, /* RestartRate */
+		0, /* BlockMask */
+	},
+	NULL, /* AlienNumberSpeech - none */
+	/* Filler for loaded resources */
+	NULL, NULL, NULL,
+	NULL,
+	NULL,
+	0, /* NumFeatures */
+	{ /* AlienFeaturesArray (alternative features) */
+	  { /* Hair colour */
+	    0, /* StartIndex */
+	    0, /* NumFrames */
 	    {0 /* BlockMaskArray */
 	    },
 	  },
@@ -432,6 +552,18 @@ init_human_comm (void)
 {
 	LOCDATA *retval;
 	BOOLEAN male; // JMS: Draw either male or female earthling captain
+	static LOCDATA human_desc;
+
+	switch (RESOLUTION_FACTOR)
+	{
+	case 2:
+		human_desc = human_desc_4x;
+		break;
+	case 0:
+	default:
+		human_desc = human_desc_1x;
+		break;
+	}
 	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	
