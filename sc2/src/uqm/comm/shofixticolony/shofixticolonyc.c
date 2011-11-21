@@ -45,16 +45,104 @@ static LOCDATA shofixticolony_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SHOFIXTI_COLONY_CONVERSATION_PHRASES, /* PlayerPhrases */
-	0, /* NumAnimations */
+	12, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
-		{
-			0, /* StartIndex */
-			0, /* NumFrames */
-			0, /* AnimFlags */
-			0, 0, /* FrameRate */
-			0, 0, /* RestartRate */
+		{ /* 0 moving sleeves */
+			1, /* StartIndex */
+			4, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND * 2, ONE_SECOND * 3, /* RestartRate */
 			0, /* BlockMask */
-		}
+		},
+		{ /* 1 ear wiggle */
+			5, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND * 3, ONE_SECOND * 2, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 2 eye blink */
+			8, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND, (ONE_SECOND / 10) * 22, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 3 yellow light row */
+			11, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, 0, /* FrameRate */
+			ONE_SECOND * 2, ONE_SECOND / 15, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 4 top left ship flying */
+			22, /* StartIndex */
+			8, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 5 ship flying */
+			30, /* StartIndex */
+			8, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, 0, /* FrameRate */
+			ONE_SECOND * 6, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 6 ship flying */
+			38, /* StartIndex */
+			7, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, 0, /* FrameRate */
+			ONE_SECOND * 7, ONE_SECOND * 3, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 7 green and red lights in the mast of the tower */
+			45, /* StartIndex */
+			2, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND * 4, 0, /* FrameRate */
+			ONE_SECOND * 4, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 8 welding #1 */
+			47, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND * 4, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 9 welding #2 */
+			53, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND * 4, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 10 welding #3 */
+			59, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND * 4, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* 11 welding #4 */
+			65, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 4, ONE_SECOND * 4, /* RestartRate */
+			0, /* BlockMask */
+		},
 	},
 	{ /* AlienTransitionDesc */
 		0, /* StartIndex */
@@ -65,8 +153,8 @@ static LOCDATA shofixticolony_desc =
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
-		1, /* StartIndex */
-		4, /* NumFrames */
+		17, /* StartIndex */
+		5, /* NumFrames */
 		0, /* AnimFlags */
 		ONE_SECOND / 15, 0, /* FrameRate */
 		ONE_SECOND / 12, 0, /* RestartRate */
