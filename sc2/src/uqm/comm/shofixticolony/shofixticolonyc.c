@@ -187,7 +187,11 @@ static void
 ExitConversation (RESPONSE_REF R)
 {
 	(void) R; // satisfy compiler. Fucking compiler.
-	NPCPhrase (GOODBYE_CAPTAIN);
+	
+	if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) > 1)
+		NPCPhrase (GOODBYE_CAPTAIN);
+	else
+		NPCPhrase (BLACKSCREEN_GOODBYE);
 	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 }
@@ -221,13 +225,19 @@ MainLoop (RESPONSE_REF R)
 {	
 	BYTE prevent_goodbye = 0;
 	
-	if (PLAYER_SAID (R, a_woman))
+	if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
+	{
+		SET_GAME_STATE (SHOFIXTI_COLONY_MET, 1);
+		NPCPhrase (SHO_GREETING1);
+			
+		Response (a_woman, MainLoop);
+		Response (i_luv_furries, MainLoop);
+	}
+	
+	else if (PLAYER_SAID (R, a_woman))
 	{
 		NPCPhrase (YES_WOMAN);
-		
-		if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
-			SET_GAME_STATE (SHOFIXTI_COLONY_MET, 1);
-		
+	
 		Response (you_sound_upset, WomanMenu);
 		Response (glad_youre_not_upset, WomanMenu);
 	}
@@ -244,7 +254,7 @@ MainLoop (RESPONSE_REF R)
 	else if (PLAYER_SAID (R, tell_me_about_distress_call))
 	{
 		NPCPhrase (DISTRESS_CALL);
-			DISABLE_PHRASE (tell_me_about_distress_call);
+		DISABLE_PHRASE (tell_me_about_distress_call);
 	}
 	else if (PLAYER_SAID (R, gf_at_home))
 		NPCPhrase (YOURE_JUST_AS_BAD);
@@ -262,20 +272,69 @@ MainLoop (RESPONSE_REF R)
 		Response (goodbye, ExitConversation);
 }
 
+static void
+BlackScreen3 (RESPONSE_REF R)
+{
+	(void) R; // satisfy compiler.
+	
+	NPCPhrase (BLACKSCREEN_LAST);
+	
+	MainLoop ((RESPONSE_REF)0);
+}
+
+static void
+BlackScreen2 (RESPONSE_REF R)
+{
+	(void) R; // satisfy compiler.
+	
+	NPCPhrase (AIRLOCK_CASUALTIES);
+	
+	Response (sounds_nasty,BlackScreen3);
+	Response (whats_up_doc, BlackScreen3);
+	Response (goodbye, ExitConversation);
+}
+
+static void
+BlackScreen1 (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, hello_blackscreen))
+		NPCPhrase (BLACKSCREEN_SIGNAL_DEGRADED);
+	
+	if (PLAYER_SAID (R, why_degraded))
+	{
+		NPCPhrase (REASON_DEGRADED);
+		DISABLE_PHRASE (why_degraded);
+		DISABLE_PHRASE (go_ahead);
+	}
+	
+	if (PHRASE_ENABLED(go_ahead))
+		Response (go_ahead, BlackScreen2);
+
+	if (PHRASE_ENABLED(why_degraded))	
+		Response (why_degraded, BlackScreen1);
+		
+	if (PLAYER_SAID (R, why_degraded))
+		Response (yes_proceed, BlackScreen2);
+		
+	Response (goodbye, ExitConversation);
+}
 
 static void
 Intro (void)
 {	
 	if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
 	{
-		NPCPhrase (SHO_GREETING1);
+		NPCPhrase (BLACKSCREEN);
+		Response (hello_blackscreen, BlackScreen1);
 	}
 	else
+	{
 		NPCPhrase (SHO_GREETING2);
-
-	Response (a_woman, MainLoop);
-	Response (i_luv_furries, MainLoop);
-	Response (tell_me_about_distress_call, MainLoop);
+		Response (a_woman, MainLoop);
+		Response (i_luv_furries, MainLoop);
+		Response (tell_me_about_distress_call, MainLoop);
+	}
+	
 	Response (goodbye, ExitConversation);
 }
 

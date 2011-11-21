@@ -22,6 +22,18 @@
 enum
 {
 	NULL_PHRASE,
+	BLACKSCREEN,
+	hello_blackscreen,
+	BLACKSCREEN_GOODBYE,
+	BLACKSCREEN_SIGNAL_DEGRADED,
+	go_ahead,
+	why_degraded,
+	REASON_DEGRADED,
+	yes_proceed,
+	AIRLOCK_CASUALTIES,
+	sounds_nasty,
+	whats_up_doc,
+	BLACKSCREEN_LAST,
 	SHO_GREETING1,
 	SHO_GREETING2,
 	a_woman,

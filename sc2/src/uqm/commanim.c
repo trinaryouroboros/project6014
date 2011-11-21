@@ -373,7 +373,8 @@ InitCommAnimations (void)
 	// JMS: Shofixti Colony comm screen is blacked out upon the first encounter.
 	if (CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION)
 	{
-		TalkDesc.AnimFlags |= ANIM_DISABLED;
+		if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) < 2)
+			TalkDesc.AnimFlags |= ANIM_DISABLED;
 	
 		for (i = 0; i < CommData.NumAnimations; ++i)
 		{
@@ -607,8 +608,9 @@ ProcessCommAnimations (BOOLEAN FullRedraw, BOOLEAN paused)
 				&& GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 1)
 			{
 				LockMutex (GraphicsLock);
+				SetTransitionSource (&CommWndRect);
 				DrawAlienFrame (NULL, 0, TRUE);
-				ScreenTransition (3, NULL);
+				ScreenTransition (3, &CommWndRect);
 				UnlockMutex (GraphicsLock);
 				SET_GAME_STATE (SHOFIXTI_COLONY_MET, 2);
 				CommData.AlienAmbientArray[CommData.NumAnimations-1].AnimFlags |= ANIM_DISABLED;
