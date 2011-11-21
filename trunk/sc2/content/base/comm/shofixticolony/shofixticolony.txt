@@ -1,8 +1,46 @@
+#(BLACKSCREEN)
+$... . ... ...$
+
+#(hello_blackscreen)
+Eh... hello?
+
+#(BLACKSCREEN_GOODBYE)
+$...$
+
+#(BLACKSCREEN_SIGNAL_DEGRADED)
+$*Message from comm application: Incoming communication signal highly degraded.*$
+$*Proceed with error tolerant reconstruction protocol?*$
+
+#(go_ahead)
+Yes, yes, go ahead.
+
+#(why_degraded)
+Reason for the degradation?
+
+#(REASON_DEGRADED)
+$*Query submitted to analytical application, please wait...*$
+$*Query returned (0.001 ms runtime) with following result:*$
+$*Severe weather event has dropped most communication grid.*$
+$*All signals are routed through a single class-3 communication satellite.*$
+
+#(yes_proceed)
+Very well, proceed.
+
+#(AIRLOCK_CASUALTIES)
+... airlock... , ... casualties ... . ... out.
+
+#(sounds_nasty)
+Sounds nasty down there.
+
+#(whats_up_doc)
+What is going on?
+
+#(BLACKSCREEN_LAST)
+$*Message from communication application: sufficient bandwidth now available for...*$ 
+$*...standard communication, please stand by.*$
+
 #(SHO_GREETING1)
-On behalf of the Shofixti, I bid you welcome Captain.
-I feel I must apologize for the mess. 
-You see, we're trying to rebuild 
-our entire civilization.
+Greetings, Captain.
 
 #(SHO_GREETING2)
 Welcome back Captain.
@@ -56,8 +94,7 @@ You do? A truly enlightened male! I'm sure your mate is with you now.
 Actually.... she's back home on Unzervault. Taking care of our things there.
 
 #(YOURE_JUST_AS_BAD)
-...
-I see.
+...I see.
 
 #(DIFFERENT_INDEED)
 Oh yes. Different indeed.

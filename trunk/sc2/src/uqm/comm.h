@@ -41,8 +41,12 @@ static inline BOOLEAN
 haveTalkingAnim (void)
 {
 	// JMS: Shofixti Colony comm screen is blacked out upon the first encounter.
-	if (CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION && GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 0)
+	if (CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION && GET_GAME_STATE (SHOFIXTI_COLONY_MET) < 3)
+	{	
+		if (GET_GAME_STATE (SHOFIXTI_COLONY_MET) == 2)
+			SET_GAME_STATE (SHOFIXTI_COLONY_MET, 3);
 		return 0;
+	}
 	else
 		return CommData.AlienTalkDesc.NumFrames > 0;
 }
