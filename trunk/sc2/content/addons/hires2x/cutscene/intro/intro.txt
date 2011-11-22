@@ -26,9 +26,9 @@ TBC 000000
 TE TRACED
 
 #(Load font to use later)
-FONT 0 addons/hires4x/fonts/starcon.fon
+FONT 0 addons/hires2x/fonts/starcon.fon
 #(Load font to use later)
-FONT 1 addons/hires4x/fonts/slides.fon
+FONT 1 addons/hires2x/fonts/slides.fon
 
 #(************ Title Screen ******************************************)
 
@@ -38,7 +38,7 @@ FONT 1 addons/hires4x/fonts/slides.fon
 FONT 0
 
 #(Set ANIM to draw slides from)
-ANI addons/hires4x/cutscene/intro/title.ani
+ANI addons/hires2x/cutscene/intro/title.ani
 
 #(Set text fade in/out color; 0xRRGGBB)
 TFC 000000
@@ -60,7 +60,7 @@ WAIT 500
 #(++++++++++++ Title 2 +++++++++++++++++++++++++++++++++++)
 
 #(Play music)
-MUSIC addons/hires4x/cutscene/intro/introx.mod
+MUSIC addons/hires2x/cutscene/intro/introx.mod
 
 #(Move sync point to current time index)
 RESYNC
@@ -128,7 +128,7 @@ FTB 3000
 FONT 1
 
 #(Set ANIM to draw slides from)
-ANI addons/hires4x/cutscene/intro/intro.ani
+ANI addons/hires2x/cutscene/intro/intro.ani
 
 #(Set text vertical position; can be T=top, B=bottom, M=middle)
 TVA T
