@@ -528,16 +528,54 @@ gas_preprocess (ELEMENT *ElementPtr)
 	else if (ElementPtr->state_flags & NONSOLID)
 	{
 		ELEMENT *eptr;
+		STARSHIP *StarShipPtr;
+		SIZE offs_x, offs_y;
+		SBYTE leftOrRight, upOrDown;
+		COUNT angle, angleCorrect;
+		static BYTE alignment[NUM_SIDES]={0,0};
 		
-		LockElement (ElementPtr->hTarget, &eptr);  // eptr points to enemy ship.
+		LockElement (ElementPtr->hTarget, &eptr);  // eptr points to enemy ship now.
 		ElementPtr->next.location = eptr->next.location;
 		
+		GetElementStarShip (eptr, &StarShipPtr);
+		angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
+		
+		alignment[ElementPtr->playerNr] = ElementPtr->creature_arr_index % 4;
+		
+		if (alignment[ElementPtr->playerNr] == 0)
+		{
+			leftOrRight = -1;
+			upOrDown = 1;
+			angleCorrect = 0;
+		}
+		else if (alignment[ElementPtr->playerNr] == 1)
+		{
+			leftOrRight = 1;
+			upOrDown = -1;
+			angleCorrect = 0;
+		}
+		else if (alignment[ElementPtr->playerNr] == 2)
+		{
+			leftOrRight = -1;
+			upOrDown = 1;
+			angleCorrect = HALF_CIRCLE / 2;
+		}
+		else
+		{
+			leftOrRight = 1;
+			upOrDown = -1;
+			angleCorrect = HALF_CIRCLE / 2;
+		}
+		
+		offs_x = SINE (angle - angleCorrect, (ElementPtr->creature_arr_index) * (6 << RESOLUTION_FACTOR));
+		offs_y = COSINE (angle - angleCorrect, (ElementPtr->creature_arr_index) * (6 << RESOLUTION_FACTOR));
+		ElementPtr->next.location.x = ElementPtr->next.location.x + leftOrRight * offs_x;
+		ElementPtr->next.location.y = ElementPtr->next.location.y + upOrDown * offs_y;
+	
 		if (ElementPtr->turn_wait)
 		{
 			HELEMENT hEffect;
-			STARSHIP *StarShipPtr;
-
-			GetElementStarShip (eptr, &StarShipPtr);
+			
 			
 			hEffect = AllocElement ();
 			if (hEffect)
