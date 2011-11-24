@@ -538,7 +538,7 @@ gas_preprocess (ELEMENT *ElementPtr)
 		ElementPtr->next.location = eptr->next.location;
 		
 		GetElementStarShip (eptr, &StarShipPtr);
-		angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
+		angle = (FACING_TO_ANGLE (StarShipPtr->ShipFacing) + (ElementPtr->creature_arr_index)) % 16;
 		
 		alignment[ElementPtr->playerNr] = ElementPtr->creature_arr_index % 4;
 		
@@ -567,8 +567,8 @@ gas_preprocess (ELEMENT *ElementPtr)
 			angleCorrect = HALF_CIRCLE / 2;
 		}
 		
-		offs_x = SINE (angle - angleCorrect, (ElementPtr->creature_arr_index) * (6 << RESOLUTION_FACTOR));
-		offs_y = COSINE (angle - angleCorrect, (ElementPtr->creature_arr_index) * (6 << RESOLUTION_FACTOR));
+		offs_x = SINE (angle - angleCorrect, (ElementPtr->creature_arr_index % 16) * (6 << RESOLUTION_FACTOR));
+		offs_y = COSINE (angle - angleCorrect, (ElementPtr->creature_arr_index % 16) * (6 << RESOLUTION_FACTOR));
 		ElementPtr->next.location.x = ElementPtr->next.location.x + leftOrRight * offs_x;
 		ElementPtr->next.location.y = ElementPtr->next.location.y + upOrDown * offs_y;
 	
