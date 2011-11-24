@@ -38,7 +38,7 @@
 #define SPECIAL_WAIT 7
 
 #define SHIP_MASS 9
-#define BAUL_OFFSET 9
+#define BAUL_OFFSET (4 << RESOLUTION_FACTOR)
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 5
 
@@ -360,8 +360,6 @@ baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 static void
 destruct_preprocess (ELEMENT *ElementPtr)
 {
-	log_add (log_Debug, "%d", GetFrameIndex(ElementPtr->current.image.frame));
-	//ElementPtr->current.image.frame = SetAbsFrameIndex(ElementPtr->current.image.frame, LAST_GAS_INDEX);
 	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 }
 
@@ -474,10 +472,10 @@ self_destruct (ELEMENT *ElementPtr)
 	}
 }
 
-#define MAX_GASES 64
+#define MAX_GASES 32
 
 static BYTE
-count_gases (STARSHIP *StarShipPtr, BOOLEAN FindSpot)
+count_gases (STARSHIP *StarShipPtr)
 {
 	BYTE num_gases, id_use[MAX_GASES];
 	HELEMENT hElement, hNextElement;
@@ -505,16 +503,7 @@ count_gases (STARSHIP *StarShipPtr, BOOLEAN FindSpot)
 		}
 		UnlockElement (hElement);
 	}
-	
-	if (FindSpot)
-	{
-		num_gases = 0;
-		while (id_use[num_gases])
-			++num_gases;
-	}
-	
-	log_add (log_User, "Num_gases %d\n", num_gases);
-	
+
 	return (num_gases);
 }
 
@@ -527,6 +516,8 @@ gas_preprocess (ELEMENT *ElementPtr)
 	else
 		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
 	
+	ElementPtr->state_flags |= CHANGING;
+	
 	// If enemy ship dies, remove the gas (this prevents game crashing upon enemy ship dying with gas on it).
 	if (ElementPtr->state_flags & NONSOLID && ElementPtr->hTarget == 0)
 	{
@@ -537,30 +528,16 @@ gas_preprocess (ELEMENT *ElementPtr)
 	else if (ElementPtr->state_flags & NONSOLID)
 	{
 		ELEMENT *eptr;
-		STARSHIP *StarShipPtr;
-		SBYTE LeftOrRight;
 		
-		GetElementStarShip (ElementPtr, &StarShipPtr);
-		
-		LockElement (ElementPtr->hTarget, &eptr);
+		LockElement (ElementPtr->hTarget, &eptr);  // eptr points to enemy ship.
 		ElementPtr->next.location = eptr->next.location;
 		
 		if (ElementPtr->turn_wait)
 		{
 			HELEMENT hEffect;
-			STARSHIP *StarShipPtr2;
-			
-			if (ElementPtr->turn_wait == 1)
-				LeftOrRight = 1;
-			else
-				LeftOrRight = -1;
-			
-			ElementPtr->next.location.x += (LeftOrRight * count_gases (StarShipPtr, TRUE)) << RESOLUTION_FACTOR;
-			ElementPtr->next.location.y += (LeftOrRight * count_gases (StarShipPtr, TRUE)) << RESOLUTION_FACTOR;
-			
-			log_add (log_Debug, "leftorright%d, countgases %d \n", LeftOrRight, count_gases (StarShipPtr, TRUE));
+			STARSHIP *StarShipPtr;
 
-			GetElementStarShip (eptr, &StarShipPtr2);
+			GetElementStarShip (eptr, &StarShipPtr);
 			
 			hEffect = AllocElement ();
 			if (hEffect)
@@ -569,12 +546,13 @@ gas_preprocess (ELEMENT *ElementPtr)
 				eptr->playerNr = ElementPtr->playerNr;
 				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
 				eptr->life_span = 1;
+				eptr->creature_arr_index = ElementPtr->creature_arr_index;
 				eptr->current = eptr->next = ElementPtr->next;
 				eptr->preprocess_func = gas_preprocess;
 				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
 				
-				GetElementStarShip (ElementPtr, &StarShipPtr2);
-				SetElementStarShip (eptr, StarShipPtr2);
+				GetElementStarShip (ElementPtr, &StarShipPtr);
+				SetElementStarShip (eptr, StarShipPtr);
 				eptr->hTarget = ElementPtr->hTarget;
 				
 				UnlockElement (hEffect);
@@ -608,26 +586,10 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 	// If colliding with enemy ship, stick to the ship.
 	else if (ElementPtr1->state_flags & PLAYER_SHIP && ElementPtr1->playerNr != ElementPtr0->playerNr)
 	{
-		HELEMENT hGasElement, hNextElement;
+		HELEMENT hGasElement;
 		ELEMENT *GasPtr;
 		
-		for (hGasElement = GetHeadElement ();hGasElement; hGasElement = hNextElement)
-		{
-			LockElement (hGasElement, &GasPtr);
-			
-			if (elementsOfSamePlayer (GasPtr, ElementPtr0)
-				&& GasPtr->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.special
-				&& (GasPtr->state_flags & NONSOLID))
-			{
-				UnlockElement (hGasElement);
-				break;
-			}
-			
-			hNextElement = GetSuccElement (GasPtr);
-			UnlockElement (hGasElement);
-		}
-		
-		if (hGasElement || (hGasElement = AllocElement ()))
+		if ((hGasElement = AllocElement ()))
 		{
 			LockElement (hGasElement, &GasPtr);
 			
@@ -648,6 +610,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 			}
 			
 			GasPtr->life_span = ElementPtr0->life_span;
+			GasPtr->creature_arr_index = ElementPtr0->creature_arr_index;
 			GasPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
 			
 			UnlockElement (hGasElement);
@@ -664,10 +627,10 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 #define GAS_HITS 100
 #define GAS_DAMAGE 1
 #define GAS_LIFE 480
-#define GAS_OFFSET (10 << RESOLUTION_FACTOR)
+#define GAS_OFFSET (25 << RESOLUTION_FACTOR)
 #define GAS_INIT_SPEED 0
 #define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))  // JMS_GFX
-#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(-5 << RESOLUTION_FACTOR)) // JMS_GFX
+#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR)) // JMS_GFX
 
 static void spawn_gas (ELEMENT *ShipPtr)
 {
@@ -677,9 +640,11 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	SIZE offs_x, offs_y;
 	COUNT angle;
 	static COUNT gas_side[NUM_SIDES]={0,0};
+	static COUNT gas_number[NUM_SIDES]={0,0};
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
+	gas_number[ShipPtr->playerNr] = (gas_number[ShipPtr->playerNr] + 1) % 32;
 	gas_side[ShipPtr->playerNr] = (gas_side[ShipPtr->playerNr] + 1) % 2;
 	angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 	
@@ -718,6 +683,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 		LockElement (Missile, &GasPtr);
 		GasPtr->collision_func = gas_collision;
 		GasPtr->postprocess_func = gas_postprocess;
+		GasPtr->creature_arr_index = gas_number[ShipPtr->playerNr];
 		SetElementStarShip (GasPtr, StarShipPtr);
 		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), GasPtr);
 		UnlockElement (Missile);
