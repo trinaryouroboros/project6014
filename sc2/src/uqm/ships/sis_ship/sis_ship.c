@@ -767,7 +767,7 @@ static COUNT initialize_explorer_weaponry (ELEMENT *ShipPtr, HELEMENT BlasterArr
 
 	
 	COORD cx, cy;
-	static COUNT blaster_side[2]={0,0};
+	static COUNT blaster_side[NUM_SIDES]={0,0};
 	COUNT facing, angle;
 	SIZE offs_x, offs_y;
 	

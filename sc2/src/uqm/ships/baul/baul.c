@@ -25,17 +25,17 @@
 
 
 #define MAX_CREW 20
-#define MAX_ENERGY 12
+#define MAX_ENERGY 21
 #define ENERGY_REGENERATION 3
 #define WEAPON_ENERGY_COST 1
-#define SPECIAL_ENERGY_COST 4
+#define SPECIAL_ENERGY_COST 2
 #define ENERGY_WAIT 24
 #define MAX_THRUST 32
 #define THRUST_INCREMENT 6
 #define TURN_WAIT 3
 #define THRUST_WAIT 5
-#define WEAPON_WAIT 1
-#define SPECIAL_WAIT 0
+#define WEAPON_WAIT 24
+#define SPECIAL_WAIT 7
 
 #define SHIP_MASS 9
 #define BAUL_OFFSET 9
@@ -46,7 +46,7 @@ static RACE_DESC baul_desc =
 {
 	{ /* SHIP_INFO */
 		FIRES_FORE,
-		10, /* Super Melee cost */
+		14, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
 		BAUL_RACE_STRINGS,
@@ -123,7 +123,7 @@ static RACE_DESC baul_desc_2xres =
 {
 	{ /* SHIP_INFO */
 		FIRES_FORE,
-		10, /* Super Melee cost */
+		14, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
 		BAUL_RACE_STRINGS,
@@ -200,7 +200,7 @@ static RACE_DESC baul_desc_4xres =
 {
 	{ /* SHIP_INFO */
 		FIRES_FORE,
-		10, /* Super Melee cost */
+		14, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
 		BAUL_RACE_STRINGS,
@@ -365,8 +365,8 @@ destruct_preprocess (ELEMENT *ElementPtr)
 	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 }
 
-/* In order to detect any Orz Marines that have boarded the ship
- when it self-destructs, we'll need to see some Orz functions */
+/* Since this was copied from Shofixti code, it had some of these orz checks there. 
+   Not sure if these are relevant anymore. */
 #include "../orz/orz.h"
 #define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && \
 ptr->collision_func == marine_collision)
@@ -377,6 +377,8 @@ self_destruct (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	// Gas is still 'solid' when it's hit by the spray. Let's make a shockwave and kill the gas cloud. 
 	if (!(ElementPtr->state_flags & NONSOLID))
 	{
 		HELEMENT hDestruct;
@@ -393,11 +395,10 @@ self_destruct (ELEMENT *ElementPtr)
 			LockElement (hDestruct, &DestructPtr);
 			SetElementStarShip (DestructPtr, StarShipPtr);
 			DestructPtr->hit_points = DestructPtr->mass_points = 0;
-			DestructPtr->playerNr = NEUTRAL_PLAYER_NUM;
+			DestructPtr->playerNr = ElementPtr->playerNr; // Don't damage self.
 			DestructPtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
 			DestructPtr->life_span = SHOCKWAVE_FRAMES;
 			SetPrimType (&(GLOBAL (DisplayArray))[DestructPtr->PrimIndex], STAMP_PRIM);
-			//SetPrimColor (&(GLOBAL (DisplayArray))[DestructPtr->PrimIndex], BUILD_COLOR (MAKE_RGB15 (0x1F, 0x1F, 0x1F), 0x0F));
 			DestructPtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
 			DestructPtr->current.image.frame = SetAbsFrameIndex(StarShipPtr->RaceDescPtr->ship_data.special[0], LAST_GAS_INDEX);
 			DestructPtr->next.image.frame = SetAbsFrameIndex(ElementPtr->current.image.frame, LAST_GAS_INDEX);
@@ -409,11 +410,14 @@ self_destruct (ELEMENT *ElementPtr)
 			UnlockElement (hDestruct);
 		}
 		
-		// Gas dies.
-		ElementPtr->state_flags |= NONSOLID;//ElementPtr->life_span = SHOCKWAVE_FRAMES;
+		// Gas dies on next turn.
+		ElementPtr->state_flags |= NONSOLID;
 		
+		// Explosion sounds.
+		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr);
+		ProcessSound (SetAbsSoundIndex (GameSounds, TARGET_DAMAGED_FOR_6_PLUS_PT), ElementPtr);
 	}
-	else
+
 	{
 		// This is called during PostProcessQueue(), close to or at the end,
 		// for the temporary destruct element to apply the effects of glory
@@ -429,7 +433,7 @@ self_destruct (ELEMENT *ElementPtr)
 			
 			if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
 			{
-#define DESTRUCT_RANGE (20 << RESOLUTION_FACTOR) // JMS_GFX
+#define DESTRUCT_RANGE (160 << RESOLUTION_FACTOR) // JMS_GFX
 				SIZE delta_x, delta_y;
 				DWORD dist;
 				
@@ -442,17 +446,17 @@ self_destruct (ELEMENT *ElementPtr)
 				if (delta_x <= DESTRUCT_RANGE && delta_y <= DESTRUCT_RANGE
 					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(DESTRUCT_RANGE * DESTRUCT_RANGE))
 				{
-#define MAX_DESTRUCTION ((DESTRUCT_RANGE >> RESOLUTION_FACTOR) / 10) // JMS_GFX
+#define MAX_DESTRUCTION ((DESTRUCT_RANGE >> RESOLUTION_FACTOR) / 16) // JMS_GFX
 					SIZE destruction;
 					
 					destruction = ((MAX_DESTRUCTION * (DESTRUCT_RANGE - square_root (dist))) / DESTRUCT_RANGE) + 1;
 					
-					if (ObjPtr->state_flags & PLAYER_SHIP)
+					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != ElementPtr->playerNr)
 					{
 						if (!DeltaCrew (ObjPtr, -destruction))
 							ObjPtr->life_span = 0;
 					}
-					else if (!GRAVITY_MASS (ObjPtr->mass_points))
+					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != ElementPtr->playerNr)
 					{
 						if ((BYTE)destruction < ObjPtr->hit_points)
 							ObjPtr->hit_points -= (BYTE)destruction;
@@ -601,8 +605,8 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 		ElementPtr0->current.image.frame = SetAbsFrameIndex (ElementPtr0->current.image.frame, LAST_GAS_INDEX);
 		ElementPtr0->next.image.frame = SetAbsFrameIndex (ElementPtr0->current.image.frame, LAST_GAS_INDEX);
 	}
-	// If colliding with a ship (Baul or enemy), stick to the ship
-	else if (ElementPtr1->state_flags & PLAYER_SHIP)
+	// If colliding with enemy ship, stick to the ship.
+	else if (ElementPtr1->state_flags & PLAYER_SHIP && ElementPtr1->playerNr != ElementPtr0->playerNr)
 	{
 		HELEMENT hGasElement, hNextElement;
 		ELEMENT *GasPtr;
@@ -660,19 +664,41 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 #define GAS_HITS 100
 #define GAS_DAMAGE 1
 #define GAS_LIFE 480
-#define GAS_OFFSET (50 << RESOLUTION_FACTOR)
+#define GAS_OFFSET (10 << RESOLUTION_FACTOR)
 #define GAS_INIT_SPEED 0
+#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))  // JMS_GFX
+#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(-5 << RESOLUTION_FACTOR)) // JMS_GFX
+
 static void spawn_gas (ELEMENT *ShipPtr)
 {
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 	HELEMENT Missile;
-		
+	SIZE offs_x, offs_y;
+	COUNT angle;
+	static COUNT gas_side[NUM_SIDES]={0,0};
+	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-	MissileBlock.cx = ShipPtr->next.location.x;
-	MissileBlock.cy = ShipPtr->next.location.y;
+	
+	gas_side[ShipPtr->playerNr] = (gas_side[ShipPtr->playerNr] + 1) % 2;
+	angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
+	
+	if(gas_side[ShipPtr->playerNr])
+	{
+		offs_x = -SINE (angle, GAS_HORZ_OFFSET);
+		offs_y = COSINE (angle, GAS_HORZ_OFFSET);
+	}
+	else
+	{
+		offs_x = -SINE (angle, GAS_HORZ_OFFSET_2);
+		offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
+	}
+		
+	
+	MissileBlock.cx = ShipPtr->next.location.x + offs_x;
+	MissileBlock.cy = ShipPtr->next.location.y + offs_y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.face = (StarShipPtr->ShipFacing - 5 - (((COUNT)TFB_Random ()) % 5)) % 16;
+	MissileBlock.face = (StarShipPtr->ShipFacing - 8) % 16;
 	MissileBlock.index = 0;
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = 0;
@@ -719,28 +745,48 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 #define MISSILE_OFFSET (3 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
+	SIZE offs_x, offs_y;
+	COUNT i, angle;
+	static COUNT spray_side[NUM_SIDES]={0,0};
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-	MissileBlock.cx = ShipPtr->next.location.x;
-	MissileBlock.cy = ShipPtr->next.location.y;
-	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
-	MissileBlock.face = StarShipPtr->ShipFacing;
-	MissileBlock.index = 0;
-	MissileBlock.sender = ShipPtr->playerNr;
-	MissileBlock.flags = IGNORE_SIMILAR;
-	MissileBlock.pixoffs = BAUL_OFFSET;
-	MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
-	MissileBlock.hit_points = MISSILE_HITS;
-	MissileBlock.damage = MISSILE_DAMAGE;
-	MissileBlock.life = MISSILE_LIFE;
-	MissileBlock.preprocess_func = spray_preprocess;
-	MissileBlock.blast_offs = MISSILE_OFFSET;
-	SprayArray[0] = initialize_missile (&MissileBlock);
+	angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 	
-	return (1);
+	for (i = 0; i < 2; i++)
+	{
+		spray_side[ShipPtr->playerNr] = (spray_side[ShipPtr->playerNr] + 1) % 2;
+		if(spray_side[ShipPtr->playerNr])
+		{
+			offs_x = -SINE (angle, GAS_HORZ_OFFSET);
+			offs_y = COSINE (angle, GAS_HORZ_OFFSET);
+		}
+		else
+		{
+			offs_x = -SINE (angle, GAS_HORZ_OFFSET_2);
+			offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
+		}
+	
+		MissileBlock.cx = ShipPtr->next.location.x + offs_x;
+		MissileBlock.cy = ShipPtr->next.location.y + offs_y;
+		MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+		MissileBlock.face = StarShipPtr->ShipFacing;
+		MissileBlock.index = 0;
+		MissileBlock.sender = ShipPtr->playerNr;
+		MissileBlock.flags = IGNORE_SIMILAR;
+		MissileBlock.pixoffs = BAUL_OFFSET;
+		MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
+		MissileBlock.hit_points = MISSILE_HITS;
+		MissileBlock.damage = MISSILE_DAMAGE;
+		MissileBlock.life = MISSILE_LIFE;
+		MissileBlock.preprocess_func = spray_preprocess;
+		MissileBlock.blast_offs = MISSILE_OFFSET;
+		SprayArray[i] = initialize_missile (&MissileBlock);
+	}
+	
+	return (2);
 }
 
-#define GAS_BATCH_SIZE 3
+#define GAS_BATCH_SIZE 1
 static void
 baul_postprocess (ELEMENT *ElementPtr)
 {
