@@ -3,7 +3,7 @@
 
 #include "types.h"
 
-typedef enum MeleeShip {
+enum MeleeShip {
 	MELEE_ANDROSYNTH,
 	MELEE_ARILOU,
 	MELEE_CHENJESU,
@@ -40,7 +40,9 @@ typedef enum MeleeShip {
 			// Used with the Update protocol, to register in the sentTeam
 	MELEE_NONE = (BYTE) ~0
 			// Empty fleet position.
-} MeleeShip;
+};
+
+typedef BYTE MeleeShip; // JMS: Make GCC compiler treat Meleeship entries as 1 byte long.
 #define NUM_MELEE_SHIPS (MELEE_EXPLORER + 1)
 
 static inline bool

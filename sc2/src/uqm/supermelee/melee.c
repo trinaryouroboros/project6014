@@ -18,6 +18,12 @@
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
+// JMS: Had to include some stuff that actually shouldn't be here in order to get the
+// melee team saving&loading after restart to work.
+#define MELEESETUP_INTERNAL
+#define MELEETEAM_INTERNAL
+#include "meleesetup.h"
+
 #include "melee.h"
  
 #include "options.h"
@@ -61,6 +67,7 @@
 #include "libs/reslib.h"
 #include "libs/log.h"
 #include "libs/uio.h"
+
 
 
 #include <assert.h>
@@ -1993,11 +2000,11 @@ LoadMeleeConfig (MELEE_STATE *pMS)
 	uio_Stream *stream;
 	int status;
 	COUNT side;
-
+	
 	stream = uio_fopen (configDir, "melee.cfg", "rb");
 	if (stream == NULL)
 		goto err;
-	
+
 	{
 		struct stat sb;
 
@@ -2012,12 +2019,17 @@ LoadMeleeConfig (MELEE_STATE *pMS)
 		status = uio_getc (stream);
 		if (status == EOF)
 			goto err;
+
 		PlayerControl[side] = (BYTE) status;
 		// XXX: insert sanity check on PlanetControl here.
 
 		if (MeleeSetup_deserializeTeam (pMS->meleeSetup, side, stream) == -1)
 			goto err;
-	
+		
+		// JMS: For some reason these weren't calculated at all which resulted in funky fleet values...
+		pMS->meleeSetup->fleetValue[0] = MeleeTeam_getValue (&(pMS->meleeSetup->teams[0]));
+		pMS->meleeSetup->fleetValue[1] = MeleeTeam_getValue (&(pMS->meleeSetup->teams[1]));
+		
 		/* Do not allow netplay mode at the start. */
 		if (PlayerControl[side] & NETWORK_CONTROL)
 			PlayerControl[side] = HUMAN_CONTROL | STANDARD_RATING;
@@ -2113,6 +2125,7 @@ Melee (void)
 		}
 
 		MenuState.side = 0;
+		
 		SetMenuSounds (MENU_SOUND_ARROWS, MENU_SOUND_SELECT);
 		DoInput (&MenuState, TRUE);
 
