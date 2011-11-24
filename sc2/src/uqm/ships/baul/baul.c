@@ -358,7 +358,7 @@ baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 #define LAST_GAS_INDEX 8
 
 static void
-destruct_preprocess (ELEMENT *ElementPtr)
+shockwave_preprocess (ELEMENT *ElementPtr)
 {
 	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 }
@@ -370,7 +370,7 @@ destruct_preprocess (ELEMENT *ElementPtr)
 ptr->collision_func == marine_collision)
 
 static void
-self_destruct (ELEMENT *ElementPtr)
+generate_shockwave (ELEMENT *ElementPtr)
 {
 	STARSHIP *StarShipPtr;
 	
@@ -379,33 +379,33 @@ self_destruct (ELEMENT *ElementPtr)
 	// Gas is still 'solid' when it's hit by the spray. Let's make a shockwave and kill the gas cloud. 
 	if (!(ElementPtr->state_flags & NONSOLID))
 	{
-		HELEMENT hDestruct;
+		HELEMENT hShockwave;
 				
-		hDestruct = AllocElement ();
-		if (hDestruct)
+		hShockwave = AllocElement ();
+		if (hShockwave)
 		{
-			ELEMENT *DestructPtr;
+			ELEMENT *ShockwavePtr;
 			STARSHIP *StarShipPtr;
 			
 			GetElementStarShip (ElementPtr, &StarShipPtr);
 			
-			PutElement (hDestruct);
-			LockElement (hDestruct, &DestructPtr);
-			SetElementStarShip (DestructPtr, StarShipPtr);
-			DestructPtr->hit_points = DestructPtr->mass_points = 0;
-			DestructPtr->playerNr = ElementPtr->playerNr; // Don't damage self.
-			DestructPtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
-			DestructPtr->life_span = SHOCKWAVE_FRAMES;
-			SetPrimType (&(GLOBAL (DisplayArray))[DestructPtr->PrimIndex], STAMP_PRIM);
-			DestructPtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-			DestructPtr->current.image.frame = SetAbsFrameIndex(StarShipPtr->RaceDescPtr->ship_data.special[0], LAST_GAS_INDEX);
-			DestructPtr->next.image.frame = SetAbsFrameIndex(ElementPtr->current.image.frame, LAST_GAS_INDEX);
-			DestructPtr->current.location = ElementPtr->current.location;
-			DestructPtr->preprocess_func = destruct_preprocess;
-			DestructPtr->postprocess_func = NULL;
-			DestructPtr->death_func = NULL;
-			ZeroVelocityComponents (&DestructPtr->velocity);
-			UnlockElement (hDestruct);
+			PutElement (hShockwave);
+			LockElement (hShockwave, &ShockwavePtr);
+			SetElementStarShip (ShockwavePtr, StarShipPtr);
+			ShockwavePtr->hit_points = ShockwavePtr->mass_points = 0;
+			ShockwavePtr->playerNr = ElementPtr->playerNr; // Don't damage self.
+			ShockwavePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
+			ShockwavePtr->life_span = SHOCKWAVE_FRAMES;
+			SetPrimType (&(GLOBAL (DisplayArray))[ShockwavePtr->PrimIndex], STAMP_PRIM);
+			ShockwavePtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+			ShockwavePtr->current.image.frame = SetAbsFrameIndex(StarShipPtr->RaceDescPtr->ship_data.special[0], LAST_GAS_INDEX);
+			ShockwavePtr->next.image.frame = SetAbsFrameIndex(ElementPtr->current.image.frame, LAST_GAS_INDEX);
+			ShockwavePtr->current.location = ElementPtr->current.location;
+			ShockwavePtr->preprocess_func = shockwave_preprocess;
+			ShockwavePtr->postprocess_func = NULL;
+			ShockwavePtr->death_func = NULL;
+			ZeroVelocityComponents (&ShockwavePtr->velocity);
+			UnlockElement (hShockwave);
 		}
 		
 		// Gas dies on next turn.
@@ -418,7 +418,7 @@ self_destruct (ELEMENT *ElementPtr)
 
 	{
 		// This is called during PostProcessQueue(), close to or at the end,
-		// for the temporary destruct element to apply the effects of glory
+		// for the temporary shockwave element to apply the effects of glory
 		// explosion. The effects are not seen until the next frame.
 		HELEMENT hElement, hNextElement;
 		
@@ -431,7 +431,7 @@ self_destruct (ELEMENT *ElementPtr)
 			
 			if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
 			{
-#define DESTRUCT_RANGE (160 << RESOLUTION_FACTOR) // JMS_GFX
+#define SHOCKWAVE_RANGE (160 << RESOLUTION_FACTOR) // JMS_GFX
 				SIZE delta_x, delta_y;
 				DWORD dist;
 				
@@ -441,13 +441,13 @@ self_destruct (ELEMENT *ElementPtr)
 				delta_x = WORLD_TO_DISPLAY (delta_x);
 				delta_y = WORLD_TO_DISPLAY (delta_y);
 				
-				if (delta_x <= DESTRUCT_RANGE && delta_y <= DESTRUCT_RANGE
-					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(DESTRUCT_RANGE * DESTRUCT_RANGE))
+				if (delta_x <= SHOCKWAVE_RANGE && delta_y <= SHOCKWAVE_RANGE
+					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(SHOCKWAVE_RANGE * SHOCKWAVE_RANGE))
 				{
-#define MAX_DESTRUCTION ((DESTRUCT_RANGE >> RESOLUTION_FACTOR) / 16) // JMS_GFX
+#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 16) // JMS_GFX
 					SIZE destruction;
 					
-					destruction = ((MAX_DESTRUCTION * (DESTRUCT_RANGE - square_root (dist))) / DESTRUCT_RANGE) + 1;
+					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
 					
 					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != ElementPtr->playerNr)
 					{
@@ -538,7 +538,7 @@ gas_preprocess (ELEMENT *ElementPtr)
 		ElementPtr->next.location = eptr->next.location;
 		
 		GetElementStarShip (eptr, &StarShipPtr);
-		angle = (FACING_TO_ANGLE (StarShipPtr->ShipFacing) + (ElementPtr->creature_arr_index)) % 16;
+		angle = (ElementPtr->creature_arr_index) % 16;
 		
 		alignment[ElementPtr->playerNr] = ElementPtr->creature_arr_index % 4;
 		
@@ -567,8 +567,8 @@ gas_preprocess (ELEMENT *ElementPtr)
 			angleCorrect = HALF_CIRCLE / 2;
 		}
 		
-		offs_x = SINE (angle - angleCorrect, (ElementPtr->creature_arr_index % 16) * (6 << RESOLUTION_FACTOR));
-		offs_y = COSINE (angle - angleCorrect, (ElementPtr->creature_arr_index % 16) * (6 << RESOLUTION_FACTOR));
+		offs_x = SINE (angle - angleCorrect, (ElementPtr->creature_arr_index % 16) * (5 << RESOLUTION_FACTOR));
+		offs_y = COSINE (angle - angleCorrect, (ElementPtr->creature_arr_index % 16) * (5 << RESOLUTION_FACTOR));
 		ElementPtr->next.location.x = ElementPtr->next.location.x + leftOrRight * offs_x;
 		ElementPtr->next.location.y = ElementPtr->next.location.y + upOrDown * offs_y;
 	
@@ -606,7 +606,7 @@ static void
 gas_postprocess (ELEMENT *ElementPtr)
 {
 	if (GetFrameIndex(ElementPtr->current.image.frame) >= LAST_GAS_INDEX)
-		self_destruct (ElementPtr);
+		generate_shockwave (ElementPtr);
 }
 
 static void
