@@ -32,8 +32,8 @@ Lololo
 Snoon
 #(Nestor)
 Nestor
-#(Lurg)
-Lurg
+#(Lurro)
+Lurro
 #(Thory)
 Thory
 #(Jujuby)

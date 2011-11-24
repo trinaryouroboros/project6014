@@ -21,9 +21,10 @@
 #include "resinst.h"
 
 #include "uqm/globdata.h"
+#include "libs/log.h"
 
 
-#define MAX_CREW 16
+#define MAX_CREW 20
 #define MAX_ENERGY 12
 #define ENERGY_REGENERATION 3
 #define WEAPON_ENERGY_COST 1
@@ -39,7 +40,7 @@
 #define SHIP_MASS 9
 #define BAUL_OFFSET 9
 #define MISSILE_SPEED DISPLAY_TO_WORLD (20)
-#define MISSILE_LIFE 15
+#define MISSILE_LIFE 5
 
 static RACE_DESC baul_desc =
 {
@@ -353,7 +354,50 @@ baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	}
 }
 
-#define LAST_GAS_INDEX 15
+#define MAX_GASES 64
+#define LAST_GAS_INDEX 8
+
+static BYTE
+count_gases (STARSHIP *StarShipPtr, BOOLEAN FindSpot)
+{
+	BYTE num_gases, id_use[MAX_GASES];
+	HELEMENT hElement, hNextElement;
+	
+	num_gases = MAX_GASES;
+	while (num_gases--)
+		id_use[num_gases] = 0;
+	
+	num_gases = 0;
+	for (hElement = GetTailElement (); hElement; hElement = hNextElement)
+	{
+		ELEMENT *ElementPtr;
+		
+		LockElement (hElement, &ElementPtr);
+		hNextElement = GetPredElement (ElementPtr);
+		if (ElementPtr->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.special
+			&& GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX
+			&& ElementPtr->life_span)
+		{
+			if (++num_gases == MAX_GASES)
+			{
+				UnlockElement (hElement);
+				hNextElement = 0;
+			}
+		}
+		UnlockElement (hElement);
+	}
+	
+	if (FindSpot)
+	{
+		num_gases = 0;
+		while (id_use[num_gases])
+			++num_gases;
+	}
+	
+	log_add (log_User, "Num_gases %d\n", num_gases);
+	
+	return (num_gases);
+}
 
 static void
 gas_preprocess (ELEMENT *ElementPtr)
@@ -364,10 +408,20 @@ gas_preprocess (ELEMENT *ElementPtr)
 	else
 		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
 	
+	// If enemy ship dies, remove the gas (this prevents game crashing upon enemy ship dying with gas on it).
+	if (ElementPtr->state_flags & NONSOLID && ElementPtr->hTarget == 0)
+	{
+		ElementPtr->life_span = 0;
+		ElementPtr->state_flags |= DISAPPEARING;
+	}
 	// When the gas has collided with enemy ship, it sticks to the ship until expires.
-	if (ElementPtr->state_flags & NONSOLID)
+	else if (ElementPtr->state_flags & NONSOLID)
 	{
 		ELEMENT *eptr;
+		STARSHIP *StarShipPtr;
+		SBYTE LeftOrRight;
+		
+		GetElementStarShip (ElementPtr, &StarShipPtr);
 		
 		LockElement (ElementPtr->hTarget, &eptr);
 		ElementPtr->next.location = eptr->next.location;
@@ -375,9 +429,19 @@ gas_preprocess (ELEMENT *ElementPtr)
 		if (ElementPtr->turn_wait)
 		{
 			HELEMENT hEffect;
-			STARSHIP *StarShipPtr;
+			STARSHIP *StarShipPtr2;
+			
+			if (ElementPtr->turn_wait == 1)
+				LeftOrRight = 1;
+			else
+				LeftOrRight = -1;
+			
+			ElementPtr->next.location.x += (LeftOrRight * count_gases (StarShipPtr, TRUE)) << RESOLUTION_FACTOR;
+			ElementPtr->next.location.y += (LeftOrRight * count_gases (StarShipPtr, TRUE)) << RESOLUTION_FACTOR;
+			
+			log_add (log_Debug, "leftorright%d, countgases %d \n", LeftOrRight, count_gases (StarShipPtr, TRUE));
 
-			GetElementStarShip (eptr, &StarShipPtr);
+			GetElementStarShip (eptr, &StarShipPtr2);
 			
 			hEffect = AllocElement ();
 			if (hEffect)
@@ -390,8 +454,8 @@ gas_preprocess (ELEMENT *ElementPtr)
 				eptr->preprocess_func = gas_preprocess;
 				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
 				
-				GetElementStarShip (ElementPtr, &StarShipPtr);
-				SetElementStarShip (eptr, StarShipPtr);
+				GetElementStarShip (ElementPtr, &StarShipPtr2);
+				SetElementStarShip (eptr, StarShipPtr2);
 				eptr->hTarget = ElementPtr->hTarget;
 				
 				UnlockElement (hEffect);
@@ -504,7 +568,17 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	}
 }
 
+#define LAST_SPRAY_INDEX 5
 
+static void
+spray_preprocess (ELEMENT *ElementPtr)
+{
+	// Move to next image frame.
+	if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX)
+		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	else
+		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+}
 
 static COUNT
 initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
@@ -519,7 +593,8 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
-	MissileBlock.face = MissileBlock.index = StarShipPtr->ShipFacing;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = 0;
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = IGNORE_SIMILAR;
 	MissileBlock.pixoffs = BAUL_OFFSET;
@@ -527,7 +602,7 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 	MissileBlock.hit_points = MISSILE_HITS;
 	MissileBlock.damage = MISSILE_DAMAGE;
 	MissileBlock.life = MISSILE_LIFE;
-	MissileBlock.preprocess_func = NULL;
+	MissileBlock.preprocess_func = spray_preprocess;
 	MissileBlock.blast_offs = MISSILE_OFFSET;
 	SprayArray[0] = initialize_missile (&MissileBlock);
 	
