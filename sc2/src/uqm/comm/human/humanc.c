@@ -230,14 +230,14 @@ static LOCDATA human_desc_4x =
 		},
 		{ /* Green Pulsing Stuff and girl */
 			242, /* StartIndex */
-			16, /* NumFrames */
+			27, /* NumFrames */
 			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND / 12, 0, /* FrameRate */
 			ONE_SECOND / 12, (ONE_SECOND / 12) * 15, /* RestartRate */
 			0, /* BlockMask */
 		},
 		{ /* Back Wall Computer */
-			258, /* StartIndex */
+			269, /* StartIndex */
 			11, /* NumFrames */
 			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 24, 0, /* FrameRate */
@@ -245,7 +245,7 @@ static LOCDATA human_desc_4x =
 			0, /* BlockMask */
 		},
 		{ /* Guy in the Back */
-			269, /* StartIndex */
+			280, /* StartIndex */
 			5, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 12, 0, /* FrameRate */
