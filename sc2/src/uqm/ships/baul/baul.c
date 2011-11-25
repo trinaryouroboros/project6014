@@ -356,18 +356,27 @@ baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 
 #define SHOCKWAVE_FRAMES 8
 #define LAST_GAS_INDEX 8
+#define LAST_SHOCKWAVE_INDEX (LAST_GAS_INDEX + SHOCKWAVE_FRAMES)
+#define NUM_DISSOLVE_ANIMS 4
+#define MAX_GASES 32
+
+#define SHOCKWAVE_RANGE (180 << RESOLUTION_FACTOR) // JMS_GFX
+#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 30) // JMS_GFX
+
+/* Since this was copied from Shofixti code, it had some of these orz checks there. 
+ Not sure if these are relevant anymore. */
+#include "../orz/orz.h"
+#define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && \
+ptr->collision_func == marine_collision)
 
 static void
 shockwave_preprocess (ELEMENT *ElementPtr)
 {
 	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	
+	// This makes the shockwave animate even if the ships are not moving and the screen is stationary.
+	ElementPtr->state_flags |= CHANGING;
 }
-
-/* Since this was copied from Shofixti code, it had some of these orz checks there. 
-   Not sure if these are relevant anymore. */
-#include "../orz/orz.h"
-#define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && \
-ptr->collision_func == marine_collision)
 
 static void
 generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
@@ -431,7 +440,6 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 			
 			if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
 			{
-#define SHOCKWAVE_RANGE (180 << RESOLUTION_FACTOR) // JMS_GFX
 				SIZE delta_x, delta_y;
 				DWORD dist;
 				
@@ -444,7 +452,6 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 				if (delta_x <= SHOCKWAVE_RANGE && delta_y <= SHOCKWAVE_RANGE
 					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(SHOCKWAVE_RANGE * SHOCKWAVE_RANGE))
 				{
-#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 30) // JMS_GFX
 					SIZE destruction;
 					
 					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
@@ -471,8 +478,6 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 		}
 	}
 }
-
-#define MAX_GASES 32
 
 static BYTE
 count_gases (STARSHIP *StarShipPtr)
@@ -509,6 +514,52 @@ count_gases (STARSHIP *StarShipPtr)
 
 static void
 gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1);
+
+static void
+gas_death_animation (ELEMENT *ElementPtr)
+{
+	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->state_flags |= CHANGING;
+}
+
+static void
+gas_death (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	if (StarShipPtr->hShip)
+	{
+		HELEMENT hIonSpots;
+		ELEMENT *ShipPtr;
+		
+		LockElement (StarShipPtr->hShip, &ShipPtr);
+	
+		if ((hIonSpots = AllocElement ()))
+		{
+			ELEMENT *IonSpotsPtr;
+			
+			LockElement (hIonSpots, &IonSpotsPtr);
+			IonSpotsPtr->playerNr = ElementPtr->playerNr;
+			IonSpotsPtr->state_flags = FINITE_LIFE | NONSOLID | IGNORE_SIMILAR | APPEARING;
+			IonSpotsPtr->turn_wait = 0;
+			IonSpotsPtr->life_span = NUM_DISSOLVE_ANIMS;
+			IonSpotsPtr->current.location.x = ElementPtr->current.location.x;
+			IonSpotsPtr->current.location.y = ElementPtr->current.location.y;
+			IonSpotsPtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+			IonSpotsPtr->current.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, LAST_SHOCKWAVE_INDEX);
+			IonSpotsPtr->preprocess_func = gas_death_animation;
+			SetElementStarShip (IonSpotsPtr, StarShipPtr);
+			SetPrimType (&(GLOBAL (DisplayArray))[IonSpotsPtr->PrimIndex], STAMP_PRIM);
+			
+			UnlockElement (hIonSpots);
+			PutElement (hIonSpots);
+		}
+		
+		UnlockElement (StarShipPtr->hShip);
+	}
+}
 
 static void
 gas_preprocess (ELEMENT *ElementPtr)
@@ -584,6 +635,7 @@ gas_preprocess (ELEMENT *ElementPtr)
 			hEffect = AllocElement ();
 			if (hEffect)
 			{
+				// eptr points to the new gas element now.
 				LockElement (hEffect, &eptr);
 				eptr->playerNr = ElementPtr->playerNr;
 				eptr->state_flags = FINITE_LIFE | IGNORE_SHIP | CHANGING;
@@ -617,8 +669,6 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 	// The ship this gas cloud belongs to.
 	GetElementStarShip (ElementPtr0, &StarShipPtr);
 	
-	log_add (log_Debug, "Lifespan %d", ElementPtr0->life_span);
-	
 	// Check if the colliding element is a ship. If it is not, check if it's a projectile from Baul ship.
 	if (!elementsOfSamePlayer(ElementPtr0, ElementPtr1) && !(ElementPtr1->state_flags & PLAYER_SHIP) 
 		&& ElementPtr0->life_span > 1 && ElementPtr1->life_span > 1
@@ -640,6 +690,9 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 		// Remove the lock on enemy ship and make the gas die on next turn.
 		ElementPtr0->hTarget = 0;
 		ElementPtr0->life_span = 1;
+		
+		// Don't do the gas dissolve anim now that the shockwave appears.
+		ElementPtr0->death_func = NULL;
 		
 		// Generate the actual shockwave.
 		generate_shockwave (ElementPtr0, ElementPtr1->playerNr);
@@ -748,6 +801,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 		
 		LockElement (Missile, &GasPtr);
 		GasPtr->collision_func = gas_collision;
+		GasPtr->death_func = gas_death;
 		GasPtr->weapon_element_index = gas_number[ShipPtr->playerNr];
 		SetElementStarShip (GasPtr, StarShipPtr);
 		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), GasPtr);
