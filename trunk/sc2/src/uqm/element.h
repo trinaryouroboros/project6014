@@ -39,7 +39,12 @@
 typedef HLINK HELEMENT;
 
 // Bits for ELEMENT_FLAGS:
-// bits 0 and 1 are now available
+// bit 0 is now available
+#define IGNORE_SHIP (1 << 1)
+		// JMS: This is used for Baul gas: When sticking to enemy ship, it ignores
+		// the ship, but can still be shot with weapons. Using NONSOLID wouldn't do
+		// since it made the gas invulnerable to weapons.
+
 #define PLAYER_SHIP (1 << 2)
 		// The ELEMENT is a player controlable ship, and not some bullet,
 		// crew, asteroid, fighter, etc. This does not mean that the ship
@@ -170,7 +175,11 @@ struct element
 			// The ship this element belongs to.
 	HELEMENT hTarget;
 	
-	int creature_arr_index; //populated by lander.c planetside when creature dies  -DN 29DEC10
+	union
+	{
+		BYTE creature_arr_index;	// populated by lander.c planetside when creature dies  -DN 29DEC10
+		BYTE weapon_element_index;	// Used by etc. Baul ship to remember which of it's gas clouds is which.
+	};
 	
 };
 

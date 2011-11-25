@@ -25,7 +25,7 @@
 
 
 #define MAX_CREW 20
-#define MAX_ENERGY 21
+#define MAX_ENERGY 22
 #define ENERGY_REGENERATION 3
 #define WEAPON_ENERGY_COST 1
 #define SPECIAL_ENERGY_COST 2
@@ -370,7 +370,7 @@ shockwave_preprocess (ELEMENT *ElementPtr)
 ptr->collision_func == marine_collision)
 
 static void
-generate_shockwave (ELEMENT *ElementPtr)
+generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 {
 	STARSHIP *StarShipPtr;
 	
@@ -393,7 +393,7 @@ generate_shockwave (ELEMENT *ElementPtr)
 			LockElement (hShockwave, &ShockwavePtr);
 			SetElementStarShip (ShockwavePtr, StarShipPtr);
 			ShockwavePtr->hit_points = ShockwavePtr->mass_points = 0;
-			ShockwavePtr->playerNr = ElementPtr->playerNr; // Don't damage self.
+			ShockwavePtr->playerNr = which_player; // Don't damage self.
 			ShockwavePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
 			ShockwavePtr->life_span = SHOCKWAVE_FRAMES;
 			SetPrimType (&(GLOBAL (DisplayArray))[ShockwavePtr->PrimIndex], STAMP_PRIM);
@@ -408,7 +408,7 @@ generate_shockwave (ELEMENT *ElementPtr)
 			UnlockElement (hShockwave);
 		}
 		
-		// Gas dies on next turn.
+		// Gas dies on the next turn.
 		ElementPtr->state_flags |= NONSOLID;
 		
 		// Explosion sounds.
@@ -418,8 +418,8 @@ generate_shockwave (ELEMENT *ElementPtr)
 
 	{
 		// This is called during PostProcessQueue(), close to or at the end,
-		// for the temporary shockwave element to apply the effects of glory
-		// explosion. The effects are not seen until the next frame.
+		// for the temporary shockwave element to apply the damage.
+		// The effects are not seen until the next frame.
 		HELEMENT hElement, hNextElement;
 		
 		for (hElement = GetHeadElement (); hElement != 0; hElement = hNextElement)
@@ -431,7 +431,7 @@ generate_shockwave (ELEMENT *ElementPtr)
 			
 			if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
 			{
-#define SHOCKWAVE_RANGE (160 << RESOLUTION_FACTOR) // JMS_GFX
+#define SHOCKWAVE_RANGE (180 << RESOLUTION_FACTOR) // JMS_GFX
 				SIZE delta_x, delta_y;
 				DWORD dist;
 				
@@ -444,17 +444,17 @@ generate_shockwave (ELEMENT *ElementPtr)
 				if (delta_x <= SHOCKWAVE_RANGE && delta_y <= SHOCKWAVE_RANGE
 					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(SHOCKWAVE_RANGE * SHOCKWAVE_RANGE))
 				{
-#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 16) // JMS_GFX
+#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 30) // JMS_GFX
 					SIZE destruction;
 					
 					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
 					
-					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != ElementPtr->playerNr)
+					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != which_player)
 					{
 						if (!DeltaCrew (ObjPtr, -destruction))
 							ObjPtr->life_span = 0;
 					}
-					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != ElementPtr->playerNr)
+					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != which_player)
 					{
 						if ((BYTE)destruction < ObjPtr->hit_points)
 							ObjPtr->hit_points -= (BYTE)destruction;
@@ -508,6 +508,9 @@ count_gases (STARSHIP *StarShipPtr)
 }
 
 static void
+gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1);
+
+static void
 gas_preprocess (ELEMENT *ElementPtr)
 {
 	// Move to next image frame.
@@ -516,16 +519,17 @@ gas_preprocess (ELEMENT *ElementPtr)
 	else
 		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
 	
+	// This makes the gas animate even if the ships are not moving and the screen is stationary.
 	ElementPtr->state_flags |= CHANGING;
 	
 	// If enemy ship dies, remove the gas (this prevents game crashing upon enemy ship dying with gas on it).
-	if (ElementPtr->state_flags & NONSOLID && ElementPtr->hTarget == 0)
+	if (ElementPtr->state_flags & IGNORE_SHIP && ElementPtr->hTarget == 0)
 	{
 		ElementPtr->life_span = 0;
 		ElementPtr->state_flags |= DISAPPEARING;
 	}
 	// When the gas has collided with enemy ship, it sticks to the ship until expires.
-	else if (ElementPtr->state_flags & NONSOLID)
+	else if (ElementPtr->state_flags & IGNORE_SHIP)
 	{
 		ELEMENT *eptr;
 		STARSHIP *StarShipPtr;
@@ -534,14 +538,16 @@ gas_preprocess (ELEMENT *ElementPtr)
 		COUNT angle, angleCorrect;
 		static BYTE alignment[NUM_SIDES]={0,0};
 		
-		LockElement (ElementPtr->hTarget, &eptr);  // eptr points to enemy ship now.
+		// eptr points to enemy ship now.
+		LockElement (ElementPtr->hTarget, &eptr);
+		
+		// Make gas's location the same as the enemy ship's.
 		ElementPtr->next.location = eptr->next.location;
 		
+		// Randomize the gas's location so every gas cloud doesn't stick to the same place on the enemy ship.
 		GetElementStarShip (eptr, &StarShipPtr);
-		angle = (ElementPtr->creature_arr_index) % 16;
-		
-		alignment[ElementPtr->playerNr] = ElementPtr->creature_arr_index % 4;
-		
+		angle = (ElementPtr->weapon_element_index) % 16;
+		alignment[ElementPtr->playerNr] = ElementPtr->weapon_element_index % 4;
 		if (alignment[ElementPtr->playerNr] == 0)
 		{
 			leftOrRight = -1;
@@ -566,9 +572,8 @@ gas_preprocess (ELEMENT *ElementPtr)
 			upOrDown = -1;
 			angleCorrect = HALF_CIRCLE / 2;
 		}
-		
-		offs_x = SINE (angle - angleCorrect, (ElementPtr->creature_arr_index % 16) * (5 << RESOLUTION_FACTOR));
-		offs_y = COSINE (angle - angleCorrect, (ElementPtr->creature_arr_index % 16) * (5 << RESOLUTION_FACTOR));
+		offs_x = SINE (angle - angleCorrect, (ElementPtr->weapon_element_index % 16) * (5 << RESOLUTION_FACTOR));
+		offs_y = COSINE (angle - angleCorrect, (ElementPtr->weapon_element_index % 16) * (5 << RESOLUTION_FACTOR));
 		ElementPtr->next.location.x = ElementPtr->next.location.x + leftOrRight * offs_x;
 		ElementPtr->next.location.y = ElementPtr->next.location.y + upOrDown * offs_y;
 	
@@ -576,17 +581,17 @@ gas_preprocess (ELEMENT *ElementPtr)
 		{
 			HELEMENT hEffect;
 			
-			
 			hEffect = AllocElement ();
 			if (hEffect)
 			{
 				LockElement (hEffect, &eptr);
 				eptr->playerNr = ElementPtr->playerNr;
-				eptr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
+				eptr->state_flags = FINITE_LIFE | IGNORE_SHIP | CHANGING;
 				eptr->life_span = 1;
-				eptr->creature_arr_index = ElementPtr->creature_arr_index;
+				eptr->weapon_element_index = ElementPtr->weapon_element_index;
 				eptr->current = eptr->next = ElementPtr->next;
 				eptr->preprocess_func = gas_preprocess;
+				eptr->collision_func = gas_collision;
 				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
 				
 				GetElementStarShip (ElementPtr, &StarShipPtr);
@@ -603,30 +608,51 @@ gas_preprocess (ELEMENT *ElementPtr)
 }
 
 static void
-gas_postprocess (ELEMENT *ElementPtr)
-{
-	if (GetFrameIndex(ElementPtr->current.image.frame) >= LAST_GAS_INDEX)
-		generate_shockwave (ElementPtr);
-}
-
-static void
 gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {
 	STARSHIP *StarShipPtr;
+	STARSHIP *EnemyStarShipPtr;
+	BYTE	 enemyShipIsBaul = 0;
+	
+	// The ship this gas cloud belongs to.
 	GetElementStarShip (ElementPtr0, &StarShipPtr);
 	
-	// If colliding with Baul's spray weapon, EXPLODE!!!
-	if (ElementPtr1->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.weapon)
+	log_add (log_Debug, "Lifespan %d", ElementPtr0->life_span);
+	
+	// Check if the colliding element is a ship. If it is not, check if it's a projectile from Baul ship.
+	if (!elementsOfSamePlayer(ElementPtr0, ElementPtr1) && !(ElementPtr1->state_flags & PLAYER_SHIP) 
+		&& ElementPtr0->life_span > 1 && ElementPtr1->life_span > 1
+		&& ElementPtr1->playerNr > -1)
 	{
+		GetElementStarShip (ElementPtr1, &EnemyStarShipPtr);
+		if (EnemyStarShipPtr->SpeciesID == BAUL_ID)
+			enemyShipIsBaul = 1;
+	}
+	
+	// If colliding with Baul's spray weapon, EXPLODE!!!
+	if (ElementPtr1->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.weapon
+		|| (enemyShipIsBaul && ElementPtr1->current.image.farray == EnemyStarShipPtr->RaceDescPtr->ship_data.weapon))
+	{
+		// Move to shockwave graphics.
 		ElementPtr0->current.image.frame = SetAbsFrameIndex (ElementPtr0->current.image.frame, LAST_GAS_INDEX);
 		ElementPtr0->next.image.frame = SetAbsFrameIndex (ElementPtr0->current.image.frame, LAST_GAS_INDEX);
+		
+		// Remove the lock on enemy ship and make the gas die on next turn.
+		ElementPtr0->hTarget = 0;
+		ElementPtr0->life_span = 1;
+		
+		// Generate the actual shockwave.
+		generate_shockwave (ElementPtr0, ElementPtr1->playerNr);
 	}
 	// If colliding with enemy ship, stick to the ship.
-	else if (ElementPtr1->state_flags & PLAYER_SHIP && ElementPtr1->playerNr != ElementPtr0->playerNr)
+	else if (!(ElementPtr0->state_flags & IGNORE_SHIP)
+			 && ElementPtr1->state_flags & PLAYER_SHIP 
+			 && ElementPtr1->playerNr != ElementPtr0->playerNr)
 	{
 		HELEMENT hGasElement;
 		ELEMENT *GasPtr;
 		
+		// Create a new gas element which is sticking to the enemy ship.
 		if ((hGasElement = AllocElement ()))
 		{
 			LockElement (hGasElement, &GasPtr);
@@ -638,8 +664,9 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 				GasPtr->current = ElementPtr0->next;
 				GasPtr->next = GasPtr->current;
 				GasPtr->playerNr = ElementPtr0->playerNr;
-				GasPtr->state_flags = FINITE_LIFE | NONSOLID | CHANGING;
+				GasPtr->state_flags = FINITE_LIFE | IGNORE_SHIP | CHANGING;
 				GasPtr->preprocess_func = gas_preprocess;
+				GasPtr->collision_func = gas_collision;
 				SetPrimType (&(GLOBAL (DisplayArray))[GasPtr->PrimIndex], NO_PRIM);
 				
 				SetElementStarShip (GasPtr, StarShipPtr);
@@ -648,12 +675,13 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 			}
 			
 			GasPtr->life_span = ElementPtr0->life_span;
-			GasPtr->creature_arr_index = ElementPtr0->creature_arr_index;
+			GasPtr->weapon_element_index = ElementPtr0->weapon_element_index;
 			GasPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
 			
 			UnlockElement (hGasElement);
 		}
 		
+		// Erase the original gas element.
 		ElementPtr0->hit_points = 0;
 		ElementPtr0->life_span = 0;
 		ElementPtr0->state_flags |= DISAPPEARING | COLLISION | NONSOLID;
@@ -677,8 +705,8 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	HELEMENT Missile;
 	SIZE offs_x, offs_y;
 	COUNT angle;
-	static COUNT gas_side[NUM_SIDES]={0,0};
-	static COUNT gas_number[NUM_SIDES]={0,0};
+	static COUNT gas_side[NUM_SIDES]   = {0, 0};
+	static COUNT gas_number[NUM_SIDES] = {0, 0};
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
@@ -720,8 +748,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 		
 		LockElement (Missile, &GasPtr);
 		GasPtr->collision_func = gas_collision;
-		GasPtr->postprocess_func = gas_postprocess;
-		GasPtr->creature_arr_index = gas_number[ShipPtr->playerNr];
+		GasPtr->weapon_element_index = gas_number[ShipPtr->playerNr];
 		SetElementStarShip (GasPtr, StarShipPtr);
 		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), GasPtr);
 		UnlockElement (Missile);
