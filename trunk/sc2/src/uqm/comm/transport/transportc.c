@@ -30,7 +30,7 @@
 // BW: for SOL/CHMMR_DEFINED, no longer included in commall.h
 
 
-static LOCDATA transport_desc =
+static LOCDATA transport_desc_1x =
 {
 	TRANSPORT_CONVERSATION, /* AlienConv */
 	NULL, /* init_encounter_func */
@@ -143,6 +143,112 @@ static LOCDATA transport_desc =
 	{ /* AlienTalkDesc */
 		4, /* StartIndex */
 		7, /* NumFrames */
+		RANDOM_ANIM, /* AnimFlags */
+		ONE_SECOND / 12, ONE_SECOND / 15, /* FrameRate */
+		ONE_SECOND * 7 / 60, ONE_SECOND / 12, /* RestartRate */
+		0, /* BlockMask */
+	},
+	NULL, /* AlienNumberSpeech - none */
+	/* Filler for loaded resources */
+	NULL, NULL, NULL,
+	NULL,
+	NULL,
+	0, /* NumFeatures */
+	{{0, 0, {0}} /*AlienFeatureArray (alternative features) */
+	},
+	{0 /* AlienFeatureChoice (will be computed later) */
+	},
+};
+
+static LOCDATA transport_desc_4x =
+{
+	TRANSPORT_CONVERSATION, /* AlienConv */
+	NULL, /* init_encounter_func */
+	NULL, /* post_encounter_func */
+	NULL, /* uninit_encounter_func */
+	TRANSPORT_PMAP_ANIM, /* AlienFrame */
+	TRANSPORT_FONT, /* AlienFont */
+	WHITE_COLOR_INIT, /* AlienTextFColor */
+	BLACK_COLOR_INIT, /* AlienTextBColor */
+	{0, 0}, /* AlienTextBaseline */
+	0, /* SIS_TEXT_WIDTH - 16, */ /* AlienTextWidth */
+	ALIGN_CENTER, /* AlienTextAlign */
+	VALIGN_TOP, /* AlienTextValign */
+	TRANSPORT_COLOR_MAP, /* AlienColorMap */
+	TRANSPORT_MUSIC, /* AlienSong */
+	NULL_RESOURCE, /* AlienAltSong */
+	0, /* AlienSongFlags */
+	TRANSPORT_CONVERSATION_PHRASES, /* PlayerPhrases */
+	7, /* NumAnimations */
+	{ /* AlienAmbientArray (ambient animations) */
+		{ /* Blink */
+			1, /* StartIndex */
+			2, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND, (ONE_SECOND / 10) * 22, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Big Ceiling Monitor */
+			8, /* StartIndex */
+			40, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 4, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Small Monitor - left */
+			48, /* StartIndex */
+			68, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 2, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Small Monitor - Right */
+			116, /* StartIndex */
+			26, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			ONE_SECOND * 1, ONE_SECOND * 1, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Green Pulsing Stuff and girl */
+			142, /* StartIndex */
+			27, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			(ONE_SECOND / 10) * 2, (ONE_SECOND / 10) * 13, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Back Wall Computer */
+			169, /* StartIndex */
+			11, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 24, 0, /* FrameRate */
+			0, 0, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{ /* Guy in the Back */
+			180, /* StartIndex */
+			5, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 12, 0, /* FrameRate */
+			(ONE_SECOND / 10) * 2, (ONE_SECOND / 10) * 13, /* RestartRate */
+			0, /* BlockMask */
+		},
+	},
+	{ /* AlienTransitionDesc */
+		0, /* StartIndex */
+		0, /* NumFrames */
+		0, /* AnimFlags */
+		0, 0, /* FrameRate */
+		0, 0, /* RestartRate */
+		0, /* BlockMask */
+	},
+	{ /* AlienTalkDesc */
+		3, /* StartIndex */
+		5, /* NumFrames */
 		RANDOM_ANIM, /* AnimFlags */
 		ONE_SECOND / 12, ONE_SECOND / 15, /* FrameRate */
 		ONE_SECOND * 7 / 60, ONE_SECOND / 12, /* RestartRate */
@@ -309,6 +415,18 @@ LOCDATA*
 init_transport_comm (void)
 {
 	LOCDATA *retval;
+	static LOCDATA transport_desc;
+
+	switch (RESOLUTION_FACTOR)
+	{
+	case 2:
+		transport_desc = transport_desc_4x;
+		break;
+	case 0:
+	default:
+		transport_desc = transport_desc_1x;
+		break;
+	}
 	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	
