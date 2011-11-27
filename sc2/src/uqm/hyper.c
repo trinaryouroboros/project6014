@@ -346,7 +346,7 @@ check_hyperspace_encounter (void)
 void
 FreeHyperData (void)
 {
-	if (RESOLUTION_FACTOR == 2)
+	if (RESOLUTION_FACTOR > 0)
 	{
 		DestroyDrawable (ReleaseDrawable (hyperholes[1]));
 		hyperholes[1] = 0;
@@ -381,7 +381,7 @@ FreeHyperData (void)
 static void
 LoadHyperData (void)
 {
-	if (RESOLUTION_FACTOR == 2)
+	if (RESOLUTION_FACTOR > 0)
 	{
 		if (hyperholes[1] == 0)
 		{
@@ -1043,7 +1043,7 @@ encounter_transition (ELEMENT *ElementPtr)
 			{
 				ElementPtr->death_func = NULL;
 				// BW: the bubble has reached full size so we start animation
-				if (RESOLUTION_FACTOR == 2)
+				if (RESOLUTION_FACTOR > 0)
 				{
 					ElementPtr->current.image.farray = &npcbubble;
 					ElementPtr->next.image.farray = &npcbubble;
@@ -1265,7 +1265,7 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 			}
 			else
 			{
-				if (RESOLUTION_FACTOR == 2)
+				if (RESOLUTION_FACTOR > 0)
 				{
 					ElementPtr->current.image.farray = &npcbubble;
 					ElementPtr->next.image.farray = &npcbubble;
@@ -1841,7 +1841,7 @@ SeedUniverse (void)
 			}
 			else
 			{
- 				// BW: first the actual star
+				// BW: first the actual star
 				hHyperSpaceElement = AllocHyperElement (SDPtr);
 				if (hHyperSpaceElement == 0)
 					continue;
@@ -1862,18 +1862,12 @@ SeedUniverse (void)
 
 				SetUpElement (HyperSpaceElementPtr);
 
-				if (SDPtr == CurStarDescPtr
-					&& GET_GAME_STATE (PORTAL_COUNTER) == 0)
-					HyperSpaceElementPtr->death_func = hyper_death;
-				else
-				{
-					HyperSpaceElementPtr->death_func = NULL;
-					HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame =
-						DecFrameIndex (stars_in_space);
-				}
+				HyperSpaceElementPtr->death_func = NULL;
+				HyperSpaceElementPtr->IntersectControl.IntersectStamp.frame = DecFrameIndex (stars_in_space);
+
 				UnlockElement (hHyperSpaceElement);
 
-				InsertElement (hHyperSpaceElement, GetHeadElement ());				
+				InsertElement (hHyperSpaceElement, GetHeadElement ());
 				// BW: and then the animated hyperspace portal
 				hHyperSpaceElement = AllocHyperElement (SDPtr);
 				if (hHyperSpaceElement == 0)
