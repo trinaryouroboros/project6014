@@ -670,6 +670,7 @@ object_animation (ELEMENT *ElementPtr)
 						speed = WORLD_TO_VELOCITY (2 * 1) * 9 / 10;
 						break;
 				}
+				speed = speed << RESOLUTION_FACTOR;
 
 				SetVelocityComponents (&ElementPtr->velocity, COSINE (angle, speed), SINE (angle, speed));
 

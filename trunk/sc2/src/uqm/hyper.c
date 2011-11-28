@@ -60,7 +60,7 @@
 #define YOFFS ((RADAR_SCAN_HEIGHT + (UNIT_SCREEN_HEIGHT << 2)) >> 1)
 
 static FRAME npcbubble; // BW: animated bubble
-static FRAME hyperspacesuns; // BW: array of all the truespace suns needed
+//static FRAME hyperspacesuns; // BW: array of all the truespace suns needed
 static FRAME hyperholes[4];			// BW: One for each flavour of space
 // hyperholes[0] is never used for numbering consistency with hyperstars
 static FRAME hyperstars[4];			// JMS: Extra slot for ORZ space star gfx
@@ -355,8 +355,8 @@ FreeHyperData (void)
 		// hyperholes[2] = 0;
 		// DestroyDrawable (ReleaseDrawable (hyperholes[2]));
 		// hyperholes[3] = 0;
-		DestroyDrawable (ReleaseDrawable (hyperspacesuns));
-		hyperspacesuns = 0;
+		// DestroyDrawable (ReleaseDrawable (hyperspacesuns));
+		// hyperspacesuns = 0;
 		DestroyDrawable (ReleaseDrawable (npcbubble));
 		npcbubble = 0;
 	}
@@ -393,7 +393,7 @@ LoadHyperData (void)
 			// hyperstars[3] = CaptureDrawable (
 			// 		LoadGraphic (ORZHOLES_MASK_PMAP_ANIM));
 		}
-		hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
+		//		hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
 		npcbubble = CaptureDrawable (LoadGraphic (NPCBUBBLE_MASK_PMAP_ANIM));
 	}
 
