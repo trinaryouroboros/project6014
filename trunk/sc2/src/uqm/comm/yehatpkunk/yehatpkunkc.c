@@ -290,6 +290,8 @@ YPTalkSegue (COUNT wait_track)
 static void
 ExitConversation (RESPONSE_REF R)
 {
+	(void) R;
+	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	/***
 	if (PLAYER_SAID (R, bye_homeworld))
@@ -371,7 +373,7 @@ Intro (void)
 	NPCPhrase_cb (P_HELLO, &SelectAlienPKUNK);
 	NPCPhrase_cb (Y_BYEBYE, &SelectAlienYEHAT);
 	//	YPTalkSegue ((COUNT)~0);
-	ExitConversation (NULL);
+	ExitConversation ((RESPONSE_REF)0);
 }
 
 static COUNT

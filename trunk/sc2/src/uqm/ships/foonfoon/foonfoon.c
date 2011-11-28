@@ -25,7 +25,7 @@
 #include "libs/sound/sound.h" // For StopSource
 #include <math.h> // For sqrt
 
-#define MAX_CREW 20
+#define MAX_CREW 12
 #define MAX_ENERGY 32
 #define ENERGY_REGENERATION 1
 #define WEAPON_ENERGY_COST 1 
