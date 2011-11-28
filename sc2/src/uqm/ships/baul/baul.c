@@ -32,7 +32,7 @@
 #define ENERGY_WAIT 24
 #define MAX_THRUST 32
 #define THRUST_INCREMENT 6
-#define TURN_WAIT 3
+#define TURN_WAIT 2
 #define THRUST_WAIT 5
 #define WEAPON_WAIT 24
 #define SPECIAL_WAIT 7
@@ -40,7 +40,7 @@
 #define SHIP_MASS 9
 #define BAUL_OFFSET (4 << RESOLUTION_FACTOR)
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
-#define MISSILE_LIFE 5
+#define MISSILE_LIFE 6
 
 static RACE_DESC baul_desc =
 {
@@ -102,7 +102,7 @@ static RACE_DESC baul_desc =
 	},
 	{
 		0,
-		(MISSILE_SPEED * MISSILE_LIFE) >> 1,
+		(MISSILE_SPEED * MISSILE_LIFE),
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -179,7 +179,7 @@ static RACE_DESC baul_desc_2xres =
 	},
 	{
 		0,
-		(MISSILE_SPEED_2XRES * MISSILE_LIFE) >> 1,
+		(MISSILE_SPEED_2XRES * MISSILE_LIFE),
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -256,7 +256,7 @@ static RACE_DESC baul_desc_4xres =
 	},
 	{
 		0,
-		(MISSILE_SPEED_4XRES * MISSILE_LIFE) >> 1,
+		(MISSILE_SPEED_4XRES * MISSILE_LIFE),
 		NULL,
 	},
 	(UNINIT_FUNC *) NULL,
@@ -363,11 +363,18 @@ baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 #define SHOCKWAVE_RANGE (180 << RESOLUTION_FACTOR) // JMS_GFX
 #define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 30) // JMS_GFX
 
-/* Since this was copied from Shofixti code, it had some of these orz checks there. 
- Not sure if these are relevant anymore. */
 #include "../orz/orz.h"
-#define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && \
-ptr->collision_func == marine_collision)
+#define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && ptr->collision_func == marine_collision)
+#define IS_GAS(ptr) (ptr->preprocess_func == gas_preprocess && ptr->collision_func == gas_collision && ptr->life_span > 1)
+
+static void
+gas_preprocess (ELEMENT *ElementPtr);
+
+static void
+gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1);
+
+static void
+gas_death (ELEMENT *ElementPtr);
 
 static void
 shockwave_preprocess (ELEMENT *ElementPtr)
@@ -438,7 +445,34 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 			LockElement (hElement, &ObjPtr);
 			hNextElement = GetSuccElement (ObjPtr);
 			
-			if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
+			/*if (IS_GAS (ObjPtr))
+			{
+				SIZE delta_x, delta_y;
+				DWORD dist;
+				
+				if ((delta_x = ObjPtr->next.location.x - ElementPtr->next.location.x) < 0) delta_x = -delta_x;
+				if ((delta_y = ObjPtr->next.location.y - ElementPtr->next.location.y) < 0) delta_y = -delta_y;
+				
+				delta_x = WORLD_TO_DISPLAY (delta_x);
+				delta_y = WORLD_TO_DISPLAY (delta_y);
+				
+				if (delta_x <= SHOCKWAVE_RANGE && delta_y <= SHOCKWAVE_RANGE
+					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(SHOCKWAVE_RANGE * SHOCKWAVE_RANGE))
+				{
+					// Remove the lock on enemy ship and make the gas die on next turn.
+					ObjPtr->hTarget = 0;
+					ObjPtr->life_span = 1;
+					
+					// Don't do the gas dissolve anim now that the shockwave appears.
+					ObjPtr->death_func = NULL;
+					
+					ElementPtr->state_flags &= ~(NONSOLID);
+					
+					// Generate the actual shockwave.
+					generate_shockwave (ObjPtr, which_player);
+				}
+			}
+			else*/ if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
 			{
 				SIZE delta_x, delta_y;
 				DWORD dist;
@@ -511,9 +545,6 @@ count_gases (STARSHIP *StarShipPtr)
 
 	return (num_gases);
 }
-
-static void
-gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1);
 
 static void
 gas_death_animation (ELEMENT *ElementPtr)
@@ -671,7 +702,6 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 	
 	// Check if the colliding element is a ship. If it is not, check if it's a projectile from Baul ship.
 	if (!elementsOfSamePlayer(ElementPtr0, ElementPtr1) && !(ElementPtr1->state_flags & PLAYER_SHIP) 
-		&& ElementPtr0->life_span > 1 && ElementPtr1->life_span > 1
 		&& ElementPtr1->playerNr > -1)
 	{
 		GetElementStarShip (ElementPtr1, &EnemyStarShipPtr);
@@ -679,7 +709,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 			enemyShipIsBaul = 1;
 	}
 	
-	// If colliding with Baul's spray weapon, EXPLODE!!!
+	// If colliding with Baul's spray weapon or shockwave, EXPLODE!!!
 	if (ElementPtr1->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.weapon
 		|| (enemyShipIsBaul && ElementPtr1->current.image.farray == EnemyStarShipPtr->RaceDescPtr->ship_data.weapon))
 	{
