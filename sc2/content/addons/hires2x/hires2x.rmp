@@ -18,6 +18,7 @@ comm.melnorme.font = FONTRES:addons/hires2x/fonts/micro.fon
 comm.melnorme.graphics = GFXRES:addons/hires2x/comm/melnorme/melnorme.ani
 comm.orz.font = FONTRES:addons/hires2x/fonts/orz.fon
 comm.orz.graphics = GFXRES:addons/hires2x/comm/orz/orz.ani
+comm.pkunk.font = FONTRES:addons/hires2x/fonts/pkunk.fon
 comm.probe.font = FONTRES:addons/hires2x/fonts/probe.fon
 comm.safeones.graphics = GFXRES:addons/hires2x/comm/safeones/safeones.ani
 comm.shofixti.font = FONTRES:addons/hires2x/fonts/shofixti.fon
