@@ -88,7 +88,7 @@ DrawShipNameString (UNICODE *pStr, COUNT CharCount, COORD y)
 }
 
 void
-ClearShipStatus (COORD y)
+ClearShipStatus (COORD y, COORD w)
 {
 	RECT r;
 
@@ -96,13 +96,13 @@ ClearShipStatus (COORD y)
 			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	r.corner.x = 2;
 	r.corner.y = 3 + y;
-	r.extent.width = STATUS_WIDTH - 4;
-	r.extent.height = SHIP_INFO_HEIGHT - 3 + 4 * RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.width = w - 4 - (RESOLUTION_FACTOR / 2);
+	r.extent.height = SHIP_INFO_HEIGHT - 3 - (3 * RESOLUTION_FACTOR / 2); // JMS_GFX
 	DrawFilledRectangle (&r);
 }
 
 void
-OutlineShipStatus (COORD y)
+OutlineShipStatus (COORD y, COORD w)
 {
 	RECT r;
 
@@ -110,31 +110,39 @@ OutlineShipStatus (COORD y)
 			BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 	r.corner.x = 0;
 	r.corner.y = 1 + y;
-	r.extent.width = STATUS_WIDTH;
+	r.extent.width = w;
 	r.extent.height = 1;
 	DrawFilledRectangle (&r);
 	++r.corner.y;
 	--r.extent.width;
 	DrawFilledRectangle (&r);
 	r.extent.width = 1;
-	r.extent.height = SHIP_INFO_HEIGHT - 2;
+	r.extent.height = SHIP_INFO_HEIGHT - 1 - 2 * RESOLUTION_FACTOR;
 	DrawFilledRectangle (&r);
 	++r.corner.x;
 	DrawFilledRectangle (&r);
 
 	SetContextForeGroundColor (
 			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
-	r.corner.x = STATUS_WIDTH - 1;
+	r.corner.x = w - 1;
 	DrawFilledRectangle (&r);
-	r.corner.x = STATUS_WIDTH - 2;
+	r.corner.x = w - 2;
 	++r.corner.y;
 	--r.extent.height;
 	DrawFilledRectangle (&r);
-
+	r.corner.x = 1;
+	r.corner.y = SHIP_INFO_HEIGHT + 2 - 2 * RESOLUTION_FACTOR;
+	r.extent.width = w - 2;
+	r.extent.height = 1;
+	DrawFilledRectangle (&r);
+	++r.corner.x;
+	--r.corner.y;
+	DrawFilledRectangle (&r);
+	
 	SetContextForeGroundColor (BLACK_COLOR);
 	r.corner.x = 0;
 	r.corner.y = y;
-	r.extent.width = STATUS_WIDTH;
+	r.extent.width = w;
 	r.extent.height = 1;
 	DrawFilledRectangle (&r);
 }
@@ -144,6 +152,7 @@ InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect)
 {
 	RECT r;
 	COORD y = 0; // default, for Melee menu
+	COORD width = STATUS_WIDTH; // BW: ShipStatus has less space in 2x and 4x MeleeMenu
 	STAMP Stamp;
 	CONTEXT OldContext;
 	RECT oldClipRect;
@@ -154,6 +163,8 @@ InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect)
 		assert (StarShipPtr->playerNr >= 0);
 		y = status_y_offsets[StarShipPtr->playerNr];
 	}
+	else
+		width -= 3 * RESOLUTION_FACTOR;
 
 	OldContext = SetContext (StatusContext);
 	if (pClipRect)
@@ -172,11 +183,11 @@ InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect)
 
 	BatchGraphics ();
 	
-	OutlineShipStatus (y);
-	ClearShipStatus (y);
+	OutlineShipStatus (y, width);
+	ClearShipStatus (y, width);
 
 	Stamp.origin.x = (STATUS_WIDTH >> 1);
-	Stamp.origin.y = 31 + y;
+	Stamp.origin.y = (31 << RESOLUTION_FACTOR) + y;
 	Stamp.frame = IncFrameIndex (SIPtr->icons);
 	DrawStamp (&Stamp);
 

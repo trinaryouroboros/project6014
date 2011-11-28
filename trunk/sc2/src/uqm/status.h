@@ -47,8 +47,8 @@ extern COORD status_y_offsets[];
 extern void InitStatusOffsets (void);
 
 extern void DrawCrewFuelString (COORD y, SIZE state);
-extern void ClearShipStatus (COORD y);
-extern void OutlineShipStatus (COORD y);
+extern void ClearShipStatus (COORD y, COORD w);
+// extern void OutlineShipStatus (COORD y, COORD w); // BW: not needed elsewhere
 extern void InitShipStatus (SHIP_INFO *ShipInfoPtr, STARSHIP *StarShipPtr,
 		RECT *pClipRect);
 			// StarShipPtr or pClipRect can be NULL
