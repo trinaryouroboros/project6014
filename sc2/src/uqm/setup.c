@@ -67,6 +67,7 @@ QUEUE race_q[NUM_PLAYERS];
 FRAME ActivityFrame;
 FRAME StatusFrame;
 FRAME BulletFrame;	// JMS
+FRAME hyperspacesuns; // BW
 FRAME FlagStatFrame;
 FRAME MiscDataFrame;
 FRAME FontGradFrame;
@@ -228,6 +229,10 @@ InitKernel (void)
 	// JMS: Bullet hole gfx for melee
 	BulletFrame = CaptureDrawable (LoadGraphic (BULLETHOLES_PMAP_ANIM));
 	if (BulletFrame == NULL)
+		return FALSE;
+
+	hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
+	if (hyperspacesuns == NULL)
 		return FALSE;
 
 	GameStrings = CaptureStringTable (LoadStringTable (STARCON_GAME_STRINGS));

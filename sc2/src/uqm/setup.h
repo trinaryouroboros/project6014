@@ -32,6 +32,7 @@ extern FRAME Screen;
 extern FRAME ActivityFrame;
 extern FRAME StatusFrame;
 extern FRAME BulletFrame;	// JMS
+extern FRAME hyperspacesuns;	// BW
 extern FRAME FlagStatFrame;
 extern FRAME MiscDataFrame;
 extern FRAME FontGradFrame;
