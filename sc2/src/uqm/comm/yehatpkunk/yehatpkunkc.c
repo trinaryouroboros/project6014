@@ -27,15 +27,15 @@
 
 #define YEHAT_FG_COLOR WHITE_COLOR
 #define YEHAT_BG_COLOR BLACK_COLOR
-#define YEHAT_BASE_X (TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 2))
-#define YEHAT_BASE_Y RES_SIS_SCALE(75)
+#define YEHAT_BASE_X (SIS_SCREEN_WIDTH * 2 / 3)
+#define YEHAT_BASE_Y RES_SIS_SCALE(60)
 #define YEHAT_TALK_INDEX 35
 #define YEHAT_TALK_FRAMES 3
 
 #define PKUNK_FG_COLOR WHITE_COLOR
 #define PKUNK_BG_COLOR BLACK_COLOR
-#define PKUNK_BASE_X (SIS_SCREEN_WIDTH - (TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 2)))
-#define PKUNK_BASE_Y RES_SIS_SCALE(70)
+#define PKUNK_BASE_X (SIS_SCREEN_WIDTH / 3)
+#define PKUNK_BASE_Y RES_SIS_SCALE(75)
 #define PKUNK_TALK_INDEX 14
 #define PKUNK_TALK_FRAMES 2
 
@@ -398,9 +398,9 @@ init_yehatpkunk_comm (void)
 	yehatpkunk_desc.post_encounter_func = post_yehatpkunk_enc;
 	yehatpkunk_desc.uninit_encounter_func = uninit_yehatpkunk;
 
-	yehatpkunk_desc.AlienTextWidth = (SIS_TEXT_WIDTH >> 1) - TEXT_X_OFFS;
 	yehatpkunk_desc.AlienTextBaseline.x = (SWORD)YEHAT_BASE_X;
 	yehatpkunk_desc.AlienTextBaseline.y = YEHAT_BASE_Y;
+	yehatpkunk_desc.AlienTextWidth = (SIS_TEXT_WIDTH - 16) * 2 / 3;	
 	PkunkFont = LoadFont (PKUNK_FONT);
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	
