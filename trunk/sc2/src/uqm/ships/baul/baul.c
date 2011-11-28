@@ -385,6 +385,144 @@ shockwave_preprocess (ELEMENT *ElementPtr)
 	ElementPtr->state_flags |= CHANGING;
 }
 
+// We cannot use the normal generate_shockwave as death_func since it has two input parameters.
+// To circumvent this, we define an otherwise similar function generate_shockwave_2 here, but
+// which only has 1 input parameter.
+static void
+generate_shockwave_2 (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+	BYTE which_player;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	which_player = ElementPtr->playerNr;
+	
+	// Gas is still 'solid' when it's hit by the spray. Let's make a shockwave and kill the gas cloud. 
+	if (!(ElementPtr->state_flags & NONSOLID))
+	{
+		HELEMENT hShockwave;
+		
+		hShockwave = AllocElement ();
+		if (hShockwave)
+		{
+			ELEMENT *ShockwavePtr;
+			STARSHIP *StarShipPtr;
+			
+			GetElementStarShip (ElementPtr, &StarShipPtr);
+			
+			PutElement (hShockwave);
+			LockElement (hShockwave, &ShockwavePtr);
+			SetElementStarShip (ShockwavePtr, StarShipPtr);
+			ShockwavePtr->hit_points = ShockwavePtr->mass_points = 0;
+			ShockwavePtr->playerNr = which_player; // Don't damage self.
+			ShockwavePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
+			ShockwavePtr->life_span = SHOCKWAVE_FRAMES;
+			SetPrimType (&(GLOBAL (DisplayArray))[ShockwavePtr->PrimIndex], STAMP_PRIM);
+			ShockwavePtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+			ShockwavePtr->current.image.frame = SetAbsFrameIndex(StarShipPtr->RaceDescPtr->ship_data.special[0], LAST_GAS_INDEX);
+			ShockwavePtr->next.image.frame = SetAbsFrameIndex(ElementPtr->current.image.frame, LAST_GAS_INDEX);
+			ShockwavePtr->current.location = ElementPtr->current.location;
+			ShockwavePtr->preprocess_func = shockwave_preprocess;
+			ShockwavePtr->postprocess_func = NULL;
+			ShockwavePtr->death_func = NULL;
+			ZeroVelocityComponents (&ShockwavePtr->velocity);
+			UnlockElement (hShockwave);
+		}
+		
+		// Gas dies on the next turn.
+		ElementPtr->state_flags |= NONSOLID;
+		
+		// Explosion sounds.
+		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 2), ElementPtr);
+		ProcessSound (SetAbsSoundIndex (GameSounds, TARGET_DAMAGED_FOR_6_PLUS_PT), ElementPtr);
+	}
+	
+	{
+		// This is called during PostProcessQueue(), close to or at the end,
+		// for the temporary shockwave element to apply the damage.
+		// The effects are not seen until the next frame.
+		HELEMENT hElement, hNextElement;
+		
+		for (hElement = GetHeadElement (); hElement != 0; hElement = hNextElement)
+		{
+			ELEMENT *ObjPtr;
+			
+			LockElement (hElement, &ObjPtr);
+			hNextElement = GetSuccElement (ObjPtr);
+			
+			if (IS_GAS (ObjPtr))
+			{
+				SIZE delta_x, delta_y;
+				DWORD dist;
+				
+				if ((delta_x = ObjPtr->next.location.x - ElementPtr->next.location.x) < 0) delta_x = -delta_x;
+				if ((delta_y = ObjPtr->next.location.y - ElementPtr->next.location.y) < 0) delta_y = -delta_y;
+				
+				delta_x = WORLD_TO_DISPLAY (delta_x);
+				delta_y = WORLD_TO_DISPLAY (delta_y);
+				
+				if (delta_x <= SHOCKWAVE_RANGE && delta_y <= SHOCKWAVE_RANGE
+					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(SHOCKWAVE_RANGE * SHOCKWAVE_RANGE))
+				{
+					SIZE destruction;
+					
+					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
+					
+					// Remove the lock on enemy ship and make the gas die on next turn.
+					ObjPtr->hTarget = 0;
+					ObjPtr->life_span = (10 / destruction);
+					
+					// Delayed shockwave
+					ObjPtr->death_func = generate_shockwave_2;
+					
+					ObjPtr->playerNr = which_player;
+					
+					// Generate the actual shockwave.
+					//generate_shockwave (ObjPtr, which_player);
+				}
+			}
+			else if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
+			{
+				SIZE delta_x, delta_y;
+				DWORD dist;
+				
+				if ((delta_x = ObjPtr->next.location.x - ElementPtr->next.location.x) < 0) delta_x = -delta_x;
+				if ((delta_y = ObjPtr->next.location.y - ElementPtr->next.location.y) < 0) delta_y = -delta_y;
+				
+				delta_x = WORLD_TO_DISPLAY (delta_x);
+				delta_y = WORLD_TO_DISPLAY (delta_y);
+				
+				if (delta_x <= SHOCKWAVE_RANGE && delta_y <= SHOCKWAVE_RANGE
+					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(SHOCKWAVE_RANGE * SHOCKWAVE_RANGE))
+				{
+					SIZE destruction;
+					
+					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
+					
+					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != which_player)
+					{
+						if (!DeltaCrew (ObjPtr, -destruction))
+							ObjPtr->life_span = 0;
+					}
+					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != which_player)
+					{
+						if ((BYTE)destruction < ObjPtr->hit_points)
+							ObjPtr->hit_points -= (BYTE)destruction;
+						else
+						{
+							ObjPtr->hit_points = 0;
+							ObjPtr->life_span = 0;
+						}
+					}
+				}
+			}
+			
+			UnlockElement (hElement);
+		}
+	}
+}
+
 static void
 generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 {
@@ -445,7 +583,7 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 			LockElement (hElement, &ObjPtr);
 			hNextElement = GetSuccElement (ObjPtr);
 			
-			/*if (IS_GAS (ObjPtr))
+			if (IS_GAS (ObjPtr))
 			{
 				SIZE delta_x, delta_y;
 				DWORD dist;
@@ -459,20 +597,24 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 				if (delta_x <= SHOCKWAVE_RANGE && delta_y <= SHOCKWAVE_RANGE
 					&& (dist = (DWORD)(delta_x * delta_x) + (DWORD)(delta_y * delta_y)) <= (DWORD)(SHOCKWAVE_RANGE * SHOCKWAVE_RANGE))
 				{
+					SIZE destruction;
+					
+					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
+					
 					// Remove the lock on enemy ship and make the gas die on next turn.
 					ObjPtr->hTarget = 0;
-					ObjPtr->life_span = 1;
+					ObjPtr->life_span = (10 / destruction);
 					
-					// Don't do the gas dissolve anim now that the shockwave appears.
-					ObjPtr->death_func = NULL;
+					// Delayed shockwave
+					ObjPtr->death_func = generate_shockwave_2;
 					
-					ElementPtr->state_flags &= ~(NONSOLID);
+					ObjPtr->playerNr = which_player;
 					
 					// Generate the actual shockwave.
-					generate_shockwave (ObjPtr, which_player);
+					//generate_shockwave (ObjPtr, which_player);
 				}
 			}
-			else*/ if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
+			else if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
 			{
 				SIZE delta_x, delta_y;
 				DWORD dist;
