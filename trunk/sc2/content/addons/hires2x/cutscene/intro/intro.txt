@@ -508,8 +508,9 @@ DRAW 8
 WAIT 500
 
 #(Text fade-in)
-TFI The urgent, garbled message refers
-to an enormous machine...
+TFI The urgent, garbled message 
+refers to an enormous 
+machine...
 #(Wait)
 WAIT 5000
 #(Text fade-out)
@@ -520,8 +521,9 @@ DRAW 11
 WAIT 500
 
 #(Text fade-in)
-TFI that destroyed several scout vessels
-upon contact. Then... only static.
+TFI that destroyed several scout 
+vessels upon contact. 
+Then... only static.
 
 #(Wait)
 WAIT 3500
