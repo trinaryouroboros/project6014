@@ -173,7 +173,7 @@ static LOCDATA human_desc_4x =
 	NULL, /* init_encounter_func */
 	NULL, /* post_encounter_func */
 	NULL, /* uninit_encounter_func */
-	HUMAN_PMAP_ANIM, /* AlienFrame */
+	DECKER_PMAP_ANIM, /* AlienFrame */
 	HUMAN_FONT, /* AlienFont */
 	WHITE_COLOR_INIT, /* AlienTextFColor */
 	BLACK_COLOR_INIT, /* AlienTextBColor */
@@ -551,7 +551,7 @@ LOCDATA*
 init_human_comm (void)
 {
 	LOCDATA *retval;
-	BOOLEAN male; // JMS: Draw either male or female earthling captain
+	COUNT captain; // BW: Choose captain
 	static LOCDATA human_desc;
 
 	switch (RESOLUTION_FACTOR)
@@ -567,43 +567,41 @@ init_human_comm (void)
 	
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 	
-	// JMS: In hyperspace just pick random male/female graphics
+	// JMS: In hyperspace just pick random captain graphics
 	// This does pose a problem if the hyperspace blip is fought, escaped from and encountered again:
 	// It might then get different random number and have captain of different gender...
 	if(LOBYTE (GLOBAL (CurrentActivity)) == IN_HYPERSPACE)
-		male=(TFB_Random()%2);
+		captain = (TFB_Random() % 3);
 	// JMS: In Interplanetary pick graphics based on battle group index number.
 	// This way the same ship has always the same captain as long as it exists.
 	else
-		male=(EncounterGroup%2);
+		captain = (EncounterGroup % 3);
 
-	
-	 // JMS: Male earthling gfx
-	if(1) //if(male)
+	human_desc.init_encounter_func = Intro;
+	human_desc.post_encounter_func = post_human_enc;
+	human_desc.uninit_encounter_func = uninit_human;
+
+	human_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
+	human_desc.AlienTextBaseline.y = 0;
+	human_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
+
+	switch (captain)
 	{
-		human_desc.init_encounter_func = Intro;
-		human_desc.post_encounter_func = post_human_enc;
-		human_desc.uninit_encounter_func = uninit_human;
-
-		human_desc.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-		human_desc.AlienTextBaseline.y = 0;
-		human_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
-
-		retval = &human_desc;
+	case 0:
+		human_desc.AlienFrameRes = DECKER_PMAP_ANIM;
+		break;
+	case 1:
+		human_desc.AlienFrameRes = ENDER_PMAP_ANIM;
+		break;
+	case 2:
+		human_desc.AlienFrameRes = HALLECK_PMAP_ANIM;
+		break;
+	default:
+		human_desc.AlienFrameRes = HUMAN_PMAP_ANIM;
+		break;
 	}
-	// JMS: Female earthling gfx
-	else
-	{
-		human_desc2.init_encounter_func = Intro;
-		human_desc2.post_encounter_func = post_human_enc;
-		human_desc2.uninit_encounter_func = uninit_human;
 	
-		human_desc2.AlienTextBaseline.x = TEXT_X_OFFS + (SIS_TEXT_WIDTH >> 1);
-		human_desc2.AlienTextBaseline.y = 0;
-		human_desc2.AlienTextWidth = SIS_TEXT_WIDTH - 16;
-	
-		retval = &human_desc2;
-	}
+	retval = &human_desc;
 
 	return (retval);
 }
