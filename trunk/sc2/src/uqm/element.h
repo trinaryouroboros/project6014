@@ -40,10 +40,8 @@ typedef HLINK HELEMENT;
 
 // Bits for ELEMENT_FLAGS:
 // bit 0 is now available
-#define IGNORE_SHIP (1 << 1)
-		// JMS: This is used for Baul gas: When sticking to enemy ship, it ignores
-		// the ship, but can still be shot with weapons. Using NONSOLID wouldn't do
-		// since it made the gas invulnerable to weapons.
+#define GASSY_SUBSTANCE (1 << 1)
+		// JMS: This is used for Baul gas and spray.
 
 #define PLAYER_SHIP (1 << 2)
 		// The ELEMENT is a player controlable ship, and not some bullet,
