@@ -677,7 +677,8 @@ spawn_point_defense (ELEMENT *ElementPtr)
 		if (!elementsOfSamePlayer (ObjectPtr, ShipPtr)
 				&& ObjectPtr->playerNr != NEUTRAL_PLAYER_NUM
 				&& CollisionPossible (ObjectPtr, ShipPtr)
-				&& !OBJECT_CLOAKED (ObjectPtr))
+				&& !OBJECT_CLOAKED (ObjectPtr)
+				&& !(ObjectPtr->state_flags & IGNORE_SHIP))
 		{
 			SIZE delta_x, delta_y;
 			UWORD dist;
@@ -720,10 +721,8 @@ spawn_point_defense (ELEMENT *ElementPtr)
 		LaserBlock.cx = SattPtr->next.location.x;
 		LaserBlock.cy = SattPtr->next.location.y;
 		LaserBlock.face = 0;
-		LaserBlock.ex = ObjectPtr->next.location.x
-				- SattPtr->next.location.x;
-		LaserBlock.ey = ObjectPtr->next.location.y
-				- SattPtr->next.location.y;
+		LaserBlock.ex = ObjectPtr->next.location.x - SattPtr->next.location.x;
+		LaserBlock.ey = ObjectPtr->next.location.y - SattPtr->next.location.y;
 		LaserBlock.sender = SattPtr->playerNr;
 		LaserBlock.flags = IGNORE_SIMILAR;
 		LaserBlock.pixoffs = 0;

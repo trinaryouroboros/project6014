@@ -342,7 +342,7 @@ crew_preprocess (ELEMENT *ElementPtr)
 
 	if (hTarget)
 	{
-#define CREW_DELTA SCALED_ONE
+#define CREW_DELTA (SCALED_ONE << RESOLUTION_FACTOR)
 		SIZE delta;
 		ELEMENT *ShipPtr;
 
