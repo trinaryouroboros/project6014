@@ -46,7 +46,6 @@ credits.font.pt13 = FONTRES:addons/hires2x/fonts/pt13.fon
 credits.font.pt17 = FONTRES:addons/hires2x/fonts/pt17.fon
 credits.font.pt45 = FONTRES:addons/hires2x/fonts/pt45.fon
 font.computer = FONTRES:addons/hires2x/fonts/computer.fon
-font.fallback = FONTRES:addons/hires2x/fonts/fallback.fon
 font.lander = FONTRES:addons/hires2x/fonts/lander.fon
 font.micro = FONTRES:addons/hires2x/fonts/micro.fon
 font.nano = FONTRES:addons/hires2x/fonts/nano.fon

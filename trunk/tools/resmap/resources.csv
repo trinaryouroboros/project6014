@@ -16,7 +16,9 @@ CREDITS_MUSIC,music.credits,uqm/imusicre.h,--,--
 MELEE_MUSIC,music.meleemenu,uqm/imusicre.h,--,--
 MAINMENU_MUSIC,music.mainmenu,uqm/imusicre.h,--,--
 COMPUTER_FONT,font.computer,uqm/ifontres.h,FONTRES,base/fonts/computer.fon
-FALLBACK_FONT,font.fallback,uqm/ifontres.h,FONTRES,base/fonts/fallback.fon
+FALLBACK_TO1X_FONT,font.fallbackto1x,uqm/ifontres.h,FONTRES,base/fonts/starcon.fon
+FALLBACK_TO2X_FONT,font.fallbackto2x,uqm/ifontres.h,FONTRES,base/fonts/fallbackto2x.fon
+FALLBACK_TO4X_FONT,font.fallbackto4x,uqm/ifontres.h,FONTRES,base/fonts/fallbackto4x.fon
 STARCON_FONT,font.starcon,uqm/ifontres.h,FONTRES,base/fonts/starcon.fon
 TINY_FONT,font.tiny,uqm/ifontres.h,FONTRES,base/fonts/tiny.fon
 MICRO_FONT,font.micro,uqm/ifontres.h,FONTRES,base/fonts/micro.fon
