@@ -678,7 +678,7 @@ spawn_point_defense (ELEMENT *ElementPtr)
 				&& ObjectPtr->playerNr != NEUTRAL_PLAYER_NUM
 				&& CollisionPossible (ObjectPtr, ShipPtr)
 				&& !OBJECT_CLOAKED (ObjectPtr)
-				&& !(ObjectPtr->state_flags & IGNORE_SHIP))
+				&& !(ObjectPtr->state_flags & GASSY_SUBSTANCE))
 		{
 			SIZE delta_x, delta_y;
 			UWORD dist;

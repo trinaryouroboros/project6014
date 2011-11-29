@@ -717,14 +717,14 @@ gas_preprocess (ELEMENT *ElementPtr)
 	ElementPtr->state_flags |= CHANGING;
 	
 	// If enemy ship dies, remove the gas (this prevents game crashing upon enemy ship dying with gas on it).
-	if ((ElementPtr->state_flags & IGNORE_SHIP && ElementPtr->hTarget == 0)
+	if ((!(ElementPtr->state_flags & IGNORE_VELOCITY) && ElementPtr->hTarget == 0)
 		|| StarShipPtr->RaceDescPtr->ship_info.crew_level == 0)
 	{
 		ElementPtr->life_span = 0;
 		ElementPtr->state_flags |= DISAPPEARING;
 	}
 	// When the gas has collided with enemy ship, it sticks to the ship until expires.
-	else if (ElementPtr->state_flags & IGNORE_SHIP && !(ElementPtr->state_flags & DISAPPEARING))
+	else if (!(ElementPtr->state_flags & IGNORE_VELOCITY) && !(ElementPtr->state_flags & DISAPPEARING))
 	{
 		ELEMENT *eptr;
 		SIZE offs_x, offs_y;
@@ -781,7 +781,7 @@ gas_preprocess (ELEMENT *ElementPtr)
 				// eptr points to the new gas element now.
 				LockElement (hEffect, &eptr);
 				eptr->playerNr = ElementPtr->playerNr;
-				eptr->state_flags = FINITE_LIFE | IGNORE_SHIP | CHANGING;
+				eptr->state_flags = FINITE_LIFE | GASSY_SUBSTANCE | CHANGING;
 				eptr->life_span = 1;
 				eptr->weapon_element_index = ElementPtr->weapon_element_index;
 				eptr->current = eptr->next = ElementPtr->next;
@@ -840,7 +840,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 		generate_shockwave (ElementPtr0, ElementPtr1->playerNr);
 	}
 	// If colliding with enemy ship, stick to the ship.
-	else if (!(ElementPtr0->state_flags & IGNORE_SHIP)
+	else if (ElementPtr0->state_flags & IGNORE_VELOCITY
 			 && ElementPtr1->state_flags & PLAYER_SHIP 
 			 && ElementPtr1->playerNr != ElementPtr0->playerNr)
 	{
@@ -859,7 +859,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 				GasPtr->current = ElementPtr0->next;
 				GasPtr->next = GasPtr->current;
 				GasPtr->playerNr = ElementPtr0->playerNr;
-				GasPtr->state_flags = FINITE_LIFE | IGNORE_SHIP | CHANGING;
+				GasPtr->state_flags = FINITE_LIFE | GASSY_SUBSTANCE | CHANGING;
 				GasPtr->preprocess_func = gas_preprocess;
 				GasPtr->collision_func = gas_collision;
 				SetPrimType (&(GLOBAL (DisplayArray))[GasPtr->PrimIndex], NO_PRIM);
@@ -886,8 +886,8 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 }
 
 #define GAS_HITS 100
-#define GAS_DAMAGE 1
-#define GAS_LIFE 480
+#define GAS_DAMAGE 0
+#define GAS_LIFE 480 // How long the gas lives.
 #define GAS_OFFSET (25 << RESOLUTION_FACTOR)
 #define GAS_INIT_SPEED 0
 #define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))  // JMS_GFX
@@ -927,7 +927,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	MissileBlock.face = (StarShipPtr->ShipFacing - 8) % 16;
 	MissileBlock.index = 0;
 	MissileBlock.sender = ShipPtr->playerNr;
-	MissileBlock.flags = 0;
+	MissileBlock.flags = GASSY_SUBSTANCE | IGNORE_VELOCITY;
 	MissileBlock.pixoffs = GAS_OFFSET;
 	MissileBlock.speed = GAS_INIT_SPEED;
 	MissileBlock.hit_points = GAS_HITS;
@@ -954,6 +954,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 
 #define LAST_SPRAY_INDEX 5
 
+// The preprocess animates spray.
 static void
 spray_preprocess (ELEMENT *ElementPtr)
 {
@@ -964,11 +965,23 @@ spray_preprocess (ELEMENT *ElementPtr)
 		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
 }
 
+// This makes the spray not collide with anything (except gas clouds: gas_collision handles them.)
+static void
+spray_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+{
+	(void) ElementPtr0;  /* Satisfying compiler (unused parameter) */
+	(void) ElementPtr1;  /* Satisfying compiler (unused parameter) */
+	(void) pPt0;  /* Satisfying compiler (unused parameter) */
+	(void) pPt1;  /* Satisfying compiler (unused parameter) */
+}
+
+// Primary weapon. The weapon must deal at least 1 damage, otherwise it won't interact with
+// other elements. However, we can prevent this damage with a separate collision function.
 static COUNT
 initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 {
 #define MISSILE_HITS 2
-#define MISSILE_DAMAGE 1
+#define MISSILE_DAMAGE 1 // Must be at least 1 to make the weapon hit gas clouds.
 #define MISSILE_OFFSET (3 << RESOLUTION_FACTOR) // JMS_GFX
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
@@ -999,7 +1012,7 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 		MissileBlock.face = StarShipPtr->ShipFacing;
 		MissileBlock.index = 0;
 		MissileBlock.sender = ShipPtr->playerNr;
-		MissileBlock.flags = IGNORE_SIMILAR;
+		MissileBlock.flags = IGNORE_SIMILAR | GASSY_SUBSTANCE;
 		MissileBlock.pixoffs = BAUL_OFFSET;
 		MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 		MissileBlock.hit_points = MISSILE_HITS;
@@ -1008,6 +1021,15 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 		MissileBlock.preprocess_func = spray_preprocess;
 		MissileBlock.blast_offs = MISSILE_OFFSET;
 		SprayArray[i] = initialize_missile (&MissileBlock);
+		
+		if (SprayArray[i])
+		{
+			ELEMENT *SprayPtr;
+			
+			LockElement (SprayArray[i], &SprayPtr);
+			SprayPtr->collision_func = spray_collision;
+			UnlockElement (SprayArray[i]);
+		}
 	}
 	
 	return (2);
