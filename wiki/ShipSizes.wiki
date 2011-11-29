@@ -143,7 +143,7 @@ Actual Dimensions  : 97x117
 {{{
 Original Dimensions: 29x33
 Perfect Dimensions : 116x132
-Actual Dimensions  : 166x131
+Actual Dimensions  : 138x110
 }}}
 
 _The width is far off on this. Might need to re-size._
@@ -152,7 +152,7 @@ _The width is far off on this. Might need to re-size._
 {{{
 Original Dimensions: 13x17
 Perfect Dimensions : 52x68
-Actual Dimensions  : 109x83
+Actual Dimensions  : 54x77
 }}}
 
 
