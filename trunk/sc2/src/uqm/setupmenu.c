@@ -46,6 +46,8 @@
 
 #include "gamestr.h"
 
+#include "libs/graphics/bbox.h"
+
 static STRING SetupTab;
 
 typedef struct setup_menu_state {
@@ -1363,6 +1365,10 @@ SetGlobalOptions (GLOBALOPTS *opts)
 			// Tell the game the new screen's size.
 			ScreenWidth  = 320 << resolutionFactor; // res_GetInteger ("config.reswidth");
 			ScreenHeight = 240 << resolutionFactor; // res_GetInteger ("config.resheight");
+			
+			// These solve the FUCKING context problem that plagued the setupmenu when changing to higher resolution.
+			TFB_BBox_Reset ();
+			TFB_BBox_Init (ScreenWidth, ScreenHeight);
 		
 			// Change how big area of the screen is update-able.
 			DestroyDrawable (ReleaseDrawable (Screen));
