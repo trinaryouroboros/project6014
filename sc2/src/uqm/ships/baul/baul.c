@@ -42,6 +42,18 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 6
 
+// Weapon specifics
+#define SHOCKWAVE_FRAMES 8
+#define LAST_GAS_INDEX 8
+#define LAST_SHOCKWAVE_INDEX (LAST_GAS_INDEX + SHOCKWAVE_FRAMES)
+#define NUM_DISSOLVE_ANIMS 4
+#define MAX_GASES 32
+#define SHOCKWAVE_RANGE (150 << RESOLUTION_FACTOR) // JMS_GFX
+#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 25) // JMS_GFX
+#include "../orz/orz.h"
+#define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && ptr->collision_func == marine_collision)
+#define IS_GAS(ptr) (ptr->preprocess_func == gas_preprocess && ptr->collision_func == gas_collision && ptr->life_span > 1)
+
 static RACE_DESC baul_desc =
 {
 	{ /* SHIP_INFO */
@@ -354,19 +366,6 @@ baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	}
 }
 
-#define SHOCKWAVE_FRAMES 8
-#define LAST_GAS_INDEX 8
-#define LAST_SHOCKWAVE_INDEX (LAST_GAS_INDEX + SHOCKWAVE_FRAMES)
-#define NUM_DISSOLVE_ANIMS 4
-#define MAX_GASES 32
-
-#define SHOCKWAVE_RANGE (180 << RESOLUTION_FACTOR) // JMS_GFX
-#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 30) // JMS_GFX
-
-#include "../orz/orz.h"
-#define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && ptr->collision_func == marine_collision)
-#define IS_GAS(ptr) (ptr->preprocess_func == gas_preprocess && ptr->collision_func == gas_collision && ptr->life_span > 1)
-
 static void
 gas_preprocess (ELEMENT *ElementPtr);
 
@@ -655,39 +654,6 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 	}
 }
 
-static BYTE
-count_gases (STARSHIP *StarShipPtr)
-{
-	BYTE num_gases, id_use[MAX_GASES];
-	HELEMENT hElement, hNextElement;
-	
-	num_gases = MAX_GASES;
-	while (num_gases--)
-		id_use[num_gases] = 0;
-	
-	num_gases = 0;
-	for (hElement = GetTailElement (); hElement; hElement = hNextElement)
-	{
-		ELEMENT *ElementPtr;
-		
-		LockElement (hElement, &ElementPtr);
-		hNextElement = GetPredElement (ElementPtr);
-		if (ElementPtr->current.image.farray == StarShipPtr->RaceDescPtr->ship_data.special
-			&& GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX
-			&& ElementPtr->life_span)
-		{
-			if (++num_gases == MAX_GASES)
-			{
-				UnlockElement (hElement);
-				hNextElement = 0;
-			}
-		}
-		UnlockElement (hElement);
-	}
-
-	return (num_gases);
-}
-
 static void
 gas_death_animation (ELEMENT *ElementPtr)
 {
@@ -736,7 +702,11 @@ gas_death (ELEMENT *ElementPtr)
 
 static void
 gas_preprocess (ELEMENT *ElementPtr)
-{
+{	
+	STARSHIP *StarShipPtr;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
 	// Move to next image frame.
 	if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX - 1)
 		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
@@ -747,16 +717,16 @@ gas_preprocess (ELEMENT *ElementPtr)
 	ElementPtr->state_flags |= CHANGING;
 	
 	// If enemy ship dies, remove the gas (this prevents game crashing upon enemy ship dying with gas on it).
-	if (ElementPtr->state_flags & IGNORE_SHIP && ElementPtr->hTarget == 0)
+	if ((ElementPtr->state_flags & IGNORE_SHIP && ElementPtr->hTarget == 0)
+		|| StarShipPtr->RaceDescPtr->ship_info.crew_level == 0)
 	{
 		ElementPtr->life_span = 0;
 		ElementPtr->state_flags |= DISAPPEARING;
 	}
 	// When the gas has collided with enemy ship, it sticks to the ship until expires.
-	else if (ElementPtr->state_flags & IGNORE_SHIP)
+	else if (ElementPtr->state_flags & IGNORE_SHIP && !(ElementPtr->state_flags & DISAPPEARING))
 	{
 		ELEMENT *eptr;
-		STARSHIP *StarShipPtr;
 		SIZE offs_x, offs_y;
 		SBYTE leftOrRight, upOrDown;
 		COUNT angle, angleCorrect;
@@ -898,7 +868,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 				GetElementStarShip (ElementPtr1, &StarShipPtr);
 				GasPtr->hTarget = StarShipPtr->hShip;
 			}
-			
+			GasPtr->hit_points = ElementPtr0->hit_points;
 			GasPtr->life_span = ElementPtr0->life_span;
 			GasPtr->weapon_element_index = ElementPtr0->weapon_element_index;
 			GasPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */

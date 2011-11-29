@@ -754,7 +754,8 @@ initialize_autoturret (ELEMENT *ElementPtr)
 		if (!elementsOfSamePlayer(ObjectPtr, ShipPtr)
 		        && ObjectPtr->playerNr != NEUTRAL_PLAYER_NUM
 			&& CollisionPossible (ObjectPtr, ShipPtr)
-			&& !OBJECT_CLOAKED (ObjectPtr))
+			&& !OBJECT_CLOAKED (ObjectPtr)
+			&& !(ObjectPtr->state_flags & IGNORE_SHIP))
 		{
 			delta_x = ObjectPtr->next.location.x
 					- ShipPtr->next.location.x;
