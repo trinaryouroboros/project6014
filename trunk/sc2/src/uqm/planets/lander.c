@@ -2659,7 +2659,7 @@ InitLander (BYTE LanderFlags)
 		if ((int)free_space < (int)(MAX_SCROUNGED << capacity_shift))
 		{
 			r.corner.x = 1;
-			r.extent.width = RES_STAT_SCALE(4);
+			r.extent.width = RES_STAT_SCALE(4) + RESOLUTION_FACTOR;
 			r.extent.height = RES_STAT_SCALE(MAX_SCROUNGED - (free_space >> capacity_shift) + 1);
 			SetContextForeGroundColor (BLACK_COLOR);
 			DrawFilledRectangle (&r);
