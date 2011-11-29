@@ -3,7 +3,9 @@
    instead and regenerate. */
 
 #define COMPUTER_FONT "font.computer"
-#define FALLBACK_FONT "font.fallback"
+#define FALLBACK_TO1X_FONT "font.fallbackto1x"
+#define FALLBACK_TO2X_FONT "font.fallbackto2x"
+#define FALLBACK_TO4X_FONT "font.fallbackto4x"
 #define LANDER_FONT "font.lander"
 #define MICRO_FONT "font.micro"
 #define NANO_FONT "font.nano"
