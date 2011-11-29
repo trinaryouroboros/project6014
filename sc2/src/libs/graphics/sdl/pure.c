@@ -256,7 +256,7 @@ TFB_Pure_ConfigureVideo (int driver, int flags, int width, int height, int toggl
 	SDL_Screen = SDL_Screens[0];
 	TransitionScreen = SDL_Screens[2];
 
-	if (0 != ReInit_Screen (&fade_color_surface, format_conv_surf,ScreenWidth, ScreenHeight))
+	if (0 != ReInit_Screen (&fade_color_surface, format_conv_surf, ScreenWidth, ScreenHeight))
 		return -1;
 
 	fade_color = SDL_MapRGB (fade_color_surface->format, 0, 0, 0);
