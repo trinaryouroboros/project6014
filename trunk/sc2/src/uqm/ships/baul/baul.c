@@ -387,6 +387,7 @@ shockwave_preprocess (ELEMENT *ElementPtr)
 // We cannot use the normal generate_shockwave as death_func since it has two input parameters.
 // To circumvent this, we define an otherwise similar function generate_shockwave_2 here, but
 // which only has 1 input parameter.
+// This function is required for daisy-chaining shockwave explosions.
 static void
 generate_shockwave_2 (ELEMENT *ElementPtr)
 {
@@ -522,6 +523,7 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 	}
 }
 
+// When hit by Baul spray, gas clouds explodes transforming into a lethal shockwave.
 static void
 generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 {
@@ -654,6 +656,7 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 	}
 }
 
+// This forwards the gas dissolving animation.
 static void
 gas_death_animation (ELEMENT *ElementPtr)
 {
@@ -661,6 +664,7 @@ gas_death_animation (ELEMENT *ElementPtr)
 	ElementPtr->state_flags |= CHANGING;
 }
 
+// When gas expires, display animation of the gas dissolving.
 static void
 gas_death (ELEMENT *ElementPtr)
 {
@@ -893,6 +897,9 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 #define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))  // JMS_GFX
 #define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR)) // JMS_GFX
 
+// Secondary weapon: Gas cloud.
+// The IGNORE_VELOCITY flag is very important: It doesn't only stop the gas from reacting to gravity,
+// but it also makes it possible for the gas to stick to enemy ship. (see collide.h)
 static void spawn_gas (ELEMENT *ShipPtr)
 {
 	STARSHIP *StarShipPtr;
@@ -927,7 +934,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	MissileBlock.face = (StarShipPtr->ShipFacing - 8) % 16;
 	MissileBlock.index = 0;
 	MissileBlock.sender = ShipPtr->playerNr;
-	MissileBlock.flags = GASSY_SUBSTANCE | IGNORE_VELOCITY;
+	MissileBlock.flags = GASSY_SUBSTANCE | IGNORE_VELOCITY; // Don't erase the IGNORE_VELOCITY. It's very important.
 	MissileBlock.pixoffs = GAS_OFFSET;
 	MissileBlock.speed = GAS_INIT_SPEED;
 	MissileBlock.hit_points = GAS_HITS;
@@ -954,7 +961,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 
 #define LAST_SPRAY_INDEX 5
 
-// The preprocess animates spray.
+// The preprocess function animates spray.
 static void
 spray_preprocess (ELEMENT *ElementPtr)
 {
