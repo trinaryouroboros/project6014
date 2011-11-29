@@ -341,10 +341,14 @@ arilou_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			else
 				IsTrackingWeapon = FALSE;
 
+			// JMS: Added the GASSY_SUBSTANCE clauses to prevent 'long teleport' if Baul gas is sticking to the Arilou ship.
 			if (((lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) /* means IMMEDIATE WEAPON */
 					|| (IsTrackingWeapon && (lpEvalDesc->which_turn == 1
 					|| (lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))) /* FIGHTERS!!! */
-					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 3, 0))
+					|| (PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 3, 0)
+						&& (!(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE) 
+							|| ((lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE) && lpEvalDesc->which_turn > 0)))
+					)
 					&& !(TFB_Random () & 3))
 			{
 				StarShipPtr->ship_input_state &= ~(LEFT | RIGHT | THRUST | WEAPON);

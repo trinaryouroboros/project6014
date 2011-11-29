@@ -270,20 +270,23 @@ blazer_collision (ELEMENT *ElementPtr0, POINT *pPt0,
 	BYTE old_offs;
 	COUNT old_crew_level;
 	COUNT old_life;
-
-	old_crew_level = ElementPtr0->crew_level;
-	old_life = ElementPtr0->life_span;
-	old_offs = ElementPtr0->blast_offset;
-	ElementPtr0->blast_offset = BLAZER_OFFSET;
-	ElementPtr0->mass_points = BLAZER_DAMAGE;
-	weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
-	ElementPtr0->mass_points = BLAZER_MASS;
-	ElementPtr0->blast_offset = old_offs;
-	ElementPtr0->life_span = old_life;
-	ElementPtr0->crew_level = old_crew_level;
-
-	ElementPtr0->state_flags &= ~(DISAPPEARING | NONSOLID);
-	collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+	
+	// JMS: This prevents the Blazer from getting stuck to Baul Gas clouds.
+	if (!(ElementPtr1->state_flags & GASSY_SUBSTANCE))
+	{
+		old_crew_level = ElementPtr0->crew_level;
+		old_life = ElementPtr0->life_span;
+		old_offs = ElementPtr0->blast_offset;
+		ElementPtr0->blast_offset = BLAZER_OFFSET;
+		ElementPtr0->mass_points = BLAZER_DAMAGE;
+		weapon_collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+		ElementPtr0->mass_points = BLAZER_MASS;
+		ElementPtr0->blast_offset = old_offs;
+		ElementPtr0->life_span = old_life;
+		ElementPtr0->crew_level = old_crew_level;
+		ElementPtr0->state_flags &= ~(DISAPPEARING | NONSOLID);
+		collision (ElementPtr0, pPt0, ElementPtr1, pPt1);
+	}
 }
 
 #define MISSILE_SPEED DISPLAY_TO_WORLD (8 << RESOLUTION_FACTOR) // JMS_GFX

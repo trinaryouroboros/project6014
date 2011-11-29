@@ -342,8 +342,10 @@ spawn_point_defense (ELEMENT *ElementPtr)
 
 			LockElement (hObject, &ObjectPtr);
 			hNextObject = GetPredElement (ObjectPtr);
-			if (ObjectPtr != ShipPtr && CollidingElement (ObjectPtr) &&
-					!OBJECT_CLOAKED (ObjectPtr))
+			if (ObjectPtr != ShipPtr 
+				&& CollidingElement (ObjectPtr) 
+				&& !OBJECT_CLOAKED (ObjectPtr)
+				&& !(ObjectPtr->state_flags & GASSY_SUBSTANCE)) // JMS: Don't zap Baul gas clouds.
 			{
 #define LASER_RANGE (UWORD)(100 << RESOLUTION_FACTOR) // JMS_GFX
 				SIZE delta_x, delta_y;
