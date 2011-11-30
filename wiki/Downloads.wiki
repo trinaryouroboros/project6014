@@ -2,7 +2,7 @@
 = Downloads =
 
 == Project 6014 demo 0.2.0 ==
-(Coming soon)...
+== (Coming soon)... ==
 
 _Released 11 November 2011_
 
