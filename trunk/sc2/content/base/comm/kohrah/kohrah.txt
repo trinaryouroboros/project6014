@@ -80,8 +80,8 @@ If not today, we will cleanse you ultimately.
 Rath? I thought you guys were plain and simply Kohr-Ah.
 
 #(RATH_IS_GREAT)	RATH_IS_GREAT.ogg
-Rath is the name we have taken after
-a great visionary.
+Rath is the name we have taken
+after a great visionary.
 It was Rath, one of us, who showed us our new path
 when things were at their bleakest.
 When our cowardly cousins, the Kzer-Za, turned their backs and ran
