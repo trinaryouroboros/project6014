@@ -2,9 +2,9 @@
 = Downloads =
 
 
-== Project 6014 demo - the patched version ==
+== Project 6014 demo 0.2.0 ==
 
-_Released 19 November 2010_
+_Released 11 November 2011_
 
 
 The files are:
