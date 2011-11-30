@@ -87,5 +87,5 @@ Also I've noticed that they show no mercy to Kohr-Ah.
 They take no surrender and just destroy on sight.
 Better to be on their side than not to be sure.
 
-#(GOODBYE_EARTHLING)
+#(GOODBYE_EARTHLING)	GOODBYE_EARTHLING.ogg
 Goodbye Earthling friend, you are always welcome in Yehat space.
