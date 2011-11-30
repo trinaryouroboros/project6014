@@ -138,10 +138,8 @@ GenerateAndrosynth_generateEnergy (SOLARSYS_STATE *solarSys, PLANET_DESC *world,
 		do
 		{
 			rand_val = TFB_Random ();
-			solarSys->SysInfo.PlanetInfo.CurPt.x =
-					(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
-			solarSys->SysInfo.PlanetInfo.CurPt.y =
-					(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
+			solarSys->SysInfo.PlanetInfo.CurPt.x = ((LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
+			solarSys->SysInfo.PlanetInfo.CurPt.y = ((LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
 			solarSys->SysInfo.PlanetInfo.CurType = 0;
 			solarSys->SysInfo.PlanetInfo.CurDensity = 0;
 

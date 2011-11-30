@@ -753,6 +753,11 @@ DeltaLanderCrew (SIZE crew_delta, COUNT which_disaster)
 		s.origin.x = ((11 + ((6 << RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)))); // JMS_GFX
 		s.origin.y = (35 - (6 * (crew_delta / NUM_CREW_COLS))) << RESOLUTION_FACTOR; // JMS_GFX
 	}
+	else if (RESOLUTION_FACTOR == 1)
+	{
+		s.origin.x = ((23 + ((6 << RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)))); // JMS_GFX
+		s.origin.y = 1 + ((35 - (6 * (crew_delta / NUM_CREW_COLS))) << RESOLUTION_FACTOR); // JMS_GFX
+	}
 	else
 	{
 		s.origin.x = 32 + ((9 * RESOLUTION_FACTOR) * (crew_delta % NUM_CREW_COLS)); // JMS_GFX
