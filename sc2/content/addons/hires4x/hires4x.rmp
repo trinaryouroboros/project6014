@@ -66,6 +66,7 @@ graphics.boom.medium = GFXRES:addons/hires4x/battle/boom-med.ani
 graphics.boom.small = GFXRES:addons/hires4x/battle/boom-sml.ani
 graphics.bulletholes = GFXRES:addons/hires4x/ui/bullet.ani
 graphics.burvixcaster = GFXRES:addons/hires4x/lander/energy/burvixcaster.ani
+graphics.umgahcaster = GFXRES:addons/hires4x/lander/energy/umgahcaster.ani
 graphics.circles_a = GFXRES:addons/hires4x/lander/energy/circles_a.ani
 graphics.circles_b = GFXRES:addons/hires4x/lander/energy/circles_b.ani
 graphics.circles_c = GFXRES:addons/hires4x/lander/energy/circles_c.ani
