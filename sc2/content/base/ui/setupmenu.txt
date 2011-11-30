@@ -133,13 +133,14 @@ Simulate an interlaced display.
 
 #(CAT_4_OPTS)
 Text
-Pictographic
+Pictograms (Issues!)
 
 #(CAT_4_OPT_0_DESC)
 In-game menus resemble the Original PC version.
 
 #(CAT_4_OPT_1_DESC)
 In-game menus resemble the 3do version.
+(Gfx currently unfinished!)
 
 #(CAT_5_OPTS)
 Gradients
@@ -157,7 +158,7 @@ Easier to read.
 
 #(CAT_6_OPTS)
 Text
-Pictograms
+Pictograms (Issues!)
 
 #(CAT_6_OPT_0_DESC)
 Displays planet scan information as text,
@@ -165,7 +166,7 @@ as per the original PC version.
 
 #(CAT_6_OPT_1_DESC)
 Displays planet scan information as pictograms,
-as per the 3do version..
+as per the 3do version. (Gfx currently unfinished!)
 
 #(CAT_7_OPTS)
 Per-Page
@@ -207,7 +208,7 @@ Requires a restart of UQM to take effect.
 
 #(CAT_10_OPTS)
 Windowed
-Fullscreen
+Fullscreen (Issues!)
 
 #(CAT_10_OPT_0_DESC)
 Display everything in a window.
@@ -215,7 +216,7 @@ Display everything in a window.
 
 #(CAT_10_OPT_1_DESC)
 Game occupies the entire screen.
-(if available)
+(if available. Currently broken in OSX Lion.)
 
 #(CAT_11_OPTS)
 Slides
