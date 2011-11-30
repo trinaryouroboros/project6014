@@ -502,7 +502,7 @@ Captain
 . I'm glad you made it back in one piece.
 
 #(NORMAL_HELLO_H0)
-I hope the battle fares well, Captain.
+I hope the search fares well, Captain.
 #(NORMAL_HELLO_H1)
 .
 
@@ -517,7 +517,7 @@ Goodbye, Captain.
 #(NORMAL_GOODBYE_A1)
 .
 #(NORMAL_GOODBYE_B0)
-Bring back lots of minerals, Captain.
+Bon voyage, Captain.
 #(NORMAL_GOODBYE_B1)
 .
 #(NORMAL_GOODBYE_C0)
@@ -537,7 +537,7 @@ We shall await your return, Captain.
 #(NORMAL_GOODBYE_F1)
 .
 #(NORMAL_GOODBYE_G0)
-Blow up an Ur-Quan for me, Captain.
+Blow up a Kohr-Ah for me, Captain.
 #(NORMAL_GOODBYE_G1)
 .
 #(NORMAL_GOODBYE_H0)
@@ -548,7 +548,7 @@ Be careful out there, Captain.
 #(LIGHT_LOAD_A0)
 The more minerals you bring us, Captain
 #(LIGHT_LOAD_A1) 
-, the faster we'll be able to tackle the Ur-Quan.
+, the better fleet we'll be able to build for you.
 
 #(LIGHT_LOAD_B0)
 Light load this time, Captain
@@ -639,7 +639,8 @@ Wow,
 #(HEAVY_LOAD_E0)
 If you can keep this up,
 #(HEAVY_LOAD_E1) 
-, we'll turn that flagship of yours into a genuine Dreadnought-Killer.
+, we'll turn that flagship of yours into a genuine Kohr-Ah Killer
+or would, if it only were moddable. Dang!
 
 #(HEAVY_LOAD_F0)
 Captain
