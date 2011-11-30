@@ -122,6 +122,14 @@ SHIP AI
 13 C
 Tristan Glaeser
  
+#(AdditionalArt)
+14 C
+ADDITIONAL ARTWORK
+
+#(Otherartists)
+13 C
+Talana's House: Clint Bellanger
+
  
 #(macstuff)
 14 C
