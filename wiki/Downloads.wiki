@@ -14,7 +14,7 @@ The files are:
 || Linux Installer|| platform specific ||0.7 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.1.1_Linux-x86.tar.gz&can=2&q= ||
 || OSX executable || platform specific ||2.3 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.1.1_OSX.7z&can=2&q=  ||
 || Alien voices package || Content ||14.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-voice.uqm&can=2&q=  ||
-|| High quality music package || Content ||52.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-3domusic.uqm&can=2&q=  ||
+|| High quality music package || Content ||52.8 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-3domusic.uqm&can=2&q=  ||
 || Base content package|| Content ||39.3 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.1.1-content.uqm&can=2&q=  ||
 
 
