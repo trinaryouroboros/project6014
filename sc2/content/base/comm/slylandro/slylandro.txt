@@ -2,7 +2,7 @@
 This is Slylandro scout vessel Plurious Giddiness.
 We come in peace and
 Oh, this is terribly exciting!
-The human traveller our songs have told so much about
+The human traveller our songs have told us so much about
 is actually before us!
 
 #(HELLO_2)	HELLO_2.ogg
@@ -34,7 +34,7 @@ You are not fooling us by disguising as friends, Kohr-ah. Prepare to die!
 
 #(WHY_ATTACK)	WHY_ATTACK.ogg
 Please! We mean you no harm.
-Why is everyone attacking us?
+Why is everybody attacking us?
 
 #(close_call)
 Slylandro! Boy, I almost blasted you to high heavens. Why and HOW are you in Kohr-Ah ships?
