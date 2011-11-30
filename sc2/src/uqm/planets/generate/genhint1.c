@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: - This is a completely new file.
+// JMS 2010: - This is a completely new file which creates home systems for those who left in a hurry...
 
 #include "../../encount.h"
 #include "../../globdata.h"
@@ -24,6 +24,8 @@
 #include "../../resinst.h"
 #include "genall.h"
 #include "libs/mathlib.h"
+
+#include "libs/log.h"
 
 static bool GenerateHint1_generatePlanets (SOLARSYS_STATE *solarSys);
 static bool GenerateHint1_generateMoons (SOLARSYS_STATE *solarSys,
@@ -131,8 +133,7 @@ static bool GenerateHint1_generateOrbital (SOLARSYS_STATE *solarSys,
 	COUNT i;
 	DWORD rand_val;
 	BYTE which_hintworld = which_hintworld_is_it ();
-	if ((GET_GAME_STATE(HINT_WORLD_LOCATION) == which_hintworld)
-	    || (which_hintworld == 1))
+	if ((GET_GAME_STATE(HINT_WORLD_LOCATION) == which_hintworld) || (which_hintworld == 1))
 	{
 		rand_val = DoPlanetaryAnalysis (&solarSys->SysInfo, solarSys->pOrbitalDesc);
 		
@@ -151,21 +152,19 @@ static bool GenerateHint1_generateOrbital (SOLARSYS_STATE *solarSys,
 		
 		if (matchWorld(solarSys, world, 1, MATCH_PLANET))
 		{
-			solarSys->SysInfo.PlanetInfo.PlanetToSunDist = EARTH_RADIUS * 352L / 100;
-			solarSys->SysInfo.PlanetInfo.AtmoDensity = 160;
-			solarSys->SysInfo.PlanetInfo.Weather = 2;
-			solarSys->SysInfo.PlanetInfo.PlanetDensity = 104;
-			solarSys->SysInfo.PlanetInfo.PlanetRadius = 120;
-			solarSys->SysInfo.PlanetInfo.Tectonics = 1;
-			solarSys->SysInfo.PlanetInfo.RotationPeriod = 288;
-			solarSys->SysInfo.PlanetInfo.SurfaceTemperature = -47;
-			
 			LoadStdLanderFont (&solarSys->SysInfo.PlanetInfo);
 			solarSys->PlanetSideFrame[1] = CaptureDrawable (LoadGraphic (CIRCLES_A_MASK_PMAP_ANIM));
 			solarSys->PlanetSideFrame[2] = CaptureDrawable (LoadGraphic (CIRCLES_B_MASK_PMAP_ANIM));
 			solarSys->SysInfo.PlanetInfo.DiscoveryString = CaptureStringTable (LoadStringTable (LEFTHURRY_STRTAB));
-			solarSys->SysInfo.PlanetInfo.Weather = 1;
+			solarSys->SysInfo.PlanetInfo.Weather = 2;
 			solarSys->SysInfo.PlanetInfo.Tectonics = 1;
+			
+			solarSys->SysInfo.PlanetInfo.PlanetToSunDist = EARTH_RADIUS * 352L / 100;
+			solarSys->SysInfo.PlanetInfo.AtmoDensity = 159;
+			solarSys->SysInfo.PlanetInfo.PlanetDensity = 104;
+			solarSys->SysInfo.PlanetInfo.PlanetRadius = 120;
+			solarSys->SysInfo.PlanetInfo.RotationPeriod = 288;
+			solarSys->SysInfo.PlanetInfo.SurfaceTemperature = -47;
 		}
 		
 		LoadPlanet (NULL);
@@ -177,11 +176,14 @@ static bool GenerateHint1_generateOrbital (SOLARSYS_STATE *solarSys,
 	return true;
 }
 
-static bool GenerateHint1_generateEnergy (SOLARSYS_STATE *solarSys,
-		PLANET_DESC *world, COUNT *whichNode)
+static bool
+GenerateHint1_generateEnergy (SOLARSYS_STATE *solarSys, PLANET_DESC *world, COUNT *whichNode)
 {
 	COUNT i;
 	BYTE which_hintworld = which_hintworld_is_it ();
+	
+	//log_add (log_Debug, "which_hintworld = %d. Stuff is in %d.", which_hintworld, GET_GAME_STATE(HINT_WORLD_LOCATION));
+	
 	if (!(GET_GAME_STATE(HINT_WORLD_LOCATION) == which_hintworld))
 	{
 		GenerateDefault_generateEnergy (solarSys, world, whichNode);
@@ -189,35 +191,37 @@ static bool GenerateHint1_generateEnergy (SOLARSYS_STATE *solarSys,
 	else
 	{
 		DWORD rand_val, old_rand;
-		
+	
 		if (matchWorld(solarSys, world, 1, MATCH_PLANET))
 		{
-			COUNT which_node;
+			COUNT nodeI;
 			
 			old_rand = TFB_SeedRandom (solarSys->SysInfo.PlanetInfo.ScanSeed[ENERGY_SCAN]);
 			
-			which_node = i = 0;
-			
+			nodeI = 0;
+			i = 0;
+		
 			do
 			{
 				rand_val = TFB_Random ();
-				solarSys->SysInfo.PlanetInfo.CurPt.x = (LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
-				solarSys->SysInfo.PlanetInfo.CurPt.y = (HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
+				solarSys->SysInfo.PlanetInfo.CurPt.x = (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1)) + 8;
+				solarSys->SysInfo.PlanetInfo.CurPt.y = (HIWORD (rand_val)) % (MAP_HEIGHT - (8 << 1)) + 8;
 				solarSys->SysInfo.PlanetInfo.CurType = 1;
 				solarSys->SysInfo.PlanetInfo.CurDensity = 0;
-				if (which_node >= solarSys->CurNode
+				
+				if (nodeI >= *whichNode
 				    && !(solarSys->SysInfo.PlanetInfo.ScanRetrieveMask[ENERGY_SCAN] & (1L << i)))
 					break;
-				++which_node;
+				++nodeI;
 			} while (++i < 24);
 			
-			solarSys->CurNode = which_node;
-			
-			TFB_SeedRandom (old_rand);
-		}
+			*whichNode = nodeI;
 		
-		solarSys->CurNode = 0;
+			TFB_SeedRandom (old_rand);
+			return true;
+		}
 	}
+	solarSys->CurNode = 0;
 	return true;
 }
 
