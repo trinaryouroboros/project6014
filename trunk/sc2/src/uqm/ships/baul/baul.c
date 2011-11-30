@@ -603,7 +603,7 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
 					
 					// Remove the lock on enemy ship and make the gas die on next turn.
-					ObjPtr->hTarget = 0;
+					//ObjPtr->hTarget = 0;
 					ObjPtr->life_span = (10 / destruction);
 					
 					// Delayed shockwave
@@ -674,30 +674,30 @@ gas_death (ELEMENT *ElementPtr)
 	
 	if (StarShipPtr->hShip)
 	{
-		HELEMENT hIonSpots;
+		HELEMENT hDissolve;
 		ELEMENT *ShipPtr;
 		
 		LockElement (StarShipPtr->hShip, &ShipPtr);
 	
-		if ((hIonSpots = AllocElement ()))
+		if ((hDissolve = AllocElement ()))
 		{
-			ELEMENT *IonSpotsPtr;
+			ELEMENT *DissolvePtr;
 			
-			LockElement (hIonSpots, &IonSpotsPtr);
-			IonSpotsPtr->playerNr = ElementPtr->playerNr;
-			IonSpotsPtr->state_flags = FINITE_LIFE | NONSOLID | IGNORE_SIMILAR | APPEARING;
-			IonSpotsPtr->turn_wait = 0;
-			IonSpotsPtr->life_span = NUM_DISSOLVE_ANIMS;
-			IonSpotsPtr->current.location.x = ElementPtr->current.location.x;
-			IonSpotsPtr->current.location.y = ElementPtr->current.location.y;
-			IonSpotsPtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-			IonSpotsPtr->current.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, LAST_SHOCKWAVE_INDEX);
-			IonSpotsPtr->preprocess_func = gas_death_animation;
-			SetElementStarShip (IonSpotsPtr, StarShipPtr);
-			SetPrimType (&(GLOBAL (DisplayArray))[IonSpotsPtr->PrimIndex], STAMP_PRIM);
+			LockElement (hDissolve, &DissolvePtr);
+			DissolvePtr->playerNr = ElementPtr->playerNr;
+			DissolvePtr->state_flags = FINITE_LIFE | NONSOLID | IGNORE_SIMILAR | APPEARING;
+			DissolvePtr->turn_wait = 0;
+			DissolvePtr->life_span = NUM_DISSOLVE_ANIMS;
+			DissolvePtr->current.location.x = ElementPtr->current.location.x;
+			DissolvePtr->current.location.y = ElementPtr->current.location.y;
+			DissolvePtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+			DissolvePtr->current.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, LAST_SHOCKWAVE_INDEX);
+			DissolvePtr->preprocess_func = gas_death_animation;
+			SetElementStarShip (DissolvePtr, StarShipPtr);
+			SetPrimType (&(GLOBAL (DisplayArray))[DissolvePtr->PrimIndex], STAMP_PRIM);
 			
-			UnlockElement (hIonSpots);
-			PutElement (hIonSpots);
+			UnlockElement (hDissolve);
+			PutElement (hDissolve);
 		}
 		
 		UnlockElement (StarShipPtr->hShip);
@@ -711,14 +711,22 @@ gas_preprocess (ELEMENT *ElementPtr)
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	
-	// Move to next image frame.
-	if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX - 1)
-		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	// Move to next image frame. (Abusing thrust_wait to slow down the anim.)
+	if (ElementPtr->thrust_wait > 0)
+		--ElementPtr->thrust_wait;
 	else
-		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
-	
-	// This makes the gas animate even if the ships are not moving and the screen is stationary.
-	ElementPtr->state_flags |= CHANGING;
+	{
+		// Abusing thrust_wait to slow down the anim. (Should help performance a bit.)
+		ElementPtr->thrust_wait = 1;
+		
+		// This makes the gas animate even if the ships are not moving and the screen is stationary.
+		ElementPtr->state_flags |= CHANGING;
+		
+		if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX - 1)
+			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+		else
+			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+	}
 	
 	// If enemy ship dies, remove the gas (this prevents game crashing upon enemy ship dying with gas on it).
 	if ((!(ElementPtr->state_flags & IGNORE_VELOCITY) && ElementPtr->hTarget == 0)
@@ -787,6 +795,7 @@ gas_preprocess (ELEMENT *ElementPtr)
 				eptr->playerNr = ElementPtr->playerNr;
 				eptr->state_flags = FINITE_LIFE | GASSY_SUBSTANCE | CHANGING;
 				eptr->life_span = 1;
+				eptr->thrust_wait = 1;
 				eptr->weapon_element_index = ElementPtr->weapon_element_index;
 				eptr->current = eptr->next = ElementPtr->next;
 				eptr->preprocess_func = gas_preprocess;
@@ -874,6 +883,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 			}
 			GasPtr->hit_points = ElementPtr0->hit_points;
 			GasPtr->life_span = ElementPtr0->life_span;
+			GasPtr->thrust_wait = 1;
 			GasPtr->weapon_element_index = ElementPtr0->weapon_element_index;
 			GasPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
 			
@@ -951,6 +961,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 		LockElement (Missile, &GasPtr);
 		GasPtr->collision_func = gas_collision;
 		GasPtr->death_func = gas_death;
+		GasPtr->thrust_wait = 1;
 		GasPtr->weapon_element_index = gas_number[ShipPtr->playerNr];
 		SetElementStarShip (GasPtr, StarShipPtr);
 		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), GasPtr);
