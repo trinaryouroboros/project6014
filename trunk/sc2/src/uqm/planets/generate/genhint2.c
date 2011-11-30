@@ -16,7 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: - This is a completely new file.
+// JMS 2010: - This is a completely new file which puts a spaceship imprint on a planet near Yehat system.
 
 #include "../../encount.h"
 #include "../../globdata.h"
