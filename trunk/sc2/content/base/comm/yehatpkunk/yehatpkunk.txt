@@ -1,15 +1,16 @@
 #(Y_HELLO)
 Braaaaarrrrrkkkk! Human captain friend, it is
-my pleasure as the space Ambassador to welcome
+my pleasure as station Commander to welcome
 ye to our first joint Pkunk and Yehat colony !
 
 #(P_HELLO)
 But !? My dear brother, I think you're still dizzy
-from our last 4 hours chanting session.
+from this morning's chanting session.
 We had agreed on this, it is I who gets to play
-space Ambassador for today !
+station Commander for today !
 
 #(Y_BYEBYE)
 Arrrrrk... As ye can see for yerself, captain, we're
-still having trouble making them understand the concept
-of shared leadership. Please come back later...
+still struggling with the concept of shared leadership.
+Please come back later...
+You can consult our Pkunk Queen on Gamma Serpentis I in the meanwhile.
