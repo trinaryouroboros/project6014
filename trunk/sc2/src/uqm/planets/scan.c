@@ -790,7 +790,11 @@ DoPickPlanetSide (MENU_STATE *pMS)
 		dy = dy << MAG_SHIFT;
 		
 		// JMS_GFX: 1 for 320x240, 3 for 640x480, 7 for 1280x960
-		j = (1 << (RESOLUTION_FACTOR + 1)) - 1;
+		// XXX: This was good for debugging build, but too fast on opitmized release build.
+		//j = (1 << (RESOLUTION_FACTOR + 1)) - 1;
+		
+		// JMS_GFX: 1 for 320x240, 2 for 640x480, 4 for 1280x960
+		j = 1 << RESOLUTION_FACTOR;
 		
 		// JMS_GFX: This makes the scan cursor faster in hi-res modes.
 		// (Originally there was no loop, just the contents.)
@@ -824,12 +828,13 @@ DoPickPlanetSide (MENU_STATE *pMS)
 			// something else limits entering this function to about once per 1/40 secs...
 			// Since I couldn't find that mysterious element, I had to do speed things up
 			// with a loop and this thing here.
+			// XXX: Actually, with the optimized release build the best solution now seems is to keep all at 1/40th, but keep the loop...
 			if (RESOLUTION_FACTOR == 0)
 				SleepThreadUntil (TimeIn + ONE_SECOND / 40);
 			else if (RESOLUTION_FACTOR == 1)
-				SleepThreadUntil (TimeIn + ONE_SECOND / 120);
+				SleepThreadUntil (TimeIn + ONE_SECOND / 40);
 			else
-				SleepThreadUntil (TimeIn + ONE_SECOND / 280);
+				SleepThreadUntil (TimeIn + ONE_SECOND / 40);
 			
 			UnbatchGraphics ();
 			UnlockMutex (GraphicsLock);
@@ -839,7 +844,8 @@ DoPickPlanetSide (MENU_STATE *pMS)
 	// JMS_GFX: For some reason, 1280x960 is choppy, no matter how many iterations
 	// the loop has or how short the sleepthread is. This final redraw makes things
 	// a bit smoother.
-	if (RESOLUTION_FACTOR == 2)
+	// XXX: This was good at debugging build but mad the cursor blink too fast in optimized release build.
+	/*if (RESOLUTION_FACTOR == 2)
 	{
 		LockMutex (GraphicsLock);
 		BatchGraphics ();
@@ -851,7 +857,7 @@ DoPickPlanetSide (MENU_STATE *pMS)
 	
 		UnbatchGraphics ();
 		UnlockMutex (GraphicsLock);
-	}
+	}*/
 
 	return TRUE;
 }
