@@ -24,7 +24,6 @@ The files are:
 
 *Linux*
   * Download and install the packages tailored to the distribution you're using. 
-
   * If there are no packages for your Linux distribution, download the source files, compile your own version of the game (./build.sh uqm config, ./build.sh uqm) and then place the 'base content' .uqm file in content/packages. If you want hires content or any of the other addon packages, download the required .uqm files and place them in content/addons
 
 *OS X* 
