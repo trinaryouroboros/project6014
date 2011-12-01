@@ -30,7 +30,7 @@ enum
 	ONE_AS_ALL,
 	astral,
 	PHOTOGRAPHS,
-	nice,
+	nicee,
 	ADAPT,
 	thanks,
 	GUIDANCE,
