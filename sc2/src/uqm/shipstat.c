@@ -77,8 +77,7 @@ DrawShipNameString (UNICODE *pStr, COUNT CharCount, COORD y)
 	Text.baseline.y = STARCON_TEXT_HEIGHT + y + (3 << RESOLUTION_FACTOR) - 6 * RESOLUTION_FACTOR; // JMS_GFX
 	Text.baseline.x = STATUS_WIDTH >> 1;
 
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
 	font_DrawText (&Text);
 	--Text.baseline.y;
 	SetContextForeGroundColor (BLACK_COLOR);
@@ -92,12 +91,11 @@ ClearShipStatus (COORD y, COORD w)
 {
 	RECT r;
 
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	r.corner.x = 2;
 	r.corner.y = 3 + y;
-	r.extent.width = w - 4 - (RESOLUTION_FACTOR / 2);
-	r.extent.height = SHIP_INFO_HEIGHT - 3 - (3 * RESOLUTION_FACTOR / 2); // JMS_GFX
+	r.extent.width = w - 4;//
+	r.extent.height = SHIP_INFO_HEIGHT - 3;
 	DrawFilledRectangle (&r);
 }
 
@@ -106,8 +104,7 @@ OutlineShipStatus (COORD y, COORD w)
 {
 	RECT r;
 
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 	r.corner.x = 0;
 	r.corner.y = 1 + y;
 	r.extent.width = w;
@@ -117,13 +114,12 @@ OutlineShipStatus (COORD y, COORD w)
 	--r.extent.width;
 	DrawFilledRectangle (&r);
 	r.extent.width = 1;
-	r.extent.height = SHIP_INFO_HEIGHT - 1 - 2 * RESOLUTION_FACTOR;
+	r.extent.height = (SHIP_INFO_HEIGHT << RESOLUTION_FACTOR) - 1 - 2 * RESOLUTION_FACTOR;
 	DrawFilledRectangle (&r);
 	++r.corner.x;
 	DrawFilledRectangle (&r);
 
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
 	r.corner.x = w - 1;
 	DrawFilledRectangle (&r);
 	r.corner.x = w - 2;
@@ -131,7 +127,7 @@ OutlineShipStatus (COORD y, COORD w)
 	--r.extent.height;
 	DrawFilledRectangle (&r);
 	r.corner.x = 1;
-	r.corner.y = SHIP_INFO_HEIGHT + 2 - 2 * RESOLUTION_FACTOR;
+	r.corner.y = (SHIP_INFO_HEIGHT << RESOLUTION_FACTOR) + 2 - 2 * RESOLUTION_FACTOR;
 	r.extent.width = w - 2;
 	r.extent.height = 1;
 	DrawFilledRectangle (&r);
