@@ -19,14 +19,17 @@ I like these visits of yours because I can really let loose.
 When I say darn near anything that's just happy around here,
 everyone becomes quite confused and a bit worried.
 It's quite off-putting.
-I have a very private room that used to be used for dark conspiracies, and I just shout for joy in it!
+I have a very private room that used to be used for dark conspiracies
+and I just shout for joy in it!
 A much better use for the room, for sure.
 
 #(did_we_speak)
 Did we speak back at Gamma Kreuger?
 
 #(ONE_AS_ALL)
-In a way, yes. We spoke from the heart there, all as one, one speaking as all. I spoke to you then, from my heart, though I wasn't really aware of it at the time, and I'm not sure what we said. But yes, we did.
+In a way, yes.
+We spoke from the heart there, all as one, one speaking as all. I spoke to you then, from my heart, though I wasn't really aware of it at the time, and I'm not sure what we said.
+But yes, we did.
 
 #(astral)
 I presume you mean astral vision or such, right? Because we've never met.
@@ -36,7 +39,7 @@ Photographs, actually. It's much nicer in person, though, isn't it?
 And don't say it - I know you're around eight million wingspans from here.
 You're such a joker.
 
-#(nice)
+#(nicee)
 It is nice to meet you at last, your majesty.
 
 #(ADAPT)
@@ -61,17 +64,17 @@ How did you end up queen?
 
 #(REBEL_RANT)
 The rebel clans' main victories were moral and with words.
-The people yearned for change, but rebellion was unacceptable,
-And asking nicely didn't look like it would get very far.
-Which put them in a bit of a tight spot, right?
-It got to the point that the loyalists weren't so much loyal to the queen...
+The people yearned for change, but rebellion was unacceptable
+and asking nicely didn't look like it would get very far
+which put them in a bit of a tight spot, right?
+It got to the point that the loyalists weren't so much loyal to the queen
 as against the idea that rebellion was a good way of changing government.
 But the queen was absolute... so no one could say that.
 In the end, they just agreed to make someone queen, while skipping the rebellion step.
-I'm not sure how that part works,
+I'm not sure how that part works
 and neither are they.
 And who better than someone truly neutral in that fight?
-Someone reasonably coherent, conciliatory, very photogenic,
+Someone reasonably coherent, conciliatory, very photogenic
 and who maintains all of those while having the tar beaten out of her.
 So, in the span of a day I went from little old Braky Girdy, inmate number something-or-other
 to Braky Girdy the First,
@@ -119,7 +122,7 @@ Some in this court welcomed these decisions.
 But you may know, captain, that whatever happens, whoever you offend, and no matter the rules,
 as long as you look out for those on the bottom, as long as your compromises have heart,
 you're our friend.
-You're welcome here even if you don't do those things,
+You're welcome here even if you don't do those things
 though we'll be somewhat less enthusiastic.
 
 #(need_help)
@@ -139,7 +142,7 @@ But with the wind as it is, this meta-cosmology lesson is all I have to offer.
 Hasta la vista!
 
 #(ADIOS1)
-Adios, humaños.
+Adios, humanos.
 ...
 Is that right? I'm not even sure that's the same lan-
 
@@ -168,11 +171,11 @@ refusal to consider alternatives,
 and, most troubling to the peers, perversion of honor.
 Nothing we haven't all lived with for as long as our respective species have been sapient.
 Court is a bit like wading through mud.
-You can do it with flat wide feet, or long thin legs.
+You can do it with flat wide feet, or long thin legs
 I go with the long thin legs, myself.
 You could also wear a wetsuit.
 Maybe that's more of what I'm doing.
-Sometimes you just wish you could exorcise the whole lot of it,
+Sometimes you just wish you could exorcise the whole lot of it
 but these demons belong here. They're ours. The outer darkness can't have 'em!
 
 #(me_help)
@@ -189,11 +192,11 @@ That would be dreadfully inconvenient.
 You sound terribly busy.
 
 #(ME_BUSY)
-Somewhat busy. The most important part is finding good people,
+Somewhat busy. The most important part is finding good people
 and the second most important part is trusting them.
 That's hard.
 But you have to do it!
-We're all children before the cosmos,
+We're all children before the cosmos
 and nothing's worse than some brat who thinks she can run everyone else's lives.
 A perspective like that helps, as a queen.
 
@@ -201,28 +204,30 @@ A perspective like that helps, as a queen.
 That was interesting.
 
 #(MELTINGPOT)
-It's not half as interesting to hear the description,
-as it is to actually sniff the stew of mixing cultures,
-to guide and learn and find things out,
-to squinnet out the liars and expose them to the light of day,
+It's not half as interesting to hear the description
+as it is to actually sniff the stew of mixing cultures.
+To guide and learn and find things out
+to squinnet out the liars and expose them to the light of day
 - for their own good of course - 
-and ride the updraft of civilization,
-as far as we can.
+and ride the updraft of civilization as far as we can.
 As awful as things can get, you always need to look up.
 
 #(JOKE)
-Say, I heard one of your human jokes. Would you like to hear it? It goes,
-A rabbi, a Nietzchean transhumanist, and a length of rope walk into a bar...
-on a damaged spaceship that's about to crash...
-No, wait...
+Say, I heard one of your human jokes. Would you like to hear it?
+So, it goes
+A rabbi, a Nietzchean transhumanist, and a length of rope walk into a bar
+on a damaged spaceship that's about to crash
+No, wait.
 The rabbi is dyslexic.
 Hmm... or was it Spinoza, instead of the rope?
 
 #(wtf_joke)
-What is this I don't even
+What is this... I don't even...
 
 #(PHILO_JOKE)
-... think it's a joke! You're right, maybe I drowsed off and mixed up your philosophical tracts with your science fiction novels. Sometimes it's hard to tell the difference.
+... think it's a joke! You're right, maybe I drowsed off
+and mixed up your philosophical tracts with your science fiction novels.
+Sometimes it's hard to tell the difference.
 
 #(brick)
 That one only works as a brick joke after the one where Saint Anselm brings Robert Dawkins a teapot.
@@ -239,7 +244,6 @@ Sometimes I get the feeling things are not quite right around here.
 
 #(important)
 So, I had some more important matters to speak of.
-
 
 #(BUSINESS)
 Ah, yes. Business.

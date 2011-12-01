@@ -184,17 +184,17 @@ static LOCDATA syreen_desc_4x =
 		{	// 1 - Oscilloscope view
 			10, /* StartIndex */
 			6, /* NumFrames */
-			RANDOM_ANIM, /* AnimFlags */
-			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
-			0, 0, /* RestartRate */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 2, 0, /* FrameRate */
+			ONE_SECOND / 2, 0, /* RestartRate */
 			0, /* BlockMask */
 		},
 		{	// 2 - Electricity on Tesla coil
 			16, /* StartIndex */
 			5, /* NumFrames */
 			CIRCULAR_ANIM, /* AnimFlags */
-			ONE_SECOND / 15, 0, /* FrameRate */
-			ONE_SECOND * 4, ONE_SECOND * 2, /* RestartRate */
+			ONE_SECOND / 20, 0, /* FrameRate */
+			ONE_SECOND / 60, 0, /* RestartRate */
 			0, /* BlockMask */
 		},
 	},
@@ -207,11 +207,11 @@ static LOCDATA syreen_desc_4x =
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
-		174, /* StartIndex */
-		8, /* NumFrames */
+		3, /* StartIndex */
+		7, /* NumFrames */
 		TALK_INTRO, /* AnimFlags */
-		ONE_SECOND / 16, ONE_SECOND / 30, /* FrameRate */
-		ONE_SECOND / 10, 0, /* RestartRate */
+		ONE_SECOND / 20, ONE_SECOND / 15, /* FrameRate */
+		ONE_SECOND / 20, ONE_SECOND / 15, /* RestartRate */
 		0, /* BlockMask */
 	},
 	NULL, /* AlienNumberSpeech - none */
