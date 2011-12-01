@@ -958,7 +958,7 @@ static void Court (RESPONSE_REF R)
 		NPCPhrase (CANT);
 		DISABLE_PHRASE(court);
 	}
-	else if (PLAYER_SAID (R, nice))
+	else if (PLAYER_SAID (R, nicee))
 		NPCPhrase (ADAPT);
 	else if (PLAYER_SAID (R, queen_different))
 	{
@@ -1019,7 +1019,7 @@ static void Orly (RESPONSE_REF R)
 	(void) R;
 	Response (did_we_speak, PkunkMain);
 	Response (astral, Joke);
-	Response (nice, Court);
+	Response (nicee, Court);
 }
 
 
