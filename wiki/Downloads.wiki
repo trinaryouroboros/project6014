@@ -18,21 +18,25 @@ The files are:
 || 1280 x 960 Graphics package - part 1|| Content ||150 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.uqm.part1.rar&can=2&q=  ||
 || 1280 x 960 Graphics package - part 2|| Content ||104 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.uqm.part2.rar&can=2&q=  ||
 
-For Windows, just download the installer. That file will download the content for you.
+*Windows*
+  * Just download the installer. That file will download the content for you.
+  * You may need to run the included .BAT file.
 
-For Linux, download and install the packages tailored to the distribution you're using. 
+*Linux*
+  * Download and install the packages tailored to the distribution you're using. 
 
-If there are no packages for your Linux distribution, download the source files, compile your own version of the game (./build.sh uqm config, ./build.sh uqm) and then place the 'base content' .uqm file in content/packages. If you want hires content or any of the other addon packages, download the required .uqm files and place them in content/addons
+  * If there are no packages for your Linux distribution, download the source files, compile your own version of the game (./build.sh uqm config, ./build.sh uqm) and then place the 'base content' .uqm file in content/packages. If you want hires content or any of the other addon packages, download the required .uqm files and place them in content/addons
 
-For OSX, you'll need to download the .app and the base content package. (Other packages are optional.)
+*OS X* 
+  * Download the OSX Application and the Base content package. (Other packages are optional.)
+  * Follow the instructions inside the .app to install the packages.
 
-You can run the game by running the executable. Windows Users may need to run the included .BAT file.
+----
 
 Do post to the forums if you have any issues with installation or running the game.
 
 *N.B.* Parts of these files are provided under the terms of the GNU General Public License (version 2); the Creative Commons License (Attribution, Non-Commercial, Share-Alike 2.5); and the Creative Commons License (Attribution 2.0).  These licenses are explained in the file [http://project6014.googlecode.com/svn/trunk/sc2/COPYING COPYING].  This file was inadvertently omitted from some release downloads.
 
-
----
+----
 
 See http://code.google.com/p/project6014/downloads for all downloads.
