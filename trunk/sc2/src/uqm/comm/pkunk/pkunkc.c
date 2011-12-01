@@ -19,6 +19,7 @@
 #include "../commall.h"
 #include "resinst.h"
 #include "strings.h"
+#include "libs/mathlib.h"
 
 #include "uqm/build.h"
 #include "uqm/gameev.h"
@@ -68,7 +69,7 @@ static LOCDATA pkunk_desc =
 			3, /* NumFrames */
 			YOYO_ANIM
 					| WAIT_TALKING, /* AnimFlags */
-			ONE_SECOND / 30, 0, /* FrameRate */
+			ONE_SECOND / 10, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
 			(1 << 1), /* BlockMask */
 		},
@@ -101,6 +102,7 @@ static LOCDATA pkunk_desc =
 	},
 };
 
+/**
 static BOOLEAN
 ShipsReady (void)
 {
@@ -129,11 +131,6 @@ PrepareShip (void)
 		SET_GAME_STATE (PKUNK_SHIP_YEAR, yi);
 	}
 }
-
-#define GOOD_REASON_1 (1 << 0)
-#define GOOD_REASON_2 (1 << 1)
-#define BAD_REASON_1 (1 << 2)
-#define BAD_REASON_2 (1 << 3)
 
 static void
 ExitConversation (RESPONSE_REF R)
@@ -581,7 +578,7 @@ PkunkHome (RESPONSE_REF R)
 	}
 	else if (PLAYER_SAID (R, what_about_ilwrath))
 	{
-		NPCPhrase (ABOUT_ILWRATH /* ILWRATH_GONE */);
+		NPCPhrase (ABOUT_ILWRATH);
 
 		DISABLE_PHRASE (what_about_ilwrath);
 	}
@@ -805,10 +802,10 @@ PkunkNeutralSpace (RESPONSE_REF R)
 				NPCPhrase (GENERAL_INFO_SPACE_2);
 				break;
 			case 2:
-				NPCPhrase (GENERAL_INFO_SPACE_6 /* was 3 */);
+				NPCPhrase (GENERAL_INFO_SPACE_6);
 				break;
 			case 3:
-				NPCPhrase (GENERAL_INFO_SPACE_7 /* was 4 */);
+				NPCPhrase (GENERAL_INFO_SPACE_7);
 				--NumVisits;
 				break;
 		}
@@ -849,252 +846,209 @@ PkunkMigrate (RESPONSE_REF R)
 		Response (bad_reason_2, ExitConversation);
 	Response (suit_yourself, ExitConversation);
 }
+**/
+
+BOOLEAN heardAdapt = FALSE;
+
+static void Court (RESPONSE_REF R);
+static void PkunkMain (RESPONSE_REF R);
+
+static void
+ExitConversation (RESPONSE_REF R)
+{
+	static BOOLEAN firstSpanish = TRUE;
+		
+	SET_GAME_STATE (BATTLE_SEGUE, 0);
+	if (PLAYER_SAID (R, spanish))
+	{
+		if (firstSpanish)
+		{
+			firstSpanish = FALSE;
+			NPCPhrase(ADIOS1);
+		}
+		else
+			NPCPhrase(ADIOS2);
+	}
+	else if (PLAYER_SAID (R, later))
+		NPCPhrase (MMM_EXIT);
+}
+
+static void Guidance (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, thanks))
+		NPCPhrase(GUIDANCE);
+	
+	Response(coming_out, PkunkMain);
+	Response(ouija, PkunkMain);
+	Response(glad, PkunkMain);
+}
+
+static void Humor (RESPONSE_REF R)
+{
+	(void) R;
+	Response (wtf_joke, PkunkMain);
+	Response (brick, PkunkMain);
+	Response (delivery, Court);
+	Response (important, PkunkMain);
+}
+
+static void Joke (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, astral))
+	{
+		heardAdapt = TRUE;
+		NPCPhrase(PHOTOGRAPHS);
+	}
+
+	NPCPhrase(JOKE);
+	SET_GAME_STATE (PKUNK_JOKE, 1);
+	Humor (R);
+}
+
+static void PkunkMain (RESPONSE_REF R)
+{
+	if (PLAYER_SAID (R, did_we_speak))
+		NPCPhrase (ONE_AS_ALL);
+	else if (PLAYER_SAID (R, how_queen))
+		NPCPhrase (REBEL_RANT);
+	else if (PLAYER_SAID (R, nafs))
+		NPCPhrase (WAY_BETTER);
+	else if (PLAYER_SAID (R, need_help))
+		NPCPhrase (COSMOLOGY);
+	else if (PLAYER_SAID (R, interesting))
+		NPCPhrase (MELTINGPOT);
+	else if (PLAYER_SAID (R, wtf_joke))
+		NPCPhrase (PHILO_JOKE);
+	else if (PLAYER_SAID (R, brick))
+		NPCPhrase (YOU_KNOW_ALL);
+	else if (PLAYER_SAID (R, important))
+		NPCPhrase (BUSINESS);
+	else if (PLAYER_SAID (R, coming_out))
+		NPCPhrase (YOU_WERE_RIGHT);
+	else if (PLAYER_SAID (R, ouija))
+	{
+		NPCPhrase (EXCUSE);
+		if (GET_GAME_STATE(PKUNK_JOKE) == 0)
+			Joke (R);
+	}
+	else if (PLAYER_SAID (R, glad))
+		NPCPhrase (WELL_MEANT);
+
+	Response (thanks, Guidance);
+	Response (how_queen, PkunkMain);
+	if (PHRASE_ENABLED (how_is_it))
+	    Response (how_is_it, Court);
+	else if (PHRASE_ENABLED (court))
+		Response (court, Court);
+	Response (nafs, PkunkMain);
+	Response (need_help, PkunkMain);
+	Response (spanish, ExitConversation);
+}
+
+static void Court (RESPONSE_REF R)
+{
+	static BOOLEAN busy = FALSE;
+	if (PLAYER_SAID (R, how_is_it))
+	{
+		NPCPhrase (SYMBOL);
+		DISABLE_PHRASE(how_is_it);
+	}
+	else if (PLAYER_SAID (R, court))
+	{
+		NPCPhrase (CANT);
+		DISABLE_PHRASE(court);
+	}
+	else if (PLAYER_SAID (R, nice))
+		NPCPhrase (ADAPT);
+	else if (PLAYER_SAID (R, queen_different))
+	{
+		heardAdapt = TRUE;
+		busy = TRUE;
+		NPCPhrase (ADAPT2);
+	}
+	else if (PLAYER_SAID (R, court_troubles))
+	{
+		busy = TRUE;
+		NPCPhrase (COURT_SHIT);
+	}
+	else if (PLAYER_SAID (R, court_troubles))
+		NPCPhrase (SAVE_WORLD);
+	else if (PLAYER_SAID (R, you_busy))
+		NPCPhrase (ME_BUSY);
+	else if (PLAYER_SAID (R, delivery))
+		NPCPhrase (THINGS_NOT_RIGHT);
+	else if (PLAYER_SAID (R, me_help))
+		NPCPhrase (SAVE_WORLD);
+
+	if (!heardAdapt)
+		Response(queen_different, Court);
+	Response (court_troubles, Court);
+	Response (me_help, Court);
+	if (busy)
+		Response (you_busy, Court);
+	Response (interesting, PkunkMain);
+}
+
+static void Mmmm (RESPONSE_REF R)
+{
+	static BOOLEAN asked = FALSE;
+
+	if (PLAYER_SAID (R, uh_hi))
+	{
+		asked = TRUE;
+		NPCPhrase (MMM);
+	}
+	else if (PLAYER_SAID (R, yes_mmm))
+		NPCPhrase (MMMUUU);
+	else if (PLAYER_SAID (R, see_me))
+		NPCPhrase (MMMMMM);
+	else if (PLAYER_SAID (R, mm))
+		NPCPhrase (MREORM);
+	
+	
+	Response (uh_hi, Mmmm);
+	if (asked)
+		Response (yes_mmm, Mmmm);
+	Response (see_me, Mmmm);
+	Response (mm, Mmmm);
+	Response (later, ExitConversation);
+}
+
+static void Orly (RESPONSE_REF R)
+{
+	(void) R;
+	Response (did_we_speak, PkunkMain);
+	Response (astral, Joke);
+	Response (nice, Court);
+}
+
 
 static void
 Intro (void)
 {
-	BYTE NumVisits, Manner;
-
-	if (LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
+	if (GET_GAME_STATE (PKUNK_MANNER) == 0)
 	{
-		NPCPhrase (OUT_TAKES);
-
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-		return;
-	}
-
-	Manner = GET_GAME_STATE (PKUNK_MANNER);
-	if (Manner == 2)
-	{
-		// Irreparably Pissed off the Pkunk.
-		NumVisits = GET_GAME_STATE (PKUNK_VISITS);
-		switch (NumVisits++)
-		{
-			case 0:
-				NPCPhrase (HATE_YOU_FOREVER_1);
-				break;
-			case 1:
-				NPCPhrase (HATE_YOU_FOREVER_2);
-				break;
-			case 2:
-				NPCPhrase (HATE_YOU_FOREVER_3);
-				break;
-			case 3:
-				NPCPhrase (HATE_YOU_FOREVER_4);
-				--NumVisits;
-				break;
-		}
-		SET_GAME_STATE (PKUNK_VISITS, NumVisits);
-
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	}
-	else if (Manner == 1)
-	{
-		// Bad relations with the Pkunk, but not irreparably.
-		NumVisits = GET_GAME_STATE (PKUNK_VISITS);
-		switch (NumVisits++)
-		{
-			case 0:
-				NPCPhrase (SPIRITUAL_PROBLEMS_1);
-				break;
-			case 1:
-				NPCPhrase (SPIRITUAL_PROBLEMS_2);
-				break;
-			case 2:
-				NPCPhrase (SPIRITUAL_PROBLEMS_3);
-				break;
-			case 3:
-				NPCPhrase (SPIRITUAL_PROBLEMS_4);
-				--NumVisits;
-				break;
-		}
-		SET_GAME_STATE (PKUNK_VISITS, NumVisits);
-
-		PkunkAngry ((RESPONSE_REF)0);
-	}
-	else if (GET_GAME_STATE (GLOBAL_FLAGS_AND_DATA) & (1 << 7))
-	{
-		// Encountering the Pkunk at their home world.
-		if (!GET_GAME_STATE (CLEAR_SPINDLE))
-		{
-			NPCPhrase (GIVE_SPINDLE);
-
-			SET_GAME_STATE (CLEAR_SPINDLE, 1);
-			SET_GAME_STATE (CLEAR_SPINDLE_ON_SHIP, 1);
-		}
-		else if (!GET_GAME_STATE (PKUNK_SENSE_VICTOR)
-				&& GLOBAL (GameClock.year_index) > START_YEAR
-				&& !GET_GAME_STATE (KOHR_AH_FRENZY))
-		{
-			NPCPhrase (SENSE_KOHRAH_VICTORY);
-
-			SET_GAME_STATE (PKUNK_SENSE_VICTOR, 1);
-		}
-
-		NumVisits = GET_GAME_STATE (PKUNK_HOME_VISITS);
-		if (Manner == 0)
-		{
-			switch (NumVisits++)
-			{
-				case 0:
-					NPCPhrase (NEUTRAL_HOMEWORLD_HELLO_1);
-					break;
-				case 1:
-					NPCPhrase (NEUTRAL_HOMEWORLD_HELLO_2);
-					break;
-				case 2:
-					NPCPhrase (NEUTRAL_HOMEWORLD_HELLO_3);
-					break;
-				case 3:
-					NPCPhrase (NEUTRAL_HOMEWORLD_HELLO_4);
-					--NumVisits;
-					break;
-			}
-		}
-		else
-		{
-			if (NumVisits && ShipsReady ())
-			{
-				if (ActivateStarShip (PKUNK_SHIP, FEASIBILITY_STUDY) == 0)
-					NPCPhrase (NO_ROOM);
-				else
-				{
-					NPCPhrase (SHIP_GIFT);
-					PrepareShip ();
-				}
-			}
-			else switch (NumVisits++)
-			{
-				case 0:
-					NPCPhrase (FRIENDLY_HOMEWORLD_HELLO_1);
-					break;
-				case 1:
-					NPCPhrase (FRIENDLY_HOMEWORLD_HELLO_2);
-					break;
-				case 2:
-					NPCPhrase (FRIENDLY_HOMEWORLD_HELLO_3);
-					break;
-				case 3:
-					NPCPhrase (FRIENDLY_HOMEWORLD_HELLO_4);
-					break;
-				case 4:
-					NPCPhrase (FRIENDLY_HOMEWORLD_HELLO_5);
-					break;
-				case 5:
-					NPCPhrase (FRIENDLY_HOMEWORLD_HELLO_6);
-					break;
-				case 6:
-					NPCPhrase (FRIENDLY_HOMEWORLD_HELLO_7);
-					break;
-				case 7:
-					NPCPhrase (FRIENDLY_HOMEWORLD_HELLO_8);
-					--NumVisits;
-					break;
-			}
-		}
-		SET_GAME_STATE (PKUNK_HOME_VISITS, NumVisits);
-
-		PkunkHome ((RESPONSE_REF)0);
-	}
-	else if ((NumVisits = GET_GAME_STATE (PKUNK_MISSION)) == 0
-			|| !(NumVisits & 1))
-	{
-		// Encountering a Pkunk ship in space, while they are not
-		// migrating.
-		NumVisits = GET_GAME_STATE (PKUNK_VISITS);
-		if (Manner == 3)
-		{
-			switch (NumVisits++)
-			{
-				case 0:
-					NPCPhrase (FRIENDLY_SPACE_HELLO_1);
-					break;
-				case 1:
-					NPCPhrase (FRIENDLY_SPACE_HELLO_2);
-					break;
-				case 2:
-					NPCPhrase (FRIENDLY_SPACE_HELLO_3);
-					break;
-				case 3:
-					NPCPhrase (FRIENDLY_SPACE_HELLO_4);
-					break;
-				case 4:
-					NPCPhrase (FRIENDLY_SPACE_HELLO_5);
-					break;
-				case 5:
-					NPCPhrase (FRIENDLY_SPACE_HELLO_6);
-					break;
-				case 6:
-					NPCPhrase (FRIENDLY_SPACE_HELLO_7);
-					break;
-				case 7:
-					NPCPhrase (FRIENDLY_SPACE_HELLO_8);
-					--NumVisits;
-					break;
-			}
-
-			PkunkFriendlySpace ((RESPONSE_REF)0);
-		}
-		else
-		{
-			switch (NumVisits++)
-			{
-				case 0:
-					NPCPhrase (NEUTRAL_SPACE_HELLO_1);
-					break;
-				case 1:
-					NPCPhrase (NEUTRAL_SPACE_HELLO_2);
-					break;
-				case 2:
-					NPCPhrase (NEUTRAL_SPACE_HELLO_3);
-					break;
-				case 3:
-					NPCPhrase (NEUTRAL_SPACE_HELLO_4);
-					--NumVisits;
-					break;
-			}
-
-			PkunkNeutralSpace ((RESPONSE_REF)0);
-		}
-		SET_GAME_STATE (PKUNK_VISITS, NumVisits);
-
+		NPCPhrase (WONDERFUL);
+		Orly ((RESPONSE_REF)0);
 	}
 	else
 	{
-		// Encountering a Pkunk ship in space, while they are
-		// migrating.
-		NumVisits = GET_GAME_STATE (PKUNK_MIGRATE_VISITS);
-		switch (NumVisits++)
+		switch (TFB_Random() % 3)
 		{
-			case 0:
-				NPCPhrase (MIGRATING_SPACE_1);
-				break;
-			case 1:
-				NPCPhrase (MIGRATING_SPACE_2);
-				break;
-			case 2:
-				NPCPhrase (MIGRATING_SPACE_3);
-				break;
-			case 3:
-				NPCPhrase (MIGRATING_SPACE_4);
-				break;
-			case 4:
-				NPCPhrase (MIGRATING_SPACE_5);
-				break;
-			case 5:
-				NPCPhrase (MIGRATING_SPACE_6);
-				break;
-			case 6:
-				NPCPhrase (MIGRATING_SPACE_7);
-				break;
-			case 7:
-				NPCPhrase (MIGRATING_SPACE_8);
-				--NumVisits;
-				break;
+		case 0:
+			NPCPhrase(MMMM);
+			Mmmm ((RESPONSE_REF)0);
+			break;
+		case 1:
+			NPCPhrase(WELCOME_BACK);
+			Court ((RESPONSE_REF)0);
+			break;
+		case 2:
+		default:
+			NPCPhrase(HOWDY);
+			PkunkMain ((RESPONSE_REF)0);
+			break;
 		}
-		SET_GAME_STATE (PKUNK_MIGRATE_VISITS, NumVisits);
-
-		PkunkMigrate ((RESPONSE_REF)0);
 	}
 }
 
@@ -1108,18 +1062,7 @@ uninit_pkunk (void)
 static void
 post_pkunk_enc (void)
 {
-	BYTE Manner;
-
-	if (GET_GAME_STATE (BATTLE_SEGUE) == 1
-			&& (Manner = GET_GAME_STATE (PKUNK_MANNER)) != 2)
-	{
-		SET_GAME_STATE (PKUNK_MANNER, 1);
-		if (Manner != 1)
-		{
-			SET_GAME_STATE (PKUNK_VISITS, 0);
-			SET_GAME_STATE (PKUNK_HOME_VISITS, 0);
-		}
-	}
+	SET_GAME_STATE (PKUNK_MANNER, 3);
 }
 
 LOCDATA*
@@ -1135,17 +1078,8 @@ init_pkunk_comm (void)
 	pkunk_desc.AlienTextBaseline.y = 0;
 	pkunk_desc.AlienTextWidth = SIS_TEXT_WIDTH - 16;
 
-	if (GET_GAME_STATE (PKUNK_MANNER) == 3
-			|| LOBYTE (GLOBAL (CurrentActivity)) == WON_LAST_BATTLE)
-	{
-		// Enter communications immediately.
-		SET_GAME_STATE (BATTLE_SEGUE, 0);
-	}
-	else
-	{
-		// Ask the player whether to attack or talk.
-		SET_GAME_STATE (BATTLE_SEGUE, 1);
-	}
+	SET_GAME_STATE (BATTLE_SEGUE, 0);
+
 	retval = &pkunk_desc;
 
 	return (retval);

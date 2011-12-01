@@ -27,6 +27,7 @@
 #include "libs/mathlib.h"
 
 
+static bool GenerateYehat_generateMoons (SOLARSYS_STATE *solarSys, PLANET_DESC *planet);
 static bool GenerateYehat_generatePlanets (SOLARSYS_STATE *solarSys);
 static bool GenerateYehat_generateOrbital (SOLARSYS_STATE *solarSys,
 		PLANET_DESC *world);
@@ -39,7 +40,7 @@ const GenerateFunctions generateYehatFunctions = {
 	/* .reinitNpcs       = */ GenerateDefault_reinitNpcs,
 	/* .uninitNpcs       = */ GenerateDefault_uninitNpcs,
 	/* .generatePlanets  = */ GenerateYehat_generatePlanets,
-	/* .generateMoons    = */ GenerateDefault_generateMoons,
+	/* .generateMoons    = */ GenerateYehat_generateMoons,
 	/* .generateName     = */ GenerateDefault_generateName,
 	/* .generateOrbital  = */ GenerateYehat_generateOrbital,
 	/* .generateMinerals = */ GenerateDefault_generateMinerals,
@@ -69,8 +70,41 @@ GenerateYehat_generatePlanets (SOLARSYS_STATE *solarSys)
 }
 
 static bool
+GenerateYehat_generateMoons (SOLARSYS_STATE *solarSys, PLANET_DESC *planet)
+{
+	GenerateDefault_generateMoons (solarSys, planet);
+
+	if (matchWorld (solarSys, planet, 0, MATCH_PLANET))
+	{
+		COUNT angle;
+		DWORD rand_val;
+
+		planet->NumPlanets = 2;
+		solarSys->MoonDesc[1].data_index = HIERARCHY_STARBASE;
+		solarSys->MoonDesc[1].radius = MIN_MOON_RADIUS;
+		rand_val = TFB_Random ();
+		angle = NORMALIZE_ANGLE (LOWORD (rand_val));
+		solarSys->MoonDesc[1].location.x =
+				COSINE (angle, solarSys->MoonDesc[1].radius);
+		solarSys->MoonDesc[1].location.y =
+				SINE (angle, solarSys->MoonDesc[1].radius);
+		ComputeSpeed(&solarSys->MoonDesc[1], TRUE, 1);
+	}
+
+	return true;
+}
+
+
+static bool
 GenerateYehat_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 {
+	if (matchWorld (solarSys, world, 0, 1))
+	{
+		InitCommunication (YEHATPKUNK_CONVERSATION);		/* Y+P starbase */
+
+		return true;
+	}
+
 	if (matchWorld (solarSys, world, 0, MATCH_PLANET))
 	{
 		if (ActivateStarShip (YEHAT_SHIP, SPHERE_TRACKING))
@@ -85,7 +119,7 @@ GenerateYehat_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *world)
 
 			GLOBAL (CurrentActivity) |= START_INTERPLANETARY;
 			SET_GAME_STATE (GLOBAL_FLAGS_AND_DATA, 1 << 7);
-			InitCommunication (YEHATPKUNK_CONVERSATION);
+			InitCommunication (PKUNK_CONVERSATION);
 
 			if (!(GLOBAL (CurrentActivity) & (CHECK_ABORT | CHECK_LOAD)))
 			{
