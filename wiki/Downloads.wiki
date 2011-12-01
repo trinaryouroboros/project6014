@@ -20,7 +20,7 @@ The files are:
 
 *Windows*
   * Just download the installer. That file will download the content for you.
-  * You may need to run the included .BAT file.
+  * If running the .exe directly doesn't work, you need to run the included .BAT file.
 
 *Linux*
   * Download and install the packages tailored to the distribution you're using. 
