@@ -24,6 +24,7 @@
 #include "libs/sound/sound.h"
 
 #include "uqm/build.h"
+#include "uqm/encount.h"
 #include "uqm/gameev.h"
 
 
@@ -231,8 +232,8 @@ static LOCDATA syreenhome_desc_4x =
 		1, /* StartIndex */
 		6, /* NumFrames */
 		0, /* AnimFlags */
-		ONE_SECOND / 20, 0, /* FrameRate */
-		ONE_SECOND / 12, 0, /* RestartRate */
+		ONE_SECOND / 20, ONE_SECOND / 20, /* FrameRate */
+		ONE_SECOND / 12, ONE_SECOND / 20, /* RestartRate */
 		0, /* BlockMask */
 	},
 	NULL, /* AlienNumberSpeech - none */
