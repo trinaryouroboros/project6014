@@ -28,7 +28,7 @@ The files are:
 
 *OS X* 
   * Download the OSX Application and the Base content package. (Other packages are optional.)
-  * Follow the instructions inside the .app to install the packages.
+  * Follow the instructions inside the Application to install the packages.
 
 ----
 
