@@ -20,7 +20,7 @@ The files are:
 
 For Windows and Linux, just download the installer. That file will download the content for you.
 
-For OSX, you'll need to download the .exe and the three content packages.
+For OSX, you'll need to download the .app and the base content package. (You may also download the optional packages.)
 
 You can run the game by running the executable. Windows Users may need to run the included .BAT file.
 
