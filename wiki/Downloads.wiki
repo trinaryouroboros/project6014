@@ -11,9 +11,9 @@ The files are:
 
 || *File* || *Type* || *Size* || *Download* ||
 || OS X Application || Platform specific ||1.4 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-v0.2.0-OSX.7z&can=2&q=  ||
+|| Base content package|| Content ||57.2 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-content.uqm&can=2&q=  ||
 || Alien voices package || Content ||14.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-voice.uqm&can=2&q=  ||
 || High quality music package || Content ||52.8 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-3domusic.uqm&can=2&q=  ||
-|| Base content package|| Content ||57.2 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-content.uqm&can=2&q=  ||
 || 640 x 480 Graphics package|| Content ||127 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires2x.uqm&can=2&q=  ||
 || 1280 x 960 Graphics package - part 1|| Content ||150 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.uqm.part1.rar&can=2&q=  ||
 || 1280 x 960 Graphics package - part 2|| Content ||104 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.uqm.part2.rar&can=2&q=  ||
