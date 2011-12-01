@@ -10,7 +10,7 @@ _Released 11 November 2011_
 The files are:
 
 || *File* || *Type* || *Size* || *Download* ||
-|| OSX Application || Platform specific ||1.4 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-v0.2.0-OSX.7z&can=2&q=  ||
+|| OS X Application || Platform specific ||1.4 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-v0.2.0-OSX.7z&can=2&q=  ||
 || Alien voices package || Content ||14.9 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-voice.uqm&can=2&q=  ||
 || High quality music package || Content ||52.8 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-3domusic.uqm&can=2&q=  ||
 || Base content package|| Content ||57.2 MB ||http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-content.uqm&can=2&q=  ||
@@ -27,7 +27,7 @@ The files are:
   * If there are no packages for your Linux distribution, download the source files, compile your own version of the game (./build.sh uqm config, ./build.sh uqm) and then place the 'base content' .uqm file in content/packages. If you want hires content or any of the other addon packages, download the required .uqm files and place them in content/addons
 
 *OS X* 
-  * Download the OSX Application and the Base content package. (Other packages are optional.)
+  * Download the OS X Application and the Base content package. (Other packages are optional.)
   * Follow the instructions inside the Application to install the packages.
 
 ----
