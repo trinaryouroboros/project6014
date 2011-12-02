@@ -16,7 +16,7 @@ The files are:
 || 1280 x 960 Graphics package|| Content ||280 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part1.rar Part 1 (190 MB)] [http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part2.rar Part 2 (64 MB)] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-hires4x.uqm Mirror] ||
 
 *Ubuntu Linux / Linux Mint packages*
-These pootworms can be installed using 'dpkg -i <filename>' or a graphical tool bundled with your distribution, and should work with the latest versions of Ubuntu Linux and Linux Mint. Previous versions of these operating systems may work (Ubuntu 11.04, for instance, works). 
+These pootworms can be installed using _dpkg -i filename.deb_ or a graphical tool bundled with your distribution, and should work with the latest versions of Ubuntu Linux and Linux Mint. Previous versions of these operating systems may work (Ubuntu 11.04, for instance, works). 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
 ||p6014_0.2_i386.deb||32-bit binaries||0.7 MB||[http://code.google.com/p/project6014/downloads/detail?name=p6014_0.2_i386.deb p6014_0.2_i386.deb] ||[http://www.stack.nl/~joris/p6014/p6014_0.2_i386.deb Mirror]||
 ||p6014_0.2_amd64.deb||64-bit binaries||0.7 MB|| [http://code.google.com/p/project6014/downloads/detail?name=p6014_0.2_amd64.deb p6014_0.2_amd64.deb] ||[http://www.stack.nl/~joris/p6014/p6014_0.2_amd64.deb Mirror]||
