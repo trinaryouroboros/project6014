@@ -9,7 +9,7 @@ _Released 1 December 2011_
 The files are:
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-||Content||.EXE.||1.4 MB||[http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.2.0_win_installer.exe&can=2&q=]||http://ge.tt/82nDqdA?c||
+||Content||.EXE.||1.4 MB||[http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.2.0_win_installer.exe&can=2&q=]||http://ge.tt/82nDqdA/v/0||
 
 *Windows*
   * Just download the installer. That file will download the content for you. If you get 404 errors download from the mirror
