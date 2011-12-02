@@ -9,13 +9,7 @@ _Released 1 December 2011_
 The files are:
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-||Content||.EXE.||1.4 MB||[http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.2.0_win_installer.exe&can=2&q=]||http://ge.tt/82nDqdA/v/0||
-
-*Windows*
-  * Just download the installer. That file will download the content for you. If you get 404 errors download from the mirror
-  * If running the .exe directly doesn't work, you need to run the included .BAT file.
-
-|| *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
+|| Windows Installer || Platform specific ||1.4 MB||[http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.2.0_win_installer.exe&can=2&q= P6014_v0.2.0_win_installer.exe]|| ||
 || OS X Application || Platform specific ||1.4 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-v0.2.0-OSX.7z&can=2&q= P6014-v0.2.0-OSX.7z] || [http://www.stack.nl/~joris/p6014/P6014-v0.2.0-OSX.7z Mirror]||
 || Base content package|| Content (required) ||57.2 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-content.uqm&can=2&q= P6014-0.2.0-prv-content.uqm]  || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-content.uqm Mirror]||
 || Alien voices package || Content ||14.9 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-voice.uqm&can=2&q= P6014-0.2.0-prv-voice.uqm] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-voice.uqm Mirror]||
@@ -23,8 +17,8 @@ The files are:
 || 640 x 480 Graphics package|| Content ||127 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires2x.uqm P6014-0.2.0-prv-hires2x.uqm] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-hires2x.uqm Mirror] ||
 || 1280 x 960 Graphics package|| Content ||280 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part1.rar Part 1 (190 MB)] [http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part2.rar Part 2 (64 MB)] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-hires4x.uqm Mirror] ||
 
-*Ubuntu Linux / Linux Mint packages*
-These pootworms can be installed using _dpkg -i filename.deb_ or a graphical tool bundled with your distribution, and should work with the latest versions of Ubuntu Linux and Linux Mint. Previous versions of these operating systems may work (Ubuntu 11.04, for instance, works). 
+* Ubuntu Linux / Linux Mint packages *
+
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
 ||p6014_0.2_i386.deb||32-bit binaries||0.7 MB||[http://code.google.com/p/project6014/downloads/detail?name=p6014_0.2_i386.deb p6014_0.2_i386.deb] ||[http://www.stack.nl/~joris/p6014/p6014_0.2_i386.deb Mirror]||
 ||p6014_0.2_amd64.deb||64-bit binaries||0.7 MB|| [http://code.google.com/p/project6014/downloads/detail?name=p6014_0.2_amd64.deb p6014_0.2_amd64.deb] ||[http://www.stack.nl/~joris/p6014/p6014_0.2_amd64.deb Mirror]||
@@ -36,10 +30,13 @@ These pootworms can be installed using _dpkg -i filename.deb_ or a graphical too
 
 
 
+*Windows*
+  * Just download the installer. That file will download the content for you.
+  * If running the .exe directly doesn't work, you need to run the included .BAT file.
 
 *Linux*
-  * Download and install the packages tailored to the distribution you're using. 
-  * If there are no packages for your Linux distribution, download the source files, compile your own version of the game (./build.sh uqm config, ./build.sh uqm) and then place the 'base content' .uqm file in content/packages. If you want hires content or any of the other addon packages, download the required .uqm files and place them in content/addons
+ * Ubuntu Linux / Linux Mint packages : These pootworms can be installed using _dpkg -i filename.deb_ or a graphical tool bundled with your distribution, and should work with the latest versions of Ubuntu Linux and Linux Mint. Previous versions of these operating systems may work (Ubuntu 11.04, for instance, works). 
+ * If there are no packages for your Linux distribution, download the source files, compile your own version of the game (./build.sh uqm config, ./build.sh uqm) and then place the 'base content' .uqm file in content/packages. If you want hires content or any of the other addon packages, download the required .uqm files and place them in content/addons
 
 *OS X* 
   * Download the OS X Application and the Base content package. (Other packages are optional.)
