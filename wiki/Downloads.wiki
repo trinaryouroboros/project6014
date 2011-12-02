@@ -5,7 +5,15 @@
 _Released 1 December 2011_
 
 
+
 The files are:
+
+|| *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
+||P6014_v0.2.0_win_installer.exe||.EXE.||1.4 MB||[http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.2.0_win_installer.exe&can=2&q=]P6014_v0.2.0_win_installer.exe||[http://ge.tt/82nDqdA?cFull Version Mirror||
+
+*Windows*
+  * Just download the installer. That file will download the content for you. If you get 404 errors download from the mirror
+  * If running the .exe directly doesn't work, you need to run the included .BAT file.
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
 || OS X Application || Platform specific ||1.4 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-v0.2.0-OSX.7z&can=2&q= P6014-v0.2.0-OSX.7z] || [http://www.stack.nl/~joris/p6014/P6014-v0.2.0-OSX.7z Mirror]||
@@ -28,10 +36,6 @@ These pootworms can be installed using _dpkg -i filename.deb_ or a graphical too
 
 
 
-
-*Windows*
-  * Just download the installer. That file will download the content for you.
-  * If running the .exe directly doesn't work, you need to run the included .BAT file.
 
 *Linux*
   * Download and install the packages tailored to the distribution you're using. 
