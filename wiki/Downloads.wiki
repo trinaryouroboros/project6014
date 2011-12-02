@@ -16,14 +16,14 @@ The files are:
 || 1280 x 960 Graphics package|| Content ||280 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part1.rar Part 1 (190 MB)] [http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part2.rar Part 2 (64 MB)] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-hires4x.uqm Mirror] ||
 
 *Ubuntu Linux / Linux Mint packages*
-|| *File* || *Type* || *Size* || *Download* ||
-||p6014_0.2_i386.deb||32-bit binaries||0.7 MB||[http://www.stack.nl/~joris/p6014/p6014_0.2_i386.deb Mirror]||
-||p6014_0.2_amd64.deb||64-bit binaries||0.7 MB||[http://www.stack.nl/~joris/p6014/p6014_0.2_amd64.deb Mirror]||
-||p6014-content.deb||Content (required)||50 MB||[http://www.stack.nl/~joris/p6014/p6014-content.deb Mirror]||
-||p6014-3domusic.deb||Content||52 MB||[http://www.stack.nl/~joris/p6014/p6014-3domusic.deb Mirror]||
-||p6014-voice.deb||Content||15 MB||[http://www.stack.nl/~joris/p6014/p6014-voice.deb Mirror]||
-||p6014-hires2x.deb||Content||95 MB||[http://www.stack.nl/~joris/p6014/p6014-hires2x.deb Mirror]||
-||p6014-hires4x.deb||Content||263 MB||[http://www.stack.nl/~joris/p6014/p6014-hires4x.deb Mirror]||
+|| *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
+||p6014_0.2_i386.deb||32-bit binaries||0.7 MB||[http://code.google.com/p/project6014/downloads/detail?name=p6014_0.2_i386.deb p6014_0.2_i386.deb] ||[http://www.stack.nl/~joris/p6014/p6014_0.2_i386.deb Mirror]||
+||p6014_0.2_amd64.deb||64-bit binaries||0.7 MB|| [http://code.google.com/p/project6014/downloads/detail?name=p6014_0.2_amd64.deb p6014_0.2_amd64.deb] ||[http://www.stack.nl/~joris/p6014/p6014_0.2_amd64.deb Mirror]||
+||p6014-content.deb||Content (required)||50 MB|| ||[http://www.stack.nl/~joris/p6014/p6014-content.deb Mirror]||
+||p6014-3domusic.deb||Content||52 MB|| ||[http://www.stack.nl/~joris/p6014/p6014-3domusic.deb Mirror]||
+||p6014-voice.deb||Content||15 MB|| ||[http://www.stack.nl/~joris/p6014/p6014-voice.deb Mirror]||
+||p6014-hires2x.deb||Content||95 MB|| ||[http://www.stack.nl/~joris/p6014/p6014-hires2x.deb Mirror]||
+||p6014-hires4x.deb||Content||263 MB|| ||[http://www.stack.nl/~joris/p6014/p6014-hires4x.deb Mirror]||
 
 
 
