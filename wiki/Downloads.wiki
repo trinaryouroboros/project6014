@@ -15,7 +15,7 @@ The files are:
 || Alien voices package || Content ||14.9 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-voice.uqm&can=2&q= P6014-0.2.0-prv-voice.uqm] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-voice.uqm Mirror]||
 || High quality music package || Content ||52.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-3domusic.uqm&can=2&q= P6014-0.2.0-prv-3domusic.uqm] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-3domusic.uqm Mirror]||
 || 640 x 480 Graphics package|| Content ||127 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires2x.uqm P6014-0.2.0-prv-hires2x.uqm] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-hires2x.uqm Mirror] ||
-|| 1280 x 960 Graphics package|| Content ||280 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part1.rar Part 1 (190 MB)] [http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part2.rar Part 2 (64 MB)] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-hires4x.uqm Mirror] ||
+|| 1280 x 960 Graphics package|| Content ||263 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part1.rar Part 1 (190 MB)] [http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.0-prv-hires4x.part2.rar Part 2 (64 MB)] || [http://www.stack.nl/~joris/p6014/P6014-0.2.0-prv-hires4x.uqm Mirror] ||
 
 * Ubuntu Linux / Linux Mint packages *
 
