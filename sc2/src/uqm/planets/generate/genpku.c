@@ -141,9 +141,9 @@ GeneratePkunk_generateEnergy (SOLARSYS_STATE *solarSys, PLANET_DESC *world,
 		{
 			rand_val = TFB_Random ();
 			solarSys->SysInfo.PlanetInfo.CurPt.x =
-					(LOBYTE (LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
+					((LOWORD (rand_val)) % (MAP_WIDTH - (8 << 1))) + 8;
 			solarSys->SysInfo.PlanetInfo.CurPt.y =
-					(HIBYTE (LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
+					((LOWORD (rand_val)) % (MAP_HEIGHT - (8 << 1))) + 8;
 			// JMS: No more clear spindles!
 			/*if (!GET_GAME_STATE (CLEAR_SPINDLE))
 				solarSys->SysInfo.PlanetInfo.CurType = 0;
