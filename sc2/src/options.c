@@ -55,6 +55,7 @@ int optMeleeScale;
 const char **optAddons;
 
 // JMS_GFX
+unsigned int loresBlowupScale;
 unsigned int resolutionFactor;
 BOOLEAN resFactorWasChanged;
 

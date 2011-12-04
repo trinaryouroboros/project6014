@@ -102,7 +102,7 @@ static LOCDATA syreenhome_desc_1x =
 			3, /* NumFrames */
 			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
-			ONE_SECOND * 7, ONE_SECOND * 6, /* RestartRate */
+			ONE_SECOND / 10, ONE_SECOND * 5, /* RestartRate */
 			(1 << 7) | (1 << 8), /* BlockMask */
 		},
 	  {             // 7 - moving hip
@@ -200,7 +200,7 @@ static LOCDATA syreenhome_desc_4x =
 			2, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
-			ONE_SECOND * 7, ONE_SECOND * 6, /* RestartRate */
+			ONE_SECOND / 10, ONE_SECOND * 5, /* RestartRate */
 			0, /* BlockMask */
 		},
 	  {             // 1 - left girl manipulating starmap

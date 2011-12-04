@@ -44,13 +44,16 @@ typedef enum {
 
 typedef enum {
 	OPTVAL_320_240,
-	OPTVAL_640_480,
-	OPTVAL_800_600,
-	OPTVAL_1024_768,
 	OPTVAL_REAL_640_480, // JMS_GFX
 	OPTVAL_REAL_1280_960, // DC_GFX
-	OPTVAL_CUSTOM
 } OPT_RESTYPE;
+
+typedef enum {
+	NO_BLOWUP,
+	OPTVAL_320_TO_640,
+	OPTVAL_320_TO_800,
+	OPTVAL_320_TO_1024,
+} OPT_LORESBLOWUPTYPE;
 
 typedef enum {
 	OPTVAL_PURE_IF_POSSIBLE,
@@ -75,6 +78,7 @@ typedef enum {
 typedef struct globalopts_struct {
 	OPT_SCALETYPE scaler;
 	OPT_RESTYPE res;
+	OPT_LORESBLOWUPTYPE loresBlowup;
 	OPT_DRIVERTYPE driver;
 	OPT_ADRIVERTYPE adriver;
 	OPT_AQUALITYTYPE aquality;

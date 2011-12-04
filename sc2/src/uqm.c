@@ -134,6 +134,7 @@ struct options_struct
 	DECL_CONFIG_OPTION(float, speechVolumeScale);
 	DECL_CONFIG_OPTION(bool, safeMode);
 	DECL_CONFIG_OPTION(int, resolutionFactor); // JMS_GFX
+	DECL_CONFIG_OPTION(int, loresBlowupScale); // JMS_GFX
 
 #define INIT_CONFIG_OPTION(name, val) \
 	{ val, false }
@@ -243,7 +244,7 @@ main (int argc, char *argv[])
 		/* .numAddons = */          0,
 
 		INIT_CONFIG_OPTION(  opengl,            false ),
-		INIT_CONFIG_OPTION2( resolution,        640, 480 ),
+		INIT_CONFIG_OPTION2( resolution,        320, 240 ),
 		INIT_CONFIG_OPTION(  fullscreen,        false ),
 		INIT_CONFIG_OPTION(  scanlines,         false ),
 		INIT_CONFIG_OPTION(  scaler,            0 ),
@@ -268,6 +269,7 @@ main (int argc, char *argv[])
 		INIT_CONFIG_OPTION(  speechVolumeScale, 1.0f ),
 		INIT_CONFIG_OPTION(  safeMode,          false ),
 		INIT_CONFIG_OPTION(  resolutionFactor,  0 ),
+		INIT_CONFIG_OPTION(  loresBlowupScale,  0 ),
 	};
 	struct options_struct defaults = options;
 	int optionsResult;
@@ -393,6 +395,7 @@ main (int argc, char *argv[])
 	
 	// JMS_GFX
 	resolutionFactor = (unsigned int) options.resolutionFactor.value; // JMS_GFX
+	loresBlowupScale = (unsigned int) options.loresBlowupScale.value; // JMS_GFX
 	resFactorWasChanged = FALSE;
 	
 	prepareContentDir (options.contentDir, options.addonDir, argv[0]);
@@ -661,6 +664,12 @@ getUserConfigOptions (struct options_struct *options)
 	{
 		options->resolutionFactor.value = res_GetInteger ("config.resolutionfactor");
 		options->resolutionFactor.set = true;
+	}
+	
+	// JMS_GFX
+	if (res_IsInteger ("config.loresBlowupScale"))
+	{
+		options->loresBlowupScale.value = res_GetInteger ("config.loresBlowupScale");
 	}
 	
 	if (res_IsInteger ("config.player1control"))
@@ -1075,7 +1084,7 @@ parseOptions (int argc, char *argv[], struct options_struct *options)
 				break;
 			}
 #endif
-			// JMS_GFX: Added the whole following case. It checks whether the resolutinfactor value is sane.
+			// JMS_GFX: Added the whole following case. It checks whether the resolutionfactor value is sane.
 			case RESFACTOR_OPT:
 			{
 				int temp;
