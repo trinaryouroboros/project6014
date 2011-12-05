@@ -760,6 +760,11 @@ START_GAME_STATE
 			 */
 	ADD_GAME_STATE (MELNORME_RAINBOW_COUNT, 4)
 			/* The number of rainbow world locations sold to the Melnorme. */
+	ADD_GAME_STATE (FOUND_KNOWN_RAINBOW_WORLD, 2)
+			/* JMS: Zeta Sextantis rainbow world which the Melnorme already know about. */
+			/* The Melnorme don't revenue the player for this rainbow world, instead    */
+			/* tell him it's useless - they already know about it.						*/
+			/* 0 when not visited. 1 when visited. 2 when tried to sell it to Melnorme. */
 
 	ADD_GAME_STATE (USED_BROADCASTER, 1)
 	ADD_GAME_STATE (BROADCASTER_RESPONSE, 1)

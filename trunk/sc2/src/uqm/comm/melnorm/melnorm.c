@@ -762,6 +762,14 @@ SellMenu (RESPONSE_REF R)
 			NPCPhrase (-(int)added_credit);
 			NPCPhrase (SOLD_RAINBOW_LOCATIONS3);
 			
+			// JMS: Player tries to sell the Zeta Sextantis rainbow world location.
+			if ((GET_GAME_STATE (FOUND_KNOWN_RAINBOW_WORLD)) == 1)
+			{
+				NPCPhrase (SOLD_RAINBOW_LOCATIONS_FAIL);
+				added_credit -= 250 * BIO_CREDIT_VALUE;
+				SET_GAME_STATE (FOUND_KNOWN_RAINBOW_WORLD, 2);
+			}
+			
 			num_new_rainbows += GET_GAME_STATE (MELNORME_RAINBOW_COUNT);
 			SET_GAME_STATE (MELNORME_RAINBOW_COUNT, num_new_rainbows);
 			num_new_rainbows = 0;
