@@ -134,6 +134,7 @@ getGenerateFunctions (BYTE Index)
 		case SUPOX_DEFINED:
 			return &generateSupoxFunctions;
 		case RAINBOW_DEFINED:
+		case RAINBOW_KNOWN_DEFINED:  // JMS - hook to generating the Zeta Sextantis rainbow world which is already known to Melnorme
 			return &generateRainbowWorldFunctions;
 		case ILWRATH_DEFINED:
 			return &generateIlwrathFunctions;

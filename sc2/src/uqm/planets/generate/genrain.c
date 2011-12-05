@@ -84,13 +84,16 @@ GenerateRainbowWorld_generateOrbital (SOLARSYS_STATE *solarSys, PLANET_DESC *wor
 		SDPtr = &star_array[0];
 		while (SDPtr != CurStarDescPtr)
 		{
-			if (SDPtr->Index == RAINBOW_DEFINED)
+			if (SDPtr->Index == RAINBOW_DEFINED || SDPtr->Index == RAINBOW_KNOWN_DEFINED)
 				++which_rainbow;
 			++SDPtr;
 		}
 		rainbow_mask |= 1 << which_rainbow;
 		SET_GAME_STATE (RAINBOW_WORLD0, LOBYTE (rainbow_mask));
 		SET_GAME_STATE (RAINBOW_WORLD1, HIBYTE (rainbow_mask));
+		
+		if(CurStarDescPtr->Index == RAINBOW_KNOWN_DEFINED && (GET_GAME_STATE(FOUND_KNOWN_RAINBOW_WORLD) == 0))
+			SET_GAME_STATE (FOUND_KNOWN_RAINBOW_WORLD, 1);
 	}
 
 	GenerateDefault_generateOrbital (solarSys, world);
