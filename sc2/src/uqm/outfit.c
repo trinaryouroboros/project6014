@@ -136,11 +136,11 @@ RedistributeFuel (void)
 	GLOBAL_SIS (FuelOnBoard) = FuelVolume;
 }
 
-//#define LANDER_X 180
-//#define LANDER_Y 18
+#define LANDER_X (24 << RESOLUTION_FACTOR) // JMS_GFX
+#define LANDER_Y (67 << RESOLUTION_FACTOR) // JMS_GFX
 
-#define LANDER_X (180 << RESOLUTION_FACTOR) // JMS_GFX
-#define LANDER_Y (18 << RESOLUTION_FACTOR) // JMS_GFX
+#define EXPLORER_LANDER_X (180 << RESOLUTION_FACTOR) // JMS_GFX
+#define EXPLORER_LANDER_Y (18 << RESOLUTION_FACTOR) // JMS_GFX
 #define LANDER_WIDTH (15 << RESOLUTION_FACTOR) // JMS_GFX
 
 static void
@@ -159,8 +159,16 @@ DisplayLanders (MENU_STATE *pMS)
 	{
 		COUNT i;
 
-		s.origin.x = LANDER_X;
-		s.origin.y = LANDER_Y;
+		if ((GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)) == 0)
+		{
+			s.origin.x = EXPLORER_LANDER_X;
+			s.origin.y = EXPLORER_LANDER_Y;
+		}
+		else
+		{
+			s.origin.x = LANDER_X;
+			s.origin.y = LANDER_Y;
+		}
 		for (i = 0; i < GLOBAL_SIS (NumLanders); ++i)
 		{
 			DrawStamp (&s);
@@ -513,8 +521,16 @@ InitFlash:
 				{
 					case PLANET_LANDER:
 					case EMPTY_SLOT + 3:
-						pMS->flash_rect0.corner.x = LANDER_X - (1 << RESOLUTION_FACTOR); // JMS_GFX
-						pMS->flash_rect0.corner.y = LANDER_Y - (1 << RESOLUTION_FACTOR); // JMS_GFX
+						if ((GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)) == 0)
+						{
+							pMS->flash_rect0.corner.x = EXPLORER_LANDER_X - (1 << RESOLUTION_FACTOR); // JMS_GFX
+							pMS->flash_rect0.corner.y = EXPLORER_LANDER_Y - (1 << RESOLUTION_FACTOR); // JMS_GFX
+						}
+						else
+						{
+							pMS->flash_rect0.corner.x = LANDER_X - (1 << RESOLUTION_FACTOR); // JMS_GFX
+							pMS->flash_rect0.corner.y = LANDER_Y - (1 << RESOLUTION_FACTOR); // JMS_GFX
+						}
 						pMS->flash_rect0.extent.width = RES_CASE(11 + 2, 22 + 4, 40 + 8); // JMS_GFX
 						pMS->flash_rect0.extent.height = RES_CASE(13 + 2, 26 + 4, 48 + 8); // JMS_GFX
 

@@ -781,11 +781,9 @@ DoModifyShips (MENU_STATE *pMS)
 							DrawMenuStateStrings (PM_CREW, SHIPYARD_CREW);
 
 							LockMutex (GraphicsLock);
-							DeltaSISGauges (UNDEFINED_DELTA, UNDEFINED_DELTA,
-									-((int)ShipCost[Index]));
+							DeltaSISGauges (UNDEFINED_DELTA, UNDEFINED_DELTA, -((int)ShipCost[Index]));
 							r.corner.x = pMS->flash_rect0.corner.x;
-							r.corner.y = pMS->flash_rect0.corner.y
-								+ pMS->flash_rect0.extent.height - (6 << RESOLUTION_FACTOR);
+							r.corner.y = pMS->flash_rect0.corner.y + pMS->flash_rect0.extent.height - (6 << RESOLUTION_FACTOR);
 							r.extent.width = SHIP_WIN_WIDTH;
 							r.extent.height = 5 << RESOLUTION_FACTOR; // JMS_GFX
 							SetContext (SpaceContext);
@@ -829,24 +827,20 @@ DoModifyShips (MENU_STATE *pMS)
 				}
 				else if (select || cancel)
 				{
-					if ((pMS->delta_item & MODIFY_CREW_FLAG)
-							&& hStarShip != 0)
+					if ((pMS->delta_item & MODIFY_CREW_FLAG) && hStarShip != 0)
 					{
-						StarShipPtr = LockShipFrag (&GLOBAL (built_ship_q),
-								hStarShip);
+						StarShipPtr = LockShipFrag (&GLOBAL (built_ship_q), hStarShip);
 						if (StarShipPtr->crew_level == 0)
 						{
 							SetFlashRect (NULL);
 							UnlockMutex (GraphicsLock);
 							ShowCombatShip (pMS, pMS->CurState, StarShipPtr);
 							LockMutex (GraphicsLock);
-							UnlockShipFrag (&GLOBAL (built_ship_q),
-									hStarShip);
+							UnlockShipFrag (&GLOBAL (built_ship_q), hStarShip);
 							RemoveQueue (&GLOBAL (built_ship_q), hStarShip);
 							FreeShipFrag (&GLOBAL (built_ship_q), hStarShip);
 							// refresh SIS display
-							DeltaSISGauges (UNDEFINED_DELTA, UNDEFINED_DELTA,
-									UNDEFINED_DELTA);
+							DeltaSISGauges (UNDEFINED_DELTA, UNDEFINED_DELTA, UNDEFINED_DELTA);
 							r.corner.x = pMS->flash_rect0.corner.x;
 							r.corner.y = pMS->flash_rect0.corner.y;
 							r.extent.width = SHIP_WIN_WIDTH;
@@ -877,8 +871,7 @@ DoModifyShips (MENU_STATE *pMS)
 					else
 					{
 						r.corner.x = pMS->flash_rect0.corner.x;
-						r.corner.y = pMS->flash_rect0.corner.y
-							+ pMS->flash_rect0.extent.height - (6 << RESOLUTION_FACTOR);
+						r.corner.y = pMS->flash_rect0.corner.y + pMS->flash_rect0.extent.height - (6 << RESOLUTION_FACTOR);
 						r.extent.width = SHIP_WIN_WIDTH;
 						r.extent.height = (5 << RESOLUTION_FACTOR); // JMS_GFX
 						SetContext (SpaceContext);
@@ -897,8 +890,8 @@ DoModifyShips (MENU_STATE *pMS)
 					else
 						StarShipPtr = NULL;  // Keeping compiler quiet.
 
-					SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN,
-							MENU_SOUND_SELECT | MENU_SOUND_CANCEL);
+					SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT | MENU_SOUND_CANCEL);
+					
 					crew_delta = 0;
 					if (dy < 0)
 					{
@@ -908,9 +901,30 @@ DoModifyShips (MENU_STATE *pMS)
 									&& GLOBAL_SIS (ResUnits) >=
 									(DWORD)GLOBAL (CrewCost))
 							{
-								r.extent.width = 1 << RESOLUTION_FACTOR;
-								r.extent.height = r.extent.width;
-								DrawFilledRectangle (&r);
+								// Crew dots/rectangles for 1x and 2x resolutions.
+								if (RESOLUTION_FACTOR < 2)
+								{
+									r.extent.width = 1 << RESOLUTION_FACTOR;
+									r.extent.height = r.extent.width;
+									DrawFilledRectangle (&r);
+								}
+								// Crew balls for 4x resolution.
+								else
+								{
+									r.corner.x += 1;
+									r.extent.width = (1 << RESOLUTION_FACTOR) - 2;
+									r.extent.height = 1 << RESOLUTION_FACTOR;
+									DrawFilledRectangle (&r);
+									
+									r.corner.x -= 1;
+									r.corner.y += 1;
+									r.extent.width = 1 << RESOLUTION_FACTOR;
+									r.extent.height = (1 << RESOLUTION_FACTOR) - 2;
+									DrawFilledRectangle (&r);
+									
+									r.corner.y -= 1;
+								}
+								
 								DeltaSISGauges (1, 0, -GLOBAL (CrewCost));
 								crew_delta = 1;
 
@@ -1093,16 +1107,18 @@ DrawBluePrint (MENU_STATE *pMS)
 	s.origin.x = 0;
 	s.origin.y = 0;
 	s.frame = DecFrameIndex (ModuleFrame);
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x16), 0x01));
-	DrawFilledStamp (&s);
+	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x16), 0x01));
 
 
 	if (GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS) == CHMMR_EXPLORER_SHIP)
 	{
+		s.frame = SetAbsFrameIndex (ModuleFrame, 22);
+		DrawFilledStamp (&s);
 	}
 	else
 	{
+		DrawFilledStamp (&s);
+		
 	    for (num_frames = 0; num_frames < NUM_DRIVE_SLOTS; ++num_frames)
 	      {
 		DrawShipPiece (ModuleFrame, GLOBAL_SIS (DriveSlots[num_frames]),
@@ -1141,11 +1157,34 @@ DrawBluePrint (MENU_STATE *pMS)
 	while (num_frames--)
 	{
 		RECT r;
-		r.extent.width = 1 << RESOLUTION_FACTOR;
-		r.extent.height = r.extent.width;
+		// Crew dots/rectangles for 1x and 2x resolutions.
+		if (RESOLUTION_FACTOR < 2)
+		{
+			r.extent.width = 1 << RESOLUTION_FACTOR;
+			r.extent.height = r.extent.width;
+			
+			GetCPodCapacity (&r.corner);
+			DrawFilledRectangle (&r);
+		}
+		// Crew balls for 4x resolution.
+		else
+		{
+			GetCPodCapacity (&r.corner);
+			
+			r.corner.x += 1;
+			r.extent.width = (1 << RESOLUTION_FACTOR) - 2;
+			r.extent.height = 1 << RESOLUTION_FACTOR;
+			DrawFilledRectangle (&r);
+			
+			r.corner.x -= 1;
+			r.corner.y += 1;
+			r.extent.width = 1 << RESOLUTION_FACTOR;
+			r.extent.height = (1 << RESOLUTION_FACTOR) - 2;
+			DrawFilledRectangle (&r);
+			
+			r.corner.y -= 1;
+		}
 		
-		GetCPodCapacity (&r.corner);
-		DrawFilledRectangle (&r);
 		++GLOBAL_SIS (CrewEnlisted);
 	}
 
