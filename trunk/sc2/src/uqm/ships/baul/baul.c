@@ -34,13 +34,13 @@
 #define THRUST_INCREMENT 6
 #define TURN_WAIT 2
 #define THRUST_WAIT 5
-#define WEAPON_WAIT 24
+#define WEAPON_WAIT 18
 #define SPECIAL_WAIT 7
 
 #define SHIP_MASS 9
 #define BAUL_OFFSET (4 << RESOLUTION_FACTOR)
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
-#define MISSILE_LIFE 6
+#define MISSILE_LIFE 10
 
 // Weapon specifics
 #define SHOCKWAVE_FRAMES 8
@@ -396,7 +396,7 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	
-	which_player = ElementPtr->playerNr;
+	which_player = -1;//ElementPtr->playerNr; XXX
 	
 	// Gas is still 'solid' when it's hit by the spray. Let's make a shockwave and kill the gas cloud. 
 	if (!(ElementPtr->state_flags & NONSOLID))
@@ -415,7 +415,7 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 			LockElement (hShockwave, &ShockwavePtr);
 			SetElementStarShip (ShockwavePtr, StarShipPtr);
 			ShockwavePtr->hit_points = ShockwavePtr->mass_points = 0;
-			ShockwavePtr->playerNr = which_player; // Don't damage self.
+			ShockwavePtr->playerNr = which_player; // Can damage both ships. //XXX Don't damage self.
 			ShockwavePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
 			ShockwavePtr->life_span = SHOCKWAVE_FRAMES;
 			SetPrimType (&(GLOBAL (DisplayArray))[ShockwavePtr->PrimIndex], STAMP_PRIM);
@@ -548,7 +548,7 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 			LockElement (hShockwave, &ShockwavePtr);
 			SetElementStarShip (ShockwavePtr, StarShipPtr);
 			ShockwavePtr->hit_points = ShockwavePtr->mass_points = 0;
-			ShockwavePtr->playerNr = which_player; // Don't damage self.
+			ShockwavePtr->playerNr = which_player;
 			ShockwavePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
 			ShockwavePtr->life_span = SHOCKWAVE_FRAMES;
 			SetPrimType (&(GLOBAL (DisplayArray))[ShockwavePtr->PrimIndex], STAMP_PRIM);
@@ -603,16 +603,12 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
 					
 					// Remove the lock on enemy ship and make the gas die on next turn.
-					//ObjPtr->hTarget = 0;
 					ObjPtr->life_span = (10 / destruction);
 					
 					// Delayed shockwave
 					ObjPtr->death_func = generate_shockwave_2;
 					
 					ObjPtr->playerNr = which_player;
-					
-					// Generate the actual shockwave.
-					//generate_shockwave (ObjPtr, which_player);
 				}
 			}
 			else if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
@@ -850,7 +846,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 		ElementPtr0->death_func = NULL;
 		
 		// Generate the actual shockwave.
-		generate_shockwave (ElementPtr0, ElementPtr1->playerNr);
+		generate_shockwave (ElementPtr0, -1); // XXX ElementPtr1->playerNr);
 	}
 	// If colliding with enemy ship, stick to the ship.
 	else if (ElementPtr0->state_flags & IGNORE_VELOCITY
@@ -976,11 +972,25 @@ static void spawn_gas (ELEMENT *ShipPtr)
 static void
 spray_preprocess (ELEMENT *ElementPtr)
 {
-	// Move to next image frame.
-	if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX)
-		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	// Abusing thrust_wait to slow down the anim.
+	if (ElementPtr->thrust_wait > 0)
+		--ElementPtr->thrust_wait;
+	// Move to next frame.
 	else
-		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+	{
+		// Abusing thrust_wait to slow down the anim. (Should help performance a bit.)
+		ElementPtr->thrust_wait = 1;
+		
+		// This makes the gas animate even if the ships are not moving and the screen is stationary.
+		ElementPtr->state_flags |= CHANGING;
+		
+		if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_SPRAY_INDEX)
+			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+		// This is a safeguard to prevent going over frame boundaries if someone messes up the 
+		// MISSILE_LIFE <-> LAST_SPRAY_INDEX <-> thrust_wait correspondence.
+		else
+			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
+	}
 }
 
 // This makes the spray not collide with anything (except gas clouds: gas_collision handles them.)
@@ -1046,6 +1056,7 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 			
 			LockElement (SprayArray[i], &SprayPtr);
 			SprayPtr->collision_func = spray_collision;
+			SprayPtr->thrust_wait = 1;
 			UnlockElement (SprayArray[i]);
 		}
 	}
