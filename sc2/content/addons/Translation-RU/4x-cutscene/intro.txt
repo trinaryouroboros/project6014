@@ -1,0 +1,618 @@
+﻿#(=========== This is the PC intro script =========================)
+
+#( !!!WARNING!!! Do not mess with the timing of this script starting )
+#( from SYNC in Slide 1. The music is synchronized to the slides. If )
+#( you MUST change timing of a subtitle, make sure this change is    )
+#( balanced off by another subtitle within the same slide!           )
+
+#(Clear entire screen first; set size...)
+DIMS 1280 960
+
+#(... and clear)
+CLS
+
+#(Set sequence dimensions; param1=width; param2=height)
+DIMS 1280 800
+#(Everything is drawn within the clipping rect defined by DIMS, from 0, 0)
+
+#(Fade all to black; param1=fade time)
+FTB 0
+
+#(Set text fore color; 0xRRGGBB)
+TC FFFFFF
+#(Set text back color; 0xRRGGBB)
+TBC 000000
+#(Set text effect; Traced, None, others when added)
+TE TRACED
+
+#(Load font to use later)
+FONT 0 addons/hires4x/fonts/starcon.fon
+#(Load font to use later)
+FONT 1 addons/hires4x/fonts/slides.fon
+
+#(************ Title Screen ******************************************)
+
+#(+++++++++++ Title 1 +++++++++++++++++++++++++++++++++)
+
+#(Set font to use)
+FONT 0
+
+#(Set ANIM to draw slides from)
+ANI addons/hires4x/cutscene/intro/title.ani
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 000000
+
+#(Set text vertical position; can be T=top, B=bottom, M=middle)
+TVA B
+
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Fade-in a slide; param1=fade time)
+FTC 1500
+#(Wait)
+WAIT 4500
+#(Fade slide to black; param1=fade time)
+FTB 2000
+#(Wait)
+WAIT 500
+
+#(++++++++++++ Title 2 +++++++++++++++++++++++++++++++++++)
+
+#(Play music)
+MUSIC addons/hires4x/cutscene/intro/introx.mod
+
+#(Move sync point to current time index)
+RESYNC
+
+#(Draw slide; param1=ANI index)
+DRAW 1
+
+#(Fade-in a slide; param1=fade time)
+FTC 1500
+
+
+#(Wait)
+WAIT 4000
+
+FTC 1500
+
+#(Draw slide; param1=ANI index)
+DRAW 2
+
+
+WAIT 700
+
+#(Fade-in a slide; param1=fade time)
+FTC 2000
+#(Synchronize)
+SYNC 5000
+#(Text fade-out)
+TFO
+#(Wait)
+WAIT 200
+
+
+
+
+#(Synchronize)
+SYNC 5000
+#(Text fade-out)
+TFO
+#(Wait)
+WAIT 200
+#(Text fade-in)
+TFI Based on Star Control 2 Created by
+Fred Ford and Paul Reiche III
+in 1992
+#(Synchronize)
+SYNC 12000
+#(Text fade-out)
+TFO
+#(Wait)
+WAIT 200
+#(Text fade-in)
+TFI Based on the source code of Star Control 2 
+and the Open Source game "The Ur-Quan Masters".
+Star control 2 is a trademark of Atari.
+
+#(Synchronize)
+SYNC 16000
+
+#(Fade slide to black; param1=fade time)
+FTB 3000
+
+#(************* Slides *********************************************)
+
+#(Set font to use)
+FONT 1
+
+#(Set ANIM to draw slides from)
+ANI addons/hires4x/cutscene/intro/intro.ani
+
+#(Set text vertical position; can be T=top, B=bottom, M=middle)
+TVA T
+
+#(++++++++++++++++++++ Slide 1 ++++++++++++++++++++++++)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 1018BC
+
+#(!!! Milestone Sync 1 !!!)
+SYNC 20000
+
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Fade-in a slide; param1=fade time)
+FTC 700
+#(Text fade-in)
+TFI Год 2165.
+#(Wait)
+WAIT 2500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI Четыре года прошло с момента 
+вашего путешествовия по галактике,
+
+#(Wait)
+WAIT 3000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI в стремлении собрать осколки старого
+Альянса Свободных Звезд, и освободить
+
+#(!!! Milestone Sync 2 !!!)
+SYNC 35000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI Человечество от рабства Ур-Куанов.
+
+#(Wait)
+WAIT 2500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Wait)
+WAIT 1250
+
+#(Text fade-in)
+TFI И вы сделали это.
+#(Wait)
+WAIT 2000
+
+#(!!! Milestone Sync 2 !!!)
+SYNC 35000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Wait)
+WAIT 1500
+
+#(Text fade-in)
+TFI Ур-Куаны бежали, бросив других
+членов Иерархии.
+
+#(Wait)
+WAIT 2500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 0
+#(Wait)
+WAIT 500
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(+++++++++++++++++++++ Slide 1 ++++++++++++++++++++++)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 707070
+
+#(Draw slide; param1=ANI index)
+DRAW 1
+#(Fade-in a slide; param1=fade time)
+FTC 700
+
+#(Text fade-in)
+TFI  Чммр стали лидерами
+всего известного космоса...
+
+#(Wait)
+WAIT 3500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 1
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI ...и продолжают укреплять свою власть. 
+#(Wait)
+WAIT 6000
+#(Text fade-out)
+TFO
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(+++++++++++++++++++++++ Slide 2 +++++++++++++++++++++++++++)
+
+#(Draw slide; param1=ANI index)
+DRAW 2
+#(Fade-in a slide; param1=fade time)
+FTC 500
+
+#(Wait)
+WAIT 700
+
+
+#(Text fade-in)
+TFI Порабощённые миры были освобождены. 
+#(Wait)
+WAIT 2000
+#(Text fade-out)
+TFO
+
+#(Fade slide to White; param1=fade time)
+FTW 500
+
+#(+++++++++++++++++++++++ Slide 3 +++++++++++++++++++++++++++)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 707070
+
+#(Draw slide; param1=ANI index)
+DRAW 3
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+
+#(Draw slide; param1=ANI index)
+DRAW 3
+#(Wait)
+WAIT 1500
+
+
+#(Text fade-in)
+TFI И началась. новая эра. Эра мира. 
+#(Wait)
+WAIT 4000
+#(Text fade-out)
+TFO
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+#(+++++++++++++++++++++++ Slide 4 +++++++++++++++++++++++++++)
+
+#(Draw slide; param1=ANI index)
+DRAW 4
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+
+#(Wait)
+WAIT 1500
+
+#(Text fade-in)
+TFI За служение Ур-Куанам,
+
+#(Wait)
+WAIT 1500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 4
+
+#(Wait)
+WAIT 1500
+
+#(Text fade-in)
+TFI ...их рабы-невольники были наказаны.
+
+#(Wait)
+WAIT 1500
+#(Text fade-out)
+TFO
+
+
+
+
+#(Fade slide to White; param1=fade time)
+FTW 500
+#(+++++++++++++++++++++++ Slide 5 +++++++++++++++++++++++++++)
+
+#(Draw slide; param1=ANI index)
+DRAW 5
+#(Fade-in a slide; param1=fade time)
+FTC 1200
+#(Draw slide; param1=ANI index)
+DRAW 5
+
+
+
+#(Draw slide; param1=ANI index)
+DRAW 5
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI  А Новый Альянс Свободных Звезд
+восстановливает родные миры пострадавших рас, 
+#(Wait)
+WAIT 3500
+#(Text fade-out)
+TFO
+
+
+#(Draw slide; param1=ANI index)
+DRAW 5
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI и продолжает вытеснять разбросанные 
+остатки флота Ур-Куанов из известной 
+части космоса.
+#(Wait)
+WAIT 3500
+#(Text fade-out)
+TFO
+
+#(Wait)
+WAIT 700
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(+++++++++++++++++++++++ Slide 6 +++++++++++++++++++++++++++)
+# (Unzervault)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC FCA030
+
+#(Draw slide; param1=ANI index)
+DRAW 6
+#(Fade-in a slide; param1=fade time)
+FTC 700
+
+#(Text fade-in)
+TFI После долгих лет странствия по галактике 
+и борьбы с Ур-Куанами...
+#(Wait)
+WAIT 3000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 6
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI ...вы начали мирную жизнь на 
+Унзервалте с манящей Таланой.
+#(Wait)
+WAIT 2500
+#(Text fade-out)
+TFO
+
+#(Draw slide; param1=ANI index)
+DRAW 6
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI Отстранившись от политики,
+и военных дел...
+#(Wait)
+WAIT 2500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 6
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI ...вы посвятили эти годы
+изучению технологии Предтечей.
+
+#(Wait)
+WAIT 3000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 6
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI Но снова ваша личная жизнь 
+должна подождать. 
+
+#(Wait)
+WAIT 3000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 6
+
+#(Wait)
+WAIT 700
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(+++++++++++++++++++++++ Slide 7 +++++++++++++++++++++++++++)
+# (Distress Call)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC FC480C
+
+#(Draw slide; param1=ANI index)
+DRAW 10
+#(Fade-in a slide; param1=fade time)
+FTC 700
+
+#(Draw slide; param1=ANI index)
+DRAW 8
+wait 500
+#(Draw slide; param1=ANI index)
+DRAW 9
+wait 500
+#(Draw slide; param1=ANI index)
+DRAW 10
+wait 500
+#(Draw slide; param1=ANI index)
+DRAW 11
+wait 500
+
+
+#(Text fade-in)
+TFI Командование Альянса на Проционе 
+получило сигнал бедствия...
+#(Wait)
+WAIT 4500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 7
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI ...от Скаутов Шофиксти
+из глубокого космоса..
+#(Wait)
+WAIT 5000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 8
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI Срочное, искаженное сообщение 
+говорит об огромной машине, 
+
+#(Wait)
+WAIT 5000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 11
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI которая разрушила 
+несколько кораблей Скаут при контакте. 
+А дальше... только помехи.
+
+#(Wait)
+WAIT 3500
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 13
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI Чммр попросили, именно вас
+именно вас возглавить экспедицию....
+#(Wait)
+WAIT 4000
+#(Text fade-out)
+TFO
+
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(+++++++++++++++++++++++ Slide 8 +++++++++++++++++++++++++++)
+# (To Infinity... and beyond!)
+
+#(Set text fade in/out color; 0xRRGGBB)
+TFC 000000
+
+#(Draw slide; param1=ANI index)
+DRAW 14
+#(Fade-in a slide; param1=fade time)
+FTC 700
+
+#(Text fade-in)
+TFI ...Снова нужно отправиться 
+в странствие, 
+#(Wait)
+WAIT 6000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 14
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI ...чтобы разыскать Шофиксти и 
+нейтрализовать этот артефакт. 
+
+#(Wait)
+WAIT 5000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 14
+#(Wait)
+WAIT 500
+
+#(Text fade-in)
+TFI Разрывая ткань пространства,
+корабль вышелв обычный космос. 
+А вы задаетесь вопросом: 
+#(Wait)
+WAIT 4000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 14
+#(Wait)
+WAIT 500
+
+
+#(Text fade-in)
+TFI Готовы ли вы к тому, что вас ждёт?
+#(Wait)
+WAIT 6000
+#(Text fade-out)
+TFO
+#(Draw slide; param1=ANI index)
+DRAW 14
+
+#(Wait)
+WAIT 700
+
+#(Fade slide to black; param1=fade time)
+FTB 700
+
+#(***************************** The End ********************************)
