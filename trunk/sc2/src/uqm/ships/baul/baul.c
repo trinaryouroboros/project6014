@@ -469,17 +469,10 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 					
 					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
 					
-					// Remove the lock on enemy ship and make the gas die on next turn.
-					ObjPtr->hTarget = 0;
+					// The shockwave is delayed according to how far it is from the shockwave that set it off.
 					ObjPtr->life_span = (10 / destruction);
-					
-					// Delayed shockwave
 					ObjPtr->death_func = generate_shockwave_2;
-					
 					ObjPtr->playerNr = which_player;
-					
-					// Generate the actual shockwave.
-					//generate_shockwave (ObjPtr, which_player);
 				}
 			}
 			else if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
@@ -602,12 +595,9 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 					
 					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
 					
-					// Remove the lock on enemy ship and make the gas die on next turn.
+					// The shockwave is delayed according to how far it is from the shockwave that set it off.
 					ObjPtr->life_span = (10 / destruction);
-					
-					// Delayed shockwave
 					ObjPtr->death_func = generate_shockwave_2;
-					
 					ObjPtr->playerNr = which_player;
 				}
 			}
@@ -704,7 +694,18 @@ static void
 gas_preprocess (ELEMENT *ElementPtr)
 {	
 	STARSHIP *StarShipPtr;
+	SDWORD dx, dy;
 	
+	// JMS_TEST: Baul's gas now flies forward.
+	// Slow down the gas smoothly.
+	GetCurrentVelocityComponentsSdword (&ElementPtr->velocity, &dx, &dy);
+	if (dx != 0 || dy != 0)
+	{
+		dx = (SDWORD)(dx * 9 / 10);
+		dy = (SDWORD)(dy * 9 / 10);
+		SetVelocityComponents (&ElementPtr->velocity, dx, dy);
+	}
+		
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	
 	// Move to next image frame. (Abusing thrust_wait to slow down the anim.)
@@ -899,9 +900,9 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 #define GAS_DAMAGE 0
 #define GAS_LIFE 480 // How long the gas lives.
 #define GAS_OFFSET (25 << RESOLUTION_FACTOR)
-#define GAS_INIT_SPEED 0
-#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))  // JMS_GFX
-#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR)) // JMS_GFX
+#define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // JMS_TEST: Baul's gas now flies forward.
+#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
+#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
 
 // Secondary weapon: Gas cloud.
 // The IGNORE_VELOCITY flag is very important: It doesn't only stop the gas from reacting to gravity,
@@ -937,7 +938,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	MissileBlock.cx = ShipPtr->next.location.x + offs_x;
 	MissileBlock.cy = ShipPtr->next.location.y + offs_y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.face = (StarShipPtr->ShipFacing - 8) % 16;
+	MissileBlock.face = StarShipPtr->ShipFacing;//(StarShipPtr->ShipFacing - 8) % 16; // JMS_TEST: Baul's gas now flies forward.
 	MissileBlock.index = 0;
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = GASSY_SUBSTANCE | IGNORE_VELOCITY; // Don't erase the IGNORE_VELOCITY. It's very important.
@@ -953,8 +954,16 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	if (Missile)
 	{
 		ELEMENT *GasPtr;
+		SIZE	dx, dy; // JMS_TEST: Baul's gas now flies forward.
 		
 		LockElement (Missile, &GasPtr);
+		
+		// JMS_TEST: Baul's gas now flies forward.
+		GetCurrentVelocityComponents (&ShipPtr->velocity, &dx, &dy);
+		DeltaVelocityComponents (&GasPtr->velocity, dx, dy);
+		GasPtr->current.location.x -= VELOCITY_TO_WORLD (dx);
+		GasPtr->current.location.y -= VELOCITY_TO_WORLD (dy);
+		
 		GasPtr->collision_func = gas_collision;
 		GasPtr->death_func = gas_death;
 		GasPtr->thrust_wait = 1;
