@@ -353,14 +353,14 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Con
 		StarShipPtr->ship_input_state &= ~SPECIAL;
 		if (ShieldStatus)
 		{
-			if (ShipPtr->life_span <= NORMAL_LIFE + 1
+			if ((ShipPtr->life_span <= NORMAL_LIFE + 1
 					&& (ShieldStatus > 0 || lpEvalDesc->ObjectPtr)
 					&& lpEvalDesc->which_turn <= 2
 					&& (ShieldStatus > 0
-					|| (lpEvalDesc->ObjectPtr->state_flags
-							& PLAYER_SHIP) // means IMMEDIATE_WEAPON.
+					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) // means IMMEDIATE_WEAPON.
 					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 2, 0))
 					&& (TFB_Random () & 3))
+					&& !(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE))
 				StarShipPtr->ship_input_state |= SPECIAL;
 
 			if (lpEvalDesc->ObjectPtr

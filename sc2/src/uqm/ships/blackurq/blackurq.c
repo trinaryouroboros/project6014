@@ -518,6 +518,7 @@ black_urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	if (StarShipPtr->special_counter == 0
 			&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST
 			&& lpEvalDesc->ObjectPtr
+			&& !(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE)
 			&& lpEvalDesc->which_turn <= 8)
 		StarShipPtr->ship_input_state |= SPECIAL;
 
