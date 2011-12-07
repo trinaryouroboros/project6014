@@ -495,8 +495,13 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 					
 					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != which_player)
 					{
-						if (!DeltaCrew (ObjPtr, -destruction))
-							ObjPtr->life_span = 0;
+						STARSHIP *EnemyShipPtr;
+						
+						GetElementStarShip (ObjPtr, &EnemyShipPtr);
+						
+						if (!(EnemyShipPtr->SpeciesID == (YEHAT_ID | UTWIG_ID) && EnemyShipPtr->ship_input_state | SPECIAL))
+							if (!DeltaCrew (ObjPtr, -destruction))
+								ObjPtr->life_span = 0;
 					}
 					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != which_player)
 					{
@@ -621,8 +626,14 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 					
 					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != which_player)
 					{
-						if (!DeltaCrew (ObjPtr, -destruction))
-							ObjPtr->life_span = 0;
+						STARSHIP *EnemyShipPtr;
+						
+						GetElementStarShip (ObjPtr, &EnemyShipPtr);
+						
+						if (!((EnemyShipPtr->SpeciesID == YEHAT_ID || EnemyShipPtr->SpeciesID == UTWIG_ID) 
+							  && ObjPtr->life_span > NORMAL_LIFE))
+							if (!DeltaCrew (ObjPtr, -destruction))
+								ObjPtr->life_span = 0;
 					}
 					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != which_player)
 					{
@@ -733,6 +744,7 @@ gas_preprocess (ELEMENT *ElementPtr)
 		ElementPtr->state_flags |= DISAPPEARING;
 	}
 	// When the gas has collided with enemy ship, it sticks to the ship until expires.
+	// (When the gas is sticking to enemy ship, the gas's IGNORE_VELOCITY flag is disabled.)
 	else if (!(ElementPtr->state_flags & IGNORE_VELOCITY) && !(ElementPtr->state_flags & DISAPPEARING))
 	{
 		ELEMENT *eptr;
@@ -819,7 +831,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 	STARSHIP *EnemyStarShipPtr;
 	BYTE	 enemyShipIsBaul = 0;
 	
-	// The ship this gas cloud belongs to.
+	// This is the ship this gas cloud belongs to.
 	GetElementStarShip (ElementPtr0, &StarShipPtr);
 	
 	// Check if the colliding element is a ship. If it is not, check if it's a projectile from Baul ship.
@@ -898,15 +910,15 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 
 #define GAS_HITS 100
 #define GAS_DAMAGE 0
-#define GAS_LIFE 480 // How long the gas lives.
-#define GAS_OFFSET (25 << RESOLUTION_FACTOR)
+#define GAS_LIFE 480 // How many 1/24 secs the gas lives.
+#define GAS_OFFSET (4 << RESOLUTION_FACTOR)
 #define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // JMS_TEST: Baul's gas now flies forward.
 #define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
-#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
+#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR)) // JMS_TEST: If the Gas_horz_offsets are the same, Baul gas comes from only one pipe.
 
 // Secondary weapon: Gas cloud.
 // The IGNORE_VELOCITY flag is very important: It doesn't only stop the gas from reacting to gravity,
-// but it also makes it possible for the gas to stick to enemy ship. (see collide.h)
+// (see collide.h) but it also makes it possible for the gas to stick to enemy ship (see this file's other gas functions).
 static void spawn_gas (ELEMENT *ShipPtr)
 {
 	STARSHIP *StarShipPtr;
@@ -923,6 +935,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	gas_side[ShipPtr->playerNr] = (gas_side[ShipPtr->playerNr] + 1) % 2;
 	angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 	
+	// Enable firing gas from different sides ("pipes") of the ship.
 	if(gas_side[ShipPtr->playerNr])
 	{
 		offs_x = -SINE (angle, GAS_HORZ_OFFSET);
@@ -934,11 +947,10 @@ static void spawn_gas (ELEMENT *ShipPtr)
 		offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
 	}
 		
-	
 	MissileBlock.cx = ShipPtr->next.location.x + offs_x;
 	MissileBlock.cy = ShipPtr->next.location.y + offs_y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.face = StarShipPtr->ShipFacing;//(StarShipPtr->ShipFacing - 8) % 16; // JMS_TEST: Baul's gas now flies forward.
+	MissileBlock.face = StarShipPtr->ShipFacing;// JMS_TEST: Baul's gas now flies forward. (this was: (StarShipPtr->ShipFacing - 8) % 16;)
 	MissileBlock.index = 0;
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = GASSY_SUBSTANCE | IGNORE_VELOCITY; // Don't erase the IGNORE_VELOCITY. It's very important.
@@ -963,6 +975,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 		DeltaVelocityComponents (&GasPtr->velocity, dx, dy);
 		GasPtr->current.location.x -= VELOCITY_TO_WORLD (dx);
 		GasPtr->current.location.y -= VELOCITY_TO_WORLD (dy);
+		// JMS_TEST ends
 		
 		GasPtr->collision_func = gas_collision;
 		GasPtr->death_func = gas_death;
@@ -977,7 +990,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 
 #define LAST_SPRAY_INDEX 5
 
-// The preprocess function animates spray.
+// The spray preprocess function animates spray.
 static void
 spray_preprocess (ELEMENT *ElementPtr)
 {
@@ -1012,8 +1025,8 @@ spray_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT 
 	(void) pPt1;  /* Satisfying compiler (unused parameter) */
 }
 
-// Primary weapon. The weapon must deal at least 1 damage, otherwise it won't interact with
-// other elements. However, we can prevent this damage with a separate collision function.
+// Primary weapon. It must deal at least 1 damage, otherwise it won't interact with other 
+// elements, not even gas. However, we can prevent this damage with a separate collision function.
 static COUNT
 initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 {
@@ -1074,6 +1087,8 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 }
 
 #define GAS_BATCH_SIZE 1
+// Gas spawning happens in postprocess, because  the game seems to like to put specials on the playing field
+// in postprocess (I guess it has something to do with keeping the queue of elements in the right order.)
 static void
 baul_postprocess (ELEMENT *ElementPtr)
 {

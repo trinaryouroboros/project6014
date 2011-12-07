@@ -360,7 +360,7 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Con
 					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) // means IMMEDIATE_WEAPON.
 					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 2, 0))
 					&& (TFB_Random () & 3))
-					&& !(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE))
+					&& (!(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE) || (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE && lpEvalDesc->ObjectPtr->mass_points > 0))) // JMS: means: Don't deflect Baul gas, do deflect Baul spray.
 				StarShipPtr->ship_input_state |= SPECIAL;
 
 			if (lpEvalDesc->ObjectPtr
