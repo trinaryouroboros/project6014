@@ -1,5 +1,0 @@
-#define SLAVERACE_PMAP_ANIM "comm.slaverace.graphics"
-#define SLAVERACE_COLOR_MAP "comm.slaverace.colortable"
-#define SLAVERACE_FONT "comm.slaverace.font"
-#define SLAVERACE_CONVERSATION_PHRASES "comm.slaverace.dialogue"
-#define SLAVERACE_MUSIC "comm.slaverace.music"

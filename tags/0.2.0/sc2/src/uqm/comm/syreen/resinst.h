@@ -1,6 +1,0 @@
-#define SYREEN_PMAP_ANIM "comm.syreen.graphics"
-#define SYREEN2_PMAP_ANIM "comm.syreen2.graphics"
-#define SYREEN_FONT "comm.syreen.font"
-#define SYREEN_COLOR_MAP "comm.syreen.colortable"
-#define SYREEN_CONVERSATION_PHRASES "comm.syreen.dialogue"
-#define SYREEN_MUSIC "comm.syreen.music"

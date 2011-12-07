@@ -1,5 +1,0 @@
-#define TRANSPORT_COLOR_MAP "comm.transport.colortable"
-#define TRANSPORT_PMAP_ANIM "comm.transport.graphics"
-#define TRANSPORT_FONT "comm.transport.font"
-#define TRANSPORT_CONVERSATION_PHRASES "comm.transport.dialogue"
-#define TRANSPORT_MUSIC "comm.transport.music"

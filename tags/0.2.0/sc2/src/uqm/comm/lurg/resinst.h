@@ -1,5 +1,0 @@
-#define LURG_COLOR_MAP "comm.lurg.colortable"
-#define LURG_PMAP_ANIM "comm.lurg.graphics"
-#define LURG_FONT "comm.lurg.font"
-#define LURG_CONVERSATION_PHRASES "comm.lurg.dialogue"
-#define LURG_MUSIC "comm.lurg.music"

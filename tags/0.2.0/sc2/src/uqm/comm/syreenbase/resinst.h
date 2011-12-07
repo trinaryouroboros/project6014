@@ -1,5 +1,0 @@
-#define SYREEN_BASE_COLOR_MAP "comm.syreenbase.colortable"
-#define SYREEN_BASE_PMAP_ANIM "comm.syreenbase.graphics"
-#define SYREEN_BASE_FONT "comm.syreenbase.font"
-#define SYREEN_BASE_CONVERSATION_PHRASES "comm.syreenbase.dialogue"
-#define SYREEN_BASE_MUSIC "comm.syreenbase.music"
