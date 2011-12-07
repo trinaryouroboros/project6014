@@ -1,0 +1,64 @@
+#summary Wiki hierarchical table of contents for the sidebart
+
+  * Game development
+    * DesignNotes
+      * [HowItStarts]
+      * Race information
+        * SC2 races
+          * [Ariloulaleelay]
+          * [Chmmr]
+          * Druuge
+          * Earthlings
+          * Ilwrath
+          * [KohrAh]
+          * [Melnorme]
+          * Mycon
+          * Pkunk
+          * [Orz]
+          * [Shofixti]
+          * [Slylandro]
+          * [Spathi]
+          * Supox
+          * [Syreen]
+          * Thraddash
+          * Umgah
+          * Utwig
+          * Ur-Quan
+          * [VUX]
+          * [Yehat]
+          * Zoq-Fot-Pik
+        * New races
+          * [Androsynth]
+          * [Faz]
+          * [FleeingRace]
+          * [Lurg]
+          * [MasterRace]
+          * [Mmrnmhrm]
+          * [Exotics]
+          * [SlaveRace]
+          * [Taalo]
+      * Devices
+        * [BlackOrb]
+        * [MmrnmhrmFix]
+        * [TaaloFix]
+        * [ExoticsCommunicationTool]
+        * [ExoticsGravityBombs]
+        * [MelnormeCallDevice]
+        * [OrzSpaceEscapeDevice]
+        * [ReactorCorePowerUnit]
+        * [SlaveShieldBuster]
+        * [SunDevice]
+        * [TemporalWrapper]
+        * [TerraformingPlants]
+        * [StarPortals] to OrzSpace
+      * [GamePlay]
+        * [GettingTechnology]
+        * [ResourceGathering]
+        * [InterstellarTravel]
+      * [Missions]
+      * [Map]
+    * Older material
+      * [ChmmrExplorer]
+  * Administration
+    * Project [Rules]
+    * PortingChanges from UQM
