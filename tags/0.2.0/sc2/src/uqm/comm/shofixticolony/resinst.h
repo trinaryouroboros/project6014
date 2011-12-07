@@ -1,0 +1,5 @@
+#define SHOFIXTI_COLONY_COLOR_MAP "comm.shofixticolony.colortable"
+#define SHOFIXTI_COLONY_CONVERSATION_PHRASES "comm.shofixticolony.dialogue"
+#define SHOFIXTI_COLONY_MUSIC "comm.shofixticolony.music"
+#define SHOFIXTI_COLONY_PMAP_ANIM "comm.shofixticolony.graphics"
+#define SHOFIXTI_COLONY_FONT "comm.shofixticolony.font"

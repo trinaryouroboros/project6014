@@ -1,0 +1,790 @@
+#(dummy)
+This is a hack.
+
+#(ENUMERATE_ONE)	melno172.ogg
+one
+
+#(ENUMERATE_TWO)	melno173.ogg
+two
+
+#(ENUMERATE_THREE)	melno174.ogg
+three
+
+#(ENUMERATE_FOUR)	melno175.ogg
+four
+
+#(ENUMERATE_FIVE)	melno176.ogg
+five
+
+#(ENUMERATE_SIX)	melno177.ogg
+six
+
+#(ENUMERATE_SEVEN)	melno178.ogg
+seven
+
+#(ENUMERATE_EIGHT)	melno179.ogg
+eight
+
+#(ENUMERATE_NINE)	melno180.ogg
+nine
+
+#(ENUMERATE_TEN)	melno181.ogg
+ten
+
+#(ENUMERATE_ELEVEN)	melno182.ogg
+eleven
+
+#(ENUMERATE_TWELVE)	melno183.ogg
+twelve
+
+#(ENUMERATE_THIRTEEN)	melno184.ogg
+thirteen
+
+#(ENUMERATE_FOURTEEN)	melno185.ogg
+fourteen
+
+#(ENUMERATE_FIFTEEN)	melno186.ogg
+fifteen
+
+#(ENUMERATE_SIXTEEN)	melno187.ogg
+sixteen
+
+#(END_LIST_WITH_AND)	melno188.ogg
+and
+
+#(ENUMERATE_ZERO)
+zero
+
+#(ENUMERATE_SEVENTEEN)	melno190.ogg
+seventeen
+
+#(ENUMERATE_EIGHTEEN)	melno191.ogg
+eighteen
+
+#(ENUMERATE_NINETEEN)	melno192.ogg
+nineteen
+
+#(ENUMERATE_TWENTY)	melno193.ogg
+twenty
+
+#(ENUMERATE_THIRTY)	melno194.ogg
+thirty
+
+#(ENUMERATE_FOURTY)	melno195.ogg
+fourty
+
+#(ENUMERATE_FIFTY)	melno196.ogg
+fifty
+
+#(ENUMERATE_SIXTY)	melno197.ogg
+sixty
+
+#(ENUMERATE_SEVENTY)	melno198.ogg
+seventy
+
+#(ENUMERATE_EIGHTY)	melno199.ogg
+eighty
+
+#(ENUMERATE_NINETY)	melno200.ogg
+ninety
+
+#(ENUMERATE_HUNDRED)	melno201.ogg
+hundred
+
+#(ENUMERATE_THOUSAND)	melno202.ogg
+thousand
+
+#(HELLO_NOW_DOWN_TO_BUSINESS1)
+Attention alien vessel, this is Trademaster Greenish of the starship
+`Inevitably Successful In All Circumstances'.
+We offer trade to enhance your species' way of life
+Captain? Is that you?
+I must say what a pleasure it is to run into you after all this time.
+How are all the Earthlings?
+
+#(hi_doing_great)
+We are doing just great! But now I have to sort out some business with a Shofixti gone missing.
+
+#(DOING_GOOD_RESPONSE)
+Ah, if it's lost Shofixti that interest you, I have some very valuable information.
+In accordance with our protocols and code of ethics
+this information can be given to you in exchange for Credits.
+
+#(doing_average)
+Just about average. How about yourselves?
+
+#(DOING_AVERAGE_RESPONSE)
+Well, with the Ur-Quan and Kohr-Ah removed (mostly) from this region of space
+we are doing quite nicely.
+Its inhabitants require our goods and services to rebuild their civilisations.
+
+#(not_good)
+Could be better to be honest.
+
+#(NOT_GOOD_RESPONSE)
+I'm sorry to hear that, Captain.
+Perhaps a shiny new bauble will raise your spirits.
+I have cunningly acquired two remarkable items
+from the Druuge which I am willing to pass on to you
+for an astonishly low price.
+
+#(WANT_TO_TRADE)
+So, like old times, would you like to resume your trading account?
+Of course we still sell fuel and information.
+
+#(how_to_trade)
+Sounds good. Remind me how this works again.
+
+#(TRADING_INFO1)
+Certainly, Captain.
+
+#(MORE_TRADING_INFO)
+We are interested in purchasing certain items, specifically
+biological data on alien life forms
+and the coordinates of certain strange worlds whose radiant energies defy all scanners
+producing a rainbow-like image.
+In exchange, we have many interesting and valuable commodities, such as
+fuel compatible with your starship's HyperDrive thrusters,
+technological specifications, allowing you to build new devices for your ship
+and many important secrets which may help you in your travels.
+To facilitate trade, we translate all your sales into Interstar Credits
+with which you may make purchases.
+If you have any questions, don't hesitate to ask.
+
+#(i_remember)
+I remember EXACTLY how this works. Let's get down to business.
+
+#(RIGHT_YOU_ARE)
+Excellent Captain, of course you do.
+
+#(make_purchases)
+I would like to make some purchases.
+
+#(items_to_sell)
+I have some items I would like to sell.
+
+#(spank_ass1)
+Actually I never really liked how you made me collect all that bio stuff just so I could save the galaxy. I'm gonna spank yo ass!
+
+#(spank_ass2)
+And I think I'm gonna spank yo ass!
+
+#(UNWISE_CAPTAIN)
+That would be unwise, Captain.  Our vessels are very well equipped to deal with pirates.  
+You surprise me with your aggression. I think I will end this communication.
+
+#(only_joke)
+Only joke. Let's trade!
+
+#(TRADING_INFO2)
+...very well.
+
+#(BATTLE_MELNORME)
+You were one of my favourite clients. I'm sure I will find more though.
+{battle screen}
+
+#(HELLO_NOW_DOWN_TO_BUSINESS2)
+As a master trader in the Melnorme merchant fleet, I greet you, Captain.
+News of your species and your unusual vessel has travelled quickly.
+I need not say how eager we are to trade with you and your kind!
+
+#(HELLO_NOW_DOWN_TO_BUSINESS3)
+Hello again, human space Captain.
+Perhaps during this encounter, we will be able to establish a successful, businesslike relationship.
+
+#(get_on_with_business)
+Shall we begin trading now?
+
+#(no_trade_now)
+Goodbye, Trade Master.
+
+#(OK_NO_TRADE_NOW_BYE)
+When you wish to trade with us, seek any supergiant star system.
+We shall be there.
+
+#(sell_ship_mark_sightings)
+Uh, I have info on vanished Precursor artifacts and space ships of unknown origin. Interested?
+
+#(OFFER_CREDITS_FOR_SHIPMARK_INFO)
+Captain
+you arouse my curiosity.
+You have done well to observe how... eager we are to acquire Precursor-related data.
+I am willing to offer you 100 Credits for your information
+should it provide valuable.
+However, as the quality of your merchandise cannot be checked without hearing it first
+I can decide if your story is worth the fee only after hearing it.
+
+#(deal_shipmarks)
+Ok, fair enough. Here's the data on the crop circles we discovered on Gamma Janus II.
+
+#(no_deal_shipmarks)
+Hmm, sounds like a rotten deal to me. Thanks, but no thanks.
+
+#(OK_NO_DEAL_SHIPMARKS)
+Very well, Captain.
+But if you do change your mind, our offer stands.
+
+#(ALTERNATIVE_REWARD_FOR_SHIPMARK_INFO)
+Hmm, let's see
+very interesting.
+Captain, I have a highly unconventional suggestion.
+Looking at your data, it seems you have come across something
+we have additional information on.
+It is our custom to only trade knowledge which we have researched thoroughly
+after all, knowing what you are selling makes it easier to ch-- er, support your customer.
+But in this case I am sure that sharing our partial wisdom would profit us both.
+What I suggest is that instead of you receiving the 100 Credit fee
+we engage in an ancient Melnorme tradition
+of exchanging one valuable fact for another.
+
+#(credits_for_ship_mark_sightings)
+No way, Jose. I'll have my Credits now, thank you.
+
+#(info_for_ship_mark_sightings)
+This might benefit both of us... Let's exchange secrets!
+
+#(SHIP_MARK_DEAL)
+What a pity, Captain.
+You just might have learned where the origin of those ships lies.
+
+#(SHIP_MARK_INFORMATION)
+Captain, once again you have made a wise decision!
+And now, for the story...
+When pursuing the matter of the lost Shofixti patrols further
+our agents set their course deep into the Messier system for more clues.
+There was nothing to be found
+except in one system.
+
+#(HINT_PLANET_0)
+The second planet of Beta Messier at 704.5:378.9...
+
+#(HINT_PLANET_1)
+The second planet of Delta Apollonius at 648.0:397.0...
+
+#(HINT_PLANET_2)
+The second planet of Alpha Apollonius at 656.4:418.3...
+
+#(SHIP_MARK_INFORMATION_2)
+...is littered with imprints similar to the one you found on Janus.
+Also, seems there has been great cities on the planet -- Destroyed?
+No. More like 'taken away'.
+Square miles of the planet terrain is patterned with blueprints of cities.
+However, nothing more stands there, only outlines of the buildings in the soil.
+Who were they? Where did they go? We don't know.
+Our inability to find out the facts behind this mystery is most unnerving
+and not to mention, bad for business.
+Should you find something that sheds more light on this matter
+do let us know. You may expect a remarkable sum in exchange.
+
+#(sell_tzzrak_tzon_pics)
+Might I tempt you with high quality imagery of the Crystal Caverns of Tzzrak-Tzon?
+	
+#(NO_WAY)
+No.
+
+#(HELLO_AND_DOWN_TO_BUSINESS1)
+Greetings Captain.
+
+#(HELLO_AND_DOWN_TO_BUSINESS2)	melno013.ogg
+How nice to see you again, Captain.
+
+#(HELLO_AND_DOWN_TO_BUSINESS3)	melno014.ogg
+I had itchy pods this morning, Captain, and here you are!
+
+#(HELLO_AND_DOWN_TO_BUSINESS4)
+It's your lucky day Captain.
+My crew and I have just finished reciting
+the traditional Melnorme hymn of the Mutually Beneficial Transaction.
+I'm sure you'll find this encounter most rewarding.
+
+#(HELLO_AND_DOWN_TO_BUSINESS5)	melno016.ogg
+Once again we meet to exchange valuable tangibles.
+Isn't this fun?!
+
+#(HELLO_AND_DOWN_TO_BUSINESS6)
+Why Captain, what a pleasant surpise!
+I was looking at my ledger of this month's transactions,
+and feeling somewhat depressed,
+and then here you are!
+How fortuitous!
+
+#(HELLO_AND_DOWN_TO_BUSINESS7)	melno018.ogg
+This very morning, I was just saying to subordinate Ochre
+`Fe-Fi-Fo-Fum! I smell the feet of a Hu-Hu-Man!'
+We laughed and laughed. What a synchronicity!
+
+#(HELLO_AND_DOWN_TO_BUSINESS8)
+I must warn you Captain,
+I am in training for the annual Melnorme Bargaining Cup.
+If I drive a particularly hard bargain today,
+please consider it a complement.
+
+#(HELLO_AND_DOWN_TO_BUSINESS9)
+Whoa Captain!
+Not another close call with a Keel-Verezy vessel!
+One of these days we really must furnish you with an Eydron scanner,
+so you can stop being such a menace to the Keel-Verezy.
+They're some of our best customers.
+
+#(HELLO_AND_DOWN_TO_BUSINESS10)	melno021.ogg
+Welcome back, Captain! You are our favorite customer.
+
+#(whats_my_credit)
+What's my Credit balance, if you please?
+
+#(RESCUE_EXPLANATION) melno037.ogg
+According to our scanners and other sensitive devices
+you are immobile in HyperSpace with no fuel reserves.
+This is a serious situation.
+Without fuel you shall drift here until your batteries exhaust themselves
+then your life-support will fail
+and you will expire
+unless, of course
+a hostile alien vessel finds you here helpless
+and annihilates you mercilessly.
+This has been known to happen.
+However
+as a gesture of good will, and in the spirit of friendship, we offer our assistance!
+For a nominal fee.
+
+#(RESCUE_AGAIN_1) melno038.ogg
+Once more we find ourselves in a position to help you.
+How wonderful.
+
+#(RESCUE_AGAIN_2) melno039.ogg
+Have you ever considered buying more fuel tanks?
+Just a friendly suggestion, Captain.
+
+#(RESCUE_AGAIN_3) melno040.ogg
+We have come to help you once more, Captain.
+
+#(RESCUE_AGAIN_4) melno041.ogg
+We MUST stop meeting like this, Captain!
+Ha, ha, ha!
+
+#(RESCUE_AGAIN_5) melno042.ogg
+Out of fuel again, eh, Captain?
+
+#(CHANGED_MIND)	melno043.ogg
+Have you changed your mind
+and decided to accept our offer of assistance?
+
+#(no_changed_mind)
+No thanks, I don't need your help right now.
+
+#(yes_changed_mind)
+Perhaps I was hasty in refusing your offer. What was it again?
+
+#(SHOULD_WE_HELP_YOU) melno044.ogg
+Would you like us to help you at this time?
+
+#(yes_help)
+Yes, I would appreciate your assistance. What is your fee?
+
+#(no_help)
+I don't need your help at this time. Maybe later, though.
+
+#(RESCUE_OFFER)	melno045.ogg
+You have no Credit balance in our mercantile computer
+and our scanners show you that you possess no useful trade goods
+but, perhaps we can work out a special deal.
+In exchange for our giving you enough fuel to
+
+#(RESCUE_TANKS)	melno046.ogg
+fill your tanks, we will take:
+
+#(RESCUE_HOME)	melno047.ogg
+get you home, we will take:
+
+#(take_it)
+I find I have no choice. I accept your offer... grudgingly.
+
+#(leave_it)
+This offer is absurd! I refuse.
+
+#(HAPPY_TO_HAVE_RESCUED) melno048.ogg
+The exchange of fuel for equipment is complete.
+As always, it is a pleasure doing business with you.
+Goodbye, Captain.
+
+#(MAYBE_SEE_YOU_LATER)	melno049.ogg
+Well then, we bid you farewell.
+We hope to see you again
+though with you sitting here, dead in space
+vulnerable and alone
+we won't hold our breath.
+
+#(GOODBYE_AND_GOODLUCK)	melno050.ogg
+Good luck, Captain.
+
+#(GOODBYE_AND_GOODLUCK_AGAIN)	melno051.ogg
+Until we meet again, Captain.
+
+#(BUY_OR_SELL)	melno069.ogg
+Now, what can we do for you today?
+
+#(goodbye)
+Goodbye, Trade Master.
+
+#(why_turned_purple)
+Why did your bridge turn purple?
+
+#(TURNED_PURPLE_BECAUSE)	melno070.ogg
+That's a good question with a very interesting answer!
+The fee for this information is 12,000,000 Credits.
+
+#(NOTHING_TO_SELL)	melno071.ogg
+We appreciate your intentions, but you have nothing we wish to buy.
+
+#(WHAT_TO_SELL)	melno072.ogg
+What would you like to sell, Captain?
+
+#(OK_DONE_SELLING) melno073.ogg
+As you wish.
+
+#(sell_life_data)
+I have some data on alien lifeforms.
+
+#(SOLD_LIFE_DATA1)	melno074.ogg
+The 
+
+#(SOLD_LIFE_DATA2)	melno203.ogg
+ units of biological data we downloaded from your ship earn you 
+
+#(SOLD_LIFE_DATA3)	melno204.ogg
+ Credits.
+
+#(sell_rainbow_locations)
+I wish to sell you Rainbow world locations.
+
+#(SOLD_RAINBOW_LOCATIONS1)	melno075.ogg
+Your ship's log indicates that you discovered the whereabouts of 
+
+#(SOLD_RAINBOW_LOCATIONS2)	melno205.ogg
+ of the Rainbow worlds which so fascinate us.
+In exchange, we will give you 
+
+#(SOLD_RAINBOW_LOCATIONS3)	melno204.ogg
+ Credits.
+
+#(sell_precursor_find)
+We found a Precursor artifact. Do you want it?
+
+#(SOLD_PRECURSOR_FIND)	melno076.ogg
+Always! Absolutely!
+In exchange we will give you
+N Credits
+
+#(changed_mind_no_sell)
+On second thought, I don't think I want to sell anything.
+
+#(done_selling)
+I am done selling, for now.
+
+#(NEED_CREDIT)	melno077.ogg
+You need Credits to purchase our trade items.
+To earn Credits you must sell us the items we desire, which are:
+biological data on alien lifeforms
+and the coordinates of certain strange worlds whose radiant energies defy all scanners
+producing a rainbow-like image.
+
+#(WHAT_TO_BUY)	melno078.ogg
+What trade items would you like to buy today?
+
+#(WHAT_MORE_TO_BUY) melno079.ogg
+Would you like to purchase anything else?
+
+#(OK_DONE_BUYING) melno080.ogg
+Very well then.
+
+#(buy_fuel)
+I'd like to buy some fuel.
+
+#(done_buying)
+I am done buying, for now.
+
+#(be_leaving_now)
+I shall be leaving now.
+
+#(HOW_MUCH_FUEL)	melno081.ogg
+How much fuel do you wish to purchase?
+
+#(buy_1_fuel)
+1 unit of fuel.
+
+#(GOT_FUEL)	melno082.ogg
+Fuel transferred to your vessel.
+
+#(buy_5_fuel)
+5 units of fuel.
+
+#(buy_10_fuel)
+10 units of fuel.
+
+#(buy_25_fuel)
+25 units of fuel.
+
+#(done_buying_fuel)
+I am done buying fuel.
+
+#(FRIENDLY_GOODBYE)	melno083.ogg
+It has been a pleasure dealing with you, Captain.
+We look forward to your next visit.
+
+#(CREDIT_IS0)
+Your present balance is 
+#(CREDIT_IS1)
+ Credits.
+
+#(NEED_MORE_CREDIT0)	melno084.ogg
+Unfortunately this purchase requires 
+#(NEED_MORE_CREDIT1)	melno206.ogg
+ additional Credits.
+
+#(BUY_FUEL_INTRO)	melno085.ogg
+As you know, we carry a large supply of fuel on board which is compatible with your engine system.
+We will be happy to sell this substance to you at a cost of 1 Credit per fuel unit.
+
+#(NO_ROOM_FOR_FUEL)	melno086.ogg
+Your ship's capacity is insufficient to hold that much fuel.
+
+#(buy_info)
+I wish to buy information.
+
+#(buy_technology)
+I am interested in purchasing new technology.
+
+#(buy_current_events)
+I wish to buy information about current events.
+
+#(buy_alien_races)
+I will pay for useful data on alien races.
+
+#(buy_history)
+Please sell us historical information.
+
+#(done_buying_info)
+I am done buying information.
+
+#(no_buy_info)
+I do not wish to buy information at this time.
+
+#(BUY_INFO_INTRO)
+As you know, in our many centuries of star-trading
+we Melnorme have come to learn much about what happens in our galaxy
+both now and in the ancient past.
+We have also kept records on the diverse alien races in your region of space.
+We will share this crucial knowledge with you for a fee of 75 Credits per informative fact.
+No refunds.
+
+#(OK_BUY_INFO)	melno088.ogg
+How wonderful, Captain!
+
+#(OK_NO_BUY_INFO)	melno089.ogg
+What else would you like to buy?
+
+#(OK_DONE_BUYING_INFO)	melno090.ogg
+What else would you like to buy?
+
+#(OK_BUY_EVENT_1)
+Captain, we only have one current event item for sale
+but boy, what a whopper it is!
+The Alliance high command as well as the Shofixti are in a turmoil
+over a patrol of Shofixti scout vessels that were probably destroyed
+but managed to transmit a distress call before that.
+While the Shofixti are naturally aggrieved over the loss of their friends
+the Chmmr have other considerations in mind.
+It is most probable that the machinery the distress message was pointing to
+is Precursor in origin.
+And lately
+the Chmmr have devoted a lot of their resources to finding Precursor artifacts.
+How we know this all?
+Usually it is not in our custom to reveal sources of information
+but in this case, it is relevant to the very fact we are selling.
+While enroute to Archytas, one of our 'agents' was able to intercept the signal near
+the Naos constellation, the primary star of which is at 469.9:578.0.
+We also have news on the other Shofixti patrols.
+Whilst we have recently had sightings of the patrol
+that was dispatched near the Angstrom system
+the one that was tasked with the Messier system is actually missing
+and probably destroyed.
+Two months ago, the patrol just vanished somewhere near the Messier system
+despite our agents' daily checks on them -- they're just gone.
+Captain, that was the only useful piece of information
+regarding current events that we have for sale.
+If we obtain any information which will prove useful to you in future,
+we will be sure to inform you.
+
+#(OK_BUY_EVENT_2)	melno092.ogg
+Captain, I recommend you consider contributing to this game. 
+I'm sure it will be worthwhile.
+
+#(OK_BUY_EVENT_3)	melno093.ogg
+
+
+#(OK_BUY_EVENT_4)	melno094.ogg
+
+
+#(OK_BUY_EVENT_5)	melno095.ogg
+
+
+#(OK_BUY_EVENT_6)	melno096.ogg
+
+
+#(OK_BUY_EVENT_7)	melno097.ogg
+
+
+#(OK_BUY_EVENT_8)	melno098.ogg
+
+
+#(OK_BUY_ALIEN_RACE_1)	
+Captain, I recommend you consider contributing to this game. 
+I'm sure it will be worthwhile.
+
+#(OK_BUY_ALIEN_RACE_2)	melno100.ogg
+
+
+#(OK_BUY_ALIEN_RACE_3)	melno101.ogg
+
+
+#(OK_BUY_ALIEN_RACE_4)	melno102.ogg
+
+
+#(OK_BUY_ALIEN_RACE_5)	melno103.ogg
+
+
+#(OK_BUY_ALIEN_RACE_6)	melno104.ogg
+
+
+#(OK_BUY_ALIEN_RACE_7)	melno105.ogg
+
+
+#(OK_BUY_ALIEN_RACE_8)	melno106.ogg
+
+
+#(OK_BUY_ALIEN_RACE_9)	melno107.ogg
+
+
+#(OK_BUY_ALIEN_RACE_10)	melno108.ogg
+
+
+#(OK_BUY_ALIEN_RACE_11)	melno109.ogg
+
+
+#(OK_BUY_ALIEN_RACE_12)	melno110.ogg
+
+
+#(OK_BUY_ALIEN_RACE_13)	melno111.ogg
+
+
+#(OK_BUY_ALIEN_RACE_14)	melno112.ogg
+
+
+#(OK_BUY_ALIEN_RACE_15)	melno113.ogg
+
+
+#(OK_BUY_ALIEN_RACE_16)	melno114.ogg
+Captain, you have heard all that we have to say about aliens indigenous to this region.
+Should we learn more in the near future, we shall be certain to sell it to you.
+
+#(OK_BUY_HISTORY_1)	
+Captain, I recommend you consider contributing to this game. 
+I'm sure it will be worthwhile.
+
+#(OK_BUY_HISTORY_2)	melno116.ogg
+
+
+#(OK_BUY_HISTORY_3)	melno117.ogg
+
+
+#(OK_BUY_HISTORY_4)	melno118.ogg
+
+
+#(OK_BUY_HISTORY_5)	melno119.ogg
+
+
+#(OK_BUY_HISTORY_6)	melno120.ogg
+
+
+#(OK_BUY_HISTORY_7)	melno121.ogg
+
+
+#(OK_BUY_HISTORY_8)	melno122.ogg
+
+
+#(OK_BUY_HISTORY_9)	melno123.ogg
+This is the last historical item we have for sale.
+
+
+#(INFO_ALL_GONE)	melno124.ogg
+We regret to say that you have exhausted our supply of genuinely valuable information.
+However we DO have many thousands of useless facts and that we will gladly sell you
+at a substantial discount. Are you interested?
+Hmm, we thought not.
+
+#(buy_new_tech)
+I would like to buy the technology you described.
+
+#(no_buy_new_tech)
+I do not want to purchase any more technology.
+
+#(done_buying_new_tech)
+I do not want to purchase any more technology.
+
+#(fill_me_up)
+Fill all my fuel tanks to maximum capacity.
+
+#(AT_MAXIMUM_CAPACITY)
+It seems like your tanks already are at maximum capacity.
+
+#(OK_DONE_BUYING_FUEL)	melno130.ogg
+Would you like to purchase anything else?
+
+#(CHARITY)	melno157.ogg
+Since you have no useful, easily removeable equipment on your vessel
+we have decided to provide you with fuel at no cost.
+Please do not make the mistake of thinking of this as a `gift' or act of altruism
+we are merely investing in our relationship with you, the customer.
+We are certain that in the long run, this will prove to be a most profitable investment.
+
+#(ALL_BIO_TYPES_FOUND)
+ALL LIFEFORM TYPES FOUND - REPLACE WITH SOMETHING CLEVER -DN 27DEC10
+
+#(STRIP_HEAD)	melno159.ogg
+We will take
+
+#(LANDERS)	melno160.ogg
+ of your Planet Landers
+
+#(THRUSTERS)	melno161.ogg
+ of your Fusion Thrusters
+
+#(JETS)	melno162.ogg
+ of your Turning Jets
+
+#(PODS)	melno163.ogg
+ of your empty Crew Pods
+
+#(BAYS)	melno164.ogg
+ of your empty Storage Bays
+
+#(DYNAMOS)	melno165.ogg
+ of your Dynamo modules
+
+#(FURNACES)	melno166.ogg
+ of your Shiva Furnaces
+
+#(GUNS)	melno167.ogg
+ of your Ion-Bolt Guns
+
+#(BLASTERS)	melno168.ogg
+ of your Blasters
+
+#(CANNONS)	melno169.ogg
+ of your Hellbore Cannons
+
+#(TRACKERS)	melno170.ogg
+ of your Auto-Tracking Modules
+
+#(DEFENSES)	melno171.ogg
+ of your Point-Defense Lasers

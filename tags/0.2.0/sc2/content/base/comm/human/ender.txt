@@ -1,0 +1,136 @@
+#(SPACE_HELLO_1a)
+Ho! This is captain 
+
+#(SPACE_HELLO_1b)
+ of star cruiser Demosthenes.
+It's our heroic liberator!
+How can I help you Captain?
+
+#(SPACE_HELLO_1c)
+Greetings. This is captain Ender of the star cruiser Demosthenes.
+Wow. It's you! How can I help?
+
+#(SPACE_HELLO_2)
+Ho, captain! Our hero finally returns!
+Anything you need?
+
+#(SPACE_HELLO_3)
+The hero from Unzervault! 
+How can we help Captain?
+
+#(ask_news)
+Got any hot news from this side of the galaxy?
+
+#(keep_up_goodbye)
+Keep up the good work, guys. See you later!
+
+#(short_on_fuel)
+You wouldn't happen to have any extra fuel with you? We're running pretty lean.
+
+#(spare_nukes)
+Would you have some old nukes to spare?
+
+#(NEWS_1)
+Not much, mainly patrolling the quadrant
+and escorting trade ships in case some Kohr-Ah show up.
+Personally, I wish the Alliance allocated more tasks for our fleet.
+The long range of our missiles would complement the
+devastating capabilities of Avatar ships nicely!
+
+#(NEWS_2)
+Everybody around here is talking!
+We lost a cruiser near Tauri on an expedition to Corvi.
+HQ heard the usual radio traffic and then nothing!
+No distress signal, they just vanished!
+Some say it's a Kohr-Ah ambush, but that's not their style.
+HQ is sending somebody to investigate.
+
+#(NEWS_3)
+The patrol that was sent after the missing cruiser
+found no signs of the ship.
+Some say the Kohr-Ah jumped them, but that's not
+their style.
+You see, they still haven't changed tactics.
+Full Frontal attacks, guns blazing. 
+Lots of time to send a distress signal.
+If you ask me, I think it was someone else
+like someone with a cloaking device.
+
+#(NEWS_4)
+Things have quieted down quite a bit.
+Lately we've just been sitting idle,
+waiting on the details of an assignment to Gamma Serpentis I.
+
+#(NEWS_5)
+Escorting cargo ships mostly.
+We've been running drills and training just to be ready.
+
+#(FUEL_1)
+I'm sorry, captain, but the sheer volume of your Explorer ship
+makes it pretty pointless to transfer from our limited reserves.
+
+#(FUEL_2)
+Regrettably your vessel is way too big for our fuel to be of any real help.
+
+#(FUEL_3)
+Negative Captain. By my calculations our entire fuel tank
+wouldn't be enough to move that monster ship anywhere.
+
+#(NUKES_QUESTION)
+Good one Captain! Wait, are you serious?
+
+#(serious)
+Dead serious.
+
+#(joking)
+Just horsing around! Lighten up, buddy!
+
+#(NUKES_SERIOUS)
+I'd love to help you, but the last thing I need is 
+a court martial and wind up in prison being
+some bad man's girlfriend.
+
+#(NUKES_JOKING)
+Phew! You had me going!
+Good one Captain!
+
+#(GOODBYE_CAPTAIN_1)
+Be careful out there sir.
+
+#(GOODBYE_CAPTAIN_2)
+Goodbye Captain. Careful out there. There is no teacher but the enemy. 
+No one but the enemy will tell you what the enemy is going to do.
+
+#(GOODBYE_CAPTAIN_3)
+We need you to be clever Captain. Think of solutions to problems 
+we haven't seen yet. It's the only way to survive out here.
+
+#(NEUTRAL_SPACE_HELLO_1)
+Friend human. You are hereby cordially invited
+to a bloody duel to the death via an impromptu
+exchange of nuclear missiles and SDI laser blasts.
+...Interested?
+
+#(NEUTRAL_SPACE_HELLO_2)
+Greetings, traveler. I present thee two options:
+You may cowardly back out of my sight this instant, or
+you can be a man and pick a fight with me.
+What it'll be?
+
+#(HOSTILE_SPACE_HELLO_1)
+Yo, bitch! Wanna fight?
+
+#(HOSTILE_SPACE_HELLO_2)
+Yo, yo, yo, wanna exchange a few nukes?
+
+#(yessiree)
+Yessiree! Lemme at you!
+
+#(nonono)
+No thanks, matey, some other time.
+
+#(MADE_MY_DAY)
+You really made my day, pal!
+
+#(MADE_WOOD)
+Ah. I guess some captains are made of wood these days.
