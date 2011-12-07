@@ -1,0 +1,39 @@
+#(WHAT_IS_CYPHER)
+What is the secret Spathi Cypher?
+
+#(huffy_muffy_guffy)
+Huffi Muffi Guffi?
+
+#(gods_work)
+I don't need a Cypher, I'm doing God's work.
+
+#(left_at_home)
+Dammit, I left it at home!
+
+#(CYPHER_OBSOLETE)
+I'm afraid that cypher is obsolete. You clearly have nefarious intent. 
+The safest course of action is to eliminate you.
+
+#(GOD_KNOWS)
+God would know the cypher, go ask Him or Her.
+
+#(GO_GET_CYPHER)
+You had better go back and get it. Return when you have it.
+
+#(turn_lights_on)
+Turn the lights on, you snivelling maggots!
+
+#(LIGHTS_NOW_ON)
+Ok.
+
+#(be_back_later)
+We'll be back to check on you later.
+
+#(telling_off)
+Why havent spathi kept to the agreement etc.
+
+#(ANYTHING_ELSE)
+Is there anything else you wanted, Captain?
+
+#(BYE)
+Bye.
