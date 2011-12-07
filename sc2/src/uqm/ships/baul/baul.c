@@ -927,7 +927,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 #define GAS_OFFSET (4 << RESOLUTION_FACTOR)
 #define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // JMS_TEST: Baul's gas now flies forward.
 #define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
-#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR)) // JMS_TEST: If the Gas_horz_offsets are the same, Baul gas comes from only one pipe.
+#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
 
 // Secondary weapon: Gas cloud.
 // The IGNORE_VELOCITY flag is very important: It doesn't only stop the gas from reacting to gravity,
@@ -956,8 +956,8 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	}
 	else
 	{
-		offs_x = -SINE (angle, GAS_HORZ_OFFSET_2);
-		offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
+		offs_x = -SINE (angle, GAS_HORZ_OFFSET);
+		offs_y = COSINE (angle, GAS_HORZ_OFFSET);
 	}
 		
 	MissileBlock.cx = ShipPtr->next.location.x + offs_x;
@@ -1060,8 +1060,8 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 		spray_side[ShipPtr->playerNr] = (spray_side[ShipPtr->playerNr] + 1) % 2;
 		if(spray_side[ShipPtr->playerNr])
 		{
-			offs_x = -SINE (angle, GAS_HORZ_OFFSET);
-			offs_y = COSINE (angle, GAS_HORZ_OFFSET);
+			offs_x = -SINE (angle, GAS_HORZ_OFFSET_2);
+			offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
 		}
 		else
 		{
