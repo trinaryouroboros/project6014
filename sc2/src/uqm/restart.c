@@ -176,16 +176,6 @@ DoRestart (MENU_STATE *pMS)
 	else if (PulsedInputState.menu[KEY_MENU_SELECT])
 	{
 		COUNT oldresfactor;
-		BOOLEAN packsInstalled;
-		
-		if (resolutionFactor == 0)
-			packsInstalled = TRUE;
-		else if (resolutionFactor == 1 && hires2xPackPresent)
-			packsInstalled = TRUE;
-		else if (resolutionFactor == 2 && hires4xPackPresent)
-			packsInstalled = TRUE;
-		else
-			packsInstalled = FALSE;
 		
 		switch (pMS->CurState)
 		{
@@ -206,22 +196,6 @@ DoRestart (MENU_STATE *pMS)
 					UnbatchGraphics ();
 					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
 					GLOBAL (CurrentActivity) = CHECK_ABORT;
-				}
-				else if (!packsInstalled)
-				{
-					Flash_pause(pMS->flashContext);
-					DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 35 + resolutionFactor));
-					// Could not find graphics pack - message
-					SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);	
-					SetTransitionSource (NULL);
-					BatchGraphics ();
-					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
-					ScreenTransition (3, NULL);
-					UnbatchGraphics ();
-					Flash_continue(pMS->flashContext);
-					SleepThreadUntil (TimeIn + ONE_SECOND / 30);
-					return TRUE;
 				}
 				else
 				{
@@ -247,22 +221,6 @@ DoRestart (MENU_STATE *pMS)
 					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
 					GLOBAL (CurrentActivity) = CHECK_ABORT;
 				}
-				else if (!packsInstalled)
-				{
-					Flash_pause(pMS->flashContext);
-					DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 35 + resolutionFactor));
-					// Could not find graphics pack - message
-					SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);	
-					SetTransitionSource (NULL);
-					BatchGraphics ();
-					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
-					ScreenTransition (3, NULL);
-					UnbatchGraphics ();
-					Flash_continue(pMS->flashContext);
-					SleepThreadUntil (TimeIn + ONE_SECOND / 30);
-					return TRUE;
-				}
 				else
 				{
 					LastActivity = CHECK_LOAD | CHECK_RESTART;
@@ -286,22 +244,6 @@ DoRestart (MENU_STATE *pMS)
 					UnbatchGraphics ();
 					SleepThreadUntil (FadeScreen(FadeAllToBlack, ONE_SECOND / 2));
 					GLOBAL (CurrentActivity) = CHECK_ABORT;
-				}
-				else if (!packsInstalled)
-				{
-					Flash_pause(pMS->flashContext);
-					DoPopupWindow (GAME_STRING (MAINMENU_STRING_BASE + 35 + resolutionFactor));
-					// Could not find graphics pack - message
-					SetMenuSounds (MENU_SOUND_UP | MENU_SOUND_DOWN, MENU_SOUND_SELECT);	
-					SetTransitionSource (NULL);
-					BatchGraphics ();
-					DrawRestartMenuGraphic (pMS);
-					DrawRestartMenu (pMS, pMS->CurState, pMS->CurFrame, FALSE);
-					ScreenTransition (3, NULL);
-					UnbatchGraphics ();
-					Flash_continue(pMS->flashContext);
-					SleepThreadUntil (TimeIn + ONE_SECOND / 30);
-					return TRUE;
 				}
 				else
 				{

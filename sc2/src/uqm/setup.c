@@ -74,8 +74,6 @@ FRAME FontGradFrame;
 Mutex GraphicsLock;
 STRING GameStrings;
 QUEUE disp_q;
-BOOLEAN hires2xPackPresent; // JMS
-BOOLEAN hires4xPackPresent; // JMS
 
 uio_Repository *repository;
 uio_DirHandle *rootDir;
@@ -127,7 +125,7 @@ LoadKernel (int argc, char *argv[])
 	}
 
 	/* Always try to use voice data */
-	if (!loadAddon ("voice"))
+	if (!loadAddon ("3dovoice"))
 		speechVolumeScale = 0.0f; // XXX: need better no-speech indicator
 
 	loadAddon ("voice"); /* Project 6014 voice files. */
@@ -138,14 +136,15 @@ LoadKernel (int argc, char *argv[])
 	}
 	
 	// JMS_GFX
-	if (resolutionFactor == 1 && loadAddon ("hires2x"))
+	if (resolutionFactor == 1)
 	{
-		hires2xPackPresent = TRUE;
+		loadAddon ("hires2x");
 		printf ("loading addon hires2x\n");
+		
 	}
-	else if (resolutionFactor == 2 && loadAddon ("hires4x"))
+	else if (resolutionFactor == 2)
 	{
-		hires4xPackPresent = TRUE;
+		loadAddon ("hires4x");
 		printf ("loading addon hires4x\n");
 	}
 	// END JMS_GFX

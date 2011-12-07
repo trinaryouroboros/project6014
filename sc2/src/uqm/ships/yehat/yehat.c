@@ -21,7 +21,6 @@
 #include "resinst.h"
 
 #include "libs/mathlib.h"
-#include "libs/log.h"
 
 
 #define MAX_CREW 20
@@ -311,7 +310,6 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Con
 	SIZE ShieldStatus;
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
-	BYTE in_gas_cloud = 0;
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 
@@ -349,31 +347,24 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Con
 			ShieldStatus = 1;
 		}
 	}
-	
-	if (lpEvalDesc->ObjectPtr)
-	{
-		if (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE 
-			&& lpEvalDesc->ObjectPtr->mass_points == 0
-			&& lpEvalDesc->which_turn <= 1)
-			in_gas_cloud = 1;
-	}
 
 	if (StarShipPtr->special_counter == 0)
 	{
 		StarShipPtr->ship_input_state &= ~SPECIAL;
 		if (ShieldStatus)
 		{
-			if ((ShipPtr->life_span <= NORMAL_LIFE + 1
+			if (ShipPtr->life_span <= NORMAL_LIFE + 1
 					&& (ShieldStatus > 0 || lpEvalDesc->ObjectPtr)
 					&& lpEvalDesc->which_turn <= 2
 					&& (ShieldStatus > 0
-					|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) // means IMMEDIATE_WEAPON.
+					|| (lpEvalDesc->ObjectPtr->state_flags
+							& PLAYER_SHIP) // means IMMEDIATE_WEAPON.
 					|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 2, 0))
 					&& (TFB_Random () & 3))
-					&& !(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE)) // JMS: means: Don't deflect Baul gas or spray.
 				StarShipPtr->ship_input_state |= SPECIAL;
 
-			if (lpEvalDesc->ObjectPtr && !(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))
+			if (lpEvalDesc->ObjectPtr
+					&& !(lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))
 				lpEvalDesc->ObjectPtr = 0;
 		}
 	}
@@ -381,21 +372,9 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Con
 	if ((lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX])->ObjectPtr)
 	{
 		STARSHIP *EnemyStarShipPtr;
-		SBYTE facing_difference;
 
 		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
-			
-		// JMS: When in Baul gas cloud, engage shield when Baul ship is near, firing primary and facing in Yehat's general direction.
-		// XXX: This is not 100% accurate but works usually since Yehat is most often chasing the enemy and thus facing him.
-		facing_difference = StarShipPtr->ShipFacing - ((EnemyStarShipPtr->ShipFacing + 8) % 16);
-		if (in_gas_cloud
-			&& lpEvalDesc->which_turn <= 20
-			&& (EnemyStarShipPtr->ship_input_state & WEAPON)
-			&& (facing_difference < 2 && facing_difference > -2))
-			StarShipPtr->ship_input_state |= SPECIAL;
-		
-		//log_add (log_Debug, "my_facing %d, his facing-8by16 %d, difference %d", StarShipPtr->ShipFacing, (EnemyStarShipPtr->ShipFacing + 8) % 16, facing_difference);
-		
+
 		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON))
 			lpEvalDesc->MoveState = PURSUE;
 	}

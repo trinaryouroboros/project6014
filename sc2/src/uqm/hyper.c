@@ -1237,8 +1237,9 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 
 		LockElement (hElement, &ElementPtr);
 		
+		i = EncounterPtr->transition_state;
 		// JMS: Force Orz fingers in Orz space to use other than normal npcship graphics.
-		if (((i = EncounterPtr->transition_state) || NewEncounter) 
+		if ((i || NewEncounter) 
 			&& !( (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) && (EncounterPtr->SD.Type== ORZ_SHIP) ) )
 		{
 			if (i < 0)
@@ -1249,7 +1250,8 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 			if (i == 0 || i > NUM_VORTEX_TRANSITIONS)
 				i = NUM_VORTEX_TRANSITIONS;
 
-			ElementPtr->current.image.frame = SetRelFrameIndex (ElementPtr->current.image.farray[0], -i);
+			ElementPtr->current.image.frame = SetRelFrameIndex (
+					ElementPtr->current.image.farray[0], -i);
 			ElementPtr->death_func = encounter_transition;
 		}
 		else
@@ -1258,7 +1260,8 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 			// "birth" of the finger!
 			if ( (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1) && (EncounterPtr->SD.Type== ORZ_SHIP) )
 			{
-				ElementPtr->current.image.frame = SetAbsFrameIndex (hyperstars[3],5);
+				ElementPtr->current.image.frame =
+				SetAbsFrameIndex (hyperstars[3],5);
 			}
 			else
 			{
@@ -1271,7 +1274,8 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 				}
 				else
 				{
-					ElementPtr->current.image.frame = DecFrameIndex (ElementPtr->current.image.farray[0]);
+					ElementPtr->current.image.frame =
+						DecFrameIndex (ElementPtr->current.image.farray[0]);
 				}
 			}
 		}
@@ -1458,10 +1462,7 @@ ProcessEncounter (ENCOUNTER *EncounterPtr, POINT *puniverse,
 		EncounterPtr->log_y -= delta_y;
 		EncounterPtr->SD.star_pt.x = LOGX_TO_UNIVERSE (EncounterPtr->log_x);
 		EncounterPtr->SD.star_pt.y = LOGY_TO_UNIVERSE (EncounterPtr->log_y);
-		
-		// Animate the NPC bubble in hi-res modes.
-		if (RESOLUTION_FACTOR > 0)
-			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 
 		encounter_radius = EncounterPtr->radius + (GRID_OFFSET >> 1);
 		delta_x = EncounterPtr->SD.star_pt.x - EncounterPtr->origin.x;

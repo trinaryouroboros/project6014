@@ -1983,7 +1983,7 @@ EnterPlanetOrbit (void)
 			ValidateInnerOrbits ();
 		
 		ResetSolarSys ();
-		if (TEXTURED_PLANETS && pSolarSysState->SunDesc[0].NumPlanets != 0)
+		if (TEXTURED_PLANETS)
 		{
 			if (worldIsMoon (pSolarSysState, pSolarSysState->pOrbitalDesc))
 			{

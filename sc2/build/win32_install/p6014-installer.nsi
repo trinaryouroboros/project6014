@@ -64,7 +64,7 @@ var ICONS_GROUP
 !insertmacro MUI_PAGE_FINISH
 
 ; Uninstaller pages
-!define MUI_UNCONFIRMPAGE_TEXT_TOP "This program will now uninstall The Ur-Quan Masters Project6014 entirely.  If you wish to preserve content or expansion packs, select Cancel now and back them up.  Otherwise, press Uninstall to continue."
+!define MUI_UNCONFIRMPAGE_TEXT_TOP "This program will now uninstall The Ur-Quan Masters entirely.  If you wish to preserve content or expansion packs, select Cancel now and back them up.  Otherwise, press Uninstall to continue."
 !insertmacro MUI_UNPAGE_CONFIRM
 !insertmacro MUI_UNPAGE_INSTFILES
 
@@ -235,8 +235,7 @@ AttemptDownload:
   Delete $DOWNLOADTARGET
   CreateDirectory $DOWNLOADTARGET
 ;  NSISdl::download "http://$2.dl.sourceforge.net/sourceforge/sc2/$1" "$DOWNLOADTARGET\$1"
-;  NSISdl::download "http://project6014.googlecode.com/files/$1" "$DOWNLOADTARGET\$1"
-NSISdl::download "http://www.stack.nl/~joris/p6014/$1" "$DOWNLOADTARGET\$1"
+  NSISdl::download "http://project6014.googlecode.com/files/$1" "$DOWNLOADTARGET\$1"
   Pop $2
   StrCmp $2 "success" DownloadSuccessful
   StrCmp $2 "cancel" DownloadCanceled
@@ -280,13 +279,13 @@ SectionGroup "!UQM" SECGRP01
     SectionIn 1 2 3 4 5 6 RO
     SetOutPath "$INSTDIR"
     SetOverwrite try
-    File "AUTHORS.txt"
-    File "COPYING.txt"
+    File "AUTHORS"
+    File "COPYING"
     File "libpng12-0.dll"
     File "Manual.txt"
     File "libogg-0.dll"
 ;    File "OpenAL32.dll"
-    File "README.txt"
+    File "README"
     File "SDL.dll"
     File "SDL_image.dll"
 ;    File "SDL_gfx.dll"
@@ -305,11 +304,11 @@ SectionGroup "!UQM" SECGRP01
     File "uqm-3do.cfg"
     
 ;    IfFileExists "$INSTDIR\content\packages\p6014-0.2.0-3domusic.uqm" 0 DelOldContent
-;      StrCpy $MD5SUM "ab632238d84b4df569fbf7a862a01f66"
+;      StrCpy $MD5SUM "a20cacc8e66f5ff1fdf5e1d3a3b93fd2"
 ;      md5dll::GetFileMD5 "$INSTDIR\content\packages\p6014-0.5.0-3domusic.uqm"
 ;      Pop $0
 ;      StrCmp $MD5SUM $0 0 DelOldContent
-;      CopyFiles "$INSTDIR\content\packages\p6014-0.2.0-3domusic.uqm" "$INSTDIR\content\packages\p6014-0.6.0-3domusic.uqm"
+;      CopyFiles "$INSTDIR\content\packages\p6014-0.5.0-3domusic.uqm" "$INSTDIR\content\packages\p6014-0.6.0-3domusic.uqm"
 ;DelOldContent:
 ;    Delete "$INSTDIR\content\packages\p6014-0.1.1-3domusic.uqm"
 ;    Delete "$INSTDIR\content\packages\p6014-0.1.1-voice.uqm"
@@ -322,15 +321,14 @@ SectionGroup "!UQM" SECGRP01
 
   Section "Core Data" SEC02
     SectionIn 1 2 3 4 6
-    CreateDirectory "$INSTDIR\content\packages"
-    CreateDirectory "$INSTDIR\content\addons"
+    CreateDirectory "$INSTDIR\content\packages\addons"
     SetOutPath "$INSTDIR\content"
     SetOverwrite ifnewer
-    AddSize 59973
+    AddSize 41166
     StrCpy $MANDATORY 1
-    StrCpy $MD5SUM "688416b2d71dee1aecc0eb81e3e18df1"
+    StrCpy $MD5SUM "1d49d3214dd595c87a952b93c21d32a7"
     File "content\version"
-    Push "P6014-0.2.0-prv-content.uqm"
+    Push "P6014-0.2.0-content.uqm"
     Push "$INSTDIR\content\packages"
     Call HandlePackage
 
@@ -348,11 +346,11 @@ SectionGroupEnd
 SectionGroup /e "High-resolution content" SECGRP02
   Section "Hires640x480" SEC03
     SectionIn 1 4 6
-    AddSize 134540
+    AddSize 55448
     StrCpy $MANDATORY 0
-    StrCpy $MD5SUM "a0cd61f28f65ce9a454ae3d1dc260970"
-    Push "P6014-0.2.0-prv-hires2x.uqm"
-    Push "$INSTDIR\content\addons"
+    StrCpy $MD5SUM "8a8ce8053b97b71edd071c750ca3a263"
+    Push "P6014-0.2.0-hires2x.uqm"
+    Push "$INSTDIR\content\packages\addons\hires2x\"
     Call HandlePackage
   ; Shortcuts
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -361,11 +359,11 @@ SectionGroup /e "High-resolution content" SECGRP02
 
   Section "Hires1280x960" SEC04
     SectionIn 1 4 6
-    AddSize 294596
+    AddSize 3784
     StrCpy $MANDATORY 0
-    StrCpy $MD5SUM "254c4d75818a07ce41c48496d597ecd1"
-    Push "P6014-0.2.0-prv-hires4x.uqm"
-    Push "$INSTDIR\content\addons"
+    StrCpy $MD5SUM "802ecf14ee8efbb461872893eaadfcf8"
+    Push "P6014-0.2.0-hires4x.uqm"
+    Push "$INSTDIR\content\packages\addons\hires4x\"
     Call HandlePackage
   ; Shortcuts
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -376,11 +374,11 @@ SectionGroupEnd
 SectionGroup /e "3DO Content" SECGRP03
   Section "Music" SEC05
     SectionIn 1 4 6
-    AddSize 55380
+    AddSize 55448
     StrCpy $MANDATORY 0
-    StrCpy $MD5SUM "ab632238d84b4df569fbf7a862a01f66"
-    Push "P6014-0.2.0-prv-3domusic.uqm"
-    Push "$INSTDIR\content\addons"
+    StrCpy $MD5SUM "8a8ce8053b97b71edd071c750ca3a263"
+    Push "P6014-0.2.0-3domusic.uqm"
+    Push "$INSTDIR\content\packages"
     Call HandlePackage
   ; Shortcuts
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -389,11 +387,11 @@ SectionGroup /e "3DO Content" SECGRP03
 
   Section "Voiceovers" SEC06
     SectionIn 1 4 6
-    AddSize 15642
+    AddSize 3784
     StrCpy $MANDATORY 0
-    StrCpy $MD5SUM "c5a0a80e4a7ab3d5828fc78f6bb91c5b"
-    Push "P6014-0.2.0-prv-voice.uqm"
-    Push "$INSTDIR\content\addons"
+    StrCpy $MD5SUM "802ecf14ee8efbb461872893eaadfcf8"
+    Push "P6014-0.2.0-voice.uqm"
+    Push "$INSTDIR\content\packages"
     Call HandlePackage
   ; Shortcuts
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
@@ -408,7 +406,7 @@ SectionGroupEnd
 ;    StrCpy $MANDATORY 0
 ;    StrCpy $MD5SUM "2df402b2951c0187604a81c3997fbb9d"
 ;    Push "p6014-remix-pack1.zip"
-;    Push "$INSTDIR\content\addons"
+;    Push "$INSTDIR\content\packages\addons\remix\"
 ;    Call HandlePackage
 ;    StrCpy $UQMARGS "--addon remix"
   ; Shortcuts
@@ -512,16 +510,17 @@ SectionEnd
 
 ; Section descriptions
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP01} "The core executables and content libraries for The Ur-Quan Masters Project6014.  All elements in this section must be installed for the game to be playable."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Includes the main program, all subsidiary libraries, and basic documentation for The Ur-Quan Masters Project6014. Required for play."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Graphics, sound, and the PC-edition music for The Ur-Quan Masters Project6014.  Required for play.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECICON} "Adds a desktop icon linking directly to The Ur-Quan Masters Project6014."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP02} "Optional content packages containing high-resolution art used to run the game at higher resolutions. Not required but strongly recommended !"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Optional package containing the art required for running the game at a resolution of 640x480.  This is still only a rough, glitchy draft.  But, if your screen can support 1280x960, you're much better off downloading the 1280x960 Graphics package instead of this one!  If this package is selected and not present in the packages directory, the installer will attempt to download it."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Optional package containing the art required for running the game at a resolution of 1280x960.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP01} "The core executables and content libraries for The Ur-Quan Masters.  All elements in this section must be installed for the game to be playable."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} "Includes the main program, all subsidiary libraries, and basic documentation for The Ur-Quan Masters. Required for play."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Graphics, sound, and the PC-edition music for The Ur-Quan Masters.  Required for play.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECICON} "Adds a desktop icon linking directly to The Ur-Quan Masters."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP02} "Optional content packages containing high-resolution art used to run the game at higher resolutions. Required for using the  high-resolution video modes."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Optional package containing the art required for running the game at a resolution of 640x480.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "Optional package containing the art required for running the game at a resolution of 1280x960.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
+
   !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP03} "Optional content packages containing music and sound unique to the 1993 3DO release."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Optional package which includes high quality remixed songs for The Ur-Quan Masters Project6014.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "Optional package containing new voiceovers for The Ur-Quan Masters Project6014.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Optional package which includes the remixed songs from the 3DO release.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC06} "Optional package containing new voiceovers for Project6014.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
 ;  !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP04} "Optional content packages containing the official UQM remixes by The Precursors.  Selecting any element from this group will also enable the 'remix' addon by default in any shortcuts."
 ;  !insertmacro MUI_DESCRIPTION_TEXT ${SEC07} `Ur-Quan Masters Remix Pack 1 - 'Super Melee!'  Optional add-on music package.  If this package is selected and not present in the packages directory, the installer will attempt to download it.`
 ;  !insertmacro MUI_DESCRIPTION_TEXT ${SEC08} `Ur-Quan Masters Remix Pack 2 - 'Neutral Aliens - Don't Shoot!'  Optional add-on music package.  If this package is selected and not present in the packages directory, the installer will attempt to download it.`
@@ -547,11 +546,11 @@ Section Uninstall
 ;  Delete "$INSTDIR\content\packages\addons\remix\p6014-remix-pack3.zip"
 ;  Delete "$INSTDIR\content\packages\addons\remix\p6014-remix-pack2.zip"
 ;  Delete "$INSTDIR\content\packages\addons\remix\p6014-remix-pack1.zip"
-  Delete "$INSTDIR\content\addons\P6014-0.2.0-prv-voice.uqm"
-  Delete "$INSTDIR\content\addons\P6014-0.2.0-prv-3domusic.uqm"
-  Delete "$INSTDIR\content\packages\P6014-0.2.0-prv-content.uqm"
-  Delete "$INSTDIR\content\addons\P6014-0.2.0-prv-hires2x.uqm"
-  Delete "$INSTDIR\content\addons\P6014-0.2.0-prv-hires4x.uqm"
+  Delete "$INSTDIR\content\packages\P6014-0.2.0-voice.uqm"
+  Delete "$INSTDIR\content\packages\P6014-0.2.0-3domusic.uqm"
+  Delete "$INSTDIR\content\packages\P6014-0.2.0-content.uqm"
+  Delete "$INSTDIR\content\packages\P6014-0.2.0-hires2x.uqm"
+  Delete "$INSTDIR\content\packages\P6014-0.2.0-hires4x.uqm"
   Delete "$INSTDIR\content\version"
 ;  Delete "$INSTDIR\zlib.dll"
   Delete "$INSTDIR\zlib1.dll"
@@ -563,14 +562,14 @@ Section Uninstall
 ;  Delete "$INSTDIR\SDL_gfx.dll"
   Delete "$INSTDIR\SDL_image.dll"
   Delete "$INSTDIR\SDL.dll"
-  Delete "$INSTDIR\README.txt"
+  Delete "$INSTDIR\README"
 ;  Delete "$INSTDIR\OpenAL32.dll"
   Delete "$INSTDIR\libogg-0.dll"
   Delete "$INSTDIR\Manual.txt"
 ;  Delete "$INSTDIR\libpng13.dll"
   Delete "$INSTDIR\libpng12-0.dll"
-  Delete "$INSTDIR\COPYING.txt"
-  Delete "$INSTDIR\AUTHORS.txt"
+  Delete "$INSTDIR\COPYING"
+  Delete "$INSTDIR\AUTHORS"
   Delete "$INSTDIR\stderr.txt"
 
   Delete "$SMPROGRAMS\$ICONS_GROUP\Uninstall.lnk"
@@ -590,8 +589,8 @@ Section Uninstall
   
   RMDir "$SMPROGRAMS\$ICONS_GROUP\Documentation"
   RMDir "$SMPROGRAMS\$ICONS_GROUP"
-;  RMDir "$INSTDIR\content\addons\remix"
-  RMDir "$INSTDIR\content\addons"
+;  RMDir "$INSTDIR\content\packages\addons\remix"
+  RMDir "$INSTDIR\content\packages\addons"
   RMDir "$INSTDIR\content\packages"
   RMDir "$INSTDIR\content"
   RMDir "$INSTDIR"

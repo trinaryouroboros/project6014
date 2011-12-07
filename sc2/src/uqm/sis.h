@@ -126,7 +126,7 @@ enum
 
 #define MAX_BUILT_SHIPS 6 // No more than 6 companion ships for the Explorer
 		/* Maximum number of ships escorting the SIS */
-#define MAX_LANDERS (((GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)) == 0) ? 3 : 10) // No more than 3 landers for explorer
+#define MAX_LANDERS 3 // No more than 3 landers
 
 #define SUPPORT_SHIP_PTS \
 	{3 +  0, 30 + (1 * 16)}, \

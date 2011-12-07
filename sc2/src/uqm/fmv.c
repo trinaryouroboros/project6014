@@ -160,11 +160,17 @@ Victory (void)
 void
 LurgCutScene (void)
 {
-	SleepThreadUntil (FadeScreen (FadeAllToBlack, ONE_SECOND / 2));
-
+	
+	BYTE xform_buf[1];
+	
+	xform_buf[0] = FadeAllToBlack;
+	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
+	
+	//ShowPresentation ( CaptureStringTable (LoadStringTable (LURGPRES_STRTAB)));
 	ShowPresentation (LURGPRES_STRTAB); // JMS: Changed to UQM 0.7. style.
 	
-	FadeScreen (FadeAllToBlack, 0);
+	xform_buf[0] = FadeAllToBlack;
+	SleepThreadUntil (XFormColorMap ((COLORMAPPTR)xform_buf, ONE_SECOND / 2));
 }
 
 void

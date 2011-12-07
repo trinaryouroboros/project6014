@@ -34,13 +34,13 @@
 #define THRUST_INCREMENT 6
 #define TURN_WAIT 2
 #define THRUST_WAIT 5
-#define WEAPON_WAIT 18
+#define WEAPON_WAIT 24
 #define SPECIAL_WAIT 7
 
 #define SHIP_MASS 9
 #define BAUL_OFFSET (4 << RESOLUTION_FACTOR)
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
-#define MISSILE_LIFE 10
+#define MISSILE_LIFE 6
 
 // Weapon specifics
 #define SHOCKWAVE_FRAMES 8
@@ -396,7 +396,7 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 	
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	
-	which_player = -1;//ElementPtr->playerNr; XXX
+	which_player = ElementPtr->playerNr;
 	
 	// Gas is still 'solid' when it's hit by the spray. Let's make a shockwave and kill the gas cloud. 
 	if (!(ElementPtr->state_flags & NONSOLID))
@@ -415,7 +415,7 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 			LockElement (hShockwave, &ShockwavePtr);
 			SetElementStarShip (ShockwavePtr, StarShipPtr);
 			ShockwavePtr->hit_points = ShockwavePtr->mass_points = 0;
-			ShockwavePtr->playerNr = which_player; // Can damage both ships. //XXX Don't damage self.
+			ShockwavePtr->playerNr = which_player; // Don't damage self.
 			ShockwavePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
 			ShockwavePtr->life_span = SHOCKWAVE_FRAMES;
 			SetPrimType (&(GLOBAL (DisplayArray))[ShockwavePtr->PrimIndex], STAMP_PRIM);
@@ -469,10 +469,17 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 					
 					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
 					
-					// The shockwave is delayed according to how far it is from the shockwave that set it off.
+					// Remove the lock on enemy ship and make the gas die on next turn.
+					ObjPtr->hTarget = 0;
 					ObjPtr->life_span = (10 / destruction);
+					
+					// Delayed shockwave
 					ObjPtr->death_func = generate_shockwave_2;
+					
 					ObjPtr->playerNr = which_player;
+					
+					// Generate the actual shockwave.
+					//generate_shockwave (ObjPtr, which_player);
 				}
 			}
 			else if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
@@ -495,20 +502,8 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 					
 					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != which_player)
 					{
-						STARSHIP *EnemyShipPtr;
-						
-						GetElementStarShip (ObjPtr, &EnemyShipPtr);
-						
-						// Deal damage to ships except shield-using Yehat & Utwig.
-						if (!((EnemyShipPtr->SpeciesID == YEHAT_ID || EnemyShipPtr->SpeciesID == UTWIG_ID) 
-							  && ObjPtr->life_span > NORMAL_LIFE))
-						{
-							if (!DeltaCrew (ObjPtr, -destruction))
-								ObjPtr->life_span = 0;
-						}
-						// Charge Utwig shield.
-						else if (EnemyShipPtr->SpeciesID == UTWIG_ID && ObjPtr->life_span > NORMAL_LIFE)
-							ObjPtr->life_span += destruction;
+						if (!DeltaCrew (ObjPtr, -destruction))
+							ObjPtr->life_span = 0;
 					}
 					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != which_player)
 					{
@@ -553,7 +548,7 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 			LockElement (hShockwave, &ShockwavePtr);
 			SetElementStarShip (ShockwavePtr, StarShipPtr);
 			ShockwavePtr->hit_points = ShockwavePtr->mass_points = 0;
-			ShockwavePtr->playerNr = which_player;
+			ShockwavePtr->playerNr = which_player; // Don't damage self.
 			ShockwavePtr->state_flags = APPEARING | FINITE_LIFE | NONSOLID | IGNORE_SIMILAR;
 			ShockwavePtr->life_span = SHOCKWAVE_FRAMES;
 			SetPrimType (&(GLOBAL (DisplayArray))[ShockwavePtr->PrimIndex], STAMP_PRIM);
@@ -607,10 +602,17 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 					
 					destruction = ((MAX_DESTRUCTION * (SHOCKWAVE_RANGE - square_root (dist))) / SHOCKWAVE_RANGE) + 1;
 					
-					// The shockwave is delayed according to how far it is from the shockwave that set it off.
+					// Remove the lock on enemy ship and make the gas die on next turn.
+					//ObjPtr->hTarget = 0;
 					ObjPtr->life_span = (10 / destruction);
+					
+					// Delayed shockwave
 					ObjPtr->death_func = generate_shockwave_2;
+					
 					ObjPtr->playerNr = which_player;
+					
+					// Generate the actual shockwave.
+					//generate_shockwave (ObjPtr, which_player);
 				}
 			}
 			else if (CollidingElement (ObjPtr) || ORZ_MARINE (ObjPtr))
@@ -633,20 +635,8 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 					
 					if (ObjPtr->state_flags & PLAYER_SHIP && ObjPtr->playerNr != which_player)
 					{
-						STARSHIP *EnemyShipPtr;
-						
-						GetElementStarShip (ObjPtr, &EnemyShipPtr);
-						
-						// Deal damage to ships except shield-using Yehat & Utwig.
-						if (!((EnemyShipPtr->SpeciesID == YEHAT_ID || EnemyShipPtr->SpeciesID == UTWIG_ID) 
-							  && ObjPtr->life_span > NORMAL_LIFE))
-						{
-							if (!DeltaCrew (ObjPtr, -destruction))
-								ObjPtr->life_span = 0;
-						}
-						// Charge Utwig shield.
-						else if (EnemyShipPtr->SpeciesID == UTWIG_ID && ObjPtr->life_span > NORMAL_LIFE)
-							ObjPtr->life_span += destruction;
+						if (!DeltaCrew (ObjPtr, -destruction))
+							ObjPtr->life_span = 0;
 					}
 					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != which_player)
 					{
@@ -718,18 +708,7 @@ static void
 gas_preprocess (ELEMENT *ElementPtr)
 {	
 	STARSHIP *StarShipPtr;
-	SDWORD dx, dy;
 	
-	// JMS_TEST: Baul's gas now flies forward.
-	// Slow down the gas smoothly.
-	GetCurrentVelocityComponentsSdword (&ElementPtr->velocity, &dx, &dy);
-	if (dx != 0 || dy != 0)
-	{
-		dx = (SDWORD)(dx * 9 / 10);
-		dy = (SDWORD)(dy * 9 / 10);
-		SetVelocityComponents (&ElementPtr->velocity, dx, dy);
-	}
-		
 	GetElementStarShip (ElementPtr, &StarShipPtr);
 	
 	// Move to next image frame. (Abusing thrust_wait to slow down the anim.)
@@ -757,7 +736,6 @@ gas_preprocess (ELEMENT *ElementPtr)
 		ElementPtr->state_flags |= DISAPPEARING;
 	}
 	// When the gas has collided with enemy ship, it sticks to the ship until expires.
-	// (When the gas is sticking to enemy ship, the gas's IGNORE_VELOCITY flag is disabled.)
 	else if (!(ElementPtr->state_flags & IGNORE_VELOCITY) && !(ElementPtr->state_flags & DISAPPEARING))
 	{
 		ELEMENT *eptr;
@@ -844,7 +822,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 	STARSHIP *EnemyStarShipPtr;
 	BYTE	 enemyShipIsBaul = 0;
 	
-	// This is the ship this gas cloud belongs to.
+	// The ship this gas cloud belongs to.
 	GetElementStarShip (ElementPtr0, &StarShipPtr);
 	
 	// Check if the colliding element is a ship. If it is not, check if it's a projectile from Baul ship.
@@ -872,7 +850,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 		ElementPtr0->death_func = NULL;
 		
 		// Generate the actual shockwave.
-		generate_shockwave (ElementPtr0, -1); // XXX ElementPtr1->playerNr);
+		generate_shockwave (ElementPtr0, ElementPtr1->playerNr);
 	}
 	// If colliding with enemy ship, stick to the ship.
 	else if (ElementPtr0->state_flags & IGNORE_VELOCITY
@@ -923,15 +901,15 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 
 #define GAS_HITS 100
 #define GAS_DAMAGE 0
-#define GAS_LIFE 480 // How many 1/24 secs the gas lives.
-#define GAS_OFFSET (4 << RESOLUTION_FACTOR)
-#define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // JMS_TEST: Baul's gas now flies forward.
-#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
-#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
+#define GAS_LIFE 480 // How long the gas lives.
+#define GAS_OFFSET (25 << RESOLUTION_FACTOR)
+#define GAS_INIT_SPEED 0
+#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))  // JMS_GFX
+#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR)) // JMS_GFX
 
 // Secondary weapon: Gas cloud.
 // The IGNORE_VELOCITY flag is very important: It doesn't only stop the gas from reacting to gravity,
-// (see collide.h) but it also makes it possible for the gas to stick to enemy ship (see this file's other gas functions).
+// but it also makes it possible for the gas to stick to enemy ship. (see collide.h)
 static void spawn_gas (ELEMENT *ShipPtr)
 {
 	STARSHIP *StarShipPtr;
@@ -948,7 +926,6 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	gas_side[ShipPtr->playerNr] = (gas_side[ShipPtr->playerNr] + 1) % 2;
 	angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 	
-	// Enable firing gas from different sides ("pipes") of the ship.
 	if(gas_side[ShipPtr->playerNr])
 	{
 		offs_x = -SINE (angle, GAS_HORZ_OFFSET);
@@ -956,14 +933,15 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	}
 	else
 	{
-		offs_x = -SINE (angle, GAS_HORZ_OFFSET);
-		offs_y = COSINE (angle, GAS_HORZ_OFFSET);
+		offs_x = -SINE (angle, GAS_HORZ_OFFSET_2);
+		offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
 	}
 		
+	
 	MissileBlock.cx = ShipPtr->next.location.x + offs_x;
 	MissileBlock.cy = ShipPtr->next.location.y + offs_y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.face = StarShipPtr->ShipFacing;// JMS_TEST: Baul's gas now flies forward. (this was: (StarShipPtr->ShipFacing - 8) % 16;)
+	MissileBlock.face = (StarShipPtr->ShipFacing - 8) % 16;
 	MissileBlock.index = 0;
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = GASSY_SUBSTANCE | IGNORE_VELOCITY; // Don't erase the IGNORE_VELOCITY. It's very important.
@@ -979,17 +957,8 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	if (Missile)
 	{
 		ELEMENT *GasPtr;
-		SIZE	dx, dy; // JMS_TEST: Baul's gas now flies forward.
 		
 		LockElement (Missile, &GasPtr);
-		
-		// JMS_TEST: Baul's gas now flies forward.
-		GetCurrentVelocityComponents (&ShipPtr->velocity, &dx, &dy);
-		DeltaVelocityComponents (&GasPtr->velocity, dx, dy);
-		GasPtr->current.location.x -= VELOCITY_TO_WORLD (dx);
-		GasPtr->current.location.y -= VELOCITY_TO_WORLD (dy);
-		// JMS_TEST ends
-		
 		GasPtr->collision_func = gas_collision;
 		GasPtr->death_func = gas_death;
 		GasPtr->thrust_wait = 1;
@@ -1003,29 +972,15 @@ static void spawn_gas (ELEMENT *ShipPtr)
 
 #define LAST_SPRAY_INDEX 5
 
-// The spray preprocess function animates spray.
+// The preprocess function animates spray.
 static void
 spray_preprocess (ELEMENT *ElementPtr)
 {
-	// Abusing thrust_wait to slow down the anim.
-	if (ElementPtr->thrust_wait > 0)
-		--ElementPtr->thrust_wait;
-	// Move to next frame.
+	// Move to next image frame.
+	if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX)
+		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 	else
-	{
-		// Abusing thrust_wait to slow down the anim. (Should help performance a bit.)
-		ElementPtr->thrust_wait = 1;
-		
-		// This makes the gas animate even if the ships are not moving and the screen is stationary.
-		ElementPtr->state_flags |= CHANGING;
-		
-		if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_SPRAY_INDEX)
-			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
-		// This is a safeguard to prevent going over frame boundaries if someone messes up the 
-		// MISSILE_LIFE <-> LAST_SPRAY_INDEX <-> thrust_wait correspondence.
-		else
-			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
-	}
+		ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
 }
 
 // This makes the spray not collide with anything (except gas clouds: gas_collision handles them.)
@@ -1038,8 +993,8 @@ spray_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT 
 	(void) pPt1;  /* Satisfying compiler (unused parameter) */
 }
 
-// Primary weapon. It must deal at least 1 damage, otherwise it won't interact with other 
-// elements, not even gas. However, we can prevent this damage with a separate collision function.
+// Primary weapon. The weapon must deal at least 1 damage, otherwise it won't interact with
+// other elements. However, we can prevent this damage with a separate collision function.
 static COUNT
 initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 {
@@ -1060,8 +1015,8 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 		spray_side[ShipPtr->playerNr] = (spray_side[ShipPtr->playerNr] + 1) % 2;
 		if(spray_side[ShipPtr->playerNr])
 		{
-			offs_x = -SINE (angle, GAS_HORZ_OFFSET_2);
-			offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
+			offs_x = -SINE (angle, GAS_HORZ_OFFSET);
+			offs_y = COSINE (angle, GAS_HORZ_OFFSET);
 		}
 		else
 		{
@@ -1091,7 +1046,6 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 			
 			LockElement (SprayArray[i], &SprayPtr);
 			SprayPtr->collision_func = spray_collision;
-			SprayPtr->thrust_wait = 1;
 			UnlockElement (SprayArray[i]);
 		}
 	}
@@ -1100,8 +1054,6 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 }
 
 #define GAS_BATCH_SIZE 1
-// Gas spawning happens in postprocess, because  the game seems to like to put specials on the playing field
-// in postprocess (I guess it has something to do with keeping the queue of elements in the right order.)
 static void
 baul_postprocess (ELEMENT *ElementPtr)
 {

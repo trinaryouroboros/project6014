@@ -142,9 +142,7 @@ Certainly, Captain.
 We are interested in purchasing certain items, specifically
 biological data on alien life forms
 and the coordinates of certain strange worlds whose radiant energies defy all scanners
-producing a rainbow-like image, like the first planet of Zeta Sextantis.
-In addition, we are always interested in hard facts about
-certain civilizations long gone... if you know what I mean, Captain.
+producing a rainbow-like image.
 In exchange, we have many interesting and valuable commodities, such as
 fuel compatible with your starship's HyperDrive thrusters,
 technological specifications, allowing you to build new devices for your ship
@@ -285,7 +283,7 @@ Might I tempt you with high quality imagery of the Crystal Caverns of Tzzrak-Tzo
 No.
 
 #(HELLO_AND_DOWN_TO_BUSINESS1)
-Greetings, Captain.
+Greetings Captain.
 
 #(HELLO_AND_DOWN_TO_BUSINESS2)	melno013.ogg
 How nice to see you again, Captain.
@@ -294,7 +292,7 @@ How nice to see you again, Captain.
 I had itchy pods this morning, Captain, and here you are!
 
 #(HELLO_AND_DOWN_TO_BUSINESS4)
-It's your lucky day, Captain.
+It's your lucky day Captain.
 My crew and I have just finished reciting
 the traditional Melnorme hymn of the Mutually Beneficial Transaction.
 I'm sure you'll find this encounter most rewarding.
@@ -459,21 +457,15 @@ The
 #(sell_rainbow_locations)
 I wish to sell you Rainbow world locations.
 
-#(SOLD_RAINBOW_LOCATIONS1)
+#(SOLD_RAINBOW_LOCATIONS1)	melno075.ogg
 Your ship's log indicates that you discovered the whereabouts of 
 
-#(SOLD_RAINBOW_LOCATIONS2)
+#(SOLD_RAINBOW_LOCATIONS2)	melno205.ogg
  of the Rainbow worlds which so fascinate us.
 In exchange, we will give you 
 
-#(SOLD_RAINBOW_LOCATIONS3)
+#(SOLD_RAINBOW_LOCATIONS3)	melno204.ogg
  Credits.
-
-#(SOLD_RAINBOW_LOCATIONS_FAIL)
-...Wait, Captain. Upon closer inspection of your log it seems
-there is the Zeta Sextantis rainbow world which is already well known to us.
-We are sure you were not trying to cheat us in a most despicable way
-but nevertheless we must ask you to reimburse 500 credits of the sum we promised you.
 
 #(sell_precursor_find)
 We found a Precursor artifact. Do you want it?

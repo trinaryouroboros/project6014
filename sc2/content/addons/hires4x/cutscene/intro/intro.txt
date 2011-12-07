@@ -158,7 +158,7 @@ WAIT 500
 
 #(Text fade-in)
 TFI Four years ago, you
-roamed the galaxy...
+travelled the galaxy...
 #(Wait)
 WAIT 3000
 #(Text fade-out)
@@ -394,7 +394,7 @@ DRAW 6
 FTC 700
 
 #(Text fade-in)
-TFI After many years of roaming the
+TFI After many years of travelling the
 galaxy fighting the Ur-Quan...
 #(Wait)
 WAIT 3000

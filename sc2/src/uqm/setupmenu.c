@@ -77,13 +77,13 @@ static void rebind_control (WIDGET_CONTROLENTRY *widget);
 static void clear_control (WIDGET_CONTROLENTRY *widget);
 
 #ifdef HAVE_OPENGL
-#define RES_OPTS 3 // JMS_GFX was 4
+#define RES_OPTS 7 // JMS_GFX was 4
 #else
-#define RES_OPTS 3 // JMS_GFX was 2
+#define RES_OPTS 5 // JMS_GFX was 2
 #endif
 
 #define MENU_COUNT          8
-#define CHOICE_COUNT       23
+#define CHOICE_COUNT       22
 #define SLIDER_COUNT        3
 #define BUTTON_COUNT       10
 #define LABEL_COUNT         4
@@ -106,7 +106,7 @@ typedef int (*HANDLER)(WIDGET *, int);
 static int choice_widths[CHOICE_COUNT] = {
 	3, 2, 3, 2, 2, 2, 2, 2, 2, 2, 
 	2, 2, 2, 2, 2, 3, 3, 2,	3, 3, 
-	3, 2, 3 };
+	3, 2 };
 
 static HANDLER button_handlers[BUTTON_COUNT] = {
 	quit_main_menu, quit_sub_menu, do_graphics, do_engine,
@@ -114,7 +114,7 @@ static HANDLER button_handlers[BUTTON_COUNT] = {
 	do_keyconfig };
 
 static int menu_sizes[MENU_COUNT] = {
-	7, 6, 7, 9, 2, 5,
+	7, 5, 7, 9, 2, 5,
 #ifdef HAVE_OPENGL
 	5,
 #else
@@ -138,7 +138,6 @@ static WIDGET *main_widgets[] = {
 
 static WIDGET *graphics_widgets[] = {
 	(WIDGET *)(&choices[0]),
-	(WIDGET *)(&choices[22]), // JMS: lores blowup
 	(WIDGET *)(&choices[10]),
 	(WIDGET *)(&choices[2]),
 	(WIDGET *)(&choices[3]),
@@ -368,14 +367,14 @@ SetDefaults (void)
 	GLOBALOPTS opts;
 	
 	GetGlobalOptions (&opts);
-	/*if (opts.res == OPTVAL_CUSTOM)
+	if (opts.res == OPTVAL_CUSTOM)
 	{
 		choices[0].numopts = RES_OPTS + 1;
 	}
 	else
-	{*/
+	{
 		choices[0].numopts = RES_OPTS;
-	//}
+	}
 	choices[0].selected = opts.res;
 	choices[1].selected = opts.driver;
 	choices[2].selected = opts.scaler;
@@ -398,7 +397,6 @@ SetDefaults (void)
 	choices[19].selected = opts.player2;
 	choices[20].selected = 0;
 	choices[21].selected = opts.musicremix;
-	choices[22].selected = opts.loresBlowup; // JMS
 
 	sliders[0].value = opts.musicvol;
 	sliders[1].value = opts.sfxvol;
@@ -430,7 +428,6 @@ PropagateResults (void)
 	opts.player1 = choices[18].selected;
 	opts.player2 = choices[19].selected;
 	opts.musicremix = choices[21].selected;
-	opts.loresBlowup = choices[22].selected; // JMS
 
 	opts.musicvol = sliders[0].value;
 	opts.sfxvol = sliders[1].value;
@@ -654,7 +651,7 @@ init_widgets (void)
 	if (SplitString (GetStringAddress (SetAbsStringTableIndex (SetupTab, 1)), '\n', 100, buffer, bank) != MENU_COUNT)
 	{
 		/* TODO: Ignore extras instead of dying. */
-		log_add (log_Fatal, "PANIC: Incorrect number of Menu Subtitles:");
+		log_add (log_Fatal, "PANIC: Incorrect number of Menu Subtitles");
 		exit (EXIT_FAILURE);
 	}
 
@@ -680,7 +677,7 @@ init_widgets (void)
 	/* Options */
 	if (SplitString (GetStringAddress (SetAbsStringTableIndex (SetupTab, 2)), '\n', 100, buffer, bank) != CHOICE_COUNT)
 	{
-		log_add (log_Fatal, "PANIC: Incorrect number of Choice Options: %d. Should be %d", CHOICE_COUNT, SplitString (GetStringAddress (SetAbsStringTableIndex (SetupTab, 2)), '\n', 100, buffer, bank));
+		log_add (log_Fatal, "PANIC: Incorrect number of Choice Options");
 		exit (EXIT_FAILURE);
 	}
 
@@ -1136,10 +1133,8 @@ GetGlobalOptions (GLOBALOPTS *opts)
 		opts->aquality = OPTVAL_MEDIUM;
 	}
 
-	
 	/* Work out resolution.  On the way, try to guess a good default
 	 * for config.alwaysgl, then overwrite it if it was set previously. */
-	opts->loresBlowup = res_GetInteger ("config.loresBlowupScale");
 	opts->driver = OPTVAL_PURE_IF_POSSIBLE;
 	switch (ScreenWidthActual)
 	{
@@ -1150,43 +1145,72 @@ GetGlobalOptions (GLOBALOPTS *opts)
 		}
 		else
 		{
-			opts->res = OPTVAL_320_240;
-			opts->driver = OPTVAL_ALWAYS_GL;
+			if (ScreenHeightActual != 240)
+			{
+				opts->res = OPTVAL_CUSTOM;
+			}
+			else
+			{
+				opts->res = OPTVAL_320_240;
+				opts->driver = OPTVAL_ALWAYS_GL;
+			}
 		}
 		break;
 	case 640:
 		if (resolutionFactor == 1) // JMS_GFX
 		{
 			opts->res = OPTVAL_REAL_640_480;
-			opts->loresBlowup = NO_BLOWUP;
 		}
 		else if (GraphicsDriver == TFB_GFXDRIVER_SDL_PURE)
 		{
-			opts->res = OPTVAL_320_240;
-			opts->loresBlowup = OPTVAL_320_TO_640;
+			opts->res = OPTVAL_640_480;
 		}
 		else
 		{
-			opts->res = OPTVAL_320_240;
-			opts->loresBlowup = OPTVAL_320_TO_640;
-			opts->driver = OPTVAL_ALWAYS_GL;
+			if (ScreenHeightActual != 480)
+			{
+				opts->res = OPTVAL_CUSTOM;
+			}
+			else
+			{
+				opts->res = OPTVAL_640_480;
+				opts->driver = OPTVAL_ALWAYS_GL;
+			}
 		}
 		break;
 	case 800:
-		opts->res = OPTVAL_320_240;
-		opts->loresBlowup = OPTVAL_320_TO_800;
+		if (ScreenHeightActual != 600)
+		{
+			opts->res = OPTVAL_CUSTOM;
+		}
+		else
+		{
+			opts->res = OPTVAL_800_600;
+		}
 		break;
 	case 1024:
-		opts->res = OPTVAL_320_240;
-		opts->loresBlowup = OPTVAL_320_TO_1024;	
+		if (ScreenHeightActual != 768)
+		{
+			opts->res = OPTVAL_CUSTOM;
+		}
+		else
+		{
+			opts->res = OPTVAL_1024_768;
+		}		
 		break;
-	case 1280:							 // DC_GFX
-		opts->res = OPTVAL_REAL_1280_960;// DC_GFX
-		opts->loresBlowup = NO_BLOWUP;	 // DC_GFX
-		break;							 // DC_GFX
+	case 1280:								 // DC_GFX
+		if (ScreenHeightActual != 960)		 // DC_GFX
+		{									 // DC_GFX
+			opts->res = OPTVAL_CUSTOM;		 // DC_GFX
+		}									 // DC_GFX
+		else								 // DC_GFX
+		{									 // DC_GFX
+			opts->res = OPTVAL_REAL_1280_960;// DC_GFX
+		}									 // DC_GFX
+		break;								 // DC_GFX
+		
 	default:
-		opts->res = OPTVAL_320_240;
-		opts->loresBlowup = NO_BLOWUP;
+		opts->res = OPTVAL_CUSTOM;
 		break;
 	}
 
@@ -1208,6 +1232,7 @@ GetGlobalOptions (GLOBALOPTS *opts)
 	opts->musicvol = (((int)(musicVolumeScale * 100.0f) + 2) / 5) * 5;
 	opts->sfxvol = (((int)(sfxVolumeScale * 100.0f) + 2) / 5) * 5;
 	opts->speechvol = (((int)(speechVolumeScale * 100.0f) + 2) / 5) * 5;
+	
 }
 
 void
@@ -1233,6 +1258,28 @@ SetGlobalOptions (GLOBALOPTS *opts)
 #endif
 		resolutionFactor = 0;				// JMS_GFX
 		break;
+	case OPTVAL_640_480:
+		NewWidth = 640;
+		NewHeight = 480;
+#ifdef HAVE_OPENGL	       
+		NewDriver = (opts->driver == OPTVAL_ALWAYS_GL ? TFB_GFXDRIVER_SDL_OPENGL : TFB_GFXDRIVER_SDL_PURE);
+#else
+		NewDriver = TFB_GFXDRIVER_SDL_PURE;
+#endif
+		resolutionFactor = 0;				// JMS_GFX
+		break;
+	case OPTVAL_800_600:
+		NewWidth = 800;
+		NewHeight = 600;
+		NewDriver = TFB_GFXDRIVER_SDL_OPENGL;
+		resolutionFactor = 0;				// JMS_GFX
+		break;
+	case OPTVAL_1024_768:
+		NewWidth = 1024;
+		NewHeight = 768;
+		NewDriver = TFB_GFXDRIVER_SDL_OPENGL;
+		resolutionFactor = 0;				// JMS_GFX
+		break;
 	case OPTVAL_REAL_640_480:				// JMS_GFX
 		NewWidth = 640;						// JMS_GFX
 		NewHeight = 480;					// JMS_GFX
@@ -1245,47 +1292,13 @@ SetGlobalOptions (GLOBALOPTS *opts)
 		NewDriver = TFB_GFXDRIVER_SDL_PURE; // JMS_GFX
 		resolutionFactor = 2;				// JMS_GFX
 		break;								// JMS_GFX
+		
 	default:
 		/* Don't mess with the custom value */
 		resolutionFactor = 0; // JMS_GFX
 		break;
 	}
-	
-	if (NewWidth == 320 && NewHeight == 240)
-	{
-		switch (opts->loresBlowup) {
-			case NO_BLOWUP:
-				// JMS: Default value: Don't do anything.
-				break;
-			case OPTVAL_320_TO_640:					// JMS_GFX
-				NewWidth = 640;						// JMS_GFX
-				NewHeight = 480;					// JMS_GFX
-#ifdef HAVE_OPENGL	       
-				NewDriver = (opts->driver == OPTVAL_ALWAYS_GL ? TFB_GFXDRIVER_SDL_OPENGL : TFB_GFXDRIVER_SDL_PURE);
-#else
-				NewDriver = TFB_GFXDRIVER_SDL_PURE;
-#endif
-				resolutionFactor = 0;				// JMS_GFX
-				break;
-			case OPTVAL_320_TO_800:					// JMS_GFX
-				NewWidth = 800;						// JMS_GFX
-				NewHeight = 600;					// JMS_GFX
-				NewDriver = TFB_GFXDRIVER_SDL_OPENGL;// JMS_GFX
-				resolutionFactor = 0;				// JMS_GFX
-				break;								// JMS_GFX
-			case OPTVAL_320_TO_1024:				// JMS_GFX
-				NewWidth = 1024;					// JMS_GFX
-				NewHeight = 768;					// JMS_GFX
-				NewDriver = TFB_GFXDRIVER_SDL_OPENGL;// JMS_GFX
-				resolutionFactor = 0;				// JMS_GFX
-				break;								// JMS_GFX
-			default:
-				break;
-		}
-	}
-	else
-		opts->loresBlowup = NO_BLOWUP;
-	
+
 	if (oldResFactor != resolutionFactor)
 		resFactorWasChanged = TRUE;
 	
@@ -1296,7 +1309,6 @@ SetGlobalOptions (GLOBALOPTS *opts)
 	
 	// JMS_GFX
 	res_PutInteger ("config.resolutionfactor", resolutionFactor);
-	res_PutInteger ("config.loresBlowupScale", opts->loresBlowup);
 
 	switch (opts->scaler) {
 	case OPTVAL_BILINEAR_SCALE:

@@ -41,7 +41,6 @@ extern int optSmoothScroll;
 extern int optMeleeScale;
 
 // JMS_GFX
-extern unsigned int loresBlowupScale;
 extern unsigned int resolutionFactor;
 extern BOOLEAN resFactorWasChanged;
 

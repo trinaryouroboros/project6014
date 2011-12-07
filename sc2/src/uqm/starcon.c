@@ -200,11 +200,9 @@ while (--ac > 0)
 			log_add (log_Fatal, "Could not set player input.");
 			explode ();  // Does not return;
 		}
-		
 		InitGameStructures ();
 		InitGameClock ();
 		AddInitialGameEvents();
-
 		do
 		{
 #ifdef DEBUG
