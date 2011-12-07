@@ -1,4 +1,6 @@
-#summary Wiki hierarchical table of contents for the sidebart
+#summary Wiki hierarchical table of contents for the sidebar
+
+= Wiki Contents =
 
   * Game development
     * DesignNotes
