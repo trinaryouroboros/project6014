@@ -501,7 +501,7 @@ black_urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 {
 	EVALUATE_DESC *lpEvalDesc;
 	STARSHIP *StarShipPtr;
-
+	
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (lpEvalDesc->ObjectPtr
 			&& lpEvalDesc->MoveState == ENTICE
@@ -509,8 +509,7 @@ black_urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			&& lpEvalDesc->which_turn <= 8)
 		lpEvalDesc->MoveState = PURSUE;
 
-	ship_intelligence (ShipPtr,
-			ObjectsOfConcern, ConcernCounter);
+	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	StarShipPtr->ship_input_state &= ~SPECIAL;
