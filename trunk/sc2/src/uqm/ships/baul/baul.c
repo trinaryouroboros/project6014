@@ -499,9 +499,16 @@ generate_shockwave_2 (ELEMENT *ElementPtr)
 						
 						GetElementStarShip (ObjPtr, &EnemyShipPtr);
 						
-						if (!(EnemyShipPtr->SpeciesID == (YEHAT_ID | UTWIG_ID) && EnemyShipPtr->ship_input_state | SPECIAL))
+						// Deal damage to ships except shield-using Yehat & Utwig.
+						if (!((EnemyShipPtr->SpeciesID == YEHAT_ID || EnemyShipPtr->SpeciesID == UTWIG_ID) 
+							  && ObjPtr->life_span > NORMAL_LIFE))
+						{
 							if (!DeltaCrew (ObjPtr, -destruction))
 								ObjPtr->life_span = 0;
+						}
+						// Charge Utwig shield.
+						else if (EnemyShipPtr->SpeciesID == UTWIG_ID && ObjPtr->life_span > NORMAL_LIFE)
+							ObjPtr->life_span += destruction;
 					}
 					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != which_player)
 					{
@@ -630,10 +637,16 @@ generate_shockwave (ELEMENT *ElementPtr, BYTE which_player)
 						
 						GetElementStarShip (ObjPtr, &EnemyShipPtr);
 						
+						// Deal damage to ships except shield-using Yehat & Utwig.
 						if (!((EnemyShipPtr->SpeciesID == YEHAT_ID || EnemyShipPtr->SpeciesID == UTWIG_ID) 
 							  && ObjPtr->life_span > NORMAL_LIFE))
+						{
 							if (!DeltaCrew (ObjPtr, -destruction))
 								ObjPtr->life_span = 0;
+						}
+						// Charge Utwig shield.
+						else if (EnemyShipPtr->SpeciesID == UTWIG_ID && ObjPtr->life_span > NORMAL_LIFE)
+							ObjPtr->life_span += destruction;
 					}
 					else if (!GRAVITY_MASS (ObjPtr->mass_points) && ObjPtr->playerNr != which_player)
 					{
