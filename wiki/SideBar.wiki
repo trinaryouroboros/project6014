@@ -1,7 +1,7 @@
 #labels Wiki
-#summary Wiki hierarchical table of contents for the sidebar
+#summary Hierarchical table of contents for the sidebar
 
-[http://code.google.com/p/project6014/w/list list of all Wiki pages]
+[http://code.google.com/p/project6014/w/list List of all Wiki pages]
 
 *Wiki Contents*
 
