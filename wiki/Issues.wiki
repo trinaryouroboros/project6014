@@ -1,4 +1,0 @@
-#labels Wiki
-= Spoiler warning! =
-
-[http://code.google.com/p/project6014/issues/list Issues]
