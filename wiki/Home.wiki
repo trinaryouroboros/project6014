@@ -9,18 +9,24 @@ This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from 
 
 = Contents =
 
-[Downloads] - Downloadable files for the latest release
+  * [Downloads] - Downloadable files for the latest release
 
 == Game development ==
 
-[DesignNotes] - current game design (plot, etc.)
+  * [DesignNotes] - current game design (plot, etc.)
 
-=== Older material ===
+  * Implementation details - useful notes for the team
+    * [ShipSizes]
+    * [ShipCreation]
+    * [AddingNewRaces]
 
-[ChmmrExplorer] - early documentation on the first new ship
+  * Older material
+    * [ChmmrExplorer] - early documentation on the first new ship
 
 == Administration ==
 
-Project [Rules]
-
-[PortingChanges] from UQM
+  * Project [Rules]
+  * [PortingChanges] from UQM
+  * [Gadgets] - interesting stats about the project
+  * Team - info about team members
+    * [TheMisterCat]
