@@ -5,11 +5,17 @@ The Wiki is for general development-related documentation for the game.
 
 This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from here.  Those that aren't can be found via the *[http://code.google.com/p/project6014/w/list list of all Wiki pages]*.
 
+*Spoiler warning!* There is heavy plot discussion in here.
+
 = Contents =
+
+[Downloads] - Downloadable files for the latest release
 
 == Game development ==
 
 [DesignNotes] - current game design (plot, etc.)
+
+=== Older material ===
 
 [ChmmrExplorer] - early documentation on the first new ship
 
