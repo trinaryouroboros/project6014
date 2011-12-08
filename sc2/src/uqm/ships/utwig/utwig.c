@@ -402,7 +402,7 @@ utwig_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				|| (lpEvalDesc->ObjectPtr->state_flags & PLAYER_SHIP) // means IMMEDIATE_WEAPON.
 				|| PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 2, 0))
 				&& (TFB_Random () & 3))
-				&& !(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE)) // JMS: means: Don't deflect Baul gas or spray.
+				&& (!lpEvalDesc->ObjectPtr || !(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE))) // JMS: means: Don't deflect Baul gas or spray.
 			{
 				StarShipPtr->ship_input_state |= SPECIAL;
 				StarShipPtr->ship_input_state &= ~WEAPON;
