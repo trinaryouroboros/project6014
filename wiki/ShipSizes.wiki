@@ -1,4 +1,4 @@
-#labels Phase-Implementation
+#labels Implementation
 # Original, idealized and actual dimensions for the in-game 4x models.
 
 = Introduction =

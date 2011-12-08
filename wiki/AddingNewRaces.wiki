@@ -1,5 +1,5 @@
 #summary How to add a new race to the game's source code.
-#labels Phase-Implementation
+#labels Implementation
 
 = Introduction =
 

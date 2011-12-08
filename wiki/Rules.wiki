@@ -1,4 +1,4 @@
-#labels Wiki
+#labels Admin
 = Introduction =
 
 This page lists some project development rules.
