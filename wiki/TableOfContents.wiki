@@ -1,7 +1,8 @@
 #summary Wiki hierarchical table of contents for the sidebar
 
-= Wiki Contents =
+*Wiki Contents*
 
+  * [Downloads]
   * Game development
     * DesignNotes
       * [HowItStarts]
