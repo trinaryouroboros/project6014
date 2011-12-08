@@ -27,6 +27,6 @@ This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from 
 
   * Project [Rules]
   * [PortingChanges] from UQM
-  * [Gadgets] - interesting stats about the project
+  * [Statistics] - interesting stats about the project
   * Team - info about team members
     * [TheMisterCat]

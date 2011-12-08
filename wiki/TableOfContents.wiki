@@ -72,7 +72,7 @@
   * Administration
     * Project [Rules]
     * PortingChanges from UQM
-    * [Gadgets]
+    * [Statistics]
     * Team
       * [TheMisterCat]
       * add others here!
