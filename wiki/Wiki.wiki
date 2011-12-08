@@ -1,6 +1,0 @@
-#labels Wiki
-= Spoiler warning! =
-
-*Heed this warning message!  This game project is heavily story-driven and reading the development docs may spoil it for you.*
-
-Discard warning and continue to [Home]
