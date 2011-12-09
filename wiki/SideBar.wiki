@@ -5,7 +5,11 @@
 
 *Wiki Contents*
 
-  * [Downloads]
+  * User information
+    * [Downloads]
+    * Forums
+      * [http://forum.uqm.stack.nl/index.php?board=1.0 The Ur-Quan Masters Forum]
+      * [http://star-control.com/community/viewforum.php?f=9 The Pages of Now and Forever]
   * Game development
     * DesignNotes
       * [HowItStarts]
