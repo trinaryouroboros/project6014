@@ -353,14 +353,15 @@ BuildGroups (void)
 			if (encounter_radius == INFINITE_RADIUS)
 				encounter_radius = (MAX_X_UNIVERSE + 1) << 1;
 			else
-				encounter_radius =
-						(encounter_radius * SPHERE_RADIUS_INCREMENT) >> 1;
+				encounter_radius = (encounter_radius * SPHERE_RADIUS_INCREMENT) >> 1;
+			
 			dx = universe.x - FleetPtr->loc.x;
 			if (dx < 0)
 				dx = -dx;
 			dy = universe.y - FleetPtr->loc.y;
 			if (dy < 0)
 				dy = -dy;
+			
 			if ((COUNT)dx < encounter_radius
 					&& (COUNT)dy < encounter_radius
 					&& (d_squared = (DWORD)dx * dx + (DWORD)dy * dy) <
@@ -384,14 +385,14 @@ BuildGroups (void)
 
 				rand_val = TFB_Random ();
 				if ((int)(LOWORD (rand_val) % 100) < (int)i
-						&& (BestPercent == 0
-						|| (HIWORD (rand_val) % (i + BestPercent)) < i))
+						&& (BestPercent == 0 || (HIWORD (rand_val) % (i + BestPercent)) < i))
 				{
-					if (FleetPtr->actual_strength == INFINITE_RADIUS)
-					{	// The prevailing encounter chance is hereby limitted
-						// to 4% for races with infinite SoI (currently, it
-						// is only the Slylandro Probes)
-						i = 4;
+					if ((FleetPtr->SpeciesID == SLYLANDRO_KOHRAH_ID || FleetPtr->SpeciesID == KOHR_AH_ID)
+						&& CurStarDescPtr->Index != 0)
+					{	
+						// Races with INFINITE_RADIUS (Sly-kohr, Kohr-Ah) don't appear
+						// at special star systems, e.g. homeworlds.
+						i = 0;
 					}
 
 					BestPercent = i;

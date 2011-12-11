@@ -679,7 +679,7 @@ enum
 		 0, /* URQUAN_SHIP */ \
 		 0, /* ZOQFOTPIK_SHIP */ \
 		30, /* SYREEN_SHIP */ \
-		15, /* BLACK_URQUAN_SHIP */ \
+		12, /* BLACK_URQUAN_SHIP */ \
 	    20, /* JMS: ANDROSYNTH_SHIP */ \
 		 0, /* JMS: CHENJESU_SHIP */ \
 		20, /* JMS: MMRNMHRM_SHIP */ \
@@ -687,7 +687,7 @@ enum
 		17, /* JMS: FOONFOON_SHIP */ \
 		45, /* JMS: LURG_SHIP */ \
 		 0, /* JMS: ISD_SHIP */ \
-		15, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
+		12, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		60, /* YEHAT_REBEL_SHIP */ \
 		 0, /* JMS: TRANSPORT_SHIP */
 
@@ -713,7 +713,7 @@ enum
 		 0, /* URQUAN_SHIP */ \
 		 0, /* ZOQFOTPIK_SHIP */ \
 	    20, /* SYREEN_SHIP */ \
-		25, /* BLACK_URQUAN_SHIP */ \
+		12, /* BLACK_URQUAN_SHIP */ \
 		50, /* JMS: ANDROSYNTH_SHIP */ \
 		 0, /* JMS: CHENJESU_SHIP */ \
 		30, /* JMS: MMRNMHRM_SHIP */ \
@@ -721,7 +721,7 @@ enum
 		25, /* JMS: FOONFOON_SHIP */ \
 		45, /* JMS: LURG_SHIP */ \
 		 0, /* JMS: ISD_SHIP */ \
-		25, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
+		12, /* JMS: SLYLANDRO_KOHRAH_SHIP */ \
 		40, /* YEHAT_REBEL_SHIP */ \
 		 0, /* TRANSPORT_SHIP */ \
 
