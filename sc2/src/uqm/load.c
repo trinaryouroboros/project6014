@@ -40,6 +40,13 @@
 
 //#define DEBUG_LOAD
 
+//log_add (log_Debug, "Autopilot - X:%d, Y:%d", GSPtr->autopilot.x, GSPtr->autopilot.y);
+//log_add (log_Debug, "IP location - X:%d, Y:%d", GSPtr->ip_location.x, GSPtr->ip_location.y);
+//log_add (log_Debug, "Sis Ship Log - X:%d, Y:%d", SSPtr->log_x, SSPtr->log_y);
+//log_add (log_Debug, "Fleet%d: Loc		- X:%d, Y:%d", num_links, FleetPtr->loc.x, FleetPtr->loc.y);
+//log_add (log_Debug, "Fleet%d: Known_loc - X:%d, Y:%d", num_links, FleetPtr->known_loc.x, FleetPtr->known_loc.y);
+//log_add (log_Debug, "Fleet%d: Dest Loc	- X:%d, Y:%d", num_links, FleetPtr->dest_loc.x, FleetPtr->dest_loc.y);
+
 ACTIVITY NextActivity;
 
 // XXX: these should handle endian conversions later
@@ -257,7 +264,7 @@ LoadRaceQueue (DECODE_REF fh, QUEUE *pQueue)
 
 		hStarShip = GetStarShipFromIndex (pQueue, Index);
 		FleetPtr = LockFleetInfo (pQueue, hStarShip);
-
+		
 		// Read FLEET_INFO elements
 		cread_16 (fh, &FleetPtr->allied_state);
 		cread_8  (fh, &FleetPtr->days_left);
@@ -376,6 +383,10 @@ LoadEncounter (ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	// Load the stuff after the BRIEF_SHIP_INFO array
 	cread_32s (fh, &EncounterPtr->log_x);
 	cread_32s (fh, &EncounterPtr->log_y);
+	
+	// JMS: Let's make savegames work even between different resolution modes.
+	EncounterPtr->log_x <<= RESOLUTION_FACTOR;
+	EncounterPtr->log_y <<= RESOLUTION_FACTOR;
 }
 
 static void
@@ -508,7 +519,12 @@ LoadSisState (SIS_STATE *SSPtr, void *fp)
 		)
 		return FALSE;
 	else
+	{
+		// JMS: Let's make savegames work even between different resolution modes.
+		SSPtr->log_x <<= RESOLUTION_FACTOR;
+		SSPtr->log_y <<= RESOLUTION_FACTOR;
 		return TRUE;
+	}
 }
 
 static BOOLEAN

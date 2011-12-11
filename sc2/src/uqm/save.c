@@ -312,8 +312,9 @@ SaveEncounter (const ENCOUNTER *EncounterPtr, DECODE_REF fh)
 	}
 	
 	// Save the stuff after the BRIEF_SHIP_INFO array
-	cwrite_32  (fh, EncounterPtr->log_x);
-	cwrite_32  (fh, EncounterPtr->log_y);
+	// JMS: Let's make savegames work even between different resolution modes.
+	cwrite_32  (fh, ((EncounterPtr->log_x) >> RESOLUTION_FACTOR));
+	cwrite_32  (fh, ((EncounterPtr->log_y) >> RESOLUTION_FACTOR));
 }
 
 static void
@@ -421,8 +422,8 @@ static BOOLEAN
 SaveSisState (const SIS_STATE *SSPtr, void *fp)
 {
 	if (
-			write_32  (fp, SSPtr->log_x) != 1 ||
-			write_32  (fp, SSPtr->log_y) != 1 ||
+			write_32  (fp, ((SSPtr->log_x) >> RESOLUTION_FACTOR)) != 1 || // JMS: Let's make savegames work even between different resolution modes.
+			write_32  (fp, ((SSPtr->log_y) >> RESOLUTION_FACTOR)) != 1 || // JMS: Let's make savegames work even between different resolution modes.
 			write_32  (fp, SSPtr->ResUnits) != 1 ||
 			write_32  (fp, SSPtr->FuelOnBoard) != 1 ||
 			write_16  (fp, SSPtr->CrewEnlisted) != 1 ||

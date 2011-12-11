@@ -608,7 +608,6 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 	{
 		// Game slot used, draw information about save game.
 		COUNT i;
-		BYTE res_scale; //JMS_GFX
 		RECT OldRect;
 		TEXT t;
 		QUEUE player_q;
@@ -617,6 +616,8 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		UNICODE buf[256];
 		POINT starPt;
 
+		//BYTE res_scale; //JMS_GFX
+		
 		// Save the states because we will hack them
 		SaveSS = GlobData.SIS_state;
 		player_q = GLOBAL (built_ship_q);
@@ -728,7 +729,7 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		t.pStr = buf;
 		
 		// JMS: Let's make savegames work even between different resolution modes.
-		// Reading the hyperspace coordinates to RECT r.
+		/*
 		if (pSD->res_factor > RESOLUTION_FACTOR)
 		{
 			res_scale  = pSD->res_factor - RESOLUTION_FACTOR;
@@ -740,7 +741,11 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 			res_scale  = RESOLUTION_FACTOR - pSD->res_factor;
 			starPt.x = LOGX_TO_UNIVERSE (pSD->SS.log_x << res_scale);
 			starPt.y = LOGY_TO_UNIVERSE (pSD->SS.log_y << res_scale);
-		}
+		}*/
+		
+		// Reading the hyperspace coordinates to RECT r.
+		starPt.x = LOGX_TO_UNIVERSE (pSD->SS.log_x);
+		starPt.y = LOGY_TO_UNIVERSE (pSD->SS.log_y);
 
 		switch (pSD->Activity)
 		{
