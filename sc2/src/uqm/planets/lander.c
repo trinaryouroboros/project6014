@@ -50,7 +50,7 @@
 
 //define SPIN_ON_LAUNCH to let the planet spin while
 // the lander animation is playing
-#define SPIN_ON_LAUNCH
+#define SPIN_ON_LAUNCH 1
 
 // PLANET_SIDE_RATE governs how fast the lander,
 // bio and planet effects will be
@@ -1850,7 +1850,7 @@ animationInterframe (TimeCount *TimeIn, COUNT periods)
 }
 
 static void
-AnimateLaunch (FRAME farray)
+AnimateLaunch (FRAME farray, BOOLEAN landing)
 {
 	RECT r;
 	STAMP s;
@@ -1872,7 +1872,7 @@ AnimateLaunch (FRAME farray)
 		NextTime = GetTimeCounter () + (ONE_SECOND / 22);
 
 		BatchGraphics ();
-		RepairBackRect (&r);
+		RepairBackRect (&r, TRUE);
 #ifdef SPIN_ON_LAUNCH
 		RotatePlanetSphere (FALSE);
 #else
@@ -1890,7 +1890,10 @@ AnimateLaunch (FRAME farray)
 		LockMutex (GraphicsLock);
 	}
 
-	RepairBackRect (&r);
+	// This clears the last lander return / launch) anim frame from the planet window.
+	if (RESOLUTION_FACTOR == 0 || !landing)
+		RepairBackRect (&r, FALSE);
+	
 	UnlockMutex (GraphicsLock);
 }
 
@@ -2512,7 +2515,7 @@ PlanetSide (POINT planetLoc)
 	explosion_index = 0;
 
 	AnimateLanderWarmup ();
-	AnimateLaunch (LanderFrame[5]);
+	AnimateLaunch (LanderFrame[5], TRUE);
 	InitPlanetSide (planetLoc);
 
 	landerInputState.NextTime = GetTimeCounter () + PLANET_SIDE_RATE;
@@ -2543,7 +2546,7 @@ PlanetSide (POINT planetLoc)
 
 			LandingTakeoffSequence (&landerInputState, FALSE);
 			ReturnToOrbit ();
-			AnimateLaunch (LanderFrame[6]);
+			AnimateLaunch (LanderFrame[6], FALSE);
 			
 			LockMutex (GraphicsLock);
 			DeltaSISGauges (crew_left, 0, 0);
