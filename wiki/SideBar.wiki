@@ -1,5 +1,5 @@
-#labels Wiki
 #summary Hierarchical table of contents for the sidebar
+#labels Wiki
 
 [http://code.google.com/p/project6014/w/list List of all Wiki pages]
 
@@ -75,6 +75,7 @@
       * [ChmmrExplorer]
   * Administration
     * Project [Rules]
+    * [Contributing] : how to set up your system
     * PortingChanges from UQM
     * [Statistics]
     * Team
