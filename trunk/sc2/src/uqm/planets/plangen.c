@@ -880,7 +880,7 @@ MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
 {
 	COORD x, y, lf_x, rt_x;
 	SIZE A, B;
-	SDWORD Asquared, TwoAsquared, Bsquared, TwoBsquared;// JMS_GFX: Was 'long' - type changed to conform to UQM's own types
+	DWORD Asquared, TwoAsquared, Bsquared, TwoBsquared;// JMS_GFX: Was 'long' - type changed to conform to UQM's own types
 	SDWORD d, dx, dy;									// JMS_GFX: Was 'long' - type changed to conform to UQM's own types
 	DWORD TopIndex, BotIndex, rim_pixels;				// JMS_GFX: Was COUNT - type changed because of overflow at 4x
 	
