@@ -127,7 +127,7 @@ GenerateVux_generateMoons (SOLARSYS_STATE *solarSys, PLANET_DESC *planet)
 		TFB_SeedRandom(10026855);
 		GenerateDefault_generateMoons (solarSys, planet);
 		
-		solarSys->MoonDesc[0].data_index = (BYTE)~0;
+		solarSys->MoonDesc[0].data_index = HIERARCHY_STARBASE;
 		solarSys->MoonDesc[0].radius = MIN_MOON_RADIUS;
 		solarSys->MoonDesc[0].location.x =
 			COSINE (QUADRANT, pSolarSysState->MoonDesc[0].radius);
