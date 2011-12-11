@@ -209,13 +209,13 @@ add_text (int status, TEXT *pTextIn)
 	}
 	else if (GetContextFontLeading (&leading), status <= -4)
 	{
-		text_width = (SIZE) (SIS_SCREEN_WIDTH - 8 - (TEXT_X_OFFS << 2));
+		text_width = (SIZE) (SIS_SCREEN_WIDTH - (8 << RESOLUTION_FACTOR) - (TEXT_X_OFFS << 2));
 
 		pText = pTextIn;
 	}
 	else
 	{
-		text_width = (SIZE) (SIS_SCREEN_WIDTH - 8 - (TEXT_X_OFFS << 2));
+		text_width = (SIZE) (SIS_SCREEN_WIDTH - (8 << RESOLUTION_FACTOR) - (TEXT_X_OFFS << 2));
 
 		switch (status)
 		{
