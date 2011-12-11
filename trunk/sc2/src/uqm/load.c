@@ -444,6 +444,7 @@ static void
 LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 {
 	BYTE dummy8;
+	BYTE res_scale;
 
 	cread_8   (fh, &dummy8); /* obsolete */
 	cread_16   (fh, &GSPtr->glob_flags);
@@ -453,6 +454,11 @@ LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 	cread_a8  (fh, GSPtr->ElementWorth, NUM_ELEMENT_CATEGORIES);
 	cread_ptr (fh); /* not loading ptr; PRIMITIVE *DisplayArray */
 	cread_16  (fh, &GSPtr->CurrentActivity);
+	
+	if (LOBYTE (GSPtr->CurrentActivity) != IN_INTERPLANETARY)
+		res_scale = RESOLUTION_FACTOR;
+	else
+		res_scale = 0;
 	
 	cread_16  (fh, NULL); /* CLOCK_STATE alignment padding */
 	LoadClockState (&GSPtr->GameClock, fh);
@@ -483,14 +489,14 @@ LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 	cread_16s (fh, &GSPtr->velocity.incr.height);
 	cread_16  (fh, NULL); /* VELOCITY_DESC padding */
 	
-	GSPtr->velocity.vector.width  <<= RESOLUTION_FACTOR; // JMS: Let's make savegames work even between different resolution modes.
-	GSPtr->velocity.vector.height <<= RESOLUTION_FACTOR; // JMS: Let's make savegames work even between different resolution modes.
-	GSPtr->velocity.fract.width	  <<= RESOLUTION_FACTOR; // JMS: Let's make savegames work even between different resolution modes.
-	GSPtr->velocity.fract.height  <<= RESOLUTION_FACTOR; // JMS: Let's make savegames work even between different resolution modes.
-	GSPtr->velocity.error.width	  <<= RESOLUTION_FACTOR; // JMS: Let's make savegames work even between different resolution modes.
-	GSPtr->velocity.error.height  <<= RESOLUTION_FACTOR; // JMS: Let's make savegames work even between different resolution modes.
-	GSPtr->velocity.incr.width	  <<= RESOLUTION_FACTOR; // JMS: Let's make savegames work even between different resolution modes.
-	GSPtr->velocity.incr.height	  <<= RESOLUTION_FACTOR; // JMS: Let's make savegames work even between different resolution modes.
+	GSPtr->velocity.vector.width  <<= res_scale; // JMS: Let's make savegames work even between different resolution modes.
+	GSPtr->velocity.vector.height <<= res_scale; // JMS: Let's make savegames work even between different resolution modes.
+	GSPtr->velocity.fract.width	  <<= res_scale; // JMS: Let's make savegames work even between different resolution modes.
+	GSPtr->velocity.fract.height  <<= res_scale; // JMS: Let's make savegames work even between different resolution modes.
+	GSPtr->velocity.error.width	  <<= res_scale; // JMS: Let's make savegames work even between different resolution modes.
+	GSPtr->velocity.error.height  <<= res_scale; // JMS: Let's make savegames work even between different resolution modes.
+	GSPtr->velocity.incr.width	  <<= res_scale; // JMS: Let's make savegames work even between different resolution modes.
+	GSPtr->velocity.incr.height	  <<= res_scale; // JMS: Let's make savegames work even between different resolution modes.
 
 	cread_32  (fh, &GSPtr->BattleGroupRef);
 	
