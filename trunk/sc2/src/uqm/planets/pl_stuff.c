@@ -265,7 +265,7 @@ ZoomInPlanetSphere (void)
 
 		BatchGraphics ();
 		if (i > 0)
-			RepairBackRect (&repairRect);
+			RepairBackRect (&repairRect, FALSE);
 
 		oldMode = SetGraphicScaleMode (TFB_SCALE_BILINEAR);
 		oldScale = SetGraphicScale ((int)(base * scale + 0.5));
