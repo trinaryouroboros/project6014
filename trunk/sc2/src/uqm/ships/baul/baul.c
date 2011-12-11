@@ -24,7 +24,7 @@
 #include "libs/log.h"
 
 
-#define MAX_CREW 20
+#define MAX_CREW 28
 #define MAX_ENERGY 22
 #define ENERGY_REGENERATION 3
 #define WEAPON_ENERGY_COST 0
@@ -1006,10 +1006,6 @@ static void spawn_gas (ELEMENT *ShipPtr)
 static void
 spray_preprocess (ELEMENT *ElementPtr)
 {
-	STARSHIP *StarShipPtr;
-	SIZE offs_x, offs_y;
-	COUNT angle;
-	
 	// Abusing thrust_wait to slow down the anim.
 	if (ElementPtr->thrust_wait > 0)
 		--ElementPtr->thrust_wait;
