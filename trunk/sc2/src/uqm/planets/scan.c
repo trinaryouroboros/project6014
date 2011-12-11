@@ -73,7 +73,6 @@ enum ScanMenuItems
 	DISPATCH_SHUTTLE,
 };
 
-
 void
 RepairBackRect (RECT *pRect)
 {
@@ -86,7 +85,11 @@ RepairBackRect (RECT *pRect)
 
 	new_r.extent.height += new_r.corner.y & 1;
 	new_r.corner.y &= ~1;
-	DrawFromExtraScreen (&new_r);
+	
+	if (RESOLUTION_FACTOR == 0)
+		DrawFromExtraScreen (&new_r);
+	else
+		DrawFromExtraScreen_Fs (&new_r);
 }
 
 static void

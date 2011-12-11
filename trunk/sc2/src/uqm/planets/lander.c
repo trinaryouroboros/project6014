@@ -1995,19 +1995,18 @@ InitPlanetSide (POINT pt)
 		pt.y = (MAP_HEIGHT << MAG_SHIFT) - 1;
 
 	curLanderLoc = pt;
-
+	
 	LockMutex (GraphicsLock);
 	SetContext (PlanetContext);
 	SetContextFont (TinyFont);
 
 	{
 		RECT r;
-
+		
 		GetContextClipRect (&r);
-
 		SetTransitionSource (&r);
 		BatchGraphics ();
-		
+
 		{
 			STAMP s;
 
