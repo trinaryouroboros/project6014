@@ -363,7 +363,7 @@ focusball_postprocess (ELEMENT *ElementPtr)
 	}
 }
 
-// Collision function for both the primary beam and the secondary saber.
+// This is the collision function for both the primary beam and the secondary saber.
 static void
 saber_beam_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {
@@ -383,7 +383,7 @@ saber_beam_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, P
 	}
 }
 
-// This makes the beam primary stay alive for an indefinite time.
+// This makes the primary beam stay alive for an indefinite time.
 static void
 beam_postprocess (ELEMENT *ElementPtr)
 {
@@ -405,8 +405,10 @@ beam_postprocess (ELEMENT *ElementPtr)
 		LockElement (hBeam, &EPtr);
 		SetElementStarShip (EPtr, StarShipPtr);
 		
+		// As long as player holds down the weapon key, extend the primary beam's life.
 		if (StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON)
 			StarShipPtr->weapon_counter = WEAPON_WAIT;
+		// When the weapon key is released, end the beam primary's life.
 		else
 		{
 			EPtr->life_span = 0;
@@ -459,7 +461,7 @@ initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[])
 	return (1);
 }
 
-// This generates the narrow beam AND a focusball.
+// This generates the beam primary AND a focusball.
 static COUNT
 initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 {
@@ -528,7 +530,7 @@ initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	return (num_of_created_elements);
 }
 
-// This generates the narrow beam.
+// This generates the beam primary.
 static COUNT
 initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 {
@@ -574,7 +576,7 @@ initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
 	return (1);
 }
 
-// This generates the wide saber.
+// This generates the secondary, wide saber.
 static COUNT
 initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
 {
