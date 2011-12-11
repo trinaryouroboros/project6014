@@ -236,7 +236,10 @@ DrawOrbitalDisplay (DRAW_ORBITAL_MODE Mode)
 	UnbatchGraphics ();
 
 	// for later RepairBackRect()
-	LoadIntoExtraScreen (&r);
+	if (RESOLUTION_FACTOR == 0)
+		LoadIntoExtraScreen (&r);
+	else
+		LoadIntoExtraScreen_Fs (&r);
 }
 
 // Initialise the surface graphics, and start the planet music.

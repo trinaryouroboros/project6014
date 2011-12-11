@@ -1,4 +1,4 @@
-//Copyright Paul Reiche, Fred Ford. 1992-2002
+ //Copyright Paul Reiche, Fred Ford. 1992-2002
 
 /*
  *  This program is free software; you can redistribute it and/or modify
@@ -49,9 +49,21 @@ DrawFromExtraScreen (RECT *r)
 }
 
 void
+DrawFromExtraScreen_Fs (RECT *r)
+{
+	TFB_DrawScreen_Copy_Fs(r, TFB_SCREEN_EXTRA, TFB_SCREEN_MAIN);
+}
+
+void
 LoadIntoExtraScreen (RECT *r)
 {
 	TFB_DrawScreen_Copy(r, TFB_SCREEN_MAIN, TFB_SCREEN_EXTRA);
+}
+
+void
+LoadIntoExtraScreen_Fs (RECT *r)
+{
+	TFB_DrawScreen_Copy_Fs(r, TFB_SCREEN_MAIN, TFB_SCREEN_EXTRA);
 }
 
 int
@@ -150,11 +162,12 @@ SetTransitionSource (const RECT *pRect)
 	RECT ActualRect;
 
 	if (pRect)
-	{	/* expand the rect to accomodate scalers in OpenGL mode */
+	{	// expand the rect to accomodate scalers in OpenGL mode
 		ActualRect = *pRect;
 		pRect = &ActualRect;
 		ExpandRect (&ActualRect, 2);
 	}
+	
 	TFB_DrawScreen_Copy (pRect, TFB_SCREEN_MAIN, TFB_SCREEN_TRANSITION);
 }
 
