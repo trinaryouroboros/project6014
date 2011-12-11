@@ -32,6 +32,7 @@ This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from 
 == Administration ==
 
   * Project [Rules]
+  * [Contributing] : how to set up your system
   * [PortingChanges] from UQM
   * [Statistics] - interesting stats about the project
   * Team - info about team members
