@@ -39,7 +39,7 @@ DrawCrewFuelString (COORD y, SIZE state)
 	Stamp.origin.y = y + GAUGE_YOFFS + STARCON_TEXT_HEIGHT - (RESOLUTION_FACTOR == 2 ? 12 : 0);
 	if (state == 0)
 	{
-		Stamp.origin.x = CREW_XOFFS + (STAT_WIDTH >> 1) + RES_STAT_SCALE(6) - (RESOLUTION_FACTOR == 2 ? 10 : 0); // JMS_GFX
+		Stamp.origin.x = CREW_XOFFS + (STAT_WIDTH >> 1) + RES_STAT_SCALE(6) - (RESOLUTION_FACTOR == 2 ? 8 : 0); // JMS_GFX
 		if (optWhichMenu == OPT_PC)
 			Stamp.frame = SetAbsFrameIndex (StatusFrame, 4);
 		else
@@ -47,7 +47,7 @@ DrawCrewFuelString (COORD y, SIZE state)
 		DrawStamp (&Stamp);
 	}
 
-	Stamp.origin.x = ENERGY_XOFFS + (STAT_WIDTH >> 1) - RES_STAT_SCALE(5) + (RESOLUTION_FACTOR == 2 ? 14 : 0);  // JMS_GFX
+	Stamp.origin.x = ENERGY_XOFFS + (STAT_WIDTH >> 1) - RES_STAT_SCALE(5) + (RESOLUTION_FACTOR == 2 ? 10 : 0);  // JMS_GFX
 	if (optWhichMenu == OPT_PC)
 		Stamp.frame = SetAbsFrameIndex (StatusFrame, 5);
 	else
@@ -94,7 +94,7 @@ ClearShipStatus (COORD y, COORD w)
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x0A), 0x08));
 	r.corner.x = 2;
 	r.corner.y = 3 + y;
-	r.extent.width = w - 4;//
+	r.extent.width = w - 4;
 	r.extent.height = SHIP_INFO_HEIGHT - 3;
 	DrawFilledRectangle (&r);
 }
@@ -189,14 +189,21 @@ InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect)
 
 	{
 		SIZE crew_height, energy_height;
-
+		
 #define MIN(a, b) (((a) <= (b)) ? (a) : (b))
-		crew_height = ((MIN(SIPtr->max_crew, MAX_CREW_SIZE) + 1) & ~1) + 1;
+		if (RESOLUTION_FACTOR < 2)
+		{
+			crew_height = ((MIN(SIPtr->max_crew, MAX_CREW_SIZE) + 1) & ~1) + 1;
+			energy_height = (((SIPtr->max_energy + 1) >> 1) << 1) + 1;
+		}
+		else
+		{
+			crew_height = ((MIN(SIPtr->max_crew, MAX_CREW_SIZE) + 1) * 1.5);
+			energy_height = (((SIPtr->max_energy + 1) >> 1) * 3) + 1;
+		}
 #undef MIN
-		energy_height = (((SIPtr->max_energy + 1) >> 1) << 1) + 1;
-
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
+		
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x08, 0x08, 0x08), 0x1F));
 		r.corner.x = CREW_XOFFS - 1;
 		r.corner.y = GAUGE_YOFFS + 1 + y;
 		r.extent.width = STAT_WIDTH + 2;
@@ -214,8 +221,7 @@ InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect)
 		r.extent.width = 1;
 		r.extent.height = crew_height;
 		DrawFilledRectangle (&r);
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x10, 0x10, 0x10), 0x19));
 		r.corner.x = CREW_XOFFS - 1;
 		r.corner.y = GAUGE_YOFFS - crew_height + y;
 		r.extent.width = STAT_WIDTH + 2;
