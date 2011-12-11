@@ -615,8 +615,6 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		SIS_STATE SaveSS;
 		UNICODE buf[256];
 		POINT starPt;
-
-		//BYTE res_scale; //JMS_GFX
 		
 		// Save the states because we will hack them
 		SaveSS = GlobData.SIS_state;
@@ -626,7 +624,6 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		// Hack StatusContext so we can use standard SIS display funcs
 		GetContextClipRect (&OldRect);
 		r.corner.x = SIS_ORG_X + ((SIS_SCREEN_WIDTH - STATUS_WIDTH) >> 1) + SAFE_X - (16 << RESOLUTION_FACTOR) + SUMMARY_X_OFFS; // JMS_GFX
-//		r.corner.x = SIS_ORG_X + ((SIS_SCREEN_WIDTH - STATUS_WIDTH) >> 1);
 		r.corner.y = SIS_ORG_Y + RESOLUTION_FACTOR; // JMS_GFX
 		r.extent.width = STATUS_WIDTH;
 		r.extent.height = STATUS_HEIGHT;
@@ -727,21 +724,6 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		t.baseline.y = (139 + 6) << RESOLUTION_FACTOR; // JMS_GFX;
 		t.align = ALIGN_LEFT;
 		t.pStr = buf;
-		
-		// JMS: Let's make savegames work even between different resolution modes.
-		/*
-		if (pSD->res_factor > RESOLUTION_FACTOR)
-		{
-			res_scale  = pSD->res_factor - RESOLUTION_FACTOR;
-			starPt.x = LOGX_TO_UNIVERSE (pSD->SS.log_x >> res_scale);
-			starPt.y = LOGY_TO_UNIVERSE (pSD->SS.log_y >> res_scale);
-		}
-		else if (pSD->res_factor <= RESOLUTION_FACTOR)
-		{
-			res_scale  = RESOLUTION_FACTOR - pSD->res_factor;
-			starPt.x = LOGX_TO_UNIVERSE (pSD->SS.log_x << res_scale);
-			starPt.y = LOGY_TO_UNIVERSE (pSD->SS.log_y << res_scale);
-		}*/
 		
 		// Reading the hyperspace coordinates to RECT r.
 		starPt.x = LOGX_TO_UNIVERSE (pSD->SS.log_x);
