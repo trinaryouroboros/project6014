@@ -386,22 +386,22 @@ SaveGameState (const GAME_STATE *GSPtr, DECODE_REF fh)
 	cwrite_16  (fh, GSPtr->ip_location.x);
 	cwrite_16  (fh, GSPtr->ip_location.y);
 	/* STAMP ShipStamp */
-	cwrite_16  (fh, GSPtr->ShipStamp.origin.x);
-	cwrite_16  (fh, GSPtr->ShipStamp.origin.y);
+	cwrite_16  (fh, (GSPtr->ShipStamp.origin.x >> RESOLUTION_FACTOR)); // JMS: Let's make savegames work even between different resolution modes.
+	cwrite_16  (fh, (GSPtr->ShipStamp.origin.y >> RESOLUTION_FACTOR)); // JMS: Let's make savegames work even between different resolution modes.
 	cwrite_16  (fh, GSPtr->ShipFacing);
 	cwrite_8   (fh, GSPtr->ip_planet);
 	cwrite_8   (fh, GSPtr->in_orbit);
 
 	/* VELOCITY_DESC velocity */
 	cwrite_16  (fh, GSPtr->velocity.TravelAngle);
-	cwrite_16  (fh, GSPtr->velocity.vector.width);
-	cwrite_16  (fh, GSPtr->velocity.vector.height);
-	cwrite_16  (fh, GSPtr->velocity.fract.width);
-	cwrite_16  (fh, GSPtr->velocity.fract.height);
-	cwrite_16  (fh, GSPtr->velocity.error.width);
-	cwrite_16  (fh, GSPtr->velocity.error.height);
-	cwrite_16  (fh, GSPtr->velocity.incr.width);
-	cwrite_16  (fh, GSPtr->velocity.incr.height);
+	cwrite_16  (fh, GSPtr->velocity.vector.width >> RESOLUTION_FACTOR); // JMS: Let's make savegames work even between different resolution modes.
+	cwrite_16  (fh, GSPtr->velocity.vector.height >> RESOLUTION_FACTOR);// JMS: Let's make savegames work even between different resolution modes.
+	cwrite_16  (fh, GSPtr->velocity.fract.width >> RESOLUTION_FACTOR);	// JMS: Let's make savegames work even between different resolution modes.
+	cwrite_16  (fh, GSPtr->velocity.fract.height >> RESOLUTION_FACTOR); // JMS: Let's make savegames work even between different resolution modes.
+	cwrite_16  (fh, GSPtr->velocity.error.width >> RESOLUTION_FACTOR);	// JMS: Let's make savegames work even between different resolution modes.
+	cwrite_16  (fh, GSPtr->velocity.error.height >> RESOLUTION_FACTOR);	// JMS: Let's make savegames work even between different resolution modes.
+	cwrite_16  (fh, GSPtr->velocity.incr.width >> RESOLUTION_FACTOR);	// JMS: Let's make savegames work even between different resolution modes.
+	cwrite_16  (fh, GSPtr->velocity.incr.height >> RESOLUTION_FACTOR);	// JMS: Let's make savegames work even between different resolution modes.
 	cwrite_16  (fh, 0); /* VELOCITY_DESC padding */
 
 	cwrite_32  (fh, GSPtr->BattleGroupRef);
