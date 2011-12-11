@@ -27,7 +27,6 @@
 #include "uqm/encount.h"
 #include "uqm/gameev.h"
 
-
 static LOCDATA syreenhome_desc_1x =
 {
 	SYREENHOME_CONVERSATION, /* AlienConv */
@@ -122,7 +121,7 @@ static LOCDATA syreenhome_desc_1x =
 			(1 << 6) | (1 << 7), /* BlockMask */
 		},
 	  {             // 9 - zoomed left girl turning head
-			79, /* StartIndex */
+			140, /* StartIndex */
 			2, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 2, ONE_SECOND, /* FrameRate */
@@ -130,7 +129,7 @@ static LOCDATA syreenhome_desc_1x =
 			(1 << 10), /* BlockMask */
 		},
 	  {             // 10 - zoomed left girl manipulating starmap
-			81, /* StartIndex */
+			142, /* StartIndex */
 			7, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 30, /* FrameRate */
@@ -138,7 +137,7 @@ static LOCDATA syreenhome_desc_1x =
 			(1 << 9), /* BlockMask */
 		},
 	  {             // 11 - zoomed front girl breathing
-			88, /* StartIndex */
+			149, /* StartIndex */
 			7, /* NumFrames */
 			CIRCULAR_ANIM | WHEN_TALKING, /* AnimFlags */
 			ONE_SECOND / 7, 0, /* FrameRate */
@@ -155,10 +154,10 @@ static LOCDATA syreenhome_desc_1x =
 		0, /* BlockMask */
 	},
 	{ /* AlienTalkDesc */
-		95, /* StartIndex */
+		79, /* StartIndex */
 		59, /* NumFrames */
 		TALK_INTRO, /* AnimFlags */
-		ONE_SECOND / 20, 0, /* FrameRate */
+		ONE_SECOND / 15, ONE_SECOND / 30, /* FrameRate */
 		ONE_SECOND / 12, 0, /* RestartRate */
 		0, /* BlockMask */
 	},
@@ -376,7 +375,7 @@ post_syreenhome_enc (void)
 LOCDATA*
 init_syreenhome_comm (void)
 {
-	LOCDATA syreenhome_desc;
+	static LOCDATA syreenhome_desc;
 	LOCDATA *retval;
 
 	switch (RESOLUTION_FACTOR)
