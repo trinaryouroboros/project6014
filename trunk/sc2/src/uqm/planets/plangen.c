@@ -726,7 +726,6 @@ RenderPlanetSphere (PLANET_ORBIT *Orbit, FRAME MaskFrame, int offset, BOOLEAN sh
 	t1 = clock ();
 #endif
 
-
 	shLevel = shield_level (offset, width);
 
 	pix = Orbit->ScratchArray;
@@ -776,7 +775,7 @@ RenderPlanetSphere (PLANET_ORBIT *Orbit, FRAME MaskFrame, int offset, BOOLEAN sh
 				lvf = lvsum >> AA_WEIGHT_BITS;
 			}
 		
-			// Apply the lighting model.  This also bounds the sphere
+			// Apply the lighting model. This also bounds the sphere
 			// to make it circular.
 			if (shielded)
 			{
@@ -880,8 +879,8 @@ MakeCrater (RECT *pRect, SBYTE *DepthArray, SIZE rim_delta, SIZE
 {
 	COORD x, y, lf_x, rt_x;
 	SIZE A, B;
-	DWORD Asquared, TwoAsquared, Bsquared, TwoBsquared;// JMS_GFX: Was 'long' - type changed to conform to UQM's own types
-	SDWORD d, dx, dy;									// JMS_GFX: Was 'long' - type changed to conform to UQM's own types
+	long int Asquared, TwoAsquared, Bsquared, TwoBsquared;
+	long int d, dx, dy;
 	DWORD TopIndex, BotIndex, rim_pixels;				// JMS_GFX: Was COUNT - type changed because of overflow at 4x
 	
 	A = pRect->extent.width >> 1;
