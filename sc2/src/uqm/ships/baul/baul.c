@@ -38,7 +38,6 @@
 #define SPECIAL_WAIT 7
 
 #define SHIP_MASS 9
-#define BAUL_OFFSET (4 << RESOLUTION_FACTOR)
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 10
 
@@ -927,7 +926,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 #define GAS_OFFSET (4 << RESOLUTION_FACTOR)
 #define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // JMS_TEST: Baul's gas now flies forward.
 #define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
-#define GAS_HORZ_OFFSET_2 (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
+#define SPRAY_HORZ_OFFSET (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
 
 // Secondary weapon: Gas cloud.
 // The IGNORE_VELOCITY flag is very important: It doesn't only stop the gas from reacting to gravity,
@@ -948,7 +947,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	gas_side[ShipPtr->playerNr] = (gas_side[ShipPtr->playerNr] + 1) % 2;
 	angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 	
-	// Enable firing gas from different sides ("pipes") of the ship.
+	// This mechanism can be used to alter the "pipe" from which the gas clouds come.
 	if(gas_side[ShipPtr->playerNr])
 	{
 		offs_x = -SINE (angle, GAS_HORZ_OFFSET);
@@ -1007,6 +1006,10 @@ static void spawn_gas (ELEMENT *ShipPtr)
 static void
 spray_preprocess (ELEMENT *ElementPtr)
 {
+	STARSHIP *StarShipPtr;
+	SIZE offs_x, offs_y;
+	COUNT angle;
+	
 	// Abusing thrust_wait to slow down the anim.
 	if (ElementPtr->thrust_wait > 0)
 		--ElementPtr->thrust_wait;
@@ -1046,6 +1049,8 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 #define MISSILE_HITS 2
 #define MISSILE_DAMAGE 1 // Must be at least 1 to make the weapon hit gas clouds.
 #define MISSILE_OFFSET (3 << RESOLUTION_FACTOR) // JMS_GFX
+#define NUM_SPRAYS 5
+#define SPRAY_DIST 4
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 	SIZE offs_x, offs_y;
@@ -1055,18 +1060,19 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 	
-	for (i = 0; i < 2; i++)
+	for (i = 0; i < NUM_SPRAYS; i++)
 	{
+		// This mechanism can be used to alter the "pipe" from which the spray particles come.
 		spray_side[ShipPtr->playerNr] = (spray_side[ShipPtr->playerNr] + 1) % 2;
 		if(spray_side[ShipPtr->playerNr])
 		{
-			offs_x = -SINE (angle, GAS_HORZ_OFFSET_2);
-			offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
+			offs_x = -SINE (angle,  SPRAY_HORZ_OFFSET + (i << RESOLUTION_FACTOR));
+			offs_y = COSINE (angle, SPRAY_HORZ_OFFSET + (i << RESOLUTION_FACTOR));
 		}
 		else
 		{
-			offs_x = -SINE (angle, GAS_HORZ_OFFSET_2);
-			offs_y = COSINE (angle, GAS_HORZ_OFFSET_2);
+			offs_x = -SINE (angle,  SPRAY_HORZ_OFFSET + (i << RESOLUTION_FACTOR));
+			offs_y = COSINE (angle, SPRAY_HORZ_OFFSET + (i << RESOLUTION_FACTOR));
 		}
 	
 		MissileBlock.cx = ShipPtr->next.location.x + offs_x;
@@ -1076,7 +1082,7 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 		MissileBlock.index = 0;
 		MissileBlock.sender = ShipPtr->playerNr;
 		MissileBlock.flags = IGNORE_SIMILAR | GASSY_SUBSTANCE;
-		MissileBlock.pixoffs = BAUL_OFFSET;
+		MissileBlock.pixoffs = 4 + ((i * SPRAY_DIST) << RESOLUTION_FACTOR);
 		MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 		MissileBlock.hit_points = MISSILE_HITS;
 		MissileBlock.damage = MISSILE_DAMAGE;
@@ -1092,11 +1098,19 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 			LockElement (SprayArray[i], &SprayPtr);
 			SprayPtr->collision_func = spray_collision;
 			SprayPtr->thrust_wait = 1;
+			
+			// This makes the spray shoot in a slight angle towards the centerline.
+			// If you want a "curved" shot, put this mechanism into spray_preprocess
+			// where it accelerates the whot towards the centerline on every frame.
+			offs_x = -SINE (angle, (100 << RESOLUTION_FACTOR));
+			offs_y = COSINE (angle, (100 << RESOLUTION_FACTOR));
+			DeltaVelocityComponents (&SprayPtr->velocity, offs_x, offs_y);
+			
 			UnlockElement (SprayArray[i]);
 		}
 	}
 	
-	return (2);
+	return (NUM_SPRAYS);
 }
 
 #define GAS_BATCH_SIZE 1
