@@ -35,7 +35,7 @@
 #define STAR_NUMBER_COUNT        15
 #define PLANET_NUMBER_COUNT      33
 #define MONTHS_STRING_COUNT      12
-#define FEEDBACK_STRING_COUNT     2
+#define FEEDBACK_STRING_COUNT     3
 #define STARBASE_STRING_COUNT     5
 #define ENCOUNTER_STRING_COUNT    8
 #define NAVIGATION_STRING_COUNT   7 // JMS: Original value was 6. This facilitates the text "*below*".

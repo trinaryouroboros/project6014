@@ -1684,6 +1684,10 @@ DEC
 MORE
 
 
+#((Star search: default F6))
+(Star search: default F6)
+
+
 #(Starbase)
 Starbase
 
