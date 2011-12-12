@@ -743,11 +743,14 @@ static void
 UpdateCursorInfo (UNICODE *prevbuf)
 {	
 	// JMS: Display hint for the player to use the star search facility
-	UNICODE buf[CURSOR_INFO_BUFSIZE] = "(Star search: F6)";
+	UNICODE buf[CURSOR_INFO_BUFSIZE];
 	POINT pt;
 	STAR_DESC *SDPtr;
 	STAR_DESC *BestSDPtr;
 
+        // (Star search: default F6)
+        utf8StringCopy (buf, sizeof (buf), GAME_STRING (FEEDBACK_STRING_BASE + 2));
+        
 	pt.x = UNIVERSE_TO_DISPX (cursorLoc.x);
 	pt.y = UNIVERSE_TO_DISPY (cursorLoc.y);
 
