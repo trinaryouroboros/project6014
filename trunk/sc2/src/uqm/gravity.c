@@ -30,8 +30,8 @@ CalculateGravity (ELEMENT *ElementPtr)
 	HELEMENT hTestElement, hSuccElement;
 
 	retval = FALSE;
-	HasGravity = (BOOLEAN)(CollidingElement (ElementPtr)
-			&& GRAVITY_MASS (ElementPtr->mass_points + 1));
+	HasGravity = (BOOLEAN)(CollidingElement (ElementPtr) && GRAVITY_MASS (ElementPtr->mass_points + 1));
+	
 	for (hTestElement = GetHeadElement ();
 			hTestElement != 0; hTestElement = hSuccElement)
 	{
@@ -41,8 +41,7 @@ CalculateGravity (ELEMENT *ElementPtr)
 		LockElement (hTestElement, &TestElementPtr);
 		if (TestElementPtr != ElementPtr
 				&& CollidingElement (TestElementPtr)
-				&& (TestHasGravity =
-				GRAVITY_MASS (TestElementPtr->mass_points + 1)) != HasGravity)
+				&& (TestHasGravity = GRAVITY_MASS (TestElementPtr->mass_points + 1)) != HasGravity)
 		{
 			COUNT abs_dx, abs_dy;
 			SIZE dx, dy;
@@ -96,7 +95,7 @@ CalculateGravity (ELEMENT *ElementPtr)
 #ifdef NEVER
 					COUNT magnitude;
 
-#define DIFUSE_GRAVITY (175 << RESOLUTION_FACTOR) // JMS_GFX
+#define DIFUSE_GRAVITY (175 << RESOLUTION_FACTOR) // JMS_GFX: Because of the ifdef NEVER this is actually never run. Well, changed it for consistency.
 					dist_squared += (DWORD)abs_dx * (DIFUSE_GRAVITY << 1)
 							+ (DWORD)abs_dy * (DIFUSE_GRAVITY << 1)
 							+ ((DWORD)(DIFUSE_GRAVITY * DIFUSE_GRAVITY) << 1);
@@ -104,7 +103,7 @@ CalculateGravity (ELEMENT *ElementPtr)
 							* GRAVITY_THRESHOLD) / dist_squared)) == 0)
 						magnitude = 1;
 
-#define MAX_MAGNITUDE 6
+#define MAX_MAGNITUDE (6 << RESOLUTION_FACTOR) // JMS_GFX: Because of the ifdef NEVER this is actually never run. Well, changed it for consistency.
 					else if (magnitude > MAX_MAGNITUDE)
 						magnitude = MAX_MAGNITUDE;
 					log_add (log_Debug, "magnitude = %u", magnitude);
@@ -126,8 +125,8 @@ CalculateGravity (ELEMENT *ElementPtr)
 
 						angle = ARCTAN (dx, dy);
 						DeltaVelocityComponents (&TestElementPtr->velocity,
-								COSINE (angle, WORLD_TO_VELOCITY (1)),
-								SINE (angle, WORLD_TO_VELOCITY (1)));
+								COSINE (angle, WORLD_TO_VELOCITY (1 << RESOLUTION_FACTOR)),
+								SINE (angle, WORLD_TO_VELOCITY (1 << RESOLUTION_FACTOR)));
 						if (TestElementPtr->state_flags & PLAYER_SHIP)
 						{
 							STARSHIP *StarShipPtr;
