@@ -140,7 +140,7 @@ DrawBattleCrewAmount (SHIP_INFO *ShipInfoPtr, COORD y_offs)
 	TEXT t;
 	UNICODE buf[40];
 
-	t.baseline.x = BATTLE_CREW_X + RES_STAT_SCALE(2) - (2 * RESOLUTION_FACTOR); // JMS_GFX
+	t.baseline.x = BATTLE_CREW_X + RES_STAT_SCALE(2) - RESOLUTION_FACTOR; // JMS_GFX
 	if (optWhichMenu == OPT_PC)
 			t.baseline.x -= RES_STAT_SCALE(8); // JMS_GFX
 	t.baseline.y = BATTLE_CREW_Y + y_offs - RESOLUTION_FACTOR; // JMS_GFX
