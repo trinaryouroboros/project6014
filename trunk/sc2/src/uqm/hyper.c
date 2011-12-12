@@ -1137,6 +1137,14 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 	
 	if (EncounterPtr->SD.Index & ENCOUNTER_REFORMING)
 	{
+		// JMS: This condition makes it so that Sly-kohrs don't reappear in HS after escaping.
+		if(EncounterPtr->SD.Type == SLYLANDRO_KOHRAH_SHIP)
+		{
+			//EncounterPtr->transition_state = -NUM_VORTEX_TRANSITIONS;
+			EncounterPtr->SD.Index &= ~ENCOUNTER_REFORMING;
+			return 0;
+		}
+		
 		EncounterPtr->SD.Index &= ~ENCOUNTER_REFORMING;
 		EncounterPtr->transition_state = 100;
 		if ((EncounterPtr->SD.Index & ONE_SHOT_ENCOUNTER)
@@ -1354,7 +1362,7 @@ DrawHyperGrid (COORD ux, COORD uy, COORD ox, COORD oy)
 	}
 }
 
-// Returns false iff the encounter is to be removed.
+// Returns false if the encounter is to be removed.
 static bool
 ProcessEncounter (ENCOUNTER *EncounterPtr, POINT *puniverse,
 		COORD ox, COORD oy, STAMP *stamp)
