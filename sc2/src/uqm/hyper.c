@@ -1140,7 +1140,6 @@ AddEncounterElement (ENCOUNTER *EncounterPtr, POINT *puniverse)
 		// JMS: This condition makes it so that Sly-kohrs don't reappear in HS after escaping.
 		if(EncounterPtr->SD.Type == SLYLANDRO_KOHRAH_SHIP)
 		{
-			//EncounterPtr->transition_state = -NUM_VORTEX_TRANSITIONS;
 			EncounterPtr->SD.Index &= ~ENCOUNTER_REFORMING;
 			return 0;
 		}

@@ -53,7 +53,7 @@ static LOCDATA shofixti_desc =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	SHOFIXTI_CONVERSATION_PHRASES, /* PlayerPhrases */
-	8, /* NumAnimations */
+	12, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
 		{ /* 0 bottom left star */
 			1, /* StartIndex */
@@ -118,6 +118,38 @@ static LOCDATA shofixti_desc =
 			ONE_SECOND / 10, 0, /* FrameRate */
 			(ONE_SECOND >> 1), (ONE_SECOND >> 1) * 3, /* RestartRate */
 			0, /* BlockMask */
+		},
+		{ /* 8 upper-middle left star */
+			45, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
+			(1 << 10), /* BlockMask */
+		},
+		{ /* 9 upper-middle right star */
+			51, /* StartIndex */
+			6, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
+			(1 << 11), /* BlockMask */
+		},
+		{ /* 10 lower-middle left star */
+			57, /* StartIndex */
+			5, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
+			(1 << 8), /* BlockMask */
+		},
+		{  /* 11 lower-middle right star */
+			62, /* StartIndex */
+			5, /* NumFrames */
+			CIRCULAR_ANIM, /* AnimFlags */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 20, ONE_SECOND / 30, /* RestartRate */
+			(1 << 9), /* BlockMask */
 		},
 	},
 	{ /* AlienTransitionDesc */
