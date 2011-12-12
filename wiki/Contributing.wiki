@@ -18,7 +18,7 @@ http://tortoisesvn.net/downloads.html
 
  * Then for the URL of the repository use (notice the *s* in https) :
 
-https://code.google.com/p/project6014/source/checkout
+https://project6014.googlecode.com/svn/trunk/
 
  * By default the code will be downloaded to C:\Mystuff\Project6014. Change it if you want and validate.
 
