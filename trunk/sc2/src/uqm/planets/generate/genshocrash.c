@@ -146,6 +146,7 @@ GenerateShofixtiCrashSite_generateMoons (SOLARSYS_STATE *solarSys,
 	return true;
 }
 
+#define LURG_TASKFORCE_SIZE 3
 
 static bool
 GenerateShofixtiCrashSite_generateOrbital (SOLARSYS_STATE *solarSys,
@@ -164,8 +165,8 @@ GenerateShofixtiCrashSite_generateOrbital (SOLARSYS_STATE *solarSys,
 		if(!(GET_GAME_STATE(CRASH_SITE_VISITED)))
 		{
 			SET_GAME_STATE(CRASH_SITE_VISITED, 1);
-			SET_GAME_STATE(CRASH_SITE_LURG_SURVIVORS, 5);
-			for (i = 0; i < 5; ++i)
+			SET_GAME_STATE(CRASH_SITE_LURG_SURVIVORS, LURG_TASKFORCE_SIZE);
+			for (i = 0; i < LURG_TASKFORCE_SIZE; ++i)
 				CloneShipFragment (LURG_SHIP, &GLOBAL (npc_built_ship_q), 0);
 		}
 		else
