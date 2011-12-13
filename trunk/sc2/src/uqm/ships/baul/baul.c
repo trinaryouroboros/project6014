@@ -57,7 +57,7 @@ static RACE_DESC baul_desc =
 {
 	{ /* SHIP_INFO */
 		FIRES_FORE,
-		14, /* Super Melee cost */
+		21, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
 		BAUL_RACE_STRINGS,
@@ -134,7 +134,7 @@ static RACE_DESC baul_desc_2xres =
 {
 	{ /* SHIP_INFO */
 		FIRES_FORE,
-		14, /* Super Melee cost */
+		21, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
 		BAUL_RACE_STRINGS,
@@ -211,7 +211,7 @@ static RACE_DESC baul_desc_4xres =
 {
 	{ /* SHIP_INFO */
 		FIRES_FORE,
-		14, /* Super Melee cost */
+		21, /* Super Melee cost */
 		MAX_CREW, MAX_CREW,
 		MAX_ENERGY, MAX_ENERGY,
 		BAUL_RACE_STRINGS,
