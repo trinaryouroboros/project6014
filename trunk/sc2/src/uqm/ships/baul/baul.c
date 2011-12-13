@@ -842,17 +842,20 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 	STARSHIP *StarShipPtr;
 	STARSHIP *EnemyStarShipPtr;
 	BYTE	 enemyShipIsBaul = 0;
+	BYTE	 enemyShipIsChmmr = 0;
 	
 	// This is the ship this gas cloud belongs to.
 	GetElementStarShip (ElementPtr0, &StarShipPtr);
 	
-	// Check if the colliding element is a ship. If it is not, check if it's a projectile from Baul ship.
+	// Check if the colliding element is a ship. If it is not, check if it's a projectile from Baul or Chmmr ship.
 	if (!elementsOfSamePlayer(ElementPtr0, ElementPtr1) && !(ElementPtr1->state_flags & PLAYER_SHIP) 
 		&& ElementPtr1->playerNr > -1)
 	{
 		GetElementStarShip (ElementPtr1, &EnemyStarShipPtr);
 		if (EnemyStarShipPtr->SpeciesID == BAUL_ID)
 			enemyShipIsBaul = 1;
+		else if (EnemyStarShipPtr->SpeciesID == CHMMR_ID) 
+			enemyShipIsChmmr = 1; // This is important because the gas can stick to zapsats.
 	}
 	
 	// If colliding with Baul's spray weapon or shockwave, EXPLODE!!!
@@ -874,11 +877,14 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 		generate_shockwave (ElementPtr0, -1); // XXX ElementPtr1->playerNr);
 	}
 	// If colliding with enemy ship, stick to the ship.
+	// Also stick to Chmmr's zapsats.
 	else if (ElementPtr0->state_flags & IGNORE_VELOCITY
-			 && ElementPtr1->state_flags & PLAYER_SHIP 
-			 && ElementPtr1->playerNr != ElementPtr0->playerNr)
+			 && ElementPtr1->playerNr != ElementPtr0->playerNr
+			 && (ElementPtr1->state_flags & PLAYER_SHIP 
+				 || (enemyShipIsChmmr && ElementPtr1->mass_points == 10) ))
 	{
 		HELEMENT hGasElement;
+		HELEMENT hTargetElement;
 		ELEMENT *GasPtr;
 		
 		// Create a new gas element which is sticking to the enemy ship.
@@ -900,7 +906,16 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 				
 				SetElementStarShip (GasPtr, StarShipPtr);
 				GetElementStarShip (ElementPtr1, &StarShipPtr);
-				GasPtr->hTarget = StarShipPtr->hShip;
+				
+				// Ships and Chmmr Zapsats require different ways of making them the target of the gas cloud.
+				if (ElementPtr1->state_flags & PLAYER_SHIP)
+					GasPtr->hTarget = StarShipPtr->hShip;
+				else
+				{
+					GasPtr->life_span = 0;
+					LockElement (ElementPtr1, &hTargetElement);
+					GasPtr->hTarget = hTargetElement;
+				}
 			}
 			GasPtr->hit_points = ElementPtr0->hit_points;
 			GasPtr->life_span = ElementPtr0->life_span;
