@@ -844,8 +844,7 @@ spawn_satellites (ELEMENT *ElementPtr)
 
 				LockElement (hSatellite, &SattPtr);
 				SattPtr->playerNr = ElementPtr->playerNr;
-				SattPtr->state_flags = IGNORE_SIMILAR | APPEARING
-						| FINITE_LIFE;
+				SattPtr->state_flags = IGNORE_SIMILAR | APPEARING | FINITE_LIFE | GASSY_SUBSTANCE; // JMS: The GASSY_SUBSTANCE makes the baul gas stick to zapsat.
 				SattPtr->life_span = NORMAL_LIFE + 1;
 				SattPtr->hit_points = 10;
 				SattPtr->mass_points = 10;
@@ -898,8 +897,7 @@ chmmr_preprocess (ELEMENT *ElementPtr)
 
 		LockElement (hSatellite, &SattPtr);
 		SattPtr->playerNr = ElementPtr->playerNr;
-		SattPtr->state_flags = FINITE_LIFE | NONSOLID | IGNORE_SIMILAR
-				| APPEARING;
+		SattPtr->state_flags = FINITE_LIFE | NONSOLID | IGNORE_SIMILAR | APPEARING;
 		SattPtr->life_span = HYPERJUMP_LIFE + 1;
 
 		SattPtr->death_func = spawn_satellites;
