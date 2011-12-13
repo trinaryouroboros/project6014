@@ -313,7 +313,7 @@ arilou_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	StarShipPtr->ship_input_state |= THRUST;
 
-	 ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = ENTICE;
+	ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = ENTICE;
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 
 	if (StarShipPtr->special_counter == 0)
@@ -347,6 +347,7 @@ arilou_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					|| (lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))) /* FIGHTERS!!! */
 					|| (PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 3, 0)
 						&& (!(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE) 
+							|| (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE && EnemyStarShipPtr->ship_input_state & WEAPON)
 							|| (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE && lpEvalDesc->ObjectPtr->state_flags & IGNORE_VELOCITY)))
 					)
 					&& !(TFB_Random () & 3))
