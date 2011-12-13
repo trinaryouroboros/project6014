@@ -56,7 +56,7 @@ GenerateYehat_generatePlanets (SOLARSYS_STATE *solarSys)
 
 	GenerateDefault_generatePlanets (solarSys);
 	solarSys->PlanetDesc[0].data_index = WATER_WORLD;
-	solarSys->PlanetDesc[0].NumPlanets = 2;
+	solarSys->PlanetDesc[0].NumPlanets = 1;
 	solarSys->PlanetDesc[0].radius = EARTH_RADIUS * 106L / 100;
 	angle = ARCTAN (solarSys->PlanetDesc[0].location.x,
 			solarSys->PlanetDesc[0].location.y);
@@ -86,6 +86,7 @@ GenerateYehat_generateMoons (SOLARSYS_STATE *solarSys, PLANET_DESC *planet)
 		angle = NORMALIZE_ANGLE (LOWORD (rand_val));
 		solarSys->MoonDesc[1].location.x = COSINE (angle, solarSys->MoonDesc[1].radius);
 		solarSys->MoonDesc[1].location.y = SINE (angle, solarSys->MoonDesc[1].radius);
+		solarSys->MoonDesc[1].temp_color = planet->temp_color;
 		ComputeSpeed(&solarSys->MoonDesc[1], TRUE, 1);
 	}
 
