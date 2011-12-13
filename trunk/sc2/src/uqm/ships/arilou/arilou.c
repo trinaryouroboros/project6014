@@ -347,7 +347,7 @@ arilou_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					|| (lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))) /* FIGHTERS!!! */
 					|| (PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 3, 0)
 						&& (!(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE) 
-							|| ((lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE) && lpEvalDesc->which_turn > 0)))
+							|| (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE && lpEvalDesc->ObjectPtr->state_flags & IGNORE_VELOCITY)))
 					)
 					&& !(TFB_Random () & 3))
 			{

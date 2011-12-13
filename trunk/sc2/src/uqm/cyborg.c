@@ -471,9 +471,10 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			if (!ShipFired
 					&& (ConcernCounter == ENEMY_SHIP_INDEX
 					|| (ConcernCounter == ENEMY_WEAPON_INDEX
-					&& ObjectsOfConcern->MoveState != AVOID
+						&& ObjectsOfConcern->MoveState != AVOID
+						&& !(ObjectsOfConcern->ObjectPtr->state_flags & GASSY_SUBSTANCE)
 #ifdef NEVER
-					&& !(StarShipPtr->control & STANDARD_RATING)
+						&& !(StarShipPtr->control & STANDARD_RATING)
 #endif /* NEVER */
 					)))
 			{
@@ -1270,7 +1271,13 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 							PlotIntercept (ed.ObjectPtr,
 							&Ship, ed.ObjectPtr->life_span,
 							DISPLAY_TO_WORLD (40 << RESOLUTION_FACTOR)); // JMS_GFX
-					ed.MoveState = AVOID;
+					
+					// This tries to make the AI behave better when Baul gas has stuck to it.
+					if (!(ed.ObjectPtr->state_flags & GASSY_SUBSTANCE) 
+						|| (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE && ed.ObjectPtr->state_flags & IGNORE_VELOCITY))
+							ed.MoveState = AVOID;
+					else if (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE)
+						ed.MoveState = ENTICE;
 				}
 
 				if (ed.which_turn > 0
