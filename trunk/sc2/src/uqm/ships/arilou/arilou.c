@@ -346,9 +346,10 @@ arilou_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					|| (IsTrackingWeapon && (lpEvalDesc->which_turn == 1
 					|| (lpEvalDesc->ObjectPtr->state_flags & CREW_OBJECT))) /* FIGHTERS!!! */
 					|| (PlotIntercept (lpEvalDesc->ObjectPtr, ShipPtr, 3, 0)
-						&& (!(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE) 
-							|| (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE && EnemyStarShipPtr->ship_input_state & WEAPON)
-							|| (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE && lpEvalDesc->ObjectPtr->state_flags & IGNORE_VELOCITY)))
+						&& (!(lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE) // Ignore stuck gas
+							|| (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE && EnemyStarShipPtr->ship_input_state & WEAPON
+								&& ObjectsOfConcern[ENEMY_SHIP_INDEX].which_turn <= 20) // If sticking to gas, teleport when Baul is near&firing primary
+							|| (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE && lpEvalDesc->ObjectPtr->state_flags & IGNORE_VELOCITY))) // non-stuck gas
 					)
 					&& !(TFB_Random () & 3))
 			{

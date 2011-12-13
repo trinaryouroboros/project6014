@@ -1073,6 +1073,14 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 	
 	for (i = 0; i < NUM_SPRAYS; i++)
 	{
+		BYTE damage;
+		
+		// Only the foremost one deals damage
+		if (i == NUM_SPRAYS-1)
+			damage = 1;
+		else
+			damage = 0;
+		
 		// This mechanism can be used to alter the "pipe" from which the spray particles come.
 		spray_side[ShipPtr->playerNr] = (spray_side[ShipPtr->playerNr] + 1) % 2;
 		if(spray_side[ShipPtr->playerNr])
@@ -1096,7 +1104,7 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 		MissileBlock.pixoffs = 4 + ((i * SPRAY_DIST) << RESOLUTION_FACTOR);
 		MissileBlock.speed = MISSILE_SPEED << RESOLUTION_FACTOR; // JMS_GFX
 		MissileBlock.hit_points = MISSILE_HITS;
-		MissileBlock.damage = MISSILE_DAMAGE;
+		MissileBlock.damage = damage;
 		MissileBlock.life = MISSILE_LIFE;
 		MissileBlock.preprocess_func = spray_preprocess;
 		MissileBlock.blast_offs = MISSILE_OFFSET;

@@ -472,7 +472,7 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 					&& (ConcernCounter == ENEMY_SHIP_INDEX
 					|| (ConcernCounter == ENEMY_WEAPON_INDEX
 						&& ObjectsOfConcern->MoveState != AVOID
-						&& !(ObjectsOfConcern->ObjectPtr->state_flags & GASSY_SUBSTANCE)
+						&& !(ObjectsOfConcern->ObjectPtr->state_flags & GASSY_SUBSTANCE) // Don't fire at baul gas. It's useless doing that.
 #ifdef NEVER
 						&& !(StarShipPtr->control & STANDARD_RATING)
 #endif /* NEVER */
@@ -1279,15 +1279,11 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 					// This tries to make the AI behave better when Baul gas has stuck to it.
 					else if (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE)
 					{
-						// The idea is that this would make the enemy ship stay away from Baul whilst gas is sticked
-						// to it. Not sure though if this actually does anything.
-						//ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = ENTICE;
+						ed.MoveState = PURSUE;
 						
-						// At least this certainly does something.
-						// 0:  ship mostly ignores the gas that is sticking to it.
-						// >0: ship coasts away (and Arilou accelerates away) to a single direction until the gas evaporates.
-						//	   (would be good otherwise, but it's too easy for Baul to catch the ship from flip-screen and kill it).
-						ed.which_turn = 0;
+						// Androsynth normally goes apeshit when in gas cloud. Bettter make it just ignore the g
+						if (StarShipPtr->SpeciesID == ANDROSYNTH_ID)
+							ed.which_turn = 0;
 					}
 				}
 
