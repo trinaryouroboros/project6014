@@ -1277,7 +1277,10 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 						|| (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE && ed.ObjectPtr->state_flags & IGNORE_VELOCITY))
 							ed.MoveState = AVOID;
 					else if (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE)
+					{
 						ed.MoveState = ENTICE;
+						ed.which_turn = 10;
+					}
 				}
 
 				if (ed.which_turn > 0
