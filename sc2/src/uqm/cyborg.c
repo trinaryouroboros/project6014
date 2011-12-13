@@ -1272,14 +1272,22 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 							&Ship, ed.ObjectPtr->life_span,
 							DISPLAY_TO_WORLD (40 << RESOLUTION_FACTOR)); // JMS_GFX
 					
-					// This tries to make the AI behave better when Baul gas has stuck to it.
+					// Avoid normal shots and Baul gas that is not yet sticking to the ship.
 					if (!(ed.ObjectPtr->state_flags & GASSY_SUBSTANCE) 
 						|| (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE && ed.ObjectPtr->state_flags & IGNORE_VELOCITY))
 							ed.MoveState = AVOID;
+					// This tries to make the AI behave better when Baul gas has stuck to it.
 					else if (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE)
 					{
-						ed.MoveState = ENTICE;
-						ed.which_turn = 10;
+						// The idea is that this would make the enemy ship stay away from Baul whilst gas is sticked
+						// to it. Not sure though if this actually does anything.
+						//ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = ENTICE;
+						
+						// At least this certainly does something.
+						// 0:  ship mostly ignores the gas that is sticking to it.
+						// >0: ship coasts away (and Arilou accelerates away) to a single direction until the gas evaporates.
+						//	   (would be good otherwise, but it's too easy for Baul to catch the ship from flip-screen and kill it).
+						ed.which_turn = 0;
 					}
 				}
 
