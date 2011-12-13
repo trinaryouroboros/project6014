@@ -1,6 +1,28 @@
 #labels Admin
-A page of gadgets showing interesting stuff about our project.
+Interesting stuff about our project.
+
+These are collected from the [http://www.ohloh.net/p/project6014/ Project 6014] page on Ohloh.Net.
 
 <wiki:gadget url="http://www.ohloh.net/p/project6014/widgets/project_basic_stats.xml" height="220" border="1" />
 
+Note that we incoporate pretty much all of The Ur-Quan Masters, which has the following stats:
+
 <wiki:gadget url="http://www.ohloh.net/p/sc2/widgets/project_basic_stats.xml" height="220" border="1" />
+
+As Damon pointed out in a comment on r2001 (13th Dec 2011):
+
+{{{
+  WoooHoo! 
+  2001 revisions! 
+  219,000 lines of code! 
+  15 committers!
+  43,225 Files!
+  651 Folders!
+  647 MB (uncompressed)
+  14,749 Website Visits
+  5,009 Unique Visitors
+  68,272 Page views
+  30,310 Forum views
+  3 Demo releases!
+  And 6013 other projects that must have been cancelled.
+}}}
