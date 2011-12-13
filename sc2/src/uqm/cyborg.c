@@ -1281,8 +1281,10 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 					{
 						ed.MoveState = PURSUE;
 						
-						// Androsynth normally goes apeshit when in gas cloud. Bettter make it just ignore the g
+						// Androsynth normally goes apeshit when in gas cloud. Better make it just ignore the gas.
 						if (StarShipPtr->SpeciesID == ANDROSYNTH_ID)
+							ed.which_turn = 0;
+						else if (StarShipPtr->SpeciesID == UR_QUAN_ID)
 							ed.which_turn = 0;
 					}
 				}
