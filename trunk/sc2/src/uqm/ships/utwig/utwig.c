@@ -430,7 +430,7 @@ utwig_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			&& (facing_difference < 2 && facing_difference > -2))
 			StarShipPtr->ship_input_state |= SPECIAL;
 		
-		log_add (log_Debug, "my_facing %d, his facing-8by16 %d, difference %d", StarShipPtr->ShipFacing, (EnemyStarShipPtr->ShipFacing + 8) % 16, facing_difference);
+		//log_add (log_Debug, "my_facing %d, his facing-8by16 %d, difference %d", StarShipPtr->ShipFacing, (EnemyStarShipPtr->ShipFacing + 8) % 16, facing_difference);
 		
 		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON)
 				&& StarShipPtr->RaceDescPtr->ship_info.energy_level)

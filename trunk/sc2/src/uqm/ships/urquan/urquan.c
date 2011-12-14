@@ -661,7 +661,7 @@ urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				&& !(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags
 					& (LIGHT_POINT_DEFENSE | HEAVY_POINT_DEFENSE))
 				&& (EnemyStarShipPtr->SpeciesID != BAUL_ID
-					|| (EnemyStarShipPtr->SpeciesID == BAUL_ID && lpEvalDesc->which_turn <= 12))
+					|| (EnemyStarShipPtr->SpeciesID == BAUL_ID && lpEvalDesc->which_turn <= 14))
 				&& (StarShipPtr->RaceDescPtr->characteristics.special_wait < 6
 				|| (MANEUVERABILITY (&EnemyStarShipPtr->RaceDescPtr->cyborg_control
 					) <= (SLOW_SHIP << RESOLUTION_FACTOR) // JMS_GFX

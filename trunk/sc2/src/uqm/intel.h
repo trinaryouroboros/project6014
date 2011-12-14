@@ -72,6 +72,7 @@ extern BOOLEAN ship_weapons (ELEMENT *ShipPtr, ELEMENT *OtherPtr,
 extern void Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr);
 extern void Entice (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr);
 extern void Avoid (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr);
+extern void InGas (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr); // JMS
 extern BOOLEAN TurnShip (ELEMENT *ShipPtr, COUNT angle);
 extern BOOLEAN ThrustShip (ELEMENT *ShipPtr, COUNT angle);
 

@@ -151,6 +151,7 @@ typedef enum
 	PURSUE = 0,
 	AVOID,
 	ENTICE,
+	IN_GAS, // JMS
 	NO_MOVEMENT
 } MOVEMENT_STATE;
 

@@ -342,6 +342,9 @@ ship_movement (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 		case ENTICE:
 			Entice (ShipPtr, EvalDescPtr);
 			break;
+		case IN_GAS: // JMS
+			InGas (ShipPtr, EvalDescPtr);
+			break;
 		case NO_MOVEMENT:
 			break;
 	}
@@ -427,6 +430,7 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	BOOLEAN ShipMoved, ShipFired;
 	COUNT margin_of_error;
 	STARSHIP *StarShipPtr;
+	EVALUATE_DESC *ObjectsOfConcernEWeapon;
 
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 
@@ -452,6 +456,9 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		margin_of_error = DISPLAY_TO_WORLD (40 << RESOLUTION_FACTOR); // JMS_GFX
 
 	ObjectsOfConcern += ConcernCounter;
+	
+	ObjectsOfConcernEWeapon = ObjectsOfConcern - ConcernCounter + ENEMY_WEAPON_INDEX;
+	
 	while (ConcernCounter--)
 	{
 		--ObjectsOfConcern;
@@ -460,10 +467,13 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			if (!ShipMoved
 					&& (ConcernCounter != ENEMY_WEAPON_INDEX
 					|| ObjectsOfConcern->MoveState == PURSUE
+					|| (ObjectsOfConcernEWeapon->MoveState == IN_GAS && ConcernCounter == ENEMY_WEAPON_INDEX)
 					|| (ObjectsOfConcern->ObjectPtr->state_flags & CREW_OBJECT)
 					|| MANEUVERABILITY (
 							&StarShipPtr->RaceDescPtr->cyborg_control
-							) >= (MEDIUM_SHIP << RESOLUTION_FACTOR))) // JMS_GFX
+							) >= (MEDIUM_SHIP << RESOLUTION_FACTOR) // JMS_GFX
+						)
+				)
 			{
 				ship_movement (ShipPtr, ObjectsOfConcern);
 				ShipMoved = TRUE;
@@ -478,8 +488,8 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 #endif /* NEVER */
 					)))
 			{
-				ShipFired = ship_weapons (ShipPtr,
-						ObjectsOfConcern->ObjectPtr, margin_of_error);
+				ShipFired = ship_weapons (ShipPtr,ObjectsOfConcern->ObjectPtr, margin_of_error);
+				
 				if (ShipFired)
 					StarShipPtr->ship_input_state |= WEAPON;
 			}
@@ -579,13 +589,12 @@ ThrustShip (ELEMENT *ShipPtr, COUNT angle)
 void
 Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 {
-	BYTE maneuver_state, facing_correct;
+	BYTE maneuver_state;
 	COUNT desired_thrust_angle, desired_turn_angle;
 	SIZE delta_x, delta_y;
 	SIZE ship_delta_x, ship_delta_y;
 	SIZE other_delta_x, other_delta_y;
 	ELEMENT *OtherObjPtr;
-	EVALUATE_DESC *EvalDescPtr2; // JMS
 	VELOCITY_DESC ShipVelocity, OtherVelocity;
 	COUNT distance_to_give_up_and_turn; // JMS
 
@@ -598,38 +607,6 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 			ShipPtr->current.location.y + ship_delta_y;
 
 	OtherObjPtr = EvalDescPtr->ObjectPtr;
-
-	// JMS: Pointer to [ENEMY_SHIP_INDEX] has to be taken with pointer arithmetic
-	if (!(OtherObjPtr->state_flags & PLAYER_SHIP))
-		EvalDescPtr2 = EvalDescPtr - ENEMY_WEAPON_INDEX;
-	else
-		EvalDescPtr2 = EvalDescPtr;
-	
-	// If Baul gas is stuck to ship and enemy ship is alive, examine enemy ship.
-	if (OtherObjPtr->state_flags & GASSY_SUBSTANCE 
-		&& !(OtherObjPtr->state_flags & IGNORE_VELOCITY)
-		&& OtherObjPtr->mass_points == 0
-		&& EvalDescPtr->which_turn <= 1
-		&& EvalDescPtr2->ObjectPtr
-		&& !(OtherObjPtr->state_flags & PLAYER_SHIP))
-	{
-		if (EvalDescPtr2->which_turn > 12 && EvalDescPtr2->which_turn <= 24)
-		{	
-			OtherObjPtr = EvalDescPtr2->ObjectPtr;
-			facing_correct = 32;
-		}
-		else
-		{
-			OtherObjPtr = EvalDescPtr->ObjectPtr;
-			facing_correct = 0;
-		}
-	}
-	// If this ain't Baul gas we're dealing with here, examine the object normally.
-	else
-	{
-		OtherObjPtr = EvalDescPtr->ObjectPtr;
-		facing_correct = 0;
-	}
 		
 	OtherVelocity = OtherObjPtr->velocity;
 	GetNextVelocityComponents (&OtherVelocity,
@@ -641,12 +618,7 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 			- ShipPtr->next.location.y;
 	delta_x = WRAP_DELTA_X (delta_x);
 	delta_y = WRAP_DELTA_Y (delta_y);
-	desired_thrust_angle = (ARCTAN (delta_x, delta_y) + facing_correct) % 64;
-	
-	//log_add (log_Debug, "%d", desired_thrust_angle);
-	
-	// Ensure we are examining the correct object.
-	OtherObjPtr = EvalDescPtr->ObjectPtr;
+	desired_thrust_angle = ARCTAN (delta_x, delta_y);
 
 	maneuver_state = 0;
 	if (ShipPtr->turn_wait == 0)
@@ -655,9 +627,7 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 			&& ((OtherObjPtr->state_flags & PLAYER_SHIP)
 			|| elementsOfSamePlayer (OtherObjPtr, ShipPtr)
 			|| OtherObjPtr->preprocess_func == crew_preprocess
-			|| ((OtherObjPtr->state_flags & GASSY_SUBSTANCE) 
-				&& !(OtherObjPtr->state_flags & IGNORE_VELOCITY)) // XXX: This whole OR clause makes the ships a bit erratic when in gas cloud...
-				)
+			)
 		)
 		maneuver_state |= THRUST;
 
@@ -1063,6 +1033,120 @@ Avoid (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 	(void) EvalDescPtr;  /* Satisfying compiler (unused parameter) */
 }
 
+void
+InGas (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
+{
+	STARSHIP *StarShipPtr;
+	BYTE maneuver_state, facing_correct;
+	COUNT desired_thrust_angle, desired_turn_angle;
+	SIZE delta_x, delta_y;
+	SIZE ship_delta_x, ship_delta_y;
+	SIZE other_delta_x, other_delta_y;
+	ELEMENT *OtherObjPtr;
+	EVALUATE_DESC *EvalDescPtr2; // JMS
+	VELOCITY_DESC ShipVelocity, OtherVelocity;
+	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	
+	ShipVelocity = ShipPtr->velocity;
+	GetNextVelocityComponents (&ShipVelocity, &ship_delta_x, &ship_delta_y, EvalDescPtr->which_turn);
+	ShipPtr->next.location.x = ShipPtr->current.location.x + ship_delta_x;
+	ShipPtr->next.location.y = ShipPtr->current.location.y + ship_delta_y;
+	
+	OtherObjPtr = EvalDescPtr->ObjectPtr;
+	
+	// JMS: Pointer to [ENEMY_SHIP_INDEX] has to be taken with pointer arithmetic.
+	if (!(OtherObjPtr->state_flags & PLAYER_SHIP))
+		EvalDescPtr2 = EvalDescPtr - ENEMY_WEAPON_INDEX;
+	// If for some reason this function is called as the ship's movement behavior against some other
+	// object than enemy weapon object (Baul gas cloud), we have no guarantees that
+	// "EvalDescPtr - ENEMY_WEAPON_INDEX" will actually point to enemy ship.
+	// To make sure things don't crash then, we make our ship target the gas cloud itself, not the enemy ship.
+	// Of course, this results in not-so-good AI in that case, but at least the game won't crash.
+	else
+		EvalDescPtr2 = EvalDescPtr;
+	
+	/*log_add (log_Debug, "%d, %d, %d, %d, %d, %d", 
+			 OtherObjPtr->state_flags & GASSY_SUBSTANCE,
+			 !(OtherObjPtr->state_flags & IGNORE_VELOCITY),
+			 OtherObjPtr->mass_points == 0,
+			 EvalDescPtr->which_turn <= 1,
+			 EvalDescPtr2->ObjectPtr,
+			 !(OtherObjPtr->state_flags & PLAYER_SHIP));*/
+	
+	// If Baul gas is stuck to ship and enemy ship is alive, let's aim at avoiding the enemy ship.
+	if (OtherObjPtr->state_flags & GASSY_SUBSTANCE 
+		&& !(OtherObjPtr->state_flags & IGNORE_VELOCITY)
+		&& OtherObjPtr->mass_points == 0
+		&& EvalDescPtr->which_turn <= 1
+		&& EvalDescPtr2->ObjectPtr
+		&& !(OtherObjPtr->state_flags & PLAYER_SHIP))
+	{
+		// If we're a suitable distance away from the enemy ship, avoid it.
+		if (EvalDescPtr2->which_turn > 12 && EvalDescPtr2->which_turn <= 24 && StarShipPtr->SpeciesID != KOHR_AH_ID)
+		{	
+			OtherObjPtr = EvalDescPtr2->ObjectPtr;
+			facing_correct = 32;
+		}
+		// Kohr-Ah coasts away while looking at the enemy ship.
+		else if (StarShipPtr->SpeciesID == KOHR_AH_ID)
+		{
+			OtherObjPtr = EvalDescPtr2->ObjectPtr;
+			facing_correct = 0;
+		}
+		// If we're really close or really far away, don't try to avoid enemy ship.
+		// (If we're really close, we want to fire at the enemy, and if we're far away, the Baul can't hit us anyway.)
+		else
+		{
+			OtherObjPtr = EvalDescPtr->ObjectPtr;
+			facing_correct = 0;
+		}
+	}
+	// If this ain't Baul gas we're dealing with here, examine the enemy weapon object normally.
+	else
+	{
+		OtherObjPtr = EvalDescPtr->ObjectPtr;
+		facing_correct = 0;
+	}
+	
+	OtherVelocity = OtherObjPtr->velocity;
+	GetNextVelocityComponents (&OtherVelocity, &other_delta_x, &other_delta_y, EvalDescPtr->which_turn);
+	
+	delta_x = (OtherObjPtr->current.location.x + other_delta_x) - ShipPtr->next.location.x;
+	delta_y = (OtherObjPtr->current.location.y + other_delta_y) - ShipPtr->next.location.y;
+	delta_x = WRAP_DELTA_X (delta_x);
+	delta_y = WRAP_DELTA_Y (delta_y);
+	desired_thrust_angle = (ARCTAN (delta_x, delta_y) + facing_correct) % 64;
+	
+	//log_add (log_Debug, "%d", desired_thrust_angle);
+	
+	// Return to examining the enemy weapon object.
+	OtherObjPtr = EvalDescPtr->ObjectPtr;
+	
+	maneuver_state = 0;
+	if (ShipPtr->turn_wait == 0)
+		maneuver_state |= LEFT | RIGHT;
+	if (ShipPtr->thrust_wait == 0
+		&& (StarShipPtr->SpeciesID != KOHR_AH_ID
+			|| (StarShipPtr->SpeciesID == KOHR_AH_ID && EvalDescPtr2->which_turn < 12)) // Up-close, Kohr-Ah chases. Far away it coasts.
+		&& ((OtherObjPtr->state_flags & PLAYER_SHIP)
+			|| elementsOfSamePlayer (OtherObjPtr, ShipPtr)
+			|| OtherObjPtr->preprocess_func == crew_preprocess
+			|| ((OtherObjPtr->state_flags & GASSY_SUBSTANCE) 
+				&& !(OtherObjPtr->state_flags & IGNORE_VELOCITY))
+			)
+		)
+		maneuver_state |= THRUST;
+	
+	desired_turn_angle = NORMALIZE_ANGLE (desired_thrust_angle + HALF_CIRCLE);
+	
+	if (maneuver_state & (LEFT | RIGHT))
+		TurnShip (ShipPtr, desired_thrust_angle);
+	
+	if (maneuver_state & THRUST)
+		ThrustShip (ShipPtr, desired_thrust_angle);
+}
+
 BATTLE_INPUT_STATE
 tactical_intelligence (ComputerInputContext *context, STARSHIP *StarShipPtr)
 {
@@ -1204,8 +1288,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 
 				ed.which_turn = (WORLD_TO_TURN (square_root ((long)dx * dx + (long)dy * dy))) >> RESOLUTION_FACTOR; // JMS_GFX
 				
-				if (ed.which_turn >
-						ObjectsOfConcern[ENEMY_SHIP_INDEX].which_turn)
+				if (ed.which_turn > ObjectsOfConcern[ENEMY_SHIP_INDEX].which_turn)
 				{
 					UnlockElement (hElement);
 					continue;
@@ -1258,8 +1341,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 				{
 					ed.which_turn = (WORLD_TO_TURN (square_root ((long)dx * dx + (long)dy * dy))) >> RESOLUTION_FACTOR; // JMS_GFX
 
-					if (ed.which_turn <
-							ObjectsOfConcern[FIRST_EMPTY_INDEX].which_turn)
+					if (ed.which_turn < ObjectsOfConcern[FIRST_EMPTY_INDEX].which_turn)
 					{
 						ed.MoveState = PURSUE;
 						ed.facing = GetVelocityTravelAngle (
@@ -1321,15 +1403,21 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 					// This tries to make the AI behave better when Baul gas has stuck to it.
 					else if (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE)
 					{
-						// This refers to the "movesta
-						ed.MoveState = PURSUE;
+						// This means "how should I move in reference to the gas cloud". We use a special InGas() behavior for this.
+						ed.MoveState = IN_GAS;
 						
 						// Androsynth and Druuge normally go apeshit when in gas cloud. Better make them just ignore the gas.
-						if (StarShipPtr->SpeciesID == ANDROSYNTH_ID || StarShipPtr->SpeciesID == DRUUGE_ID )
+						// Mmrnmhrm didn't go as batty, but it's still better when ignoring the gas clouds.
+						if (StarShipPtr->SpeciesID == ANDROSYNTH_ID 
+							|| StarShipPtr->SpeciesID == DRUUGE_ID
+							|| StarShipPtr->SpeciesID == MMRNMHRM_ID)
 						{
 							ed.MoveState = AVOID;
 							ed.which_turn = 0;
 						}
+						// Mycon works better in plain AVOID mode than with IN_GAS
+						else if (StarShipPtr->SpeciesID == MYCON_ID)
+							ed.MoveState = AVOID;
 					}
 				}
 
@@ -1343,7 +1431,7 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 					ed.facing = GetVelocityTravelAngle (
 							&ed.ObjectPtr->velocity
 							);
-
+	
 					ObjectsOfConcern[ENEMY_WEAPON_INDEX] = ed;
 				}
 			}
