@@ -394,6 +394,13 @@ yehat_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Con
 			&& (facing_difference < 2 && facing_difference > -2))
 			StarShipPtr->ship_input_state |= SPECIAL;
 		
+		// JMS: When Foon-foon is near it might damage Yehat in no time with the dervish sabre.
+		// As a precaution, raise shields soon enough.
+		if (EnemyStarShipPtr->SpeciesID == FOONFOON_ID
+			&& lpEvalDesc->which_turn < 10
+			&& (TFB_Random () & 3))
+			StarShipPtr->ship_input_state |= SPECIAL;
+		
 		//log_add (log_Debug, "my_facing %d, his facing-8by16 %d, difference %d", StarShipPtr->ShipFacing, (EnemyStarShipPtr->ShipFacing + 8) % 16, facing_difference);
 		
 		if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON))
