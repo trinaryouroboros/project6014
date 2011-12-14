@@ -579,12 +579,13 @@ ThrustShip (ELEMENT *ShipPtr, COUNT angle)
 void
 Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 {
-	BYTE maneuver_state;
+	BYTE maneuver_state, facing_correct;
 	COUNT desired_thrust_angle, desired_turn_angle;
 	SIZE delta_x, delta_y;
 	SIZE ship_delta_x, ship_delta_y;
 	SIZE other_delta_x, other_delta_y;
 	ELEMENT *OtherObjPtr;
+	EVALUATE_DESC *EvalDescPtr2; // JMS
 	VELOCITY_DESC ShipVelocity, OtherVelocity;
 	COUNT distance_to_give_up_and_turn; // JMS
 
@@ -597,6 +598,39 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 			ShipPtr->current.location.y + ship_delta_y;
 
 	OtherObjPtr = EvalDescPtr->ObjectPtr;
+
+	// JMS: Pointer to [ENEMY_SHIP_INDEX] has to be taken with pointer arithmetic
+	if (!(OtherObjPtr->state_flags & PLAYER_SHIP))
+		EvalDescPtr2 = EvalDescPtr - ENEMY_WEAPON_INDEX;
+	else
+		EvalDescPtr2 = EvalDescPtr;
+	
+	// If Baul gas is stuck to ship and enemy ship is alive, examine enemy ship.
+	if (OtherObjPtr->state_flags & GASSY_SUBSTANCE 
+		&& !(OtherObjPtr->state_flags & IGNORE_VELOCITY)
+		&& OtherObjPtr->mass_points == 0
+		&& EvalDescPtr->which_turn <= 1
+		&& EvalDescPtr2->ObjectPtr
+		&& !(OtherObjPtr->state_flags & PLAYER_SHIP))
+	{
+		if (EvalDescPtr2->which_turn > 12 && EvalDescPtr2->which_turn <= 24)
+		{	
+			OtherObjPtr = EvalDescPtr2->ObjectPtr;
+			facing_correct = 32;
+		}
+		else
+		{
+			OtherObjPtr = EvalDescPtr->ObjectPtr;
+			facing_correct = 0;
+		}
+	}
+	// If this ain't Baul gas we're dealing with here, examine the object normally.
+	else
+	{
+		OtherObjPtr = EvalDescPtr->ObjectPtr;
+		facing_correct = 0;
+	}
+		
 	OtherVelocity = OtherObjPtr->velocity;
 	GetNextVelocityComponents (&OtherVelocity,
 			&other_delta_x, &other_delta_y, EvalDescPtr->which_turn);
@@ -607,7 +641,12 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 			- ShipPtr->next.location.y;
 	delta_x = WRAP_DELTA_X (delta_x);
 	delta_y = WRAP_DELTA_Y (delta_y);
-	desired_thrust_angle = ARCTAN (delta_x, delta_y);
+	desired_thrust_angle = (ARCTAN (delta_x, delta_y) + facing_correct) % 64;
+	
+	//log_add (log_Debug, "%d", desired_thrust_angle);
+	
+	// Ensure we are examining the correct object.
+	OtherObjPtr = EvalDescPtr->ObjectPtr;
 
 	maneuver_state = 0;
 	if (ShipPtr->turn_wait == 0)
@@ -615,7 +654,11 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 	if (ShipPtr->thrust_wait == 0
 			&& ((OtherObjPtr->state_flags & PLAYER_SHIP)
 			|| elementsOfSamePlayer (OtherObjPtr, ShipPtr)
-			|| OtherObjPtr->preprocess_func == crew_preprocess))
+			|| OtherObjPtr->preprocess_func == crew_preprocess
+			|| ((OtherObjPtr->state_flags & GASSY_SUBSTANCE) 
+				&& !(OtherObjPtr->state_flags & IGNORE_VELOCITY)) // XXX: This whole OR clause makes the ships a bit erratic when in gas cloud...
+				)
+		)
 		maneuver_state |= THRUST;
 
 	desired_turn_angle = NORMALIZE_ANGLE (desired_thrust_angle + HALF_CIRCLE);
@@ -682,8 +725,7 @@ Pursue (ELEMENT *ShipPtr, EVALUATE_DESC *EvalDescPtr)
 			// This code prevents Kohr-Ah, Ur-Quan and ISD from turning around mid-chase while pursuing Earthling.
 			if (StarShipPtr->SpeciesID == (KOHR_AH_ID | UR_QUAN_ID | ISD_ID)
 				&& EnemyStarShipPtr->SpeciesID == EARTHLING_ID 
-				&& !(EnemyStarShipPtr->cur_status_flags &
-					 (SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL)))
+				&& !(EnemyStarShipPtr->cur_status_flags & (SHIP_BEYOND_MAX_SPEED | SHIP_IN_GRAVITY_WELL)))
 				distance_to_give_up_and_turn = 44;
 			else
 				distance_to_give_up_and_turn = 24;
@@ -1279,13 +1321,15 @@ if (!(ShipPtr->state_flags & FINITE_LIFE)
 					// This tries to make the AI behave better when Baul gas has stuck to it.
 					else if (ed.ObjectPtr->state_flags & GASSY_SUBSTANCE)
 					{
+						// This refers to the "movesta
 						ed.MoveState = PURSUE;
 						
-						// Androsynth normally goes apeshit when in gas cloud. Better make it just ignore the gas.
-						if (StarShipPtr->SpeciesID == ANDROSYNTH_ID)
+						// Androsynth and Druuge normally go apeshit when in gas cloud. Better make them just ignore the gas.
+						if (StarShipPtr->SpeciesID == ANDROSYNTH_ID || StarShipPtr->SpeciesID == DRUUGE_ID )
+						{
+							ed.MoveState = AVOID;
 							ed.which_turn = 0;
-						else if (StarShipPtr->SpeciesID == UR_QUAN_ID)
-							ed.which_turn = 0;
+						}
 					}
 				}
 

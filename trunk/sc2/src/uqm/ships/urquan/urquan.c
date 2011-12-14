@@ -622,7 +622,7 @@ urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 {
 	EVALUATE_DESC *lpEvalDesc;
 	STARSHIP *StarShipPtr;
-
+	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 
 	 ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = PURSUE;
@@ -636,6 +636,14 @@ urquan_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			&& lpEvalDesc->which_turn == 2
 			&& ObjectsOfConcern[ENEMY_SHIP_INDEX].which_turn > 16)))
 		lpEvalDesc->MoveState = PURSUE;
+	
+	/*if (lpEvalDesc->ObjectPtr)
+	{
+		if (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE 
+			&& lpEvalDesc->ObjectPtr->mass_points == 0
+			&& lpEvalDesc->which_turn <= 1)
+			ObjectsOfConcern[ENEMY_SHIP_INDEX].MoveState = ENTICE;
+	}*/
 
 	ship_intelligence (ShipPtr,
 			ObjectsOfConcern, ConcernCounter);
