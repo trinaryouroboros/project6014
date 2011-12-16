@@ -493,11 +493,31 @@ ilwrath_preprocess (ELEMENT *ElementPtr)
 		}
 		else if (!sameColor (color, BLACK_COLOR))
 		{
-			if (sameColor (color,
-					BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01)))
+			if (sameColor (color, BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x14), 0x01)))
 			{
+				HELEMENT hElement, hNextElement;
+				ELEMENT  *EnemyShipCandidatePtr;
+				STARSHIP *EnemyStarShipCandidatePtr;
+				
 				SetPrimColor (lpPrim, BLACK_COLOR);
-				Untarget (ElementPtr);
+				
+				// JMS: Don't untarget Baul gas clouds. (Otherwise they would just vanish upon cloaking.)
+				for (hElement = GetHeadElement (); hElement != 0; hElement = hNextElement)
+				{
+					LockElement (hElement, &EnemyShipCandidatePtr);
+					hNextElement = GetSuccElement (EnemyShipCandidatePtr);
+					
+					
+					if (EnemyShipCandidatePtr->state_flags & PLAYER_SHIP)
+					{
+						GetElementStarShip (EnemyShipCandidatePtr, &EnemyStarShipCandidatePtr);
+						
+						if (EnemyStarShipCandidatePtr->SpeciesID != BAUL_ID)
+							Untarget (ElementPtr);
+						
+						break;
+					}
+				}
 			}
 			else if (sameColor (color,
 					BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09)))
