@@ -41,14 +41,15 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 10
 
-// Weapon specifics
+// Weapon graphics specifics
+#define LAST_SPRAY_INDEX 5
 #define SHOCKWAVE_FRAMES 8
 #define LAST_GAS_INDEX 8
 #define LAST_SHOCKWAVE_INDEX (LAST_GAS_INDEX + SHOCKWAVE_FRAMES)
-#define NUM_DISSOLVE_ANIMS 4
-#define MAX_GASES 32
-#define SHOCKWAVE_RANGE (150 << RESOLUTION_FACTOR) // JMS_GFX
-#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 25) // JMS_GFX
+#define NUM_DISSOLVE_FRAMES 4
+#define LAST_DISSOLVE_INDEX (LAST_SHOCKWAVE_INDEX + NUM_DISSOLVE_FRAMES)
+#define NUM_EMERGE_FRAMES 3
+
 #include "../orz/orz.h"
 #define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && ptr->collision_func == marine_collision)
 #define IS_GAS(ptr) (ptr->preprocess_func == gas_preprocess && ptr->collision_func == gas_collision && ptr->life_span > 1)
@@ -383,6 +384,9 @@ shockwave_preprocess (ELEMENT *ElementPtr)
 	ElementPtr->state_flags |= CHANGING;
 }
 
+#define SHOCKWAVE_RANGE (150 << RESOLUTION_FACTOR) // JMS_GFX
+#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 25) // JMS_GFX
+
 // We cannot use the normal generate_shockwave as death_func since it has two input parameters.
 // To circumvent this, we define an otherwise similar function generate_shockwave_2 here, but
 // which only has 1 input parameter.
@@ -696,7 +700,7 @@ gas_death (ELEMENT *ElementPtr)
 			DissolvePtr->playerNr = ElementPtr->playerNr;
 			DissolvePtr->state_flags = FINITE_LIFE | NONSOLID | IGNORE_SIMILAR | APPEARING;
 			DissolvePtr->turn_wait = 0;
-			DissolvePtr->life_span = NUM_DISSOLVE_ANIMS;
+			DissolvePtr->life_span = NUM_DISSOLVE_FRAMES;
 			DissolvePtr->current.location.x = ElementPtr->current.location.x;
 			DissolvePtr->current.location.y = ElementPtr->current.location.y;
 			DissolvePtr->current.image.farray = StarShipPtr->RaceDescPtr->ship_data.special;
@@ -719,8 +723,7 @@ gas_preprocess (ELEMENT *ElementPtr)
 	STARSHIP *StarShipPtr;
 	SDWORD dx, dy;
 	
-	// JMS_TEST: Baul's gas now flies forward.
-	// Slow down the gas smoothly.
+	// Baul's gas now flies forward. Slow down the gas smoothly.
 	GetCurrentVelocityComponentsSdword (&ElementPtr->velocity, &dx, &dy);
 	if (dx != 0 || dy != 0)
 	{
@@ -742,7 +745,10 @@ gas_preprocess (ELEMENT *ElementPtr)
 		// This makes the gas animate even if the ships are not moving and the screen is stationary.
 		ElementPtr->state_flags |= CHANGING;
 		
-		if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX - 1)
+		if (GetFrameIndex (ElementPtr->current.image.frame) >= LAST_DISSOLVE_INDEX
+			&& GetFrameIndex (ElementPtr->current.image.frame) < LAST_DISSOLVE_INDEX + NUM_EMERGE_FRAMES)
+			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+		else if (GetFrameIndex (ElementPtr->current.image.frame) < LAST_GAS_INDEX - 1)
 			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 		else
 			ElementPtr->next.image.frame = SetAbsFrameIndex (ElementPtr->current.image.frame, 0);
@@ -821,8 +827,10 @@ gas_preprocess (ELEMENT *ElementPtr)
 				eptr->current = eptr->next = ElementPtr->next;
 				eptr->preprocess_func = gas_preprocess;
 				eptr->collision_func = gas_collision;
-				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
+				// No need to have death_func here: It carries on from the declaration in gas_collision.
+				// In fact, if gas_death is put here as death_func, it just messes up the graphics.
 				
+				SetPrimType (&(GLOBAL (DisplayArray))[eptr->PrimIndex], STAMP_PRIM);
 				GetElementStarShip (ElementPtr, &StarShipPtr);
 				SetElementStarShip (eptr, StarShipPtr);
 				eptr->hTarget = ElementPtr->hTarget;
@@ -922,6 +930,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 			GasPtr->thrust_wait = 1;
 			GasPtr->weapon_element_index = ElementPtr0->weapon_element_index;
 			GasPtr->turn_wait = (BYTE)(1 << ((BYTE)TFB_Random () & 1)); /* LEFT or RIGHT */
+			GasPtr->death_func = gas_death;
 			
 			UnlockElement (hGasElement);
 		}
@@ -935,19 +944,19 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 	(void) pPt1;  /* Satisfying compiler (unused parameter) */
 }
 
-#define GAS_HITS 100
-#define GAS_DAMAGE 0
-#define GAS_LIFE 480 // How many 1/24 secs the gas lives.
-#define GAS_OFFSET (4 << RESOLUTION_FACTOR)
-#define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // JMS_TEST: Baul's gas now flies forward.
-#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
-#define SPRAY_HORZ_OFFSET (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
-
 // Secondary weapon: Gas cloud.
 // The IGNORE_VELOCITY flag is very important: It doesn't only stop the gas from reacting to gravity,
 // (see collide.h) but it also makes it possible for the gas to stick to enemy ship (see this file's other gas functions).
 static void spawn_gas (ELEMENT *ShipPtr)
 {
+#define GAS_HITS 100
+#define GAS_DAMAGE 0
+#define GAS_LIFE 480 // How many 1/24 secs the gas lives.
+#define GAS_OFFSET (4 << RESOLUTION_FACTOR)
+#define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // Baul's gas now flies forward.
+#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
+#define SPRAY_HORZ_OFFSET (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
+	
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 	HELEMENT Missile;
@@ -977,8 +986,8 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	MissileBlock.cx = ShipPtr->next.location.x + offs_x;
 	MissileBlock.cy = ShipPtr->next.location.y + offs_y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
-	MissileBlock.face = StarShipPtr->ShipFacing;// JMS_TEST: Baul's gas now flies forward. (this was: (StarShipPtr->ShipFacing - 8) % 16;)
-	MissileBlock.index = 0;
+	MissileBlock.face = StarShipPtr->ShipFacing;// Baul's gas now flies forward. (this was: (StarShipPtr->ShipFacing - 8) % 16;)
+	MissileBlock.index = LAST_DISSOLVE_INDEX; // Start with the gas emerge animation which is the last .pngs in gasXX.ani
 	MissileBlock.sender = ShipPtr->playerNr;
 	MissileBlock.flags = GASSY_SUBSTANCE | IGNORE_VELOCITY; // Don't erase the IGNORE_VELOCITY. It's very important.
 	MissileBlock.pixoffs = GAS_OFFSET;
@@ -993,16 +1002,15 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	if (Missile)
 	{
 		ELEMENT *GasPtr;
-		SIZE	dx, dy; // JMS_TEST: Baul's gas now flies forward.
+		SIZE	dx, dy; // Baul's gas now flies forward.
 		
 		LockElement (Missile, &GasPtr);
 		
-		// JMS_TEST: Baul's gas now flies forward.
+		// Baul's gas now flies forward.
 		GetCurrentVelocityComponents (&ShipPtr->velocity, &dx, &dy);
 		DeltaVelocityComponents (&GasPtr->velocity, dx, dy);
 		GasPtr->current.location.x -= VELOCITY_TO_WORLD (dx);
 		GasPtr->current.location.y -= VELOCITY_TO_WORLD (dy);
-		// JMS_TEST ends
 		
 		GasPtr->collision_func = gas_collision;
 		GasPtr->death_func = gas_death;
@@ -1014,8 +1022,6 @@ static void spawn_gas (ELEMENT *ShipPtr)
 		PutElement (Missile);
 	}
 }
-
-#define LAST_SPRAY_INDEX 5
 
 // The spray preprocess function animates spray.
 static void
