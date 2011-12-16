@@ -507,7 +507,6 @@ ilwrath_preprocess (ELEMENT *ElementPtr)
 					LockElement (hElement, &EnemyShipCandidatePtr);
 					hNextElement = GetSuccElement (EnemyShipCandidatePtr);
 					
-					
 					if (EnemyShipCandidatePtr->state_flags & PLAYER_SHIP)
 					{
 						GetElementStarShip (EnemyShipCandidatePtr, &EnemyStarShipCandidatePtr);
