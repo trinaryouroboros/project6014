@@ -292,7 +292,7 @@ static COUNT
 initialize_test_burst (ELEMENT *ElementPtr, HELEMENT BurstArray[]);
 
 static COUNT
-initialize_test_sabre (ELEMENT *ElementPtr, HELEMENT SabreArray[]);
+initialize_test_saber (ELEMENT *ElementPtr, HELEMENT SabreArray[]);
 
 static COUNT 
 initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[]);
@@ -402,15 +402,23 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 		old_input_state = StarShipPtr->ship_input_state;
 		
 		// The final decision of "to dervish or not to dervish" is made by evaluating a test weapon function,
-		// which is pretty similar to the primary weapon test function. This one only has longer range.
-		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_test_sabre;
+		// which is pretty similar to the primary weapon test function. This one only has different stats.
+		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_test_saber;
 		
 		ship_intelligence (ShipPtr, ObjectsOfConcern, ENEMY_SHIP_INDEX + 1);
 		
 		if (StarShipPtr->ship_input_state & WEAPON)
 		{
+			BYTE right_or_left;
+			
+			right_or_left = TFB_Random () % 2;
+			
 			StarShipPtr->ship_input_state &= ~WEAPON;
 			StarShipPtr->ship_input_state |= SPECIAL;
+			if (right_or_left)
+				StarShipPtr->ship_input_state |= RIGHT;
+			else
+				StarShipPtr->ship_input_state |= LEFT;
 		}
 		
 		StarShipPtr->ship_input_state = (unsigned char)(old_input_state | (StarShipPtr->ship_input_state & SPECIAL));
@@ -708,7 +716,7 @@ initialize_test_burst (ELEMENT *ElementPtr, HELEMENT BurstArray[])
 
 // This is used by AI for testing would it hit the enemy ship with dervish mode.
 static COUNT
-initialize_test_sabre (ELEMENT *ElementPtr, HELEMENT SabreArray[])
+initialize_test_saber (ELEMENT *ElementPtr, HELEMENT SaberArray[])
 {
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
@@ -723,13 +731,13 @@ initialize_test_sabre (ELEMENT *ElementPtr, HELEMENT SabreArray[])
 	MissileBlock.sender = ElementPtr->playerNr;
 	MissileBlock.flags =  IGNORE_SIMILAR;
 	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
-	MissileBlock.speed = (MISSILE_SPEED << RESOLUTION_FACTOR);
+	MissileBlock.speed = DERVISH_THRUST;
 	MissileBlock.hit_points = ElementPtr->mass_points;
 	MissileBlock.damage = ElementPtr->mass_points;
-	MissileBlock.life = NUM_BURST_FRAMES * 2;
+	MissileBlock.life = 10;
 	MissileBlock.preprocess_func = animate_burst;
 	MissileBlock.blast_offs = 25 << RESOLUTION_FACTOR;
-	SabreArray[0] = initialize_missile (&MissileBlock);
+	SaberArray[0] = initialize_missile (&MissileBlock);
 	
 	return (1);
 }
