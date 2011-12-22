@@ -28,8 +28,6 @@ Joris van de Donk - joris@mooses.nl
 package uqmanimationtool;
 
 import com.sun.corba.se.impl.orbutil.concurrent.Mutex;
-import com.thoughtworks.xstream.XStream;
-import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
@@ -44,7 +42,6 @@ import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -63,8 +60,6 @@ import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -84,8 +79,6 @@ public class MainFrame extends javax.swing.JFrame {
     boolean timon = false;
     File editingFile;
     Settings settings;
-    XStream xstream;
-    private static final String CONFFILE = "uqmanimationtool.conf";
     Integer animationTo = null;
     int animPass = 0;
 
@@ -403,23 +396,13 @@ public class MainFrame extends javax.swing.JFrame {
         addWindowListener(new WindowAdapter() {
 
             public void windowClosing(WindowEvent e) {
-                FileWriter fo = null;
                 try {
                     settings.hideDupe = false;
                     settings.showOnlySelected = jCheckBoxMenuItem_ShowSelectedFrameOnly.isSelected();
-                    String xml = xstream.toXML(settings);
-                    fo = new FileWriter(CONFFILE);
-                    fo.write(xml);
-                    fo.close();
+                    settings.writeSettings();
                     System.exit(0);
                 } catch (IOException ex) {
                     Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
-                    try {
-                        fo.close();
-                    } catch (IOException ex) {
-                        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                    }
                 }
             }
         });
@@ -445,15 +428,7 @@ public class MainFrame extends javax.swing.JFrame {
     }
 
     private void initSettings() throws FileNotFoundException, IOException {
-        settings = new Settings();
-        xstream = new XStream(new DomDriver()); // does not require XPP3 library
-        xstream.alias("UQMAnimationToolSettings", Settings.class);
-        File f = new File(CONFFILE);
-        if (f.exists()) {
-            FileInputStream fis = new FileInputStream(f);
-            settings = (Settings) xstream.fromXML(fis);
-            fis.close();
-        }
+        settings = Settings.getInstance();
         jCheckBoxMenuItem_ShowSelectedFrameOnly.setSelected(settings.showOnlySelected);
         hotspotColor = (settings.hotspotColor == null ? Color.red : settings.hotspotColor);
     }
