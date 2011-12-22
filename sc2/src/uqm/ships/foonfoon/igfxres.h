@@ -2,10 +2,10 @@
    should not be edited directly.  Modify the master resource list
    instead and regenerate. */
 
-#define FOONFOON_BEAM_BIG_MASK_PMAP_ANIM "ship.foonfoon.graphics.beam.large"
-#define FOONFOON_BEAM_MED_MASK_PMAP_ANIM "ship.foonfoon.graphics.beam.medium"
-#define FOONFOON_BEAM_SML_MASK_PMAP_ANIM "ship.foonfoon.graphics.beam.small"
 #define FOONFOON_BIG_MASK_PMAP_ANIM "ship.foonfoon.graphics.typhoon.large"
+#define FOONFOON_BURST_BIG_MASK_PMAP_ANIM "ship.foonfoon.graphics.burst.large"
+#define FOONFOON_BURST_MED_MASK_PMAP_ANIM "ship.foonfoon.graphics.burst.medium"
+#define FOONFOON_BURST_SML_MASK_PMAP_ANIM "ship.foonfoon.graphics.burst.small"
 #define FOONFOON_CAPTAIN_MASK_PMAP_ANIM "ship.foonfoon.graphics.captain"
 #define FOONFOON_ICON_MASK_PMAP_ANIM "ship.foonfoon.icons"
 #define FOONFOON_MED_MASK_PMAP_ANIM "ship.foonfoon.graphics.typhoon.medium"

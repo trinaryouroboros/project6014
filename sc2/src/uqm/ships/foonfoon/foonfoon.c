@@ -28,7 +28,7 @@
 #define MAX_CREW 12
 #define MAX_ENERGY 32
 #define ENERGY_REGENERATION 1
-#define WEAPON_ENERGY_COST 1 
+#define WEAPON_ENERGY_COST 3
 #define SPECIAL_ENERGY_COST 10
 #define ENERGY_WAIT 2
 #define MAX_THRUST 52
@@ -39,20 +39,25 @@
 #define SPECIAL_WAIT 0
 
 #define SHIP_MASS 2
-#define MISSILE_SPEED DISPLAY_TO_WORLD (30)
+#define MISSILE_SPEED DISPLAY_TO_WORLD (35)
 #define MISSILE_LIFE 10
 #define MISSILE_RANGE (MISSILE_SPEED * MISSILE_LIFE)
 
-// Weapon specific
+// Weapon gfx
 #define REVERSE_DIR (BYTE)(1 << 7)
 #define NUM_SHIP_FACINGS 16
 #define FOCUSBALL_OFFSET (7 << RESOLUTION_FACTOR)
-#define FOCUSBALL_FRAME_STARTINDEX 16
-#define NUM_FOCUSBALL_ANIMS 3
+#define FOCUSBALL_FRAME_STARTINDEX 64
+#define NUM_FOCUSBALL_FRAMES 3
+#define NUM_BURST_FRAMES 4
+// Weapon attributes
+#define BURST_CHARGE_TIME 39 // Seconds * BATTLE_FRAME_RATE
 #define NUM_SABERS 5
 #define DERVISH_DEGENERATION (-1)
-#define DERVISH_COOLDOWN_TIME 36 
+#define DERVISH_COOLDOWN_TIME 36 // Seconds *BATTLE_FRAME_RATE
 #define DERVISH_THRUST (80 << RESOLUTION_FACTOR) // JMS_GFX
+#define RECOIL_VELOCITY WORLD_TO_VELOCITY (DISPLAY_TO_WORLD (6 << RESOLUTION_FACTOR)) // JMS_GFX
+#define MAX_RECOIL_VELOCITY (RECOIL_VELOCITY * 6)
 
 static RACE_DESC foonfoon_desc =
 {
@@ -92,9 +97,9 @@ static RACE_DESC foonfoon_desc =
 			FOONFOON_SML_MASK_PMAP_ANIM,
 		},
 		{
-			FOONFOON_BEAM_BIG_MASK_PMAP_ANIM,
-			FOONFOON_BEAM_MED_MASK_PMAP_ANIM,
-			FOONFOON_BEAM_SML_MASK_PMAP_ANIM,
+			FOONFOON_BURST_BIG_MASK_PMAP_ANIM,
+			FOONFOON_BURST_MED_MASK_PMAP_ANIM,
+			FOONFOON_BURST_SML_MASK_PMAP_ANIM,
 		},
 		{
 			FOONFOON_SABRE_BIG_MASK_PMAP_ANIM,
@@ -128,7 +133,7 @@ static RACE_DESC foonfoon_desc =
 // JMS_GFX
 #define MAX_THRUST_2XRES 104
 #define THRUST_INCREMENT_2XRES 24
-#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (60)
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (70)
 #define MISSILE_RANGE_2XRES (MISSILE_SPEED_2XRES * MISSILE_LIFE)
 
 // JMS_GFX
@@ -170,9 +175,9 @@ static RACE_DESC foonfoon_desc_2xres =
 			FOONFOON_SML_MASK_PMAP_ANIM,
 		},
 		{
-			FOONFOON_BEAM_BIG_MASK_PMAP_ANIM,
-			FOONFOON_BEAM_MED_MASK_PMAP_ANIM,
-			FOONFOON_BEAM_SML_MASK_PMAP_ANIM,
+			FOONFOON_BURST_BIG_MASK_PMAP_ANIM,
+			FOONFOON_BURST_MED_MASK_PMAP_ANIM,
+			FOONFOON_BURST_SML_MASK_PMAP_ANIM,
 		},
 		{
 			FOONFOON_SABRE_BIG_MASK_PMAP_ANIM,
@@ -206,7 +211,7 @@ static RACE_DESC foonfoon_desc_2xres =
 // JMS_GFX
 #define MAX_THRUST_4XRES 208
 #define THRUST_INCREMENT_4XRES 48
-#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (120)
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (140)
 #define MISSILE_RANGE_4XRES (MISSILE_SPEED_2XRES * MISSILE_LIFE)
 
 // JMS_GFX
@@ -248,9 +253,9 @@ static RACE_DESC foonfoon_desc_4xres =
 			FOONFOON_SML_MASK_PMAP_ANIM,
 		},
 		{
-			FOONFOON_BEAM_BIG_MASK_PMAP_ANIM,
-			FOONFOON_BEAM_MED_MASK_PMAP_ANIM,
-			FOONFOON_BEAM_SML_MASK_PMAP_ANIM,
+			FOONFOON_BURST_BIG_MASK_PMAP_ANIM,
+			FOONFOON_BURST_MED_MASK_PMAP_ANIM,
+			FOONFOON_BURST_SML_MASK_PMAP_ANIM,
 		},
 		{
 			FOONFOON_SABRE_BIG_MASK_PMAP_ANIM,
@@ -300,10 +305,98 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 static COUNT 
 initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[]);
 
-static COUNT
-initialize_beam (ELEMENT *ShipPtr, HELEMENT FocusArray[]);
+// This animates the primary burst.
+static void
+animate_burst (ELEMENT *ElementPtr)
+{
+	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	ElementPtr->state_flags |= CHANGING;
+}
 
-// This animates the focusball between frames 0...2.
+// This turns the focusball into a primary burst.
+static void
+fire_burst (ELEMENT *ElementPtr)
+{
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	HELEMENT hMissile;
+	ELEMENT *ShipPtr;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	LockElement (StarShipPtr->hShip, &ShipPtr);
+	
+	MissileBlock.cx = ElementPtr->next.location.x;
+	MissileBlock.cy = ElementPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = (StarShipPtr->ShipFacing) * NUM_BURST_FRAMES;
+	MissileBlock.sender = ElementPtr->playerNr;
+	MissileBlock.flags =  IGNORE_SIMILAR;
+	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
+	MissileBlock.speed = (MISSILE_SPEED << RESOLUTION_FACTOR);
+	MissileBlock.hit_points = ElementPtr->mass_points;
+	MissileBlock.damage = ElementPtr->mass_points;
+	MissileBlock.life = NUM_BURST_FRAMES;
+	MissileBlock.preprocess_func = animate_burst;
+	MissileBlock.blast_offs = 50 << RESOLUTION_FACTOR;
+	
+	hMissile = initialize_missile (&MissileBlock);
+	
+	if (hMissile)
+	{
+		ELEMENT *BurstPtr;
+		SIZE dx, dy;
+		
+		LockElement (hMissile, &BurstPtr);
+		SetElementStarShip (BurstPtr, StarShipPtr);
+		GetCurrentVelocityComponents (&ShipPtr->velocity, &dx, &dy);
+		DeltaVelocityComponents (&BurstPtr->velocity, dx, dy);
+		BurstPtr->current.location.x -= VELOCITY_TO_WORLD (dx);
+		BurstPtr->current.location.y -= VELOCITY_TO_WORLD (dy);
+		UnlockElement (hMissile);
+		PutElement (hMissile);
+
+		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+	}
+
+	// Recoil the ship with powerful enough shots.
+	if (ElementPtr->mass_points >= 4)
+	{
+		COUNT angle;
+		SIZE cur_delta_x, cur_delta_y;
+		BYTE mult;
+		
+		// More powerful shots knock the ship back more.
+		if (ElementPtr->mass_points >= 7)
+		{
+			mult = 2;
+		}
+		else
+			mult = 1;
+		
+		StarShipPtr->cur_status_flags &= ~SHIP_AT_MAX_SPEED;
+		angle = FACING_TO_ANGLE (StarShipPtr->ShipFacing) + HALF_CIRCLE;
+		
+		DeltaVelocityComponents (&ShipPtr->velocity,
+								 COSINE (angle, RECOIL_VELOCITY * mult),
+								 SINE (angle, RECOIL_VELOCITY * mult));
+		GetCurrentVelocityComponents (&ShipPtr->velocity, &cur_delta_x, &cur_delta_y);
+		
+		if ((long)cur_delta_x * (long)cur_delta_x
+			+ (long)cur_delta_y * (long)cur_delta_y
+			> (long)MAX_RECOIL_VELOCITY * (long)MAX_RECOIL_VELOCITY)
+		{
+			angle = ARCTAN (cur_delta_x, cur_delta_y);
+			SetVelocityComponents (&ShipPtr->velocity,
+								   COSINE (angle, MAX_RECOIL_VELOCITY),
+								   SINE (angle, MAX_RECOIL_VELOCITY));
+		}
+		
+		UnlockElement (StarShipPtr->hShip);
+	}
+}
+
+// 
 static void
 focusball_postprocess (ELEMENT *ElementPtr)
 {
@@ -316,24 +409,36 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		ELEMENT *ShipPtr;
 		STARSHIP *StarShipPtr;
 		COUNT frame_index;
+		static BYTE shake[NUM_SIDES] = {0};
 		
+		// The original focusball actually dies in the end of this function.
+		// But here we create a new one to replace it so no one notices.
 		GetElementStarShip (ElementPtr, &StarShipPtr);
 		LockElement (StarShipPtr->hShip, &ShipPtr);
 		initialize_focusball (ShipPtr, &hFocusBall);
-		if ((StarShipPtr->cur_status_flags | StarShipPtr->old_status_flags) & WEAPON)
+		
+		// When holding WEAPON button down, don't drain energy.
+		if (StarShipPtr->cur_status_flags & WEAPON)
+		{
 			DeltaEnergy (ShipPtr, 0);
-		UnlockElement (StarShipPtr->hShip);
-		
+			StarShipPtr->weapon_counter = WEAPON_WAIT;
+		}
+		// Ensure the focusball doesn't reach ship-damaging charge when holding the SPECIAL button down.
+		else if (StarShipPtr->cur_status_flags & SPECIAL)
+			ElementPtr->mass_points = 1;
+			
+		// Copy the old focusball's values to the new focusball element.
 		LockElement (hFocusBall, &EPtr);
-		
-		EPtr->current.image.frame = ElementPtr->current.image.frame;
-		EPtr->turn_wait = ElementPtr->turn_wait;
-		
 		SetElementStarShip (EPtr, StarShipPtr);
+		EPtr->thrust_wait = ElementPtr->thrust_wait;
+		EPtr->mass_points = ElementPtr->mass_points;
+		EPtr->turn_wait = ElementPtr->turn_wait;
+		EPtr->current.image.frame = ElementPtr->current.image.frame;
 		
+		// Animate the focusball ping-pong between frames 0...2.
 		frame_index = GetFrameIndex (EPtr->current.image.frame) - FOCUSBALL_FRAME_STARTINDEX;
-		if		(((EPtr->turn_wait & REVERSE_DIR) && (frame_index % NUM_FOCUSBALL_ANIMS) != 0)
-			||  (!(EPtr->turn_wait & REVERSE_DIR) && ((frame_index + 1) % NUM_FOCUSBALL_ANIMS) == 0))
+		if	(((EPtr->turn_wait & REVERSE_DIR) && (frame_index % NUM_FOCUSBALL_FRAMES) != 0)
+			||  (!(EPtr->turn_wait & REVERSE_DIR) && ((frame_index + 1) % NUM_FOCUSBALL_FRAMES) == 0))
 		{
 			--frame_index;
 			EPtr->turn_wait |= REVERSE_DIR;
@@ -343,18 +448,87 @@ focusball_postprocess (ELEMENT *ElementPtr)
 			++frame_index;
 			EPtr->turn_wait &= ~REVERSE_DIR;
 		}
-			
 		EPtr->current.image.frame = SetAbsFrameIndex (EPtr->current.image.frame, FOCUSBALL_FRAME_STARTINDEX + frame_index);
 		
 		// When player releases WEAPON or SPECIAL key, kill the focusball.
 		if (!(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON)
 			&& !(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & SPECIAL))
 		{
-			EPtr->life_span = 0;
+			EPtr->life_span = 1;
 			EPtr->preprocess_func = 0;
-			EPtr->postprocess_func = 0;
+			EPtr->death_func = fire_burst;
+			
+			if (EPtr->mass_points >= 7)
+			{
+				// Also suffer some damage if the shot is big enough!
+				if (!DeltaCrew (ShipPtr, -2))
+					ShipPtr->life_span = 0;
+				ShipPtr->state_flags |= CHANGING;
+				ProcessSound (SetAbsSoundIndex (GameSounds, 4), ShipPtr);
+			}
+				
+			// Return the ship to normal graphics if the ship was pulsating.
+			if ((GetFrameIndex (ShipPtr->current.image.frame)) >= NUM_SHIP_FACINGS)
+			{
+				ShipPtr->next.image.frame = SetAbsFrameIndex (ShipPtr->next.image.frame, StarShipPtr->ShipFacing);
+				ShipPtr->state_flags |= CHANGING;
+			}
 		}
 		
+		// Charge the primary weapon when holding down the WEAPON key.
+		// The more charged up the primary, the more it deals damage.
+		if (EPtr->thrust_wait == 0)
+		{
+			EPtr->mass_points <<= 1;
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+			EPtr->thrust_wait = BURST_CHARGE_TIME;
+			
+			// Nerf the most powerful shot's strength. Also give some 'mercy time' to avoid exploding your own ship too easily.
+			if (EPtr->mass_points == 8)
+			{
+				EPtr->mass_points = 7;
+				EPtr->thrust_wait += (BURST_CHARGE_TIME / 3);
+			}
+		}
+		else
+			--EPtr->thrust_wait;
+		
+		// At dangerously large charge levels, the ship starts pulsating.
+		if (EPtr->mass_points == 4)
+		{
+			// Alternate between normal and blurred graphics.
+			if ((GetFrameIndex (ShipPtr->current.image.frame)) < NUM_SHIP_FACINGS && EPtr->life_span > 1)
+				ShipPtr->next.image.frame = SetAbsFrameIndex (ShipPtr->next.image.frame, StarShipPtr->ShipFacing + NUM_SHIP_FACINGS);
+			else
+				ShipPtr->next.image.frame = SetAbsFrameIndex (ShipPtr->next.image.frame, StarShipPtr->ShipFacing);
+		}
+		else if (EPtr->mass_points >= 7)
+		{
+			shake[ShipPtr->playerNr] = ((shake[ShipPtr->playerNr] + (BYTE)TFB_Random()) % 4) - 1;
+			if (shake[ShipPtr->playerNr] > 1)
+				shake[ShipPtr->playerNr] = 0;
+			
+			// Alternate between normal and blurred graphics.
+			if ((GetFrameIndex (ShipPtr->current.image.frame)) < NUM_SHIP_FACINGS && EPtr->life_span > 1)
+				ShipPtr->next.image.frame = SetAbsFrameIndex (ShipPtr->next.image.frame, 
+					(StarShipPtr->ShipFacing + shake[ShipPtr->playerNr]) + NUM_SHIP_FACINGS);
+			else
+				ShipPtr->next.image.frame = SetAbsFrameIndex (ShipPtr->next.image.frame, StarShipPtr->ShipFacing);
+		}
+		
+		// If the player charges the primary too much, the whole ship explodes!!!
+		if (EPtr->mass_points >= 10)
+		{
+			EPtr->mass_points = 7;
+			
+			if (!DeltaCrew (ShipPtr, -MAX_CREW))
+				ShipPtr->life_span = 0;
+			ShipPtr->state_flags |= CHANGING;
+		}
+		
+		UnlockElement (StarShipPtr->hShip);
+			
+		// Put the focusball to the queue of elements.
 		UnlockElement (hFocusBall);
 		PutElement (hFocusBall);
 		
@@ -363,9 +537,9 @@ focusball_postprocess (ELEMENT *ElementPtr)
 	}
 }
 
-// This is the collision function for both the primary beam and the secondary saber.
+// This is the collision function for both the secondary saber.
 static void
-saber_beam_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
+saber_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *pPt1)
 {
 	HELEMENT hBlastElement;
 	STARSHIP *StarShipPtr;	
@@ -383,48 +557,7 @@ saber_beam_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, P
 	}
 }
 
-// This makes the primary beam stay alive for an indefinite time.
-static void
-beam_postprocess (ELEMENT *ElementPtr)
-{
-	if (ElementPtr->state_flags & APPEARING)
-		ZeroVelocityComponents (&ElementPtr->velocity);
-	else
-	{
-		HELEMENT hBeam;
-		ELEMENT *EPtr;
-		ELEMENT *ShipPtr;
-		STARSHIP *StarShipPtr;
-		
-		GetElementStarShip (ElementPtr, &StarShipPtr);
-		LockElement (StarShipPtr->hShip, &ShipPtr);
-		initialize_beam (ShipPtr, &hBeam);
-		DeltaEnergy (ShipPtr, 0);
-		UnlockElement (StarShipPtr->hShip);
-		
-		LockElement (hBeam, &EPtr);
-		SetElementStarShip (EPtr, StarShipPtr);
-		
-		// As long as player holds down the weapon key, extend the primary beam's life.
-		if (StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON)
-			StarShipPtr->weapon_counter = WEAPON_WAIT;
-		// When the weapon key is released, end the beam primary's life.
-		else
-		{
-			EPtr->life_span = 0;
-			EPtr->preprocess_func = 0;
-			EPtr->postprocess_func = 0;
-		}
-		
-		UnlockElement (hBeam);
-		PutElement (hBeam);
-		
-		SetPrimType (&(GLOBAL (DisplayArray))[ElementPtr->PrimIndex],  NO_PRIM);
-	}
-}
-
-
-// This generates the focus ball.
+// This generates a focus ball.
 static COUNT
 initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[])
 {
@@ -455,128 +588,60 @@ initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[])
 		
 		LockElement (FocusArray[0], &FocusPtr);
 		FocusPtr->postprocess_func = focusball_postprocess;
+		FocusPtr->thrust_wait = 255; // Let's ensure the secondary sabre's focusball doesn't grow it's damage amount.
 		UnlockElement (FocusArray[0]);
 	}
 	
 	return (1);
 }
 
-// This generates the beam primary AND a focusball.
+// Primary weapon: This generates a focusball which turns into beam burst when the weapon button is released.
 static COUNT
-initialize_beam_and_focusball (ELEMENT *ShipPtr, HELEMENT BeamArray[])
+initialize_focusball_which_bursts (ELEMENT *ShipPtr, HELEMENT BurstArray[])
 {
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
-	static BYTE damage_amount[NUM_SIDES] = {0};
-	BYTE num_of_created_elements = 1;
 
-	// Do not deal damage on every frame. This makes the beam weaker.
-	damage_amount[ShipPtr->playerNr] = (damage_amount[ShipPtr->playerNr] + 1) % 3;
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-	
 	MissileBlock.cx = ShipPtr->next.location.x;
 	MissileBlock.cy = ShipPtr->next.location.y;
 	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
 	MissileBlock.face = StarShipPtr->ShipFacing;
-	MissileBlock.index = StarShipPtr->ShipFacing;
+	MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
 	MissileBlock.sender = ShipPtr->playerNr;
-	MissileBlock.flags =  IGNORE_SIMILAR;
+	MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
 	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
 	MissileBlock.speed = DISPLAY_TO_WORLD (FOCUSBALL_OFFSET);
 	MissileBlock.hit_points = 100;
-	MissileBlock.damage = (damage_amount[ShipPtr->playerNr] == 0);
+	MissileBlock.damage = 1;
 	MissileBlock.life = 2;
 	MissileBlock.preprocess_func = 0;
 	MissileBlock.blast_offs = 0;
-
-	// Beam
-	BeamArray[0] = initialize_missile (&MissileBlock);
-
-	if (BeamArray[0])
-	{
-		ELEMENT *BeamPtr;
-		
-		LockElement (BeamArray[0], &BeamPtr);
-		SetElementStarShip (BeamPtr, StarShipPtr);
-		BeamPtr->collision_func = saber_beam_collision;
-		BeamPtr->postprocess_func = beam_postprocess;
-		InitIntersectStartPoint (BeamPtr);
-		InitIntersectEndPoint (BeamPtr);
-		BeamPtr->IntersectControl.IntersectStamp.frame = StarShipPtr->RaceDescPtr->ship_data.weapon[StarShipPtr->ShipFacing];
-		UnlockElement (BeamArray[0]);
-	}
 	
-	// Focusball
 	if (!(StarShipPtr->old_status_flags & WEAPON))
 	{
-		MissileBlock.damage = 0;
-		MissileBlock.index = FOCUSBALL_FRAME_STARTINDEX;
-		MissileBlock.flags =  NONSOLID | IGNORE_SIMILAR;
-		BeamArray[1] = initialize_missile (&MissileBlock);
+		BurstArray[0] = initialize_missile (&MissileBlock);
 	
-		if (BeamArray[1])
+		if (BurstArray[0])
 		{
 			ELEMENT *FocusPtr;
 		
-			LockElement (BeamArray[1], &FocusPtr);
+			LockElement (BurstArray[0], &FocusPtr);
 			FocusPtr->postprocess_func = focusball_postprocess;
-			UnlockElement (BeamArray[1]);
-		
-			num_of_created_elements++;
+			FocusPtr->thrust_wait = BURST_CHARGE_TIME;
+			UnlockElement (BurstArray[0]);
 		}
+	
+		return (1);
 	}
-	
-	// Beam is the first and (possible) focusball is the second.
-	return (num_of_created_elements);
-}
-
-// This generates the beam primary.
-static COUNT
-initialize_beam (ELEMENT *ShipPtr, HELEMENT BeamArray[])
-{
-	STARSHIP *StarShipPtr;
-	MISSILE_BLOCK MissileBlock;
-	static BYTE damage_amount[NUM_SIDES] = {0};
-	
-	// Do not deal damage on every frame. This makes the beam weaker.
-	damage_amount[ShipPtr->playerNr] = (damage_amount[ShipPtr->playerNr] + 1) % 3;
-	GetElementStarShip (ShipPtr, &StarShipPtr);
-	
-	MissileBlock.cx = ShipPtr->next.location.x;
-	MissileBlock.cy = ShipPtr->next.location.y;
-	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
-	MissileBlock.face = StarShipPtr->ShipFacing;
-	MissileBlock.index = StarShipPtr->ShipFacing;
-	MissileBlock.sender = ShipPtr->playerNr;
-	MissileBlock.flags =  IGNORE_SIMILAR;
-	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
-	MissileBlock.speed = DISPLAY_TO_WORLD (FOCUSBALL_OFFSET);
-	MissileBlock.hit_points = 100;
-	MissileBlock.damage = (damage_amount[ShipPtr->playerNr] == 0);
-	MissileBlock.life = 2;
-	MissileBlock.preprocess_func = 0;
-	MissileBlock.blast_offs = 0;
-	
-	BeamArray[0] = initialize_missile (&MissileBlock);
-	
-	if (BeamArray[0])
+	else
 	{
-		ELEMENT *BeamPtr;
-		
-		LockElement (BeamArray[0], &BeamPtr);
-		SetElementStarShip (BeamPtr, StarShipPtr);
-		BeamPtr->collision_func = saber_beam_collision;
-		BeamPtr->postprocess_func = beam_postprocess;
-		InitIntersectStartPoint (BeamPtr);
-		InitIntersectEndPoint (BeamPtr);
-		BeamPtr->IntersectControl.IntersectStamp.frame = StarShipPtr->RaceDescPtr->ship_data.weapon[StarShipPtr->ShipFacing];
-		UnlockElement (BeamArray[0]);
+		DeltaEnergy (ShipPtr, 0);
+		return (0);
 	}
-	
-	return (1);
 }
 
-// This generates the secondary, wide saber.
+// Secondary weapon: This generates the wide saber.
 static COUNT
 initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
 {
@@ -607,7 +672,7 @@ initialize_saber (ELEMENT *ShipPtr, HELEMENT SaberArray[], COUNT facingfix)
 		
 		LockElement (SaberArray[0], &SaberPtr);
 		SetElementStarShip (SaberPtr, StarShipPtr);
-		SaberPtr->collision_func = saber_beam_collision;
+		SaberPtr->collision_func = saber_collision;
 		InitIntersectStartPoint (SaberPtr);
 		InitIntersectEndPoint (SaberPtr);
 		SaberPtr->IntersectControl.IntersectStamp.frame = StarShipPtr->RaceDescPtr->ship_data.special[facing];
@@ -642,7 +707,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	// Store the original turning rate & max speed if not in dervish mode, or the slow state after dervish.
 	if (StarShipPtr->special_counter == 0 
 		&& RDPtr->characteristics.turn_wait > 0
-		&& frame_index < NUM_SHIP_FACINGS
+		&& (frame_index < NUM_SHIP_FACINGS && !(StarShipPtr->cur_status_flags & WEAPON)) // Weapon check because the primary weapon also can set the ship graphics
 		&& !(StarShipPtr->RaceDescPtr->ship_info.damage_flags & DAMAGE_THRUST))
 	{
 		basic_max_thrust[2 * RESOLUTION_FACTOR + ElementPtr->playerNr]  = RDPtr->characteristics.max_thrust;
@@ -710,6 +775,7 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 				LockElement (Focusball, &FBMissilePtr);
 				
 				SetElementStarShip (FBMissilePtr, StarShipPtr);
+				FBMissilePtr->mass_points = 0;
 				
 				UnlockElement (Focusball);
 				PutElement (Focusball);
@@ -814,7 +880,6 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 	frame_index = GetFrameIndex (ElementPtr->current.image.frame);
 	
 	if (StarShipPtr->cur_status_flags & SPECIAL
-		//&& StarShipPtr->special_counter == 0 
 		&& !not_had_pause[ElementPtr->playerNr])
 	{
 		// Can't use primary weapon and special simultaneously.
@@ -845,9 +910,7 @@ foonfoon_preprocess (ELEMENT *ElementPtr)
 			totalspeed = sqrt (speedx * speedx + speedy * speedy);
 
 			// Upon pressing the special key, speed rapidly to the direction which the ship was heading to.
-			if (//!(StarShipPtr->old_status_flags & SPECIAL)
-				//|| (/*StarShipPtr->old_status_flags & SPECIAL 
-				frame_index < NUM_SHIP_FACINGS
+			if (frame_index < NUM_SHIP_FACINGS
 				&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= SPECIAL_ENERGY_COST
 				&& StarShipPtr->cur_status_flags & (LEFT | RIGHT)
 				)//&& totalspeed < DERVISH_THRUST)
@@ -912,7 +975,7 @@ init_foonfoon (void)
 	{
 		foonfoon_desc.postprocess_func = foonfoon_postprocess;
 		foonfoon_desc.preprocess_func  = foonfoon_preprocess;
-		foonfoon_desc.init_weapon_func = initialize_beam_and_focusball;
+		foonfoon_desc.init_weapon_func = initialize_focusball_which_bursts;
 		foonfoon_desc.cyborg_control.intelligence_func = foonfoon_intelligence;
 		RaceDescPtr = &foonfoon_desc;
 	}
@@ -920,7 +983,7 @@ init_foonfoon (void)
 	{
 		foonfoon_desc_2xres.postprocess_func = foonfoon_postprocess;
 		foonfoon_desc_2xres.preprocess_func  = foonfoon_preprocess;
-		foonfoon_desc_2xres.init_weapon_func = initialize_beam_and_focusball;
+		foonfoon_desc_2xres.init_weapon_func = initialize_focusball_which_bursts;
 		foonfoon_desc_2xres.cyborg_control.intelligence_func = foonfoon_intelligence;
 		RaceDescPtr = &foonfoon_desc_2xres;
 	}
@@ -928,7 +991,7 @@ init_foonfoon (void)
 	{
 		foonfoon_desc_4xres.postprocess_func = foonfoon_postprocess;
 		foonfoon_desc_4xres.preprocess_func  = foonfoon_preprocess;
-		foonfoon_desc_4xres.init_weapon_func = initialize_beam_and_focusball;
+		foonfoon_desc_4xres.init_weapon_func = initialize_focusball_which_bursts;
 		foonfoon_desc_4xres.cyborg_control.intelligence_func = foonfoon_intelligence;
 		RaceDescPtr = &foonfoon_desc_4xres;
 	}

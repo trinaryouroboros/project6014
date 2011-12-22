@@ -205,7 +205,10 @@ weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt, ELEMENT *HitElementPtr
 			// Without this clause the collision effect of the fighter lasers would be buggy.
 			//
 			// Currently, this does prevent ISD's main laser from having separate collision graphics.
-			if (num_blast_frames <= ANGLE_TO_FACING (FULL_CIRCLE) || StarShipPtr->SpeciesID == ISD_ID)
+			// Ditto for Foon-foon primary.
+			if (num_blast_frames <= ANGLE_TO_FACING (FULL_CIRCLE) 
+				|| StarShipPtr->SpeciesID == ISD_ID
+				|| StarShipPtr->SpeciesID == FOONFOON_ID)
 			{
 				BlastElementPtr->life_span = 2;
 				BlastElementPtr->current.image.farray = blast;
