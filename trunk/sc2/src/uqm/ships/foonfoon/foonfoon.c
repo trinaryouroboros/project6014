@@ -21,6 +21,7 @@
 #include "resinst.h"
 
 #include "uqm/globdata.h"
+#include "libs/log.h"
 #include "libs/mathlib.h"
 #include "libs/sound/sound.h" // For StopSource
 #include <math.h> // For sqrt
@@ -286,24 +287,140 @@ static RACE_DESC foonfoon_desc_4xres =
 	0, /* CodeRef */
 };
 
+// Forward declarations.
+static COUNT
+initialize_test_burst (ELEMENT *ElementPtr, HELEMENT BurstArray[]);
+
+static COUNT
+initialize_test_sabre (ELEMENT *ElementPtr, HELEMENT SabreArray[]);
+
+static COUNT 
+initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[]);
+
+static COUNT
+initialize_focusball_which_bursts (ELEMENT *ShipPtr, HELEMENT BurstArray[]);
+
+static void
+focusball_postprocess (ELEMENT *ElementPtr);
+
+// The Almighty AI.
 static void
 foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT ConcernCounter)
 {
+#define IS_FOCUSBALL(ptr) (ptr->postprocess_func == focusball_postprocess && ptr->mass_points > 0)
+	BYTE old_count;
 	STARSHIP *StarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
-	
-	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
+	HELEMENT hElement, hNextElement;
+	ELEMENT  *FocusballCandidatePtr;
+	SIZE charge_amount = 0;
+	SIZE charge_time_left = 255;
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-	StarShipPtr->ship_input_state &= ~SPECIAL;
 	
+	// Find the focusball element (if one exists).
+	for (hElement = GetHeadElement (); hElement != 0; hElement = hNextElement)
+	{
+		LockElement (hElement, &FocusballCandidatePtr);
+		hNextElement = GetSuccElement (FocusballCandidatePtr);
+		
+		// See how charged the focusball is.
+		if (IS_FOCUSBALL(FocusballCandidatePtr))
+		{
+			charge_amount	 = FocusballCandidatePtr->mass_points;
+			charge_time_left = FocusballCandidatePtr->thrust_wait;
+			break;
+		}
+	}
+	
+	// Release the SPECIAL button when energy is drained.
+	if (StarShipPtr->RaceDescPtr->ship_info.energy_level == 0)
+		StarShipPtr->ship_input_state &= ~SPECIAL;
+	// Otherwise, when dervish has been started, keep dervishing until all energy is drained.
+	else if (StarShipPtr->ship_input_state & SPECIAL 
+			 && StarShipPtr->RaceDescPtr->ship_info.energy_level > 0)
+	{
+		StarShipPtr->ship_input_state &= ~WEAPON;
+		StarShipPtr->ship_input_state |= SPECIAL;
+		
+		lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
+		ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
+		goto end_intelligence;
+	}
+	
+	// We test the possibility of primary weapon hitting with a test function.
+	StarShipPtr->RaceDescPtr->init_weapon_func = initialize_test_burst;
+	old_count = StarShipPtr->weapon_counter;
+	
+	// This, like the lot of this code is copied from Melnorme AI.
+	// I don't know if the following has any real meaning, but since this works fine, let's keep it...
+	if (StarShipPtr->weapon_counter == WEAPON_WAIT)
+		StarShipPtr->weapon_counter = 0;
+	
+	// Action towards enemy ship: If we don't have weapon ready and don't have enough battery,
+	// escape until battery is charged. When we have enough battery, pursue the enemy!!
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
+	if (lpEvalDesc->ObjectPtr)
+	{
+		if (StarShipPtr->RaceDescPtr->ship_info.energy_level < SPECIAL_ENERGY_COST + WEAPON_ENERGY_COST
+			&& !(StarShipPtr->old_status_flags & WEAPON))
+			lpEvalDesc->MoveState = ENTICE;
+		else
+		{
+			STARSHIP *EnemyStarShipPtr;
+			
+			GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
+			if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON))
+				lpEvalDesc->MoveState = PURSUE;
+		}
+	}
+	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 	
+	//log_add (log_Debug, "charge %d, timeleft: %d", charge_amount, charge_time_left);
+	
+	// Charge focusball...
+	if (StarShipPtr->weapon_counter == 0
+		&& (old_count != 0
+			|| ((StarShipPtr->special_counter
+			|| StarShipPtr->RaceDescPtr->ship_info.energy_level >= MAX_ENERGY - 3 * WEAPON_ENERGY_COST)
+				&& !(StarShipPtr->ship_input_state & WEAPON))
+			)
+		)
+		StarShipPtr->ship_input_state ^= WEAPON;
+	
+	// ...but let it go just before it would start inducing damage to own ship.
+	if (charge_amount >= 4 && charge_time_left < 3)
+		StarShipPtr->ship_input_state &= ~WEAPON;
+	
+	// Consider dervishing if we don't have a heavily charged primary weapon handy and we have enough battery.
+	if (StarShipPtr->special_counter == 0
+		&& charge_amount < 2
+		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= MAX_ENERGY - 4 * WEAPON_ENERGY_COST)
+	{
+		BYTE old_input_state;
+		
+		old_input_state = StarShipPtr->ship_input_state;
+		
+		// The final decision of "to dervish or not to dervish" is made by evaluating a test weapon function,
+		// which is pretty similar to the primary weapon test function. This one only has longer range.
+		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_test_sabre;
+		
+		ship_intelligence (ShipPtr, ObjectsOfConcern, ENEMY_SHIP_INDEX + 1);
+		
+		if (StarShipPtr->ship_input_state & WEAPON)
+		{
+			StarShipPtr->ship_input_state &= ~WEAPON;
+			StarShipPtr->ship_input_state |= SPECIAL;
+		}
+		
+		StarShipPtr->ship_input_state = (unsigned char)(old_input_state | (StarShipPtr->ship_input_state & SPECIAL));
+	}
+	
+	StarShipPtr->weapon_counter = old_count;
+	
+end_intelligence:
+	StarShipPtr->RaceDescPtr->init_weapon_func = initialize_focusball_which_bursts;
 }
-
-// Forward declarations.
-static COUNT 
-initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[]);
 
 // This animates the primary burst.
 static void
@@ -396,7 +513,7 @@ fire_burst (ELEMENT *ElementPtr)
 	}
 }
 
-// 
+// This function handles the life and death of a focusball.
 static void
 focusball_postprocess (ELEMENT *ElementPtr)
 {
@@ -559,6 +676,62 @@ saber_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT 
 		
 		ElementPtr0->state_flags &= ~DISAPPEARING;
 	}
+}
+
+// This is used by AI for testing would the primary weapon hit if shot.
+static COUNT
+initialize_test_burst (ELEMENT *ElementPtr, HELEMENT BurstArray[])
+{
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	MissileBlock.cx = ElementPtr->next.location.x;
+	MissileBlock.cy = ElementPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = (StarShipPtr->ShipFacing) * NUM_BURST_FRAMES;
+	MissileBlock.sender = ElementPtr->playerNr;
+	MissileBlock.flags =  IGNORE_SIMILAR;
+	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
+	MissileBlock.speed = (MISSILE_SPEED << RESOLUTION_FACTOR);
+	MissileBlock.hit_points = ElementPtr->mass_points;
+	MissileBlock.damage = ElementPtr->mass_points;
+	MissileBlock.life = NUM_BURST_FRAMES;
+	MissileBlock.preprocess_func = animate_burst;
+	MissileBlock.blast_offs = 50 << RESOLUTION_FACTOR;
+	BurstArray[0] = initialize_missile (&MissileBlock);
+	
+	return (1);
+}
+
+// This is used by AI for testing would it hit the enemy ship with dervish mode.
+static COUNT
+initialize_test_sabre (ELEMENT *ElementPtr, HELEMENT SabreArray[])
+{
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	MissileBlock.cx = ElementPtr->next.location.x;
+	MissileBlock.cy = ElementPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.weapon;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = (StarShipPtr->ShipFacing) * NUM_BURST_FRAMES;
+	MissileBlock.sender = ElementPtr->playerNr;
+	MissileBlock.flags =  IGNORE_SIMILAR;
+	MissileBlock.pixoffs = FOCUSBALL_OFFSET;
+	MissileBlock.speed = (MISSILE_SPEED << RESOLUTION_FACTOR);
+	MissileBlock.hit_points = ElementPtr->mass_points;
+	MissileBlock.damage = ElementPtr->mass_points;
+	MissileBlock.life = NUM_BURST_FRAMES * 2;
+	MissileBlock.preprocess_func = animate_burst;
+	MissileBlock.blast_offs = 25 << RESOLUTION_FACTOR;
+	SabreArray[0] = initialize_missile (&MissileBlock);
+	
+	return (1);
 }
 
 // This generates a focus ball.
