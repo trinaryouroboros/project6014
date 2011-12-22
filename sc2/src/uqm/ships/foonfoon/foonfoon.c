@@ -398,23 +398,24 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= MAX_ENERGY - 4 * WEAPON_ENERGY_COST)
 	{
 		BYTE old_input_state;
-		
 		old_input_state = StarShipPtr->ship_input_state;
 		
 		// The final decision of "to dervish or not to dervish" is made by evaluating a test weapon function,
 		// which is pretty similar to the primary weapon test function. This one only has different stats.
 		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_test_saber;
-		
 		ship_intelligence (ShipPtr, ObjectsOfConcern, ENEMY_SHIP_INDEX + 1);
 		
+		// Since we faked using primary weapon even though we really are gonna use special,
+		// change the WEAPON button press to SPECIAL.
 		if (StarShipPtr->ship_input_state & WEAPON)
 		{
 			BYTE right_or_left;
-			
 			right_or_left = TFB_Random () % 2;
 			
 			StarShipPtr->ship_input_state &= ~WEAPON;
 			StarShipPtr->ship_input_state |= SPECIAL;
+			
+			// Also turn the ship to either direction, otherwise the dervish won't activate.
 			if (right_or_left)
 				StarShipPtr->ship_input_state |= RIGHT;
 			else

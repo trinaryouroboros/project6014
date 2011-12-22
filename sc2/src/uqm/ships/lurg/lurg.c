@@ -338,7 +338,7 @@ lurg_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT Conc
 		// Avoid contact when the enemy is warping in or moving directly away.
 		if (lpEvalDesc->ObjectPtr->state_flags & APPEARING
 			|| (TestFacing > 6 && TestFacing < 10
-				&& CurrentEnemySpeed >= 16))
+				&& CurrentEnemySpeed >= (16 << RESOLUTION_FACTOR)))
 		{
 			lpEvalDesc->MoveState = AVOID;
 		}
