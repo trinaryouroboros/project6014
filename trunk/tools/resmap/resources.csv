@@ -1134,9 +1134,9 @@ FOONFOON_MICON_MASK_PMAP_ANIM,ship.foonfoon.meleeicons,uqm/ships/foonfoon/igfxre
 FOONFOON_BIG_MASK_PMAP_ANIM,ship.foonfoon.graphics.typhoon.large,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/typhoon-big.ani
 FOONFOON_MED_MASK_PMAP_ANIM,ship.foonfoon.graphics.typhoon.medium,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/typhoon-med.ani
 FOONFOON_SML_MASK_PMAP_ANIM,ship.foonfoon.graphics.typhoon.small,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/typhoon-sml.ani
-FOONFOON_BEAM_BIG_MASK_PMAP_ANIM,ship.foonfoon.graphics.beam.large,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/beam-big.ani
-FOONFOON_BEAM_MED_MASK_PMAP_ANIM,ship.foonfoon.graphics.beam.medium,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/beam-med.ani
-FOONFOON_BEAM_SML_MASK_PMAP_ANIM,ship.foonfoon.graphics.beam.small,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/beam-sml.ani
+FOONFOON_BURST_BIG_MASK_PMAP_ANIM,ship.foonfoon.graphics.burst.large,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/burst-big.ani
+FOONFOON_BURST_MED_MASK_PMAP_ANIM,ship.foonfoon.graphics.burst.medium,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/burst-med.ani
+FOONFOON_BURST_SML_MASK_PMAP_ANIM,ship.foonfoon.graphics.burst.small,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/burst-sml.ani
 FOONFOON_SABRE_BIG_MASK_PMAP_ANIM,ship.foonfoon.graphics.sabre.large,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/sabre-big.ani
 FOONFOON_SABRE_MED_MASK_PMAP_ANIM,ship.foonfoon.graphics.sabre.medium,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/sabre-med.ani
 FOONFOON_SABRE_SML_MASK_PMAP_ANIM,ship.foonfoon.graphics.sabre.small,uqm/ships/foonfoon/igfxres.h,GFXRES,base/ships/foonfoon/sabre-sml.ani
