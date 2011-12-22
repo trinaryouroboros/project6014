@@ -338,7 +338,7 @@ fire_burst (ELEMENT *ElementPtr)
 	MissileBlock.damage = ElementPtr->mass_points;
 	MissileBlock.life = NUM_BURST_FRAMES;
 	MissileBlock.preprocess_func = animate_burst;
-	MissileBlock.blast_offs = 50 << RESOLUTION_FACTOR;
+	MissileBlock.blast_offs = 50 << RESOLUTION_FACTOR; // Don't change this value. Otherwise a special clause in weapon.c will stop working :(
 	
 	hMissile = initialize_missile (&MissileBlock);
 	
