@@ -425,7 +425,10 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		}
 		// Ensure the focusball doesn't reach ship-damaging charge when holding the SPECIAL button down.
 		else if (StarShipPtr->cur_status_flags & SPECIAL)
-			ElementPtr->mass_points = 1;
+		{
+			ElementPtr->mass_points = 0;
+			ElementPtr->thrust_wait = 255;
+		}
 			
 		// Copy the old focusball's values to the new focusball element.
 		LockElement (hFocusBall, &EPtr);
@@ -456,7 +459,8 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		{
 			EPtr->life_span = 1;
 			EPtr->preprocess_func = 0;
-			EPtr->death_func = fire_burst;
+			if (ElementPtr->mass_points)
+				EPtr->death_func = fire_burst;
 			
 			if (EPtr->mass_points >= 7)
 			{
@@ -801,7 +805,6 @@ foonfoon_postprocess (ELEMENT *ElementPtr)
 	{
 		// When dervish ends...
 		if ((StarShipPtr->old_status_flags & SPECIAL || RDPtr->ship_info.energy_level == 0)
-			//&& StarShipPtr->special_counter == 0
 			&& frame_index >= NUM_SHIP_FACINGS)
 		{
 			COUNT i;
