@@ -3,3 +3,6 @@ The GUI is developed mainly using NetBeans' Matisse swing GUI editor. All .form 
 are files saved by this editor, NetBeans will autogenerate Java code based on these
 files. For this reason, I advise you to use NetBeans, rather than some other IDE like
 Eclipse.
+
+Settings are saved in  ~/.uqmtools/uqmanimationtool.properties 
+ (%UserProfile%/.uqmtools/uqmanimationtool.properties on Windows)

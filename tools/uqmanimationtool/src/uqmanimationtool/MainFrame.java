@@ -629,8 +629,6 @@ public class MainFrame extends javax.swing.JFrame {
         jSplitPane_horiz = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane_vert = new javax.swing.JSplitPane();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jList_Frames = new javax.swing.JList();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel_AniTab = new javax.swing.JPanel();
         jLabel_Rate = new javax.swing.JLabel();
@@ -639,6 +637,9 @@ public class MainFrame extends javax.swing.JFrame {
         jSlider_Zoom = new javax.swing.JSlider();
         jPanel_TranspTab = new javax.swing.JPanel();
         jComboBox_Tranparency = new javax.swing.JComboBox();
+        jPanel3 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jList_Frames = new javax.swing.JList();
         jPanel_ImageWorkspace = new javax.swing.JPanel();
         jToolBar_statusbar = new javax.swing.JToolBar();
         jLabel_LoadedFile = new javax.swing.JLabel();
@@ -716,12 +717,6 @@ public class MainFrame extends javax.swing.JFrame {
         jSplitPane_vert.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane_vert.setResizeWeight(1.0);
 
-        jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
-        jList_Frames.setPreferredSize(new java.awt.Dimension(100, 300));
-        jScrollPane1.setViewportView(jList_Frames);
-
-        jSplitPane_vert.setTopComponent(jScrollPane1);
-
         jTabbedPane1.setTabLayoutPolicy(javax.swing.JTabbedPane.SCROLL_TAB_LAYOUT);
         jTabbedPane1.setMinimumSize(new java.awt.Dimension(100, 100));
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(100, 90));
@@ -781,7 +776,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel_Zoom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider_Zoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/preferences-desktop.png")), jPanel_AniTab, "Animation settings"); // NOI18N
@@ -819,12 +814,33 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel_TranspTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jComboBox_Tranparency, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(123, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/applications-other.png")), jPanel_TranspTab, "Transparency helper settings"); // NOI18N
 
         jSplitPane_vert.setRightComponent(jTabbedPane1);
+
+        jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jList_Frames.setPreferredSize(null);
+        jScrollPane1.setViewportView(jList_Frames);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 235, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 502, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
+        );
+
+        jSplitPane_vert.setLeftComponent(jPanel3);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -1217,6 +1233,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu_File;
     private javax.swing.JMenu jMenu_Help;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel_AniTab;
     private javax.swing.JPanel jPanel_ImageWorkspace;
     private javax.swing.JPanel jPanel_TranspTab;
