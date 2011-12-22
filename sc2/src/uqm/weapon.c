@@ -208,7 +208,8 @@ weapon_collision (ELEMENT *WeaponElementPtr, POINT *pWPt, ELEMENT *HitElementPtr
 			// Ditto for Foon-foon primary.
 			if (num_blast_frames <= ANGLE_TO_FACING (FULL_CIRCLE) 
 				|| StarShipPtr->SpeciesID == ISD_ID
-				|| StarShipPtr->SpeciesID == FOONFOON_ID)
+				|| StarShipPtr->SpeciesID == FOONFOON_ID
+				|| WeaponElementPtr->blast_offset == 50 << RESOLUTION_FACTOR) // Hack to make dying foon-foon's shots work.
 			{
 				BlastElementPtr->life_span = 2;
 				BlastElementPtr->current.image.farray = blast;
