@@ -19,14 +19,67 @@ misrepresented as being the original software.
 
 Joris van de Donk - joris@mooses.nl
  */
-
 package uqmanimationtool;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Settings {
+
+    private static Settings settingsInstance;
     public String lastDirPath = "";
-    public boolean hideDupe = false;
+    public boolean hideDupe = false; //not really used anymore
     public boolean showOnlySelected = false;
     public Color hotspotColor = Color.red;
+
+    public static Settings getInstance() {
+        if (settingsInstance == null) {
+            settingsInstance = new Settings();
+        }
+        return settingsInstance;
+    }
+
+    public Settings() {
+        File aniprops = getPropertiesFile();
+        if (aniprops.exists()) {
+            Properties settingsProps = new Properties();
+            try {
+                settingsProps.load(new FileInputStream(aniprops));
+                lastDirPath = settingsProps.getProperty("lastDirPath");
+                showOnlySelected = settingsProps.getProperty("showOnlySelected").equals("True");
+                String hotspotCS = settingsProps.getProperty("hotspotColor");
+                if (hotspotCS != null) {
+                    hotspotColor = new Color(Integer.valueOf(hotspotCS));
+                }
+            } catch (IOException ex) {
+                //Can't read the properties file. Cleverly ignore. :)
+                Logger.getLogger(Settings.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void writeSettings() throws IOException {
+        File writeFile = getPropertiesFile();
+        Properties settingsProps = new Properties();
+        settingsProps.setProperty("lastDirPath", lastDirPath);
+        settingsProps.setProperty("showOnlySelected", (showOnlySelected == true ? "True" : "False"));
+        settingsProps.setProperty("hotspotColor", "" + hotspotColor.getRGB());
+        settingsProps.store(new FileWriter(writeFile), "Settings file for the UQM Animation tool");
+    }
+
+    private File getPropertiesFile() {
+        File homedir = new File(System.getProperty("user.home"));
+        File uqmtoolsdir = new File(homedir, ".uqmtools");
+        if (!uqmtoolsdir.exists()) {
+            uqmtoolsdir.mkdir();
+        }
+        File aniprops = new File(uqmtoolsdir, "uqanimationtool.properties");
+        return aniprops;
+    }
 }
