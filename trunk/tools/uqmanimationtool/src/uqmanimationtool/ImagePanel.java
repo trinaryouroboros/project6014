@@ -22,16 +22,10 @@ Joris van de Donk - joris@mooses.nl
 
 package uqmanimationtool;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.AffineTransform;
-import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
-import java.awt.image.BufferedImageFilter;
-import java.awt.image.BufferedImageOp;
-import java.awt.image.ConvolveOp;
 import java.awt.image.RescaleOp;
 import java.io.File;
 import java.io.FileNotFoundException;

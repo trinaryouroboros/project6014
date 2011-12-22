@@ -498,6 +498,7 @@ public class MainFrame extends javax.swing.JFrame {
         BufferedReader br = new BufferedReader(new FileReader(f));
         int lnr = 0;
         boolean negativeFound = false;
+        StringBuilder sb = new StringBuilder();
         while (br.ready()) {
             lnr++;
             String line = br.readLine();
@@ -522,15 +523,19 @@ public class MainFrame extends javax.swing.JFrame {
                     io.setOpaque(false);
                     io.setVisible(true);
                 } catch (NumberFormatException ne) {
-                    JOptionPane.showMessageDialog(this, "NumberFormatException occured. Bah. Ignoring this line (Line Number: " + lnr + ")! Input string: [" + line + "]. Exception message: " + ne.getMessage());
+                    sb.append("NumberFormatException occured. Ignoring this line (Line Number: ").append(lnr).append(")! Input string: [").append(line).append("]. Exception message: ").append(ne.getMessage()).append("\n");
                 } catch (ArrayIndexOutOfBoundsException ae) {
-                    JOptionPane.showMessageDialog(this, "ArrayIndexOutOfBoundException occured. This probably means your .ani file is bugged. Ignoring this line (Line Number: " + lnr + "). Line: [" + line + "]. Exception message: " + ae.getMessage());
+                    sb.append("ArrayIndexOutOfBoundException occured. This probably means your .ani file is bugged. Ignoring this line (Line Number: ").append(lnr).append("). Line: [").append(line).append("]. Exception message: ").append(ae.getMessage()).append("\n");
                 } catch (IIOException ie) {
-                    JOptionPane.showMessageDialog(this, "Ignoring this line (Line Number: " + lnr + "): [" + line + "] Message: " + ie.getMessage(), "IIOException occured (" + ie + ")", JOptionPane.ERROR_MESSAGE);
+                    sb.append("ImageIOException occured. Ignoring this line (Line Number: ").append(lnr).append("): [").append(line).append("] Message: ").append(ie.getMessage()).append("\n");
                 } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this, "Ignoring this line (Line Number: " + lnr + "): [" + line + "] Message: " + e.getMessage(), "Unhandled exception occured (" + e + ")", JOptionPane.ERROR_MESSAGE);
+                    sb.append("Ignoring this line (Line Number: ").append(lnr).append("): [").append(line).append("] Message: ").append(e.getMessage()).append("\n");
                 }
             }
+        }
+        if (sb.length() > 0) {
+            TextDialog td = new TextDialog(sb.toString(), "Errors occured while parsing the input file");
+            td.setVisible(true);
         }
         this.hotspot = generateHotspot(100, 100, jSlider_Zoom.getValue());
         jPanel_ImageWorkspace.add(hotspot, 0);
