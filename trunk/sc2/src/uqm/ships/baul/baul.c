@@ -41,7 +41,7 @@
 #define MISSILE_SPEED DISPLAY_TO_WORLD (30)
 #define MISSILE_LIFE 10
 
-// Weapon graphics specifics
+// Weapon graphics
 #define LAST_SPRAY_INDEX 5
 #define SHOCKWAVE_FRAMES 8
 #define LAST_GAS_INDEX 8
@@ -49,6 +49,25 @@
 #define NUM_DISSOLVE_FRAMES 4
 #define LAST_DISSOLVE_INDEX (LAST_SHOCKWAVE_INDEX + NUM_DISSOLVE_FRAMES)
 #define NUM_EMERGE_FRAMES 3
+
+// Weapon attributes
+#define SHOCKWAVE_RANGE (150 << RESOLUTION_FACTOR) // JMS_GFX
+#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 25) // JMS_GFX
+
+#define GAS_HITS 100
+#define GAS_DAMAGE 0
+#define GAS_LIFE 480 // How many 1/24 secs the gas lives.
+#define GAS_OFFSET (4 << RESOLUTION_FACTOR)
+#define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // Baul's gas now flies forward.
+#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
+#define GAS_BATCH_SIZE 1
+
+#define SPRAY_HORZ_OFFSET (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
+#define MISSILE_HITS 2
+#define MISSILE_DAMAGE 1 // Must be at least 1 to make the weapon hit gas clouds.
+#define MISSILE_OFFSET (3 << RESOLUTION_FACTOR) // JMS_GFX
+#define NUM_SPRAYS 5
+#define SPRAY_DIST 4
 
 #include "../orz/orz.h"
 #define ORZ_MARINE(ptr) (ptr->preprocess_func == intruder_preprocess && ptr->collision_func == marine_collision)
@@ -279,93 +298,7 @@ static RACE_DESC baul_desc_4xres =
 	0, /* CodeRef */
 };
 
-static void
-baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
-						COUNT ConcernCounter)
-{
-	
-	STARSHIP *StarShipPtr;
-	EVALUATE_DESC *lpEvalDesc;
-	
-	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	if (lpEvalDesc->ObjectPtr)
-	{
-#define STATIONARY_SPEED WORLD_TO_VELOCITY (DISPLAY_TO_WORLD (4 << RESOLUTION_FACTOR)) // JMS_GFX
-		SIZE dx, dy;
-		
-		GetCurrentVelocityComponents (
-									  &lpEvalDesc->ObjectPtr->velocity, &dx, &dy
-									  );
-		if (lpEvalDesc->which_turn > 8
-			|| (long)dx * dx + (long)dy * dy <=
-			(long)STATIONARY_SPEED * STATIONARY_SPEED)
-			lpEvalDesc->MoveState = PURSUE;
-		else
-			lpEvalDesc->MoveState = ENTICE;
-	}
-	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
-	
-	GetElementStarShip (ShipPtr, &StarShipPtr);
-	if (StarShipPtr->special_counter == 0)
-	{
-		StarShipPtr->ship_input_state &= ~SPECIAL;
-		if (ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr
-			&& ObjectsOfConcern[ENEMY_WEAPON_INDEX].MoveState == ENTICE)
-		{
-			if ((StarShipPtr->ship_input_state & THRUST)
-				|| (ShipPtr->turn_wait == 0 && !(StarShipPtr->ship_input_state & (LEFT | RIGHT)))
-				|| NORMALIZE_FACING (ANGLE_TO_FACING (GetVelocityTravelAngle (
-						&ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr->velocity) + HALF_CIRCLE + OCTANT)
-						- StarShipPtr->ShipFacing) > ANGLE_TO_FACING (QUADRANT))
-				StarShipPtr->ship_input_state |= SPECIAL;
-		}
-		else if (lpEvalDesc->ObjectPtr)
-		{
-			if (lpEvalDesc->MoveState == PURSUE)
-			{
-				if (StarShipPtr->RaceDescPtr->ship_info.energy_level >= WEAPON_ENERGY_COST
-					+ SPECIAL_ENERGY_COST
-					&& ShipPtr->turn_wait == 0
-					&& !(StarShipPtr->ship_input_state & (LEFT | RIGHT))
-					&& (!(StarShipPtr->cur_status_flags & SPECIAL)
-						|| !(StarShipPtr->cur_status_flags
-							 & (SHIP_AT_MAX_SPEED | SHIP_BEYOND_MAX_SPEED))))
-					StarShipPtr->ship_input_state |= SPECIAL;
-			}
-			else if (lpEvalDesc->MoveState == ENTICE)
-			{
-				COUNT direction_angle;
-				SIZE delta_x, delta_y;
-				
-				delta_x = lpEvalDesc->ObjectPtr->next.location.x
-				- ShipPtr->next.location.x;
-				delta_y = lpEvalDesc->ObjectPtr->next.location.y
-				- ShipPtr->next.location.y;
-				direction_angle = ARCTAN (delta_x, delta_y);
-				
-				if ((lpEvalDesc->which_turn > 24
-					 && !(StarShipPtr->ship_input_state & (LEFT | RIGHT)))
-					|| (lpEvalDesc->which_turn <= 16
-						&& NORMALIZE_ANGLE (direction_angle
-											- (FACING_TO_ANGLE (StarShipPtr->ShipFacing) + HALF_CIRCLE)
-											+ QUADRANT) <= HALF_CIRCLE
-						&& (lpEvalDesc->which_turn < 12
-							|| NORMALIZE_ANGLE (direction_angle
-												- (GetVelocityTravelAngle (
-																		   &lpEvalDesc->ObjectPtr->velocity
-																		   ) + HALF_CIRCLE)
-												+ (OCTANT + 2)) <= ((OCTANT + 2) << 1))))
-					StarShipPtr->ship_input_state |= SPECIAL;
-			}
-		}
-		
-		if ((StarShipPtr->ship_input_state & SPECIAL)
-			&& StarShipPtr->RaceDescPtr->ship_info.energy_level >=
-			SPECIAL_ENERGY_COST)
-			StarShipPtr->ship_input_state &= ~THRUST;
-	}
-}
-
+// Forward declarations
 static void
 gas_preprocess (ELEMENT *ElementPtr);
 
@@ -375,6 +308,135 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 static void
 gas_death (ELEMENT *ElementPtr);
 
+static COUNT
+initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[]);
+
+// This is used by AI for testing would it hit the enemy ship with gas.
+static COUNT
+initialize_test_gas (ELEMENT *ElementPtr, HELEMENT GasArray[])
+{
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	MissileBlock.cx = ElementPtr->next.location.x;
+	MissileBlock.cy = ElementPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = LAST_DISSOLVE_INDEX;
+	MissileBlock.sender = ElementPtr->playerNr;
+	MissileBlock.flags =  GASSY_SUBSTANCE | IGNORE_VELOCITY;
+	MissileBlock.pixoffs = GAS_OFFSET;
+	MissileBlock.speed = GAS_INIT_SPEED;
+	MissileBlock.hit_points = GAS_HITS;
+	MissileBlock.damage = GAS_DAMAGE;
+	MissileBlock.life = 20; // Not GAS_LIFE because this test gas doesn't slow down at all -> life has to be short.
+	MissileBlock.preprocess_func = gas_preprocess;
+	MissileBlock.blast_offs = 0;
+	GasArray[0] = initialize_missile (&MissileBlock);
+	
+	return (1);
+}
+
+static void
+baul_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
+						COUNT ConcernCounter)
+{
+	BYTE old_count;
+	STARSHIP *StarShipPtr;
+	EVALUATE_DESC *lpEvalDesc;
+	BYTE in_gas_cloud = 0;
+	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	old_count = StarShipPtr->weapon_counter;
+	
+	// Don't spawn gas unless specifically told to.
+	StarShipPtr->ship_input_state &= ~SPECIAL;
+	
+	// See if there is gas sticking to OUR ship.
+	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
+	if (lpEvalDesc->ObjectPtr)
+	{
+		if (lpEvalDesc->ObjectPtr->state_flags & GASSY_SUBSTANCE 
+			&& lpEvalDesc->ObjectPtr->mass_points == 0
+			&& lpEvalDesc->which_turn <= 1)
+			in_gas_cloud = 1;
+	}
+	
+	// Now that we're done with the gas examinations, examine enemy ship.
+	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
+	
+	// Actions towards enemy ship: 
+	if (lpEvalDesc->ObjectPtr)
+	{
+#define STATIONARY_SPEED WORLD_TO_VELOCITY (DISPLAY_TO_WORLD (4 << RESOLUTION_FACTOR)) // JMS_GFX
+		SIZE dx, dy;
+		
+		GetCurrentVelocityComponents (&lpEvalDesc->ObjectPtr->velocity, &dx, &dy);
+		
+		// Chase the ship if it's within a reasonable distance and there's no gas sticking to OUR ship.
+		if ((lpEvalDesc->which_turn < 20
+			|| (long)dx * dx + (long)dy * dy <= (long)STATIONARY_SPEED * STATIONARY_SPEED)
+			&& !in_gas_cloud)
+			lpEvalDesc->MoveState = PURSUE;
+		// Otherwise, entice.
+		else
+			lpEvalDesc->MoveState = ENTICE;
+	}
+	
+	// Normal ship intelligence.
+	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
+	
+	// We don't want the Baul shooting all the time so it doesn't kill itself so easily.
+	if (lpEvalDesc->ObjectPtr)
+	{	
+		STARSHIP *EnemyStarShipPtr;
+		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
+		
+		// If the enemy is very close, don't shoot him with the primary to avoid damage to self.
+		// We shoot however, if the enemy ship has lazer or tries to shoot us.
+		// The philosophy: Better to kill both than do nothing and die.
+		if (StarShipPtr->ship_input_state & WEAPON && lpEvalDesc->which_turn < 8
+			&& !(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON)
+			&& !(EnemyStarShipPtr->ship_input_state & WEAPON)
+			&& !(EnemyStarShipPtr->ship_input_state & SPECIAL) )
+			StarShipPtr->ship_input_state &= ~WEAPON;
+	}
+	
+	// Drop gas whenever the battery tops off and when we are far away from the enemy.
+	if ((StarShipPtr->RaceDescPtr->ship_info.energy_level 
+		 == StarShipPtr->RaceDescPtr->ship_info.max_energy)
+		&& lpEvalDesc->which_turn > 12
+		&& !in_gas_cloud)
+		StarShipPtr->ship_input_state |= SPECIAL;
+	
+	// Consider dropping gas also when the enemy is in our sights.
+	if (StarShipPtr->special_counter == 0)
+	{
+		BYTE old_input_state;
+		old_input_state = StarShipPtr->ship_input_state;
+		
+		// The final decision of "to gas or not to gas" is made by evaluating a test weapon function.
+		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_test_gas;
+		ship_intelligence (ShipPtr, ObjectsOfConcern, ENEMY_SHIP_INDEX + 1);
+		
+		// Since we faked using primary weapon even though we really are gonna use special,
+		// change the WEAPON button press to SPECIAL.
+		if (StarShipPtr->ship_input_state & WEAPON)
+		{
+			StarShipPtr->ship_input_state &= ~WEAPON;
+			StarShipPtr->ship_input_state |= SPECIAL;
+		}
+		
+		StarShipPtr->ship_input_state = (unsigned char)(old_input_state | (StarShipPtr->ship_input_state & SPECIAL));
+	}
+	
+	// Return the original stats.
+	StarShipPtr->weapon_counter = old_count;
+	StarShipPtr->RaceDescPtr->init_weapon_func = initialize_spray;
+}
+
 static void
 shockwave_preprocess (ELEMENT *ElementPtr)
 {
@@ -383,9 +445,6 @@ shockwave_preprocess (ELEMENT *ElementPtr)
 	// This makes the shockwave animate even if the ships are not moving and the screen is stationary.
 	ElementPtr->state_flags |= CHANGING;
 }
-
-#define SHOCKWAVE_RANGE (150 << RESOLUTION_FACTOR) // JMS_GFX
-#define MAX_DESTRUCTION ((SHOCKWAVE_RANGE >> RESOLUTION_FACTOR) / 25) // JMS_GFX
 
 // We cannot use the normal generate_shockwave as death_func since it has two input parameters.
 // To circumvent this, we define an otherwise similar function generate_shockwave_2 here, but
@@ -948,15 +1007,7 @@ gas_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT *p
 // The IGNORE_VELOCITY flag is very important: It doesn't only stop the gas from reacting to gravity,
 // (see collide.h) but it also makes it possible for the gas to stick to enemy ship (see this file's other gas functions).
 static void spawn_gas (ELEMENT *ShipPtr)
-{
-#define GAS_HITS 100
-#define GAS_DAMAGE 0
-#define GAS_LIFE 480 // How many 1/24 secs the gas lives.
-#define GAS_OFFSET (4 << RESOLUTION_FACTOR)
-#define GAS_INIT_SPEED (100 << RESOLUTION_FACTOR) // Baul's gas now flies forward.
-#define GAS_HORZ_OFFSET (DISPLAY_TO_WORLD(5 << RESOLUTION_FACTOR))
-#define SPRAY_HORZ_OFFSET (DISPLAY_TO_WORLD((-5) << RESOLUTION_FACTOR))
-	
+{	
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 	HELEMENT Missile;
@@ -996,7 +1047,7 @@ static void spawn_gas (ELEMENT *ShipPtr)
 	MissileBlock.damage = GAS_DAMAGE;
 	MissileBlock.life = GAS_LIFE;
 	MissileBlock.preprocess_func = gas_preprocess;
-	MissileBlock.blast_offs = GAS_OFFSET;
+	MissileBlock.blast_offs = 0;
 	Missile = initialize_missile (&MissileBlock);
 	
 	if (Missile)
@@ -1063,11 +1114,6 @@ spray_collision (ELEMENT *ElementPtr0, POINT *pPt0, ELEMENT *ElementPtr1, POINT 
 static COUNT
 initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 {
-#define MISSILE_HITS 2
-#define MISSILE_DAMAGE 1 // Must be at least 1 to make the weapon hit gas clouds.
-#define MISSILE_OFFSET (3 << RESOLUTION_FACTOR) // JMS_GFX
-#define NUM_SPRAYS 5
-#define SPRAY_DIST 4
 	STARSHIP *StarShipPtr;
 	MISSILE_BLOCK MissileBlock;
 	SIZE offs_x, offs_y;
@@ -1138,7 +1184,6 @@ initialize_spray (ELEMENT *ShipPtr, HELEMENT SprayArray[])
 	return (NUM_SPRAYS);
 }
 
-#define GAS_BATCH_SIZE 1
 // Gas spawning happens in postprocess, because  the game seems to like to put specials on the playing field
 // in postprocess (I guess it has something to do with keeping the queue of elements in the right order.)
 static void

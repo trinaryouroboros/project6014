@@ -479,14 +479,17 @@ ship_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 				ShipMoved = TRUE;
 			}
 			if (!ShipFired
-					&& (ConcernCounter == ENEMY_SHIP_INDEX
+				&& (ConcernCounter == ENEMY_SHIP_INDEX
 					|| (ConcernCounter == ENEMY_WEAPON_INDEX
 						&& ObjectsOfConcern->MoveState != AVOID
 						&& !(ObjectsOfConcern->ObjectPtr->state_flags & GASSY_SUBSTANCE) // Don't fire at baul gas. It's useless doing that.
+						&& StarShipPtr->SpeciesID != BAUL_ID // Baul AI doesn't try to shoot enemy projectiles. It would only hurt itself more.
 #ifdef NEVER
 						&& !(StarShipPtr->control & STANDARD_RATING)
-#endif /* NEVER */
-					)))
+#endif /* NEVER */		
+						)
+					)
+				)
 			{
 				ShipFired = ship_weapons (ShipPtr,ObjectsOfConcern->ObjectPtr, margin_of_error);
 				
