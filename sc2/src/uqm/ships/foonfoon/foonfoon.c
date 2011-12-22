@@ -315,6 +315,7 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 	ELEMENT  *FocusballCandidatePtr;
 	SIZE charge_amount = 0;
 	SIZE charge_time_left = 255;
+	BYTE enemy_is_Chmmr = 0;
 	
 	GetElementStarShip (ShipPtr, &StarShipPtr);
 	
@@ -334,7 +335,7 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 	}
 	
 	// Release the SPECIAL button when energy is drained.
-	if (StarShipPtr->RaceDescPtr->ship_info.energy_level == 0)
+	if (StarShipPtr->RaceDescPtr->ship_info.energy_level == 0 || StarShipPtr->RaceDescPtr->ship_info.energy_level == MAX_ENERGY)
 		StarShipPtr->ship_input_state &= ~SPECIAL;
 	// Otherwise, when dervish has been started, keep dervishing until all energy is drained.
 	else if (StarShipPtr->ship_input_state & SPECIAL 
@@ -362,17 +363,23 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
 	if (lpEvalDesc->ObjectPtr)
 	{
+		STARSHIP *EnemyStarShipPtr;
+		GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
+		
+		// Check if the enemy ship is Chmmr. We want to use the dervish more against it.
+		if(EnemyStarShipPtr->SpeciesID == CHMMR_ID)
+			enemy_is_Chmmr = 1;
+		else
+			enemy_is_Chmmr = 0;
+		
 		if (StarShipPtr->RaceDescPtr->ship_info.energy_level < SPECIAL_ENERGY_COST + WEAPON_ENERGY_COST
-			&& !(StarShipPtr->old_status_flags & WEAPON))
+			&& !(StarShipPtr->old_status_flags & WEAPON)
+			&& !enemy_is_Chmmr)
+			lpEvalDesc->MoveState = ENTICE;
+		else if (enemy_is_Chmmr && StarShipPtr->RaceDescPtr->ship_info.energy_level < SPECIAL_ENERGY_COST + WEAPON_ENERGY_COST)
 			lpEvalDesc->MoveState = ENTICE;
 		else
-		{
-			STARSHIP *EnemyStarShipPtr;
-			
-			GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
-			if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON))
-				lpEvalDesc->MoveState = PURSUE;
-		}
+			lpEvalDesc->MoveState = PURSUE;
 	}
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 	
@@ -382,7 +389,7 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 	if (StarShipPtr->weapon_counter == 0
 		&& (old_count != 0
 			|| ((StarShipPtr->special_counter
-			|| StarShipPtr->RaceDescPtr->ship_info.energy_level >= MAX_ENERGY - 3 * WEAPON_ENERGY_COST)
+			|| StarShipPtr->RaceDescPtr->ship_info.energy_level >= MAX_ENERGY - 2 * WEAPON_ENERGY_COST)
 				&& !(StarShipPtr->ship_input_state & WEAPON))
 			)
 		)
@@ -394,8 +401,9 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 	
 	// Consider dervishing if we don't have a heavily charged primary weapon handy and we have enough battery.
 	if (StarShipPtr->special_counter == 0
-		&& charge_amount < 2
-		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= MAX_ENERGY - 4 * WEAPON_ENERGY_COST)
+		&& (enemy_is_Chmmr
+			|| (charge_amount < 2 && StarShipPtr->RaceDescPtr->ship_info.energy_level >= MAX_ENERGY - 4 * WEAPON_ENERGY_COST))
+		)
 	{
 		BYTE old_input_state;
 		old_input_state = StarShipPtr->ship_input_state;
