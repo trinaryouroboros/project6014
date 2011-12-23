@@ -858,7 +858,7 @@ DrawStorageBays (BOOLEAN Refresh)
 
 	r.extent.width  = RES_STAT_SCALE(2); // JMS_GFX
 	r.extent.height = RES_STAT_SCALE(4); // JMS_GFX
-	r.corner.y = RES_STAT_SCALE(123) + RESOLUTION_FACTOR * 2; // JMS_GFX
+	r.corner.y = RES_STAT_SCALE(123) + RESOLUTION_FACTOR * 2 + (RESOLUTION_FACTOR == 1 ? 2 : 0); // JMS_GFX
 	
 	if (Refresh)
 	{
@@ -932,7 +932,8 @@ GetGaugeRect (RECT *pRect, BOOLEAN IsCrewRect)
 	pRect->extent.width = RES_STAT_SCALE(24) - RESOLUTION_FACTOR * 3; // JMS_GFX
 	pRect->corner.x = (STATUS_WIDTH >> 1) - (pRect->extent.width >> 1) + RESOLUTION_FACTOR * 2;
 	pRect->extent.height = RES_STAT_SCALE(5); // JMS_GFX
-	pRect->corner.y = RES_STAT_SCALE((IsCrewRect ? 117 : 38)) + RESOLUTION_FACTOR * 3; // JMS_GFX
+	pRect->corner.y = RES_STAT_SCALE((IsCrewRect ? 117 : 38)) + RESOLUTION_FACTOR * 3
+		+ ((IsCrewRect && RESOLUTION_FACTOR == 1) ? 1 : 0); // JMS_GFX
 }
 
 static void
@@ -958,8 +959,8 @@ DrawPC_SIS (void)
 	t.pStr = GAME_STRING (STATUS_STRING_BASE + 3); // "FUEL"
 	font_DrawText (&t);
 
-	r.corner.y += RES_STAT_SCALE(79); // JMS_GFX
-	t.baseline.y += RES_STAT_SCALE(79); // JMS_GFX
+	r.corner.y += RES_STAT_SCALE(79) + (RESOLUTION_FACTOR == 1 ? 4 : 0); // JMS_GFX
+	t.baseline.y += RES_STAT_SCALE(79) + (RESOLUTION_FACTOR == 1 ? 2 : 0); // JMS_GFX
 	DrawFilledRectangle (&r);
 
 	SetContextFontEffect (SetAbsFrameIndex (FontGradFrame, 2));
@@ -1114,15 +1115,14 @@ DeltaSISGauges_crewDelta (SIZE crew_delta)
 		GetGaugeRect (&r, TRUE);
 		
 		t.baseline.x = STATUS_WIDTH >> 1;
-		t.baseline.y = r.corner.y + r.extent.height;
+		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR == 1 ? 1 : 0);
 		t.align = ALIGN_CENTER;
 		t.pStr = buf;
 		t.CharCount = (COUNT)~0;
 
 		SetContextForeGroundColor (BLACK_COLOR);
 		DrawFilledRectangle (&r);
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x6C));
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x0E, 0x00), 0x6C));
 		font_DrawText (&t);
 	}
 }
@@ -1157,8 +1157,8 @@ DeltaSISGauges_fuelDelta (SIZE fuel_delta)
 		}
 	}
 
-	new_coarse_fuel = (COUNT)(
-			GLOBAL_SIS (FuelOnBoard) / FUEL_TANK_SCALE);
+	new_coarse_fuel = (COUNT)(GLOBAL_SIS (FuelOnBoard) / FUEL_TANK_SCALE);
+	
 	if (new_coarse_fuel != old_coarse_fuel)
 	{
 		TEXT t;
@@ -1170,15 +1170,14 @@ DeltaSISGauges_fuelDelta (SIZE fuel_delta)
 		GetGaugeRect (&r, FALSE);
 		
 		t.baseline.x = STATUS_WIDTH >> 1;
-		t.baseline.y = r.corner.y + r.extent.height;
+		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR == 1 ? 1 : 0);
 		t.align = ALIGN_CENTER;
 		t.pStr = buf;
 		t.CharCount = (COUNT)~0;
 
 		SetContextForeGroundColor (BLACK_COLOR);
 		DrawFilledRectangle (&r);
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2C));
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x13, 0x00, 0x00), 0x2C));
 		font_DrawText (&t);
 	}
 }
@@ -1372,6 +1371,9 @@ GetCPodCapacity (POINT *ppt)
 			case 2:
 				x = crew_lines_x_coords_4x[i];
 				break;
+			case 1:
+				x = crew_lines_x_coords_4x[i];
+				break;
 			case 0:
 			default:
 				x = crew_lines_x_coords_1x[i];
@@ -1384,7 +1386,7 @@ GetCPodCapacity (POINT *ppt)
 			static const Color crew_rows[] = PC_EXPLORER_CREW_COLOR_TABLE;
       
 			ppt->x = (x + 2 * line_remainder) << RESOLUTION_FACTOR;
-			ppt->y = (y << RESOLUTION_FACTOR) + RES_CASE(12,24,34);
+			ppt->y = (y << RESOLUTION_FACTOR) + RES_CASE(12,17,34);
       
 			if (optWhichFonts == OPT_PC)
 				SetContextForeGroundColor (crew_rows[(y-7)/2]);
@@ -1647,10 +1649,9 @@ GetFTankCapacity (POINT *ppt)
 					    / (EXPLORER_FUEL_CAPACITY));
 	
 			ppt->x = (31 << RESOLUTION_FACTOR) + which_row; // JMS_GFX
-			ppt->y = RES_CASE(22, 44, 97); // JMS_GFX
+			ppt->y = RES_CASE(22, 48, 97); // JMS_GFX
 		
-			which_row = (COUNT)(GetFuelTotal() * 10
-					    / (EXPLORER_FUEL_CAPACITY));
+			which_row = (COUNT)(GetFuelTotal() * 10 / (EXPLORER_FUEL_CAPACITY));
 				
 			SetContextForeGroundColor (fuel_colors[which_row]);
 			SetContextBackGroundColor (fuel_colors[which_row + 1]);
