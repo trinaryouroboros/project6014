@@ -80,15 +80,14 @@ DrawModuleStrings (MENU_STATE *pMS, BYTE NewModule)
 
 		s.frame = SetAbsFrameIndex (pMS->CurFrame, NewModule);
 		DrawStamp (&s);
-		t.baseline.x = s.origin.x + RADAR_WIDTH - 2;
+		t.baseline.x = s.origin.x + RADAR_WIDTH  - 2;
 		t.baseline.y = s.origin.y + RADAR_HEIGHT - 2;
 		t.align = ALIGN_RIGHT;
 		t.CharCount = (COUNT)~0;
 		t.pStr = buf;
 		sprintf (buf, "%u", GLOBAL (ModuleCost[NewModule]) * MODULE_COST_SCALE);
 		SetContextFont (TinyFont);
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x00, 0x1F, 0x00), 0x02));
+		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x1F, 0x00), 0x02));
 		font_DrawText (&t);
 	}
 	UnbatchGraphics ();
@@ -114,10 +113,10 @@ RedistributeFuel (void)
 	{
 		GLOBAL_SIS (FuelOnBoard) += EXPLORER_FUEL_VOLUME_PER_ROW;
 		GetFTankCapacity (&r.corner);
-		r.extent.height = RES_CASE(7, 14, 19); // JMS_GFX
+		r.extent.height = RES_CASE(7, 10, 19); // JMS_GFX
 		DrawFilledRectangle (&r);
 		r.corner.y += RES_CASE(1,2,2);
-		r.extent.height = RES_CASE(5, 10, 15);
+		r.extent.height = RES_CASE(5, 6, 15);
 		SetContextForeGroundColor (SetContextBackGroundColor (BLACK_COLOR));
 		DrawFilledRectangle (&r);
 		if (FuelVolume < EXPLORER_FUEL_VOLUME_PER_ROW)
@@ -126,7 +125,7 @@ RedistributeFuel (void)
 
 	FuelVolume = GLOBAL_SIS (FuelOnBoard) + m;
 
-	r.extent.height = RES_CASE(7, 14, 19); // JMS_GFX
+	r.extent.height = RES_CASE(7, 10, 19); // JMS_GFX
 	while ((GLOBAL_SIS (FuelOnBoard) += EXPLORER_FUEL_VOLUME_PER_ROW) < GetFTankCapacity (&r.corner))
 	{
 		SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0B, 0x00, 0x00), 0x2E));
@@ -483,8 +482,7 @@ DoInstallModule (MENU_STATE *pMS)
 			{
 				case PLANET_LANDER:
 				case EMPTY_SLOT + 3:
-					new_slot_piece = NewItem < GLOBAL_SIS (NumLanders)
-							? PLANET_LANDER : (EMPTY_SLOT + 3);
+					new_slot_piece = NewItem < GLOBAL_SIS (NumLanders) ? PLANET_LANDER : (EMPTY_SLOT + 3);
 					break;
 				case FUSION_THRUSTER:
 				case EMPTY_SLOT + 0:

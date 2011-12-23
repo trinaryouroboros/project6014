@@ -56,12 +56,17 @@ static const COORD hangar_x_coords_1x[HANGAR_SHIPS_ROW] =
 #else // use PC hangar
 // modified PC 6x2 hangar layout
 #	define HANGAR_SHIPS_ROW  6
-#	define HANGAR_Y          RES_CASE(116, 232, 536) // JMS_GFX
+#	define HANGAR_Y          RES_CASE(116, 268, 536) // JMS_GFX
 #	define HANGAR_DY         (84 << RESOLUTION_FACTOR) // JMS_GFX
 
 static const COORD hangar_x_coords_1x[HANGAR_SHIPS_ROW] =
 {
-	0, 38, 76,  131, 169, 207
+	0, 38, 76, 131, 169, 207
+};
+
+static const COORD hangar_x_coords_2x[HANGAR_SHIPS_ROW] =
+{
+	24, 102, 179, 293, 370, 448
 };
 
 static const COORD hangar_x_coords_4x[HANGAR_SHIPS_ROW] =
@@ -258,7 +263,7 @@ DrawRaceStrings (MENU_STATE *pMS, BYTE NewRaceItem)
 	UnlockMutex (GraphicsLock);
 }
 
-#define SHIP_WIN_WIDTH RES_CASE(34, 68, 146) // JMS_GFX
+#define SHIP_WIN_WIDTH RES_CASE(34, 73, 146) // JMS_GFX
 #define SHIP_WIN_HEIGHT (SHIP_WIN_WIDTH + (6 << RESOLUTION_FACTOR)) // JMS_GFX
 #define SHIP_WIN_FRAMES ((SHIP_WIN_WIDTH >> 1) + 1)
 
@@ -287,7 +292,7 @@ ShowShipCrew (SHIP_FRAGMENT *StarShipPtr, RECT *pRect)
 
 	r = *pRect;
 	t.baseline.x = r.corner.x + (r.extent.width >> 1);
-	t.baseline.y = r.corner.y + r.extent.height - 1;
+	t.baseline.y = r.corner.y + r.extent.height - 1 - (RESOLUTION_FACTOR == 1 ? 1 : 0);
 	t.align = ALIGN_CENTER;
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
@@ -295,7 +300,7 @@ ShowShipCrew (SHIP_FRAGMENT *StarShipPtr, RECT *pRect)
 	{
 		r.corner.y = t.baseline.y - (6 << RESOLUTION_FACTOR); //JMS_GFX
 		r.extent.width = SHIP_WIN_WIDTH;
-		r.extent.height = 6 << RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.height = (6 << RESOLUTION_FACTOR) + (RESOLUTION_FACTOR == 1 ? 1 : 0); // JMS_GFX
 		SetContextForeGroundColor (BLACK_COLOR);
 		DrawFilledRectangle (&r);
 	}
@@ -324,6 +329,9 @@ ShowCombatShip (MENU_STATE *pMS, COUNT which_window,
 	{
 		case 2:
 			hangar_x_coords = hangar_x_coords_4x;
+			break;
+		case 1:
+			hangar_x_coords = hangar_x_coords_2x;
 			break;
 		case 0:
 		default:
@@ -578,6 +586,9 @@ DoModifyShips (MENU_STATE *pMS)
 	{
 		case 2:
 			hangar_x_coords = hangar_x_coords_4x;
+			break;
+		case 1:
+			hangar_x_coords = hangar_x_coords_2x;
 			break;
 		case 0:
 		default:
