@@ -105,12 +105,19 @@ public class TextDialog extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
-        System.out.println("settting");
-        jTextArea1.setWrapStyleWord(jCheckBox1.isSelected());
-        jTextArea1.setLineWrap(jCheckBox1.isSelected());
-        jTextArea1.updateUI();
+         setWrapping(jCheckBox1.isSelected(), false);
     }//GEN-LAST:event_jCheckBox1ActionPerformed
-
+    
+    public void setWrapping(boolean wrapping, boolean also_set_checkbox) {
+        jTextArea1.setWrapStyleWord(wrapping);
+        jTextArea1.setLineWrap(wrapping);
+        if (also_set_checkbox) {
+            jCheckBox1.setSelected(wrapping);
+            jCheckBox1.updateUI();
+        }
+        jTextArea1.updateUI();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JCheckBox jCheckBox1;

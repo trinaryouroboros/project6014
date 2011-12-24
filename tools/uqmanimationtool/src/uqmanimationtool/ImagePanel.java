@@ -80,6 +80,12 @@ public class ImagePanel extends JPanel {
         this.yoff = yoff;
         this.setLocation((this.xoff * -1) * zoom, (this.yoff * -1) * zoom);
     }
+    
+    public void setZoom(int zoom) {
+        setSize(this.image.getWidth() * zoom, this.image.getHeight() * zoom);
+        this.zoom = zoom;
+        this.setLocation((this.xoff * -1) * zoom, (this.yoff * -1) * zoom);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -132,6 +138,9 @@ public class ImagePanel extends JPanel {
     }
 
     @Override
+    /**
+     * Return the string that has to be displayed in (amongst others) the list of frames. Almost equal to "toSource()".
+     */
     public String toString() {
         String sString = "NULL";
         if (imagepath != null) {
@@ -144,7 +153,15 @@ public class ImagePanel extends JPanel {
         }
         return (changed ? "*" : " ") + sString + " " + split1 + " " + split2 + " " + xoff + " " + yoff;
     }
+    
+    public String getFilename() {
+        return imagepath.substring(imagepath.lastIndexOf(System.getProperty("file.separator")) + 1);
+    }
 
+    /**
+     * Return the 'source' line for this imagepanel, as written in the relevant .ani file
+     * @return the 'source' line for this imagepanel, as written in the relevant .ani file
+     */
     public String toSource() {
         String sString = "NULL";
         if (imagepath != null) {

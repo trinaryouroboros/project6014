@@ -47,14 +47,16 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.IIOException;
 import javax.swing.AbstractAction;
-import javax.swing.DefaultListModel;
+import javax.swing.AbstractListModel;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.DropMode;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -71,7 +73,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class MainFrame extends javax.swing.JFrame {
 
     Mutex mu = new Mutex();
-    DefaultListModel listModel = new DefaultListModel();
+    AnimationSystem animationSystem = new AnimationSystem();
     Color hotspotColor = Color.red;
     ImagePanel hotspot;
     TimerTask t;
@@ -116,8 +118,8 @@ public class MainFrame extends javax.swing.JFrame {
      * @param dy amount to translate Y position by
      */
     private void tranlateImagePanels(int dx, int dy) {
-        for (int k = 0; k < listModel.size(); k++) {
-            ImagePanel ip = (ImagePanel) listModel.get(k);
+        for (int k = 0; k < animationSystem.size(); k++) {
+            ImagePanel ip = (ImagePanel) animationSystem.get(k);
             if (ip != null) {
                 ip.setDXoff(dx);
                 ip.setDYoff(dy);
@@ -289,8 +291,8 @@ public class MainFrame extends javax.swing.JFrame {
         if (jList_Frames.getSelectedIndex() == -1) {
             return null;
         }
-        if (listModel.size() >= jList_Frames.getSelectedIndex()) {
-            return (ImagePanel) listModel.get(jList_Frames.getSelectedIndex());
+        if (animationSystem.size() >= jList_Frames.getSelectedIndex()) {
+            return (ImagePanel) animationSystem.get(jList_Frames.getSelectedIndex());
         } else {
             return null;
         }
@@ -315,8 +317,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
         try {
             fw = new FileWriter(writefile);
-            for (int i = 0; i < listModel.getSize(); i++) {
-                ImagePanel ip = (ImagePanel) listModel.get(i);
+            for (int i = 0; i < animationSystem.getListModel().getSize(); i++) {
+                ImagePanel ip = (ImagePanel) animationSystem.get(i);
                 if (ip != null) {
                     fw.write(ip.toSource() + "\n");
                 }
@@ -337,30 +339,8 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }
 
-    private void showNotes() {
-        new Notes(this, true).setVisible(true);
-    }
-
     private void saveFile() {
         saveFile(editingFile);
-    }
-
-    private class KeyAction extends AbstractAction {
-
-        private char key;
-
-        public KeyAction(char key) {
-            this.key = key;
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            switch (key) {
-                case 'w':
-                    System.out.println("LOL W PRESSED");
-                    break;
-            }
-        }
     }
 
     private void repaintHotspot() {
@@ -375,6 +355,7 @@ public class MainFrame extends javax.swing.JFrame {
     /** Creates new form MainFrame */
     public MainFrame() {
         initComponents();
+        jList_AnimationFrames.setDropMode(DropMode.ON);
 
         jPanel_ImageWorkspace.requestFocus();
         try {
@@ -416,6 +397,44 @@ public class MainFrame extends javax.swing.JFrame {
                 }
             }
         });
+
+        jComboBox_animations.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if ("comboBoxChanged".equals(e.getActionCommand())) {
+                    repaintFrames();
+                    jList_AnimationFrames.setModel(new AbstractListModel() {
+
+                        @Override
+                        public int getSize() {
+                            return ((Animation) animationSystem.animationListModel.getSelectedItem()).frames.size();
+                        }
+
+                        @Override
+                        public Object getElementAt(int index) {
+                            return ((Animation) animationSystem.animationListModel.getSelectedItem()).frames.get(index);
+                        }
+                    });
+                    jComboBox_AnimationType.setModel(new DefaultComboBoxModel(new Object[]{AnimationType.BACKGROUND, AnimationType.CIRCULAR, AnimationType.RANDOM, AnimationType.TALK, AnimationType.YO_YO}));
+                    jComboBox_AnimationType.setSelectedItem(((Animation) animationSystem.animationListModel.getSelectedItem()).aniType);
+                }
+            }
+        });
+
+        jComboBox_AnimationType.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if ("comboBoxChanged".equals(e.getActionCommand())) {
+                    ((Animation) animationSystem.animationListModel.getSelectedItem()).aniType = (AnimationType) jComboBox_AnimationType.getSelectedItem();
+//                    if (((AnimationType)jComboBox1.getSelectedItem()).equals(AnimationType.RANDOM)) {
+//                        JOptionPane.showMessageDialog(rootPane, "AnimationType 'RANDOM' is not fully supported by the SMIL exporter!");
+//                    }
+                }
+                jComboBox_animations.updateUI();
+            }
+        });
     }
 
     private ImagePanel generateHotspot(int width, int height, int zoom) {
@@ -455,8 +474,8 @@ public class MainFrame extends javax.swing.JFrame {
                 System.exit(0);
             }
         }
-        jList_Frames.setModel(listModel);
-        listModel.clear();
+        jList_Frames.setModel(animationSystem.getListModel());
+        jComboBox_animations.setModel(animationSystem.animationListModel);
         setCurrentlyEditingFile(f);
         try {
             parseFile(editingFile);
@@ -494,7 +513,7 @@ public class MainFrame extends javax.swing.JFrame {
     private void parseFile(File f) throws FileNotFoundException, IOException, NoSuchAlgorithmException {
         settings.lastDirPath = f.getParent();
         jPanel_ImageWorkspace.removeAll();
-        listModel.clear();
+        animationSystem.clear();
         BufferedReader br = new BufferedReader(new FileReader(f));
         int lnr = 0;
         boolean negativeFound = false;
@@ -519,7 +538,7 @@ public class MainFrame extends javax.swing.JFrame {
                     io.setSplit1(split1);
                     io.setSplit2(split2);
                     jPanel_ImageWorkspace.add(io, 0);
-                    listModel.addElement(io);
+                    animationSystem.addElement(io);
                     io.setOpaque(false);
                     io.setVisible(true);
                 } catch (NumberFormatException ne) {
@@ -542,16 +561,17 @@ public class MainFrame extends javax.swing.JFrame {
         if (!negativeFound) {
             int xoff = (int) (jPanel_ImageWorkspace.getWidth() * 0.5);
             int yoff = (int) (jPanel_ImageWorkspace.getHeight() * 0.5);
-            for (int j = 0; j < listModel.size(); j++) {
-                ImagePanel i = (ImagePanel) listModel.get(j);
+            for (int j = 0; j < animationSystem.size(); j++) {
+                ImagePanel i = (ImagePanel) animationSystem.get(j);
                 Point p = i.getLocation();
                 i.setLocation((int) (p.getX() + xoff), (int) (p.getY() + yoff));
             }
             Point p = hotspot.getLocation();
             hotspot.setLocation((int) (p.getX() + xoff), (int) (p.getY() + yoff));
-
-
         }
+        jList_AnimationFrames.updateUI();
+        jList_Frames.updateUI();
+        jComboBox_animations.updateUI();
     }
 
     private class MyMouseMotionListener implements MouseMotionListener {
@@ -567,8 +587,8 @@ public class MainFrame extends javax.swing.JFrame {
             if (editingFile != null) {
                 int xoff = e.getXOnScreen() - this.prevx;
                 int yoff = e.getYOnScreen() - this.prevy;
-                for (int j = 0; j < listModel.size(); j++) {
-                    ImagePanel i = (ImagePanel) listModel.get(j);
+                for (int j = 0; j < animationSystem.size(); j++) {
+                    ImagePanel i = (ImagePanel) animationSystem.get(j);
                     Point p = i.getLocation();
                     i.setLocation((int) (p.getX() + xoff), (int) (p.getY() + yoff));
                 }
@@ -645,7 +665,19 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList_Frames = new javax.swing.JList();
+        jSplitPane1 = new javax.swing.JSplitPane();
         jPanel_ImageWorkspace = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList_AnimationFrames = new javax.swing.JList();
+        jComboBox_animations = new javax.swing.JComboBox();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jComboBox_AnimationType = new javax.swing.JComboBox();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
         jToolBar_statusbar = new javax.swing.JToolBar();
         jLabel_LoadedFile = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -662,9 +694,12 @@ public class MainFrame extends javax.swing.JFrame {
         jCheckBoxMenuItem_HighlightFrame = new javax.swing.JCheckBoxMenuItem();
         jMenu_Help = new javax.swing.JMenu();
         jMenuItem_Help = new javax.swing.JMenuItem();
+        jMenuItem2 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("UQMAnimationTool v0.5");
+        setTitle("UQMAnimationTool v0.5+aniBETA");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         jToolBar_Quickmenu.setRollover(true);
@@ -781,7 +816,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel_Zoom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider_Zoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/preferences-desktop.png")), jPanel_AniTab, "Animation settings"); // NOI18N
@@ -789,21 +824,6 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel_TranspTab.setPreferredSize(new java.awt.Dimension(100, 100));
 
         jComboBox_Tranparency.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Don't use any transparency helpers", "Show selected frame transparently", "Show non-selected frames transparently", "Mixed transparencies for selected/non-selected" }));
-        jComboBox_Tranparency.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jComboBox_TranparencyItemStateChanged(evt);
-            }
-        });
-        jComboBox_Tranparency.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox_TranparencyActionPerformed(evt);
-            }
-        });
-        jComboBox_Tranparency.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                jComboBox_TranparencyPropertyChange(evt);
-            }
-        });
 
         javax.swing.GroupLayout jPanel_TranspTabLayout = new javax.swing.GroupLayout(jPanel_TranspTab);
         jPanel_TranspTab.setLayout(jPanel_TranspTabLayout);
@@ -819,7 +839,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel_TranspTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jComboBox_Tranparency, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(137, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/applications-other.png")), jPanel_TranspTab, "Transparency helper settings"); // NOI18N
@@ -827,6 +847,7 @@ public class MainFrame extends javax.swing.JFrame {
         jSplitPane_vert.setRightComponent(jTabbedPane1);
 
         jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jList_Frames.setDragEnabled(true);
         jList_Frames.setPreferredSize(null);
         jScrollPane1.setViewportView(jList_Frames);
 
@@ -840,9 +861,9 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 502, Short.MAX_VALUE)
+            .addGap(0, 402, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
         );
 
         jSplitPane_vert.setLeftComponent(jPanel3);
@@ -855,10 +876,13 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane_vert, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 609, Short.MAX_VALUE)
+            .addComponent(jSplitPane_vert, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
         );
 
         jSplitPane_horiz.setLeftComponent(jPanel2);
+
+        jSplitPane1.setDividerLocation(700);
+        jSplitPane1.setResizeWeight(1.0);
 
         jPanel_ImageWorkspace.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jPanel_ImageWorkspace.setPreferredSize(new java.awt.Dimension(420, 595));
@@ -872,14 +896,111 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel_ImageWorkspace.setLayout(jPanel_ImageWorkspaceLayout);
         jPanel_ImageWorkspaceLayout.setHorizontalGroup(
             jPanel_ImageWorkspaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 916, Short.MAX_VALUE)
+            .addGap(0, 695, Short.MAX_VALUE)
         );
         jPanel_ImageWorkspaceLayout.setVerticalGroup(
             jPanel_ImageWorkspaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 605, Short.MAX_VALUE)
+            .addGap(0, 606, Short.MAX_VALUE)
         );
 
-        jSplitPane_horiz.setRightComponent(jPanel_ImageWorkspace);
+        jSplitPane1.setLeftComponent(jPanel_ImageWorkspace);
+
+        jScrollPane2.setViewportView(jList_AnimationFrames);
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/list-add.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Move up");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Move down");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Import selected frame(s) (..)");
+        jButton4.setToolTipText("Adds the selected item(s) from the list on the left to the currently selected animation.");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/help-browser.png"))); // NOI18N
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Remove item(s)");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jComboBox_AnimationType, 0, 157, Short.MAX_VALUE)
+                            .addComponent(jComboBox_animations, javax.swing.GroupLayout.Alignment.TRAILING, 0, 157, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)))
+                .addGap(5, 5, 5))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jComboBox_animations))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jComboBox_AnimationType, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton6)
+                .addGap(8, 8, 8)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jSplitPane1.setRightComponent(jPanel1);
+
+        jSplitPane_horiz.setRightComponent(jSplitPane1);
 
         jToolBar_statusbar.setFloatable(false);
         jToolBar_statusbar.setRollover(true);
@@ -963,7 +1084,29 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jMenu_Help.add(jMenuItem_Help);
 
+        jMenuItem2.setText("XStream License Information");
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu_Help.add(jMenuItem2);
+
         jMenuBar1.add(jMenu_Help);
+
+        jMenu1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/preferences-system.png"))); // NOI18N
+        jMenu1.setText("Tools (BETA)");
+
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/face-smile.png"))); // NOI18N
+        jMenuItem1.setText("Export SMIL File");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(jMenuItem1);
+
+        jMenuBar1.add(jMenu1);
 
         setJMenuBar(jMenuBar1);
 
@@ -983,7 +1126,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar_Quickmenu, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane_horiz, javax.swing.GroupLayout.DEFAULT_SIZE, 611, Short.MAX_VALUE)
+                .addComponent(jSplitPane_horiz, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar_statusbar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1043,7 +1186,7 @@ public class MainFrame extends javax.swing.JFrame {
      * Select the next frame from the list (wraps around)
      */
     private void selectNext() {
-        if (jList_Frames.getSelectedIndex() < listModel.getSize() - 1) {
+        if (jList_Frames.getSelectedIndex() < animationSystem.getListModel().getSize() - 1) {
             jList_Frames.setSelectedIndex(jList_Frames.getSelectedIndex() + 1);
         } else {
             jList_Frames.setSelectedIndex(0);
@@ -1057,7 +1200,7 @@ public class MainFrame extends javax.swing.JFrame {
         if (jList_Frames.getSelectedIndex() > 0) {
             jList_Frames.setSelectedIndex(jList_Frames.getSelectedIndex() - 1);
         } else {
-            jList_Frames.setSelectedIndex(listModel.size() - 1);
+            jList_Frames.setSelectedIndex(animationSystem.size() - 1);
         }
     }
 
@@ -1077,47 +1220,16 @@ public class MainFrame extends javax.swing.JFrame {
         try {
             jLabel_Zoom.setText("Zoom: " + jSlider_Zoom.getValue());
             mu.acquire();
-            jPanel_ImageWorkspace.removeAll();
-            ArrayList<ImagePanel> newimgpanels = new ArrayList<ImagePanel>();
 
-            boolean negativefound = false;
-            int xoff = (int) (jPanel_ImageWorkspace.getWidth() * 0.5);
-            int yoff = (int) (jPanel_ImageWorkspace.getHeight() * 0.5);
-            for (int j = 0; j < listModel.size(); j++) {
-                ImagePanel i = (ImagePanel) listModel.get(j);
-                if (i.getXoff() * -1 < 0 || i.getYoff() * -1 < 0) {
-                    negativefound = true;
-                }
-            }
-
-            for (int k = 0; k < listModel.size() + 1; k++) {
+            for (int k = 0; k < animationSystem.size() + 1; k++) {
                 ImagePanel i = hotspot;
-                if (k < listModel.size()) {
-                    i = (ImagePanel) listModel.get(k);
+                if (k < animationSystem.size()) {
+                    i = (ImagePanel) animationSystem.get(k);
                 }
-                //
-                ImagePanel j = new ImagePanel(i.getImagepath(), i.getImage(), i.getXoff(), i.getYoff(), jSlider_Zoom.getValue(), i.getSplit1(), i.getSplit2());
-                jPanel_ImageWorkspace.add(j, 0);
-                j.setOpaque(false);
-                j.setVisible(true);
-                //j.setLocation(i.getLocation());
-                if (i.equals(hotspot)) {
-                    hotspot = j;
-                } else {
-                    newimgpanels.add(j);
-                }
-                if (negativefound) {
-                    j.setLocation((int) (j.getLocation().getX() + xoff), (int) (j.getLocation().getY() + yoff));
-                }
-            }
-            listModel.clear();
-            for (ImagePanel i : newimgpanels) {
-                listModel.addElement(i);
+                i.setZoom(jSlider_Zoom.getValue());
             }
             jPanel_ImageWorkspace.updateUI();
             mu.release();
-
-
         } catch (InterruptedException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1145,15 +1257,6 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jPanel_ImageWorkspaceMouseMoved
 
-    private void jComboBox_TranparencyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox_TranparencyActionPerformed
-    }//GEN-LAST:event_jComboBox_TranparencyActionPerformed
-
-    private void jComboBox_TranparencyItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jComboBox_TranparencyItemStateChanged
-    }//GEN-LAST:event_jComboBox_TranparencyItemStateChanged
-
-    private void jComboBox_TranparencyPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_jComboBox_TranparencyPropertyChange
-    }//GEN-LAST:event_jComboBox_TranparencyPropertyChange
-
     private void jButton_SetXYFramesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SetXYFramesActionPerformed
         String newx = JOptionPane.showInputDialog("What should the new X position be for ALL frames (cancel to not change)?");
         String newy = JOptionPane.showInputDialog("What should the new Y position be for ALL frames (cancel to not change)?");
@@ -1161,7 +1264,7 @@ public class MainFrame extends javax.swing.JFrame {
             try {
                 int n = Integer.valueOf(newx);
                 for (int i : jList_Frames.getSelectedIndices()) {
-                    ImagePanel p = (ImagePanel) listModel.get(i);
+                    ImagePanel p = (ImagePanel) animationSystem.get(i);
                     p.setXoff(n);
                 }
             } catch (NumberFormatException e) {
@@ -1172,7 +1275,7 @@ public class MainFrame extends javax.swing.JFrame {
             try {
                 int n = Integer.valueOf(newy);
                 for (int i : jList_Frames.getSelectedIndices()) {
-                    ImagePanel p = (ImagePanel) listModel.get(i);
+                    ImagePanel p = (ImagePanel) animationSystem.get(i);
                     p.setYoff(n);
                 }
             } catch (NumberFormatException e) {
@@ -1191,7 +1294,31 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItem_OpenActionPerformed
 
     private void jMenuItem_HelpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_HelpActionPerformed
-        showNotes();
+        TextDialog td = new TextDialog("UQMAnimationTool\n"
+                + "\n"
+                + "Keyboard commands - Playback:\n"
+                + "UP/DOWN arrows: select the next/previous frame in the animation\n"
+                + "SPACE: loop through the animation once\n"
+                + "P: play the animation repeatedly\n"
+                + "\n"
+                + "Keyboard commands - Editing:\n"
+                + "W: Move the selected frame one pixel to the top\n"
+                + "A: Move the selected frame one pixel to the left\n"
+                + "S: Move the selected frame one pixel to the bottom\n"
+                + "D: Move the selected frame one pixel to the right\n"
+                + "SHIFT+W/A/S/D: Same as W/A/S/D, except it moves *all* frames one pixel.\n"
+                + "\n"
+                + "HELP:\n"
+                + "-Everything should be pretty self-explanatory. Load a file, click on an item in the list to bring it to the front of all images displayed. Tune things with various options.\n"
+                + "-NOTE THAT everything is ALWAYS displayed and I am only fucking with the Z order, UNLESS the \"only show selected image\" box is checked. If an animation works in UQMAnimationTool, this does not guarantee that it also works in UQM itself (code, etc). Alignment should mostly work allright though. \n"
+                + "\n"
+                + "Notes:\n"
+                + "-Zooming no longer reloads image files. Reloading a file, however, will.\n"
+                + "-You might see screwups with complex animations (like the one used in the Lurg from Project6014). Unfortunately, I cannot help this as the code makes sure that screwups like that should not happen, and I'm not parsing any code! :P\n"
+                + "-May still have some threading issues regarding zooming. If things bug out; that's why... I guess I should have some kind of 'dev console' that is mapped to System.err and System.out.. hmm..\n"
+                + "-The Hotspot color does not have an Alpha value, despite what the .conf file might say... :)", "Help and Notes");
+        td.setWrapping(true, true);
+        td.setVisible(true);
     }//GEN-LAST:event_jMenuItem_HelpActionPerformed
 
     private void jMenuItem_SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_SaveActionPerformed
@@ -1201,6 +1328,119 @@ public class MainFrame extends javax.swing.JFrame {
     private void jMenuItem_ReloadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem_ReloadActionPerformed
         loadFile(editingFile);
     }//GEN-LAST:event_jMenuItem_ReloadActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        Animation a = new Animation();
+        animationSystem.addAnimation(a);
+        jComboBox_animations.setSelectedIndex(animationSystem.animations.size() - 1); //Select the item we just added
+        jComboBox_animations.updateUI();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        moveAnimationFrame(-1);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        moveAnimationFrame(1);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+        for (int i : jList_Frames.getSelectedIndices()) {
+            a.addFrame((ImagePanel) animationSystem.frames.get(i));
+        }
+        jList_AnimationFrames.updateUI();
+        jComboBox_animations.updateUI();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        JFileChooser fc = new JFileChooser(settings.lastDirPath);
+        fc.addChoosableFileFilter(new FileNameExtensionFilter("SMIL file", "smil"));
+        int result = fc.showSaveDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            int resultO = JOptionPane.showOptionDialog(rootPane, "Do you want to negate the X and Y offsets for all frames in the Layout? Answer 'yes' for communication screens, and 'no' for anything else.", "Question", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, null, JOptionPane.YES_OPTION);
+
+            if (resultO == 0) {
+                resultO = -1;
+            }
+            System.out.println("result is " + resultO);
+            SMILExporter smile = new SMILExporter(animationSystem, fc.getSelectedFile(), resultO);
+            try {
+                smile.doExport();
+            } catch (IOException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "No file specified. Not saving.");
+        }
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        TextDialog td = new TextDialog("Animation types:\n"
+                + "----------------\n"
+                + "BACKGROUND: Background frames. These should *always* be visible in the background.\n"
+                + "CIRCULAR: Circular animation. Shows all frames in order, then restarts from the top again.\n"
+                + "RANDOM: Random animation. Frames are shown in a random order. Because SMIL does not appear to support randomness, the SMIL generator generates a random order.\n"
+                + "TALK: Talk animation. These should be shown whenever the character is talking. Not sure if this should be RANDOM or CIRCULAR. Currently the exact same as CIRCULAR. Also not sure how we can integrate these with UQM.\n"
+                + "YO_YO: Yo-yo animation. Shows all frames in order, then shows them again in backwards order. You can create awesome yo-yo's with this.", "Animation types HELP");
+        td.setWrapping(true, true);
+        td.setVisible(true);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        TextDialog td = new TextDialog("XStream License -- http://xstream.codehaus.org/license.html\n"
+                + "\n"
+                + "----------------------\n"
+                + "Copyright (c) 2003-2006, Joe Walnes\n"
+                + "Copyright (c) 2006-2007, XStream Committers\n"
+                + "All rights reserved.\n"
+                + "\n"
+                + "Redistribution and use in source and binary forms, with or without\n"
+                + "modification, are permitted provided that the following conditions are met:\n"
+                + "\n"
+                + "Redistributions of source code must retain the above copyright notice, this list of\n"
+                + "conditions and the following disclaimer. Redistributions in binary form must reproduce\n"
+                + "the above copyright notice, this list of conditions and the following disclaimer in\n"
+                + "the documentation and/or other materials provided with the distribution.\n"
+                + "\n"
+                + "Neither the name of XStream nor the names of its contributors may be used to endorse\n"
+                + "or promote products derived from this software without specific prior written\n"
+                + "permission.\n"
+                + "\n"
+                + "THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS \"AS IS\" AND ANY\n"
+                + "EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES\n"
+                + "OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT\n"
+                + "SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,\n"
+                + "INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED\n"
+                + "TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR\n"
+                + "BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN\n"
+                + "CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY\n"
+                + "WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH\n"
+                + "DAMAGE.\n"
+                + "", "XStream License Information");
+        td.setWrapping(true, true);
+        td.setVisible(true);
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+        for (int i : jList_AnimationFrames.getSelectedIndices()) {
+            a.frames.remove(i);
+        }
+        jList_AnimationFrames.updateUI();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void moveAnimationFrame(int delta) {
+        Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+        int indexold = jList_AnimationFrames.getSelectedIndex();
+        int indexnew = Math.min(Math.max(0, indexold + delta), jList_AnimationFrames.getModel().getSize() - 1);
+        System.out.println("indexold=" + indexold + "  indexnew=" + indexnew);
+        ImagePanel p = a.frames.get(indexold);
+        a.frames.remove(p);
+        a.frames.add(indexnew, p);
+        jList_AnimationFrames.setSelectedIndex(indexnew);
+        jList_AnimationFrames.updateUI();
+    }
 
     /**
      * @param args the command line arguments
@@ -1214,6 +1454,12 @@ public class MainFrame extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton_Autoloop;
     private javax.swing.JButton jButton_HotspotColor;
     private javax.swing.JButton jButton_Openfile;
@@ -1222,13 +1468,19 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_HighlightFrame;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_ShowHotspot;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem_ShowSelectedFrameOnly;
+    private javax.swing.JComboBox jComboBox_AnimationType;
     private javax.swing.JComboBox jComboBox_Tranparency;
+    private javax.swing.JComboBox jComboBox_animations;
     private javax.swing.JLabel jLabel_LoadedFile;
     private javax.swing.JLabel jLabel_MouseXY;
     private javax.swing.JLabel jLabel_Rate;
     private javax.swing.JLabel jLabel_Zoom;
+    private javax.swing.JList jList_AnimationFrames;
     private javax.swing.JList jList_Frames;
+    private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem_Help;
     private javax.swing.JMenuItem jMenuItem_Open;
     private javax.swing.JMenuItem jMenuItem_Reload;
@@ -1237,17 +1489,20 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu_Display;
     private javax.swing.JMenu jMenu_File;
     private javax.swing.JMenu jMenu_Help;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel_AniTab;
     private javax.swing.JPanel jPanel_ImageWorkspace;
     private javax.swing.JPanel jPanel_TranspTab;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
     private javax.swing.JSlider jSlider_Rate;
     private javax.swing.JSlider jSlider_Zoom;
+    private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane_horiz;
     private javax.swing.JSplitPane jSplitPane_vert;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -1270,8 +1525,8 @@ public class MainFrame extends javax.swing.JFrame {
      */
     private void repaintFrames() {
         try {
-            for (int j = 0; j < listModel.size(); j++) {
-                ImagePanel i = (ImagePanel) listModel.get(j);
+            for (int j = 0; j < animationSystem.size(); j++) {
+                ImagePanel i = (ImagePanel) animationSystem.get(j);
                 if (jComboBox_Tranparency.getSelectedIndex() == 0) {
                     i.setTransparency(1f);
                     i.setHighlight(1f);
@@ -1289,8 +1544,8 @@ public class MainFrame extends javax.swing.JFrame {
             if (jList_Frames.getSelectedIndex() != -1) {
                 mu.acquire();
                 if (jCheckBoxMenuItem_ShowSelectedFrameOnly.isSelected()) {
-                    for (int j = 0; j < listModel.size(); j++) {
-                        ImagePanel i = (ImagePanel) listModel.get(j);
+                    for (int j = 0; j < animationSystem.size(); j++) {
+                        ImagePanel i = (ImagePanel) animationSystem.get(j);
                         i.setVisible(false);
                     }
                 }
