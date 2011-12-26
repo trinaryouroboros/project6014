@@ -13,7 +13,8 @@ anim_pattern2 = re.compile(r'^(\t|    )(\t|    ){$')
 anim_end_pattern = re.compile(r'^(\t|    )(\t|    )},?$')
 
 mask_line_pattern = re.compile('\s*(.+)/\* BlockMask \*/')
-mask_part_regex = re.compile('\s*\(1L?\s*<<\s*([0-9]+)\s*\)\s*')
+mask_line_pattern2 = re.compile('\s*[^(]*(\(1L?\s*<<\s*[0-9]+L?.*\))[^)]*$')
+mask_part_regex = re.compile('\s*\(1L?\s*<<\s*([0-9]+)L?\s*\)\s*')
 
 
 syntax_errors = 0
@@ -87,11 +88,13 @@ def check_file(filename):
                     warn('anim num is actually %d' % anim_num)
                 in_pattern = True
             
-            if mask_line_pattern.match(line):
+            if mask_line_pattern.match(line) or mask_line_pattern2.match(line):
                 if not in_pattern:
                     warn("Mask outside pattern: '%s'" % line)
                     syntax_errors += 1
                 m = mask_line_pattern.match(line)
+                if m is None:
+                    m = mask_line_pattern2.match(line)
                 masks = m.groups()[0].rstrip(', ')
                 #print 'Masks: %s' % masks
                 parts = []
@@ -101,7 +104,10 @@ def check_file(filename):
                         continue
                     parts.append(int(m.groups()[0]))
                 #print 'Parts: %s' % parts
-                blocked_by_map[anim_num] = parts
+                if anim_num in blocked_by_map:
+                    blocked_by_map[anim_num].extend(parts)
+                else:
+                    blocked_by_map[anim_num] = parts
             
             if anim_end_pattern.match(line):
                 if not in_pattern:
