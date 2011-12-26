@@ -367,7 +367,7 @@ static LOCDATA lurg_desc_4x =
 			CIRCULAR_ANIM, /* AnimFlags */
 			ONE_SECOND / 19, 0, /* FrameRate */
 			3 * ONE_SECOND / 2, ONE_SECOND / 2, /* RestartRate */
-			0, /* BlockMask */
+			(1L << 8), /* BlockMask */
 		},
 		{	// 13 - Move lavalamp Right
 			72, /* StartIndex */
