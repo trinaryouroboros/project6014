@@ -88,13 +88,14 @@ public class SMILExporter {
         //Write out all animations:
         for (Animation a : aniSystem.animations) {
             if (a.aniType == AnimationType.BACKGROUND) { //Background 'animation': no sequence, no duration (ALWAYS VISIBLE)
-                for (ImagePanel ip : a.frames) {
-                    sb.append(_genParForIPanel(ip, null) + "\n");
+                for (AnimationFrame af : a.frames) {
+                    af.duration = -1d;
+                    sb.append(_genParForAFrame(af) + "\n");
                 }
             } else if (a.aniType == AnimationType.CIRCULAR) { //Circular animation: all frames after each other
                 sb.append(_genSeqForAni(a));
-                for (ImagePanel ip : a.frames) {
-                    sb.append(_genParForIPanel(ip, 0.25f) + "\n");
+                for (AnimationFrame af : a.frames) {
+                    sb.append(_genParForAFrame(af) + "\n");
                 }
                 sb.append("</seq>\n");
             } else if (a.aniType == AnimationType.RANDOM) { //Random animation: all frames randomly. Pre-determined generation because SMIL does not (?) support randomness
@@ -102,24 +103,24 @@ public class SMILExporter {
                 //Generate 'random' list of frame elements sufficiently large enough to appear random to the player
                 Random random = new Random();
                 for (int i = 0; i < 256; i++) {
-                    sb.append(_genParForIPanel(a.frames.get(random.nextInt(a.frames.size())), 0.25f));
+                    sb.append(_genParForAFrame(a.frames.get(random.nextInt(a.frames.size()))) + "\n");
                 }
                 sb.append("</seq>\n");
             } else if (a.aniType == AnimationType.TALK) { //Same as circular for now. Should be same as random??
                 sb.append(_genSeqForAni(a));                
-                for (ImagePanel ip : a.frames) {
-                    sb.append(_genParForIPanel(ip, 0.25f) + "\n");
+                for (AnimationFrame af : a.frames) {
+                    sb.append(_genParForAFrame(af) + "\n");
                 }
                 sb.append("</seq>\n");
             } else if (a.aniType == AnimationType.YO_YO) { //Yo-yo animation: loops through all frames once, then loops through them again in reverse.
                 sb.append(_genSeqForAni(a));
-                for (ImagePanel ip : a.frames) {
-                    sb.append(_genParForIPanel(ip, 0.25f) + "\n");
+                for (AnimationFrame af : a.frames) {
+                    sb.append(_genParForAFrame(af) + "\n");
                 }
                 ArrayList<ImagePanel> tempA = new ArrayList(a.frames);
                 Collections.reverse(tempA);
-                for (ImagePanel ip : tempA) {
-                    sb.append(_genParForIPanel(ip, 0.25f) + "\n");
+                for (AnimationFrame af : a.frames) {
+                    sb.append(_genParForAFrame(af) + "\n");
                 }
                 sb.append("</seq>\n");
             }
@@ -134,19 +135,11 @@ public class SMILExporter {
         return "<seq begin=\"0s\" repeatCount=\"indefinite\" > <!-- Animation: " + a.toString() + " -->\n";
     }
 
-    private String _genParForIPanel(ImagePanel ip, Float duration) {
-        return "<par" + (duration != null ? " dur=\"" + duration + "s\"" : "") + "><img src=\"" + ip.getFilename() + "\" region=\"" + ip.getFilename() + "\"/></par>"; //TODO: change duration
+    private String _genParForAFrame(AnimationFrame frame) {
+        return "<par" + (frame.duration != null && frame.duration >= 0 ? " dur=\"" + frame.duration + "s\"" : "") + "><img src=\"" + frame.frame.getFilename() + "\" region=\"" + frame.frame.getFilename() + "\"/></par>";
     }
 
     private String genEndRoot() {
         return "</smil>\n";
     }
-//    
-//            for (Animation a : aniSystem.animations) {
-//            if (a.aniType == AnimationType.BACKGROUND) {
-//                for (ImagePanel ip : a.frames) {
-//                    sb.append("<region xml:id=\"background-\"" + ip.getFilename() + "\" width=\"" + ip.getWidth() + "\" height=\"" + ip.getHeight() + "\" z-index=\"-1\"/>");
-//                }
-//            }
-//        }
 }

@@ -47,16 +47,19 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.imageio.IIOException;
 import javax.swing.AbstractAction;
-import javax.swing.AbstractListModel;
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.DropMode;
 import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
@@ -65,6 +68,7 @@ import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
@@ -83,6 +87,116 @@ public class MainFrame extends javax.swing.JFrame {
     Settings settings;
     Integer animationTo = null;
     int animPass = 0;
+    private static Pattern extframePattern = Pattern.compile("\\[.*\\]");
+    private MyTableModel aniTableModel;
+
+    private void parseExtline(String extline, StringBuilder sb) throws NumberFormatException {
+        //Parse all extension lines
+        extline = extline.substring(2).trim();
+        String[] extsplitted = extline.toLowerCase().split(" ");
+
+
+        if (extsplitted.length >= 1) {
+            //#@ anidef 0 TALK [NAME]
+            if (extsplitted[0].equals("anidef")) {
+                if (extsplitted.length >= 3) {
+                    int aniID = Integer.valueOf(extsplitted[1]);
+                    while (animationSystem.animations.size() <= aniID) {
+                        Animation ani = new Animation();
+                        animationSystem.addAnimation(ani);
+                    }
+
+                    Animation ani = animationSystem.animations.get(aniID);
+                    if (extsplitted[2].equals("talk")) {
+                        ani.aniType = AnimationType.TALK;
+                    }
+                    if (extsplitted[2].equals("circular")) {
+                        ani.aniType = AnimationType.CIRCULAR;
+                    }
+                    if (extsplitted[2].equals("random")) {
+                        ani.aniType = AnimationType.RANDOM;
+                    }
+                    if (extsplitted[2].equals("yo_yo")) {
+                        ani.aniType = AnimationType.YO_YO;
+                    }
+                    if (extsplitted[2].equals("background")) {
+                        ani.aniType = AnimationType.BACKGROUND;
+                    }
+
+                    Matcher matcher = extframePattern.matcher(extline);
+                    if (matcher.find()) {
+                        String fSource = matcher.group();
+                        fSource = fSource.substring(1, fSource.length() - 1); //trim off the [ and ]
+                        ani.setName(fSource);
+                    }
+                } else {
+                    sb.append("Too few arguments to anidef at " + extline + "\n");
+                }
+            }
+
+
+            //#@ aniframe 0 0.25 [<<FRAME SOURCE>>]
+            if (extsplitted[0].equals("aniframe")) {
+                if (extsplitted.length >= 4) {
+                    int aniID = Integer.valueOf(extsplitted[1]);
+                    if (animationSystem.animations.size() > aniID) {
+                        Animation ani = animationSystem.animations.get(aniID);
+                        double duration = -1; //Default for BACKGROUND animationType
+                        if (ani.aniType != AnimationType.BACKGROUND) {
+                            duration = Double.valueOf(extsplitted[2]);
+                        }
+
+                        Matcher matcher = extframePattern.matcher(extline);
+                        if (matcher.find()) {
+                            String fSource = matcher.group();
+                            fSource = fSource.substring(1, fSource.length() - 1); //trim off the [ and ]
+                            boolean found = false;
+                            for (ImagePanel ip : animationSystem.frames) {
+                                if (ip.toSource().equals(fSource)) {
+                                    ani.addFrame(ip, duration);
+                                    found = true;
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                sb.append("Nothing found for " + fSource + "\n");
+                                //something is wrong, couldn't find aniframe declaration in list of frames (it's assigned to an animation, but not declared as a frame to UQM)
+                                //TODO: determine behaviour (add it in anyways, OR ignore it?)
+                            }
+
+                        } else {
+                            sb.append("Invalid aniframe extension line\n");
+                            //something is wrong, couldn't find aniframe declaration
+                        }
+                    } else {
+                        sb.append("Animation with index " + aniID + " not found. Has it been declared previously?\n");
+                    }
+                } else {
+                    sb.append("Too few arguments to aniframe at " + extline + "\n");
+                }
+            }
+        }
+    }
+
+    private boolean parseLine(String line, File f, boolean negativeFound) throws NoSuchAlgorithmException, IOException, NumberFormatException {
+        String[] splitted = line.split(" ");
+        String fname = f.getParent() + System.getProperty("file.separator") + splitted[0];
+        int split1 = Integer.valueOf(splitted[1]);
+        int split2 = Integer.valueOf(splitted[2]);
+        int xoff = Integer.valueOf(splitted[3]);
+        int yoff = Integer.valueOf(splitted[4]);
+        if (xoff < 0 || yoff < 0) {
+            negativeFound = true;
+        }
+        ImagePanel io = new ImagePanel(fname, xoff, yoff, jSlider_Zoom.getValue());
+        io.setSplit1(split1);
+        io.setSplit2(split2);
+        jPanel_ImageWorkspace.add(io, 0);
+        animationSystem.addElement(io);
+        io.setOpaque(false);
+        io.setVisible(true);
+        return negativeFound;
+    }
 
     /**
      * Translate a single image panel (the one currently selected)
@@ -324,6 +438,20 @@ public class MainFrame extends javax.swing.JFrame {
                 }
                 ip.setChanged(false);
             }
+            for (int i = 0; i < animationSystem.animations.size(); i++) {
+                Animation ani = animationSystem.animations.get(i);
+                if (ani.aniType == AnimationType.BACKGROUND) {
+                    for (AnimationFrame af : ani.frames) {
+                        af.duration = -1d;
+                    }
+                }
+                fw.write("#@ anidef " + i + " " + ani.aniType + " [" + ani.getName() + "]\n");
+            }
+            for (int i = 0; i < animationSystem.animations.size(); i++) {
+                for (AnimationFrame frame : animationSystem.animations.get(i).frames) {
+                    fw.write("#@ aniframe " + i + " " + frame.duration + " [" + frame.frame.toSource() + "]\n");
+                }
+            }
             fw.close();
             jList_Frames.updateUI();
         } catch (IOException ex) {
@@ -331,7 +459,9 @@ public class MainFrame extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Couldn't save file: " + ex);
         } finally {
             try {
-                fw.close();
+                if (fw != null) {
+                    fw.close();
+                }
             } catch (IOException ex) {
                 Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, "Couldn't close file: " + ex);
@@ -355,7 +485,6 @@ public class MainFrame extends javax.swing.JFrame {
     /** Creates new form MainFrame */
     public MainFrame() {
         initComponents();
-        jList_AnimationFrames.setDropMode(DropMode.ON);
 
         jPanel_ImageWorkspace.requestFocus();
         try {
@@ -404,20 +533,11 @@ public class MainFrame extends javax.swing.JFrame {
             public void actionPerformed(ActionEvent e) {
                 if ("comboBoxChanged".equals(e.getActionCommand())) {
                     repaintFrames();
-                    jList_AnimationFrames.setModel(new AbstractListModel() {
-
-                        @Override
-                        public int getSize() {
-                            return ((Animation) animationSystem.animationListModel.getSelectedItem()).frames.size();
-                        }
-
-                        @Override
-                        public Object getElementAt(int index) {
-                            return ((Animation) animationSystem.animationListModel.getSelectedItem()).frames.get(index);
-                        }
-                    });
+                    Animation ani = (Animation) animationSystem.animationListModel.getSelectedItem();
                     jComboBox_AnimationType.setModel(new DefaultComboBoxModel(new Object[]{AnimationType.BACKGROUND, AnimationType.CIRCULAR, AnimationType.RANDOM, AnimationType.TALK, AnimationType.YO_YO}));
-                    jComboBox_AnimationType.setSelectedItem(((Animation) animationSystem.animationListModel.getSelectedItem()).aniType);
+                    jComboBox_AnimationType.setSelectedItem(ani.aniType);
+                    aniTableModel.fireTableStructureChange();
+                    jTable1.updateUI();
                 }
             }
         });
@@ -433,8 +553,12 @@ public class MainFrame extends javax.swing.JFrame {
 //                    }
                 }
                 jComboBox_animations.updateUI();
+                aniTableModel.fireTableStructureChange();
+                jTable1.updateUI();
             }
         });
+        aniTableModel = new MyTableModel();
+        jTable1.setModel(aniTableModel);
     }
 
     private ImagePanel generateHotspot(int width, int height, int zoom) {
@@ -518,29 +642,14 @@ public class MainFrame extends javax.swing.JFrame {
         int lnr = 0;
         boolean negativeFound = false;
         StringBuilder sb = new StringBuilder();
+        ArrayList<String> anitool_extension_lines = new ArrayList<String>();
         while (br.ready()) {
             lnr++;
             String line = br.readLine();
+            line = line.trim(); //trim the line of any trailing/leading whitespace
             if (!line.startsWith("#")) {
-                String[] splitted = null;
                 try {
-                    splitted = line.split(" ");
-                    String fname = f.getParent() + System.getProperty("file.separator") + splitted[0];
-                    int split1 = Integer.valueOf(splitted[1]);
-                    int split2 = Integer.valueOf(splitted[2]);
-                    int xoff = Integer.valueOf(splitted[3]);
-                    int yoff = Integer.valueOf(splitted[4]);
-                    if (xoff < 0 || yoff < 0) {
-                        negativeFound = true;
-                    }
-
-                    ImagePanel io = new ImagePanel(fname, xoff, yoff, jSlider_Zoom.getValue());
-                    io.setSplit1(split1);
-                    io.setSplit2(split2);
-                    jPanel_ImageWorkspace.add(io, 0);
-                    animationSystem.addElement(io);
-                    io.setOpaque(false);
-                    io.setVisible(true);
+                    negativeFound = parseLine(line, f, negativeFound); //parse the line
                 } catch (NumberFormatException ne) {
                     sb.append("NumberFormatException occured. Ignoring this line (Line Number: ").append(lnr).append(")! Input string: [").append(line).append("]. Exception message: ").append(ne.getMessage()).append("\n");
                 } catch (ArrayIndexOutOfBoundsException ae) {
@@ -550,6 +659,19 @@ public class MainFrame extends javax.swing.JFrame {
                 } catch (Exception e) {
                     sb.append("Ignoring this line (Line Number: ").append(lnr).append("): [").append(line).append("] Message: ").append(e.getMessage()).append("\n");
                 }
+            } else if (line.startsWith("#@")) { //UQMAnimatonTool extension line
+                anitool_extension_lines.add(line); //Add it for parsing later
+            }
+        }
+        for (String extline : anitool_extension_lines) {
+            try {
+                parseExtline(extline, sb); //parse extension lines
+            } catch (NumberFormatException ne) {
+                sb.append("NumberFormatException occured. Input string: [").append(extline).append("]. Exception message: ").append(ne.getMessage()).append("\n");
+            } catch (ArrayIndexOutOfBoundsException ae) {
+                sb.append("ArrayIndexOutOfBoundException occured. This probably means your .ani file is bugged. Ignoring this line: [").append(extline).append("]. Exception message: ").append(ae.getMessage()).append("\n");
+            } catch (Exception e) {
+                sb.append("Ignoring this line: ").append(" [").append(extline).append("] Message: [").append(e.getMessage()).append("] Exception: [").append(e).append("] ").append("\n");
             }
         }
         if (sb.length() > 0) {
@@ -569,7 +691,7 @@ public class MainFrame extends javax.swing.JFrame {
             Point p = hotspot.getLocation();
             hotspot.setLocation((int) (p.getX() + xoff), (int) (p.getY() + yoff));
         }
-        jList_AnimationFrames.updateUI();
+        jTable1.updateUI();
         jList_Frames.updateUI();
         jComboBox_animations.updateUI();
     }
@@ -668,8 +790,6 @@ public class MainFrame extends javax.swing.JFrame {
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel_ImageWorkspace = new javax.swing.JPanel();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jList_AnimationFrames = new javax.swing.JList();
         jComboBox_animations = new javax.swing.JComboBox();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -678,6 +798,10 @@ public class MainFrame extends javax.swing.JFrame {
         jComboBox_AnimationType = new javax.swing.JComboBox();
         jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
         jToolBar_statusbar = new javax.swing.JToolBar();
         jLabel_LoadedFile = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
@@ -816,7 +940,7 @@ public class MainFrame extends javax.swing.JFrame {
                 .addComponent(jLabel_Zoom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider_Zoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(34, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/preferences-desktop.png")), jPanel_AniTab, "Animation settings"); // NOI18N
@@ -839,14 +963,14 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel_TranspTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jComboBox_Tranparency, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(137, Short.MAX_VALUE))
+                .addContainerGap(140, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/applications-other.png")), jPanel_TranspTab, "Transparency helper settings"); // NOI18N
 
         jSplitPane_vert.setRightComponent(jTabbedPane1);
 
-        jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13));
         jList_Frames.setDragEnabled(true);
         jList_Frames.setPreferredSize(null);
         jScrollPane1.setViewportView(jList_Frames);
@@ -861,9 +985,9 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 402, Short.MAX_VALUE)
+            .addGap(0, 399, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE))
         );
 
         jSplitPane_vert.setLeftComponent(jPanel3);
@@ -881,7 +1005,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jSplitPane_horiz.setLeftComponent(jPanel2);
 
-        jSplitPane1.setDividerLocation(700);
+        jSplitPane1.setDividerLocation(650);
         jSplitPane1.setResizeWeight(1.0);
 
         jPanel_ImageWorkspace.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -896,7 +1020,7 @@ public class MainFrame extends javax.swing.JFrame {
         jPanel_ImageWorkspace.setLayout(jPanel_ImageWorkspaceLayout);
         jPanel_ImageWorkspaceLayout.setHorizontalGroup(
             jPanel_ImageWorkspaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 695, Short.MAX_VALUE)
+            .addGap(0, 645, Short.MAX_VALUE)
         );
         jPanel_ImageWorkspaceLayout.setVerticalGroup(
             jPanel_ImageWorkspaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -905,8 +1029,6 @@ public class MainFrame extends javax.swing.JFrame {
 
         jSplitPane1.setLeftComponent(jPanel_ImageWorkspace);
 
-        jScrollPane2.setViewportView(jList_AnimationFrames);
-
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/list-add.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -914,6 +1036,8 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/go-up.png"))); // NOI18N
         jButton2.setText("Move up");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -921,6 +1045,8 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/go-down.png"))); // NOI18N
         jButton3.setText("Move down");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -936,6 +1062,8 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jComboBox_AnimationType.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/help-browser.png"))); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -943,10 +1071,38 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/list-remove.png"))); // NOI18N
         jButton6.setText("Remove item(s)");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
+            }
+        });
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
+
+        jButton7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/list-remove.png"))); // NOI18N
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("rename");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
             }
         });
 
@@ -957,36 +1113,42 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 197, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jComboBox_AnimationType, 0, 157, Short.MAX_VALUE)
-                            .addComponent(jComboBox_animations, javax.swing.GroupLayout.Alignment.TRAILING, 0, 157, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jComboBox_animations, 0, 252, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 109, Short.MAX_VALUE)))
-                .addGap(5, 5, 5))
+                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 101, Short.MAX_VALUE)
+                        .addComponent(jButton8))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jComboBox_AnimationType, 0, 217, Short.MAX_VALUE)
+                        .addGap(2, 2, 2)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(jComboBox_animations, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton8)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox_animations))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jComboBox_AnimationType, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 412, Short.MAX_VALUE)
+                    .addComponent(jButton5, 0, 0, Short.MAX_VALUE)
+                    .addComponent(jComboBox_AnimationType))
+                .addGap(10, 10, 10)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
@@ -1331,6 +1493,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         Animation a = new Animation();
+        a.aniType = AnimationType.CIRCULAR;
         animationSystem.addAnimation(a);
         jComboBox_animations.setSelectedIndex(animationSystem.animations.size() - 1); //Select the item we just added
         jComboBox_animations.updateUI();
@@ -1347,9 +1510,9 @@ public class MainFrame extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
         for (int i : jList_Frames.getSelectedIndices()) {
-            a.addFrame((ImagePanel) animationSystem.frames.get(i));
+            a.addFrame(new AnimationFrame((ImagePanel) animationSystem.frames.get(i), (a.aniType == AnimationType.BACKGROUND ? -1d : 1d)));
         }
-        jList_AnimationFrames.updateUI();
+        jTable1.updateUI();
         jComboBox_animations.updateUI();
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -1424,22 +1587,40 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
-        for (int i : jList_AnimationFrames.getSelectedIndices()) {
-            a.frames.remove(i);
+        int[] ints = jTable1.getSelectedRows();
+        for (int i = ints.length - 1; i >= 0; i--) {
+            if (ints[i] >= 0 && ints[i] < a.frames.size()) {
+                a.frames.remove(ints[i]);
+            }
         }
-        jList_AnimationFrames.updateUI();
+        jTable1.clearSelection();
+        jTable1.updateUI();
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        String result = JOptionPane.showInputDialog("What should the new name of the animation be?");
+        if (result.contains("]") || result.contains("[")) {
+            JOptionPane.showMessageDialog(rootPane, "Characters '[' and ']' are not allowed. Removing them.");
+        }
+        Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+        a.setName(result);
+        jComboBox_animations.updateUI();
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     private void moveAnimationFrame(int delta) {
         Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
-        int indexold = jList_AnimationFrames.getSelectedIndex();
-        int indexnew = Math.min(Math.max(0, indexold + delta), jList_AnimationFrames.getModel().getSize() - 1);
+        int indexold = jTable1.getSelectedRow();
+        int indexnew = Math.min(Math.max(0, indexold + delta), jTable1.getModel().getRowCount() - 1);
         System.out.println("indexold=" + indexold + "  indexnew=" + indexnew);
-        ImagePanel p = a.frames.get(indexold);
+        AnimationFrame p = a.frames.get(indexold);
         a.frames.remove(p);
         a.frames.add(indexnew, p);
-        jList_AnimationFrames.setSelectedIndex(indexnew);
-        jList_AnimationFrames.updateUI();
+        jTable1.setRowSelectionInterval(indexnew, indexnew);
+        jTable1.updateUI();
     }
 
     /**
@@ -1460,6 +1641,8 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton_Autoloop;
     private javax.swing.JButton jButton_HotspotColor;
     private javax.swing.JButton jButton_Openfile;
@@ -1475,7 +1658,6 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel_MouseXY;
     private javax.swing.JLabel jLabel_Rate;
     private javax.swing.JLabel jLabel_Zoom;
-    private javax.swing.JList jList_AnimationFrames;
     private javax.swing.JList jList_Frames;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
@@ -1496,7 +1678,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel_ImageWorkspace;
     private javax.swing.JPanel jPanel_TranspTab;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
@@ -1506,6 +1688,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JSplitPane jSplitPane_horiz;
     private javax.swing.JSplitPane jSplitPane_vert;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable jTable1;
     private javax.swing.JToolBar jToolBar_Quickmenu;
     private javax.swing.JToolBar jToolBar_statusbar;
     // End of variables declaration//GEN-END:variables
@@ -1581,6 +1764,100 @@ public class MainFrame extends javax.swing.JFrame {
             }
         } catch (InterruptedException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private class MyTableModel extends AbstractTableModel {
+
+        public void fireTableStructureChange() {
+            fireTableStructureChanged();
+        }
+
+        @Override
+        public int getRowCount() {
+            Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+            if (a != null) {
+                return a.frames.size();
+            } else {
+                return 0;
+            }
+        }
+
+        @Override
+        public int getColumnCount() {
+            Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+            if (a == null) {
+                return 2;
+            }
+            if (a.aniType == AnimationType.BACKGROUND) {
+                return 1;
+            } else {
+                return 2;
+            }
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+            if (a.aniType == AnimationType.BACKGROUND) {
+                if (columnIndex == 0) {
+                    return a.frames.get(rowIndex).frame;
+                } else {
+                    return "?UNDEFINED_COLUMN?"; //This should never happen as those columns don't exist.
+                }
+            } else {
+                if (columnIndex == 0) {
+                    return a.frames.get(rowIndex).duration;
+                } else if (columnIndex == 1) {
+                    return a.frames.get(rowIndex).frame;
+                } else {
+                    return "?UNDEFINED_COLUMN?"; //This should never happen as those columns don't exist.
+                }
+            }
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+            if (a != null && a.aniType == AnimationType.BACKGROUND) {
+                if (column == 0) {
+                    return "Frame";
+                }
+            } else {
+                if (column == 0) {
+                    return "Duration";
+                } else if (column == 1) {
+                    return "Frame";
+                }
+            }
+            return "?UNDEFINED_COLUMN?"; //This should never happen as those columns don't exist.
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+            if (a.aniType == AnimationType.BACKGROUND) {
+                return false;
+            } else {
+                if (columnIndex == 0) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+            Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+            if (columnIndex == 0) {
+                try {
+                    a.frames.get(rowIndex).setDuration(Double.valueOf((String) aValue));
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(rootPane, "Invalid value specified. Exception: " + e);
+                }
+            }
+            fireTableCellUpdated(rowIndex, columnIndex);
         }
     }
 }

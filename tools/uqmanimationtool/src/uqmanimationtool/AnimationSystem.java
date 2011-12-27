@@ -92,10 +92,6 @@ public class AnimationSystem {
     public Object get(int i) {
         return framesListModel.getElementAt(i);
     }
-
-    public void addNewAnimation() {
-        animations.add(new Animation());
-    }
     
     public void addAnimation(Animation a) {
         animations.add(a);
