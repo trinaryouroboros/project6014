@@ -36,10 +36,10 @@ DrawCrewFuelString (COORD y, SIZE state)
 {
 	STAMP Stamp;
 
-	Stamp.origin.y = y + GAUGE_YOFFS + STARCON_TEXT_HEIGHT - (RESOLUTION_FACTOR == 2 ? 12 : 0);
+	Stamp.origin.y = y + GAUGE_YOFFS + STARCON_TEXT_HEIGHT - RES_CASE(0,6,12);//(RESOLUTION_FACTOR == 2 ? 12 : 0);
 	if (state == 0)
 	{
-		Stamp.origin.x = CREW_XOFFS + (STAT_WIDTH >> 1) + RES_STAT_SCALE(6) - (RESOLUTION_FACTOR == 2 ? 8 : 0); // JMS_GFX
+		Stamp.origin.x = CREW_XOFFS + (STAT_WIDTH >> 1) + RES_STAT_SCALE(6) - RES_CASE(0,8,8);//(RESOLUTION_FACTOR == 2 ? 8 : 0); // JMS_GFX
 		if (optWhichMenu == OPT_PC)
 			Stamp.frame = SetAbsFrameIndex (StatusFrame, 4);
 		else
@@ -47,7 +47,7 @@ DrawCrewFuelString (COORD y, SIZE state)
 		DrawStamp (&Stamp);
 	}
 
-	Stamp.origin.x = ENERGY_XOFFS + (STAT_WIDTH >> 1) - RES_STAT_SCALE(5) + (RESOLUTION_FACTOR == 2 ? 10 : 0);  // JMS_GFX
+	Stamp.origin.x = ENERGY_XOFFS + (STAT_WIDTH >> 1) - RES_STAT_SCALE(5) + RES_CASE(0,10,10);// + (RESOLUTION_FACTOR == 2 ? 10 : 0);  // JMS_GFX
 	if (optWhichMenu == OPT_PC)
 		Stamp.frame = SetAbsFrameIndex (StatusFrame, 5);
 	else
@@ -114,7 +114,7 @@ OutlineShipStatus (COORD y, COORD w)
 	--r.extent.width;
 	DrawFilledRectangle (&r);
 	r.extent.width = 1;
-	r.extent.height = (SHIP_INFO_HEIGHT << RESOLUTION_FACTOR) - 1 - 2 * RESOLUTION_FACTOR;
+	r.extent.height = (SHIP_INFO_HEIGHT << RESOLUTION_FACTOR) - RES_CASE(1,3,5);
 	DrawFilledRectangle (&r);
 	++r.corner.x;
 	DrawFilledRectangle (&r);
@@ -127,7 +127,7 @@ OutlineShipStatus (COORD y, COORD w)
 	--r.extent.height;
 	DrawFilledRectangle (&r);
 	r.corner.x = 1;
-	r.corner.y = (SHIP_INFO_HEIGHT << RESOLUTION_FACTOR) + 2 - 2 * RESOLUTION_FACTOR;
+	r.corner.y = (SHIP_INFO_HEIGHT << RESOLUTION_FACTOR) - RES_CASE(-2,22,2);
 	r.extent.width = w - 2;
 	r.extent.height = 1;
 	DrawFilledRectangle (&r);
@@ -191,11 +191,13 @@ InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect)
 		SIZE crew_height, energy_height;
 		
 #define MIN(a, b) (((a) <= (b)) ? (a) : (b))
-		if (RESOLUTION_FACTOR < 2)
+		// At basic resolution.
+		if (RESOLUTION_FACTOR < 1)
 		{
 			crew_height = ((MIN(SIPtr->max_crew, MAX_CREW_SIZE) + 1) & ~1) + 1;
 			energy_height = (((SIPtr->max_energy + 1) >> 1) << 1) + 1;
 		}
+		// At hires 2x and 4x.
 		else
 		{
 			crew_height = ((MIN(SIPtr->max_crew, MAX_CREW_SIZE) + 1) * 1.5);
