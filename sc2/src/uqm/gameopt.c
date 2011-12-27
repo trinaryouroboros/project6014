@@ -215,7 +215,6 @@ DrawNameString (bool nameCaptain, UNICODE *Str, COUNT CursorPos,
 	LockMutex (GraphicsLock);
 
 	{
-		r.corner.x = RES_STAT_SCALE(2); // JMS_GFX;
 		r.extent.width = SHIP_NAME_WIDTH; // JMS_GFX
 		r.extent.height = SHIP_NAME_HEIGHT;
 
@@ -223,11 +222,11 @@ DrawNameString (bool nameCaptain, UNICODE *Str, COUNT CursorPos,
 		if (nameCaptain)
 		{	// Naming the captain
 			Font = TinyFont;
+			r.corner.x = RES_STAT_SCALE(3); // JMS_GFX;
 			r.corner.y = RES_STAT_SCALE(10); // JMS_GFX
-			r.corner.x += RES_STAT_SCALE(1); // JMS_GFX
 			r.extent.width -= RES_STAT_SCALE(2); // JMS_GFX;
-			lf.baseline.x = (STATUS_WIDTH >> 1) - RES_STAT_SCALE(1);
-			lf.baseline.y = r.corner.y + r.extent.height - RES_STAT_SCALE(1);// - 2 * RESOLUTION_FACTOR; // JMS_GFX
+			lf.baseline.x = (STATUS_WIDTH >> 1) - RES_CASE(1,0,-1);
+			lf.baseline.y = r.corner.y + r.extent.height - RES_STAT_SCALE(1);
 
 			BackGround = BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09);
 			ForeGround = BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x0B);
@@ -235,7 +234,8 @@ DrawNameString (bool nameCaptain, UNICODE *Str, COUNT CursorPos,
 		else
 		{	// Naming the flagship
 			Font = StarConFont;
-			r.corner.y = RES_STAT_SCALE(20); // JMS_GFX;
+			r.corner.x = RES_CASE(2,5,7); // JMS_GFX;
+			r.corner.y = RES_CASE(20,42,62); // JMS_GFX;
 			lf.baseline.x = r.corner.x + (r.extent.width >> 1);
 			lf.baseline.y = r.corner.y + r.extent.height - RES_STAT_SCALE(1); // JMS_GFX
 
