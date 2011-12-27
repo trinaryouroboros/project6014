@@ -21,44 +21,41 @@ Joris van de Donk - joris@mooses.nl
  */
 package uqmanimationtool;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author joris
  */
-public class Animation {
+public class AnimationFrame {
 
-    AnimationType aniType;
-    ArrayList<AnimationFrame> frames;
-    String name;
+    ImagePanel frame;
+    Double duration;
 
-    public Animation() {
-        frames = new ArrayList<AnimationFrame>();
-        aniType = AnimationType.UNDEFINED;
-        name = "Unnamed animation";
+    public AnimationFrame(ImagePanel frame, Double duration) {
+        this.frame = frame;
+        this.duration = duration;
     }
 
     @Override
     public String toString() {
-        return name + " (" + frames.size() + ")";
+        if (duration < 0) {
+            return "b [" + frame.toSource() + "]";
+        } else {
+        return duration + " [" + frame.toSource() + "]";
+        }
     }
 
-    public void addFrame(ImagePanel frame, double duration) {
-        frames.add(new AnimationFrame(frame, duration));
+    public Double getDuration() {
+        return duration;
     }
 
-    public void addFrame(AnimationFrame frame) {
-        frames.add(frame);
+    public ImagePanel getFrame() {
+        return frame;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name.replaceAll("\\[", "").replaceAll("\\]", "");
+    public void setDuration(Double duration) {
+        this.duration = duration;
     }
     
+       
     
 }

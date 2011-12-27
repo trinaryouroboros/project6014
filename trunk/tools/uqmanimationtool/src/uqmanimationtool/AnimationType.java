@@ -27,5 +27,5 @@ package uqmanimationtool;
  */
 public enum AnimationType {
 
-    CIRCULAR, RANDOM, TALK, YO_YO, BACKGROUND;
+    CIRCULAR, RANDOM, TALK, YO_YO, BACKGROUND, UNDEFINED;
 }
