@@ -522,14 +522,14 @@ DrawCaptainsName (void)
 	OldColor = SetContextForeGroundColor (CAPTAIN_NAME_BACKGROUND_COLOR);
 
 	// Background of captain's name.	
-	r.corner.x = RES_STAT_SCALE(2 + 1);						// JMS_GFX;
+	r.corner.x = RES_STAT_SCALE(3);							// JMS_GFX
 	r.corner.y = RES_STAT_SCALE(10);						// JMS_GFX
 	r.extent.width = SHIP_NAME_WIDTH - RES_STAT_SCALE(2);	// JMS_GFX
 	r.extent.height = SHIP_NAME_HEIGHT;						// JMS_GFX
 	DrawFilledRectangle (&r);
 
 	// The name itself.
-	t.baseline.x = (STATUS_WIDTH >> 1) - RES_STAT_SCALE(1);
+	t.baseline.x = (STATUS_WIDTH >> 1) - RES_CASE(1,0,-1);
 	t.baseline.y = r.corner.y + RES_STAT_SCALE(6); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = GLOBAL_SIS (CommanderName);
@@ -558,8 +558,8 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 		OldContext = SetContext (StatusContext);
 		OldFont = SetContextFont (StarConFont);
 
-		r.corner.x = RES_STAT_SCALE(2);		// JMS_GFX
-		r.corner.y = RES_STAT_SCALE(20);	// JMS_GFX
+		r.corner.x = RES_CASE(2,5,7);		// JMS_GFX
+		r.corner.y = RES_CASE(20,42,62);	// JMS_GFX
 		r.extent.width = SHIP_NAME_WIDTH;	// JMS_GFX
 		r.extent.height = SHIP_NAME_HEIGHT;
 
@@ -858,7 +858,7 @@ DrawStorageBays (BOOLEAN Refresh)
 
 	r.extent.width  = RES_STAT_SCALE(2); // JMS_GFX
 	r.extent.height = RES_STAT_SCALE(4); // JMS_GFX
-	r.corner.y = RES_STAT_SCALE(123) + RESOLUTION_FACTOR * 2 + (RESOLUTION_FACTOR == 1 ? 2 : 0); // JMS_GFX
+	r.corner.y		= RES_STAT_SCALE(123) + RES_CASE(0,4,4); // JMS_GFX
 	
 	if (Refresh)
 	{
@@ -903,7 +903,7 @@ DrawStorageBays (BOOLEAN Refresh)
 			// r.extent.height = 4 - r.extent.height;
 			if (r.extent.height)
 			{
-				r.corner.y = RES_STAT_SCALE(123) + RESOLUTION_FACTOR * 2;
+				r.corner.y = RES_STAT_SCALE(123) + RES_CASE(0,4,4);
 				SetContextForeGroundColor (STORAGE_BAY_EMPTY_COLOR);
 				DrawFilledRectangle (&r);
 			}

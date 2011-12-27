@@ -142,11 +142,11 @@ DrawCargoDisplay (void)
 	COUNT i;
 
 	r.corner.x = RES_STAT_SCALE(2); // JMS_GFX
-	r.extent.width = FIELD_WIDTH + RES_STAT_SCALE(1) + RESOLUTION_FACTOR * 2; // JMS_GFX
 	r.corner.y = RES_STAT_SCALE(20); // JMS_GFX
+	r.extent.width = FIELD_WIDTH + RES_STAT_SCALE(1) + RES_CASE(0,3,3); // JMS_GFX
 	// XXX: Shouldn't the height be 1 less? This draws the bottom border
 	//   1 pixel too low. Or if not, why do we need another box anyway?
-	r.extent.height = RES_STAT_SCALE(129) - r.corner.y + RESOLUTION_FACTOR; // JMS_GFX
+	r.extent.height = RES_STAT_SCALE(129) - r.corner.y + RES_CASE(0,3,2); // JMS_GFX
 	DrawStarConBox (&r, 1,
 			SHADOWBOX_MEDIUM_COLOR, SHADOWBOX_DARK_COLOR,
 			TRUE, CARGO_BACK_COLOR);
