@@ -211,6 +211,7 @@ HYPERSUNS_MASK_PMAP_ANIM,graphics.hypersuns,uqm/igfxres.h,GFXRES,base/nav/hypers
 NPCBUBBLE_MASK_PMAP_ANIM,graphics.npcbubble,uqm/igfxres.h,GFXRES,base/nav/hyperstars.ani
 ARISPACE_MASK_PMAP_ANIM,graphics.quasispace,uqm/igfxres.h,GFXRES,base/nav/quasispace.ani
 ORZSPACE_MASK_PMAP_ANIM,graphics.orzspace,uqm/igfxres.h,GFXRES,base/nav/orzspace.ani
+NEBULAE_PMAP_ANIM,graphics.nebulae,uqm/igfxres.h,GFXRES,base/nav/nebulae.ani
 IPBKGND_MASK_PMAP_ANIM,graphics.orbitbackground,uqm/igfxres.h,GFXRES,base/nav/orbitbackground.ani
 SISIP_MASK_PMAP_ANIM,graphics.flagship,uqm/igfxres.h,GFXRES,base/nav/explorer_ip.ani
 ORBPLAN_MASK_PMAP_ANIM,graphics.planets,uqm/igfxres.h,GFXRES,base/nav/planets.ani

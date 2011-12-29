@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// BW 2011: thickness can be either 0 (if you want regular dots)
+// or 1 (for plusses). num_off_pixels has to be adjusted manually.
+
 #include "../units.h"
 #include "libs/gfxlib.h"
 #include "libs/graphics/context.h"
@@ -25,7 +28,38 @@
 #define NUM_QUADS 4
 
 void
-DrawOval (RECT *pRect, BYTE num_off_pixels)
+DrawPlus (PRIMITIVE *prim, COUNT StartPrim)
+{
+	COUNT quad;
+
+	for (quad = 0; quad < NUM_QUADS; ++quad)
+	{
+		--prim[quad].Object.Point.x;
+	}
+	DrawBatch (prim, StartPrim, 0);
+
+	for (quad = 0; quad < NUM_QUADS; ++quad)
+	{
+		prim[quad].Object.Point.x += 2;
+	}
+	DrawBatch (prim, StartPrim, 0);
+	
+	for (quad = 0; quad < NUM_QUADS; ++quad)
+	{
+		--prim[quad].Object.Point.x;
+		--prim[quad].Object.Point.y;
+	}
+	DrawBatch (prim, StartPrim, 0);
+	
+	for (quad = 0; quad < NUM_QUADS; ++quad)
+	{
+		prim[quad].Object.Point.y += 2;
+	}
+	DrawBatch (prim, StartPrim, 0);
+}
+
+void
+DrawOval (RECT *pRect, BYTE num_off_pixels, BYTE thickness)
 {
 #define FIRST_QUAD (1 << 0)
 #define SECOND_QUAD (1 << 1)
@@ -170,8 +204,11 @@ DrawOval (RECT *pRect, BYTE num_off_pixels)
 			prim[0].Object.Point.y = prim[1].Object.Point.y = B - y;
 			prim[1].Object.Point.x = prim[2].Object.Point.x = A - x;
 			prim[2].Object.Point.y = prim[3].Object.Point.y = B + y;
-
 			DrawBatch (prim, StartPrim, 0);
+
+			if (thickness == 1)
+				DrawPlus (prim, StartPrim);
+
 			off = num_off_pixels;
 		}
 
@@ -197,8 +234,11 @@ DrawOval (RECT *pRect, BYTE num_off_pixels)
 			prim[0].Object.Point.y = prim[1].Object.Point.y = B - y;
 			prim[1].Object.Point.x = prim[2].Object.Point.x = A - x;
 			prim[2].Object.Point.y = prim[3].Object.Point.y = B + y;
-
 			DrawBatch (prim, StartPrim, 0);
+
+			if (thickness == 1)
+				DrawPlus (prim, StartPrim);
+
 			off = num_off_pixels;
 		}
 
