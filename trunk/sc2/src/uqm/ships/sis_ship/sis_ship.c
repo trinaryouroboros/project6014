@@ -55,7 +55,7 @@
 #define SPECIAL_ENERGY_COST 15
 #define SPECIAL_WAIT 20
 #define STUNBALL_SPEED DISPLAY_TO_WORLD (16 << RESOLUTION_FACTOR) // JMS_GFX
-#define STUNBALL_LIFE 20 // Duration is as long as you hold down the button.
+#define STUNBALL_LIFE 90 // Duration is as long as you hold down the button.
 #define STUNBALL_HITS 10
 #define STUNBALL_DAMAGE 0
 #define STUNBALL_START_OFFSET (36 << RESOLUTION_FACTOR) // JMS_GFX
@@ -144,6 +144,7 @@ static RACE_DESC exp_desc =
 static void InitDriveSlots (RACE_DESC *RaceDescPtr, const BYTE *DriveSlots);
 static void InitJetSlots (RACE_DESC *RaceDescPtr, const BYTE *JetSlots);
 void uninit_exp (RACE_DESC *pRaceDesc);
+static COUNT initialize_teststunner (ELEMENT *ShipPtr, HELEMENT MissileArray[]);
 
 // Hyperspace movement.
 static void exp_hyper_preprocess (ELEMENT *ElementPtr)
@@ -704,6 +705,32 @@ static void initialize_stunner (ELEMENT *ShipPtr)
 	}
 }
 
+static COUNT
+initialize_teststunner (ELEMENT *ShipPtr, HELEMENT MissileArray[])
+{
+	STARSHIP *StarShipPtr;
+	MISSILE_BLOCK MissileBlock;
+	
+	GetElementStarShip (ShipPtr, &StarShipPtr);
+	MissileBlock.cx = ShipPtr->next.location.x;
+	MissileBlock.cy = ShipPtr->next.location.y;
+	MissileBlock.farray = StarShipPtr->RaceDescPtr->ship_data.special;
+	MissileBlock.face = StarShipPtr->ShipFacing;
+	MissileBlock.index = 0;
+	MissileBlock.sender = ShipPtr->playerNr;
+	MissileBlock.flags = IGNORE_SIMILAR;
+	MissileBlock.pixoffs = STUNBALL_START_OFFSET;
+	MissileBlock.speed = STUNBALL_SPEED;
+	MissileBlock.hit_points = STUNBALL_HITS;
+	MissileBlock.damage = STUNBALL_DAMAGE;
+	MissileBlock.life = STUNBALL_LIFE;
+	MissileBlock.preprocess_func = stunner_preprocess;
+	MissileBlock.blast_offs = STUNBALL_BLAST_OFFSET;
+	MissileArray[0] = initialize_missile (&MissileBlock);
+	
+	return (1);
+}
+
 // Melee-related postprocess.
 /* static void exp_battle_postprocess (ELEMENT *ElementPtr)
 {
@@ -877,9 +904,7 @@ static void exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 	EVALUATE_DESC *lpEvalDesc;
 	STARSHIP *StarShipPtr;
 
-
 	GetElementStarShip (ShipPtr, &StarShipPtr);
-
 
 	lpEvalDesc = &ObjectsOfConcern[ENEMY_WEAPON_INDEX];
 	if (lpEvalDesc->ObjectPtr)
@@ -895,34 +920,82 @@ static void exp_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 			lpEvalDesc->MoveState = PURSUE;
 	}
 
+	// Act like Melnorme towards enemy ships: Chase most, entice ships with lazers
+	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
+	if (lpEvalDesc->ObjectPtr)
+	{
+		if (StarShipPtr->RaceDescPtr->ship_info.energy_level < MAX_ENERGY / 6)
+			lpEvalDesc->MoveState = AVOID;
+		else if (StarShipPtr->RaceDescPtr->ship_info.energy_level < MAX_ENERGY / 3)
+			lpEvalDesc->MoveState = ENTICE;
+		else
+		{
+			STARSHIP *EnemyStarShipPtr;
+			
+			GetElementStarShip (lpEvalDesc->ObjectPtr, &EnemyStarShipPtr);
+			if (!(EnemyStarShipPtr->RaceDescPtr->ship_info.ship_flags & IMMEDIATE_WEAPON))
+				lpEvalDesc->MoveState = PURSUE;
+		}
+	}
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 	
-	// JMS: Use special like Melnorme uses its own special (This could use a little refinement...)
-	lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
-	StarShipPtr->ship_input_state &= ~SPECIAL;
-	if (StarShipPtr->special_counter == 0 
-		&& StarShipPtr->RaceDescPtr->ship_info.energy_level >= StarShipPtr->RaceDescPtr->characteristics.special_energy_cost)
+	// JMS: Use special like Chenjesu uses its primary weapon
+	if (lpEvalDesc->ObjectPtr)
 	{
-		BYTE old_input_state;
+		HELEMENT h, hNext;
+		ELEMENT *StunnerPtr;
 		
-		old_input_state = StarShipPtr->ship_input_state;
-		
-		// StarShipPtr->RaceDescPtr->init_weapon_func = initialize_stunner;
-		
-		++ShipPtr->turn_wait;
-		++ShipPtr->thrust_wait;
-		ship_intelligence (ShipPtr, ObjectsOfConcern, ENEMY_SHIP_INDEX + 1);
-		--ShipPtr->thrust_wait;
-		--ShipPtr->turn_wait;
-		
-		if (StarShipPtr->ship_input_state & WEAPON)
+		h = (StarShipPtr->old_status_flags & SPECIAL) ? GetTailElement () : (HELEMENT)0;
+		for (; h; h = hNext)
 		{
-			StarShipPtr->ship_input_state &= ~WEAPON;
-			StarShipPtr->ship_input_state |= SPECIAL;
+			LockElement (h, &StunnerPtr);
+			hNext = GetPredElement (StunnerPtr);
+			if (!(StunnerPtr->state_flags & NONSOLID)
+				&& StunnerPtr->preprocess_func
+				&& StunnerPtr->life_span > 0
+				&& elementsOfSamePlayer (StunnerPtr, ShipPtr))
+			{
+				if (ObjectsOfConcern[ENEMY_SHIP_INDEX].ObjectPtr)
+				{
+					COUNT which_turn;
+					
+					if ((which_turn = PlotIntercept (StunnerPtr, ObjectsOfConcern[ENEMY_SHIP_INDEX].ObjectPtr,
+							StunnerPtr->life_span, (200 << RESOLUTION_FACTOR))) == 0
+						|| (which_turn == 1
+							&& PlotIntercept (StunnerPtr, ObjectsOfConcern[ENEMY_SHIP_INDEX].ObjectPtr,
+							StunnerPtr->life_span, 0) == 0))
+						StarShipPtr->ship_input_state &= ~SPECIAL;
+					else if (StarShipPtr->weapon_counter == 0)
+					{
+						StarShipPtr->ship_input_state |= SPECIAL;
+						lpEvalDesc = &ObjectsOfConcern[ENEMY_SHIP_INDEX];
+					}
+					
+					UnlockElement (h);
+					break;
+				}
+				hNext = 0;
+			}
+			UnlockElement (h);
 		}
 		
-		StarShipPtr->ship_input_state = (unsigned char)(old_input_state | (StarShipPtr->ship_input_state & SPECIAL));
-		StarShipPtr->RaceDescPtr->init_weapon_func = initialize_explorer_weaponry;
+		if (h == 0)
+		{
+			StarShipPtr->RaceDescPtr->init_weapon_func = initialize_teststunner;
+			
+			if (StarShipPtr->old_status_flags & SPECIAL)
+			{
+				StarShipPtr->ship_input_state &= ~SPECIAL;
+				if (lpEvalDesc == &ObjectsOfConcern[ENEMY_WEAPON_INDEX])
+					StarShipPtr->weapon_counter = 3;
+			}
+			else if (StarShipPtr->weapon_counter == 0
+					 && ship_weapons (ShipPtr, lpEvalDesc->ObjectPtr, (200 << RESOLUTION_FACTOR))
+					 && StarShipPtr->RaceDescPtr->ship_info.energy_level > MAX_ENERGY * 2 / 3) // JMS_GFX
+				StarShipPtr->ship_input_state |= SPECIAL;
+			
+			StarShipPtr->RaceDescPtr->init_weapon_func = initialize_explorer_weaponry;
+		}
 	}
 }
 
