@@ -20,6 +20,8 @@
 #include "tfb_prim.h"
 #include "libs/log.h"
 
+#include "libs/graphics/gfx_common.h" // JMS: For resolutionFactor
+
 static inline TFB_Char *getCharFrame (FONT_DESC *fontPtr, UniChar ch);
 
 
@@ -74,18 +76,20 @@ font_DrawText (TEXT *lpText)
 void
 font_DrawTracedText (TEXT *pText, Color text, Color trace)
 {
+	BYTE res_scale = resolutionFactor > 0 ? 1 : 0;
+	
 	// Preserve current foreground color for full correctness
 	Color oldfg = SetContextForeGroundColor (trace);
-	pText->baseline.x--;
+	pText->baseline.x -= 1 << res_scale;
 	font_DrawText (pText);
-	pText->baseline.x += 2;
+	pText->baseline.x += 2 << res_scale;
 	font_DrawText (pText);
-	pText->baseline.x--;
-	pText->baseline.y--;
+	pText->baseline.x -= 1 << res_scale;
+	pText->baseline.y -= 1 << res_scale;
 	font_DrawText (pText);
-	pText->baseline.y += 2;
+	pText->baseline.y += 2 << res_scale;
 	font_DrawText (pText);
-	pText->baseline.y--;
+	pText->baseline.y -= 1 << res_scale;
 	SetContextForeGroundColor (text);
 	font_DrawText (pText);
 	SetContextForeGroundColor (oldfg);

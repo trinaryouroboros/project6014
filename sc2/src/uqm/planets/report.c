@@ -50,7 +50,7 @@ ClearReportArea (void)
 	STAMP s;
 	COORD startx;
 
-	if (RESOLUTION_FACTOR == 2)
+	if (RESOLUTION_FACTOR > 0)
 	{
 		emptycols = NUM_CELL_COLS + 1;
 		emptyrows = NUM_CELL_ROWS + 1;
