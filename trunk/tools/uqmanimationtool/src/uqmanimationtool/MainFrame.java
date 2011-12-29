@@ -48,9 +48,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -64,11 +61,14 @@ import javax.swing.JColorChooser;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
+import uqmanimationtool.miscgui.ButtonColumn;
 
 /**
  *
@@ -88,7 +88,7 @@ public class MainFrame extends javax.swing.JFrame {
     Integer animationTo = null;
     int animPass = 0;
     private static Pattern extframePattern = Pattern.compile("\\[.*\\]");
-    private MyTableModel aniTableModel;
+    private AnimationStructureTableModel aniTableModel;
 
     private void parseExtline(String extline, StringBuilder sb) throws NumberFormatException {
         //Parse all extension lines
@@ -251,43 +251,11 @@ public class MainFrame extends javax.swing.JFrame {
      * (due to AZERTY support)
      */
     private void initKeys() {
-        //Space
-        jList_Frames.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).remove(KeyStroke.getKeyStroke(' '));
-        for (KeyListener k : jList_Frames.getKeyListeners()) {
-            jList_Frames.removeKeyListener(k);
-        }
-        getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke(' '),
-                "doSpace");
-        getRootPane().getActionMap().put("doSpace",
-                new AbstractAction() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if (jList_Frames.getSelectedIndex() != -1) {
-                            animationTo = jList_Frames.getSelectedIndex();
-                        } else {
-                            animationTo = 0;
-                        }
-                        animPass = 0;
-                        toggleTimer();
-                    }
-                });
-
-        //P
-        getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('p'),
-                "doP");
-        getRootPane().getActionMap().put("doP",
-                new AbstractAction() {
-
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        toggleTimer();
-                    }
-                });
-
         //W
         getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('w'),
                 "doW");
+        getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('z'),
+                "doW"); //AZERTY
         getRootPane().getActionMap().put("doW",
                 new AbstractAction() {
 
@@ -298,6 +266,8 @@ public class MainFrame extends javax.swing.JFrame {
                 });
         getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('W'),
                 "doW2");
+        getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('Z'),
+                "doW2"); //AZERTY
         getRootPane().getActionMap().put("doW2",
                 new AbstractAction() {
 
@@ -310,6 +280,8 @@ public class MainFrame extends javax.swing.JFrame {
         //A
         getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('a'),
                 "doA");
+        getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('q'),
+                "doA"); //AZERTY
         getRootPane().getActionMap().put("doA",
                 new AbstractAction() {
 
@@ -320,6 +292,8 @@ public class MainFrame extends javax.swing.JFrame {
                 });
         getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('A'),
                 "doA2");
+        getRootPane().getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT).put(KeyStroke.getKeyStroke('Q'),
+                "doA2"); //AZERTY
         getRootPane().getActionMap().put("doA2",
                 new AbstractAction() {
 
@@ -553,12 +527,30 @@ public class MainFrame extends javax.swing.JFrame {
 //                    }
                 }
                 jComboBox_animations.updateUI();
+                jTable2.updateUI();
                 aniTableModel.fireTableStructureChange();
                 jTable1.updateUI();
             }
         });
-        aniTableModel = new MyTableModel();
+        aniTableModel = new AnimationStructureTableModel();
         jTable1.setModel(aniTableModel);
+
+        AnimationPlayingTableModel aniPTableModel = new AnimationPlayingTableModel();
+        jTable2.setModel(aniPTableModel);
+        ButtonColumn bc = new ButtonColumn(jTable2, new AbstractAction() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JTable table = (JTable) e.getSource();
+                int modelRow = Integer.valueOf(e.getActionCommand());
+                if (modelRow >= 0) {
+                    Animation a = animationSystem.animations.get(modelRow);
+                    a.setIsPlaying((a.playingState == 0 ? true : false));
+                }
+            }
+        }, 0);
+        jTable2.getColumnModel().getColumn(0).setPreferredWidth(25);
+        jTable2.getColumnModel().getColumn(0).setMaxWidth(25);
     }
 
     private ImagePanel generateHotspot(int width, int height, int zoom) {
@@ -694,6 +686,7 @@ public class MainFrame extends javax.swing.JFrame {
         jTable1.updateUI();
         jList_Frames.updateUI();
         jComboBox_animations.updateUI();
+        jTable2.updateUI();
     }
 
     private class MyMouseMotionListener implements MouseMotionListener {
@@ -772,14 +765,11 @@ public class MainFrame extends javax.swing.JFrame {
         jButton_HotspotColor = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JToolBar.Separator();
         jButton_SetXYFrames = new javax.swing.JButton();
-        jButton_Autoloop = new javax.swing.JButton();
         jSplitPane_horiz = new javax.swing.JSplitPane();
         jPanel2 = new javax.swing.JPanel();
         jSplitPane_vert = new javax.swing.JSplitPane();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel_AniTab = new javax.swing.JPanel();
-        jLabel_Rate = new javax.swing.JLabel();
-        jSlider_Rate = new javax.swing.JSlider();
         jLabel_Zoom = new javax.swing.JLabel();
         jSlider_Zoom = new javax.swing.JSlider();
         jPanel_TranspTab = new javax.swing.JPanel();
@@ -789,6 +779,7 @@ public class MainFrame extends javax.swing.JFrame {
         jList_Frames = new javax.swing.JList();
         jSplitPane1 = new javax.swing.JSplitPane();
         jPanel_ImageWorkspace = new javax.swing.JPanel();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         jComboBox_animations = new javax.swing.JComboBox();
         jButton1 = new javax.swing.JButton();
@@ -802,10 +793,18 @@ public class MainFrame extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton7 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jButton10 = new javax.swing.JButton();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jButton_Autoloop = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
         jToolBar_statusbar = new javax.swing.JToolBar();
         jLabel_LoadedFile = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JToolBar.Separator();
         jLabel_MouseXY = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JToolBar.Separator();
+        jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu_File = new javax.swing.JMenu();
         jMenuItem_Open = new javax.swing.JMenuItem();
@@ -866,18 +865,9 @@ public class MainFrame extends javax.swing.JFrame {
         });
         jToolBar_Quickmenu.add(jButton_SetXYFrames);
 
-        jButton_Autoloop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/media-playback-start.png"))); // NOI18N
-        jButton_Autoloop.setText("Start/Stop autoloop");
-        jButton_Autoloop.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton_AutoloopActionPerformed(evt);
-            }
-        });
-        jToolBar_Quickmenu.add(jButton_Autoloop);
-
         jSplitPane_horiz.setPreferredSize(new java.awt.Dimension(364, 597));
 
-        jSplitPane_vert.setDividerLocation(400);
+        jSplitPane_vert.setDividerLocation(500);
         jSplitPane_vert.setOrientation(javax.swing.JSplitPane.VERTICAL_SPLIT);
         jSplitPane_vert.setResizeWeight(1.0);
 
@@ -886,20 +876,6 @@ public class MainFrame extends javax.swing.JFrame {
         jTabbedPane1.setPreferredSize(new java.awt.Dimension(100, 90));
 
         jPanel_AniTab.setBorder(javax.swing.BorderFactory.createEtchedBorder());
-
-        jLabel_Rate.setText("Rate: 50");
-
-        jSlider_Rate.setMajorTickSpacing(100);
-        jSlider_Rate.setMaximum(1000);
-        jSlider_Rate.setMinimum(1);
-        jSlider_Rate.setMinorTickSpacing(25);
-        jSlider_Rate.setPaintTicks(true);
-        jSlider_Rate.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jSlider_Rate.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jSlider_RateStateChanged(evt);
-            }
-        });
 
         jLabel_Zoom.setText("Zoom: 3");
 
@@ -923,24 +899,21 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel_AniTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel_AniTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSlider_Zoom, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-                    .addComponent(jLabel_Rate)
-                    .addComponent(jSlider_Rate, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
-                    .addComponent(jLabel_Zoom, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE))
-                .addGap(12, 12, 12))
+                    .addGroup(jPanel_AniTabLayout.createSequentialGroup()
+                        .addComponent(jLabel_Zoom, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addGroup(jPanel_AniTabLayout.createSequentialGroup()
+                        .addComponent(jSlider_Zoom, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(14, 14, 14))))
         );
         jPanel_AniTabLayout.setVerticalGroup(
             jPanel_AniTabLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel_AniTabLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel_Rate)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSlider_Rate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel_Zoom)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSlider_Zoom, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/preferences-desktop.png")), jPanel_AniTab, "Animation settings"); // NOI18N
@@ -963,14 +936,14 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel_TranspTabLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jComboBox_Tranparency, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(140, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/applications-other.png")), jPanel_TranspTab, "Transparency helper settings"); // NOI18N
 
         jSplitPane_vert.setRightComponent(jTabbedPane1);
 
-        jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13));
+        jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
         jList_Frames.setDragEnabled(true);
         jList_Frames.setPreferredSize(null);
         jScrollPane1.setViewportView(jList_Frames);
@@ -985,9 +958,9 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 399, Short.MAX_VALUE)
+            .addGap(0, 499, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 399, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE))
         );
 
         jSplitPane_vert.setLeftComponent(jPanel3);
@@ -1000,7 +973,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSplitPane_vert, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 612, Short.MAX_VALUE)
+            .addComponent(jSplitPane_vert, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 615, Short.MAX_VALUE)
         );
 
         jSplitPane_horiz.setLeftComponent(jPanel2);
@@ -1024,7 +997,7 @@ public class MainFrame extends javax.swing.JFrame {
         );
         jPanel_ImageWorkspaceLayout.setVerticalGroup(
             jPanel_ImageWorkspaceLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 606, Short.MAX_VALUE)
+            .addGap(0, 609, Short.MAX_VALUE)
         );
 
         jSplitPane1.setLeftComponent(jPanel_ImageWorkspace);
@@ -1036,7 +1009,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jButton2.setFont(new java.awt.Font("Tahoma", 0, 10));
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/go-up.png"))); // NOI18N
         jButton2.setText("Move up");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -1045,7 +1018,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        jButton3.setFont(new java.awt.Font("Tahoma", 0, 10));
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/go-down.png"))); // NOI18N
         jButton3.setText("Move down");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
@@ -1054,6 +1027,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/list-add.png"))); // NOI18N
         jButton4.setText("Import selected frame(s) (..)");
         jButton4.setToolTipText("Adds the selected item(s) from the list on the left to the currently selected animation.");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -1062,7 +1036,7 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
-        jComboBox_AnimationType.setFont(new java.awt.Font("Tahoma", 0, 11)); // NOI18N
+        jComboBox_AnimationType.setFont(new java.awt.Font("Tahoma", 0, 11));
 
         jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/help-browser.png"))); // NOI18N
         jButton5.addActionListener(new java.awt.event.ActionListener() {
@@ -1106,6 +1080,13 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        jButton10.setText("Set duration for all selected ");
+        jButton10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton10ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -1113,14 +1094,9 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
                     .addComponent(jComboBox_animations, 0, 252, Short.MAX_VALUE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 252, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1130,7 +1106,15 @@ public class MainFrame extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jComboBox_AnimationType, 0, 217, Short.MAX_VALUE)
                         .addGap(2, 2, 2)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 116, Short.MAX_VALUE)
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1148,19 +1132,76 @@ public class MainFrame extends javax.swing.JFrame {
                     .addComponent(jButton5, 0, 0, Short.MAX_VALUE)
                     .addComponent(jComboBox_AnimationType))
                 .addGap(10, 10, 10)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 382, Short.MAX_VALUE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 355, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
-                .addGap(8, 8, 8)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(19, 19, 19)
+                .addComponent(jButton10)
                 .addContainerGap())
         );
 
-        jSplitPane1.setRightComponent(jPanel1);
+        jTabbedPane2.addTab("Animation definition", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/applications-system.png")), jPanel1); // NOI18N
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Title 1", "Title 2"
+            }
+        ));
+        jScrollPane2.setViewportView(jTable2);
+
+        jButton_Autoloop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/media-playback-start.png"))); // NOI18N
+        jButton_Autoloop.setText("Start/stop ani system");
+        jButton_Autoloop.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_AutoloopActionPerformed(evt);
+            }
+        });
+
+        jButton11.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/help-browser.png"))); // NOI18N
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jButton_Autoloop, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 31, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton_Autoloop)
+                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 519, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jTabbedPane2.addTab("Playback", new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/applications-multimedia.png")), jPanel4); // NOI18N
+
+        jSplitPane1.setRightComponent(jTabbedPane2);
 
         jSplitPane_horiz.setRightComponent(jSplitPane1);
 
@@ -1173,6 +1214,10 @@ public class MainFrame extends javax.swing.JFrame {
 
         jLabel_MouseXY.setText("Mouse: [x,y]");
         jToolBar_statusbar.add(jLabel_MouseXY);
+        jToolBar_statusbar.add(jSeparator4);
+
+        jLabel1.setText("Layout mode");
+        jToolBar_statusbar.add(jLabel1);
 
         jMenu_File.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/system-file-manager.png"))); // NOI18N
         jMenu_File.setText("File");
@@ -1288,7 +1333,7 @@ public class MainFrame extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jToolBar_Quickmenu, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSplitPane_horiz, javax.swing.GroupLayout.DEFAULT_SIZE, 614, Short.MAX_VALUE)
+                .addComponent(jSplitPane_horiz, javax.swing.GroupLayout.DEFAULT_SIZE, 617, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jToolBar_statusbar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -1305,7 +1350,15 @@ public class MainFrame extends javax.swing.JFrame {
             tim.cancel();
             timon = false;
             jButton_Autoloop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/media-playback-start.png")));
+            jLabel1.setText("Layout mode");
         } else {
+            jLabel1.setText("Animation mode");
+            for (Animation a : animationSystem.animations) { //Reset all animation timers
+                a.resetTimer();
+            }
+            for (int i = 0; i < animationSystem.frames.size(); i++) { //Fix the z-indexes
+                jPanel_ImageWorkspace.setComponentZOrder(animationSystem.frames.get(i), animationSystem.frames.size() - i);
+            }
             jButton_Autoloop.setIcon(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/media-playback-stop.png")));
             tim = new Timer();
             t = new TimerTask() {
@@ -1313,33 +1366,16 @@ public class MainFrame extends javax.swing.JFrame {
                 @Override
                 public void run() {
                     try {
-                        //mu.acquire();
-                        boolean proceed = true;
-                        if (animationTo != null) {
-                            if (jList_Frames.getSelectedIndex() == animationTo) {
-                                animPass++;
-                                if (animPass > 1) {
-                                    animPass = 0;
-                                    animationTo = null;
-                                    proceed = false;
-                                    toggleTimer();
-                                }
-                            }
+                        for (Animation a : animationSystem.animations) {
+                            a.processAnimationDelta();
                         }
-                        if (proceed) {
-                            selectNext();
-
-
-                        }
-                        //mu.release();
-                        //} catch (InterruptedException ex) {
-                        //    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                        repaintFrames();
                     } catch (IllegalArgumentException ex) {
                         Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
             };
-            tim.scheduleAtFixedRate(t, 0, jSlider_Rate.getValue());
+            tim.scheduleAtFixedRate(t, 0, 15); //a bit more than 60fps
             timon = true;
         }
     }
@@ -1365,14 +1401,6 @@ public class MainFrame extends javax.swing.JFrame {
             jList_Frames.setSelectedIndex(animationSystem.size() - 1);
         }
     }
-
-    private void jSlider_RateStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider_RateStateChanged
-        jLabel_Rate.setText("Rate: " + jSlider_Rate.getValue());
-        if (timon) {
-            toggleTimer();
-            toggleTimer();
-        }
-    }//GEN-LAST:event_jSlider_RateStateChanged
 
     private void jButton_SavefileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_SavefileActionPerformed
         saveFile();
@@ -1497,6 +1525,7 @@ public class MainFrame extends javax.swing.JFrame {
         animationSystem.addAnimation(a);
         jComboBox_animations.setSelectedIndex(animationSystem.animations.size() - 1); //Select the item we just added
         jComboBox_animations.updateUI();
+        jTable2.updateUI();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
@@ -1514,6 +1543,7 @@ public class MainFrame extends javax.swing.JFrame {
         }
         jTable1.updateUI();
         jComboBox_animations.updateUI();
+        jTable2.updateUI();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
@@ -1598,7 +1628,15 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
+        Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+        animationSystem.animations.remove(a);
+        if (animationSystem.animations.size() >= 0) {
+            animationSystem.animationListModel.setSelectedItem(animationSystem.animations.get(0));
+        } else {
+            animationSystem.animationListModel.setSelectedItem(null);
+        }
+        jTable1.clearSelection();
+        jTable1.updateUI();
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -1609,7 +1647,28 @@ public class MainFrame extends javax.swing.JFrame {
         Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
         a.setName(result);
         jComboBox_animations.updateUI();
+        jTable2.updateUI();
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+        Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
+        String newd = JOptionPane.showInputDialog("What should the new duration be for ALL selected frames (cancel to not change)?");
+        if (newd != null && !newd.equals("")) {
+            for (int i : jTable1.getSelectedRows()) {
+                a.frames.get(i).setDuration(Double.valueOf(newd));
+            }
+        }
+        jTable1.updateUI();
+    }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        TextDialog td = new TextDialog(
+                "To use the animation system's playback feature, it first needs to be enabled by hitting the \"start/stop ani system\" button.\n"
+                + "Once the playback system is running (UQMAnimationTool should display \"Animation mode\" in the bottom status bar of the main screen), you can start or stop individual animations by clicking the playback buttons in the table.\n"
+                + "Note that even background 'animations' have to be started, or else they won't be visible.", "Animation system playback notes");
+        td.setWrapping(true, true);
+        td.setVisible(true);
+    }//GEN-LAST:event_jButton11ActionPerformed
 
     private void moveAnimationFrame(int delta) {
         Animation a = (Animation) animationSystem.animationListModel.getSelectedItem();
@@ -1636,6 +1695,8 @@ public class MainFrame extends javax.swing.JFrame {
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
@@ -1654,9 +1715,9 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox jComboBox_AnimationType;
     private javax.swing.JComboBox jComboBox_Tranparency;
     private javax.swing.JComboBox jComboBox_animations;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel_LoadedFile;
     private javax.swing.JLabel jLabel_MouseXY;
-    private javax.swing.JLabel jLabel_Rate;
     private javax.swing.JLabel jLabel_Zoom;
     private javax.swing.JList jList_Frames;
     private javax.swing.JMenu jMenu1;
@@ -1674,21 +1735,25 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel_AniTab;
     private javax.swing.JPanel jPanel_ImageWorkspace;
     private javax.swing.JPanel jPanel_TranspTab;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JToolBar.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator2;
     private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JSlider jSlider_Rate;
+    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JSlider jSlider_Zoom;
     private javax.swing.JSplitPane jSplitPane1;
     private javax.swing.JSplitPane jSplitPane_horiz;
     private javax.swing.JSplitPane jSplitPane_vert;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTabbedPane jTabbedPane2;
     private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JToolBar jToolBar_Quickmenu;
     private javax.swing.JToolBar jToolBar_statusbar;
     // End of variables declaration//GEN-END:variables
@@ -1707,67 +1772,133 @@ public class MainFrame extends javax.swing.JFrame {
      * Repaint all the frames. Set the Z index properly. Don't show certain frames if the UI wants us to ("show only selected frame").
      */
     private void repaintFrames() {
-        try {
-            for (int j = 0; j < animationSystem.size(); j++) {
-                ImagePanel i = (ImagePanel) animationSystem.get(j);
-                if (jComboBox_Tranparency.getSelectedIndex() == 0) {
-                    i.setTransparency(1f);
-                    i.setHighlight(1f);
-                } else if (jComboBox_Tranparency.getSelectedIndex() == 1) {
-                    i.setTransparency(1f);
-                    i.setHighlight(1f);
-                } else if (jComboBox_Tranparency.getSelectedIndex() == 2) {
-                    i.setTransparency(0.5f);
-                    i.setHighlight(0.5f);
-                } else if (jComboBox_Tranparency.getSelectedIndex() == 3) {
-                    i.setTransparency(0.25f);
-                    i.setHighlight(0.25f);
-                }
-            }
-            if (jList_Frames.getSelectedIndex() != -1) {
+        if (timon) {
+            try {
                 mu.acquire();
-                if (jCheckBoxMenuItem_ShowSelectedFrameOnly.isSelected()) {
-                    for (int j = 0; j < animationSystem.size(); j++) {
-                        ImagePanel i = (ImagePanel) animationSystem.get(j);
-                        i.setVisible(false);
-                    }
+                for (int j = 0; j < animationSystem.size(); j++) {
+                    ImagePanel i = (ImagePanel) animationSystem.get(j);
+                    i.setVisible(animationSystem.isVisible(i));
                 }
-                try {
-                    if (getSelectedImagePanel() != null) {
-                        jPanel_ImageWorkspace.setComponentZOrder(getSelectedImagePanel(), 0);
-                        getSelectedImagePanel().setVisible(true);
-
-                        if (jComboBox_Tranparency.getSelectedIndex() == 0) {
-                            getSelectedImagePanel().setTransparency(1f);
-                        } else if (jComboBox_Tranparency.getSelectedIndex() == 1) {
-                            getSelectedImagePanel().setTransparency(0.5f);
-                        } else if (jComboBox_Tranparency.getSelectedIndex() == 2) {
-                            getSelectedImagePanel().setTransparency(1f);
-                        } else if (jComboBox_Tranparency.getSelectedIndex() == 3) {
-                            getSelectedImagePanel().setTransparency(0.5f);
-                        }
-                        if (jCheckBoxMenuItem_HighlightFrame.isSelected()) {
-                            getSelectedImagePanel().setHighlight(2f);
-                        } else {
-                            getSelectedImagePanel().setHighlight(getSelectedImagePanel().getTransparency());
-                        }
-                    }
-                    repaintHotspot();
-                    jPanel_ImageWorkspace.updateUI();
-
-
-                } catch (IllegalArgumentException ex) {
-                    Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                jPanel_ImageWorkspace.updateUI();
                 mu.release();
-
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (InterruptedException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            try {
+                for (int j = 0; j < animationSystem.size(); j++) {
+                    ImagePanel i = (ImagePanel) animationSystem.get(j);
+                    if (jComboBox_Tranparency.getSelectedIndex() == 0) {
+                        i.setTransparency(1f);
+                        i.setHighlight(1f);
+                    } else if (jComboBox_Tranparency.getSelectedIndex() == 1) {
+                        i.setTransparency(1f);
+                        i.setHighlight(1f);
+                    } else if (jComboBox_Tranparency.getSelectedIndex() == 2) {
+                        i.setTransparency(0.5f);
+                        i.setHighlight(0.5f);
+                    } else if (jComboBox_Tranparency.getSelectedIndex() == 3) {
+                        i.setTransparency(0.25f);
+                        i.setHighlight(0.25f);
+                    }
+                }
+                if (jList_Frames.getSelectedIndex() != -1) {
+                    mu.acquire();
+                    if (jCheckBoxMenuItem_ShowSelectedFrameOnly.isSelected()) {
+                        for (int j = 0; j < animationSystem.size(); j++) {
+                            ImagePanel i = (ImagePanel) animationSystem.get(j);
+                            i.setVisible(false);
+                        }
+                    }
+                    try {
+                        if (getSelectedImagePanel() != null) {
+                            jPanel_ImageWorkspace.setComponentZOrder(getSelectedImagePanel(), 0);
+                            getSelectedImagePanel().setVisible(true);
+
+                            if (jComboBox_Tranparency.getSelectedIndex() == 0) {
+                                getSelectedImagePanel().setTransparency(1f);
+                            } else if (jComboBox_Tranparency.getSelectedIndex() == 1) {
+                                getSelectedImagePanel().setTransparency(0.5f);
+                            } else if (jComboBox_Tranparency.getSelectedIndex() == 2) {
+                                getSelectedImagePanel().setTransparency(1f);
+                            } else if (jComboBox_Tranparency.getSelectedIndex() == 3) {
+                                getSelectedImagePanel().setTransparency(0.5f);
+                            }
+                            if (jCheckBoxMenuItem_HighlightFrame.isSelected()) {
+                                getSelectedImagePanel().setHighlight(2f);
+                            } else {
+                                getSelectedImagePanel().setHighlight(getSelectedImagePanel().getTransparency());
+                            }
+                        }
+                        repaintHotspot();
+                        jPanel_ImageWorkspace.updateUI();
+
+
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    mu.release();
+
+                }
+            } catch (InterruptedException ex) {
+                Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }
 
-    private class MyTableModel extends AbstractTableModel {
+    private class AnimationPlayingTableModel extends AbstractTableModel {
+
+        @Override
+        public int getRowCount() {
+            return animationSystem.animations.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 2;
+        }
+
+        @Override
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Animation a = (Animation) animationSystem.animations.get(rowIndex);
+            if (columnIndex == 0) {
+                if (a.playingState == 0) {
+                    return new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/media-playback-start.png"));
+                } else {
+                    return new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/media-playback-stop.png"));
+                }
+            } else if (columnIndex == 1) {
+                return a.toString();
+            }
+            return "??WTF??";
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            if (column == 0) {
+                return "Play";
+            } else if (column == 1) {
+                return "Animation";
+            }
+            return "?UNDEFINED_COLUMN?"; //This should never happen as those columns don't exist.
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            if (columnIndex == 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+            //Don't do anything
+        }
+    }
+
+    private class AnimationStructureTableModel extends AbstractTableModel {
 
         public void fireTableStructureChange() {
             fireTableStructureChanged();
