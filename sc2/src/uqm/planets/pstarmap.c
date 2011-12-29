@@ -471,7 +471,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 						SetContextForeGroundColor (WHITE_COLOR);
 					else
 						SetContextForeGroundColor (c);
-					DrawOval (&r, 0);
+					DrawOval (&r, 0, 0);
 
 					SetContextFont (TinyFont);
 

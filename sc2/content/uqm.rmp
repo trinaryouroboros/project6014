@@ -283,6 +283,7 @@ graphics.meleepickship = GFXRES:base/ui/meleepickship.ani
 graphics.miscdata = GFXRES:base/ui/miscdata.ani
 graphics.modulesmenu = GFXRES:base/ui/modulesmenu.ani
 graphics.moonbase = GFXRES:base/lander/energy/moonbase.ani
+graphics.nebulae = GFXRES:base/nav/nebulae.ani
 graphics.newgame = GFXRES:base/ui/newgame.ani
 graphics.newgame2x = GFXRES:base/ui/newgame2x.ani
 graphics.newgame4x = GFXRES:base/ui/newgame4x.ani

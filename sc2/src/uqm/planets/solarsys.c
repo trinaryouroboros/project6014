@@ -1079,7 +1079,10 @@ DrawOrbit (PLANET_DESC *planet, int sizeNumer, int dyNumer, int denom)
 	GetPlanetOrbitRect (&r, planet, sizeNumer, dyNumer, denom);
 
 	SetContextForeGroundColor (planet->temp_color);
-	DrawOval (&r, 1);
+	if (RESOLUTION_FACTOR < 2)
+		DrawOval (&r, 1, 0);
+	else
+		DrawOval (&r, 3, 1);
 }
 
 static SIZE
@@ -2291,13 +2294,11 @@ CreateStarBackGround (void)
 {
 	COUNT i, j;
 	DWORD rand_val;
-	STAMP s;
+	STAMP s, nebula;
 	DWORD old_seed;
 	CONTEXT oldContext;
 	RECT clipRect;
 	FRAME frame;
-	
-	COUNT num_of_stars; // JMS_GFX: Replaced NUM_BRT_DRAWN with this
 
 	oldContext = SetContext (SpaceContext);
 	GetContextClipRect (&clipRect);
@@ -2314,23 +2315,24 @@ CreateStarBackGround (void)
 
 	old_seed = seedRandomForSolarSys ();
 
+	nebula.origin.x = nebula.origin.y = 0;
+ 	nebula.frame = CaptureDrawable (LoadGraphic (NEBULAE_PMAP_ANIM));
+#define NUM_NEBULAE 16
+ 	nebula.frame = SetAbsFrameIndex (nebula.frame, CurStarDescPtr->star_pt.x % NUM_NEBULAE);
+ 	DrawStamp(&nebula);
+
+	DestroyDrawable (ReleaseDrawable (nebula.frame));
+
 	// JMS: You can add randomness to background stars by uncommenting the Global tick_counts
 	// old_seed = TFB_SeedRandom (
 	//		MAKE_DWORD (CurStarDescPtr->star_pt.x - 5000/*+(GLOBAL (GameClock).tick_count)*/,
 	//		CurStarDescPtr->star_pt.y - 6000/*+(GLOBAL (GameClock).tick_count <= 0)*/ ));
 
-	if (RESOLUTION_FACTOR == 0)	// JMS_GFX
-		num_of_stars = 30;		// JMS_GFX
-	if (RESOLUTION_FACTOR == 1)	// JMS_GFX
-		num_of_stars = 66;		// JMS_GFX
-	if (RESOLUTION_FACTOR == 2)	// JMS_GFX
-		num_of_stars = 111;		// JMS_GFX
-	
 #define NUM_DIM_PIECES 8
 	s.frame = SpaceJunkFrame;
 	for (i = 0; i < NUM_DIM_PIECES; ++i)
 	{
-#define NUM_DIM_DRAWN 5
+#define NUM_DIM_DRAWN (5 << RESOLUTION_FACTOR)
 		for (j = 0; j < NUM_DIM_DRAWN; ++j)
 		{
 			rand_val = TFB_Random ();
@@ -2344,8 +2346,8 @@ CreateStarBackGround (void)
 #define NUM_BRT_PIECES 8
 	for (i = 0; i < NUM_BRT_PIECES; ++i)
 	{
-//#define NUM_BRT_DRAWN 30
-		for (j = 0; j < num_of_stars /*NUM_BRT_DRAWN*/; ++j)
+#define NUM_BRT_DRAWN RES_CASE(30, 60, 90) // JMS_GFX
+		for (j = 0; j < NUM_BRT_DRAWN; ++j)
 		{
 			rand_val = TFB_Random ();
 			s.origin.x = LOWORD (rand_val) % SIS_SCREEN_WIDTH;
