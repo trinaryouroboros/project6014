@@ -1,0 +1,442 @@
+<?xml version="1.0"?>
+<!DOCTYPE smil PUBLIC "-//W3C//DTD SMIL 3.0//EN"
+                      "http://www.w3.org/2008/SMIL30/SMIL30Language.dtd">
+<smil xmlns="http://www.w3.org/ns/SMIL">  <head>
+    <meta name="title" content="UQMAnimationtool Generated File"/>
+    <meta name="author" content="UQMAnimationtool"/>
+    <layout>
+<region xml:id="chmmr.0.png" width="729" height="321" left="0" top="0" z-index="-1"/>
+<region xml:id="chmmr.1.png" width="168" height="144" left="36" top="54" z-index="-1"/>
+<region xml:id="chmmr.2.png" width="45" height="96" left="77" top="54" z-index="-1"/>
+<region xml:id="chmmr.3.png" width="45" height="96" left="77" top="54" z-index="-1"/>
+<region xml:id="chmmr.4.png" width="45" height="96" left="77" top="54" z-index="-1"/>
+<region xml:id="chmmr.5.png" width="45" height="96" left="77" top="54" z-index="-1"/>
+<region xml:id="chmmr.6.png" width="48" height="57" left="36" top="83" z-index="-1"/>
+<region xml:id="chmmr.7.png" width="48" height="57" left="36" top="83" z-index="-1"/>
+<region xml:id="chmmr.8.png" width="48" height="57" left="36" top="83" z-index="-1"/>
+<region xml:id="chmmr.9.png" width="48" height="57" left="36" top="83" z-index="-1"/>
+<region xml:id="chmmr.10.png" width="48" height="57" left="36" top="83" z-index="-1"/>
+<region xml:id="chmmr.11.png" width="48" height="57" left="36" top="83" z-index="-1"/>
+<region xml:id="chmmr.12.png" width="33" height="33" left="98" top="10" z-index="-1"/>
+<region xml:id="chmmr.13.png" width="33" height="33" left="98" top="10" z-index="-1"/>
+<region xml:id="chmmr.14.png" width="33" height="33" left="98" top="10" z-index="-1"/>
+<region xml:id="chmmr.15.png" width="33" height="33" left="98" top="10" z-index="-1"/>
+<region xml:id="chmmr.16.png" width="33" height="33" left="98" top="10" z-index="-1"/>
+<region xml:id="chmmr.17.png" width="27" height="27" left="169" top="25" z-index="-1"/>
+<region xml:id="chmmr.18.png" width="27" height="27" left="169" top="25" z-index="-1"/>
+<region xml:id="chmmr.19.png" width="27" height="27" left="169" top="25" z-index="-1"/>
+<region xml:id="chmmr.20.png" width="27" height="27" left="169" top="25" z-index="-1"/>
+<region xml:id="chmmr.21.png" width="27" height="27" left="169" top="25" z-index="-1"/>
+<region xml:id="chmmr.22.png" width="27" height="27" left="94" top="94" z-index="-1"/>
+<region xml:id="chmmr.23.png" width="27" height="27" left="94" top="94" z-index="-1"/>
+<region xml:id="chmmr.24.png" width="27" height="27" left="94" top="94" z-index="-1"/>
+<region xml:id="chmmr.25.png" width="27" height="27" left="94" top="94" z-index="-1"/>
+<region xml:id="chmmr.26.png" width="27" height="27" left="94" top="94" z-index="-1"/>
+<region xml:id="chmmr.27.png" width="33" height="87" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.28.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.29.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.30.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.31.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.32.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.33.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.34.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.35.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.36.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.37.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.38.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.39.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.40.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.41.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.42.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.43.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.44.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.45.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.46.png" width="33" height="93" left="179" top="76" z-index="-1"/>
+<region xml:id="chmmr.47.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.48.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.49.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.50.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.51.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.52.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.53.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.54.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.55.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.56.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.57.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.58.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.59.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.60.png" width="15" height="93" left="193" top="76" z-index="-1"/>
+<region xml:id="chmmr.61.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.62.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.63.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.64.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.65.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.66.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.67.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.68.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.69.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.70.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.71.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.72.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.73.png" width="3" height="3" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.74.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.75.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.76.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.77.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.78.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.79.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.80.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.81.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.82.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.83.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+<region xml:id="chmmr.84.png" width="24" height="243" left="235" top="26" z-index="-1"/>
+    </layout>
+  </head>
+  <body>
+  <par>
+<par><img src="chmmr.0.png" region="chmmr.0.png"/></par>
+<seq begin="0s" repeatCount="indefinite" > <!-- Animation: Lightning bolts (11) -->
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.3.png" region="chmmr.3.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.7.png" region="chmmr.7.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.8.png" region="chmmr.8.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.2.png" region="chmmr.2.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.1.png" region="chmmr.1.png"/></par>
+<par dur="0.1s"><img src="chmmr.5.png" region="chmmr.5.png"/></par>
+<par dur="0.1s"><img src="chmmr.4.png" region="chmmr.4.png"/></par>
+<par dur="0.1s"><img src="chmmr.11.png" region="chmmr.11.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.6.png" region="chmmr.6.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+<par dur="0.1s"><img src="chmmr.9.png" region="chmmr.9.png"/></par>
+<par dur="0.1s"><img src="chmmr.10.png" region="chmmr.10.png"/></par>
+</seq>
+<seq begin="0s" repeatCount="indefinite" > <!-- Animation: Star 1 (5) -->
+<par dur="0.1s"><img src="chmmr.12.png" region="chmmr.12.png"/></par>
+<par dur="0.1s"><img src="chmmr.13.png" region="chmmr.13.png"/></par>
+<par dur="0.1s"><img src="chmmr.14.png" region="chmmr.14.png"/></par>
+<par dur="0.1s"><img src="chmmr.15.png" region="chmmr.15.png"/></par>
+<par dur="1.0s"><img src="chmmr.16.png" region="chmmr.16.png"/></par>
+</seq>
+<seq begin="0s" repeatCount="indefinite" > <!-- Animation: Star 2 (5) -->
+<par dur="0.1s"><img src="chmmr.17.png" region="chmmr.17.png"/></par>
+<par dur="0.1s"><img src="chmmr.18.png" region="chmmr.18.png"/></par>
+<par dur="0.1s"><img src="chmmr.19.png" region="chmmr.19.png"/></par>
+<par dur="0.1s"><img src="chmmr.20.png" region="chmmr.20.png"/></par>
+<par dur="2.1s"><img src="chmmr.21.png" region="chmmr.21.png"/></par>
+</seq>
+<seq begin="0s" repeatCount="indefinite" > <!-- Animation: Star 3 (5) -->
+<par dur="0.2s"><img src="chmmr.22.png" region="chmmr.22.png"/></par>
+<par dur="0.2s"><img src="chmmr.23.png" region="chmmr.23.png"/></par>
+<par dur="0.2s"><img src="chmmr.24.png" region="chmmr.24.png"/></par>
+<par dur="0.2s"><img src="chmmr.25.png" region="chmmr.25.png"/></par>
+<par dur="1.3s"><img src="chmmr.26.png" region="chmmr.26.png"/></par>
+</seq>
+<seq begin="0s" repeatCount="indefinite" > <!-- Animation: Bouncy1 (20) -->
+<par dur="0.1s"><img src="chmmr.27.png" region="chmmr.27.png"/></par>
+<par dur="0.1s"><img src="chmmr.28.png" region="chmmr.28.png"/></par>
+<par dur="0.1s"><img src="chmmr.29.png" region="chmmr.29.png"/></par>
+<par dur="0.1s"><img src="chmmr.30.png" region="chmmr.30.png"/></par>
+<par dur="0.1s"><img src="chmmr.31.png" region="chmmr.31.png"/></par>
+<par dur="0.1s"><img src="chmmr.32.png" region="chmmr.32.png"/></par>
+<par dur="0.1s"><img src="chmmr.33.png" region="chmmr.33.png"/></par>
+<par dur="0.1s"><img src="chmmr.34.png" region="chmmr.34.png"/></par>
+<par dur="0.1s"><img src="chmmr.35.png" region="chmmr.35.png"/></par>
+<par dur="0.1s"><img src="chmmr.36.png" region="chmmr.36.png"/></par>
+<par dur="0.1s"><img src="chmmr.37.png" region="chmmr.37.png"/></par>
+<par dur="0.1s"><img src="chmmr.38.png" region="chmmr.38.png"/></par>
+<par dur="0.1s"><img src="chmmr.39.png" region="chmmr.39.png"/></par>
+<par dur="0.1s"><img src="chmmr.40.png" region="chmmr.40.png"/></par>
+<par dur="0.1s"><img src="chmmr.41.png" region="chmmr.41.png"/></par>
+<par dur="0.1s"><img src="chmmr.42.png" region="chmmr.42.png"/></par>
+<par dur="0.1s"><img src="chmmr.43.png" region="chmmr.43.png"/></par>
+<par dur="0.1s"><img src="chmmr.44.png" region="chmmr.44.png"/></par>
+<par dur="0.1s"><img src="chmmr.45.png" region="chmmr.45.png"/></par>
+<par dur="0.1s"><img src="chmmr.46.png" region="chmmr.46.png"/></par>
+</seq>
+<seq begin="0s" repeatCount="indefinite" > <!-- Animation: Bouncy2 (14) -->
+<par dur="0.1s"><img src="chmmr.47.png" region="chmmr.47.png"/></par>
+<par dur="0.1s"><img src="chmmr.48.png" region="chmmr.48.png"/></par>
+<par dur="0.1s"><img src="chmmr.49.png" region="chmmr.49.png"/></par>
+<par dur="0.1s"><img src="chmmr.50.png" region="chmmr.50.png"/></par>
+<par dur="0.1s"><img src="chmmr.51.png" region="chmmr.51.png"/></par>
+<par dur="0.1s"><img src="chmmr.52.png" region="chmmr.52.png"/></par>
+<par dur="0.1s"><img src="chmmr.53.png" region="chmmr.53.png"/></par>
+<par dur="0.1s"><img src="chmmr.54.png" region="chmmr.54.png"/></par>
+<par dur="0.1s"><img src="chmmr.55.png" region="chmmr.55.png"/></par>
+<par dur="0.1s"><img src="chmmr.56.png" region="chmmr.56.png"/></par>
+<par dur="0.1s"><img src="chmmr.57.png" region="chmmr.57.png"/></par>
+<par dur="0.1s"><img src="chmmr.58.png" region="chmmr.58.png"/></par>
+<par dur="0.1s"><img src="chmmr.59.png" region="chmmr.59.png"/></par>
+<par dur="0.1s"><img src="chmmr.60.png" region="chmmr.60.png"/></par>
+</seq>
+<seq begin="0s" repeatCount="indefinite" > <!-- Animation: Bouncy3 (23) -->
+<par dur="0.1s"><img src="chmmr.61.png" region="chmmr.61.png"/></par>
+<par dur="0.1s"><img src="chmmr.62.png" region="chmmr.62.png"/></par>
+<par dur="0.1s"><img src="chmmr.63.png" region="chmmr.63.png"/></par>
+<par dur="0.1s"><img src="chmmr.64.png" region="chmmr.64.png"/></par>
+<par dur="0.1s"><img src="chmmr.65.png" region="chmmr.65.png"/></par>
+<par dur="0.1s"><img src="chmmr.66.png" region="chmmr.66.png"/></par>
+<par dur="0.1s"><img src="chmmr.67.png" region="chmmr.67.png"/></par>
+<par dur="0.1s"><img src="chmmr.68.png" region="chmmr.68.png"/></par>
+<par dur="0.1s"><img src="chmmr.69.png" region="chmmr.69.png"/></par>
+<par dur="0.1s"><img src="chmmr.70.png" region="chmmr.70.png"/></par>
+<par dur="0.1s"><img src="chmmr.71.png" region="chmmr.71.png"/></par>
+<par dur="0.1s"><img src="chmmr.72.png" region="chmmr.72.png"/></par>
+<par dur="0.1s"><img src="chmmr.74.png" region="chmmr.74.png"/></par>
+<par dur="0.1s"><img src="chmmr.75.png" region="chmmr.75.png"/></par>
+<par dur="0.1s"><img src="chmmr.76.png" region="chmmr.76.png"/></par>
+<par dur="0.1s"><img src="chmmr.77.png" region="chmmr.77.png"/></par>
+<par dur="0.1s"><img src="chmmr.78.png" region="chmmr.78.png"/></par>
+<par dur="0.1s"><img src="chmmr.79.png" region="chmmr.79.png"/></par>
+<par dur="0.1s"><img src="chmmr.80.png" region="chmmr.80.png"/></par>
+<par dur="0.1s"><img src="chmmr.81.png" region="chmmr.81.png"/></par>
+<par dur="0.1s"><img src="chmmr.82.png" region="chmmr.82.png"/></par>
+<par dur="0.1s"><img src="chmmr.83.png" region="chmmr.83.png"/></par>
+<par dur="0.1s"><img src="chmmr.84.png" region="chmmr.84.png"/></par>
+</seq>
+  </par>
+  </body>
+</smil>
