@@ -60,7 +60,7 @@ public class AnimationSystem {
 
             @Override
             public void addElement(Object anObject) {
-                animations.add((Animation)anObject);
+                animations.add((Animation) anObject);
             }
 
             @Override
@@ -92,7 +92,7 @@ public class AnimationSystem {
     public Object get(int i) {
         return framesListModel.getElementAt(i);
     }
-    
+
     public void addAnimation(Animation a) {
         animations.add(a);
     }
@@ -104,5 +104,25 @@ public class AnimationSystem {
 
     public void addElement(ImagePanel ip) {
         frames.add(ip);
+    }
+
+    boolean isVisible(ImagePanel i) {
+        for (Animation a : animations) {
+            if (a.playingState != 0) {
+                if (a.aniType == AnimationType.BACKGROUND) {
+                    for (AnimationFrame af : a.frames) {
+                        if (af.getFrame() == i) {
+                            return true;
+                        }
+                    }
+                } else {
+
+                    if (a.frames.get(a.currentlyPlaying).getFrame() == i) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 }
