@@ -122,14 +122,54 @@ clusters.lines.weight=0.75
 sois.font.name=Arial Bold
 sois.font.filename=Arialbd.ttf
 sois.font.size=16
-sois.count=0
+sois.count=6
 
-# Center and radius are in grid coordinates
-#sois.1.name=EARTHLING
-#sois.1.color=f05015
-#sois.1.font.size=9
-#sois.1.center.x=177
-#sois.1.center.y=144.5
-#sois.1.radius=44
-# Race name positioning tweak (.x and .y)
-#sois.1.tweak.y=-3
+#TODO: grab proper color from game?
+sois.1.name=CHMMR
+sois.1.color=f0f0f0
+sois.1.font.size=35
+sois.1.center.x=556.2
+sois.1.center.y=851.8
+sois.1.radius=139
+
+#TODO: grab proper color from game?
+sois.2.name=EARTHLING
+sois.2.color=2020f0
+sois.2.font.size=8
+sois.2.center.x=675.2 
+sois.2.center.y=745.0
+sois.2.radius=38
+
+#TODO: grab proper color from game?
+sois.3.name=SHOFIXTI
+sois.3.color=554433
+sois.3.font.size=7
+sois.3.center.x=790.8
+sois.3.center.y=626.9
+sois.3.radius=23.75
+
+
+
+#TODO: grab proper color from game?
+sois.4.name=YEHAT
+sois.4.color=2255ff
+sois.4.font.size=17
+sois.4.center.x=992.3
+sois.4.center.y=629.4
+sois.4.radius=76
+
+#TODO: grab proper color from game?
+sois.5.name=ORZ
+sois.5.color=55aaaa
+sois.5.font.size=17
+sois.5.center.x=858.7
+sois.5.center.y=856.6
+sois.5.radius=33.25
+
+#TODO: grab proper color from game?
+sois.6.name=SYREEN
+sois.6.color=ff5522
+sois.6.font.size=9
+sois.6.center.x=912.5
+sois.6.center.y=977.0
+sois.6.radius=33.25
