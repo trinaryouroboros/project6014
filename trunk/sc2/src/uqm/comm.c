@@ -78,6 +78,13 @@
 // JMS: Changed this back to 120 fps since hires4x seems to like it... 
 #define COMM_ANIM_RATE   (ONE_SECOND / 120)
 
+
+/* This symbol, when appearing in alien text, toggles the computer font. */
+#define COMPUTER_TOKEN '$'
+
+/* Whether the current conversation uses computer tokens.  Currently only Orz and the Shofixti Colony. */
+#define isComputerTokenConv (CommData.AlienConv == ORZ_CONVERSATION || CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION)
+
 static CONTEXT AnimContext;
 
 LOCDATA CommData;
@@ -289,10 +296,11 @@ add_text (int status, TEXT *pTextIn)
 		else
 		{
 			// Alien speech
-			if (CommData.AlienConv == ORZ_CONVERSATION || CommData.AlienConv == SHOFIXTICOLONY_CONVERSATION)
+			if (isComputerTokenConv)
 			{
 				// BW : special case for the Orz conversations
-				// the character $ is recycled as a marker to
+				// the character COMPUTER_TOKEN (currently '$')
+                                // is recycled as a marker to
 				// switch from and to computer font.
 				//
 				// JMS: Computer font also used when first encountering Shofixti colony.
@@ -318,7 +326,7 @@ add_text (int status, TEXT *pTextIn)
 				// This loop computes the width of the line
 				while (remChars > 0)
 					{
-						while ((*ptr != '$') && remChars > 0)
+						while ((*ptr != COMPUTER_TOKEN) && remChars > 0)
 							{
 								getCharFromString (&ptr);
 								remChars--;
@@ -329,7 +337,7 @@ add_text (int status, TEXT *pTextIn)
 						
 						width += rect.extent.width;
 						
-						if (*ptr == '$')
+						if (*ptr == COMPUTER_TOKEN)
 							{
 								getCharFromString (&ptr);
 								remChars--;
@@ -359,7 +367,7 @@ add_text (int status, TEXT *pTextIn)
 				// This loop is used to look up for $
 				while (remChars > 0)
 					{
-						while ((*ptr != '$') && remChars > 0)
+						while ((*ptr != COMPUTER_TOKEN) && remChars > 0)
 							{
 								getCharFromString (&ptr);
 								remChars--;
@@ -373,7 +381,7 @@ add_text (int status, TEXT *pTextIn)
 						
 						pText->baseline.x += rect.extent.width;
 						
-						if (*ptr == '$')
+						if (*ptr == COMPUTER_TOKEN)
 							{
 								getCharFromString (&ptr);
 								remChars--;
@@ -927,6 +935,32 @@ typedef struct summary_state
 
 } SUMMARY_STATE;
 
+/* Removes the computer tokens from a prepared text line. */
+static void removeComputerTokens(TEXT *pText)
+{
+    static char buffer[250];
+    const char *ptr = pText->pStr;
+    char *ptr2 = buffer;
+    COUNT remChars = pText->CharCount;
+    COUNT usedChars = 0;
+    
+    while (remChars > 0 && usedChars < sizeof(buffer))
+    {
+        if (*ptr != COMPUTER_TOKEN)
+        {
+            *ptr2 = *ptr;
+            ptr2++;
+            usedChars++;
+        }
+        getCharFromString (&ptr);
+        remChars--;
+    }
+    
+    *ptr2 = 0;
+    pText->CharCount = usedChars;
+    pText->pStr = buffer;
+}
+
 static BOOLEAN
 DoConvSummary (SUMMARY_STATE *pSS)
 {
@@ -1006,6 +1040,8 @@ DoConvSummary (SUMMARY_STATE *pSS)
 					!getLineWithinWidth (&t, &next, r.extent.width, (COUNT)~0);
 					++row)
 			{
+                                if (isComputerTokenConv)
+                                    removeComputerTokens(&t);
 				font_DrawText (&t);
 				t.baseline.y += DELTA_Y_SUMMARY;
 				t.pStr = next;
@@ -1020,6 +1056,8 @@ DoConvSummary (SUMMARY_STATE *pSS)
 			}
 		
 			// this subtitle fit completely
+                        if (isComputerTokenConv)
+                            removeComputerTokens(&t);
 			font_DrawText (&t);
 			t.baseline.y += DELTA_Y_SUMMARY;
 		}
