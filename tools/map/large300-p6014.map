@@ -1,0 +1,135 @@
+#####################################################################
+# Starmap image generation script
+# Project 6014 edition
+# 300 dpi, clipped A3 size
+#####################################################################
+
+# General image definition
+
+image.dpi.x=300
+image.dpi.y=300
+# width and height in inches; v-trimmed A3
+image.width=11.69
+image.height=14.56
+# color specified as RRGGBB in hexadecimal
+image.backcolor=200020
+# layer Order
+image.layers=sois,grid,soinames,clusters,stars,starnums,cnames
+
+grid.extent.x=1000
+grid.extent.y=1000
+grid.step.1=100
+grid.step.2=50
+grid.step.3=10
+# origins and dimensions in inches
+grid.origin.x=0.6
+grid.origin.y=0.6
+grid.width=10.49
+grid.height=10.49
+grid.color=9566cb
+grid.font.name=Arial Bold
+grid.font.filename=Arialbd.ttf
+# font point size is in 1/64th of an inch
+grid.font.size=8
+# weight is in 1/64th of an inch
+grid.box.weight=1
+grid.lines.weight=0.75
+grid.marks.color=8771b6
+
+# Stars
+
+stars.definition=stars-p6014.map
+stars.numcolor=989898
+stars.desig.font.name=Times New Roman
+stars.desig.font.filename=Times.ttf
+stars.desig.font.size=4
+# designation letters/symbols in utf8 for the specified font
+# using Greek letters
+stars.desig.table=greek.map
+# star images and/or colors
+# colors are whatever you want, one letter per color, but
+#   must match those used in map defined by stars.definition
+stars.colors=RGBOYW
+stars.sizes=3
+stars.R.1.image=stars/fca_027_red.png
+# radius in 1/64 of an inch
+stars.R.1.radius=1.6
+stars.R.1.color=980000
+stars.R.2.image=stars/fca_037_red.png
+stars.R.2.radius=2.7
+stars.R.2.color=b80000
+stars.R.3.image=stars/fca_070_red.png
+stars.R.3.radius=3.4
+stars.R.3.color=d00000
+stars.G.1.image=stars/fca_027_green.png
+stars.G.1.radius=1.6
+stars.G.1.color=009800
+stars.G.2.image=stars/fca_037_green.png
+stars.G.2.radius=2.7
+stars.G.2.color=00b800
+stars.G.3.image=stars/fca_070_green.png
+stars.G.3.radius=3.4
+stars.G.3.color=00d000
+stars.B.1.image=stars/fca_027_blue.png
+stars.B.1.radius=1.6
+stars.B.1.color=000098
+stars.B.2.image=stars/fca_037_blue.png
+stars.B.2.radius=2.7
+stars.B.2.color=0000b8
+stars.B.3.image=stars/fca_070_blue.png
+stars.B.3.radius=3.4
+stars.B.3.color=0000d0
+stars.O.1.image=stars/fca_027_orange.png
+stars.O.1.radius=1.6
+stars.O.1.color=b86000
+stars.O.2.image=stars/fca_037_orange.png
+stars.O.2.radius=2.7
+stars.O.2.color=d06800
+stars.O.3.image=stars/fca_070_orange.png
+stars.O.3.radius=3.4
+stars.O.3.color=e8700
+stars.Y.1.image=stars/fca_027_yellow.png
+stars.Y.1.radius=1.6
+stars.Y.1.color=b8b420
+stars.Y.2.image=stars/fca_037_yellow.png
+stars.Y.2.radius=2.7
+stars.Y.2.color=d0ca28
+stars.Y.3.image=stars/fca_070_yellow.png
+stars.Y.3.radius=3.4
+stars.Y.3.color=e8e430
+stars.W.1.image=stars/fca_027_white.png
+stars.W.1.radius=1.6
+stars.W.1.color=c8c8c8
+stars.W.2.image=stars/fca_037_white.png
+stars.W.2.radius=2.7
+stars.W.2.color=d8d8d8
+stars.W.3.image=stars/fca_070_white.png
+stars.W.3.radius=3.4
+stars.W.3.color=f0f0f0
+
+# Star Clusters
+
+clusters.definition=clusters-p6014.map
+clusters.names.font.name=Arial Narrow Bold
+clusters.names.font.filename=Arialnb.ttf
+clusters.names.font.size=7
+clusters.names.color=7aa2ef
+clusters.lines.color=8181a9
+clusters.lines.weight=0.75
+
+# Spheres of Influence
+
+sois.font.name=Arial Bold
+sois.font.filename=Arialbd.ttf
+sois.font.size=16
+sois.count=0
+
+# Center and radius are in grid coordinates
+#sois.1.name=EARTHLING
+#sois.1.color=f05015
+#sois.1.font.size=9
+#sois.1.center.x=177
+#sois.1.center.y=144.5
+#sois.1.radius=44
+# Race name positioning tweak (.x and .y)
+#sois.1.tweak.y=-3
