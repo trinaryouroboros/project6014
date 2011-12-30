@@ -150,6 +150,9 @@ LoadKernel (int argc, char *argv[])
 	}
 	// END JMS_GFX
 	
+	// JMS: Force loading russian translation addon since the prepareAddons doesn't want to find it.
+	loadAddon ("Translation_RU");
+	
 	/* Now load the rest of the addons, in order. */
 	prepareAddons (optAddons);
 
