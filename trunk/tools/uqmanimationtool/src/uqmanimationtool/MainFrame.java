@@ -1686,10 +1686,21 @@ public class MainFrame extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        final String[] argsf = args;
         java.awt.EventQueue.invokeLater(new Runnable() {
 
+            @Override
             public void run() {
-                new MainFrame().setVisible(true);
+                
+                MainFrame m = new MainFrame();
+                m.setVisible(true);
+                for (String s : argsf) {
+                    File f = new File(s);
+                    if (f.exists()) {
+                        m.loadFile(f);
+                        break;
+                    }
+                }
             }
         });
     }
