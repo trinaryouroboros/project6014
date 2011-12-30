@@ -1,14 +1,89 @@
 #####################################################################
-# The Ur-Quan Masters official cluster definitions
+# The Ur-Quan Masters: Project 6014 official cluster definitions
 # (used by starmap image generation scripts)
 #
 # Fields are:
 #   Cluster name,
 #   Name positioning hint (navigational abbr; not currently used),
 #   Connecting line pairs (comma separated; latin: A=1, B=2, etc)
-#Antliae,ne,AB,BC,BE,CD,EF,FA
 #####################################################################
 #P6014 constellations:
+# Constellations not added due to bugs:
+# JUTURNA    http://code.google.com/p/project6014/issues/detail?id=63
+# PERSIPINA  http://code.google.com/p/project6014/issues/detail?id=62
+Apollonius,n,IE,ED,DC,CB,GH,HF,FI,GB,FA
+Messier,n,DA,AB,DC
+Acoreus,n,FE,ED,DA,AB,CA,CB
+Hymen,n,BE,EC,CA,AD
+Angstrom,n,AB,BD,BC
+Canis Majoris,n,DC,CA,AB,BD,AF,FG,GH,HI,CE
+Eris,n,GB,BC,HB,BA
+Lemaitre,n,FC,CB,BE,EC,ED,EA,AD,AI
+Ursae Minoris,n,CB,BA,AD
+Notus,n,BA,AC
+Morpheus,n,AB
+Pales,n,BA,AC
+Priapus,n,DC,CB,BA,AE
+Arachne,n,AB,BC,CA,CD,DF,FE,ED
+Huygens,n,DB,BA,AC,CD
+Halley,n,AB
+Vertumnus,n,AB,BD,DC,CA
+Poena,n,FE,EC,CD,DB,BF,DA
+Aristillus,n,BA
+Hicetas,n,BA,AC
+Hyginus,n,AB
+Sylvanus,n,BC,CD,DE,EA
+Janus,n,AC,CE,ED,DB,BA,CB,BE
+Juventus,n,BC,CA
+Eidolonii,n,CB,BE,DA,AE,BA
+Libitina,n,CB,BA,AC
+Cassini,n,BA,AD,DE,EC,FE,CA
+Galilei,n,AC,CB
+Naos,n,BA,AC,CB,AD,DE,EF
+Favonius,n,GA,AE,EF,FD,CA,EB,BC
+Vindemiatrix,n,AB,BC
+Hydri,n,HG,GF,FE,ED,DA,AC,CB,BE,BH
+Riccioli,n,BA
+Faunus,n,CB,BE,EA,AD,DC,BA
+Menelaus,n,BA
+Pleione,n,CA,AB
+Ares,n,BA,AC
+Bellona,n,CD,DA,AB,BC
+Phosphor,n,DA,AB,CA
+Hygea,n,NM,MA,AD,DC,CM,MO,OB,BC,OK,KL,BJ,JI,DE,EH,EF,AG
+Macrobius,n,BA
+Fortuna,n,AB
+Hypnos,n,CB,BA
+Polydectes,n,BC,CD,DA,ED,FE
+Hecate,n,BC,BA
+Archytas,n,GF,FE,ED,DC,CB,BA
+Syrma,n,AE,ED,DA,DC,CB,BA
+Kapteyn,n,DA,AC,CB,BE
+Hespera,n,FD,DC,CA,AB,BE
+Eurus,n,CD,DA,AE,AB,AF,FG,DE
+Hulse,n,BD,DA,AC,CB
+Lycaeus,n,CB,BA
+Fraunhofer,n,CA,AD,DB
+Bessel,n,HG,GF,FE,EC,CD,DA,AB,BE
+Hestia,n,IH,HG,GF,FE,ED,DC,CB,BA
+Juno,n,FE,ED,DH,HB,BC,HG,AH
+Ursae Majoris,n,BA
+Menkent,n,CA,AB
+Auster,n,EB,BA,AC,CF,FD,DA
+Aeolus,n,CD,DE,EB,BA
+Eltanin,n,AC,CB,BE,ED,DA,EF
+Conon,n,BA
+Adrastus,n,BA,AC
+Demeter,n,BA
+Minerva,n,AB,BC
+Penzias,n,DC,CB,EG,GF,FA,AE,AB
+Serpentis,n,IH,HG,GD,DB,BE,EC,CA,AJ
+Archimedes,n,CE,EA,CD,AB
+Bootis,n,GC,CF,FE,EA,AD,AB,BC,FH,HI
+Artemis,n,AB
+Somnus,n,AC,AD,AB
+Heraclides,n,AB
+Canis Minoris,n,CB,BA,AC
 #
 #TODO
 #
@@ -23,7 +98,8 @@ Arae,nw,AB,AC,AD,DE,EA
 Arianni,ne,AB,BC,CA
 Arietis,nw,AB,BC,CD,DE
 Aurigae,s,AB,BC,CD
-Bootis,e,AD,AB,BC,CG,CF,FE,EA
+# A star was added to Bootis, so we clear this one and set it in p6014's part
+# Bootis,e,AD,AB,BC,CG,CF,FE,EA
 Brahe,w,AB,BF,FE,ED,DC,CE
 Caeli,n,AB,BC,CD,DE
 Camelopardalis,e,AB,BH,HE,EA,AF,FG,AC,CD,DI
@@ -103,7 +179,8 @@ Saurus,ne,AB,BC,CA
 Scorpii,sw,AB,BC,CF,FE,ED
 Sculptoris,,AC,AD,AE
 Scuti,e,BA,AD,DF,FE,EC
-Serpentis,nw,FA,AC,CE,EB,BD,DG,GH,HI
+# A star was added to Serpentis, so we clear this one and set it in p6014's part
+# Serpentis,nw,FA,AC,CE,EB,BD,DG,GH,HI 
 Sextantis,n,AB,BF,FE,ED,DC
 Squidi,nw,AB,BC,CA
 Tauri,ne,DA,AF,FE,EC,CA,CB
