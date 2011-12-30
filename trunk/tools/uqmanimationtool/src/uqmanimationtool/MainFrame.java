@@ -943,7 +943,7 @@ public class MainFrame extends javax.swing.JFrame {
 
         jSplitPane_vert.setRightComponent(jTabbedPane1);
 
-        jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13)); // NOI18N
+        jList_Frames.setFont(new java.awt.Font("Monospaced", 0, 13));
         jList_Frames.setDragEnabled(true);
         jList_Frames.setPreferredSize(null);
         jScrollPane1.setViewportView(jList_Frames);
@@ -1701,6 +1701,7 @@ public class MainFrame extends javax.swing.JFrame {
                         break;
                     }
                 }
+                m.setIconImage(new javax.swing.ImageIcon(getClass().getResource("/uqmanimationtool/icons/uqmani-icon.png")).getImage());
             }
         });
     }
