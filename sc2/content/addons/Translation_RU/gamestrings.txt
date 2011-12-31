@@ -1684,6 +1684,10 @@ Mepкypий
 ДАЛЕЕ
 
 
+#((Star search: default F6))
+(Star search: default F6)
+
+
 #(Starbase)
 Космическая Станция
 
