@@ -938,22 +938,27 @@ typedef struct summary_state
 /* Removes the computer tokens from a prepared text line. */
 static void removeComputerTokens(TEXT *pText)
 {
-    static char buffer[250];
+    static char buffer[512];
     const char *ptr = pText->pStr;
     char *ptr2 = buffer;
+    char *pend = buffer + sizeof(buffer) - 1;
     COUNT remChars = pText->CharCount;
     COUNT usedChars = 0;
     
-    while (remChars > 0 && usedChars < sizeof(buffer))
+    while (remChars > 0)
     {
-        if (*ptr != COMPUTER_TOKEN)
-        {
-            *ptr2 = *ptr;
-            ptr2++;
-            usedChars++;
-        }
-        getCharFromString (&ptr);
+        UniChar ch = getCharFromString(&ptr);
         remChars--;
+        
+        if (ch != COMPUTER_TOKEN)
+        {
+            int used = getStringFromChar(ptr2, pend - ptr2, ch);
+            if (used > 0)
+            {
+                ptr2 += used;
+                usedChars++;
+            }
+        }
     }
     
     *ptr2 = 0;
