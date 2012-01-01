@@ -2642,7 +2642,7 @@ SOURCE=..\..\src\uqm\ships\isd\isd.h
 
 SOURCE=..\..\src\uqm\ships\isd\resinst.h
 # End Source File
-# Begin Source File
+# End Group
 # Begin Group "lastbat"
 
 # PROP Default_Filter ""
@@ -2682,7 +2682,7 @@ SOURCE=..\..\src\uqm\ships\lurg\lurg.h
 
 SOURCE=..\..\src\uqm\ships\lurg\resinst.h
 # End Source File
-# Begin Source File
+# End Group
 # Begin Group "melnorme"
 
 # PROP Default_Filter ""
