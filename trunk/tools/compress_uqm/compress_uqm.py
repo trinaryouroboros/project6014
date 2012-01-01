@@ -80,11 +80,13 @@ class Processor(object):
         for line in f:
             line = line.strip()
             line_num += 1
-            parts = line.split()
-            if len(parts) != 5:
-                warning('Unable to parse %s:%d: %s' % (ani_name, line_num, line))
+            if line == '':
+                warning('Blank line %s:%d' % (ani_name, line_num))
                 new_lines.append(line)
                 continue
+            parts = line.split()
+            if len(parts) != 5:
+                warning('Malformed ANI line %s:%d: %s' % (ani_name, line_num, line))
             if parts[0].endswith('.png'):
                 png_name = os.path.join(os.path.dirname(ani_name), parts[0]).replace('\\', '/')
                 try:
