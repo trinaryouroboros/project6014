@@ -35,6 +35,7 @@ class Processor(object):
 
         self.ani_fixes = {}
         self.image_replacements = {}
+        self.images_seen = {}
         self.savings = 0
 
     def has_transparency(self, im):
@@ -96,6 +97,12 @@ class Processor(object):
                 warning('Malformed ANI line %s:%d: %s' % (ani_name, line_num, line))
             if parts[0].endswith('.png'):
                 png_name = os.path.join(os.path.dirname(ani_name), parts[0]).replace('\\', '/')
+                
+                if png_name in self.images_seen:
+                    self.images_seen[png_name] += 1
+                else:
+                    self.images_seen[png_name] = 1
+                
                 try:
                     if self.analyse_png(png_name):
                         changed = True
@@ -127,6 +134,8 @@ class Processor(object):
     def apply(self):
         self.create()
         for name in self.names:
+            if (name.endswith('.png') or name.endswith('.jpg')) and name not in self.images_seen:
+                warning('Image %s not seen in any ANI file!' % name)
             if name in self.image_replacements:
                 self.write_data(name.replace('.png', '.jpg'), self.image_replacements[name])
             elif name in self.ani_fixes:
