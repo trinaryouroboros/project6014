@@ -5,13 +5,16 @@ import Image
 import ImageFile
 import ImageStat
 import StringIO
+import re
 
 
 DEFAULT_COMPRESSION_LEVEL = 90
 DEFAULT_SIZE_THRESHOLD = 1024
 DEFAULT_REDUCTION_THRESHOLD = 0.1
-DEFAULT_ALPHA_THRESHOLD = 216
+DEFAULT_ALPHA_THRESHOLD = 128
 DEFAULT_SIZE_WARNING_THRESHOLD = 100*1024
+
+DEFAULT_FORCE_REGEX = r'.+/cutscene/.+\.png'
 
 
 def notice(msg):
@@ -27,6 +30,8 @@ class Processor(object):
         self.reduction_threshold = DEFAULT_REDUCTION_THRESHOLD
         self.alpha_threshold = DEFAULT_ALPHA_THRESHOLD
         self.size_warning_threshold = DEFAULT_SIZE_WARNING_THRESHOLD
+        
+        self.force_regex = re.compile(DEFAULT_FORCE_REGEX)
 
         self.ani_fixes = {}
         self.image_replacements = {}
@@ -54,7 +59,9 @@ class Processor(object):
         p.feed(buf)
         im = p.close()
 
-        if self.has_transparency(im):
+        if self.force_regex.match(png_name):
+            warning('File %s will be forced' % png_name)
+        elif self.has_transparency(im):
             #notice('File %s has transparent pixels' % png_name)
             if len(buf) >= self.size_warning_threshold:
                 warning('Transparent image is quite large: %s (%d bytes)' % (png_name, len(buf)))
