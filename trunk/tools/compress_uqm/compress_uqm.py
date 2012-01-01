@@ -69,7 +69,11 @@ class Processor(object):
             return False
 
         ss = StringIO.StringIO();
-        im.save(ss, 'JPEG', quality=self.compression_level)
+        try:
+            im.save(ss, 'JPEG', quality=self.compression_level)
+        except IOError, ex:
+            warning('Unable to convert %s to JPEG: %s' % (png_name, ex))
+            return False
         buf2 = ss.getvalue()
         reduction = (len(buf) - len(buf2))/float(len(buf))
         if reduction < self.reduction_threshold:
