@@ -9,7 +9,7 @@
             <region xml:id="Title" height="425" width="300" left="100" top="10"/>
             <region xml:id="Captions" height="20" width="300" left="100" top="450"/>
 			<region xml:id="menu" top="50" left="120"/>
-			<region xml:id="overlay" left="100" top="50" width="200" />
+			<region xml:id="overlay" left="100" top="50" width="200" height="400"/>
             <region id="audio_region" soundLevel="100%"/>
         </layout>
     </head>
@@ -21,14 +21,13 @@
 
 
 			
-			            <img dur="25s" fill="freeze" fit="meet" id="overlay" backgroundOpacity="60%" mediaOpacity="50%"
-                panZoom="0,0,100,100" region="overlay" src="overlay.png"/>
+			            <img dur="25s" id="overlay" fit="fill" region="overlay" src="overlay.png"/>
 
             <smilText dur="25s" textFontSize="x-large" textFontWeight="bold" textColor="white" region="Title">
                Project 6014: Setup
             </smilText>
 
-            <smilText dur="25s" textFontSize="xx-large" textFontWeight="bold" textColor="white" region="menu">
+            <smilText dur="25s" textFontSize="large" textFontWeight="bold" textColor="white" region="menu">
 			<center>
                Graphic Options <br />
 			   PC/3DO Options <br />
