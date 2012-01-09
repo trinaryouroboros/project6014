@@ -52,7 +52,7 @@
 #define NUM_FOCUSBALL_FRAMES 3
 #define NUM_BURST_FRAMES 4
 // Weapon attributes
-#define BURST_CHARGE_TIME 39 // Divide this by BATTLE_FRAME_RATE to get seconds.
+#define BURST_CHARGE_TIME 39 // Divide this by BATTLE_FRAME_RATE to get the time in seconds.
 #define NUM_SABERS 5
 #define DERVISH_DEGENERATION (-1)
 #define DERVISH_COOLDOWN_TIME 36 // Seconds *BATTLE_FRAME_RATE
@@ -582,7 +582,7 @@ focusball_preprocess (ELEMENT *ElementPtr)
 		GetElementStarShip (ElementPtr, &StarShipPtr);
 		LockElement (StarShipPtr->hShip, &ShipPtr);
 		
-		/*// End the old charge-up sound.
+		// End the old charge-up sound.
 		for (i = FIRST_SFX_CHANNEL; i <= LAST_SFX_CHANNEL; ++i)
 		{
 			ELEMENT *posobj;
@@ -592,10 +592,10 @@ focusball_preprocess (ELEMENT *ElementPtr)
 			posobj = GetPositionalObject (i);
 			if (posobj == ShipPtr)
 				StopSource (i);
-		}*/
+		}
 		
 		// Start playing the new charge-up sound.
-		chargesound = 3 + log(ElementPtr->mass_points * 2) / log(2);
+		chargesound = 3 + (BYTE)(log(ElementPtr->mass_points * 2) / log(2));
 		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, chargesound), ShipPtr);
 		
 		UnlockElement (StarShipPtr->hShip);
