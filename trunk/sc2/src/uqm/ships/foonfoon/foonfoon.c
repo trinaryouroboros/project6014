@@ -52,7 +52,7 @@
 #define NUM_FOCUSBALL_FRAMES 3
 #define NUM_BURST_FRAMES 4
 // Weapon attributes
-#define BURST_CHARGE_TIME 39 // Seconds * BATTLE_FRAME_RATE
+#define BURST_CHARGE_TIME 39 // Divide this by BATTLE_FRAME_RATE to get seconds.
 #define NUM_SABERS 5
 #define DERVISH_DEGENERATION (-1)
 #define DERVISH_COOLDOWN_TIME 36 // Seconds *BATTLE_FRAME_RATE
@@ -383,8 +383,6 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 	}
 	ship_intelligence (ShipPtr, ObjectsOfConcern, ConcernCounter);
 	
-	//log_add (log_Debug, "charge %d, timeleft: %d", charge_amount, charge_time_left);
-	
 	// Charge focusball...
 	if (StarShipPtr->weapon_counter == 0
 		&& (old_count != 0
@@ -571,6 +569,39 @@ fire_burst (ELEMENT *ElementPtr)
 	}
 }
 
+// This function plays the primary weapon charge-up sound.
+static void
+focusball_preprocess (ELEMENT *ElementPtr)
+{
+	if (ElementPtr->thrust_wait == 1 && ElementPtr->mass_points < 7)
+	{
+		BYTE chargesound, i;
+		ELEMENT *ShipPtr;
+		STARSHIP *StarShipPtr;
+		
+		GetElementStarShip (ElementPtr, &StarShipPtr);
+		LockElement (StarShipPtr->hShip, &ShipPtr);
+		
+		/*// End the old charge-up sound.
+		for (i = FIRST_SFX_CHANNEL; i <= LAST_SFX_CHANNEL; ++i)
+		{
+			ELEMENT *posobj;
+			if (!ChannelPlaying(i))
+				continue;
+			
+			posobj = GetPositionalObject (i);
+			if (posobj == ShipPtr)
+				StopSource (i);
+		}*/
+		
+		// Start playing the new charge-up sound.
+		chargesound = 3 + log(ElementPtr->mass_points * 2) / log(2);
+		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, chargesound), ShipPtr);
+		
+		UnlockElement (StarShipPtr->hShip);
+	}	
+}
+
 // This function handles the life and death of a focusball.
 static void
 focusball_postprocess (ELEMENT *ElementPtr)
@@ -632,10 +663,27 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		if (!(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & WEAPON)
 			&& !(StarShipPtr->cur_status_flags & StarShipPtr->old_status_flags & SPECIAL))
 		{
+			BYTE i;
+			
 			EPtr->life_span = 1;
 			EPtr->preprocess_func = 0;
 			if (ElementPtr->mass_points)
 				EPtr->death_func = fire_burst;
+			
+			// End the charge-up sound.
+			if (ShipPtr->crew_level > 0)
+			{
+				for (i = FIRST_SFX_CHANNEL; i <= LAST_SFX_CHANNEL; ++i)
+				{
+					ELEMENT *posobj;
+					if (!ChannelPlaying(i))
+						continue;
+				
+					posobj = GetPositionalObject (i);
+					if (posobj == ShipPtr)
+						StopSource (i);
+				}
+			}
 			
 			if (EPtr->mass_points >= 7)
 			{
@@ -659,7 +707,6 @@ focusball_postprocess (ELEMENT *ElementPtr)
 		if (EPtr->thrust_wait == 0)
 		{
 			EPtr->mass_points <<= 1;
-			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
 			EPtr->thrust_wait = BURST_CHARGE_TIME;
 			
 			// Nerf the most powerful shot's strength. Also give some 'mercy time' to avoid exploding your own ship too easily.
@@ -813,7 +860,7 @@ initialize_focusball (ELEMENT *ShipPtr, HELEMENT FocusArray[])
 	MissileBlock.hit_points = 1;
 	MissileBlock.damage = 0;
 	MissileBlock.life = 2;
-	MissileBlock.preprocess_func = 0;
+	MissileBlock.preprocess_func = focusball_preprocess;
 	MissileBlock.blast_offs = 0;
 	FocusArray[0] = initialize_missile (&MissileBlock);
 	
@@ -850,7 +897,7 @@ initialize_focusball_which_bursts (ELEMENT *ShipPtr, HELEMENT BurstArray[])
 	MissileBlock.hit_points = 100;
 	MissileBlock.damage = 1;
 	MissileBlock.life = 2;
-	MissileBlock.preprocess_func = 0;
+	MissileBlock.preprocess_func = focusball_preprocess;
 	MissileBlock.blast_offs = 0;
 	
 	if (!(StarShipPtr->old_status_flags & WEAPON))
@@ -865,6 +912,9 @@ initialize_focusball_which_bursts (ELEMENT *ShipPtr, HELEMENT BurstArray[])
 			FocusPtr->postprocess_func = focusball_postprocess;
 			FocusPtr->thrust_wait = BURST_CHARGE_TIME;
 			UnlockElement (BurstArray[0]);
+			
+			// Start playing the charge-up sound.
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 3), ShipPtr);
 		}
 	
 		return (1);
