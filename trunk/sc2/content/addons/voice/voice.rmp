@@ -1,5 +1,6 @@
 comm.kohrah.dialogue = CONVERSATION:base/comm/kohrah/kohrah.txt:addons/voice/kohrah/:addons/voice/kohrah/kohrah.ts
 comm.lurg.dialogue = CONVERSATION:base/comm/lurg/lurg.txt:addons/voice/lurg/:addons/voice/lurg/lurg.ts
+comm.orz.dialogue = CONVERSATION:base/comm/orz/orz.txt:addons/voice/orz/:addons/voice/orz/orz.ts
 comm.slylandro.dialogue = CONVERSATION:base/comm/slylandro/slylandro.txt:addons/voice/slylandro/:addons/voice/slylandro/slylandro.ts
 comm.spathi.dialogue = CONVERSATION:base/comm/spathi/spathi.txt:addons/voice/spathi/:addons/voice/spathi/spathi.ts
 comm.yehat.dialogue = CONVERSATION:base/comm/yehat/yehat.txt:addons/voice/yehat/:addons/voice/yehat/yehat.ts

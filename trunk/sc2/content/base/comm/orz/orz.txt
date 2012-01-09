@@ -1,17 +1,17 @@
-#(ORZ_GREETING)
+#(ORZ_GREETING)	ORZ_GREETING.ogg
 This $*now*$ is $*smiley*$ like $*lizards*$! $*Camper*$ captain has to see the Orz!
 $*Happy campers*$ can say Hello to Orz every day. 
 I say three times more than $*bottom*$:
 "Hello $*Camper*$ friends!"
 
-#(ORZ_GREETING_2)
+#(ORZ_GREETING_2)	ORZ_GREETING_2.ogg
 $*Jumping Peppers!*$ Again $*campers*$ are to make talk with us the Orz.
 Do we $*play*$ this $*game*$? We do, and do not $*hurt*$ in the $*during*$!
 
 #(how_are_things)
 How are things?
 
-#(HAPPY_ORZ)
+#(HAPPY_ORZ)	HAPPY_ORZ.ogg
 Before now is $*fun time*$, and Orz can make $*games*$ with $*campers*$
 and $*smell colours*$ and even the $*Playground*$.
 Soon is so more $*unbeamy*$ and $*inferior poets*$ $*spread*$ into $*camper*$ $*basis*$
@@ -25,7 +25,7 @@ $*Inferior poets*$ are most the $*inside*$, $*outside*$ not so.
 #(any_news)
 Can you give us any news?
 
-#(ORZ_NEWS)
+#(ORZ_NEWS)	ORZ_NEWS.ogg
 Since several $*pieces*$ we are learning the $*happy camper*$ favourite $*games*$
 and extoll the $*numbers*$ that are $*ripe*$.
 About this $*level*$ the $*Silly Cows*$ and $*campers*$ $*spit*$ the first words otherwise.
@@ -35,7 +35,7 @@ VUX are always $*dancing*$ the Orz but not better than small, so not so $*frumpl
 #(tell_of_nature)
 Please, tell me of your true nature.
 
-#(ORZ_TELL_1)
+#(ORZ_TELL_1)	ORZ_TELL_1.ogg
 I am say so much, and then less more:
 Before $*campers*$ first said "Hello!" the Orz there was Androsynth.
 The Androsynth made $*slippery places*$ for us to $*smell*$ your $*level*$
@@ -50,7 +50,7 @@ I am joke on party and $*party*$. It is funny the most, even not too $*false*$ e
 #(tell_buddies)
 Probably time you told your buddies what really happened to the Androsynth don't you think?
 
-#(ORZ_TELL_2)
+#(ORZ_TELL_2)	ORZ_TELL_2.ogg
 No!! You do not want to know! I am clear and you do not ask so much the $*fat*$ words!
 Now you understand, we can $*hammer*$ the $*tulips*$ together.
 No more ask the true nature.
@@ -58,7 +58,7 @@ No more ask the true nature.
 #(discuss_alliance_matters)
 We need to discuss Alliance matters...
 
-#(HAPPY_TO_DISCUSS)
+#(HAPPY_TO_DISCUSS)	HAPPY_TO_DISCUSS.ogg
 If $*campers*$ need to converse on the Alliance, that is okay.
 Do not be frighten to ask the Orz,
 "What is up?" We now understand the words.
@@ -73,7 +73,7 @@ Are you happy with your established sphere of influence?
 #(alliance_question_2)
 The Syreen are an awful lot like us humans... and some other guys we know. What do you think?
 
-#(ALLIANCE_ANSWER_1)
+#(ALLIANCE_ANSWER_1)	ALLIANCE_ANSWER_1.ogg
 The $*square*$ machines draw $*limits*$ in $*heavy space*$.
 The machines want to contain $*Orz bubbles*$. They afraid of $*Orz bubbles*$.
 Such a joke! This is all the more fun! $*Orz bubbles*$ are not Orz, just $*fingers*$ of Orz.
@@ -81,14 +81,14 @@ You cannot contain $*fingers*$, so silly! We just $*slip*$ and poke and reach.
 We make a $*peephole*$ in $*the middle*$. Orz is again $*expanding*$.
 More and more $*expanding*$!
 
-#(ALLIANCE_ANSWER_2)
+#(ALLIANCE_ANSWER_2)	ALLIANCE_ANSWER_2.ogg
 The $*slow pixies*$ draw Orz closer.
 But now Orz just $*sweeping*$ the $*house*$.
 
 #(enough_alliance)
 That's enough about alliance for now.
 
-#(ENOUGH_ALLIANCE_OK)
+#(ENOUGH_ALLIANCE_OK)	ENOUGH_ALLIANCE_OK.ogg
 Never be afraid to $*open*$ enough and $*spread the wax*$.
 
 #(ask_know_fjorn)
@@ -108,7 +108,7 @@ Fjorn are $*happy*$ but after too much time are not $*happy*$, are not $*enjoy*$
 #(any_more_news)
 Any more news for us?
 
-#(ORZ_GARBAGE)
+#(ORZ_GARBAGE)	ORZ_GARBAGE.ogg
 Have you $*pursue*$ the $*light temperature*$ yet?
 Before it has been so not for you but $*tomorrow*$ you saw.
 Maybe you even do not know? Do not worry.
@@ -122,5 +122,5 @@ $*Games*$ soon are $*heavy*$, but $*light temperature*$ is still $*appropriate*$
 #(goodbye_orz)
 Thank you Orz, we must be off!
 
-#(GOODBYE_EARTHLING)
+#(GOODBYE_EARTHLING)	GOODBYE_EARTHLING.ogg
 Orz must be $*on*$. Only joke!
