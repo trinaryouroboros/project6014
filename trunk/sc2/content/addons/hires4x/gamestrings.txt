@@ -521,6 +521,8 @@ Sol
 #(Coronae)
 Coronae
 
+#(Terebellum)
+Terebellum
 
 #(UNKNOWN)
 UNKNOWN
