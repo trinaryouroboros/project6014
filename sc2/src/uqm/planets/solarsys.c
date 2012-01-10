@@ -330,7 +330,7 @@ LoadIPData (void)
 	// JMS: ORZ space portal gfx replaces normal sun gfx. 
 	// Originally there was only the statement within else block and it was within the if (SpaceJunkFrame == 0) block.
 	
-	if (RESOLUTION_FACTOR < 2)
+	if (RESOLUTION_FACTOR == 0)
 	{
 		if (CurStarDescPtr->Index==ORZ_SPACE_PORTAL_DEFINED) 
 			SunFrame = CaptureDrawable (LoadGraphic (ORZSPACEPORTAL_MASK_PMAP_ANIM));
@@ -562,7 +562,7 @@ LoadSolarSys (void)
 	old_seed = seedRandomForSolarSys ();
 
 	// JMS: Animating IP sun in hi-res...
-	if (RESOLUTION_FACTOR < 2)
+	if (RESOLUTION_FACTOR == 0)
 		SunFrame = SetAbsFrameIndex (SunFrame, STAR_TYPE (CurStarDescPtr->Type));
 	else
 		SunFrame = SetAbsFrameIndex (SunFrame, (STAR_TYPE (CurStarDescPtr->Type)) * 32);
@@ -1566,7 +1566,7 @@ CalcSunSize (PLANET_DESC *pSunDesc, SIZE radius)
 	pSunDesc->image.origin.x = SIS_SCREEN_WIDTH >> 1;
 	pSunDesc->image.origin.y = SIS_SCREEN_HEIGHT >> 1;
 	// JMS: Animating IP sun in hi-res modes...
-	if (RESOLUTION_FACTOR < 2)
+	if (RESOLUTION_FACTOR == 0)
 		pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index);
 	else
 		pSunDesc->image.frame = SetRelFrameIndex (SunFrame, index * SUN_ANIMFRAMES_NUM);
@@ -1810,7 +1810,7 @@ IP_frame (void)
 		}
 
 		// JMS: Animating IP sun in hi-res modes...
-		if (!playerInInnerSystem () && RESOLUTION_FACTOR == 2)
+		if (!playerInInnerSystem () && RESOLUTION_FACTOR != 0)
 			AnimateSun (newRadius);
 		
 		RedrawQueue (FALSE);
