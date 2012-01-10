@@ -306,8 +306,8 @@ Sextantis
 Tauri
 
 
-#(Monica)
-Monica
+#(Ursae Minoris)
+Ursae Minoris
 
 
 #(Bootis)
@@ -523,6 +523,10 @@ Coronae
 
 #(Terebellum)
 Terebellum
+
+#(Monica)
+Monica
+
 
 #(UNKNOWN)
 UNKNOWN
