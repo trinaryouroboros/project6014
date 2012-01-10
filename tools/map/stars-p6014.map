@@ -42,8 +42,8 @@ Hygea,L,116.2,72.4,W,1
 Favonius,D,566.4,72.7,O,1
 Hygea,K,127.5,74.3,W,1
 Hygea,J,154.7,76.1,W,1
-Monica,B,663.5,76.6,B,1
-Monica,A,646.2,78.9,Y,1
+Proclus,B,663.5,76.6,B,1
+Proclus,A,646.2,78.9,Y,1
 Juturna,B,884.4,79.0,B,1
 Menelaus,A,352.4,79.6,G,1
 Faunus,A,399.9,81.2,O,1
@@ -53,9 +53,9 @@ Faunus,E,375.9,87.9,B,1
 Hygea,O,130.5,89.4,Y,1
 Hygea,B,140.2,90.2,R,1
 Faunus,B,400.9,92.3,B,1
-Monica,C,667.0,93.5,O,1
+Proclus,C,667.0,93.5,O,1
 Hygea,N,119.0,94.3,R,1
-Monica,D,623.0,96.8,Y,1
+Proclus,D,623.0,96.8,Y,1
 Lemaitre,I,688.2,98.9,O,1
 Hygea,M,123.3,99.7,R,1
 Hygea,C,133.8,104.3,R,1
@@ -63,7 +63,7 @@ Vindemiatrix,C,492.5,104.3,B,1
 Faunus,C,416.1,107.5,G,1
 Vindemiatrix,B,503.5,108.2,B,1
 Hygea,H,156.7,110.4,Y,1
-Proclus,*,6.6,113.2,G,1
+Terebellum,*,6.6,113.4,W,1
 Hygea,A,127.9,113.2,O,3
 Hygea,D,135.5,113.7,O,1
 Vindemiatrix,A,522.9,114.0,O,1
@@ -143,7 +143,7 @@ Nereus,*,318.0,281.1,O,1
 Huygens,C,398.9,298.2,G,1
 Fortuna,A,13.2,302.7,B,3
 Eurus,E,138.1,306.6,Y,1
-Terebellum,*,211.5,309.9,W,1
+Monica,*,211.5,309.9,G,1
 Acoreus,F,749.5,310.0,G,1
 Eurus,D,132.9,310.5,Y,1
 Morpheus,B,691.5,312.5,O,1
