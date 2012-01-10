@@ -144,6 +144,7 @@ graphics.meleemenu = GFXRES:addons/hires2x/ui/meleemenu.ani
 graphics.meleepickship = GFXRES:addons/hires2x/ui/meleepickship.ani
 graphics.miscdata = GFXRES:addons/hires2x/ui/miscdata.ani
 graphics.modulesmenu = GFXRES:addons/hires2x/ui/modulesmenu.ani
+graphics.nebulae = GFXRES:addons/hires2x/nav/nebulae.ani
 graphics.npcbubble = GFXRES:addons/hires2x/nav/hyperstars-031/npcbubble.ani
 graphics.orbitbackground = GFXRES:addons/hires2x/nav/orbitbackground.ani
 graphics.orbitenter = GFXRES:addons/hires2x/nav/orbitenter.ani
