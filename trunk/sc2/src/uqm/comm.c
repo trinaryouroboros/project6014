@@ -29,6 +29,10 @@
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
 #define COMM_INTERNAL
+//#include "port.h"
+//#include SDL_INCLUDE(SDL.h)
+//#include "libs/graphics/gfxintrn.h"
+//#include "libs/graphics/gfx_common.h"
 #include "comm.h"
 
 #include "build.h"
@@ -1423,11 +1427,12 @@ HailAlien (void)
 			SLIDER_Y + 2, 1));
 	SetContext (TextCacheContext);
 	SetContextFGFrame (TextCacheFrame);
-	TextBack = BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x10), 0x00);
+	TextBack = BUILD_COLOR (MAKE_RGB15 (0x01, 0x01, 0x01), 0x00);
 			// Color key for the background.
 	SetContextBackGroundColor (TextBack);
 	ClearDrawable ();
 	SetFrameTransparentColor (TextCacheFrame, TextBack);
+	//	SDL_SetAlpha(TextCacheFrame->image->NormalImg, SDL_SRCALPHA, 128);
 
 	ES.phrase_buf[0] = '\0';
 
