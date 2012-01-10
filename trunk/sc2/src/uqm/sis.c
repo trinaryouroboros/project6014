@@ -190,7 +190,7 @@ DrawSISTitle (UNICODE *pStr)
 	RECT r;
 
 	t.baseline.x = SIS_TITLE_WIDTH >> 1;
-	t.baseline.y = SIS_TITLE_HEIGHT - RES_STAT_SCALE(2); // JMS_GFX
+	t.baseline.y = SIS_TITLE_HEIGHT - RES_CASE(2,6,6); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
@@ -295,7 +295,7 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 	if (!(flags & DSME_MYCOLOR))
 		SetContextForeGroundColor (SIS_MESSAGE_TEXT_COLOR);
 
-	t.baseline.y = SIS_MESSAGE_HEIGHT - RES_STAT_SCALE(2); // JMS_GFX
+	t.baseline.y = SIS_MESSAGE_HEIGHT - RES_CASE(2,6,6); // JMS_GFX
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
 	SetContextFont (TinyFont);
@@ -485,7 +485,7 @@ DrawStatusMessage (const UNICODE *pStr)
 	}
 
 	t.baseline.x = STATUS_MESSAGE_WIDTH >> 1;
-	t.baseline.y = STATUS_MESSAGE_HEIGHT - 1 - (RESOLUTION_FACTOR >> 1); // JMS_GFX
+	t.baseline.y = STATUS_MESSAGE_HEIGHT - RES_CASE(1,2,3); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
@@ -530,7 +530,7 @@ DrawCaptainsName (void)
 
 	// The name itself.
 	t.baseline.x = (STATUS_WIDTH >> 1) - RES_CASE(1,0,-1);
-	t.baseline.y = r.corner.y + RES_STAT_SCALE(6); // JMS_GFX
+	t.baseline.y = r.corner.y + RES_CASE(6,10,18); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = GLOBAL_SIS (CommanderName);
 	t.CharCount = (COUNT)~0;
@@ -558,8 +558,8 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 		OldContext = SetContext (StatusContext);
 		OldFont = SetContextFont (StarConFont);
 
-		r.corner.x = RES_CASE(2,5,7);		// JMS_GFX
-		r.corner.y = RES_CASE(20,42,62);	// JMS_GFX
+		r.corner.x = RES_CASE(2,4,7);		// JMS_GFX
+		r.corner.y = RES_CASE(20,40,62);	// JMS_GFX
 		r.extent.width = SHIP_NAME_WIDTH;	// JMS_GFX
 		r.extent.height = SHIP_NAME_HEIGHT;
 
@@ -586,7 +586,7 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 	DrawFilledRectangle (&r);
 
 	t.baseline.x = r.corner.x + (r.extent.width >> 1);
-	t.baseline.y = r.corner.y + (SHIP_NAME_HEIGHT - (InStatusArea ? RES_STAT_SCALE(1) : 0)); // JMS_GFX
+	t.baseline.y = r.corner.y + (SHIP_NAME_HEIGHT - (InStatusArea ? RES_CASE(1,3,3) : 0)); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.CharCount = (COUNT)~0;
 	if (optWhichFonts == OPT_PC)

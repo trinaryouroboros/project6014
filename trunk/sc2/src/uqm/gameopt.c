@@ -226,7 +226,7 @@ DrawNameString (bool nameCaptain, UNICODE *Str, COUNT CursorPos,
 			r.corner.y = RES_STAT_SCALE(10); // JMS_GFX
 			r.extent.width -= RES_STAT_SCALE(2); // JMS_GFX;
 			lf.baseline.x = (STATUS_WIDTH >> 1) - RES_CASE(1,0,-1);
-			lf.baseline.y = r.corner.y + r.extent.height - RES_STAT_SCALE(1);
+			lf.baseline.y = r.corner.y + r.extent.height - RES_CASE(1,4,3);
 
 			BackGround = BUILD_COLOR (MAKE_RGB15 (0x0A, 0x0A, 0x1F), 0x09);
 			ForeGround = BUILD_COLOR (MAKE_RGB15 (0x0A, 0x1F, 0x1F), 0x0B);
@@ -234,10 +234,10 @@ DrawNameString (bool nameCaptain, UNICODE *Str, COUNT CursorPos,
 		else
 		{	// Naming the flagship
 			Font = StarConFont;
-			r.corner.x = RES_CASE(2,5,7); // JMS_GFX;
-			r.corner.y = RES_CASE(20,42,62); // JMS_GFX;
+			r.corner.x = RES_CASE(2,4,7); // JMS_GFX;
+			r.corner.y = RES_CASE(20,40,62); // JMS_GFX;
 			lf.baseline.x = r.corner.x + (r.extent.width >> 1);
-			lf.baseline.y = r.corner.y + r.extent.height - RES_STAT_SCALE(1); // JMS_GFX
+			lf.baseline.y = r.corner.y + r.extent.height - RES_CASE(1,3,3); // JMS_GFX
 
 			BackGround = BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x00), 0x2D);
 			ForeGround = BUILD_COLOR (MAKE_RGB15 (0x1F, 0x0A, 0x00), 0x7D);
