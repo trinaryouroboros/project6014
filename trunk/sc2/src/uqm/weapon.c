@@ -286,7 +286,7 @@ ModifySilhouette (ELEMENT *ElementPtr, STAMP *modify_stamp,
 	{
 		or.corner.x += ObjectIntersect.IntersectStamp.origin.x;
 		or.corner.y += ObjectIntersect.IntersectStamp.origin.y;
-		InitShipStatus (&StarShipPtr->RaceDescPtr->ship_info, StarShipPtr, &or);
+		InitShipStatus (&StarShipPtr->RaceDescPtr->ship_info, StarShipPtr, &or, FALSE);
 	}
 	else
 	{

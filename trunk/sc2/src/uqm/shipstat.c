@@ -87,7 +87,7 @@ DrawShipNameString (UNICODE *pStr, COUNT CharCount, COORD y)
 }
 
 void
-ClearShipStatus (COORD y, COORD w)
+ClearShipStatus (COORD y, COORD w, BOOLEAN inMeleeMenu)
 {
 	RECT r;
 
@@ -95,12 +95,12 @@ ClearShipStatus (COORD y, COORD w)
 	r.corner.x = 2;
 	r.corner.y = 3 + y;
 	r.extent.width = w - 4;
-	r.extent.height = SHIP_INFO_HEIGHT - 3;
+	r.extent.height = SHIP_INFO_HEIGHT - (inMeleeMenu ? RES_CASE(3,5,6) : 3);
 	DrawFilledRectangle (&r);
 }
 
 void
-OutlineShipStatus (COORD y, COORD w)
+OutlineShipStatus (COORD y, COORD w, BOOLEAN inMeleeMenu)
 {
 	RECT r;
 
@@ -114,7 +114,7 @@ OutlineShipStatus (COORD y, COORD w)
 	--r.extent.width;
 	DrawFilledRectangle (&r);
 	r.extent.width = 1;
-	r.extent.height = (SHIP_INFO_HEIGHT << RESOLUTION_FACTOR) - RES_CASE(1,3,5);
+	r.extent.height = SHIP_INFO_HEIGHT - RES_CASE(1,2,inMeleeMenu?5:0);
 	DrawFilledRectangle (&r);
 	++r.corner.x;
 	DrawFilledRectangle (&r);
@@ -127,13 +127,15 @@ OutlineShipStatus (COORD y, COORD w)
 	--r.extent.height;
 	DrawFilledRectangle (&r);
 	r.corner.x = 1;
-	r.corner.y = (SHIP_INFO_HEIGHT << RESOLUTION_FACTOR) - RES_CASE(-2,22,2);
+	r.corner.y = SHIP_INFO_HEIGHT - RES_CASE(-2,1,2);
 	r.extent.width = w - 2;
 	r.extent.height = 1;
-	DrawFilledRectangle (&r);
+	if (inMeleeMenu)
+		DrawFilledRectangle (&r);
 	++r.corner.x;
 	--r.corner.y;
-	DrawFilledRectangle (&r);
+	if (inMeleeMenu)
+		DrawFilledRectangle (&r);
 	
 	SetContextForeGroundColor (BLACK_COLOR);
 	r.corner.x = 0;
@@ -144,7 +146,7 @@ OutlineShipStatus (COORD y, COORD w)
 }
 
 void
-InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect)
+InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect, BOOLEAN inMeleeMenu)
 {
 	RECT r;
 	COORD y = 0; // default, for Melee menu
@@ -179,8 +181,8 @@ InitShipStatus (SHIP_INFO *SIPtr, STARSHIP *StarShipPtr, RECT *pClipRect)
 
 	BatchGraphics ();
 	
-	OutlineShipStatus (y, width);
-	ClearShipStatus (y, width);
+	OutlineShipStatus (y, width, inMeleeMenu);
+	ClearShipStatus (y, width, inMeleeMenu);
 
 	Stamp.origin.x = (STATUS_WIDTH >> 1);
 	Stamp.origin.y = (31 << RESOLUTION_FACTOR) + y;
