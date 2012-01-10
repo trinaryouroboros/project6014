@@ -278,8 +278,8 @@
 Приапа
 
 
-#(Proclus)
-Прокл
+#(Terebellum)
+Terebellum
 
 
 #(Riccioli)
@@ -306,8 +306,8 @@
 Тельца
 
 
-#(Ursae Minoris)
-Малой Медведицы
+#(Proclus)
+Прокл
 
 
 #(Bootis)
