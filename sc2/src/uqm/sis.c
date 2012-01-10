@@ -485,7 +485,7 @@ DrawStatusMessage (const UNICODE *pStr)
 	}
 
 	t.baseline.x = STATUS_MESSAGE_WIDTH >> 1;
-	t.baseline.y = STATUS_MESSAGE_HEIGHT - RES_CASE(1,2,3); // JMS_GFX
+	t.baseline.y = STATUS_MESSAGE_HEIGHT - RES_CASE(1,4,3); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
@@ -523,7 +523,7 @@ DrawCaptainsName (void)
 
 	// Background of captain's name.	
 	r.corner.x = RES_STAT_SCALE(3);							// JMS_GFX
-	r.corner.y = RES_STAT_SCALE(10);						// JMS_GFX
+	r.corner.y = RES_CASE(10,18,30);							// JMS_GFX
 	r.extent.width = SHIP_NAME_WIDTH - RES_STAT_SCALE(2);	// JMS_GFX
 	r.extent.height = SHIP_NAME_HEIGHT;						// JMS_GFX
 	DrawFilledRectangle (&r);
@@ -570,10 +570,10 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 		OldContext = SetContext (SpaceContext);
 		OldFont = SetContextFont (MicroFont);
 
-		r.corner.x = 0;
+		r.corner.x = RES_CASE(0,24,0);
 		r.corner.y = 1;
-		r.extent.width = SIS_SCREEN_WIDTH;
-		r.extent.height = SHIP_NAME_HEIGHT;
+		r.extent.width = SIS_SCREEN_WIDTH- RES_CASE(0,24,0);
+		r.extent.height = SHIP_NAME_HEIGHT + RES_CASE(0,1,0);
 
 		t.pStr = buf;
 		snprintf (buf, sizeof buf, "%s %s",
@@ -586,7 +586,8 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 	DrawFilledRectangle (&r);
 
 	t.baseline.x = r.corner.x + (r.extent.width >> 1);
-	t.baseline.y = r.corner.y + (SHIP_NAME_HEIGHT - (InStatusArea ? RES_CASE(1,3,3) : 0)); // JMS_GFX
+	t.baseline.y = r.corner.y + (SHIP_NAME_HEIGHT - 
+			(InStatusArea ? RES_CASE(1,3,3) : RES_CASE(0,2,0))); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.CharCount = (COUNT)~0;
 	if (optWhichFonts == OPT_PC)
@@ -858,7 +859,7 @@ DrawStorageBays (BOOLEAN Refresh)
 
 	r.extent.width  = RES_STAT_SCALE(2); // JMS_GFX
 	r.extent.height = RES_STAT_SCALE(4); // JMS_GFX
-	r.corner.y		= RES_STAT_SCALE(123) + RES_CASE(0,4,4); // JMS_GFX
+	r.corner.y		= RES_STAT_SCALE(123) + RES_CASE(0,1,5); // JMS_GFX
 	
 	if (Refresh)
 	{
@@ -903,7 +904,7 @@ DrawStorageBays (BOOLEAN Refresh)
 			// r.extent.height = 4 - r.extent.height;
 			if (r.extent.height)
 			{
-				r.corner.y = RES_STAT_SCALE(123) + RES_CASE(0,4,4);
+				r.corner.y = RES_STAT_SCALE(123) + RES_CASE(0,1,5);
 				SetContextForeGroundColor (STORAGE_BAY_EMPTY_COLOR);
 				DrawFilledRectangle (&r);
 			}
@@ -929,11 +930,10 @@ DrawStorageBays (BOOLEAN Refresh)
 void
 GetGaugeRect (RECT *pRect, BOOLEAN IsCrewRect)
 {
-	pRect->extent.width = RES_STAT_SCALE(24) - RESOLUTION_FACTOR * 3; // JMS_GFX
+	pRect->extent.width = RES_STAT_SCALE(24) - RES_CASE(0,6,6); // JMS_GFX
 	pRect->corner.x = (STATUS_WIDTH >> 1) - (pRect->extent.width >> 1) + RESOLUTION_FACTOR * 2;
 	pRect->extent.height = RES_STAT_SCALE(5); // JMS_GFX
-	pRect->corner.y = RES_STAT_SCALE((IsCrewRect ? 117 : 38)) + RESOLUTION_FACTOR * 3
-		+ ((IsCrewRect && RESOLUTION_FACTOR == 1) ? 1 : 0); // JMS_GFX
+	pRect->corner.y = RES_STAT_SCALE((IsCrewRect ? 117 : 38)) + RESOLUTION_FACTOR * 3; // JMS_GFX
 }
 
 static void
@@ -959,8 +959,8 @@ DrawPC_SIS (void)
 	t.pStr = GAME_STRING (STATUS_STRING_BASE + 3); // "FUEL"
 	font_DrawText (&t);
 
-	r.corner.y += RES_STAT_SCALE(79) + (RESOLUTION_FACTOR == 1 ? 4 : 0); // JMS_GFX
-	t.baseline.y += RES_STAT_SCALE(79) + (RESOLUTION_FACTOR == 1 ? 2 : 0); // JMS_GFX
+	r.corner.y += RES_STAT_SCALE(79) + (RESOLUTION_FACTOR == 1 ? 2 : 0); // JMS_GFX
+	t.baseline.y += RES_STAT_SCALE(79); // JMS_GFX
 	DrawFilledRectangle (&r);
 
 	SetContextFontEffect (SetAbsFrameIndex (FontGradFrame, 2));
@@ -978,7 +978,7 @@ DrawPC_SIS (void)
 
 	// Text "CAPTAIN".
 	SetContextForeGroundColor (PC_CAPTAIN_STRING_TEXT_COLOR);
-	t.baseline.y = r.corner.y + RES_STAT_SCALE(6); // JMS_GFX
+	t.baseline.y = r.corner.y + RES_CASE(6,10,18); // JMS_GFX
 	t.pStr = GAME_STRING (STATUS_STRING_BASE + 5); // "CAPTAIN"
 	font_DrawText (&t);
 }
@@ -1115,7 +1115,7 @@ DeltaSISGauges_crewDelta (SIZE crew_delta)
 		GetGaugeRect (&r, TRUE);
 		
 		t.baseline.x = STATUS_WIDTH >> 1;
-		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR == 1 ? 1 : 0);
+		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR == 1 ? 2 : 0);
 		t.align = ALIGN_CENTER;
 		t.pStr = buf;
 		t.CharCount = (COUNT)~0;
@@ -1170,7 +1170,7 @@ DeltaSISGauges_fuelDelta (SIZE fuel_delta)
 		GetGaugeRect (&r, FALSE);
 		
 		t.baseline.x = STATUS_WIDTH >> 1;
-		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR == 1 ? 1 : 0);
+		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR == 1 ? 2 : 0);
 		t.align = ALIGN_CENTER;
 		t.pStr = buf;
 		t.CharCount = (COUNT)~0;

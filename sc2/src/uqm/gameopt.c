@@ -223,7 +223,7 @@ DrawNameString (bool nameCaptain, UNICODE *Str, COUNT CursorPos,
 		{	// Naming the captain
 			Font = TinyFont;
 			r.corner.x = RES_STAT_SCALE(3); // JMS_GFX;
-			r.corner.y = RES_STAT_SCALE(10); // JMS_GFX
+			r.corner.y = RES_CASE(10,18,30); // JMS_GFX
 			r.extent.width -= RES_STAT_SCALE(2); // JMS_GFX;
 			lf.baseline.x = (STATUS_WIDTH >> 1) - RES_CASE(1,0,-1);
 			lf.baseline.y = r.corner.y + r.extent.height - RES_CASE(1,4,3);
