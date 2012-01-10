@@ -66,7 +66,7 @@ static const COORD hangar_x_coords_1x[HANGAR_SHIPS_ROW] =
 
 static const COORD hangar_x_coords_2x[HANGAR_SHIPS_ROW] =
 {
-	24, 102, 179, 293, 370, 448
+	0, 78, 155, 269, 346, 424
 };
 
 static const COORD hangar_x_coords_4x[HANGAR_SHIPS_ROW] =
@@ -1270,8 +1270,7 @@ DrawBluePrint (MENU_STATE *pMS)
 			r.corner.y += r.extent.height + (1 << RESOLUTION_FACTOR); // JMS_GFX;
 			DrawPoint (&r.corner);
 			r.corner.y -= r.extent.height;
-			SetContextForeGroundColor (
-					SetContextBackGroundColor (BLACK_COLOR));
+			SetContextForeGroundColor (SetContextBackGroundColor (BLACK_COLOR));
 			DrawFilledRectangle (&r);
 			m = FuelVolume < EXPLORER_FUEL_VOLUME_PER_ROW ?
 					(COUNT)FuelVolume : EXPLORER_FUEL_VOLUME_PER_ROW;
