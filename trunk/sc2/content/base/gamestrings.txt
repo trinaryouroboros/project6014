@@ -278,8 +278,8 @@ Poena
 Priapus
 
 
-#(Proclus)
-Proclus
+#(Terebellum)
+Terebellum
 
 
 #(Riccioli)
@@ -306,8 +306,8 @@ Sextantis
 Tauri
 
 
-#(Ursae Minoris)
-Ursae Minoris
+#(Proclus)
+Proclus
 
 
 #(Bootis)
