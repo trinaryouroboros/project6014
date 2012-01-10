@@ -521,8 +521,6 @@ Sol
 #(Coronae)
 Coronae
 
-#(Terebellum)
-Terebellum
 
 #(Monica)
 Monica
