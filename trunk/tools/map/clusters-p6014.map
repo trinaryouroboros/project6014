@@ -8,9 +8,9 @@
 #   Connecting line pairs (comma separated; latin: A=1, B=2, etc)
 #####################################################################
 #P6014 constellations:
-# Constellations not added due to bugs:
-# JUTURNA    http://code.google.com/p/project6014/issues/detail?id=63
-# PERSIPINA  http://code.google.com/p/project6014/issues/detail?id=62
+Juturna,n,CB,BA
+Persipina,n,CB,BA
+Coronae,n,AB
 Apollonius,n,IE,ED,DC,CB,GH,HF,FI,GB,FA
 Messier,n,DA,AB,DC
 Acoreus,n,FE,ED,DA,AB,CA,CB
@@ -19,7 +19,7 @@ Angstrom,n,AB,BD,BC
 Canis Majoris,n,DC,CA,AB,BD,AF,FG,GH,HI,CE
 Eris,n,GB,BC,HB,BA
 Lemaitre,n,FC,CB,BE,EC,ED,EA,AD,AI
-Ursae Minoris,n,CB,BA,AD
+Monica,n,CB,BA,AD
 Notus,n,BA,AC
 Morpheus,n,AB
 Pales,n,BA,AC

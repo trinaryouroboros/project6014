@@ -75,7 +75,7 @@ Syrma
 Serpentis
 Sextantis
 Tauri
-Ursae Minoris
+Monica
 Bootis
 Olber
 Centauri
@@ -129,4 +129,5 @@ Canopus
 Sirius
 Sol
 Coronae
+Terebellum
 UNKNOWN
