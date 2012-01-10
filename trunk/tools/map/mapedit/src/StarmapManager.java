@@ -24,12 +24,13 @@ public class StarmapManager {
     private static final String MAP_LINE_REGEX = "\\s*\\{\\{.*\\}, MAKE_STAR.*\\}.*"; //Could be improved; but works nicely on the current UQM src
     private HashMap<String, Integer> translator_alienPresence;
     private HashMap<String, Integer> translator_starTypes;
-    private HashMap<String, Integer> translator_starColors;
+    private static HashMap<String, Integer> translator_starColors;
     private static Pattern numberPattern = Pattern.compile("\\d+");
     private static Pattern nonWhiteOrComma = Pattern.compile("[\\S&&[^,]]+");
     private ArrayList<Star> stars;
     private XStream xstream;
     private ArrayList<Constellation> constellations;
+    
 
     public StarmapManager() {
         translator_alienPresence = new HashMap<String, Integer>();
@@ -159,7 +160,7 @@ public class StarmapManager {
         }
     }
 
-    public Color getColor(int starColor) {
+    public static Color getColor(int starColor) {
         String colString = null;
         for (String s : translator_starColors.keySet()) {
             if (translator_starColors.get(s) == starColor) {
