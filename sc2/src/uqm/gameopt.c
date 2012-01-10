@@ -648,9 +648,7 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 		{
 			COUNT j;
 
-			s.origin.x = (140 << RESOLUTION_FACTOR) + SUMMARY_X_OFFS + SUMMARY_SIDE_OFFS; // JMS_GFX
-			if (RESOLUTION_FACTOR == 2)
-				s.origin.x += 110;
+			s.origin.x = (140 << RESOLUTION_FACTOR) + SUMMARY_X_OFFS + SUMMARY_SIDE_OFFS + RES_CASE(0,10,110); // JMS_GFX
 			
 			for (j = 0; j < 4; ++j)
 			{
@@ -668,9 +666,7 @@ DrawSavegameSummary (PICK_GAME_STATE *pickState, COUNT gameIndex)
 
 		// Placement of the RU and bio-credit amounts.
 		SetContextFont (StarConFont);
-		t.baseline.x = (173 << RESOLUTION_FACTOR) + SUMMARY_X_OFFS + SUMMARY_SIDE_OFFS; // JMS_GFX
-		if (RESOLUTION_FACTOR == 2)
-			t.baseline.x += 110;
+		t.baseline.x = (173 << RESOLUTION_FACTOR) + SUMMARY_X_OFFS + SUMMARY_SIDE_OFFS + RES_CASE(0,15,110); // JMS_GFX
 		
 		t.align = ALIGN_CENTER;
 		t.CharCount = (COUNT)~0;
