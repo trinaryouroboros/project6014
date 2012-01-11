@@ -314,7 +314,7 @@ FreePlanet (void)
 		pSolarSysState->PlanetSideFrame[i] = 0;
 	}
 
-//    FreeLanderData ();
+    //FreeLanderData ();
 
 	DestroyStringTable (ReleaseStringTable (pSolarSysState->XlatRef));
 	pSolarSysState->XlatRef = 0;

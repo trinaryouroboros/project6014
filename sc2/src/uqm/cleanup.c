@@ -16,8 +16,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Removed unnecessary UninitGameKernel function
-
 #include "nameref.h"
 #include "libs/reslib.h"
 #include "gamestr.h"
@@ -34,8 +32,6 @@
 // XXX: we do not current have a header for this prototype to live in
 //  should be something like solarsys.h
 extern void FreeIPData (void);
-
-
 
 void
 FreeKernel (void)
@@ -91,9 +87,6 @@ FreeGameData (void)
 	FreeHyperData ();
 }
 
-// JMS: Commented out because it seems all the functionalities contained in this function
- // are called separately when the program run ends: Freegamedata and Freekernel
- // (which contains UninitKernel and UninitContexts) are run straight in starcon.c where the program run ends.
 void
 UninitGameKernel (void)
 {
