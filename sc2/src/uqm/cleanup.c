@@ -16,8 +16,7 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: -Release Bullet hole gfx when uniniting kernel
-//			 -Removed unnecessary UninitGameKernel function
+// JMS 2010: -Removed unnecessary UninitGameKernel function
 
 #include "nameref.h"
 #include "libs/reslib.h"
@@ -71,7 +70,8 @@ UninitKernel (void)
 	DestroyFont (MicroFont);
 	DestroyStringTable (ReleaseStringTable (GameStrings));
 	DestroyDrawable (ReleaseDrawable (StatusFrame));
-	DestroyDrawable (ReleaseDrawable (BulletFrame));	// JMS
+	DestroyDrawable (ReleaseDrawable (nebulaeFrame));	// JMS
+	DestroyDrawable (ReleaseDrawable (hyperspacesuns));	// JMS
 	DestroyDrawable (ReleaseDrawable (ActivityFrame));
 	DestroyFont (TinyFont);
 	DestroyFont (StarConFont);

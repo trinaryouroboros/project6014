@@ -2316,12 +2316,9 @@ CreateStarBackGround (void)
 	old_seed = seedRandomForSolarSys ();
 
 	nebula.origin.x = nebula.origin.y = 0;
- 	nebula.frame = CaptureDrawable (LoadGraphic (NEBULAE_PMAP_ANIM));
 #define NUM_NEBULAE 16
- 	nebula.frame = SetAbsFrameIndex (nebula.frame, CurStarDescPtr->star_pt.x % NUM_NEBULAE);
+ 	nebula.frame = SetAbsFrameIndex (nebulaeFrame, CurStarDescPtr->star_pt.x % NUM_NEBULAE);
  	DrawStamp(&nebula);
-
-	DestroyDrawable (ReleaseDrawable (nebula.frame));
 
 	// JMS: You can add randomness to background stars by uncommenting the Global tick_counts
 	// old_seed = TFB_SeedRandom (

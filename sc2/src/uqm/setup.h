@@ -14,8 +14,6 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
-// JMS 2010: BulletFrame declaration: Bullet hole gfx for melee
-
 #ifndef _SETUP_H
 #define _SETUP_H
 
@@ -31,7 +29,7 @@ extern RESOURCE_INDEX hResIndex;
 extern FRAME Screen;
 extern FRAME ActivityFrame;
 extern FRAME StatusFrame;
-extern FRAME BulletFrame;	// JMS
+extern FRAME nebulaeFrame;	// JMS
 extern FRAME hyperspacesuns;	// BW
 extern FRAME FlagStatFrame;
 extern FRAME MiscDataFrame;
