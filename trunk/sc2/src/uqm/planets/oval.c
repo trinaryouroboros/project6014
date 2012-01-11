@@ -260,8 +260,7 @@ DrawFilledOval (RECT *pRect)
 {
 	COORD x, y;
 	SIZE A, B;
-	long Asquared, TwoAsquared,
-						Bsquared, TwoBsquared;
+	long Asquared, TwoAsquared, Bsquared, TwoBsquared;
 	long d, dx, dy;
 	LINE corners;
 	PRIMITIVE prim[NUM_QUADS >> 1];
@@ -343,14 +342,18 @@ DrawFilledOval (RECT *pRect)
 
 	while (y >= 0)
 	{
-		prim[0].Object.Rect.corner.x =
-				prim[1].Object.Rect.corner.x = A - x;
-		prim[0].Object.Rect.extent.width =
-				prim[1].Object.Rect.extent.width = (x << 1) + 1;
+		prim[0].Object.Rect.corner.x = prim[1].Object.Rect.corner.x = A - x;
+		prim[0].Object.Rect.extent.width = prim[1].Object.Rect.extent.width = (x << 1) + 1;
 		prim[0].Object.Rect.corner.y = B - y;
+		
+		// JMS: This little sucker prevents drawing a double line in the middle
+		// which would look pretty ugly when using alpha channel.
+		if (y == 0)
+			SetPrimColor (&prim[1], BUILD_COLOR_RGBA(0x00,0x00,0x00,0x00));
+		
 		prim[1].Object.Rect.corner.y = B + y;
-
-		DrawBatch (prim, StartPrim, 0);
+			
+			DrawBatch (prim, StartPrim, 0);
 
 		if (d < 0)
 		{

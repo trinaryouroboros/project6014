@@ -307,7 +307,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	long diameter;
 	RECT r, old_r;
 	POINT oldOrigin = {0, 0};
-	STAMP s;
+	STAMP s, nebula;
 	FRAME star_frame;
 	STAR_DESC *SDPtr;
 	BOOLEAN draw_cursor;
@@ -352,6 +352,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		SetContextForeGroundColor (
 				BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x07), 0x57));
 		SetContextBackGroundColor (BLACK_COLOR);
+		
 	}
 	else
 	{
@@ -370,6 +371,14 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 								   BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x08), 0x6E));
 	}
 	ClearDrawable ();
+	
+	// JMS: Draw a sexy nebula on the map's background (Only in Hyperspace, not in QS/Orzspace!).
+	if (which_space <= 1)
+	{
+		nebula.origin.x = nebula.origin.y = 0;
+		nebula.frame = SetAbsFrameIndex (nebulaeFrame, 16);
+		DrawStamp(&nebula);
+	}
 	
 	if (race_update == 0
 			&& which_space < 2
@@ -400,9 +409,15 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		r.corner.y = UNIVERSE_TO_DISPY (r.corner.y)
 				- (r.extent.height >> 1);
 
-		OldColor = SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x03, 0x03, 0x03), 0x22));
+		// JMS: This was the original fuel range circle color.
+		//OldColor = SetContextForeGroundColor (
+		//		BUILD_COLOR (MAKE_RGB15 (0x03, 0x03, 0x03), 0x22));
+		
+		// JMS: The fuel range circle is now partially Transparent
+		OldColor = SetContextForeGroundColor (BUILD_COLOR_RGBA(0x66,0x66,0x66,0x22));
+		
 		DrawFilledOval (&r);
+		
 		SetContextForeGroundColor (OldColor);
 	}
 
