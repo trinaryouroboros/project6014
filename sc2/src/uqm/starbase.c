@@ -677,7 +677,7 @@ DoStarBase (MENU_STATE *pMS)
 	else if (PulsedInputState.menu[KEY_MENU_SELECT])
 	{
 ExitStarBase:
-		DestroyDrawable (ReleaseDrawable (StarbaseData.StarbaseFrame));
+		DestroyDrawable (ReleaseDrawable (pMS->CurFrame));
 		pMS->CurFrame = 0;
 		StopMusic ();
 		if (pMS->hMusic)
