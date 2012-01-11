@@ -715,6 +715,18 @@ FreeSolarSys (void)
 			Orbit->ObjectFrame = 0;
 			DestroyDrawable (ReleaseDrawable (Orbit->WorkFrame));
 			Orbit->WorkFrame = 0;
+			
+			DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TintFrame));
+			pSolarSysState->Orbit.TintFrame = 0;
+			pSolarSysState->Orbit.TintColor = BLACK_COLOR;
+			DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TopoZoomFrame));
+			pSolarSysState->Orbit.TopoZoomFrame = 0;
+			DestroyStringTable (ReleaseStringTable (pSolarSysState->XlatRef));
+			pSolarSysState->XlatRef = 0;
+			DestroyDrawable (ReleaseDrawable (pSolarSysState->TopoFrame));
+			pSolarSysState->TopoFrame = 0;
+			DestroyColorMap (ReleaseColorMap (pSolarSysState->OrbitalCMap));
+			pSolarSysState->OrbitalCMap = 0;
 
 			HFree (Orbit->TopoColors);
 			Orbit->TopoColors = NULL;
