@@ -309,7 +309,6 @@ MELEE_PICK_MASK_PMAP_ANIM,graphics.meleepickship,uqm/igfxres.h,GFXRES,base/ui/me
 SEGUE_PMAP_ANIM,graphics.segue,uqm/igfxres.h,GFXRES,base/ui/segue.ani
 SEGUE_ORZSPACEPORTAL_ANIM,graphics.segue_orzspaceportal,uqm/igfxres.h,GFXRES,base/nav/segue_orzspaceportal.ani
 SC2_PICK_PMAP_ANIM,graphics.pickship,uqm/igfxres.h,GFXRES,base/ui/pickship.ani
-BULLETHOLES_PMAP_ANIM,graphics.bulletholes,uqm/igfxres.h,GFXRES,base/ui/bullet.ani
 RESTART_PMAP_ANIM,graphics.newgame,uqm/igfxres.h,GFXRES,base/ui/newgame.ani
 RESTART_PMAP_ANIM2X,graphics.newgame2x,uqm/igfxres.h,GFXRES,base/ui/newgame2x.ani
 RESTART_PMAP_ANIM4X,graphics.newgame4x,uqm/igfxres.h,GFXRES,base/ui/newgame4x.ani

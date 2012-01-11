@@ -66,8 +66,8 @@ FONT NanoFont; // JMS
 QUEUE race_q[NUM_PLAYERS];
 FRAME ActivityFrame;
 FRAME StatusFrame;
-FRAME BulletFrame;	// JMS
 FRAME hyperspacesuns; // BW
+FRAME nebulaeFrame; // JMS
 FRAME FlagStatFrame;
 FRAME MiscDataFrame;
 FRAME FontGradFrame;
@@ -230,15 +230,14 @@ InitKernel (void)
 	if (StatusFrame == NULL)
 		return FALSE;
 
-	// JMS: Bullet hole gfx for melee
-	BulletFrame = CaptureDrawable (LoadGraphic (BULLETHOLES_PMAP_ANIM));
-	if (BulletFrame == NULL)
-		return FALSE;
-
 	hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
 	if (hyperspacesuns == NULL)
 		return FALSE;
 
+	nebulaeFrame = CaptureDrawable (LoadGraphic (NEBULAE_PMAP_ANIM));
+	if (hyperspacesuns == NULL)
+		return FALSE;
+	
 	GameStrings = CaptureStringTable (LoadStringTable (STARCON_GAME_STRINGS));
 	if (GameStrings == 0)
 		return FALSE;

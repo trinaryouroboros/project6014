@@ -52,6 +52,8 @@
 #include "libs/mathlib.h"
 #include "libs/memlib.h"
 
+#include "../nameref.h"
+
 #include <stdlib.h>
 
 
@@ -368,7 +370,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 								   BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x08), 0x6E));
 	}
 	ClearDrawable ();
-
+	
 	if (race_update == 0
 			&& which_space < 2
 			&& orz_space < 2 // JMS: Orz space check

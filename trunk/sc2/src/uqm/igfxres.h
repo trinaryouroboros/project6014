@@ -16,7 +16,6 @@
 #define BOOM_BIG_MASK_PMAP_ANIM "graphics.boom.large"
 #define BOOM_MED_MASK_PMAP_ANIM "graphics.boom.medium"
 #define BOOM_SML_MASK_PMAP_ANIM "graphics.boom.small"
-#define BULLETHOLES_PMAP_ANIM "graphics.bulletholes"
 #define BURV_BCS_MASK_PMAP_ANIM "graphics.burvixcaster"
 #define CANNISTER_MASK_PMAP_ANIM "graphics.lifecan"
 #define CIRCLES_A_MASK_PMAP_ANIM "graphics.circles_a"
