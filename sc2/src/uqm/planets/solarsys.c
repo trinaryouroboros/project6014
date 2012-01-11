@@ -242,7 +242,7 @@ void GenerateTexturedMoons (SOLARSYS_STATE *system, PLANET_DESC *planet)
 	
 	for (i = 0, pMoonDesc = &system->MoonDesc[0];
 			i < planet->NumPlanets; ++i, ++pMoonDesc)
-	{
+	{		
 		// BW : precompute the generated texture to display it in IP
 		if (!(pMoonDesc->data_index & WORLD_TYPE_SPECIAL))
 		{
@@ -465,7 +465,7 @@ void GenerateTexturedPlanets (void)
 			i < pSolarSysState->SunDesc[0].NumPlanets; ++i, ++pCurDesc)
 	{
 		SurfFrame = NULL;
-
+		
 		DoPlanetaryAnalysis (&pSolarSysState->SysInfo, pCurDesc);
 		
 		// BW : precompute the generated texture to display it in IP
@@ -703,19 +703,20 @@ FreeSolarSys (void)
 		     i < pSolarSysState->SunDesc[0].NumPlanets; ++i, ++pCurDesc)
 		{
 			PLANET_ORBIT *Orbit = &pCurDesc->orbit;
-
+			
 			LockMutex (GraphicsLock);
 
 			HFree (Orbit->lpTopoData);
 			Orbit->lpTopoData = 0;
 			DestroyDrawable (ReleaseDrawable (Orbit->SphereFrame));
-			Orbit->SphereFrame = NULL;
+			Orbit->SphereFrame = 0;
 
 			DestroyDrawable (ReleaseDrawable (Orbit->ObjectFrame));
 			Orbit->ObjectFrame = 0;
 			DestroyDrawable (ReleaseDrawable (Orbit->WorkFrame));
 			Orbit->WorkFrame = 0;
 			
+			// JMS: Not sure if these do any good...
 			DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TintFrame));
 			pSolarSysState->Orbit.TintFrame = 0;
 			pSolarSysState->Orbit.TintColor = BLACK_COLOR;
@@ -727,6 +728,7 @@ FreeSolarSys (void)
 			pSolarSysState->TopoFrame = 0;
 			DestroyColorMap (ReleaseColorMap (pSolarSysState->OrbitalCMap));
 			pSolarSysState->OrbitalCMap = 0;
+			// JMS ends.
 
 			HFree (Orbit->TopoColors);
 			Orbit->TopoColors = NULL;
@@ -2183,7 +2185,7 @@ static void
 UninitSolarSys (void)
 {
 	FreeSolarSys ();
-	//FreeLanderData (); // JMS: This is not needed since the landerframes won't reload if they're already oaded once.
+	//FreeLanderData (); // JMS: This is not needed since the landerframes won't reload if they're already loaded once.
 	FreeIPData (); // JMS This IS necessary.
 
 	// JMS: Zero the flag which controls escaping enemies.
