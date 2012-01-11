@@ -249,7 +249,8 @@ add_text (int status, TEXT *pTextIn)
 		locText.baseline.x -= (8 << RESOLUTION_FACTOR) - 4 * RESOLUTION_FACTOR; // JMS_GFX
 		locText.CharCount = (COUNT)~0;
 		locText.pStr = STR_BULLET;
-		font_DrawText (&locText);
+		if (!(status == -2 && pTextIn->baseline.y >= SIS_SCREEN_HEIGHT))
+			font_DrawText (&locText);
 
 		locText = *pTextIn;
 		pText = &locText;
@@ -557,7 +558,7 @@ RefreshResponses (ENCOUNTER_STATE *pES)
 	y = SLIDER_Y + SLIDER_HEIGHT + (1 << RESOLUTION_FACTOR); // JMS_GFX
 	for (response = pES->top_response; response < pES->num_responses; ++response)
 	{
-		extra_y = (response == pES->top_response ? 0 : 8 * RESOLUTION_FACTOR); // JMS_GFX
+		extra_y = (response == pES->top_response ? 0 : RES_CASE(0,12,22)); // JMS_GFX
 		
 		pES->response_list[response].response_text.baseline.x = TEXT_X_OFFS + (8 << RESOLUTION_FACTOR); // JMS_GFX
 		pES->response_list[response].response_text.baseline.y = y + leading + extra_y; // JMS_GFX
