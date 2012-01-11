@@ -1057,10 +1057,20 @@ DrawSupportShips (void)
 	HSHIPFRAG hStarShip;
 	HSHIPFRAG hNextShip;
 	const POINT *pship_pos;
-	const POINT ship_pos[MAX_BUILT_SHIPS] =
+	const POINT ship_pos_1x[MAX_BUILT_SHIPS] =
 	{
-		SUPPORT_SHIP_PTS
+		SUPPORT_SHIP_PTS_1X
 	};
+	const POINT ship_pos_2x[MAX_BUILT_SHIPS] =
+	{
+		SUPPORT_SHIP_PTS_2X
+	};
+	const POINT ship_pos_4x[MAX_BUILT_SHIPS] =
+	{
+		SUPPORT_SHIP_PTS_4X
+	};
+	
+	const POINT *ship_pos = RES_CASE(ship_pos_1x,ship_pos_2x,ship_pos_4x);
 
 	for (hStarShip = GetHeadLink (&GLOBAL (built_ship_q)),
 			pship_pos = ship_pos;

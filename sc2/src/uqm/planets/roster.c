@@ -34,9 +34,17 @@
 #include <stdlib.h>
 
 // Ship icon positions in status display around the flagship
-static const POINT ship_pos[MAX_BUILT_SHIPS] =
+static const POINT ship_pos_1x[MAX_BUILT_SHIPS] =
 {
-	SUPPORT_SHIP_PTS
+	SUPPORT_SHIP_PTS_1X
+};
+static const POINT ship_pos_2x[MAX_BUILT_SHIPS] =
+{
+	SUPPORT_SHIP_PTS_2X
+};
+static const POINT ship_pos_4x[MAX_BUILT_SHIPS] =
+{
+	SUPPORT_SHIP_PTS_4X
 };
 
 typedef struct
@@ -133,6 +141,8 @@ LockSupportShip (ROSTER_STATE *rosterState, HSHIPFRAG *phFrag)
 {
 	const POINT *pship_pos;
 	HSHIPFRAG hStarShip, hNextShip;
+	
+	const POINT *ship_pos = RES_CASE(ship_pos_1x,ship_pos_2x,ship_pos_4x);
 
 	// Lookup the current escort's location in the unsorted points list
 	// to find the original escort index
@@ -401,6 +411,7 @@ RosterMenu (void)
 {
 	MENU_STATE MenuState;
 	ROSTER_STATE RosterState;
+	const POINT *ship_pos = RES_CASE(ship_pos_1x,ship_pos_2x,ship_pos_4x);
 
 	memset (&MenuState, 0, sizeof MenuState);
 	MenuState.privData = &RosterState;
@@ -412,8 +423,8 @@ RosterMenu (void)
 		return FALSE;
 
 	// Get the escort positions we will use and sort on X then Y
-	assert (sizeof (RosterState.shipPos) == sizeof (ship_pos));
-	memcpy (RosterState.shipPos, ship_pos, sizeof (ship_pos));
+	assert (sizeof (RosterState.shipPos) == sizeof (ship_pos_1x));
+	memcpy (RosterState.shipPos, ship_pos, sizeof (ship_pos_1x));
 	qsort (RosterState.shipPos, RosterState.count,
 			sizeof (RosterState.shipPos[0]), compShipPos);
 

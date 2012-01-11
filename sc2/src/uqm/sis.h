@@ -106,7 +106,7 @@ enum
 #define EMPTY_SLOT NUM_MODULES
 #define NUM_BOMB_MODULES 10
 
-// JMS_GFX: Module drawing follows resolution factor
+// JMS_GFX
 #define DRIVE_SIDE_X (31 << RESOLUTION_FACTOR)
 #define DRIVE_SIDE_Y (56 << RESOLUTION_FACTOR)
 #define DRIVE_TOP_X (33 << RESOLUTION_FACTOR)
@@ -125,16 +125,29 @@ enum
 #define SHIP_PIECE_OFFSET (12 << RESOLUTION_FACTOR)
 
 #define MAX_BUILT_SHIPS 6 // No more than 6 companion ships for the Explorer
-		/* Maximum number of ships escorting the SIS */
 #define MAX_LANDERS (((GET_GAME_STATE(WHICH_SHIP_PLAYER_HAS)) == 0) ? 3 : 10) // No more than 3 landers for explorer
 
-#define SUPPORT_SHIP_PTS \
+#define SUPPORT_SHIP_PTS_1X \
 	{3 +  0, 30 + (1 * 16)}, \
 	{3 + 42, 30 + (1 * 16)}, \
 	{3 +  0, 30 + (0 * 16)}, \
 	{3 + 42, 30 + (0 * 16)}, \
 	{3 +  0, 30 + (5 * 16)}, \
 	{3 + 42, 30 + (5 * 16)},
+#define SUPPORT_SHIP_PTS_2X \
+	{2 +  0, 30 + (1 * 20)}, \
+	{2 + 44, 30 + (1 * 20)}, \
+	{2 +  0, 30 + (0 * 16)}, \
+	{2 + 44, 30 + (0 * 16)}, \
+	{2 +  0, 30 + (5 * 16 + 2)}, \
+	{2 + 44, 30 + (5 * 16 + 2)},
+#define SUPPORT_SHIP_PTS_4X \
+	{3 +  0, 30 + (1 * 20)}, \
+	{3 + 42, 30 + (1 * 20)}, \
+	{3 +  0, 30 + (0 * 16)}, \
+	{3 + 42, 30 + (0 * 16)}, \
+	{3 +  0, 30 + (5 * 16 + 2)}, \
+	{3 + 42, 30 + (5 * 16 + 2)},
 // Only authorized positions according to graphics (chflagstat.0.png)
 // BW: now these need to be constant because they initialize an array
 // in roster.c. Resolution Factor will be appied when effectively drawing.
