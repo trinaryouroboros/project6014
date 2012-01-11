@@ -1264,10 +1264,10 @@ DrawBluePrint (MENU_STATE *pMS)
 			COUNT m;
 
 			GetFTankCapacity (&r.corner);
-			r.corner.x += 36 << RESOLUTION_FACTOR; // JMS_GFX
-			r.corner.y += 18 << RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.x += (RES_CASE(40,50,48)) << RESOLUTION_FACTOR; // JMS_GFX
+			r.corner.y += (RES_CASE(22,20,19)) << RESOLUTION_FACTOR; // JMS_GFX
 			DrawPoint (&r.corner);
-			r.corner.y += r.extent.height + (1 << RESOLUTION_FACTOR); // JMS_GFX;
+			r.corner.y += r.extent.height + 1; // JMS_GFX;
 			DrawPoint (&r.corner);
 			r.corner.y -= r.extent.height;
 			SetContextForeGroundColor (SetContextBackGroundColor (BLACK_COLOR));
