@@ -190,7 +190,7 @@ DrawSISTitle (UNICODE *pStr)
 	RECT r;
 
 	t.baseline.x = SIS_TITLE_WIDTH >> 1;
-	t.baseline.y = SIS_TITLE_HEIGHT - RES_CASE(2,6,6); // JMS_GFX
+	t.baseline.y = SIS_TITLE_HEIGHT - RES_CASE(2,6,8); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
@@ -295,7 +295,7 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 	if (!(flags & DSME_MYCOLOR))
 		SetContextForeGroundColor (SIS_MESSAGE_TEXT_COLOR);
 
-	t.baseline.y = SIS_MESSAGE_HEIGHT - RES_CASE(2,6,6); // JMS_GFX
+	t.baseline.y = SIS_MESSAGE_HEIGHT - RES_CASE(2,6,8); // JMS_GFX
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
 	SetContextFont (TinyFont);
