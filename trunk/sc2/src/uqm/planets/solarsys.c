@@ -258,12 +258,12 @@ void GenerateTexturedMoons (SOLARSYS_STATE *system, PLANET_DESC *planet)
 
 			// Clean up some parasitic use of pSolarSysState
 			LockMutex (GraphicsLock);
-			// DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TintFrame));
-			// pSolarSysState->Orbit.TintFrame = 0;
-			// pSolarSysState->Orbit.TintColor = BLACK_COLOR;
+			DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TintFrame));
+			pSolarSysState->Orbit.TintFrame = 0;
+			pSolarSysState->Orbit.TintColor = BLACK_COLOR;
 		
-			// DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TopoZoomFrame));
-			// pSolarSysState->Orbit.TopoZoomFrame = 0;
+			DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TopoZoomFrame));
+			pSolarSysState->Orbit.TopoZoomFrame = 0;
 			DestroyStringTable (ReleaseStringTable (pSolarSysState->XlatRef));
 			pSolarSysState->XlatRef = 0;
 			DestroyDrawable (ReleaseDrawable (pSolarSysState->TopoFrame));
@@ -362,8 +362,7 @@ LoadIPData (void)
 		SISIPFrame = CaptureDrawable (LoadGraphic (SISIP_MASK_PMAP_ANIM));
 
 		OrbitalCMap = CaptureColorMap (LoadColorMap (ORBPLAN_COLOR_MAP));
-		OrbitalFrame = CaptureDrawable (
-				LoadGraphic (ORBPLAN_MASK_PMAP_ANIM));
+		OrbitalFrame = CaptureDrawable (LoadGraphic (ORBPLAN_MASK_PMAP_ANIM));
 		SunCMap = CaptureColorMap (LoadColorMap (IPSUN_COLOR_MAP));
 
 		SpaceMusic = LoadMusic (IP_MUSIC);
@@ -522,12 +521,12 @@ void GenerateTexturedPlanets (void)
 		
 		// Clean up some parasitic use of pSolarSysState
 		LockMutex (GraphicsLock);
-		// DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TintFrame));
-		// pSolarSysState->Orbit.TintFrame = 0;
-		// pSolarSysState->Orbit.TintColor = BLACK_COLOR;
+		DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TintFrame));
+		pSolarSysState->Orbit.TintFrame = 0;
+		pSolarSysState->Orbit.TintColor = BLACK_COLOR;
 		
-		// DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TopoZoomFrame));
-		// pSolarSysState->Orbit.TopoZoomFrame = 0;
+		DestroyDrawable (ReleaseDrawable (pSolarSysState->Orbit.TopoZoomFrame));
+		pSolarSysState->Orbit.TopoZoomFrame = 0;
 		DestroyStringTable (ReleaseStringTable (pSolarSysState->XlatRef));
 		pSolarSysState->XlatRef = 0;
 		DestroyDrawable (ReleaseDrawable (pSolarSysState->TopoFrame));
@@ -792,8 +791,6 @@ FreeSolarSys (void)
 	} // #endif TEXTURED_PLANETS
 
 	StopMusic ();
-
-//    FreeIPData ();
 }
 
 static FRAME
@@ -2174,9 +2171,8 @@ static void
 UninitSolarSys (void)
 {
 	FreeSolarSys ();
-
-//FreeLanderData ();
-//FreeIPData ();
+	//FreeLanderData (); // JMS: This is not needed since the landerframes won't reload if they're already oaded once.
+	FreeIPData (); // JMS This IS necessary.
 
 	// JMS: Zero the flag which controls escaping enemies.
 	if(GET_GAME_STATE(ENEMY_ESCAPE_OCCURRED))
