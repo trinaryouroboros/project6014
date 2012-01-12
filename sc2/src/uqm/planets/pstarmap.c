@@ -301,7 +301,7 @@ static void
 DrawStarMap (COUNT race_update, RECT *pClipRect)
 {
 #define GRID_DELTA 500
-	SIZE i;
+	SIZE i, j;
 	COUNT which_space;
 	COUNT orz_space;	// JMS
 	long diameter;
@@ -311,6 +311,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	FRAME star_frame;
 	STAR_DESC *SDPtr;
 	BOOLEAN draw_cursor;
+	Color OldColor; // JMS: Relocated here from the fuel range drawing loop, needed for transparent grid.
 
 	if (pClipRect == (RECT*)-1)
 	{
@@ -385,8 +386,6 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 			&& orz_space < 2 // JMS: Orz space check
 			&& (diameter = (long)GLOBAL_SIS (FuelOnBoard) << 1))
 	{
-		Color OldColor;
-
 		if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
 			r.corner = CurStarDescPtr->star_pt;
 		else
@@ -420,26 +419,33 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		
 		SetContextForeGroundColor (OldColor);
 	}
-
-	for (i = MAX_Y_UNIVERSE + 1; i >= 0; i -= GRID_DELTA)
+	
+	// JMS: The grid is now partially transparent for HS map.
+	// Hi-res modes have less transparency since thin lines are harder to see.
+	if (which_space <= 1)
+		OldColor = SetContextForeGroundColor (BUILD_COLOR_RGBA(0x00,0x00,0x5E,RES_CASE(0x55,0x80,0xCC)));
+	
+	// The Grid. (For more information, see TRON)
+	for (i = MAX_Y_UNIVERSE + 1, j = MAX_X_UNIVERSE + 1; i >= 0, j >= 0; i -= GRID_DELTA, j -= GRID_DELTA)
 	{
-		SIZE j;
-
+		// Horizontal lines.
 		r.corner.x = UNIVERSE_TO_DISPX (0);
 		r.corner.y = UNIVERSE_TO_DISPY (i);
 		r.extent.width = SIS_SCREEN_WIDTH << zoomLevel;
 		r.extent.height = 1;
 		DrawFilledRectangle (&r);
 
+		// Vertical lines
 		r.corner.y = UNIVERSE_TO_DISPY (MAX_Y_UNIVERSE + 1);
 		r.extent.width = 1;
 		r.extent.height = SIS_SCREEN_HEIGHT << zoomLevel;
-		for (j = MAX_X_UNIVERSE + 1; j >= 0; j -= GRID_DELTA)
-		{
-			r.corner.x = UNIVERSE_TO_DISPX (j);
-			DrawFilledRectangle (&r);
-		}
+		r.corner.x = UNIVERSE_TO_DISPX (j);
+		DrawFilledRectangle (&r);
 	}
+	
+	// JMS: Return original nontransparent grid color, just in case.
+	if (which_space <= 1)
+		SetContextForeGroundColor (OldColor);
 
 	star_frame = SetRelFrameIndex (StarMapFrame, 2);
 	
