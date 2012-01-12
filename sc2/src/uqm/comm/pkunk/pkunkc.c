@@ -194,7 +194,14 @@ static void PkunkMain (RESPONSE_REF R)
 		NPCPhrase (COSMOLOGY);
 	}
 	else if (PLAYER_SAID (R, interesting))
+	{
+		DISABLE_PHRASE (interesting);
 		NPCPhrase (MELTINGPOT);
+	}
+	else if (PLAYER_SAID (R, sorry))
+	{
+		NPCPhrase (WORDS);
+	}
 	else if (PLAYER_SAID (R, wtf_joke))
 	{
 		DISABLE_PHRASE (wtf_joke);
@@ -299,7 +306,10 @@ static void Court (RESPONSE_REF R)
 		Response (me_help, Court);
 	if ((busy) && (PHRASE_ENABLED (you_busy)))
 		Response (you_busy, Court);
-	Response (interesting, PkunkMain);
+	if (PHRASE_ENABLED (interesting))
+		Response (interesting, PkunkMain);
+	else
+		Response (sorry, PkunkMain);
 }
 
 static void Mmmm (RESPONSE_REF R)

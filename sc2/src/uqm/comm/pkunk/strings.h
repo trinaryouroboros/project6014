@@ -57,6 +57,8 @@ enum
 	ME_BUSY,
 	interesting,
 	MELTINGPOT,
+	sorry,
+	WORDS,
 	JOKE,
 	wtf_joke,
 	PHILO_JOKE,
