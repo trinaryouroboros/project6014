@@ -36,7 +36,6 @@ FindStar (STAR_DESC *LastSDPtr, POINT *puniverse, SIZE xbounds,
 	SIZE lo, hi;
 	STAR_DESC *BaseSDPtr;
 
-	// DEBUG BY JMS: Too many magic numbers here and in other places. Should define that number of systems, vortices and other shit
 	if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
 	{
 #define NUM_HYPER_VORTICES 15
