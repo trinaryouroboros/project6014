@@ -40,8 +40,8 @@
 #define SPECIAL_WAIT 0
 
 #define SHIP_MASS 2
-#define MISSILE_SPEED DISPLAY_TO_WORLD (35)
-#define MISSILE_LIFE 10
+#define MISSILE_SPEED DISPLAY_TO_WORLD (27)
+#define MISSILE_LIFE 6
 #define MISSILE_RANGE (MISSILE_SPEED * MISSILE_LIFE)
 
 // Weapon gfx
@@ -134,7 +134,7 @@ static RACE_DESC foonfoon_desc =
 // JMS_GFX
 #define MAX_THRUST_2XRES 104
 #define THRUST_INCREMENT_2XRES 24
-#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (70)
+#define MISSILE_SPEED_2XRES DISPLAY_TO_WORLD (54)
 #define MISSILE_RANGE_2XRES (MISSILE_SPEED_2XRES * MISSILE_LIFE)
 
 // JMS_GFX
@@ -212,8 +212,8 @@ static RACE_DESC foonfoon_desc_2xres =
 // JMS_GFX
 #define MAX_THRUST_4XRES 208
 #define THRUST_INCREMENT_4XRES 48
-#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (140)
-#define MISSILE_RANGE_4XRES (MISSILE_SPEED_2XRES * MISSILE_LIFE)
+#define MISSILE_SPEED_4XRES DISPLAY_TO_WORLD (108)
+#define MISSILE_RANGE_4XRES (MISSILE_SPEED_4XRES * MISSILE_LIFE)
 
 // JMS_GFX
 static RACE_DESC foonfoon_desc_4xres =
@@ -309,7 +309,7 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 {
 #define IS_FOCUSBALL(ptr) (ptr->postprocess_func == focusball_postprocess && ptr->mass_points > 0)
 	BYTE old_count;
-	STARSHIP *StarShipPtr;
+	STARSHIP *StarShipPtr, *FBStarShipPtr;
 	EVALUATE_DESC *lpEvalDesc;
 	HELEMENT hElement, hNextElement;
 	ELEMENT  *FocusballCandidatePtr;
@@ -325,12 +325,18 @@ foonfoon_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern, COUNT 
 		LockElement (hElement, &FocusballCandidatePtr);
 		hNextElement = GetSuccElement (FocusballCandidatePtr);
 		
-		// See how charged the focusball is.
+		// Ensure this is not the enemy's focusball.
 		if (IS_FOCUSBALL(FocusballCandidatePtr))
 		{
-			charge_amount	 = FocusballCandidatePtr->mass_points;
-			charge_time_left = FocusballCandidatePtr->thrust_wait;
-			break;
+			GetElementStarShip (FocusballCandidatePtr, &FBStarShipPtr);
+			
+			// If this is this ship's focusball, see how charged the focusball is.
+			if (FBStarShipPtr == StarShipPtr)
+			{
+				charge_amount	 = FocusballCandidatePtr->mass_points;
+				charge_time_left = FocusballCandidatePtr->thrust_wait;
+				break;
+			}
 		}
 	}
 	
@@ -482,7 +488,15 @@ end_intelligence:
 static void
 animate_burst (ELEMENT *ElementPtr)
 {
-	ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	STARSHIP *StarShipPtr;
+	
+	GetElementStarShip (ElementPtr, &StarShipPtr);
+	
+	if ((GetFrameIndex (ElementPtr->next.image.frame) > 1) && !((GetFrameIndex (ElementPtr->next.image.frame) + 1) % NUM_BURST_FRAMES))
+		ElementPtr->next.image.frame = DecFrameIndex (ElementPtr->current.image.frame);
+	else
+		ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
+	
 	ElementPtr->state_flags |= CHANGING;
 }
 
@@ -509,7 +523,7 @@ fire_burst (ELEMENT *ElementPtr)
 	MissileBlock.speed = (MISSILE_SPEED << RESOLUTION_FACTOR);
 	MissileBlock.hit_points = ElementPtr->mass_points;
 	MissileBlock.damage = ElementPtr->mass_points;
-	MissileBlock.life = NUM_BURST_FRAMES;
+	MissileBlock.life = MISSILE_LIFE;
 	MissileBlock.preprocess_func = animate_burst;
 	MissileBlock.blast_offs = 50 << RESOLUTION_FACTOR; // Don't change this value. Otherwise a special clause in weapon.c will stop working :(
 	
@@ -912,9 +926,6 @@ initialize_focusball_which_bursts (ELEMENT *ShipPtr, HELEMENT BurstArray[])
 			FocusPtr->postprocess_func = focusball_postprocess;
 			FocusPtr->thrust_wait = BURST_CHARGE_TIME;
 			UnlockElement (BurstArray[0]);
-			
-			// Start playing the charge-up sound.
-			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 3), ShipPtr);
 		}
 	
 		return (1);
