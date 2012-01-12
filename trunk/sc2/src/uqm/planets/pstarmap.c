@@ -21,6 +21,7 @@
 //			 -Do not draw Sphere of Influence for Kohr-Ahs.
 //			 -Display hint for the player to use the star search facility in the starmap
 // JMS 2011: -In the beginning of game, known races' home planets are marked on the map as small SoIs.
+//			 -The hi-res modes now have a more user-friendly starmap cursor.
 
 // JMS_GFX 2011: Merged the resolution Factor stuff from UQM-HD.
 
@@ -52,6 +53,7 @@
 #include "libs/mathlib.h"
 #include "libs/memlib.h"
 
+#include "libs/log.h"
 #include "../nameref.h"
 
 #include <stdlib.h>
@@ -426,7 +428,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 		OldColor = SetContextForeGroundColor (BUILD_COLOR_RGBA(0x00,0x00,0x5E,RES_CASE(0x55,0x80,0xCC)));
 	
 	// The Grid. (For more information, see TRON)
-	for (i = MAX_Y_UNIVERSE + 1, j = MAX_X_UNIVERSE + 1; i >= 0, j >= 0; i -= GRID_DELTA, j -= GRID_DELTA)
+	for (i = MAX_Y_UNIVERSE + 1, j = MAX_X_UNIVERSE + 1; i >= 0; i -= GRID_DELTA, j -= GRID_DELTA)
 	{
 		// Horizontal lines.
 		r.corner.x = UNIVERSE_TO_DISPX (0);
@@ -762,6 +764,10 @@ UpdateCursorLocation (int sx, int sy, const POINT *newpt)
 
 #define CURSOR_INFO_BUFSIZE 256
 
+// JMS: How close to a star the cursor has to be to 'snap' into it.
+// Don't make this larger than 1 for lo-res(1x). Otherwise the cursor gets stuck on stars.
+#define CURSOR_SNAP_AREA (RES_CASE(0,3,6))
+
 static void
 UpdateCursorInfo (UNICODE *prevbuf)
 {	
@@ -771,25 +777,29 @@ UpdateCursorInfo (UNICODE *prevbuf)
 	STAR_DESC *SDPtr;
 	STAR_DESC *BestSDPtr;
 
-        // (Star search: default F6)
-        utf8StringCopy (buf, sizeof (buf), GAME_STRING (FEEDBACK_STRING_BASE + 2));
+	// "(Star search: default F6)"
+	utf8StringCopy (buf, sizeof (buf), GAME_STRING (FEEDBACK_STRING_BASE + 2));
         
 	pt.x = UNIVERSE_TO_DISPX (cursorLoc.x);
 	pt.y = UNIVERSE_TO_DISPY (cursorLoc.y);
 
 	SDPtr = BestSDPtr = 0;
+	
 	while ((SDPtr = FindStar (SDPtr, &cursorLoc, 75, 75)))
 	{
-		if (UNIVERSE_TO_DISPX (SDPtr->star_pt.x) == pt.x
-				&& UNIVERSE_TO_DISPY (SDPtr->star_pt.y) == pt.y
-				&& (BestSDPtr == 0
-				|| STAR_TYPE (SDPtr->Type) >= STAR_TYPE (BestSDPtr->Type)))
+		if ((UNIVERSE_TO_DISPX (SDPtr->star_pt.x) >= pt.x - CURSOR_SNAP_AREA && UNIVERSE_TO_DISPX (SDPtr->star_pt.x) <= pt.x + CURSOR_SNAP_AREA)
+				&& (UNIVERSE_TO_DISPY (SDPtr->star_pt.y) >= pt.y - CURSOR_SNAP_AREA && UNIVERSE_TO_DISPY (SDPtr->star_pt.y) <= pt.y + CURSOR_SNAP_AREA)
+				&& (BestSDPtr == 0 || STAR_TYPE (SDPtr->Type) >= STAR_TYPE (BestSDPtr->Type)))
 			BestSDPtr = SDPtr;
 	}
 
 	if (BestSDPtr)
-	{
-		cursorLoc = BestSDPtr->star_pt;
+	{	// A star is near the cursor:
+		// Snap cursor onto star only in 1x res. In hi-res modes,  
+		// snapping is done when the star is selected as auto-pilot target.
+		if (RESOLUTION_FACTOR == 0)
+			cursorLoc = BestSDPtr->star_pt;
+		
 		GetClusterName (BestSDPtr, buf);
 	}
 	else
@@ -1299,10 +1309,10 @@ DoMoveCursor (MENU_STATE *pMS)
 #define MAX_ACCEL_DELAY_1X (ONE_SECOND / 8)
 #define STEP_ACCEL_DELAY_1X (ONE_SECOND / 120)
 #define MIN_ACCEL_DELAY_2X (ONE_SECOND / 60)
-#define MAX_ACCEL_DELAY_2X (ONE_SECOND / 8)
+#define MAX_ACCEL_DELAY_2X (ONE_SECOND / 10)
 #define STEP_ACCEL_DELAY_2X (ONE_SECOND / 120)
 #define MIN_ACCEL_DELAY_4X (ONE_SECOND / 60)
-#define MAX_ACCEL_DELAY_4X (ONE_SECOND / 8)
+#define MAX_ACCEL_DELAY_4X (ONE_SECOND / 10)
 #define STEP_ACCEL_DELAY_4X (ONE_SECOND / 120)
 
 	static UNICODE last_buf[CURSOR_INFO_BUFSIZE];
@@ -1360,6 +1370,34 @@ DoMoveCursor (MENU_STATE *pMS)
 	}
 	else if (PulsedInputState.menu[KEY_MENU_SELECT])
 	{
+		// JMS: The hi-res modes now have a user-friendly starmap cursor.
+		// The cursor finds a star even if the cursor is several pixels away from it (CURSOR_SNAP_AREA)
+		// The cursor centers on the star only when selected as an auto-pilot target.
+		if (RESOLUTION_FACTOR > 0)
+		{
+			STAR_DESC *SDPtr;
+			STAR_DESC *BestSDPtr;
+			POINT pt;
+			
+			pt.x = UNIVERSE_TO_DISPX (cursorLoc.x);
+			pt.y = UNIVERSE_TO_DISPY (cursorLoc.y);
+			SDPtr = BestSDPtr = 0;
+			
+			while ((SDPtr = FindStar (SDPtr, &cursorLoc, 75, 75)))
+			{
+				if ((UNIVERSE_TO_DISPX (SDPtr->star_pt.x) >= pt.x - CURSOR_SNAP_AREA && UNIVERSE_TO_DISPX (SDPtr->star_pt.x) <= pt.x + CURSOR_SNAP_AREA)
+					&& (UNIVERSE_TO_DISPY (SDPtr->star_pt.y) >= pt.y -CURSOR_SNAP_AREA && UNIVERSE_TO_DISPY (SDPtr->star_pt.y) <= pt.y + CURSOR_SNAP_AREA)
+					&& (BestSDPtr == 0 || STAR_TYPE (SDPtr->Type) >= STAR_TYPE (BestSDPtr->Type)))
+					BestSDPtr = SDPtr;
+			}
+			
+			if (BestSDPtr)
+			{
+				cursorLoc = BestSDPtr->star_pt;
+				UpdateCursorLocation (0, 0, &BestSDPtr->star_pt);
+			}
+		}
+		
 		GLOBAL (autopilot) = cursorLoc;
 #ifdef DEBUG
 		if (instantMove)
@@ -1427,11 +1465,17 @@ DoMoveCursor (MENU_STATE *pMS)
 		if (PulsedInputState.menu[KEY_MENU_UP])      sy =   -1;
 		if (PulsedInputState.menu[KEY_MENU_DOWN])    sy =    1;
 
-		if (moveRepeats > 20)
+		if (moveRepeats > 25)
 		{
-			sx *= 1 << RESOLUTION_FACTOR;
-			sy *= 1 << RESOLUTION_FACTOR;
+			sx *= RES_CASE(1,2,2);
+			sy *= RES_CASE(1,2,2);
 		}
+		if (moveRepeats > 50)
+		{
+			sx *= RES_CASE(1,1,2);
+			sy *= RES_CASE(1,1,2);
+		}
+		
 		// BW: we need to go through this because 4x only checks for
 		// input every ONE_SECOND/40 or so, thus reducing
 		// MIN_ACCEL_DELAY is of no use. In practice it's similar.
