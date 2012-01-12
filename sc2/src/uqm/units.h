@@ -71,7 +71,7 @@ extern unsigned int resolutionFactor; // JMS_GFX
 				/* Blue boxes which display messages and the green date box. */
 #define SIS_TITLE_BOX_WIDTH    (57 << RESOLUTION_FACTOR)						// JMS_GFX
 #define SIS_TITLE_WIDTH        (SIS_TITLE_BOX_WIDTH - (2 << RESOLUTION_FACTOR)) // JMS_GFX
-#define SIS_TITLE_HEIGHT       RES_CASE(8,16,22)								// JMS_GFX
+#define SIS_TITLE_HEIGHT       RES_CASE(8,19,29)								// JMS_GFX
 #define SIS_SPACER_BOX_WIDTH   (12 << RESOLUTION_FACTOR)						// JMS_GFX
 
 #define SIS_MESSAGE_BOX_WIDTH  (SIS_SCREEN_WIDTH - SIS_TITLE_BOX_WIDTH - SIS_SPACER_BOX_WIDTH)
@@ -79,7 +79,7 @@ extern unsigned int resolutionFactor; // JMS_GFX
 #define SIS_MESSAGE_HEIGHT     SIS_TITLE_HEIGHT
 
 #define STATUS_MESSAGE_WIDTH   (STATUS_WIDTH - RES_STAT_SCALE(4))				// JMS_GFX
-#define STATUS_MESSAGE_HEIGHT  RES_STAT_SCALE(7) // JMS_GFX
+#define STATUS_MESSAGE_HEIGHT  RES_CASE(7,17,24) // JMS_GFX
 
 #define SHIP_NAME_WIDTH        (STATUS_WIDTH - RES_STAT_SCALE(4) + RESOLUTION_FACTOR)// JMS_GFX
 #define SHIP_NAME_HEIGHT       RES_STAT_SCALE(7)								// JMS_GFX

@@ -254,7 +254,7 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 	r.corner.x = SIS_ORG_X + 1;
 	r.corner.y = SIS_ORG_Y - SIS_MESSAGE_HEIGHT;
 	r.extent.width = SIS_MESSAGE_WIDTH;
-	r.extent.height = SIS_MESSAGE_HEIGHT - RES_STAT_SCALE(1);
+	r.extent.height = SIS_MESSAGE_HEIGHT - 1;
 	SetContextFGFrame (Screen);
 	SetContextClipRect (&r);
 	
@@ -420,7 +420,7 @@ void
 GetStatusMessageRect (RECT *r)
 {
 	r->corner.x = RES_STAT_SCALE(2) + RESOLUTION_FACTOR;
-	r->corner.y = RES_STAT_SCALE(130) + 2 * RESOLUTION_FACTOR;
+	r->corner.y = RES_STAT_SCALE(130) + RES_CASE(0,0,4);
 	r->extent.width = STATUS_MESSAGE_WIDTH;
 	r->extent.height = STATUS_MESSAGE_HEIGHT;
 }
@@ -485,7 +485,7 @@ DrawStatusMessage (const UNICODE *pStr)
 	}
 
 	t.baseline.x = STATUS_MESSAGE_WIDTH >> 1;
-	t.baseline.y = STATUS_MESSAGE_HEIGHT - RES_CASE(1,4,3); // JMS_GFX
+	t.baseline.y = STATUS_MESSAGE_HEIGHT - RES_CASE(1,6,6); // JMS_GFX
 	t.align = ALIGN_CENTER;
 	t.pStr = pStr;
 	t.CharCount = (COUNT)~0;
