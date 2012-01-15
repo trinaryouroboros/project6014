@@ -383,6 +383,9 @@ init_syreenhome_comm (void)
 	case 2:
 		syreenhome_desc = syreenhome_desc_4x;
 		break;
+	case 1:
+		syreenhome_desc = syreenhome_desc_4x;
+		break;
 	case 0:
 	default:
 		syreenhome_desc = syreenhome_desc_1x;
