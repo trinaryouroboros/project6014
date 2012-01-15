@@ -559,6 +559,9 @@ init_human_comm (void)
 	case 2:
 		human_desc = human_desc_4x;
 		break;
+	case 1:
+		human_desc = human_desc_4x;
+		break;
 	case 0:
 	default:
 		human_desc = human_desc_1x;
