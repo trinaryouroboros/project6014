@@ -218,63 +218,113 @@ static LOCDATA yehat_desc_2x =
 	NULL_RESOURCE, /* AlienAltSong */
 	0, /* AlienSongFlags */
 	YEHAT_CONVERSATION_PHRASES, /* PlayerPhrases */
-	7, /* NumAnimations */
+	13, /* NumAnimations */
 	{ /* AlienAmbientArray (ambient animations) */
-		{ /* 0 Yehat right hand */
+		{ /* right hand-wing tapping keyboard; front guy */
 			4, /* StartIndex */
 			3, /* NumFrames */
-			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			YOYO_ANIM
+			| WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 10, ONE_SECOND / 10, /* FrameRate */
 			ONE_SECOND / 4, ONE_SECOND / 2,/* RestartRate */
-			0, /* BlockMask */
+			0,
 		},
-		{ /* 1 Yehat left hand */
+		{ /* left hand-wing tapping keyboard; front guy */
 			7, /* StartIndex */
 			3, /* NumFrames */
-			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
+			YOYO_ANIM
+			| WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 10, ONE_SECOND / 10, /* FrameRate */
 			ONE_SECOND / 4, ONE_SECOND / 2,/* RestartRate */
-			0, /* BlockMask */
+			0,
 		},
-		{ /* 2 Yehat eye glow */
+		{
 			10, /* StartIndex */
 			3, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 20, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 6), /* BlockMask */
+			(1 << 4) | (1 << 12),
 		},
-		{ /* 3 Yehat light */
+		{
 			13, /* StartIndex */
 			3, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
-			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
-			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			(1 << 4) | (1 << 5), /* BlockMask */
+			ONE_SECOND / 20, 0, /* FrameRate */
+			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
+			(1 << 5),
 		},
-		{ /* 4 Yehat light */
+		{
 			16, /* StartIndex */
+			5, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
+			ONE_SECOND * 6, ONE_SECOND * 3,/* RestartRate */
+			(1 << 2) | (1 << 12),
+		},
+		{
+			21, /* StartIndex */
+			5, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
+			ONE_SECOND * 6, ONE_SECOND * 3,/* RestartRate */
+			(1 << 3),
+		},
+		{
+			26, /* StartIndex */
 			3, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			(1 << 3) | (1 << 5), /* BlockMask */
+			0, /* BlockMask */
 		},
-		{ /* 5 Yehat light */
-			19, /* StartIndex */
+		{
+			29, /* StartIndex */
 			3, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
 			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
-			(1 << 3) | (1 << 4), /* BlockMask */
+			0, /* BlockMask */
 		},
-		{ /* 6 Yehat eye blink */
-			22, /* StartIndex */
-			4, /* NumFrames */
+		{
+			32, /* StartIndex */
+			3, /* NumFrames */
 			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{
+			35, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{
+			38, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{
+			41, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM, /* AnimFlags */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* FrameRate */
+			ONE_SECOND / 30, ONE_SECOND / 30, /* RestartRate */
+			0, /* BlockMask */
+		},
+		{
+			44, /* StartIndex */
+			3, /* NumFrames */
+			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 30, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 2), /* BlockMask */
+			(1 << 2) | (1 << 4),
 		},
 	},
 	{ /* AlienTransitionDesc - empty */
