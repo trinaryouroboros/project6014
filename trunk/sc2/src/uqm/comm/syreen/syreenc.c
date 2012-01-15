@@ -357,6 +357,9 @@ init_syreen_comm (void)
 	case 2:
 		syreen_desc = syreen_desc_4x;
 		break;
+	case 1:
+		syreen_desc = syreen_desc_4x;
+		break;
 	case 0:
 	default:
 		syreen_desc = syreen_desc_1x;
