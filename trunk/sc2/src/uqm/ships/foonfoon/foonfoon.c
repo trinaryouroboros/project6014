@@ -543,7 +543,15 @@ fire_burst (ELEMENT *ElementPtr)
 		UnlockElement (hMissile);
 		PutElement (hMissile);
 
-		ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 1), ElementPtr);
+		// Play different 'shot release' sound according to how powerful the shot is.
+		if (ElementPtr->mass_points >= 7)
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 10), ElementPtr);
+		else if (ElementPtr->mass_points == 4)
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 9), ElementPtr);
+		else if (ElementPtr->mass_points == 2)
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 8), ElementPtr);
+		else
+			ProcessSound (SetAbsSoundIndex (StarShipPtr->RaceDescPtr->ship_data.ship_sounds, 7), ElementPtr);
 	}
 
 	// Recoil the ship with powerful enough shots.
