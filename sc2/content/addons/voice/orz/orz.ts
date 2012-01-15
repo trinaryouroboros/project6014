@@ -17,9 +17,9 @@
 #(enough_alliance)
 #(ENOUGH_ALLIANCE_OK)	
 #(ask_know_fjorn)
-#(ORZ_DENY_FJORN)
+#(ORZ_DENY_FJORN)		3000
 #(you_have_met_fjorn)
-#(TALK_ABOUT_FJORN)
+#(TALK_ABOUT_FJORN)		4000
 #(any_more_news)
 #(ORZ_GARBAGE)			2500, 3500, 3200, 2800, 4000, 3600, 2900, 3500, 4350
 #(goodbye_orz)
