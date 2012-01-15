@@ -422,6 +422,9 @@ init_transport_comm (void)
 	case 2:
 		transport_desc = transport_desc_4x;
 		break;
+	case 1:
+		transport_desc = transport_desc_4x;
+		break;
 	case 0:
 	default:
 		transport_desc = transport_desc_1x;
