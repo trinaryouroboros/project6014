@@ -1,7 +1,7 @@
-#(VUX_GREETING1)
+#(VUX_GREETING1)	VUX_GREETING1.ogg
 Oh. It's you.
 
-#(VUX_GREETING2)
+#(VUX_GREETING2)	VUX_GREETING2.ogg
 UGH, get AWAY from me human. 
 Just because you are free to roam the galaxy while we are imprisoned
 does not mean you get to impose your hideous presence on us.
@@ -9,13 +9,13 @@ does not mean you get to impose your hideous presence on us.
 #(greeting_1_who_you)
 Umm, yes, it is me. Who are you?
 
-#(STRONG_STOMACH)
+#(STRONG_STOMACH)	STRONG_STOMACH.ogg
 The one with the strongest stomach.
 
 #(greeting_1_whats_like)
 So, what's it like over there?
 
-#(TAKE_GUESS)
+#(TAKE_GUESS)		TAKE_GUESS.ogg
 ...Take a guess.
 
 #(SILENT)
@@ -24,13 +24,13 @@ So, what's it like over there?
 #(greeting_1_to_apology)
 I never quite got around to finishing my apology for our unfortunate first contact. You ready?
 
-#(KILL_LIKE_OTHERS)
+#(KILL_LIKE_OTHERS)	KILL_LIKE_OTHERS.ogg
 Are you going to kill me if I don't accept it, like all the others?
 
 #(whats_news)
 Any news to report?
 
-#(DAX_INFORMATION)
+#(DAX_INFORMATION)	DAX_INFORMATION.ogg
 I was hoping you wouldn't ask that
 as I am required to answer completely.
 The one piece of news you are not already aware of is that ZEX's deviant subordinate DAX
@@ -47,19 +47,19 @@ Did you have any science teams out investigating Precursor factories? No aces up
 #(sb2_neglect_mismanagement)
 Are you suffering from critical shortages due to neglect and mismanagement?
 
-#(NOT_IDIOTS)
+#(NOT_IDIOTS)	NOT_IDIOTS.ogg
 ...No, we aren't idiots.
 
 #(sb3_rethinking_position)
 Are you rethinking your position on aliens?
 
-#(ARGUMENT_SUBJECT)
+#(ARGUMENT_SUBJECT)		ARGUMENT_SUBJECT.ogg
 There is some argument on this subject, yes.
 
 #(sb4_seriously_how_is)
 Seriously, how is it over there?
 
-#(RANT)
+#(RANT)			RANT.ogg
 Captain... we were minding our own business when the Ur-Quan invaded,
 supported by fleets of Ilwrath, Umgah, and Spathi.
 These four did not enhance our hopefulness for the goodness of unseen aliens,
@@ -83,16 +83,16 @@ In order to survive, our people live most of their lives indoors under carefully
 And of course some of us are compelled to come up here and offer assistance to the ones who imprisoned us.
 ...Not so good!
 
-#(AFTER_RANT)
+#(AFTER_RANT)		AFTER_RANT.ogg
 ...you're joking.
 
 #(sb5_safe_under_shield)
 At least you weren't bombarded from orbit like us. And the shield is blue, especially for you.
 
-#(SPITEFUL_VUX_1)
+#(SPITEFUL_VUX_1)	SPITEFUL_VUX_1.ogg
 Not quite as bad as the Ur-Quan! Such high standards you keep.
 
-#(SPITEFUL_VUX_2)
+#(SPITEFUL_VUX_2)	SPITEFUL_VUX_2.ogg
 You humans must know from experience how humiliating this is. 
 VUX were intergalactic masters while your species were still twigging on to the industrial revolution. 
 You'll excuse me if I sound a little spiteful... it's because I am.
@@ -103,13 +103,13 @@ Okay, then.
 #(apology_1)
 I didn't kill them! I wasted a lot of fuel running away, too, I'll have you know!
 
-#(APOLOGY_1_ANSWER)
+#(APOLOGY_1_ANSWER)	APOLOGY_1_ANSWER.ogg
 A 'waste'. So telling.
 
 #(apology_2)
 They attacked me after I offered peace.
 
-#(APOLOGY_2_ANSWER)
+#(APOLOGY_2_ANSWER)	APOLOGY_2_ANSWER.ogg
 You used a peace offer to cover your invasion, complete with wiping out fleets.
 
 #(apology_3)
@@ -127,19 +127,19 @@ If you're going to be like that, never mind!
 #(2apology_1)
 Eh, whatever.
 
-#(2APOLOGY_1_ANSWER)
+#(2APOLOGY_1_ANSWER)		2APOLOGY_1_ANSWER.ogg
 A strong effort, captain. Bravo.
 
 #(2apology_2)
 I'm sorry that captain Rand was a meanie.
 
-#(2APOLOGY_2_ANSWER)
+#(2APOLOGY_2_ANSWER)		2APOLOGY_2_ANSWER.ogg
 Go on.
 
 #(2apology_3)
 I'm sorry captain Rand judged your appearance by standards that shouldn't apply to it.
 
-#(2APOLOGY_3_ANSWER)
+#(2APOLOGY_3_ANSWER)		2APOLOGY_3_ANSWER.ogg
 Certainly not! Go on.
 
 #(2apology_4)
@@ -151,7 +151,7 @@ I'm sorry you guys heard his honest opinion. You shouldn't have been subjected t
 #(3apology_1)
 I'm sorry that Star Control did not ensure that its captains were capable of controlling themselves.
 
-#(3APOLOGY_1_ANSWER)
+#(3APOLOGY_1_ANSWER)		3APOLOGY_1_ANSWER.ogg
 Go on. Back down to a single captain again. A different one... *ahem*
 
 #(3apology_2)
@@ -163,7 +163,7 @@ What? I just apologized.
 #(3apology_3)
 I'm sorry that humans find you extremely ugly. It's really a shame.
 
-#(3APOLOGY_3_ANSWER)
+#(3APOLOGY_3_ANSWER)		3APOLOGY_3_ANSWER.ogg
 It's unfortunate your aesthetic senses are so dull
 but you don't want to change them, do you? 
 Thought not. NOT SORRY.
@@ -171,25 +171,25 @@ Thought not. NOT SORRY.
 #(3apology_4)
 It's unfortunate that our sense of beauty is so dull as to be unable to perceive such magnificence.
 
-#(3APOLOGY_4_ANSWER)
+#(3APOLOGY_4_ANSWER)		3APOLOGY_4_ANSWER.ogg
 Yes, isn't it? Now, about you specifically...
 
 #(4apology_1)
 I'm sorry I didn't make more of an effort to bring you on board the New Alliance.
 
-#(4APOLOGY_1_ANSWER)
+#(4APOLOGY_1_ANSWER)		4APOLOGY_1_ANSWER.ogg
 Okay.
 
 #(4apology_2)
 I'm sorry I didn't intervene on your behalf to ensure more lenient treatment.
 
-#(4APOLOGY_2_ANSWER)
+#(4APOLOGY_2_ANSWER)		4APOLOGY_2_ANSWER.ogg
 Go on.
 
 #(4apology_3)
 That covers it, right?
 
-#(4APOLOGY_3_ANSWER)
+#(4APOLOGY_3_ANSWER)		4APOLOGY_3_ANSWER.ogg
 So gracious of you to apologize for the actions of others.
 
 #(4apology_4)
@@ -201,48 +201,48 @@ Nope. I gave you guys a lot of chances!
 #(5apology_1)
 Is there anything else? Can we be friends now?
 
-#(5APOLOGY_1_ANSWER)
+#(5APOLOGY_1_ANSWER)		5APOLOGY_1_ANSWER.ogg
 No, there's nothing else. No, I'm afraid that's still impossible.
 
 #(5apology_2)
 I'm sorry for... umm, help me out here.
 
-#(5APOLOGY_2_ANSWER)
+#(5APOLOGY_2_ANSWER)		5APOLOGY_2_ANSWER.ogg
 Your sincerity is infectious
 It should be burned.
 
 #(5apology_3)
 Is there anything else I can do to help?
 
-#(5APOLOGY_3_ANSWER)
+#(5APOLOGY_3_ANSWER)		5APOLOGY_3_ANSWER.ogg
 Yes. You can cast down the Chmmr and free my people. That would help a lot.
 
 #(5apology_4)
 All apologized up! One step closer to retroactive 100% completion!
 
-#(5APOLOGY_4_ANSWER)
+#(5APOLOGY_4_ANSWER)		5APOLOGY_4_ANSWER.ogg
 I knew there had to be a reason for this.
 
 #(6apology_1)
 That's a tall order.
 
-#(6APOLOGY_1_ANSWER)
+#(6APOLOGY_1_ANSWER)		6APOLOGY_1_ANSWER.ogg
 So is being forgiven.
 
 #(6apology_2)
 Yeah, how about NO.
 
-#(6APOLOGY_2_ANSWER)
+#(6APOLOGY_2_ANSWER)		6APOLOGY_2_ANSWER.ogg
 The same to you, buddy.
 
 #(6apology_3)
 The Chmmr? Are you crazy? Those guys are scary!
 
-#(6APOLOGY_3_ANSWER)
+#(6APOLOGY_3_ANSWER)		6APOLOGY_3_ANSWER.ogg
 What a hero.
 
 #(goodbye_vux)
 Well, umm, nice meeting you. Sayonara.
 
-#(GOODBYE_EARTHLING)
+#(GOODBYE_EARTHLING)		GOODBYE_EARTHLING.ogg
 Finally!

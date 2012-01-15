@@ -4,4 +4,5 @@ comm.orz.dialogue = CONVERSATION:base/comm/orz/orz.txt:addons/voice/orz/:addons/
 comm.slylandro.dialogue = CONVERSATION:base/comm/slylandro/slylandro.txt:addons/voice/slylandro/:addons/voice/slylandro/slylandro.ts
 comm.spathi.dialogue = CONVERSATION:base/comm/spathi/spathi.txt:addons/voice/spathi/:addons/voice/spathi/spathi.ts
 comm.yehat.dialogue = CONVERSATION:base/comm/yehat/yehat.txt:addons/voice/yehat/:addons/voice/yehat/yehat.ts
+comm.vux.dialogue = CONVERSATION:base/comm/vux/vux.txt:addons/voice/vux/:addons/voice/vux/vux.ts
 
