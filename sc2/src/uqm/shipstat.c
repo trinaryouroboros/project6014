@@ -398,7 +398,7 @@ DeltaStatistics (SHIP_INFO *ShipInfoPtr, COORD y_offs,
 				if (PlayerControl[1] & COMPUTER_CONTROL && ShipInfoPtr->ship_flags & BAD_GUY)
 					DrawFilledRectangle (&r);
 				else
-					// JMS: I'VE DELETED THIS! Draw bullet hole to signify critical damage
+					// JMS: I'VE DELETED THIS! This used to draw bullet holes to signify critical damage.
 					if (ShipInfoPtr->damage_flags & DAMAGE_GAUGE_CREW)
 					{
 						/*STAMP Stamp;
