@@ -269,12 +269,11 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 		TEXT t;
 
 		t.baseline.x = STATUS_WIDTH >> 1;
-		t.baseline.y = y + 6;
+		t.baseline.y = y + RES_CASE(6,-22,-44);
 		t.align = ALIGN_CENTER;
 		t.pStr = GLOBAL_SIS (CommanderName);
 		t.CharCount = (COUNT)~0;
-		SetContextForeGroundColor (
-				BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x00), 0x02));
+		SetContextForeGroundColor (RES_CASE(BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x00), 0x02), BLACK_COLOR, BLACK_COLOR));
 		SetContextFont (TinyFont);
 		font_DrawText (&t);
 	}

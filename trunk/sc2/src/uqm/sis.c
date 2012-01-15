@@ -523,7 +523,7 @@ DrawCaptainsName (void)
 
 	// Background of captain's name.	
 	r.corner.x = RES_STAT_SCALE(3);							// JMS_GFX
-	r.corner.y = RES_CASE(10,18,30);							// JMS_GFX
+	r.corner.y = RES_CASE(10,18,30);						// JMS_GFX
 	r.extent.width = SHIP_NAME_WIDTH - RES_STAT_SCALE(2);	// JMS_GFX
 	r.extent.height = SHIP_NAME_HEIGHT;						// JMS_GFX
 	DrawFilledRectangle (&r);
