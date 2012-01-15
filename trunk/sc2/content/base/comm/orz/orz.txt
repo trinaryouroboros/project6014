@@ -94,14 +94,14 @@ Never be afraid to $*open*$ enough and $*spread the wax*$.
 #(ask_know_fjorn)
 Do you know anything about the Fjorn?
 
-#(ORZ_DENY_FJORN)
+#(ORZ_DENY_FJORN)	ORZ_DENY_FJORN.ogg
 It is not. Orz have never hear this word "Fjorn".
 It is strange because Orz have hear most words and many people, but not $*talker*$ Fjorn.
 
 #(you_have_met_fjorn)
 Talker Fjorn? So you have met them!
 
-#(TALK_ABOUT_FJORN)
+#(TALK_ABOUT_FJORN)	TALK_ABOUT_FJORN.ogg
 Since $*Campers*$ are last ask Orz have meet $*talker*$ Fjorn again.
 Fjorn are $*happy*$ but after too much time are not $*happy*$, are not $*enjoy*$ and talk like not stopping!
 
