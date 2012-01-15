@@ -21,8 +21,8 @@
 #define P6014_MAJOR_VERSION_S  "0"
 #define P6014_MINOR_VERSION     2
 #define P6014_MINOR_VERSION_S  "2"
-#define P6014_PATCH_VERSION     0
-#define P6014_PATCH_VERSION_S  "0"
+#define P6014_PATCH_VERSION     1
+#define P6014_PATCH_VERSION_S  "1"
 #define P6014_EXTRA_VERSION    ""
 /* The final version is interpreted as:
  * printf ("%d.%d.%d%s", P6014_MAJOR_VERSION, P6014_MINOR_VERSION,
