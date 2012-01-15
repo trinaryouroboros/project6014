@@ -424,8 +424,9 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	
 	// JMS: The grid is now partially transparent for HS map.
 	// Hi-res modes have less transparency since thin lines are harder to see.
+	// JvdD: The grid is now bright red, to account for the background 
 	if (which_space <= 1)
-		OldColor = SetContextForeGroundColor (BUILD_COLOR_RGBA(0x00,0x00,0x5E,RES_CASE(0x55,0x80,0xCC)));
+		OldColor = SetContextForeGroundColor (BUILD_COLOR_RGBA(0xAE,0x30,0x30,RES_CASE(0x55,0x80,0xCC)));
 	
 	// The Grid. (For more information, see TRON)
 	for (i = MAX_Y_UNIVERSE + 1, j = MAX_X_UNIVERSE + 1; i >= 0; i -= GRID_DELTA, j -= GRID_DELTA)
