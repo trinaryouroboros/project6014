@@ -1,15 +1,15 @@
-#(Y_HELLO)
+#(Y_HELLO)	Y_HELLO.ogg
 Braaaaarrrrrkkkk! Human captain friend, it is
 my pleasure as station Commander to welcome
 ye to our first joint Pkunk and Yehat colony !
 
-#(P_HELLO)
+#(P_HELLO)	P_HELLO.ogg
 But !? My dear brother, I think you're still dizzy
 from this morning's chanting session.
 We had agreed on this, it is I who gets to play
 station Commander for today !
 
-#(Y_BYEBYE)
+#(Y_BYEBYE)	Y_BYEBYE.ogg
 Arrrrrk... As ye can see for yerself, captain, we're
 still struggling with the concept of shared leadership.
 Please come back later...
