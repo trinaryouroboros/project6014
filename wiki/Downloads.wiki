@@ -12,12 +12,12 @@ The files are:
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
 || Windows Installer || Platform specific ||MB||[ ]|| [ ]||
-|| OS X Application || Platform specific ||MB ||[ ] || [ ]||
+|| OS X Application || Platform specific ||1.4 MB ||[ ] || [ ]||
 || Base content package|| Content (required) ||43.6 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-content.uqm Base content for 0.2.1 (required)]  || [ ]||
 || Alien voices package || Content ||39.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-voice.uqm Voice package for 0.2.1] || [http://www.stack.nl/~joris/p6014/0.2.1/P6014-0.2.1-prv-voice.uqm mirror 1]||
 || High quality music package || Content ||52.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-3domusic.uqm HQ music package for 0.2.1] || [http://www.stack.nl/~joris/p6014/0.2.1/P6014-0.2.1-prv-3domusic.uqm  mirror 1]||
-|| 640 x 480 Graphics package|| Content ||MB ||[ ] || [ ] ||
-|| 1280 x 960 Graphics package|| Content ||MB ||[ ] || [ ] ||
+|| 640 x 480 Graphics package|| Content ||114 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-hires2x.uqm 640x480 graphics] || [ ] ||
+|| 1280 x 960 Graphics package|| Content ||223 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-hires4x.uqm.part1.rar Part 1] [http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-hires4x.uqm.part2.rar Part 2] || [ ] ||
 
 * Ubuntu Linux / Linux Mint packages *
 
