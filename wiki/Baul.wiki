@@ -1,0 +1,32 @@
+#labels Races
+= Baul =
+
+  * *Connected races:* Foon-foon
+  * *Connected devices:*
+
+== Summary info ==
+The Baul respect strength, and they’re absolutely convinced about them having it. They’re natural in bullying each other, and to no wonder they could bring this habit to interstellar levels. They have practically taken the entire Foon-Foon race hostage.
+
+They're divided to two factions:
+
+1. the _General_'s space navy which separated itself from the government and gone subjugating and leeching off the Foon-Foon. They own and guard a giant cannon placed on the Foon-Foon homeworld's moon (called the "Moon Cannon" ... don't expect much imagination from Baul naming habits), pointing at the planet's surface. Their SOI is inside the Foon-Foon SOI.
+2. the government and the _President_ who would rather see the space navy at leash length. They reside on the Baul homeworld, which need to be found first.
+
+The Captain can gain Baul alliance in two ways:
+
+*1. Help the General*: The easiest solution -- find and destroy the Foon-Foon rebels.
+*2. Help the President*: The hardest solution, especially because it incorporates the Foon-Foon alliance mission of destroying the Moon Cannon (and therefore grants FF alliance too). If you find the Baul homeworld, the Captain can make a deal with the President about assassinating the General, which requires. If the deal was made the Captain can rightfully engage the General in combat and let a puppet general take his place who will steer the Baul SOI back to their homeworld. Once they're there, the alliance can be signed, or they simply send their captains and ship schematics to NAFS bases.
+
+The Captain can cut himself away from gaining the Baul alliance in the following ways:
+
+1. by attacking the Baul homeworld
+2. by attacking the General's Punisher ships
+3. by attacking Foon-Foon ships while they're supervised by Baul officers
+4. by helping the Foon-Foon rebels without making the deal
+5. by doing nothing (see Foon-Foon description)
+
+== Detailed info ==
+
+== Ship ==
+
+The obnoxius Baul Punisher. A massive craft developed by Baul engineering genius :). It uses a pair of gases discovered by Baul brewer industry: one of them is red and set of as a cloud, the other is blue, sprayed and quick to dissolve. The two of them meeting creates a destructive shockwave which can also set off other red clouds. On top of that, the clouds can stick to enemy ships.
