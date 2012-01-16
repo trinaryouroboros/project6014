@@ -30,7 +30,7 @@ The files are:
 ||p6014-hires2x.deb||Content||95 MB|| ||[ ]||
 ||p6014-hires4x.deb||Content||263 MB|| ||[ ]||
 
-
+*Note: You MUST use 0.2.1. content packages! Packages with older version number (like 0.2.0.) won't work!*
 
 *Windows*
   * Just download the installer. That file will download the content for you.
