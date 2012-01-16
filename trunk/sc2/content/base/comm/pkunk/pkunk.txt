@@ -1,4 +1,4 @@
-#(WONDERFUL)	WONDERFUL.OGG
+#(WONDERFUL)	WONDERFUL.ogg
 I trust you don't mind my bypassing regular channels to talk to you directly.
 It is wonderful to see you again.
 
@@ -7,7 +7,7 @@ Mmmmmmmmm... mMMMMMmmm
 mrrrrr... m...
 mmmmmmmm
 
-#(WELCOME_BACK)	WELCOME_BACK.OGG
+#(WELCOME_BACK)	WELCOME_BACK.ogg
 Welcome back to Ruttipeep, the home of all Yehat and Pkunk.
 Well, most of them, usually.
 Some of them, often?
@@ -181,7 +181,7 @@ but these demons belong here. They're ours. The outer darkness can't have 'em!
 #(me_help)
 Is there anything I can do to help?
 
-#(SAVE_WORLD)	SAVE_WORLD
+#(SAVE_WORLD)	SAVE_WORLD.ogg
 Hmm.
 On this?
 Not that I know of.
@@ -191,7 +191,7 @@ That would be dreadfully inconvenient.
 #(you_busy)
 You sound terribly busy.
 
-#(ME_BUSY)	ME_BUSY
+#(ME_BUSY)	ME_BUSY.ogg
 Somewhat busy. The most important part is finding good people
 and the second most important part is trusting them.
 That's hard.
@@ -215,7 +215,7 @@ As awful as things can get, you always need to look up.
 #(sorry)
 Sorry, that was all.
 
-#(WORDS)
+#(WORDS)	WORDS.ogg
 Ah, so wonderful to speak with someone who isn't
 so extremely careful with words.
 
