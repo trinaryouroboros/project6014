@@ -10,23 +10,23 @@ The files are:
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
 || Windows Installer || Platform specific ||1.4 MB||[ ]|| ||
-|| OS X Application || Platform specific ||1.4 MB ||[ ] || [ Mirror]||
-|| Base content package|| Content (required) ||57.2 MB ||[ ]  || [ Mirror]||
+|| OS X Application || Platform specific ||1.4 MB ||[ ] || [ ]||
+|| Base content package|| Content (required) ||57.2 MB ||[ ]  || [ ]||
 || Alien voices package || Content ||14.9 MB ||[ ] || [Mirror]||
-|| High quality music package || Content ||52.8 MB ||[ ] || [ Mirror]||
-|| 640 x 480 Graphics package|| Content ||127 MB ||[ ] || [ Mirror] ||
-|| 1280 x 960 Graphics package|| Content ||253 MB ||[ ] || [ Mirror] ||
+|| High quality music package || Content ||52.8 MB ||[ ] || [ ]||
+|| 640 x 480 Graphics package|| Content ||127 MB ||[ ] || [ ] ||
+|| 1280 x 960 Graphics package|| Content ||253 MB ||[ ] || [ ] ||
 
 * Ubuntu Linux / Linux Mint packages *
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-||p6014_0.2_i386.deb||32-bit binaries||0.7 MB||[ ] ||[ Mirror]||
-||p6014_0.2_amd64.deb||64-bit binaries||0.7 MB|| [ ] ||[ Mirror]||
-||p6014-content.deb||Content (required)||50 MB|| ||[ Mirror]||
-||p6014-3domusic.deb||Content||52 MB|| ||[ Mirror]||
-||p6014-voice.deb||Content||15 MB|| ||[ Mirror]||
-||p6014-hires2x.deb||Content||95 MB|| ||[ Mirror]||
-||p6014-hires4x.deb||Content||263 MB|| ||[ Mirror]||
+||p6014_0.2_i386.deb||32-bit binaries||0.7 MB||[ ] ||[ ]||
+||p6014_0.2_amd64.deb||64-bit binaries||0.7 MB|| [ ] ||[ ]||
+||p6014-content.deb||Content (required)||50 MB|| ||[ ]||
+||p6014-3domusic.deb||Content||52 MB|| ||[ ]||
+||p6014-voice.deb||Content||15 MB|| ||[ ]||
+||p6014-hires2x.deb||Content||95 MB|| ||[ ]||
+||p6014-hires4x.deb||Content||263 MB|| ||[ ]||
 
 
 
