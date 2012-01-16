@@ -22,13 +22,13 @@ The files are:
 * Ubuntu Linux / Linux Mint packages *
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-||p6014_0.2_i386.deb||32-bit binaries||0.7 MB||[ ] ||[ ]||
-||p6014_0.2_amd64.deb||64-bit binaries||0.7 MB|| [ ] ||[ ]||
-||p6014-content.deb||Content (required)||50 MB|| ||[ ]||
-||p6014-3domusic.deb||Content||52 MB|| ||[ ]||
-||p6014-voice.deb||Content||15 MB|| ||[ ]||
-||p6014-hires2x.deb||Content||95 MB|| ||[ ]||
-||p6014-hires4x.deb||Content||263 MB|| ||[ ]||
+||p6014_0.2_i386.deb||32-bit binaries||MB||[ ] ||[ ]||
+||p6014_0.2_amd64.deb||64-bit binaries||MB|| [ ] ||[ ]||
+||p6014-content.deb||Content (required)||MB|| ||[ ]||
+||p6014-3domusic.deb||Content||MB|| ||[ ]||
+||p6014-voice.deb||Content||MB|| ||[ ]||
+||p6014-hires2x.deb||Content||MB|| ||[ ]||
+||p6014-hires4x.deb||Content||MB|| ||[ ]||
 
 *Note: You MUST use 0.2.1. content packages! Packages with older version number (like 0.2.0.) won't work!*
 
