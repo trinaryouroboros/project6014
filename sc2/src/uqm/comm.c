@@ -72,6 +72,9 @@
 // XXX: was 32 picked experimentally?
 #define OSCILLOSCOPE_RATE   (ONE_SECOND / 32)
 
+// JMS
+#define RESPONSE_EXTRA_Y (RES_CASE(0,12,22))
+
 // Maximum comm animation frame rate (actual execution rate)
 // A gfx frame is not always produced during an execution frame,
 // and several animations are combined into one gfx frame.
@@ -249,7 +252,7 @@ add_text (int status, TEXT *pTextIn)
 		locText.baseline.x -= (8 << RESOLUTION_FACTOR) - 4 * RESOLUTION_FACTOR; // JMS_GFX
 		locText.CharCount = (COUNT)~0;
 		locText.pStr = STR_BULLET;
-		if (!(status == -2 && pTextIn->baseline.y >= SIS_SCREEN_HEIGHT))
+		if (!((status == -2 || status == -1) && pTextIn->baseline.y >= SIS_SCREEN_HEIGHT))
 			font_DrawText (&locText);
 
 		locText = *pTextIn;
@@ -288,7 +291,7 @@ add_text (int status, TEXT *pTextIn)
 		{
 			// Player dialog option or (status == -4) other non-alien
 			// text.
-			if (pText->baseline.y < SIS_SCREEN_HEIGHT)
+			if ((pText->baseline.y + RESPONSE_EXTRA_Y) < SIS_SCREEN_HEIGHT)
 				font_DrawText (pText);
 
 			if (status < -4 && pText->baseline.y >= -status - 10)
@@ -558,7 +561,7 @@ RefreshResponses (ENCOUNTER_STATE *pES)
 	y = SLIDER_Y + SLIDER_HEIGHT + (1 << RESOLUTION_FACTOR); // JMS_GFX
 	for (response = pES->top_response; response < pES->num_responses; ++response)
 	{
-		extra_y = (response == pES->top_response ? 0 : RES_CASE(0,12,22)); // JMS_GFX
+		extra_y = (response == pES->top_response ? 0 : RESPONSE_EXTRA_Y); // JMS_GFX
 		
 		pES->response_list[response].response_text.baseline.x = TEXT_X_OFFS + (8 << RESOLUTION_FACTOR); // JMS_GFX
 		pES->response_list[response].response_text.baseline.y = y + leading + extra_y; // JMS_GFX
@@ -575,7 +578,7 @@ RefreshResponses (ENCOUNTER_STATE *pES)
 		s.origin.y = SLIDER_Y + SLIDER_HEIGHT + 1;
 		s.frame = SetAbsFrameIndex (ActivityFrame, 6);
 	}
-	else if (y > SIS_SCREEN_HEIGHT)
+	else if ((y + extra_y) > SIS_SCREEN_HEIGHT)
 	{
 		s.origin.y = SIS_SCREEN_HEIGHT - 2;
 		s.frame = SetAbsFrameIndex (ActivityFrame, 7);
@@ -1216,7 +1219,7 @@ PlayerResponseInput (ENCOUNTER_STATE *pES)
 				pES->top_response = 0;
 				// RefreshResponses (pES);
 			}
-			else if (y > SIS_SCREEN_HEIGHT)
+			else if ((y + RESPONSE_EXTRA_Y) > SIS_SCREEN_HEIGHT)
 			{
 				pES->top_response = response;
 				// RefreshResponses (pES);
