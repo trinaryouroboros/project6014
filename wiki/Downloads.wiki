@@ -13,7 +13,7 @@ The files are:
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
 || Windows Installer || Platform specific ||MB||[ ]|| [ ]||
 || OS X Application || Platform specific ||MB ||[ ] || [ ]||
-|| Base content package|| Content (required) ||MB ||[ ]  || [ ]||
+|| Base content package|| Content (required) ||43.6 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-content.uqm Base content for 0.2.1]  || [ ]||
 || Alien voices package || Content ||39.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-voice.uqm Voice package for 0.2.1] || [http://www.stack.nl/~joris/p6014/0.2.1/P6014-0.2.1-prv-voice.uqm mirror 1]||
 || High quality music package || Content ||52.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-3domusic.uqm HQ music package for 0.2.1] || [http://www.stack.nl/~joris/p6014/0.2.1/P6014-0.2.1-prv-3domusic.uqm  mirror 1]||
 || 640 x 480 Graphics package|| Content ||MB ||[ ] || [ ] ||
