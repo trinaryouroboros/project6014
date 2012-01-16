@@ -14,8 +14,8 @@ The files are:
 || Windows Installer || Platform specific ||MB||[ ]|| [ ]||
 || OS X Application || Platform specific ||MB ||[ ] || [ ]||
 || Base content package|| Content (required) ||MB ||[ ]  || [ ]||
-|| Alien voices package || Content ||39.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-voice.uqm Voice package for 0.2.1.] || [ ]||
-|| High quality music package || Content ||52.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-3domusic.uqm HQ music package for 0.2.1.] || [ ]||
+|| Alien voices package || Content ||39.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-voice.uqm Voice package for 0.2.1] || [ ]||
+|| High quality music package || Content ||52.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-3domusic.uqm HQ music package for 0.2.1] || [ ]||
 || 640 x 480 Graphics package|| Content ||MB ||[ ] || [ ] ||
 || 1280 x 960 Graphics package|| Content ||MB ||[ ] || [ ] ||
 
