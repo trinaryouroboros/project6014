@@ -4,7 +4,7 @@
 == Project 6014 demo 0.2.1 ==
 *Note: You MUST use 0.2.1 content packages! Packages with older version number (like 0.2.0) won't work!*
 
-_Coming soon!!!_
+_Released 16th Jan 2012_
 
 
 
