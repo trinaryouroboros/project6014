@@ -142,7 +142,7 @@ But with the wind as it is, this meta-cosmology lesson is all I have to offer.
 Hasta la vista!
 
 #(ADIOS1)	ADIOS1.ogg
-Adios, humanos.
+Adios, humaños.
 ...
 Is that right? I'm not even sure that's the same lan-
 
@@ -162,7 +162,7 @@ Go extinct, mostly...
 but some adapt!
 
 #(court_troubles)
-What are these courtly troubles?
+So, there are some courtly troubles?
 
 #(COURT_SHIT)	COURT_SHIT.ogg
 This and that. Factionalism, xenophobia,
@@ -212,6 +212,13 @@ to squinnet out the liars and expose them to the light of day
 and ride the updraft of civilization as far as we can.
 As awful as things can get, you always need to look up.
 
+#(sorry)
+Sorry, that was all.
+
+#(WORDS)
+Ah, so wonderful to speak with someone who isn't
+so extremely careful with words.
+
 #(JOKE)		JOKE.ogg
 Say, I heard one of your human jokes. Would you like to hear it?
 So, it goes
@@ -230,7 +237,7 @@ and mixed up your philosophical tracts with your science fiction novels.
 Sometimes it's hard to tell the difference.
 
 #(brick)
-That one only works as a brick joke after the one where Saint Anselm brings Robert Dawkins a teapot.
+That one only works as a brick joke after the one where Saint Anselm brings Richard Dawkins a teapot.
 
 #(YOU_KNOW_ALL)		YOU_KNOW_ALL.ogg
 Oh, right! Well, it seems you know it already.
