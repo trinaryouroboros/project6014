@@ -9,7 +9,7 @@ _Coming soon!!!_
 The files are:
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-|| Windows Installer || Platform specific ||1.4 MB||[ ]|| ||
+|| Windows Installer || Platform specific ||1.4 MB||[ ]|| [ ]||
 || OS X Application || Platform specific ||1.4 MB ||[ ] || [ ]||
 || Base content package|| Content (required) ||57.2 MB ||[ ]  || [ ]||
 || Alien voices package || Content ||14.9 MB ||[ ] || [ ]||
