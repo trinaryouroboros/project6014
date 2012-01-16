@@ -57,6 +57,7 @@ extern FRAME SpaceJunkFrame;
 #undef SPIN_ON_SCAN
 
 #define FLASH_INDEX 105
+#define OUTLINECOLOR (BUILD_COLOR_RGBA(0x00,0x00,0x00,0x66))
 
 static CONTEXT ScanContext;
 
@@ -114,7 +115,7 @@ PrintScanTitlePC (TEXT *t, RECT *r, const char *txt, int xpos)
 	t->pStr = txt;
 	t->CharCount = (COUNT)~0;
 	//font_DrawText (t);
-	font_DrawTracedText (t, SCAN_PC_TITLE_COLOR, BLACK_COLOR);
+	font_DrawTracedText (t, SCAN_PC_TITLE_COLOR, OUTLINECOLOR);
 	TextRect (t, r, NULL);
 	t->baseline.x += r->extent.width;
 	SetContextForeGroundColor (SCAN_INFO_COLOR);
@@ -183,7 +184,7 @@ PrintCoarseScanPC (void)
 	SetContextForeGroundColor (SCAN_PC_TITLE_COLOR);
 	SetContextFont (MicroFont);
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 
 	SetContextFont (TinyFont);
 	UnlockMutex (GraphicsLock);
@@ -205,7 +206,7 @@ PrintCoarseScanPC (void)
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -228,7 +229,7 @@ PrintCoarseScanPC (void)
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -240,7 +241,7 @@ PrintCoarseScanPC (void)
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -258,7 +259,7 @@ PrintCoarseScanPC (void)
 	}
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -277,7 +278,7 @@ PrintCoarseScanPC (void)
 	}
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	UnlockMutex (GraphicsLock);
 
 	t.baseline.y = SCAN_BASELINE_Y_PC;
@@ -296,7 +297,7 @@ PrintCoarseScanPC (void)
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -309,7 +310,7 @@ PrintCoarseScanPC (void)
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -324,7 +325,7 @@ PrintCoarseScanPC (void)
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -338,7 +339,7 @@ PrintCoarseScanPC (void)
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -352,7 +353,7 @@ PrintCoarseScanPC (void)
 	sprintf (buf, "%d" STR_DEGREE_SIGN, val);
 	t.CharCount = (COUNT)~0;
 	//font_DrawText (&t);
-	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, OUTLINECOLOR);
 	UnlockMutex (GraphicsLock);
 }
 
