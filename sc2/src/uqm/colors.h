@@ -405,7 +405,7 @@
 // === Scan menu and general ===
 
 #define SCAN_PC_TITLE_COLOR \
-		BUILD_COLOR (MAKE_RGB15 (0x00, 0x00, 0x15), 0x3B)
+		BUILD_COLOR (MAKE_RGB15 (0x00, 0x14, 0x14), 0x03)
 
 #define SCAN_INFO_COLOR \
 		BUILD_COLOR (MAKE_RGB15 (0x0F, 0x00, 0x19), 0x3B)
