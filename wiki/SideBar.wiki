@@ -42,7 +42,7 @@
           * [Faz]
           * [FleeingRace]
           * [Lurg]
-          * [MasterRace]
+          * [Baul]
           * [Mmrnmhrm]
           * [Exotics]
           * [SlaveRace]
