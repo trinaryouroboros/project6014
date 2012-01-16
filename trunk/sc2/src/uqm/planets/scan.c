@@ -113,7 +113,8 @@ PrintScanTitlePC (TEXT *t, RECT *r, const char *txt, int xpos)
 	SetContextForeGroundColor (SCAN_PC_TITLE_COLOR);
 	t->pStr = txt;
 	t->CharCount = (COUNT)~0;
-	font_DrawText (t);
+	//font_DrawText (t);
+	font_DrawTracedText (t, SCAN_PC_TITLE_COLOR, BLACK_COLOR);
 	TextRect (t, r, NULL);
 	t->baseline.x += r->extent.width;
 	SetContextForeGroundColor (SCAN_INFO_COLOR);
@@ -181,7 +182,8 @@ PrintCoarseScanPC (void)
 
 	SetContextForeGroundColor (SCAN_PC_TITLE_COLOR);
 	SetContextFont (MicroFont);
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 
 	SetContextFont (TinyFont);
 	UnlockMutex (GraphicsLock);
@@ -202,7 +204,8 @@ PrintCoarseScanPC (void)
 			GAME_STRING (ORBITSCAN_STRING_BASE + 1)); // " a.u."
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -224,7 +227,8 @@ PrintCoarseScanPC (void)
 	}
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -235,7 +239,8 @@ PrintCoarseScanPC (void)
 			pSolarSysState->SysInfo.PlanetInfo.SurfaceTemperature);
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -252,7 +257,8 @@ PrintCoarseScanPC (void)
 		t.pStr = buf;
 	}
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -270,7 +276,8 @@ PrintCoarseScanPC (void)
 		t.pStr = buf;
 	}
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	UnlockMutex (GraphicsLock);
 
 	t.baseline.y = SCAN_BASELINE_Y_PC;
@@ -288,7 +295,8 @@ PrintCoarseScanPC (void)
 			GAME_STRING (ORBITSCAN_STRING_BASE + 12)); // " e.s."
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -300,7 +308,8 @@ PrintCoarseScanPC (void)
 			GAME_STRING (ORBITSCAN_STRING_BASE + 12)); // " e.s."
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -314,7 +323,8 @@ PrintCoarseScanPC (void)
 			GAME_STRING (ORBITSCAN_STRING_BASE + 15)); // " g."
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -327,7 +337,8 @@ PrintCoarseScanPC (void)
 			GAME_STRING (ORBITSCAN_STRING_BASE + 17)); // " days"
 	t.pStr = buf;
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	t.baseline.y += SCAN_LEADING_PC;
 	UnlockMutex (GraphicsLock);
 
@@ -340,7 +351,8 @@ PrintCoarseScanPC (void)
 	t.pStr = buf;
 	sprintf (buf, "%d" STR_DEGREE_SIGN, val);
 	t.CharCount = (COUNT)~0;
-	font_DrawText (&t);
+	//font_DrawText (&t);
+	font_DrawTracedText (&t, SCAN_INFO_COLOR, BLACK_COLOR);
 	UnlockMutex (GraphicsLock);
 }
 
