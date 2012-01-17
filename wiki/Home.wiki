@@ -9,7 +9,7 @@ This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from 
 
 = Contents =
 
-== User information ==
+== Game information ==
 
   * [Downloads] - Downloadable files for the latest release
   
@@ -17,7 +17,7 @@ This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from 
     * [http://forum.uqm.stack.nl/index.php?board=1.0 The Ur-Quan Masters Forum]
     * [http://star-control.com/community/viewforum.php?f=9 The Pages of Now and Forever]
 
-== Game development ==
+== Development ==
 
   * [DesignNotes] - current game design (plot, etc.)
 
