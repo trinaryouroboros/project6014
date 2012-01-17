@@ -22,13 +22,13 @@ The files are:
 * Ubuntu Linux / Linux Mint packages *
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-||p6014_0.2.1_i386.deb||32-bit binaries||MB||[ ] ||[ ]||
-||p6014_0.2.1_amd64.deb||64-bit binaries||MB|| [ ] ||[ ]||
-||p6014-0.2.1-content.deb||Content (required)||MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-content.deb mirror 1]||
+||p6014_0.2.1_i386.deb||32-bit binaries||0.7 MB||[ ] ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014_0.2.1_i386.deb mirror 1]||
+||p6014_0.2.1_amd64.deb||64-bit binaries||0.7 MB|| [ ] ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014_0.2.1_amd64.deb mirror 1]||
+||p6014-0.2.1-content.deb||Content (required)||36.9 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-content.deb mirror 1]||
 ||p6014-0.2.1-3domusic.deb||Content||52.6 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-3domusic.deb mirror 1]||
 ||p6014-0.2.1-voice.deb||Content||39.4 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-voice.deb mirror 1]||
-||p6014-0.2.1-hires2x.deb||Content||MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-hires2x.deb mirror 1]||
-||p6014-0.2.1-hires4x.deb||Content||MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-hires4x.deb mirror 1]||
+||p6014-0.2.1-hires2x.deb||Content||61.1 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-hires2x.deb mirror 1]||
+||p6014-0.2.1-hires4x.deb||Content||233 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-hires4x.deb mirror 1]||
 
 *Note: You MUST use 0.2.1 content packages! Packages with older version number (like 0.2.0) won't work!*
 
@@ -46,6 +46,7 @@ The files are:
 
 =Additional Downloads=
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
+|| Source .tar.gz (revision 2202) || Source || 16.1 MB || || [http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-src.tar.gz Mirror 1] ||
 || starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-blue.png Giant Star Map (red)]  || [http://www.deviantart.com/download/279923412/project_6014_starmap___red_by_dczanik-d4mnqac.png Mirror 1 ]||
 || starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-red.png Giant Star Map (blue)]  || [http://www.deviantart.com/download/279835061/project_6014__star_map_blue_by_dczanik-d4mlu45.png Mirror 1 ]||
 
