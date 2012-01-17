@@ -46,7 +46,6 @@ The files are:
 
 =Additional Downloads=
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-|| starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-2.png Printable Star Map (blue)]  || [ ]||
 
 ----
 
