@@ -46,8 +46,8 @@ The files are:
 
 =Additional Downloads=
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-|| starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-blue.png Giant Star Map (red)]  || [ ]||
-|| starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-red.png Giant Star Map (blue)]  || [ ]||
+|| starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-blue.png Giant Star Map (red)]  || [http://www.deviantart.com/download/279923412/project_6014_starmap___red_by_dczanik-d4mnqac.png Mirror 1 ]||
+|| starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-red.png Giant Star Map (blue)]  || [http://www.deviantart.com/download/279835061/project_6014__star_map_blue_by_dczanik-d4mlu45.png Mirror 1 ]||
 
 ----
 
