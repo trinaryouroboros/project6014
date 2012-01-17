@@ -1,0 +1,2399 @@
+#(Denebola )
+Денебола
+
+
+#(Acamar)
+Акамар
+
+
+#(Acoreus)
+Акореса
+
+
+#(Adrastus)
+Адраста
+
+
+#(Aeolus)
+Эола
+
+
+#(Alcyone)
+Альциона
+
+
+#(Angstrom)
+Ангстрема
+
+
+#(Apollonius)
+Аполлония
+
+
+#(Arachne)
+Паука
+
+
+#(Caeli)
+Резца
+
+
+#(Archimedes)
+Архимеда
+
+
+#(Archytas)
+Архита
+
+
+#(Ares)
+Ареса
+
+
+#(Aristillus)
+Аристилла
+
+
+#(Artemis)
+Артемиды
+
+
+#(Ascella)
+Асцелла
+
+
+#(Auster)
+Аустера
+
+
+#(Bellona)
+Беллоны
+
+
+#(Bessel)
+Бесселя
+
+
+#(Canis Majoris)
+Большого Пса
+
+
+#(Canis Minoris)
+Малого Пса
+
+
+#(Cassini)
+Кассини
+
+
+#(Celaeno)
+Целено
+
+
+#(Conon)
+Конона
+
+
+#(Demeter)
+Деметры
+
+
+#(Electra)
+Электра
+
+
+#(Eltanin)
+Элтанина
+
+
+#(Eurus)
+Эвра
+
+
+#(Faunus)
+Фавна
+
+
+#(Favonius)
+Фавония
+
+
+#(Fortuna)
+Фортуны
+
+
+#(Fraunhofer)
+Фраунгофера
+
+
+#(Gacrux )
+Гакрукс
+
+
+#(Galilei)
+Галилея
+
+
+#(Halley)
+Галлея
+
+
+#(Hecate)
+Гекаты
+
+
+#(Heraclides)
+Гераклида
+
+
+#(Hespera)
+Геспера
+
+
+#(Hestia)
+Гестии
+
+
+#(Hicetas)
+Гикета
+
+
+#(Hulse)
+Халса
+
+
+#(Huygens)
+Гюйгенса
+
+
+#(Hydri)
+Южной Гидры
+
+
+#(Hygea)
+Гигея
+
+
+#(Hyginus)
+Гигина
+
+
+#(Hymen)
+Гимения
+
+
+#(Hypnos)
+Сна
+
+
+#(Janus)
+Януса
+
+
+#(Juno)
+Юноны
+
+
+#(Juturna)
+Ютурна
+
+
+#(Juventus)
+Ювентуса
+
+
+#(Kapteyn)
+Каптейна
+
+
+#(Kornephoros)
+Корнефорос
+
+
+#(Lemaitre)
+Леметра
+
+
+#(Eris)
+Эриса
+
+
+#(Libitina)
+Либитины
+
+
+#(Lupi)
+Лупи
+
+
+#(Lycaeus)
+Ликаи
+
+
+#(Macrobius)
+Макробия
+
+
+#(Menelaus)
+Менелая
+
+
+#(Menkent)
+Менкента
+
+
+#(Messier)
+Мессье
+
+
+#(Meton)
+Метон
+
+
+#(Minerva)
+Минервы
+
+
+#(Naos)
+Наоса
+
+
+#(Notus)
+Нотуса
+
+
+#(Pales)
+Палеса
+
+
+#(Morpheus)
+Морфея
+
+
+#(Poena)
+Пени
+
+
+#(Priapus)
+Приапа
+
+
+#(Terebellum)
+Terebellum
+
+
+#(Riccioli)
+Рициоли
+
+
+#(Sylvanus)
+Сильвануса
+
+
+#(Syrma)
+Сирмы
+
+
+#(Serpentis)
+Змеи
+
+
+#(Sextantis)
+Секстанта
+
+
+#(Tauri)
+Тельца
+
+
+#(Proclus)
+Прокл
+
+
+#(Bootis)
+Волопаса
+
+
+#(Olber)
+Олбера
+
+
+#(Centauri)
+Центавра
+
+
+#(Ptolemae)
+Птолемея
+
+
+#(Gorno)
+Горно
+
+
+#(Velorum)
+Паруса
+
+
+#(Virginis)
+Девы
+
+
+#(Volantis)
+Летучей Рыбы
+
+
+#(Vulpeculae)
+Лисички
+
+
+#(Lalande)
+Лаланда
+
+
+#(Luyten)
+Лейтена
+
+
+#(Indi)
+Индейца
+
+
+#(Lacaille)
+Лакайля
+
+
+#(Giclas)
+Гикласа
+
+
+#(Krueger)
+Крюгера
+
+
+#(Lyrae)
+Лиры
+
+
+#(Wolf)
+Волка
+
+
+#(Saurus)
+Зверя
+
+
+#(Raynet)
+Рейнет
+
+
+#(Zeeman)
+Зееман
+
+
+#(Vela)
+Вела
+
+
+#(Mira)
+Миры
+
+
+#(Cerenkov)
+Черенкова
+
+
+#(Parmenides)
+Парменид
+
+
+#(Penzias)
+Пензиаса
+
+
+#(Persipina)
+Персипины
+
+
+#(Phosphor)
+Фосфора
+
+
+#(Mensae)
+Столовой Горы
+
+
+#(Illuminati)
+Иллюминати
+
+
+#(Vitalis)
+Виталиса
+
+
+#(Herculis)
+Геркулеса
+
+
+#(Gruis)
+Журавля
+
+
+#(Squidi)
+Кальмара
+
+
+#(Pleione)
+Плейоны
+
+
+#(Ursae Majoris)
+Большой Медведицы
+
+
+#(Polydectes)
+Полидекта
+
+
+#(Betelgeuse)
+Бетельгейзе
+
+
+#(Vertumnus)
+Вертумна
+
+
+#(Nereus)
+Нерей
+
+
+#(Procyon)
+Процион
+
+
+#(Rigel)
+Ригель
+
+
+#(Eidolonii)
+Эйдолони
+
+
+#(Mizar)
+Мицар
+
+
+#(Pythagoras)
+Пифагор
+
+
+#(Regulus)
+Регул
+
+
+#(Vindemiatrix)
+Виндемиатрикса
+
+
+#(Somnus)
+Сомнуса
+
+
+#(Capella)
+Капелла
+
+
+#(Deneb)
+Денеб
+
+
+#(Canopus)
+Канопус
+
+
+#(Sirius)
+Сириус
+
+
+#(Sol)
+Солнце
+
+
+#(Coronae)
+Короны
+
+
+#(Monica)
+Monica
+
+
+#(UNKNOWN)
+НЕИЗВЕСТНО
+
+
+#(devices)
+Устройства
+
+
+#(Quasi Portal)
+Квази Портал
+
+
+#(Talking Pet)
+Говорящая Зверушка
+
+
+#(Utwig Bomb)
+Бомба Утвигов
+
+
+#(Sun Device)
+Генератор Солнца
+
+
+#(Rosy Sphere)
+Розовая Сфера
+
+
+#(Aqua Helix)
+Водяная Спираль
+
+
+#(Clear Spindle)
+Прозрачное Веретено
+
+
+#(Broken Ultron)
+Сломанный Ультрон
+
+
+#(Broken Ultron)
+Сломанный Ультрон
+
+
+#(Broken Ultron)
+Сломанный Ультрон
+
+
+#(Perfect Ultron)
+Целый Ультрон
+
+
+#(Temporal Wrapper)
+---Temporal Wrapper
+
+
+#(Umgah Caster)
+Передатчик Умга
+
+
+#(Burvix Caster)
+Передатчик Бурвиксов
+
+
+#(1 DataPlate)
+Табличка 1
+
+
+#(2 DataPlate)
+Табличка 2
+
+
+#(3 DataPlate)
+Табличка 3
+
+
+#(Taalo Shield)
+Щит Таало
+
+
+#(Egg Case)
+Скорлупа Яйца
+
+
+#(Egg Case)
+Скорлупа Яйца
+
+
+#(Egg Case)
+Скорлупа Яйца
+
+
+#(Syreen Shuttle)
+Шаттл Сиренн
+
+
+#(VUX Beast)
+Зверь ВУКСов
+
+
+#(Destruct Code)
+Код Саморазрушения
+
+
+#(Warp Pod)
+Гипер- двигатель
+
+
+#(Wimbli's Trident)
+Трезубец Вимбли
+
+
+#(Glowing Rod)
+Пылающий Жезл
+
+
+#(Moon Base)
+Лунная База
+
+
+#(cargo)
+Трюм
+
+
+#(Free)
+Свободно
+
+
+#(Common)
+Простые
+
+
+#(Corrosive)
+Коррозийные
+
+
+#(Base Metal)
+Металлы
+
+
+#(Noble Gas)
+Инертные Газы
+
+
+#(Rare Earth)
+Редкоземельные
+
+
+#(Precious)
+Драгоценные
+
+
+#(Radioactive)
+Радиоактивные
+
+
+#(Exotic)
+Экзотические
+
+
+#(Hydrogen)
+Водород
+
+
+#(Helium)
+Гелий
+
+
+#(Lithium)
+Литий
+
+
+#(Beryllium)
+Бериллий
+
+
+#(Boron)
+Бор
+
+
+#(Carbon)
+Углерод
+
+
+#(Nitrogen)
+Азот
+
+
+#(Oxygen)
+Кислород
+
+
+#(Fluorine)
+Фтор
+
+
+#(Neon)
+Неон
+
+
+#(Sodium)
+Натрий
+
+
+#(Magnesium)
+Магний
+
+
+#(Aluminum)
+Алюминий
+
+
+#(Silicon)
+Кремний
+
+
+#(Phosphorus)
+Фосфор
+
+
+#(Sulfur)
+Сера
+
+
+#(Chlorine)
+Хлор
+
+
+#(Argon)
+Аргон
+
+
+#(Potassium)
+Калий
+
+
+#(Calcium)
+Кальций
+
+
+#(Scandium)
+Скандий
+
+
+#(Titanium)
+Титан
+
+
+#(Vanadium)
+Ванадий
+
+
+#(Chromium)
+Хром
+
+
+#(Manganese)
+Марганец
+
+
+#(Iron)
+Железо
+
+
+#(Cobalt)
+Кобальт
+
+
+#(Nickel)
+Никель
+
+
+#(Copper)
+Медь
+
+
+#(Zinc)
+Цинк
+
+
+#(Gallium)
+Галлий
+
+
+#(Germanium)
+Германий
+
+
+#(Arsenic)
+Мышьяк
+
+
+#(Selenium)
+Селен
+
+
+#(Bromine)
+Бром
+
+
+#(Krypton)
+Криптон
+
+
+#(Rubidium)
+Рубидий
+
+
+#(Strontium)
+Стронций
+
+
+#(Yttrium)
+Иттрий
+
+
+#(Zirconium)
+Цирконий
+
+
+#(Niobium)
+Ниобий
+
+
+#(Molybdenum)
+Молибден
+
+
+#(Technetium)
+Технеций
+
+
+#(Ruthenium)
+Рутений
+
+
+#(Rhodium)
+Родий
+
+
+#(Palladium)
+Палладий
+
+
+#(Silver)
+Серебро
+
+
+#(Cadmium)
+Кадмий
+
+
+#(Indium)
+Индий
+
+
+#(Tin)
+Олово
+
+
+#(Antimony)
+Сурьма
+
+
+#(Tellurium)
+Теллур
+
+
+#(Iodine)
+Йод
+
+
+#(Xenon)
+Ксенон
+
+
+#(Cesium)
+Цезий
+
+
+#(Barium)
+Барий
+
+
+#(Lanthanum)
+Лантан
+
+
+#(Cerium)
+Церий
+
+
+#(Praseo- dymium)
+Празеодим
+
+
+#(Neodymium)
+Неодим
+
+
+#(Promethium)
+Прометий
+
+
+#(Samarium)
+Самарий
+
+
+#(Europium)
+Европий
+
+
+#(Gadolinium)
+Гадолиний
+
+
+#(Terbium)
+Тербий
+
+
+#(Dyprosium)
+Диспрозий
+
+
+#(Holmium)
+Гольмий
+
+
+#(Erbium)
+Эрбий
+
+
+#(Thulium)
+Тулий
+
+
+#(Ytterbium)
+Иттербий
+
+
+#(Lutetium)
+Лютеций
+
+
+#(Hafnium)
+Гафний
+
+
+#(Tantalum)
+Тантал
+
+
+#(Tungsten)
+Вольфрам
+
+
+#(Rhenium)
+Рений
+
+
+#(Osmium)
+Осмий
+
+
+#(Iridium)
+Иридий
+
+
+#(Platinum)
+Платина
+
+
+#(Gold)
+Золото
+
+
+#(Mercury)
+Ртуть
+
+
+#(Thallium)
+Таллий
+
+
+#(Lead)
+Свинец
+
+
+#(Bismuth)
+Висмут
+
+
+#(Polonium)
+Полоний
+
+
+#(Astatine)
+Астат
+
+
+#(Radon)
+Радон
+
+
+#(Francium)
+Франций
+
+
+#(Radium)
+Радий
+
+
+#(Actinium)
+Актиний
+
+
+#(Thorium)
+Торий
+
+
+#(Protactinium)
+Протактиний
+
+
+#(Uranium)
+Уран
+
+
+#(Neptunium)
+Нептуний
+
+
+#(Plutonium)
+Плутоний
+
+
+#(Ozone)
+Озон
+
+
+#(Free Radicals)
+Свободные Радикалы
+
+
+#(Carbon Dioxide)
+Двуокись Углерода
+
+
+#(Carbon Monoxide)
+Одноокись Углерода
+
+
+#(Ammonia)
+Аммиак
+
+
+#(Methane)
+Метан
+
+
+#(Sulfuric Acid)
+Серная Кислота
+
+
+#(Hydrochloric Acid)
+Соляная Кислота
+
+
+#(Hydrocyanic Acid)
+Синильная Кислота
+
+
+#(Formic Acid)
+Муравьиная Кислота
+
+
+#(Phosphoric Acid)
+Фосфорная Кислота
+
+
+#(Formaldehyde)
+Формальдегид
+
+
+#(Cyano- acetylene)
+Циано- ацетилен
+
+
+#(Methanol)
+Метанол
+
+
+#(Ethanol)
+Этанол
+
+
+#(Silicon Monoxide)
+Одноокись Кремния
+
+
+#(Titanium Oxide)
+Оксид Титана
+
+
+#(Zirconium Oxide)
+Оксид Циркония
+
+
+#(Water)
+Вода
+
+
+#(Silicon Compounds)
+Кремниевые Соединения
+
+
+#(Metal Oxides)
+Оксиды Металлов
+
+
+#(Quantum Black Holes)
+Квантовые Чёрные Дыры
+
+
+#(Neutronium)
+Нейтрониум
+
+
+#(Magnetic Monopoles)
+Магнитные Монополи
+
+
+#(Degenerate Matter)
+Вырожденная Материя
+
+
+#(Super Fluids)
+Сверхжидкости
+
+
+#(Aguuti Nodules)
+Агутиевая Руда
+
+
+#(Iron Compounds)
+Соединения Железа
+
+
+#(Aluminum Compounds)
+Соединения Алюминия
+
+
+#(Nitrous Oxide)
+Оксид Азота
+
+
+#(Radioactives)
+Радиоактивные Материалы
+
+
+#(Hydro- carbons)
+Углеводороды
+
+
+#(Carbon Compounds)
+Углеродные Соединения
+
+
+#(Antimatter)
+Антиматерия
+
+
+#(Charon Dust)
+Пыль Харона
+
+
+#(Reisburg Helices)
+Спирали Рейсбурга
+
+
+#(Tzo Crystals)
+Кристаллы Тзо
+
+
+#(Calcium Compounds)
+Соединения Кальция
+
+
+#(Nitric Acid)
+Азотная Кислота
+
+
+#(MINERAL SCAN)
+ГЕОЛОГИЧЕСКОЕ СКАНИРОВАНИЕ
+
+
+#(ENERGY SCAN)
+ЭНЕРГЕТИЧЕСКОЕ СКАНИРОВАНИЕ
+
+
+#(BIOLOGICAL SCAN)
+БИОЛОГИЧЕСКОЕ СКАНИРОВАНИЕ
+
+
+#((MORE))
+(ДАЛЬШЕ)
+
+
+#(Oolite)
+Оолитовый
+
+
+#(Yttric)
+Иттриевый
+
+
+#(Quasi-Degenerate)
+Квази-Вырожденный
+
+
+#(Lanthanide)
+Лантанидный
+
+
+#(Treasure)
+Богатый
+
+
+#(Urea)
+Уриновый
+
+
+#(Metal)
+Металлический
+
+
+#(Radioactive)
+Радиоактивный
+
+
+#(Opalescent)
+Опаловый
+
+
+#(Cyanic)
+Циановый
+
+
+#(Acid)
+Кислотный
+
+
+#(Alkali)
+Щелочной
+
+
+#(Halide)
+Галогенный
+
+
+#(Green)
+Зелёный
+
+
+#(Copper)
+Медный
+
+
+#(Carbide)
+Карбидный
+
+
+#(Ultramarine)
+Ультрамариновый
+
+
+#(Noble)
+Благородный
+
+
+#(Azure)
+Лазурный
+
+
+#(Chondrite)
+Хондритный
+
+
+#(Purple)
+Пурпурный
+
+
+#(Super-Dense)
+Сверхплотный
+
+
+#(Pellucid)
+Прозрачный
+
+
+#(Dust)
+Пыльный
+
+
+#(Crimson)
+Красный
+
+
+#(Cimmerian)
+Киммерийский
+
+
+#(Infrared)
+Инфракрасный
+
+
+#(Selenic)
+Селенический
+
+
+#(Auric)
+Золотой
+
+
+#(Fluorescent)
+Флюоресцентный
+
+
+#(Ultraviolet)
+Ультрафиолетовый
+
+
+#(Plutonic)
+Плутонический
+
+
+#(Rainbow)
+Радужный
+
+
+#(Shattered)
+Разрушенный
+
+
+#(Sapphire)
+Сапфировый
+
+
+#(Organic)
+Органический
+
+
+#(Xenolithic)
+Ксенолитный
+
+
+#(Redux)
+Возрождающийся
+
+
+#(Primordial)
+Первобытный
+
+
+#(Emerald)
+Изумрудный
+
+
+#(Chlorine)
+Хлорный
+
+
+#(Magnetic)
+Магнетический
+
+
+#(Water)
+Водный
+
+
+#(Telluric)
+Теллуровый
+
+
+#(Hydrocarbon)
+Углеводородный
+
+
+#(Iodine)
+Йодный
+
+
+#(Vinylogous)
+Винилогический
+
+
+#(Ruby)
+Рубиновый
+
+
+#(Magma)
+Магматический
+
+
+#(Maroon)
+Бордовый
+
+
+#(World)
+Мир
+
+
+#(Gas Giant)
+Газовый Гигант
+
+
+#(Alpha)
+Альфа
+
+
+#(Beta)
+Бета
+
+
+#(Gamma)
+Гамма
+
+
+#(Delta)
+Дельта
+
+
+#(Epsilon)
+Эпсилон
+
+
+#(Zeta)
+Зета
+
+
+#(Eta)
+Эта
+
+
+#(Theta)
+Тета
+
+
+#(Iota)
+Йота
+
+
+#(Kappa)
+Каппа
+
+
+#(Lambda)
+Лямбда
+
+
+#(Mu)
+Мю
+
+
+#(Nu)
+Ню
+
+
+#(Xi)
+Кси
+
+
+#(Omicron)
+Омикрон
+
+
+#(Mercury)
+Mepкypий
+
+
+#(Venus)
+Венера
+
+
+#(Earth)
+Земля
+
+
+#(Mars)
+Марс
+
+
+#(Jupiter)
+Юпитер
+
+
+#(Saturn)
+Сатурн
+
+
+#(Uranus)
+Уран
+
+
+#(Neptune)
+Нептун
+
+
+#(Pluto)
+Плутон
+
+
+#(Luna)
+Луна
+
+
+#(Io)
+Ио
+
+
+#(Europa)
+Европа
+
+
+#(Ganymede)
+Ганимед
+
+
+#(Callisto)
+Каллисто
+
+
+#(Titan)
+Титан
+
+
+#(Triton)
+Тритон
+
+
+#(Planet I)
+Плaнeтa I
+
+
+#(Planet II)
+Плaнeтa II
+
+
+#(Planet III)
+Плaнeтa III
+
+
+#(Planet IV)
+Плaнeтa IV
+
+
+#(Planet V)
+Плaнeтa V
+
+
+#(Planet VI)
+Плaнeтa VI
+
+
+#(Planet VII)
+Плaнeтa VII
+
+
+#(Planet VIII)
+Плaнeтa VIII
+
+
+#(Planet IX)
+Плaнeтa IX
+
+
+#(Planet X)
+Плaнeтa X
+
+
+#(Planet XI)
+Плaнeтa XI
+
+
+#(Planet XII)
+Плaнeтa XII
+
+
+#(Planet XIII)
+Плaнeтa XIII
+
+
+#(Planet XIV)
+Плaнeтa XIV
+
+
+#(Planet XV)
+Плaнeтa XV
+
+
+#(Planet XVI)
+Плaнeтa XVI
+
+#(Sa-Matra)
+Са-Матра
+
+#(JAN)
+ЯНВ
+
+
+#(FEB)
+ФЕВ
+
+
+#(MAR)
+МАР
+
+
+#(APR)
+АПР
+
+
+#(MAY)
+МАЙ
+
+
+#(JUN)
+ИЮН
+
+
+#(JUL)
+ИЮЛ
+
+
+#(AUG)
+АВГ
+
+
+#(SEP)
+СЕН
+
+
+#(OCT)
+ОКТ
+
+
+#(NOV)
+НОЯ
+
+
+#(DEC)
+ДЕК
+
+
+#((In response to your statement))
+(В ответ на Вашу реплику)
+
+
+#(MORE)
+ДАЛЕЕ
+
+
+#(Starbase)
+Космическая Станция
+
+
+#(Starbase Commander)
+Командир Станции
+
+
+#(Outfit Starship)
+Снарядить Корабль
+
+
+#(Shipyard)
+Верфь
+
+
+#(Depart StarBase)
+Покинуть Станцию
+
+
+#(ENCOUNTER IN)
+ВСТРЕЧА В
+
+
+#(Deep Space)
+Глубоком Космосе
+
+
+#(ENCOUNTER AT)
+ВСТРЕЧА У
+
+
+#(BATTLE GROUP)
+БОЕВАЯ ГРУППА
+
+
+#(Enemy Ships)
+Вражеских Кораблей
+
+
+#(Destroyed)
+Уничтожено
+
+
+#(Debris)
+Обломков
+
+
+#(Scavenged)
+Собрано
+
+
+#(HyperSpace)
+ГиперПространство
+
+
+#(QuasiSpace)
+КвазиПространство
+
+
+#(OUT OF FUEL)
+НЕТ ТОПЛИВА
+
+
+#(AUTO-PILOT)
+АВТО-ПИЛОТ
+
+
+#(Fuel:)
+Топливо:
+
+
+#(Fuel Use:)
+Топлива:
+
+#(*Below*)
+* Ниже *
+
+#(Enter name)
+Введите имя
+
+
+#(FLAGSHIP)
+ФЛАГМАН
+
+
+#(Vindicator)
+Защитник
+
+
+#(Zelnick)
+Зельник
+
+
+#(Empty)
+Пустая
+
+
+#(Slot)
+Ячейка
+
+
+#(Team)
+Команда
+
+
+#(Name)
+Имя
+
+
+#(Balanced Team 1)
+Сбалансированная 1
+
+
+#(Balanced Team 2)
+Сбалансированная 2
+
+
+#(200 points)
+200 очков
+
+
+#(Behemoth Zenith)
+Зенит Бегемотов
+
+
+#(The Peeled Eyes)
+Ясные Глаза
+
+
+#(Saving . . .)
+Сохранение . . .
+
+
+#(Loading . . .)
+Загрузка . . .
+
+
+#(Unable to save game!)
+Невозможно сохранить игру!
+
+
+#(Empty Slot)
+Пустой Слот
+
+
+#(Saved Game - Date:)
+Сохранённая игра - Дата:
+
+
+#(Sound)
+Звук
+
+
+#(Music)
+Музыка
+
+
+#(Voice)
+Голос
+
+
+#(Cyborg)
+Киборг
+
+
+#(OFF)
+ВЫКЛ
+
+
+#(ON)
+ВКЛ
+
+
+#(Really Quit)
+Выйти?
+
+
+#(Yes)
+Да
+
+
+#(No)
+Нет
+
+
+#(Cr)
+Кр
+
+
+#(RU)
+ЕР
+
+
+#(UNLIMITED)
+БЕСКОНЕЧНО
+
+
+#(FUEL)
+ТОПЛИВО
+
+
+#(CREW)
+ЭКИПАЖ
+
+
+#(CAPTAIN)
+КАПИТАН
+
+
+#(nose:)
+нос:
+
+
+#(spread:)
+перед:
+
+
+#(side:)
+бок:
+
+
+#(tail:)
+зад:
+
+
+#(maximum velocity:)
+максимальная скорость:
+
+
+#(turning rate:)
+угловая скорость:
+
+
+#(combat energy:)
+боевая энергия:
+
+
+#(maximum fuel:)
+максимум топлива:
+
+
+#(gun)
+ствол
+
+
+#(blaster)
+бластер
+
+
+#(cannon)
+пушка
+
+
+#(n/a)
+н/д
+
+
+#(none)
+нет
+
+
+#(Orbit: )
+Орбита: 
+
+
+#( a.u.)
+ а.е.
+
+
+#(Atmo: )
+Атмосфера: 
+
+
+#(Super Thick)
+Сверхплотная
+
+
+#(Vacuum)
+Вакуум
+
+
+#( atm)
+ атм
+
+
+#(Temp: )
+Температура: 
+
+
+#(Weather: )
+Погода: 
+
+
+#(None)
+Нет
+
+
+#(Class)
+Класс
+
+
+#(Tectonics: )
+Тектоника: 
+
+
+#(Mass: )
+Масса: 
+
+
+#( e.s.)
+ з.е.
+
+
+#(Radius: )
+Радиус: 
+
+
+#(Gravity: )
+Гравитация: 
+
+
+#( g.)
+ g.
+
+
+#(Day: )
+День: 
+
+
+#( days)
+ дней
+
+
+#(Tilt: )
+Наклон: 
+
+
+#(Scan)
+Сканер
+
+
+#(Starmap)
+Карта
+
+
+#(Devices)
+Устройства
+
+
+#(Cargo)
+Трюм
+
+
+#(Roster)
+Команда
+
+
+#(Game)
+Игра
+
+
+#(Navigate)
+Навигация
+
+
+#(Mineral)
+Минералы
+
+
+#(Energy)
+Энергия
+
+
+#(Biological)
+Биология
+
+
+#(Exit menu)
+Назад
+
+
+#(Autoscan)
+Автоскан
+
+
+#(Dispatch)
+Посадка
+
+
+#(Save game)
+Сохранить
+
+
+#(Load game)
+Загрузить
+
+
+#(Quit game)
+Выход
+
+
+#(Settings)
+Настройки
+
+
+#(Exit menu)
+Назад
+
+
+#(Converse)
+Разговор
+
+
+#(Attack!)
+Атака!
+
+
+#(Game)
+Игра
+
+
+#(Fuel)
+Топливо
+
+
+#(Module)
+Модуль
+
+
+#(Game)
+Игра
+
+
+#(exit menu)
+Назад
+
+
+#(Crew)
+Команда
+
+
+#(Game)
+Игра
+
+
+#(Exit menu)
+Назад
+
+
+#(Sound)
+Звук
+
+
+#(Music)
+Музыка
+
+
+#(Voice)
+Голос
+
+
+#(Cyborg)
+Киборг
+
+
+#(Captain)
+Капитан
+
+
+#(Flagship)
+Флагман
+
+
+#(Exit menu)
+Назад
+
+
+#(must restart)
+Переключение вкл/выкл высокое разрешение
+графический режим требует перезапуска игры.
+
+Сейчас игра будет закрыта -
+приносим извинения за доставленные неудобства!
+
+
+#(hires_not_done)
+К сожалению, экспериментальный режим
+супер-пупер-мега-графики
+не реализован.
+
+Примерное время завершеия: никогда
+
+
+#()
+
+
+
+#()
+
+
+
+#()
+
+
+
+#()
+
+
+
+#(Scan)
+Сканер
+
+
+#(Starmap)
+Карта
+
+
+#(Manifest)
+Корабль
+
+
+#(Game)
+Игра
+
+
+#(Navigate)
+Навигация
+
+
+#(Cargo)
+Трюм
+
+
+#(Devices)
+Устройства
+
+
+#(Roster)
+Команда
+
+
+#(Exit menu)
+Назад
+
+
+#(Mineral)
+Минералы
+
+
+#(Energy)
+Энергия
+
+
+#(Biological)
+Биология
+
+
+#(Autoscan)
+Автоскан
+
+
+#(Dispatch)
+Посадка
+
+
+#(Exit menu)
+Назад
+
+
+#(mouse_err)
+Мышь не поддерживается в этой игре.
+Используйте клавиатуру или джойстик.
+
+Нажмите ПРОБЕЛ для продолжения.
+
+#(Unconnected. Press LEFT to connect.)
+Нет соединения. Нажмите ВЛЕВО чтобы установить соединение.
+
+
+#(Awaiting incoming connection...)
+Ждём входящее соединение
+
+#(Attempting outgoing connection...)
+Соединяемся
+
+#(Connected. Change the control method to disconnect.)
+Соединение установлено. Нажмите ВВОД чтобы разорвать.
+
+
+#(Confirmation cancelled. Press FIRE to reconfirm.)
+Подтверждение снято. Нажмите ОГОНЬ для подтверждения
+
+
+#(Connection for bottom player not established.)
+Нет связи с нижним игроком.
+
+
+#(Connection for top player not established.)
+Нет связи с верхним игроком.
+
+
+#(Waiting for remote confirmation.)
+Ждём подтверждения
+
+
+#(Bottom player is connected.)
+Нижний игрок подключён.
+
+
+#(Top player is connected.)
+Верхний игрок подключён.
+
+
+#(Bottom player: connection failed.)
+Нижний игрок: обрыв связи.
+
+
+#(Top player: connection failed.)
+Верхний игрок: обрыв связи.
+
+
+#(Bottom player: connection closed.)
+Нижний игрок: отключился.
+
+
+#(Top player: connection closed.)
+Верхний игрок: отключился.
+
+
+#(Connection for bottom player not ready.)
+Нижний игрок не готов.
+
+
+#(Connection for top player not ready.)
+Верхний игрок не готов.
+
+
+#(Bottom player changed something -- need to reconfirm.)
+Нижний игрок что-то изменил. Подтвердим?
+
+
+#(Top player changed something -- need to reconfirm.)
+Верхний игрок что-то изменил. Подтвердим?
+
+
+#(Press SPACE to cancel)
+Нажмите ПРОБЕЛ для отмены
+
+
+#(Connect to remote host)
+Соединиться с сервером
+
+
+#(Wait for incoming connection)
+Ждать входящее соединение
+
+
+#(Cancel)
+Отмена
+
+
+#(Host)
+Сервер
+
+
+#(Port)
+Порт
+
+
+#(Net Delay)
+Латентность сети
+
+
+#(Disconnect for an unspecified reason.)
+Подключение разорвано по неизвестной причине.
+
+
+#(Connection aborted due to version mismatch.)
+Соединение разорвано из-за несовпадения версий.
+
+
+#(Connection aborted due to an internal protocol error.)
+Подключение разорвано из-за внутренней ошибки протокола.
+
+
+#(Connection aborted because the remote side sent a fake signature.)
+Подключение разорвано, потому что удалённая сторона прислала неправильную подпись.
+
+
+#(Game aborted for an unspecified reason.)
+Игра прервана по неизвестной причине.
+
+
+#(Game aborted due to loss of synchronisation.)
+Игра прервана из-за рассинхронизации.
+
+
+#(Game aborted by the remote player.)
+Игра прервана удалённым игроком.
+
+
+#(Only one side at a time can be network controlled.)
+Через сеть можно контролировать не более одной стороны одновременно.
+
+
+#(Netplay with a computer-controlled side is currently not possible.)
+Сетевая игра с компьютером пока невозможна.
+

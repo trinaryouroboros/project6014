@@ -1,0 +1,133 @@
+#(SPACE_HELLO_1a)
+Greetings. This is captain 
+
+#(SPACE_HELLO_1b)
+ of the Earth star cruiser Sagan.
+Hello my friend! How can we help you Captain?
+
+#(SPACE_HELLO_1c)
+This is captain Tuf of the star cruiser Sagan.
+How can we be of assistance my friend?
+
+#(SPACE_HELLO_2)
+Hello my friend! Glad to see you back in the neighborhood!
+Anything we can help you with?
+
+#(SPACE_HELLO_3)
+This is Captain Tuf of the star cruiser Sagan. How can we assist you?
+
+#(ask_news)
+Got any hot news from this side of the galaxy?
+
+#(keep_up_goodbye)
+Keep up the good work, guys. See you later!
+
+#(short_on_fuel)
+You wouldn't happen to have any extra fuel with you? We're running pretty lean.
+
+#(spare_nukes)
+Would you have some old nukes to spare?
+
+#(NEWS_1)
+Not much, mainly patrolling the quadrant and
+enjoying the stars while waiting on our next big assignment.
+I never get tired of them. You couldn't see the stars under that damn slave shield.
+
+#(NEWS_2)
+Yeah. I've got a bit news for you.
+We've lost contact with the starship Amelia.
+HQ says they heard routine radio traffic then nothing.
+No hardware warnings or distress calls were sent out.
+It just vanished. Could be a malfunction, or it was attacked.
+Nobody knows. HQ is sending a patrol over to investigate.
+
+#(NEWS_3)
+Yes, the patrol that was sent out after the missing cruiser
+came back. It found no signs of the ship.
+Some say it was an Ur-Quan Kohr-Ah surprise attack.
+I'm not so sure about that. The aggressive nature of the
+Kohr-Ah makes them more likely to attack with guns blazing.
+They're still dangerous to come across but they still give you
+plenty of time to make a distress call.
+I think it was a surprise attack, perhaps using 
+a cloaking device.
+
+#(NEWS_4)
+Things have been pretty quiet Captain.
+We're just waiting on the details of a science assignment 
+out in the Orion Nebula.
+
+
+#(NEWS_5)
+We've been assisting with some repairs of some nearby satellites.
+Other than that, not much has happened in the past few days.
+
+#(FUEL_1)
+Sorry, captain, but the sheer volume of your Explorer ship
+makes it pretty pointless to transfer from our limited reserves.
+
+#(FUEL_2)
+I hate to be the bearer of bad news, but your vessel is way too 
+big for our fuel to be of any real help.
+
+#(FUEL_3)
+You need to get better at math... The whole tank of this cruiser
+wouldn't move that barge of yours an inch.
+
+#(NUKES_QUESTION)
+...Are you joking?
+
+#(serious)
+Not at all.
+
+#(joking)
+Just horsing around! Lighten up, buddy!
+
+#(NUKES_SERIOUS)
+Oh, you want me to just give you nuclear weapons?
+Well...since you asked..
+Short answer? No.
+Long answer? NNNNOOOOOOOOOOOOOOOOOOOOOOOO.
+
+
+#(NUKES_JOKING)
+Your sense of humor sucks my friend! We're still in a state of war, you know.
+
+#(GOODBYE_CAPTAIN_1)
+Until next time my friend!
+
+#(GOODBYE_CAPTAIN_2)
+Be careful out there my friend. It's still pretty hostile out there.
+
+#(GOODBYE_CAPTAIN_3)
+Take care, my friend!
+
+#(NEUTRAL_SPACE_HELLO_1)
+Friend human. You are hereby cordially invited
+to a bloody duel to the death via an impromptu
+exchange of nuclear missiles and SDI laser blasts.
+...Interested?
+
+#(NEUTRAL_SPACE_HELLO_2)
+Greetings, traveler. I present thee two options:
+You may cowardly back out of my sight this instant, or
+you can be a man and pick a fight with me.
+What it'll be?
+
+#(HOSTILE_SPACE_HELLO_1)
+Yo, bitch! Wanna fight?
+
+#(HOSTILE_SPACE_HELLO_2)
+Yo, yo, yo, wanna exchange a few nukes?
+
+#(yessiree)
+Yessiree! Lemme at you!
+
+#(nonono)
+No thanks, matey, some other time.
+
+#(MADE_MY_DAY)
+You really made my day, pal!
+
+#(MADE_WOOD)
+Ah. I guess some captains are made of wood these days.

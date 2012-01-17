@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<smil baseProfile="Language" version="3.0" xmlns="http://www.w3.org/ns/SMIL">
+    <head>
+        <meta content="Pan and Zoom" name="title"/>
+
+        <layout>
+            <root-layout backgroundColor="black" height="640" width="480"/>
+            <region backgroundColor="black" height="640" top="30" left="0" width="480" xml:id="image_region"/>
+            <region xml:id="Title" height="425" width="300" left="100" top="10"/>
+            <region xml:id="Captions" height="20" width="300" left="100" top="450"/>
+			<region xml:id="menu" top="50" left="120"/>
+			<region xml:id="overlay" left="100" top="50" width="200" height="400"/>
+            <region id="audio_region" soundLevel="100%"/>
+        </layout>
+    </head>
+    <body>
+        <par>
+
+
+		
+
+
+			
+			            <img dur="25s" id="overlay" fit="fill" region="overlay" src="overlay.png"/>
+
+            <smilText dur="25s" textFontSize="x-large" textFontWeight="bold" textColor="white" region="Title">
+               Project 6014: Setup
+            </smilText>
+
+            <smilText dur="25s" textFontSize="large" textFontWeight="bold" textColor="white" region="menu">
+			<center>
+               Graphic Options <br />
+			   PC/3DO Options <br />
+			   Audio Options <br />
+			   Resource Options <br />
+			   Configure Controls <br />
+			   Advanced Options <br />
+			   Exit Setup
+			   </center>
+            </smilText>
+			
+            <img dur="25s" fill="freeze" fit="meet" id="image"
+                panZoom="0,0,100%,100%" region="image_region" src="schematic-wallpaper.jpg">
+
+	
+
+
+			<!-- Engines -->
+                <animate attributeName="panZoom" begin="2.0"
+                    dur="1.5s" fill="freeze" values="-1,4,1920,1200;611,709,700,890"/>
+		
+			<!-- -->
+                <animate attributeName="panZoom" begin="6.0"
+                    dur="1.5s" fill="freeze" values="611,709,700,890;611,309,700,390"/>
+                <animate attributeName="panZoom" begin="9.0"
+                    dur="1.5s" fill="freeze" values="611,309,700,390;811,609,700,890"/>
+					<!-- Weapons -->
+                <animate attributeName="panZoom" begin="13.0"
+                    dur="1.5s" fill="freeze" values="811,609,700,890;253,244,481,792"/>
+                <animate attributeName="panZoom" begin="17.0"
+                    dur="1.5s" fill="freeze" values="253,244,481,792;611,309,700,890"/>
+
+            </img>
+
+            <smilText dur="25s" textFontSize="large" textFontWeight="normal" textColor="white" region="Captions">
+<!-- On early versions for Win32, the screen did not clear if there is no initial character here.... -->
+                .
+               <clear begin="4s"/>
+                 Engines - ONLINE.
+                <clear begin="6s"/>
+
+               <clear begin="8s"/>
+                 EMP BLASTER - ONLINE.
+               <clear begin="11s"/>
+                 LANDER PODS - READY.
+               <clear begin="15s"/>
+                 HULL INTEGRITY: 100%
+               <clear begin="17s"/>
+                 PRIMARY WEAPONS - ONLINE.
+               <clear begin="20s"/>
+<!-- The screen does not clear if there is no additional character text.... -->
+                .
+
+            </smilText>
+
+        </par>
+    </body>
+</smil>

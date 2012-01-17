@@ -1,0 +1,58 @@
+Some Pseudo-code to help guide the programmers through the conversation:
+//*******************************************************************//
+
+If (1st Greeting) 
+	{
+		#(SHO_GREETING1)
+	{
+	ELSE
+	{
+		#(SHO_GREETING)	
+	}
+
+CHOICE (#a_woman, #i_luv_furries, #tell_me_about_distress_call)		//Main Loop
+	
+IF #(a_woman)
+	{
+		#(YES_WOMAN)
+		{
+			CHOICE (you_sound_upset,glad_your_not_upset)
+			IF #(you_sound_upset) OR  #(glad_youre_not_upset)
+			{
+				#(SINCE_YOU_MENTIONED_IT)
+				{
+					CHOICE (#thats_sad, #humans_are_different)
+					IF #(thats_sad)
+					{
+						#(YOU_UNDERSTAND)
+						CHOICE #(gf_at_home)
+						IF #(gf_at_home)
+						{
+							#(YOURE_JUST_AS_BAD)	
+						}
+					}
+					IF #(humans_are_different)
+					{					
+						#(SO_DIFFERENT)
+						CHOICE #(gf_at_home)
+						{
+							#(DIFFERENT_INDEED)
+						}
+					}
+				}
+			}
+			
+		}
+	}
+IF #(i_luv_furries)
+	{
+		#(BACK_OFF_CREEP)
+		CHOICE (#(just_joking),#(sorry_disrespectful))
+		
+	}
+IF #(tell_me_about_distress_call)
+	{
+		#(DISTRESS_CALL)
+	}
+	
+//*******************************************************************//

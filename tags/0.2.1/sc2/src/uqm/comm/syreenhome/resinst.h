@@ -1,0 +1,5 @@
+#define SYREEN_HOME_COLOR_MAP "comm.syreenhome.colortable"
+#define SYREEN_HOME_PMAP_ANIM "comm.syreenhome.graphics"
+#define SYREEN_HOME_FONT "comm.syreenhome.font"
+#define SYREEN_HOME_CONVERSATION_PHRASES "comm.syreenhome.dialogue"
+#define SYREEN_HOME_MUSIC "comm.syreenhome.music"
