@@ -44,6 +44,10 @@ The files are:
   * Download the OS X Application and the Base content package. (Other packages are optional.)
   * Follow the instructions inside the Application to install the packages.
 
+=Additional Downloads=
+|| *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
+|| starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-2.png Printable Star Map (blue)]  || [ ]||
+
 ----
 
 Do post to the forums if you have any issues with installation or running the game.
