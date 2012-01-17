@@ -24,11 +24,11 @@ The files are:
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
 ||p6014_0.2.1_i386.deb||32-bit binaries||MB||[ ] ||[ ]||
 ||p6014_0.2.1_amd64.deb||64-bit binaries||MB|| [ ] ||[ ]||
-||p6014-0.2.1-content.deb||Content (required)||MB|| ||[ ]||
+||p6014-0.2.1-content.deb||Content (required)||MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-content.deb mirror 1]||
 ||p6014-0.2.1-3domusic.deb||Content||52.6 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-3domusic.deb mirror 1]||
 ||p6014-0.2.1-voice.deb||Content||39.4 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-voice.deb mirror 1]||
-||p6014-0.2.1-hires2x.deb||Content||MB|| ||[ ]||
-||p6014-0.2.1-hires4x.deb||Content||MB|| ||[ ]||
+||p6014-0.2.1-hires2x.deb||Content||MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-hires2x.deb mirror1 ]||
+||p6014-0.2.1-hires4x.deb||Content||MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-hires4x.deb mirror 1]||
 
 *Note: You MUST use 0.2.1 content packages! Packages with older version number (like 0.2.0) won't work!*
 
