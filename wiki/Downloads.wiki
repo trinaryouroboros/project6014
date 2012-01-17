@@ -49,8 +49,8 @@ The files are:
 || Source .tar.gz (revision 2202) || Source || 16.1 MB || || [http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-src.tar.gz Mirror 1] ||
 || starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-blue.png Giant Star Map (red)]  || [http://www.deviantart.com/download/279923412/project_6014_starmap___red_by_dczanik-d4mnqac.png Mirror 1 ]||
 || starmap-2.png|| Map ||6.4 MB ||[http://project6014.googlecode.com/svn/trunk/tools/map/starmap-red.png Giant Star Map (blue)]  || [http://www.deviantart.com/download/279835061/project_6014__star_map_blue_by_dczanik-d4mlu45.png Mirror 1 ]||
-|| starmap-spoilerfree-a4.pdf|| Map || 0.08 MB || [http://project6014.googlecode.com/svn-history/r2227/trunk/sc2/doc/devel/starmap-spoilerfree-a4.pdf Spoiler-free A4-printable starmap] || ||
-|| starmap-spoilerfree.svg (interactive) || Map || 0.4 MB || [http://www.stack.nl/~joris/p6014/starmap-spoilerfree.svg Interactive starmap] || ||
+|| starmap-spoilerfree-a4.pdf|| Map || 0.08 MB || [http://project6014.googlecode.com/svn/trunk/sc2/doc/devel/starmap-spoilerfree-a4.pdf Spoiler-free A4-printable starmap] || [http://www.stack.nl/~joris/p6014/starmap-spoilerfree-a4.png Mirror 1]||
+|| starmap-spoilerfree.svg (interactive) || Map || 0.4 MB || [http://code.google.com/p/project6014/downloads/detail?name=starmap-spoilerfree.svg Interactive starmap] || [http://www.stack.nl/~joris/p6014/starmap-spoilerfree.svg Mirror 1] ||
 
 ----
 
