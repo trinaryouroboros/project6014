@@ -8,6 +8,8 @@ import ImageFile
 import ImageStat
 import StringIO
 import re
+from glob import glob
+from optparse import OptionParser
 
 
 DEFAULT_COMPRESSION_LEVEL = 90
@@ -18,12 +20,14 @@ DEFAULT_SIZE_WARNING_THRESHOLD = 100*1024
 
 DEFAULT_FORCE_REGEX = r'.+/cutscene/.+\.png'
 
+verbose_output = False
 
-def notice(msg):
-    print >>sys.stderr, msg
+def notice(msg, force=False):
+    if force or verbose_output:
+        print >>sys.stderr, msg
 
 def warning(msg):
-    print >>sys.stderr, msg
+    print >>sys.stderr, 'Warning: %s' % msg
 
 class Processor(object):
     def __init__(self):
@@ -63,13 +67,13 @@ class Processor(object):
         self.total_pixels += im.size[0] * im.size[1]
         
         if len(buf) < self.size_threshold:
-            #notice('File %s does not meet size threshold (size is %d)' % (png_name, len(buf)))
+            notice('File %s does not meet size threshold (size is %d)' % (png_name, len(buf)))
             return False
 
         if self.force_regex.match(png_name):
             warning('File %s will be forced' % png_name)
         elif self.has_transparency(im):
-            #notice('File %s has transparent pixels' % png_name)
+            notice('File %s has transparent pixels' % png_name)
             if len(buf) >= self.size_warning_threshold:
                 warning('Transparent image is quite large: %s (%d bytes)' % (png_name, len(buf)))
             return False
@@ -83,7 +87,7 @@ class Processor(object):
         buf2 = ss.getvalue()
         reduction = (len(buf) - len(buf2))/float(len(buf))
         if reduction < self.reduction_threshold:
-            #notice('File %s does not meet reduction threshold (reduction was %d%%)' % (png_name, 100*reduction))
+            notice('File %s does not meet reduction threshold (reduction was %d%%)' % (png_name, 100*reduction))
             return False
 
         self.savings += len(buf) - len(buf2)
@@ -138,9 +142,9 @@ class Processor(object):
         ani_names = [name for name in self.names if name.endswith('.ani')]
         for ani_name in ani_names:
             self.analyze_ani(ani_name)
-        notice('Compressable images: %d' % len(self.image_replacements))
-        notice('Expected savings: %d' % self.savings)
-        notice('Total number of pixels: %d' % self.total_pixels)
+        notice('Compressable images: %d' % len(self.image_replacements), force=True)
+        notice('Expected savings: %d' % self.savings, force=True)
+        notice('Total number of pixels: %d' % self.total_pixels, force=True)
     
     def apply(self):
         self.create()
@@ -184,15 +188,32 @@ class UQMProcessor(Processor):
 
 
 def main(args=None):
-    if args is None:
-        args = sys.argv
+    usage = """usage: %prog FILENAME... [--apply] [-v]"""
+    desc = """Analyse UQM package files or content directories for compressable images; optionally apply results to create new compressed version."""
+    parser = OptionParser(usage=usage, description=desc)
+    parser.add_option("--apply",
+                      action="store_true", default=False,
+                      help="apply results to create new version")
+    parser.add_option("-v", "--verbose",
+                      action="store_true", default=False, dest="verbose",
+                      help="verbose output")
 
-    uqm_name = args[1]
-
-    p = UQMProcessor(uqm_name)
-    p.analyze()
-    p.apply()
-    p.close()
+    options, args = parser.parse_args()
+    filenames = [fn2 for fn in args for fn2 in glob(fn)]
+    if len(args) == 0:
+        parser.error('Need one or more filenames to process')
+    
+    if options.verbose:
+        global verbose_output
+        verbose_output = True
+    
+    for uqm_name in filenames:
+        notice('Processing file: %s' % uqm_name)
+        p = UQMProcessor(uqm_name)
+        p.analyze()
+        if options.apply:
+            p.apply()
+        p.close()
 
 
 if __name__ == '__main__':
