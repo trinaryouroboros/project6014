@@ -39,6 +39,8 @@ class Processor(object):
         self.image_replacements = {}
         self.images_seen = {}
         self.savings = 0
+        
+        self.total_pixels = 0
 
     def has_transparency(self, im):
         if im.mode == 'RGB':
@@ -54,13 +56,15 @@ class Processor(object):
         buf = f.read()
         f.close()
 
-        if len(buf) < self.size_threshold:
-            #notice('File %s does not meet size threshold (size is %d)' % (png_name, len(buf)))
-            return False
-
         p = ImageFile.Parser()
         p.feed(buf)
         im = p.close()
+        
+        self.total_pixels += im.size[0] * im.size[1]
+        
+        if len(buf) < self.size_threshold:
+            #notice('File %s does not meet size threshold (size is %d)' % (png_name, len(buf)))
+            return False
 
         if self.force_regex.match(png_name):
             warning('File %s will be forced' % png_name)
@@ -136,6 +140,7 @@ class Processor(object):
             self.analyze_ani(ani_name)
         notice('Compressable images: %d' % len(self.image_replacements))
         notice('Expected savings: %d' % self.savings)
+        notice('Total number of pixels: %d' % self.total_pixels)
     
     def apply(self):
         self.create()
