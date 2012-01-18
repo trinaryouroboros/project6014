@@ -168,7 +168,7 @@ class Processor(object):
 class UQMProcessor(Processor):
     def __init__(self, uqm_name):
         super(UQMProcessor, self).__init__()
-        self.dir_name = uqm_name
+        self.uqm_name = uqm_name
         self.input = zipfile.ZipFile(uqm_name, 'r')
         self.names = self.input.namelist()
         notice('Total files in UQM: %s' % len(self.names))
