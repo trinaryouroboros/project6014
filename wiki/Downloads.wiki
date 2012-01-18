@@ -2,11 +2,15 @@
 = Downloads =
 
 == Project 6014 demo 0.2.1 ==
-*Note: You MUST use 0.2.1 content packages! Packages with older version number (like 0.2.0) won't work!*
 
 _Released 16th Jan 2012_
 
+*Note: You MUST use 0.2.1 content packages! Packages with older version number (like 0.2.0) won't work!*
 
+== - ==
+
+
+*Windows / OS X packages*
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
 || Windows Installer || Platform specific ||1.4 MB||[http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.2.1_win_installer.exe Windows Installer 0.2.1] || [ ]||
 || OS X Application || Platform specific ||1.4 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-v0.2.1-OSX.7z OS X Application 0.2.1] || [http://www.stack.nl/~joris/p6014/0.2.1/P6014-v0.2.1-OSX.7z mirror 1]||
