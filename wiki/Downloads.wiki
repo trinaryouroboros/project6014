@@ -7,12 +7,14 @@ _Released 16th Jan 2012_
 
 *Note: You MUST use 0.2.1 content packages! Packages with older version number (like 0.2.0) won't work!*
 
+*<font color="#ff0000">The Windows installer is currently missing a .dll file. Please download [http://www.stack.nl/~joris/p6014/jpeg.dll jpeg.dll] and place it in the same folder as your p6014 executable. Our apologies for the inconvenience; we'll get this fixed ASAP.</font>*
+
 == - ==
 
 
 *Windows / OS X packages*
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-|| Windows Installer || Platform specific ||1.4 MB||[http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.2.1_win_installer.exe Windows Installer 0.2.1] || [ ]||
+|| Windows Installer || Platform specific ||1.4 MB||[http://code.google.com/p/project6014/downloads/detail?name=P6014_v0.2.1_win_installer.exe Windows Installer 0.2.1] [http://www.stack.nl/~joris/p6014/jpeg.dll jpeg.dll (required)] || [ ]||
 || OS X Application || Platform specific ||1.4 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-v0.2.1-OSX.7z OS X Application 0.2.1] || [http://www.stack.nl/~joris/p6014/0.2.1/P6014-v0.2.1-OSX.7z mirror 1]||
 || Base content package|| Content (required) ||43.6 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-content.uqm Base content for 0.2.1 (required)]  || [http://www.stack.nl/~joris/p6014/0.2.1/P6014-0.2.1-prv-content.uqm mirror 1]||
 || Alien voices package || Content ||39.8 MB ||[http://code.google.com/p/project6014/downloads/detail?name=P6014-0.2.1-prv-voice.uqm Voice package for 0.2.1] || [http://www.stack.nl/~joris/p6014/0.2.1/P6014-0.2.1-prv-voice.uqm mirror 1]||
