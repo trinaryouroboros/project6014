@@ -66,6 +66,10 @@ class Processor(object):
         
         self.total_pixels += im.size[0] * im.size[1]
         
+        if png_name.endswith('.jpg'):
+            notice('File %s is already compressed' % png_name)
+            return False
+        
         if len(buf) < self.size_threshold:
             notice('File %s does not meet size threshold (size is %d)' % (png_name, len(buf)))
             return False
@@ -109,7 +113,7 @@ class Processor(object):
             parts = line.split()
             if len(parts) != 5:
                 warning('Malformed ANI line %s:%d: %s' % (ani_name, line_num, line))
-            if parts[0].endswith('.png'):
+            if parts[0].endswith('.png') or parts[0].endswith('.jpg'):
                 png_name = os.path.join(os.path.dirname(ani_name), parts[0]).replace('\\', '/')
                 
                 if png_name in self.images_seen:
@@ -164,9 +168,10 @@ class Processor(object):
 class UQMProcessor(Processor):
     def __init__(self, uqm_name):
         super(UQMProcessor, self).__init__()
-        self.uqm_name = uqm_name
+        self.dir_name = uqm_name
         self.input = zipfile.ZipFile(uqm_name, 'r')
         self.names = self.input.namelist()
+        notice('Total files in UQM: %s' % len(self.names))
         self.output = None
 
     def get_data(self, name):
@@ -185,6 +190,47 @@ class UQMProcessor(Processor):
     def create(self):
         self.output_name = self.uqm_name.replace('.uqm', '.compress.uqm')
         self.output = zipfile.ZipFile(self.output_name, 'w')
+
+
+class DirProcessor(Processor):
+    def __init__(self, dir_name):
+        super(DirProcessor, self).__init__()
+        self.dir_name = dir_name.rstrip('/')
+        self.output_dir_name = None
+        
+        # Find all files in the directory
+        self.names = []
+        for dirpath, dirnames, filenames in os.walk(dir_name):
+            dirpath = dirpath[len(dir_name)+1:]
+            for fn in filenames:
+                file_path = os.path.join(dirpath, fn)
+                self.names.append(file_path)
+        notice('Total files in dir: %s' % len(self.names))
+
+    def get_data(self, name):
+        full_name = os.path.join(self.dir_name, name)
+        if not os.path.exists(full_name):
+            raise KeyError(name)
+        f = open(full_name, 'rb')
+        return f
+
+    def write_data(self, name, data):
+        full_name = os.path.join(self.output_dir_name, name)
+        dir_path = os.path.dirname(full_name)
+        if not os.path.exists(dir_path):
+            os.makedirs(dir_path)
+        f = open(full_name, 'wb')
+        f.write(data)
+        f.close()
+
+    def close(self):
+        pass
+        #os.rename(self.output_name, self.uqm_name)
+    
+    def create(self):
+        self.output_dir_name = self.dir_name + '.compress'
+        if not os.path.exists(self.output_dir_name):
+            os.makedirs(self.output_dir_name)
 
 
 def main(args=None):
@@ -209,7 +255,10 @@ def main(args=None):
     
     for uqm_name in filenames:
         notice('Processing file: %s' % uqm_name)
-        p = UQMProcessor(uqm_name)
+        if os.path.isdir(uqm_name):
+            p = DirProcessor(uqm_name)
+        else:
+            p = UQMProcessor(uqm_name)
         p.analyze()
         if options.apply:
             p.apply()
