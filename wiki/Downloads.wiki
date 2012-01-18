@@ -22,8 +22,8 @@ The files are:
 * Ubuntu Linux / Linux Mint packages *
 
 || *File* || *Type* || *Size* || *Download* || *Download mirrors* ||
-||p6014_0.2.1_i386.deb||32-bit binaries||0.7 MB||[ ] ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014_0.2.1_i386.deb mirror 1]||
-||p6014_0.2.1_amd64.deb||64-bit binaries||0.7 MB|| [ ] ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014_0.2.1_amd64.deb mirror 1]||
+||p6014_0.2.1_i386.deb||32-bit binaries||0.7 MB||[http://code.google.com/p/project6014/downloads/detail?name=p6014_0.2.1_i386.deb 32-bit Linux package] ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014_0.2.1_i386.deb mirror 1]||
+||p6014_0.2.1_amd64.deb||64-bit binaries||0.7 MB|| [http://code.google.com/p/project6014/downloads/detail?name=p6014_0.2.1_amd64.deb 64-bit Linux package] ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014_0.2.1_amd64.deb mirror 1]||
 ||p6014-0.2.1-content.deb||Content (required)||36.9 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-content.deb mirror 1]||
 ||p6014-0.2.1-3domusic.deb||Content||52.6 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-3domusic.deb mirror 1]||
 ||p6014-0.2.1-voice.deb||Content||39.4 MB|| ||[http://www.stack.nl/~joris/p6014/0.2.1/p6014-0.2.1-voice.deb mirror 1]||
