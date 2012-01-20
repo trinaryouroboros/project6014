@@ -71,6 +71,7 @@
       * [ShipSizes]
       * [ShipCreation]
       * [AddingNewRaces]
+      * [DialogLanguage]
     * Older material
       * [ChmmrExplorer]
   * Administration
