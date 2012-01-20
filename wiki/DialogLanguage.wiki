@@ -1,0 +1,184 @@
+#summary Proposals for a language for describing dialogs
+#labels Implementation
+
+= Introduction =
+
+Multiple people have proposed that a language be found or devised that is suited to writing conversations. C is not well suited to this.
+
+Simpler is better.
+
+Proposals may go below.
+
+= Death 999's language =
+
+The syntax is very terse so the author can focus on the text.
+
+There are four keywords: greeting, node, option, and text
+
+== basic structure ==
+
+  * Greetings show what they say to you at the beginning of a conversation, then direct you to a node of possible responses.
+
+  * Nodes organize what you can say. They contain options.
+
+  * Options show what you say on one line then what the other says on the rest of the lines, then direct you to a node.
+
+  * Text is used for repeated or conditional phrases.
+
+
+Every node and text has a name, which can be any string with no spaces, e.g. 
+
+{{{ node main }}}
+
+or
+
+{{{ text get_you_for_this }}}
+
+This is so they can be jumped to (for nodes) or called (for text). Options may also have names. Greetings do not get names. At the end of a greeting or option, the last line is a declaration of what node to go to, in the format
+
+{{{ .foo }}}
+
+with foo the name of the node to go to. Text items just end with a line that is a '.' (if you want to have a line that begins with a '.',  we'll get to that with display directives)
+
+There are two predefined nodenames 'done' and 'fight' with the obvious meanings.
+
+Very simple example, where they say hello and you can say hello or goodbye, then they say goodbye, then you go back to navigation.
+
+{{{
+greeting
+hello // I didn't mention this, but '//' can be used for comments
+  .main      // leading and trailing whitespace are ignored. You can use an indenting convention if you like
+
+node main
+option
+  hello
+  goodbye
+  .done
+
+option
+  goodbye
+  goodbye
+  .done
+}}}
+
+== Conditions and Consequences ==
+
+Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by a _key_. The simplest keys are just names of _flags_, which can be _set_ or _unset_.
+
+If all of an item's conditions are met, it can be used. If an item is being sought _by name_ and does not meet the conditions, the search goes on for another item of the same name. For greetings, the first greeting with all of its conditions met is used. All unnamed options with their criteria met are shown. If an option is given a name, only the first option with that name with its conditions met will be shown, just as with nodes and texts (useful for presenting variations on the same option - different responses to the same statement, say).
+
+If an item is actually used (its conditions are met, and for options, the player also selects it), then the conditions are applied.
+
+This example represents the basic conditions and consequences.
+
+{{{
+option =requiredToBeTrue !requiredToBeFalse +setThis -unsetThis
+}}}
+
+there are three compound operations. Each pair of lines is equivalent:
+
+{{{
+option >foo // think 'arrow of time leads to this'
+option !foo +foo
+
+option <foo // think 'eat this'.
+option =foo -foo
+}}}
+
+The other is the toggle, ~. It is just a consequence, not also a condition. If the consequence is taken, it first checks the key. If the key evaluates as true, it unsets the key. If the key evaluates as false, it sets it.
+
+{{{
+text ~switch
+Okay, I hit the switch. Now what?
+.
+}}}
+
+=== keys ===
+
+As mentioned, keys can be just flags. This is if they begin with letters or '_'. All-lower-case flags will automatically be unset at the end of the conversation - they have 'temporary' scope. All-upper-case flags are global, shared by all dialogs and the game as a whole. Mixed-case flags are namespaced to this dialog file so you don't collide with the flags other people are using for their races.
+
+Examples:
+{{{
+>said_hi // totally standard construction on a conversation option to avoid saying hi more than once per conversation (starts unset, satisfying condition, then once taken, sets it, so it won't appear anymore).
+>Mentioned_Kohr-Ah // These folks will remember that you mentioned the Kohr-Ah, but other folks in other conversation documents won't
+=SHIP_IS_MK_II // If you've upgraded, this will be set
+}}}
+
+Some other keys refer to numeric flags. These begin with the number sign # and are then followed by an algebraic statement (equality, inequality)
+
+It's simple if it's a condition. It evaluates the two sides of the statement and sees whether it's true or not. For example, {{{ =#BioData>99 }}} will be true if the BioData numeric flag has been set to at least 100. You can do more complicated things, like {{ =#(MAP_X-500)^2+(MAP_Y-500)^2<10^2 }} is true if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' )
+
+Math within an evaluation is double-precision floating point. Numeric flag values (and displayed numbers, when we get to that) are ints, rounded towards 0.
+
+If it's a 'set' consequence (+ or >) then the left hand side of the statement must be a numeric flag, which will be set to the value of the other side if it's =, or to the nearest satisfying value if it's an inequality. If it's an unset consequence (-) then you may optionally leave off the comparator and right hand side. Unset numeric flags are treated as 0. Because of this asymmetry (unsetting does not take a statement but a numeric flag)
+
+Some flags and numeric flags will manipulated by non-dialog elements of the game, and some of those cannot be set directly, like FREE_CARGO_CAPACITY
+
+=== random flag ===
+
+There's a special random numeric flag which when you evaluate it, is a number from 0 to 99. It is not rerolled when you evaluate it, but only at the beginning of the conversation and if you try to set it or unset it. The name of this flag is, simply, %.
+
+{{{ text blah <#%<25 // this meets the condition 1/4 of the time
+BLAH!!!
+.
+
+text blah <#%<50 // this also meets the condition 1/4 of the time
+//because it won't be taken if the first one was because it's named blah like the first one
+blah
+.
+
+text blah -#% // this meets the implicit condition half the time
+buh
+.
+}}}
+Note that instead of using the = condition, the < condition was used to require it... and then try to set it, so the random number would be changed. And the unconditional last option also rerolled the random number.
+
+== Evaluations ==
+
+If you want to have the text be dynamic, use $ or $(). This will evaluate the contained expression and put that in its place. The first of these is space delimited. The second version with parentheses can be used to allow it to contain spaces, or if this substitution would not be followed by a space.
+
+For example:
+
+{{{
+greeting
+Greetings, captain! You have $Credits credits. That is to say, your balance is $(Credits).
+.main
+}}}
+
+This need not be a numeric flag. You can also substitute strings, using text items. Text items are always lower-case, and will be used in preference over any temporary-scope numeric flags with the same name.
+Here's a somewhat more canny version of the above. Note that the last instance has no condition, being implicitly conditional on having been reached.
+
+{{{
+greeting
+Greetings, captain! You have $(credits).
+.main
+
+text credits =#Credits=0
+no credits
+.
+
+text credits =#Credits=1
+one credit
+.
+
+text credits
+$Credits credits
+.
+}}}
+
+== Display Directives ==
+
+Certain commands can be given to display in a certain way. For instance, display location, or linebreaks you want on a single page.
+
+Put these commands in the text, in curly braces, so:
+{{{
+{left} I'm Zoq {center} (Fot goes here) {right} I'm Pik
+{top left} My lovely captain! {bottom right} Oh, ZEX!
+This is the first line of text{br}And this is the second line
+{color FF0000}I'm suddenly talking in red
+{}... and that empty pair of braces kept the '...' at the beginning of this line from being interpreted as the end of this text.
+}}}
+
+Other special commands are possible for 'dimming the lights' or changing who you're talking to altogether, but they haven't even been specified yet.
+ 
+Don't feel constrained by what exists. This language is in development.
