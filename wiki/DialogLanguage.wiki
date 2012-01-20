@@ -28,15 +28,21 @@ There are four keywords: greeting, node, option, and text
 
 Every node and text has a name, which can be any string with no spaces, e.g. 
 
-{{{ node main }}}
+{{{
+node main
+}}}
 
 or
 
-{{{ text get_you_for_this }}}
+{{{
+text get_you_for_this
+}}}
 
 This is so they can be jumped to (for nodes) or called (for text). Options may also have names. Greetings do not get names. At the end of a greeting or option, the last line is a declaration of what node to go to, in the format
 
-{{{ .foo }}}
+{{{
+.foo
+}}}
 
 with foo the name of the node to go to. Text items just end with a line that is a '.' (if you want to have a line that begins with a '.',  we'll get to that with display directives)
 
@@ -58,6 +64,9 @@ option
 option
   goodbye
   goodbye
+
+// you CAN but probably shouldn't have blank lines in the middle of your statements.
+// If I write a 'lint' utility to validate these files, that will definitely give a warning.
   .done
 }}}
 
@@ -187,3 +196,83 @@ This is the first line of text{br}And this is the second line
 Other special directives are possible for 'dimming the lights' or changing who you're talking to altogether, but they haven't even been specified yet.
  
 Don't feel constrained by what exists. This language is in development. If you need it, ask for it.
+
+== Example dialog ==
+
+Here's the moderately complicated dialog I presented in the email where I first mentioned it:
+
+{{{
+greeting !#EXAMPLE_RACE_REP<0
+Hello, captain!
+.main
+
+greeting
+Captain, you denied us slug repellent when we needed it.
+DIE!
+.fight
+
+
+node main
+option >said_hi !SLUGS_DEFEATED
+Why hello yourself!
+I'm so glad you came, captain!
+We've come under attack by vicious slugs!
+.slugs
+
+option >said_hi =SLUGS_DEFEATED
+Why hello yourself!
+It's so nice to see you again, captain
+especially since you helped us with our slug infestation!
+.main
+
+option =said_hi
+goodbye
+Return soon, captain
+.done
+
+option !said_hi
+Actually, I just dropped by for a moment...
+Oh, how disappointing!
+.done
+
+node slugs
+option <HAVE_SLUG_REPELLENT +SLUGS_DEFEATED +#EXAMPLE_RACE_REP=1
+Oh, here, have our slug repellent!
+Thank you for your generosity, captain!
+.main
+
+option =HAVE_SLUG_REPELLENT +#EXAMPLE_RACE_REP=-1
+Even though we have slug repellent, you can't have any!
+You fiend!
+.fight
+
+option <try_shoot
+Did you try shooting them?
+$no_work
+.slugs
+
+option ~BLUE_SWITCH_SET
+Try hitting the big blue switch over there.
+Umm, okay?
+$no_work
+.slugs
+
+option
+I'm sorry, I'm out of ideas.
+That's unfortunate, but we understand.
+.main
+
+
+text no_work >already_took_advice
+We tried that.
+It didn't work.
+.
+
+text no_work
+We tried that.
+It didn't work.
+Again.
+.
+}}}
+
+One last thing. If no greeting or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_, not a valid exit. If on the other hand you call a text and no matching texts have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank)
