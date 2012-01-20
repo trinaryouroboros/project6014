@@ -74,7 +74,7 @@ option
 
 == Conditions and Consequences ==
 
-Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by a _key_. The simplest keys are just names of _flags_, which can be _set_ or _unset_.
+Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by a _key_. The simplest keys are just names of _flags_, which can be _set_ (interpreted as 'true') or _unset_ (interpreted as 'false').
 
 If all of an item's conditions are met, it can be used. If an item is being sought _by name_ and does not meet the conditions, the search goes on for another item of the same name. For greetings, the first greeting with all of its conditions met is used. All unnamed options with their criteria met are shown. If an option is given a name, only the first option with that name with its conditions met will be shown, just as with nodes and texts (useful for presenting variations on the same option - different responses to the same statement, say).
 
@@ -85,6 +85,8 @@ This example represents the basic conditions and consequences.
 {{{
 option =requiredToBeTrue !requiredToBeFalse +setThis -unsetThis
 }}}
+To be explicit, if the 'requiredToBeTrue' flag is not set, this option will not appear. If the 'requiredToBeFalse' flag is set, this option will not appear. Otherwise, it will appear. If this option is chosen by the player, the flag 'setThis' is set, and the flag 'unsetThis' is unset.
+
 Here is a longer example illustrating the use of named conditions
 For example:
 
