@@ -257,24 +257,24 @@ DIE!
 
 
 node main
-option >said_hi !SLUGS_DEFEATED
+option hi >said_hi !SLUGS_DEFEATED
 Why hello yourself!
 I'm so glad you came, captain!
 We've come under attack by vicious slugs!
 .slugs
 
-option >said_hi =SLUGS_DEFEATED
+option hi >said_hi // implicitly =SLUGS_DEFEATED due to also being a 'hi' option.
 Why hello yourself!
 It's so nice to see you again, captain
 especially since you helped us with our slug infestation!
 .main
 
-option =said_hi
+option bye =said_hi
 goodbye
 Return soon, captain
 .done
 
-option !said_hi
+option bye // implicitly !said_hi, by virtue of also being a 'bye' option
 Actually, I just dropped by for a moment...
 Oh, how disappointing!
 .done
