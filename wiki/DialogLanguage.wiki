@@ -78,7 +78,7 @@ Any of these items -- greeting, node, option, or text -- may have _conditions_ a
 
 If all of an item's conditions are met, it can be used. If an item is being sought _by name_ and does not meet the conditions, the search goes on for another item of the same name. For greetings, the first greeting with all of its conditions met is used. All unnamed options with their criteria met are shown. If an option is given a name, only the first option with that name with its conditions met will be shown, just as with nodes and texts (useful for presenting variations on the same option - different responses to the same statement, say).
 
-If an item is actually used (its conditions are met, and for options, the player also selects it), then the conditions are applied.
+If an item is actually used (its conditions are met, and for options, the player also selects it), then the consequences are applied. Any consequences on a node itself are applied before the option list is generated.
 
 This example represents the basic conditions and consequences.
 
@@ -233,20 +233,19 @@ Put these commands in the text, in curly braces, so:
 {left} I'm Zoq {center} (Fot goes here) {right} I'm Pik
 {top left} My lovely captain! {bottom right} Oh, ZEX!
 This is the first line of text{br}And this is the second line
-{color FF0000}I'm suddenly talking in red
+{color=FF0000}I'm suddenly talking in red{color}back to default
+{(} if you need to use actual curly braces for some reason, this is how you show them {)}
 {}... and that empty pair of braces kept the '...' at the beginning of this line from being interpreted as the end of this text.
 }}}
 
-Other special directives are possible for 'dimming the lights' or changing who you're talking to altogether, but they haven't even been specified yet.
- 
-Don't feel constrained by what exists. This language is in development. If you need it, ask for it.
+Other special directives are possible for 'dimming the lights'/vfx, or even changing who you're talking to altogether, but they haven't been specified yet. Don't feel constrained by what exists. This language is in development. If you need it, ask for it.
 
 == Example dialog ==
 
-Here's the moderately complicated dialog I presented in the email where I first mentioned it:
+Here's the moderately complicated dialog I presented in the email where I first mentioned it, slightly modified to take full advantage of the language features.
 
 {{{
-greeting !#EXAMPLE_RACE_REP<0
+greeting !#Rep<0
 Hello, captain!
 .main
 
@@ -280,12 +279,12 @@ Oh, how disappointing!
 .done
 
 node slugs
-option <HAVE_SLUG_REPELLENT +SLUGS_DEFEATED +#EXAMPLE_RACE_REP=1
+option <HAVE_SLUG_REPELLENT +SLUGS_DEFEATED +#Rep=1
 Oh, here, have our slug repellent!
 Thank you for your generosity, captain!
 .main
 
-option =HAVE_SLUG_REPELLENT +#EXAMPLE_RACE_REP=-1
+option =HAVE_SLUG_REPELLENT +#Rep=-1
 Even though we have slug repellent, you can't have any!
 You fiend!
 .fight
@@ -320,3 +319,18 @@ Again.
 }}}
 
 One last thing. If no greeting or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_, not a valid exit. If on the other hand you call a text and no matching texts have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank)
+
+This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
+ 
+An init example
+{{{
+greeting !Know_You_Well // 
+$init
+Greetings, unknown starship.
+.main
+
+text init >First_Contact +Need_Food +Need_Shelter +Need_Water
+.
+}}}
+
+The second time you meet them, if they still don't know you well yet, the Need_X flags aren't set again even though the dialog they're a consequence of was taken.
