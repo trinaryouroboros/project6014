@@ -26,7 +26,7 @@ There are four keywords: greeting, node, option, and text
   * Text is used for repeated or conditional phrases.
 
 
-Every node and text has a name, which can be any string with no spaces, e.g. 
+Every node and text has a name, which can be almost any string. Mainly, it can have no whitespace; for text items, it must also have no parentheses. For example: 
 
 {{{
 node main
