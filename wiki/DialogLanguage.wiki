@@ -99,8 +99,12 @@ As mentioned, keys can be just flags. This is if they begin with letters or '_'.
 
 Examples:
 {{{
->said_hi // totally standard construction on a conversation option to avoid saying hi more than once per conversation (starts unset, satisfying condition, then once taken, sets it, so it won't appear anymore).
->Mentioned_Kohr-Ah // These folks will remember that you mentioned the Kohr-Ah, but other folks in other conversation documents won't
+>said_hi // totally standard construction on a conversation option to avoid saying hi more than once per conversation
+// (it starts unset, thus satisfying the condition, but once taken, sets it, so it won't appear anymore).
+
+>Mentioned_Kohr-Ah // These folks will remember that you mentioned the Kohr-Ah,
+// but other folks in other conversation documents won't
+
 =SHIP_IS_MK_II // If you've upgraded, this will be set
 }}}
 
