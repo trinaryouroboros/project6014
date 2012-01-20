@@ -68,7 +68,7 @@ option
   goodbye
 
 // you CAN but probably shouldn't have blank lines in the middle of your statements.
-// If I write a 'lint' utility to validate these files, that will definitely give a warning.
+// If I write a validation utility, that will definitely give a warning.
   .done
 </pre>
 
@@ -102,15 +102,16 @@ I don't know anything about juggling. Can you help me?
 Not really, sorry.
 .main
 </pre>
+The named option with no condition guarantees that it is complementary to the first. You will be able to say something about juggling. Also, again, it helps avoid errors - less typing out of explicit conditions, and a validator can check for option names that are used only once (you probably didn't mean that).
 
 
-There are three compound operations. Each pair of lines is equivalent:
+As shortcuts and again to minimize the opportunity for errors, there are three compound operations. Each pair of lines is equivalent:
 
 <pre>
-option >foo // think 'arrow of time leads to this'
+option >foo // think 'arrow of time leads to this'. Only applies if not already true, then it becomes so.
 option !foo +foo
 
-option <foo // think 'eat this'.
+option <foo // think 'eat this'. Only applies if already true, then it isn't anymore.
 option =foo -foo
 </pre>
 
