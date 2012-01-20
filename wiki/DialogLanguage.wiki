@@ -118,7 +118,8 @@ Some flags and numeric flags will manipulated by non-dialog elements of the game
 
 There's a special random numeric flag which when you evaluate it, is a number from 0 to 99. It is not rerolled when you evaluate it, but only at the beginning of the conversation and if you try to set it or unset it. The name of this flag is, simply, %.
 
-{{{ text blah <#%<25 // this meets the condition 1/4 of the time
+{{{
+ text blah <#%<25 // this meets the condition 1/4 of the time
 BLAH!!!
 .
 
