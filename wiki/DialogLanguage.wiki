@@ -28,21 +28,21 @@ There are four keywords: greeting, node, option, and text
 
 Every node and text has a name, which can be almost any string. Mainly, it can have no whitespace; for text items, it must also have no parentheses. For example: 
 
-{{{
+<pre>
 node main
-}}}
+</pre>
 
 or
 
-{{{
+<pre>
 text get_you_for_this
-}}}
+</pre>
 
 This is so they can be jumped to (for nodes) or called (for text). Options may also have names. Greetings do not get names. At the end of a greeting or option, the last line is a declaration of what node to go to, in the format
 
-{{{
+<pre>
 .foo
-}}}
+</pre>
 
 with foo the name of the node to go to. Text items just end with a line that is a '.' (if you want to have a line that begins with a '.',  we'll get to that with display directives)
 
@@ -50,7 +50,7 @@ There are two predefined nodenames 'done' and 'fight' with the obvious meanings.
 
 Very simple example, where they say hello and you can say hello or goodbye, then they say goodbye, then you go back to navigation.
 
-{{{
+<pre>
 greeting
 hello // I didn't mention this, but '//' can be used for comments
   .main     // leading and trailing whitespace are ignored.
@@ -70,7 +70,7 @@ option
 // you CAN but probably shouldn't have blank lines in the middle of your statements.
 // If I write a 'lint' utility to validate these files, that will definitely give a warning.
   .done
-}}}
+</pre>
 
 == Conditions and Consequences ==
 
@@ -82,15 +82,15 @@ If an item is actually used (its conditions are met, and for options, the player
 
 This example represents the basic conditions and consequences.
 
-{{{
+<pre>
 option =requiredToBeTrue !requiredToBeFalse +setThis -unsetThis
-}}}
+</pre>
 To be explicit, if the 'requiredToBeTrue' flag is not set, this option will not appear. If the 'requiredToBeFalse' flag is set, this option will not appear. Otherwise, it will appear. If this option is chosen by the player, the flag 'setThis' is set, and the flag 'unsetThis' is unset.
 
 Here is a longer example illustrating the use of named conditions
 For example:
 
-{{{
+<pre>
 node main
 option juggling =EXPERT_JUGGLER
 Can I show off my juggling talents?
@@ -101,21 +101,21 @@ option juggling
 I don't know anything about juggling. Can you help me?
 Not really, sorry.
 .main
-}}}
+</pre>
 
 
 There are three compound operations. Each pair of lines is equivalent:
 
-{{{
+<pre>
 option >foo // think 'arrow of time leads to this'
 option !foo +foo
 
 option <foo // think 'eat this'.
 option =foo -foo
-}}}
+</pre>
 
 This is commonly used to close off an option so you can't take it over and over again in the same conversation:
-{{{
+<pre>
 node main
 option juggling =EXPERT_JUGGLER >juggled
 Can I show off my juggling talents?
@@ -126,27 +126,27 @@ option juggling >ta_juggling // 'ta_' is an abbreviation I use for 'talked about
 I don't know anything about juggling. Can you help me?
 Not really, sorry.
 .main
-}}}
+</pre>
 
 
 The last symbol is the toggle, ~. It is just a consequence, not also a condition. If the consequence is taken, it first checks the key. If the key evaluates as true, it unsets the key. If the key evaluates as false, it sets it. I wouldn't normally be so pedantic (yes, even I have limits), but this means that the toggle actually has a meaning for numeric flags.
 
-{{{
+<pre>
 text ~Switch_on
 Okay, I hit the switch. Now what?
 .
-}}}
+</pre>
 
 === keys ===
 
-As mentioned, the keys referred to in conditions and consequences can be just flags. They are interpreed that way if they begin with letters, numbers, or any non-reserved punctuation like {{{_}}}, quotes, periods and commas, @, etc..
+As mentioned, the keys referred to in conditions and consequences can be just flags. They are interpreed that way if they begin with letters, numbers, or any non-reserved punctuation like <pre>_</pre>, quotes, periods and commas, @, etc..
 
   * All-lower-case flags will automatically be unset at the end of the conversation - they have 'temporary' scope.
   * All-upper-case flags are global, shared by all dialogs and the game as a whole.
   * Mixed-case flags are preserved but namespaced to this dialog file so you don't collide with the flags other people are using for their races.
 
 Examples:
-{{{
+<pre>
 >said_hi // use this to avoid letting the player say hi more than once per conversation
 // (it starts unset, thus satisfying the condition, but once taken, sets it, so it won't appear anymore).
 
@@ -154,12 +154,12 @@ Examples:
 // but other folks in other conversation documents won't
 
 =SHIP_IS_MK_II // If the player upgraded, this will be set
-}}}
+</pre>
 
 Some other keys refer to numeric flags. These begin with the number sign # and are then followed by an algebraic statement (equality, inequality). For instance,
-{{{
+<pre>
 =#BioData>99
-}}}
+</pre>
 
 If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the BioData numeric flag has been set to at least 100. Unset numeric flags are treated as 0.
 
@@ -177,7 +177,7 @@ Some flags and numeric flags will manipulated by non-dialog elements of the game
 
 There's a special random numeric flag which when you evaluate it, is a number from 0 to 99. It is not rerolled when you evaluate it, but only at the beginning of the conversation and if you try to set it or unset it. The name of this flag is, simply, %.
 
-{{{
+<pre>
  text blah <#%<25 // this meets the condition 1/4 of the time
 BLAH!!!
 .
@@ -190,7 +190,7 @@ blah
 text blah -#% // this meets the implicit condition half the time
 buh
 .
-}}}
+</pre>
 Note that instead of using the = condition, the < condition was used to require it... and then try to set it, so the random number would be changed. And the unconditional last option also rerolled the random number.
 
 == Evaluations ==
@@ -199,16 +199,16 @@ If you want to have the text be dynamic, use $ or $(). This will evaluate the co
 
 For example:
 
-{{{
+<pre>
 greeting
 Greetings, captain! You have $Credits credits. That is to say, your balance is $(Credits).
 .main
-}}}
+</pre>
 
 This need not be a numeric flag. You can also substitute strings, using text items. Text items are always lower-case, and will be used in preference over any temporary-scope numeric flags with the same name.
 Here's a somewhat more canny version of the above. Note that the last instance has no condition, being implicitly conditional on having been reached.
 
-{{{
+<pre>
 greeting
 Greetings, captain! You have $(credits).
 .main
@@ -224,21 +224,21 @@ one credit
 text credits
 $Credits credits
 .
-}}}
+</pre>
 
 == Display Directives ==
 
 Certain commands can be given to display in a certain way. For instance, display location, or linebreaks you want on a single page.
 
 Put these commands in the text, in curly braces, so:
-{{{
+<pre>
 {left} I'm Zoq {center} (Fot goes here) {right} I'm Pik
 {top left} My lovely captain! {bottom right} Oh, ZEX!
 This is the first line of text{br}And this is the second line
 {color=FF0000}I'm suddenly talking in red{color}back to default
 {(} if you need to use actual curly braces for some reason, this is how you show them {)}
 {}... and that empty pair of braces kept the '...' at the beginning of this line from being interpreted as the end of this text.
-}}}
+</pre>
 
 Other special directives are possible for 'dimming the lights'/vfx, or even changing who you're talking to altogether, but they haven't been specified yet. Don't feel constrained by what exists. This language is in development. If you need it, ask for it.
 
@@ -246,7 +246,7 @@ Other special directives are possible for 'dimming the lights'/vfx, or even chan
 
 Here's the moderately complicated dialog I presented in the email where I first mentioned it, slightly modified to take full advantage of the language features.
 
-{{{
+<pre>
 greeting !#Rep<0
 Hello, captain!
 .main
@@ -318,14 +318,14 @@ We tried that.
 It didn't work.
 Again.
 .
-}}}
+</pre>
 
 One last thing. If no greeting or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_, not a valid exit. If on the other hand you call a text and no matching texts have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank)
 
 This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
  
 An init example
-{{{
+<pre>
 greeting !Know_You_Well // 
 $init
 Greetings, unknown starship.
@@ -333,6 +333,6 @@ Greetings, unknown starship.
 
 text init >First_Contact +Need_Food +Need_Shelter +Need_Water
 .
-}}}
+</pre>
 
 The second time you meet them, if they still don't know you well yet, the Need_X flags aren't set again even though the dialog they're a consequence of was taken.
