@@ -19,11 +19,11 @@ There are four keywords: greeting, node, option, and text
 
   * Greetings show what they say to you at the beginning of a conversation, then direct you to a node of possible responses.
 
-  * Nodes organize what you can say. They contain options.
+  * Nodes organize what you can say. They contain options. Once you declare a node, all options are in that node until you declare another one.
 
   * Options show what you say on one line then what the other says on the rest of the lines, then direct you to a node.
 
-  * Text is used for repeated or conditional phrases.
+  * Text is used for repeated or conditional phrases. You can put it anywhere, but it's best to put it either at the end or near where it'll be used.
 
 
 Every node and text has a name, which can be almost any string. Mainly, it can have no whitespace; for text items, it must also have no parentheses. For example: 
@@ -53,7 +53,9 @@ Very simple example, where they say hello and you can say hello or goodbye, then
 {{{
 greeting
 hello // I didn't mention this, but '//' can be used for comments
-  .main      // leading and trailing whitespace are ignored. You can use an indenting convention if you like
+  .main     // leading and trailing whitespace are ignored.
+// You can use an indenting convention if you like, as shown below.
+// I don't. I just use blank lines to keep things organized.
 
 node main
 option
