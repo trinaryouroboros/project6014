@@ -87,8 +87,7 @@ option =requiredToBeTrue !requiredToBeFalse +setThis -unsetThis
 </pre>
 To be explicit, if the 'requiredToBeTrue' flag is not set, this option will not appear. If the 'requiredToBeFalse' flag is set, this option will not appear. Otherwise, it will appear. If this option is chosen by the player, the flag 'setThis' is set, and the flag 'unsetThis' is unset.
 
-Here is a longer example illustrating the use of named conditions
-For example:
+Here is a longer example illustrating the use of named conditions.
 
 <pre>
 node main
@@ -115,22 +114,17 @@ option <foo // think 'eat this'. Only applies if already true, then it isn't any
 option =foo -foo
 </pre>
 
-This is commonly used to close off an option so you can't take it over and over again in the same conversation:
-<pre>
-node main
-option juggling =EXPERT_JUGGLER >juggled
-Can I show off my juggling talents?
-Certainly!
-.juggling
+This is commonly used to close off an option so you can't take it over and over again in the same conversation. To reuse a line from above (and get rid of the things that made it complex before):
 
-option juggling >ta_juggling // 'ta_' is an abbreviation I use for 'talked about'
+<pre>
+option >ta_juggling // 'ta_' is an abbreviation I use for 'talked about'
 I don't know anything about juggling. Can you help me?
 Not really, sorry.
 .main
 </pre>
 
 
-The last symbol is the toggle, ~. It is just a consequence, not also a condition. If the consequence is taken, it first checks the key. If the key evaluates as true, it unsets the key. If the key evaluates as false, it sets it. I wouldn't normally be so pedantic (yes, even I have limits), but this means that the toggle actually has a meaning for numeric flags.
+The last symbol is the toggle, ~. It is just a consequence, not also a condition. If the consequence is fulfilled, it first checks the key. If the key evaluates as true, it unsets the key. If the key evaluates as false, it sets it. I wouldn't normally be so pedantic (yes, even I have limits), but this means that the toggle actually has a meaning for numeric flags.
 
 <pre>
 text ~Switch_on
@@ -321,11 +315,11 @@ Again.
 .
 </pre>
 
-One last thing. If no greeting or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_, not a valid exit. If on the other hand you call a text and no matching texts have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank)
+One last thing. If no greeting, node, or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_, not a valid exit. If on the other hand you call a text and no matching texts have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank)
 
 This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
  
-An init example
+An init example fragment
 <pre>
 greeting !Know_You_Well // 
 $init
@@ -334,6 +328,8 @@ Greetings, unknown starship.
 
 text init >First_Contact +Need_Food +Need_Shelter +Need_Water
 .
+
+// file goes on to have other things in it - in particular, a catch-all greeting.
 </pre>
 
 The second time you meet them, if they still don't know you well yet, the Need_X flags aren't set again even though the dialog they're a consequence of was taken.
