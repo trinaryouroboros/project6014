@@ -95,7 +95,7 @@ Okay, I hit the switch. Now what?
 
 === keys ===
 
-As mentioned, keys can be just flags. This is if they begin with letters or '_'. All-lower-case flags will automatically be unset at the end of the conversation - they have 'temporary' scope. All-upper-case flags are global, shared by all dialogs and the game as a whole. Mixed-case flags are namespaced to this dialog file so you don't collide with the flags other people are using for their races.
+As mentioned, keys can be just flags. This is if they begin with letters or {{{_}}}. All-lower-case flags will automatically be unset at the end of the conversation - they have 'temporary' scope. All-upper-case flags are global, shared by all dialogs and the game as a whole. Mixed-case flags are preserved but namespaced to this dialog file so you don't collide with the flags other people are using for their races.
 
 Examples:
 {{{
@@ -110,9 +110,9 @@ Examples:
 
 Some other keys refer to numeric flags. These begin with the number sign # and are then followed by an algebraic statement (equality, inequality)
 
-It's simple if it's a condition. It evaluates the two sides of the statement and sees whether it's true or not. For example, {{{ =#BioData>99 }}} will be true if the BioData numeric flag has been set to at least 100. You can do more complicated things, like {{ =#(MAP_X-500)^2+(MAP_Y-500)^2<10^2 }} is true if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' )
+If it's being used as a condition, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition {{{ =#BioData>99 }}} will be met if the BioData numeric flag has been set to at least 100. You can do more complicated things, like {{ =#(MAP_X-500)^2+(MAP_Y-500)^2<10^2 }} which is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' )
 
-Math within an evaluation is double-precision floating point. Numeric flag values (and displayed numbers, when we get to that) are ints, rounded towards 0.
+Math within an evaluation is double-precision floating point. Any number coming out of this evaluation is converted to an integer so you don't need to worry that some 12 digit decimal is going to be displayed (how do you do hat? Not there yet).
 
 If it's a 'set' consequence (+ or >) then the left hand side of the statement must be a numeric flag, which will be set to the value of the other side if it's =, or to the nearest satisfying value if it's an inequality. If it's an unset consequence (-) then you may optionally leave off the comparator and right hand side. Unset numeric flags are treated as 0. Because of this asymmetry (unsetting does not take a statement but a numeric flag)
 
@@ -184,6 +184,6 @@ This is the first line of text{br}And this is the second line
 {}... and that empty pair of braces kept the '...' at the beginning of this line from being interpreted as the end of this text.
 }}}
 
-Other special commands are possible for 'dimming the lights' or changing who you're talking to altogether, but they haven't even been specified yet.
+Other special directives are possible for 'dimming the lights' or changing who you're talking to altogether, but they haven't even been specified yet.
  
-Don't feel constrained by what exists. This language is in development.
+Don't feel constrained by what exists. This language is in development. If you need it, ask for it.
