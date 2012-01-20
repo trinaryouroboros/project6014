@@ -139,6 +139,8 @@ debugKeyPressed (void)
 
 	// Interactive:
 //	uio_debugInteractive(stdin, stdout, stderr);
+
+    DumpAllGameStates();
 }
 
 ////////////////////////////////////////////////////////////////////////////

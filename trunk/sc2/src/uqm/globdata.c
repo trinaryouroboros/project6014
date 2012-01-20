@@ -485,6 +485,28 @@ UninitGameStructures (void)
 	initedGameStructs = FALSE;
 }
 
+struct map_entry
+{
+    char *stateName;
+    int stateLen;
+};
+
+static struct map_entry gameStateMap[NUM_GAME_STATE_BITS];
+
+void DumpAllGameStates(void)
+{
+    COUNT i;
+    for (i = 0; i < NUM_GAME_STATE_BITS; i++)
+    {
+        if (gameStateMap[i].stateName)
+        {
+            BYTE val = getGameState(i, i+gameStateMap[i].stateLen);
+            printf("%s = %d, ", gameStateMap[i].stateName, val);
+        }
+    }
+    printf("\n");
+}
+
 void
 InitGlobData (void)
 {
@@ -495,6 +517,13 @@ InitGlobData (void)
 	GLOBAL (glob_flags) = (BYTE)i;
 
 	GLOBAL (DisplayArray) = DisplayArray;
+    
+    i = 0;
+#define ADD_GAME_STATE(name, len) \
+        gameStateMap[i].stateName = #name; \
+        gameStateMap[i].stateLen = len; \
+        i += len;
+#include "gamestate.inc"
 }
 
 
