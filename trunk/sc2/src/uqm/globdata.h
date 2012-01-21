@@ -271,6 +271,12 @@ END_GAME_STATE
 #define PRECURSOR_SERVICE_VEHICLE 1
 #define PRECURSOR_BATTLESHIP 2
 
+// Various defines to enable game-related features
+// These can control whether they are enabled; they also serve as useful words
+// to search for to find the related code.
+
+// Is Orz Space non-Euclidean?  (Slow near the bottom; autopilot follows geodesics.)
+#define ENABLE_NON_EUCLIDEAN_ORZ_SPACE 1
 
 
 // Values for GAME_STATE.glob_flags:

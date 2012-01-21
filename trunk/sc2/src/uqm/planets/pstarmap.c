@@ -676,7 +676,7 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 			&& GLOBAL (autopilot.x) != ~0
 			&& GLOBAL (autopilot.y) != ~0)
     {
-        if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+        if (ENABLE_NON_EUCLIDEAN_ORZ_SPACE && GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
 		    DrawOrzSpaceAutoPilot (&GLOBAL (autopilot));
         else
             DrawAutoPilot (&GLOBAL (autopilot));
@@ -1489,7 +1489,7 @@ DoMoveCursor (MENU_STATE *pMS)
 		}
 		
 		GLOBAL (autopilot) = cursorLoc;
-        if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+        if (ENABLE_NON_EUCLIDEAN_ORZ_SPACE && GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
         {
             SetOrzSpaceAutoPilot();
         }
