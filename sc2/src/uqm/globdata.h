@@ -326,6 +326,8 @@ typedef struct
 	CLOCK_STATE GameClock;
 
 	POINT autopilot;
+    DPOINT autopilotOrzSpaceCenter;
+    SDWORD autopilotOrzSpaceRadius;
 	POINT ip_location;
 	STAMP ShipStamp;
 	UWORD ShipFacing;
