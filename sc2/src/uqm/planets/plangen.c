@@ -461,7 +461,9 @@ CreateSphereTiltMap (int angle, COUNT height, COUNT radius)
 			
 			rad = sqrt (rad_2);
 			// antialiasing goes beyond the actual radius
-			if (rad >= radius)
+            // N.B. Was >=radius, but in extreme cases would result in the next
+            // aa pixel being 330, when the maximum value row is 329.
+            if (rad > (radius-1))
 				rad = (double)radius - 0.1;
 			
 			da = atan2 ((double)y, (double)x);
