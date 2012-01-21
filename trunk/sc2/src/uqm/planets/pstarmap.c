@@ -57,6 +57,7 @@
 #include "../nameref.h"
 
 #include <stdlib.h>
+#include <math.h>
 
 
 static POINT cursorLoc;
@@ -168,26 +169,14 @@ DrawCursor (COORD curs_x, COORD curs_y)
 	DrawStamp (&s);
 }
 
-static void
-DrawAutoPilot (POINT *pDstPt)
+static void DrawAutoPilotSegment(POINT *pt, POINT *destPt)
 {
 	SIZE dx, dy,
 				xincr, yincr,
 				xerror, yerror,
 				cycle, delta;
-	POINT pt;
 
-	if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
-		pt = CurStarDescPtr->star_pt;
-	else
-	{
-		pt.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
-		pt.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
-	}
-	pt.x = UNIVERSE_TO_DISPX (pt.x);
-	pt.y = UNIVERSE_TO_DISPY (pt.y);
-
-	dx = UNIVERSE_TO_DISPX (pDstPt->x) - pt.x;
+	dx = destPt->x - pt->x;
 	if (dx >= 0)
 		xincr = 1;
 	else
@@ -197,7 +186,7 @@ DrawAutoPilot (POINT *pDstPt)
 	}
 	dx <<= 1;
 
-	dy = UNIVERSE_TO_DISPY (pDstPt->y) - pt.y;
+	dy = destPt->y - pt->y;
 	if (dy >= 0)
 		yincr = 1;
 	else
@@ -213,26 +202,121 @@ DrawAutoPilot (POINT *pDstPt)
 		cycle = dy;
 	delta = xerror = yerror = cycle >> 1;
 
-	SetContextForeGroundColor (
-			BUILD_COLOR (MAKE_RGB15 (0x04, 0x04, 0x1F), 0x01));
-
 	delta &= ~1;
 	while (delta--)
 	{
 		if (!(delta & 1))
-			DrawPoint (&pt);
+			DrawPoint (pt);
 
 		if ((xerror -= dx) <= 0)
 		{
-			pt.x += xincr;
+			pt->x += xincr;
 			xerror += cycle;
 		}
 		if ((yerror -= dy) <= 0)
 		{
-			pt.y += yincr;
+			pt->y += yincr;
 			yerror += cycle;
 		}
 	}
+}
+
+static void
+DrawAutoPilot (POINT *pDstPt)
+{
+	SIZE dx, dy,
+				xincr, yincr,
+				xerror, yerror,
+				cycle, delta;
+	POINT pt;
+    POINT destPt;
+
+	if (LOBYTE (GLOBAL (CurrentActivity)) != IN_HYPERSPACE)
+		pt = CurStarDescPtr->star_pt;
+	else
+	{
+		pt.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
+		pt.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
+	}
+	pt.x = UNIVERSE_TO_DISPX (pt.x);
+	pt.y = UNIVERSE_TO_DISPY (pt.y);
+
+    destPt.x = UNIVERSE_TO_DISPX (pDstPt->x);
+    destPt.y = UNIVERSE_TO_DISPY (pDstPt->y);
+
+	SetContextForeGroundColor (
+			BUILD_COLOR (MAKE_RGB15 (0x04, 0x04, 0x1F), 0x01));
+
+    DrawAutoPilotSegment(&pt, &destPt);
+}
+
+void SetOrzSpaceAutoPilot(void)
+{
+    float px = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
+    float py = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
+    float qx = GLOBAL (autopilot).x;
+    float qy = GLOBAL (autopilot).y;
+
+    float dx = qx - px;
+    float dy = qy - py;
+
+    float tx = (px + qx)/2.0;
+    float ty = (py + qy)/2.0;
+
+    float k = ty/dx;
+    float cx = tx + k*dy;
+
+    float r2 = qy*qy + (qx-cx)*(qx-cx);
+    float rad = sqrt(r2);
+
+    GLOBAL (autopilotOrzSpaceCenter).x = cx;
+    GLOBAL (autopilotOrzSpaceCenter).y = 0;
+
+    GLOBAL (autopilotOrzSpaceRadius) = rad;
+}
+
+static void
+DrawOrzSpaceAutoPilot (POINT *pDstPt)
+{
+    SDWORD cx = GLOBAL (autopilotOrzSpaceCenter).x;
+    SDWORD cy = GLOBAL (autopilotOrzSpaceCenter).y;
+    SDWORD rad = GLOBAL (autopilotOrzSpaceRadius);
+
+    SDWORD x1 = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
+    SDWORD y1 = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
+    SDWORD x2 = GLOBAL (autopilot).x;
+    SDWORD y2 = GLOBAL (autopilot).y;
+
+    float a1, a2;
+    float deltaA;
+    int numSegs;
+    int i;
+
+    POINT pt, destPt;
+
+    a1 = atan2(y1 - cy, x1 - cx);
+    a2 = atan2(y2 - cy, x2 - cx);
+
+    numSegs = abs(32.0*(a2 - a1)/M_PI);
+    if (numSegs < 1)
+        numSegs = 1;
+
+    deltaA = (a2 - a1)/numSegs;
+
+	SetContextForeGroundColor (
+			BUILD_COLOR (MAKE_RGB15 (0x04, 0x04, 0x1F), 0x01));
+
+    pt.x = UNIVERSE_TO_DISPX (x1);
+    pt.y = UNIVERSE_TO_DISPY (y1);
+
+    for (i = 0; i < numSegs; i++)
+    {
+        a1 += deltaA;
+        destPt.x = UNIVERSE_TO_DISPX (cx + rad * cos(a1));
+        destPt.y = UNIVERSE_TO_DISPY (cy + rad * sin(a1));
+
+        DrawAutoPilotSegment(&pt, &destPt);
+    }
 }
 
 static void
@@ -591,7 +675,12 @@ DrawStarMap (COUNT race_update, RECT *pClipRect)
 	if (race_update == 0
 			&& GLOBAL (autopilot.x) != ~0
 			&& GLOBAL (autopilot.y) != ~0)
-		DrawAutoPilot (&GLOBAL (autopilot));
+    {
+        if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+		    DrawOrzSpaceAutoPilot (&GLOBAL (autopilot));
+        else
+            DrawAutoPilot (&GLOBAL (autopilot));
+    }
 
 	if (transition_pending)
 	{
@@ -1400,6 +1489,11 @@ DoMoveCursor (MENU_STATE *pMS)
 		}
 		
 		GLOBAL (autopilot) = cursorLoc;
+        if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+        {
+            SetOrzSpaceAutoPilot();
+        }
+
 #ifdef DEBUG
 		if (instantMove)
 		{
