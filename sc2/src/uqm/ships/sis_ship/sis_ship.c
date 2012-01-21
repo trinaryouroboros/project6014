@@ -288,6 +288,13 @@ LeaveAutoPilot:
 
 			max_velocity = WORLD_TO_VELOCITY (StarShipPtr->RaceDescPtr->characteristics.max_thrust);
 
+            // In Orz Space, max speed is proportion to distance from bottom edge!
+            if (ENABLE_NON_EUCLIDEAN_ORZ_SPACE && GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+            {
+                float prop = 1.0 - GLOBAL_SIS (log_y) / (float) MAX_X_LOGICAL;
+                max_velocity *= prop;
+            }
+
 			dy = (speed / velocity_increment + 1) * velocity_increment;
 			
 			if (dy < speed + velocity_increment)

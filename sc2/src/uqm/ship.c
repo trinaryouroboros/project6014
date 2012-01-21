@@ -102,7 +102,7 @@ inertial_thrust (ELEMENT *ElementPtr)
 		desired_speed = VelocitySquared (delta_x, delta_y);
 
         // In Orz Space, max speed is proportion to distance from bottom edge!
-        if (GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+        if (ENABLE_NON_EUCLIDEAN_ORZ_SPACE && GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
         {
             float prop = 1.0 - GLOBAL_SIS (log_y) / (float) MAX_X_LOGICAL;
             max_thrust *= prop;
