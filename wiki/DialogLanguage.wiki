@@ -13,20 +13,20 @@ Proposals may go below.
 
 The syntax is very terse so the author can focus on the text.
 
-There are four keywords: greeting, node, option, and text
-
 == basic structure ==
+
+There are four basic large-scale entities, each declared on a line beginning with its (lowercase, singular) name.
 
   * Greetings show what they say to you at the beginning of a conversation, then direct you to a node of possible responses.
 
   * Nodes organize what you can say. They contain options. Once you declare a node, all options are in that node until you declare another one.
 
-  * Options show what you say on one line then what the other says on the rest of the lines, then direct you to a node.
+  * Options shows what the player-character may say on one line then what the other character would say in response on the rest of the lines, then direct you to a node.
 
   * Text is used for repeated or conditional phrases. You can put it anywhere, but it's best to put it either at the end or near where it'll be used.
 
 
-Every node and text has a name, which can be almost any string not containing whitespace and starting with a letter or number, and not containing parentheses. For example: 
+Every node and text has a name. Node names can be nearly anything not containing spaces. Text names should start with a letter, and contain no upper-case letters, arithmetic operators, square brackets. Example: 
 
 <pre>
 node main
@@ -44,7 +44,7 @@ This is so they can be jumped to (for nodes) or called (for text). Options may a
 .foo
 </pre>
 
-with foo the name of the node to go to. Text items just end with a line that is a '.' (if you want to have a line that begins with a '.',  we'll get to that with display directives)
+with foo the name of the node to go to. Text items just end with a line that is a '.' (if you want to have a dialog line that begins with a '.', such as '...',  we'll get to that with display directives)
 
 There are two predefined nodenames 'done' and 'fight' with the obvious meanings.
 
@@ -190,22 +190,24 @@ Note that instead of using the = condition, the < condition was used to require 
 
 == Evaluations ==
 
-If you want to have the text be dynamic, use $ or $(). This will evaluate the contained expression and put that in its place. The first of these is space delimited. The second version with parentheses can be used to allow it to contain spaces, or if this substitution would not be followed by a space.
+If you want to have the text be dynamic, use square brackets {{{ [foo] }}}. This will evaluate the contained expression (in this case, 'foo') and put that in its place. Square-brackets will all be interpreted in this way. If you really need to represent square brackets in text, see display directives, below.
+
+Note, inside the square brackets, you can use either parentheses or square brackets to order your evaluation options. Square brackets will resolve as a string and be concatenated with the strings around it, then reinterpreted. Parentheses will resolve arithmetic only - if there's no arithmetic in them, they'll be left alone as text. That's so you can use parentheses inside a text item. If you really need to display arithmetic to the player in a set of parentheses in a text item, tell me and we'll work something out.
 
 For example:
 
 <pre>
 greeting
-Greetings, captain! You have $Credits credits. That is to say, your balance is $(Credits).
+Greetings, captain! You have [Credits] credits.
 .main
 </pre>
 
-This need not be a numeric flag. You can also substitute strings, using text items. Text items are always lower-case, and will be used in preference over any temporary-scope numeric flags with the same name.
+The evaluation need not be a numeric flag. You can also substitute strings, using text items. Text items are always lower-case, and will be used in preference over any temporary-scope numeric flags with the same name.
 Here's a somewhat more canny version of the above. Note that the last instance has no condition, being implicitly conditional on having been reached.
 
 <pre>
 greeting
-Greetings, captain! You have $(credits).
+Greetings, captain! You have [credits].
 .main
 
 text credits =#Credits=0
@@ -217,7 +219,7 @@ one credit
 .
 
 text credits
-$Credits credits
+[Credits] credits
 .
 </pre>
 
@@ -225,13 +227,13 @@ $Credits credits
 
 Certain commands can be given to display in a certain way. For instance, display location, or linebreaks you want on a single page.
 
-Put these commands in the text, in curly braces, so:
+Some display directives you may want to use will be:
 <pre>
 {left} I'm Zoq {center} (Fot goes here) {right} I'm Pik
 {top left} My lovely captain! {bottom right} Oh, ZEX!
 This is the first line of text{br}And this is the second line
 {color=FF0000}I'm suddenly talking in red{color}back to default
-{(} if you need to use actual curly braces for some reason, this is how you show them {)}
+{(} if you need to use square brackets or curly braces for some reason, this is something like how you will show them. I'll fill it in if asked. {)}
 {}... and that empty pair of braces kept the '...' at the beginning of this line from being interpreted as the end of this text.
 </pre>
 
@@ -288,13 +290,13 @@ You fiend!
 
 option <try_shoot
 Did you try shooting them?
-$no_work
+[no_work]
 .slugs
 
 option ~BLUE_SWITCH_SET
 Try hitting the big blue switch over there.
 Umm, okay?
-$no_work
+[no_work]
 .slugs
 
 option
@@ -322,7 +324,7 @@ This can be especially handy for doing conditional processing without changing w
 An init example fragment
 <pre>
 greeting !Know_You_Well // 
-$init
+[init]
 Greetings, unknown starship.
 .main
 
