@@ -290,13 +290,13 @@ You fiend!
 
 option <try_shoot
 Did you try shooting them?
-[no_work]
+[no_work] // call a text item.
 .slugs
 
 option ~BLUE_SWITCH_SET
 Try hitting the big blue switch over there.
 Umm, okay?
-[no_work]
+[no_work] // reuse same text item.
 .slugs
 
 option
@@ -310,7 +310,7 @@ We tried that.
 It didn't work.
 .
 
-text no_work
+text no_work // second and later times this is called in one conversation, get this.
 We tried that.
 It didn't work.
 Again.
@@ -322,16 +322,19 @@ One last thing. If no greeting, node, or option can be found for which the condi
 This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
  
 An init example fragment
-<pre>
-greeting !Know_You_Well // 
-[init]
-Greetings, unknown starship.
-.main
+<pre>// The wiki's acting wonky here. Need to use extra-wide spacing, sorry.
 
-text init >First_Contact +Need_Food +Need_Shelter +Need_Water
-.
+ greeting !Know_You_Well 
 
-// file goes on to have other things in it - in particular, a catch-all greeting.
-</pre>
+ [init] 
+
+ Greetings, unknown starship.
+
+ .main
+
+ text init >First_Contact +Need_Food +Need_Shelter +Need_Water
+
+.</pre>
+
 
 The second time you meet them, if they still don't know you well yet, the Need_X flags aren't set again even though the dialog they're a consequence of was taken.
