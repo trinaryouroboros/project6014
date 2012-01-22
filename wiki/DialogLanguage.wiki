@@ -103,6 +103,8 @@ Not really, sorry.
 </pre>
 The named option with no condition guarantees that it is complementary to the first. You will be able to say something about juggling. Also, again, it helps avoid errors - less typing out of explicit conditions, and a validator can check for option names that are used only once (you probably didn't mean that).
 
+Using a catch-all is important! If no greeting, node, or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_, it will result in conversation termination and an entry in the error log.
+ 
 
 As shortcuts and again to minimize the opportunity for errors, there are three compound operations. Each pair of lines is equivalent:
 
@@ -134,7 +136,7 @@ Okay, I hit the switch. Now what?
 
 === keys ===
 
-As mentioned, the keys referred to in conditions and consequences can be just flags. They are interpreed that way if they begin with letters, numbers, or any non-reserved punctuation like <pre>_</pre>, quotes, periods and commas, @, etc..
+As mentioned, the keys referred to in conditions and consequences can be just flags. They are interpreted that way if they begin with letters, numbers, or any non-reserved punctuation like <pre>_</pre>, quotes, periods and commas, @, etc..
 
   * All-lower-case flags will automatically be unset at the end of the conversation - they have 'temporary' scope.
   * All-upper-case flags are global, shared by all dialogs and the game as a whole.
@@ -156,9 +158,9 @@ Some other keys refer to numeric flags. These begin with the number sign # and a
 =#BioData>99
 </pre>
 
-If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the BioData numeric flag has been set to at least 100. Unset numeric flags are treated as 0.
+If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100. Unset numeric flags are treated as 0.
 
-You can do more complicated things, like {{ =#(MAP_X-500)^2+(MAP_Y-500)^2<10^2 }} which is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' )
+You can do more complicated things, like {{ =#(MAP_X-500)`^`2+(MAP_Y-500)`^`2<10`^`2 }} which is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' )
 
 If it's a *consequence* other than '-', then the left hand side of the statement must be a numeric flag, which will be set to the value of the other side if it's =, or to the nearest satisfying value if it's an inequality.
 
@@ -166,7 +168,7 @@ If it's the unset consequence '-', then you may (and probably should) leave off 
 
 Math within an evaluation is double-precision floating point. Any number coming out of this evaluation is converted to an integer so you don't need to worry about your numeric flags being off by a tiny amount from the target value, or that some 12 digit decimal is going to be displayed (how do you do that? We'll get to that later).
 
-Some flags and numeric flags will manipulated by non-dialog elements of the game, and some of those cannot be set directly, like FREE_CARGO_CAPACITY
+Some flags and numeric flags will manipulated by non-dialog elements of the game, and some of those cannot be set directly, like FREE_CARGO_CAPACITY.
 
 === random flag ===
 
@@ -188,11 +190,11 @@ buh
 </pre>
 Note that instead of using the = condition, the < condition was used to require it... and then try to set it, so the random number would be changed. And the unconditional last option also rerolled the random number.
 
-== Evaluations ==
+== Evaluations and Calling Text Items ==
 
-If you want to have the text be dynamic, use square brackets {{{ [foo] }}}. This will evaluate the contained expression (in this case, 'foo') and put that in its place. Square-brackets will all be interpreted in this way. If you really need to represent square brackets in text, see display directives, below.
+If you want to have the text be dynamic, use square brackets {{{ [foo] }}}. This will evaluate the contained expression (in this case, 'foo') and put the result in its place. This includes substituting text items by name, and numeric substitutions. All square-brackets will all be interpreted in this way. If you really need to show square brackets in text, see 'display directives', below.
 
-Note, inside the square brackets, you can use either parentheses or square brackets to order your evaluation options. Square brackets will resolve as a string and be concatenated with the strings around it, then reinterpreted. Parentheses will resolve arithmetic only - if there's no arithmetic in them, they'll be left alone as text. That's so you can use parentheses inside a text item. If you really need to display arithmetic to the player in a set of parentheses in a text item, tell me and we'll work something out.
+Note, inside the square brackets, you can use either parentheses or square brackets to order your evaluation options. Square brackets will resolve as a string and be concatenated with the strings around it, then reinterpreted (in most cases, this works for handling arithmetic). Parentheses will resolve arithmetic only - if there's no arithmetic in them, they'll be left alone as text. That's so you can use parentheses inside a text item. If you _really_ need to display arithmetic to the player in a set of parentheses in a text item, tell me and we'll work something out.
 
 For example:
 
@@ -202,8 +204,7 @@ Greetings, captain! You have [Credits] credits.
 .main
 </pre>
 
-The evaluation need not be a numeric flag. You can also substitute strings, using text items. Text items are always lower-case, and will be used in preference over any temporary-scope numeric flags with the same name.
-Here's a somewhat more canny version of the above. Note that the last instance has no condition, being implicitly conditional on having been reached.
+Here's a somewhat more canny version of the above using text items with conditions. Note that the last text item has no condition, being implicitly conditional on having been reached.
 
 <pre>
 greeting
@@ -222,6 +223,28 @@ text credits
 [Credits] credits
 .
 </pre>
+
+If you call a text and no matching texts have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank).
+
+This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
+ 
+An init example fragment
+<pre>// The wiki's acting wonky here. Need to use extra-wide spacing, sorry.
+
+ greeting !Know_You_Well 
+
+ [init] 
+
+ Greetings, unknown starship.
+
+ .main
+
+ text init >First_Contact +Need_Food +Need_Shelter +Need_Water
+
+.</pre>
+
+
+The second time you meet them, if they still don't know you well yet, the Need_X flags aren't set again even though the dialog they're a consequence of was taken.
 
 == Display Directives ==
 
@@ -316,25 +339,3 @@ It didn't work.
 Again.
 .
 </pre>
-
-One last thing. If no greeting, node, or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_, not a valid exit. If on the other hand you call a text and no matching texts have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank)
-
-This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
- 
-An init example fragment
-<pre>// The wiki's acting wonky here. Need to use extra-wide spacing, sorry.
-
- greeting !Know_You_Well 
-
- [init] 
-
- Greetings, unknown starship.
-
- .main
-
- text init >First_Contact +Need_Food +Need_Shelter +Need_Water
-
-.</pre>
-
-
-The second time you meet them, if they still don't know you well yet, the Need_X flags aren't set again even though the dialog they're a consequence of was taken.
