@@ -72,11 +72,13 @@
       * [ShipCreation]
       * [AddingNewRaces]
       * [DialogLanguage]
-    * Older material
+    * Older material - of curiosity value
       * [ChmmrExplorer]
+      * [http://code.google.com/p/project6014/source/browse/trunk/sc2/doc/mod/melnorme.png Melnorme dialogue tree]
   * Administration
     * Project [Rules]
-    * [Contributing] : how to set up your system
+    * [Contributing] - how to set up your system
+    * [ReleaseProcess] - things to remember
     * PortingChanges from UQM
     * [Statistics]
     * Team
