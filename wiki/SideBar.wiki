@@ -39,13 +39,13 @@
           * Zoq-Fot-Pik
         * New races
           * [Androsynth]
+          * [Baul]
           * [Faz]
+          * [FoonFoon]
           * [FleeingRace]
           * [Lurg]
-          * [Baul]
           * [Mmrnmhrm]
           * [Exotics]
-          * [SlaveRace]
           * [Taalo]
       * Devices
         * [BlackOrb]
