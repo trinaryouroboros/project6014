@@ -160,7 +160,7 @@ Some other keys refer to numeric flags. These begin with the number sign # and a
 
 If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100. Unset numeric flags are treated as 0.
 
-You can do more complicated things, like {{ =#(MAP_X-500)`^`2+(MAP_Y-500)`^`2<10`^`2 }} which is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' )
+You can do more complicated things. Use square brackets for grouping, like {{ =#`[MAP_X-500`]`^`2+`[MAP_Y-500`]`^`2<10`^`2 }} which is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' )
 
 If it's a *consequence* other than '-', then the left hand side of the statement must be a numeric flag, which will be set to the value of the other side if it's =, or to the nearest satisfying value if it's an inequality.
 
@@ -192,9 +192,15 @@ Note that instead of using the = condition, the < condition was used to require 
 
 == Evaluations and Calling Text Items ==
 
-If you want to have the text be dynamic, use square brackets {{{ [foo] }}}. This will evaluate the contained expression (in this case, 'foo') and put the result in its place. This includes substituting text items by name, and numeric substitutions. All square-brackets will all be interpreted in this way. If you really need to show square brackets in text, see 'display directives', below.
+If you want to have the text be dynamic, use square brackets {{{ [foo] }}}. This will evaluate the contained expression (in this case, 'foo') and put the result in its place, removing the square brackets. These square bracket statements are evaluated left to right by where they close. They may be nested. Within each replacement, it goes down the list, looking for things to do.
 
-Note, inside the square brackets, you can use either parentheses or square brackets to order your evaluation options. Square brackets will resolve as a string and be concatenated with the strings around it, then reinterpreted (in most cases, this works for handling arithmetic). Parentheses will resolve arithmetic only - if there's no arithmetic in them, they'll be left alone as text. That's so you can use parentheses inside a text item. If you _really_ need to display arithmetic to the player in a set of parentheses in a text item, tell me and we'll work something out.
+ # arithmetic operations (ordered by normal precedence) to perform, then evaluating numeric parameters on either side and performing the arithmetic
+ # if not in a condition or consequence, substitute text items with the named key. If the key is found but conditions are not met, remove the key call and start over, don't flow through to numeric flags.
+ # numeric flag with that key.
+
+If the text item is called from the Captain's line (the first line after an option), only the first line of the text item will be used.
+
+Parentheses are ignored by this language, as they are too frequently used in dialogue for anyone to want to have to think about whether they're going to cause trouble.
 
 For example:
 
@@ -224,7 +230,7 @@ text credits
 .
 </pre>
 
-If you call a text and no matching texts have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank).
+If you call a text and the key is found but none of them have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank). If no text items are found with that key at all, it tries to evaluate it as a numeric flag.
 
 This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
  
@@ -339,3 +345,9 @@ It didn't work.
 Again.
 .
 </pre>
+
+Here's another example where you have a different statment for each level of friendliness.
+
+<pr>option
+How about you light them on fire?
+[light_fire_[Rep]]
