@@ -7,7 +7,7 @@ Var UQMUSERDATA
 
 ; HM NIS Edit Wizard helper defines
 !define PRODUCT_NAME "The Ur-Quan Masters project6014"
-!define PRODUCT_VERSION "0.2.0"
+!define PRODUCT_VERSION "0.2.1"
 !define PRODUCT_WEB_SITE "http://code.google.com/p/project6014/"
 !define PRODUCT_DIR_REGKEY "Software\Microsoft\Windows\CurrentVersion\App Paths\p6014.exe"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
@@ -236,7 +236,7 @@ AttemptDownload:
   CreateDirectory $DOWNLOADTARGET
 ;  NSISdl::download "http://$2.dl.sourceforge.net/sourceforge/sc2/$1" "$DOWNLOADTARGET\$1"
 ;  NSISdl::download "http://project6014.googlecode.com/files/$1" "$DOWNLOADTARGET\$1"
-NSISdl::download "http://www.stack.nl/~joris/p6014/$1" "$DOWNLOADTARGET\$1"
+NSISdl::download "http://www.stack.nl/~joris/p6014/0.2.1/$1" "$DOWNLOADTARGET\$1"
   Pop $2
   StrCmp $2 "success" DownloadSuccessful
   StrCmp $2 "cancel" DownloadCanceled
@@ -282,6 +282,7 @@ SectionGroup "!UQM" SECGRP01
     SetOverwrite try
     File "AUTHORS.txt"
     File "COPYING.txt"
+    File "jpeg.dll"
     File "libpng12-0.dll"
     File "Manual.txt"
     File "libogg-0.dll"
@@ -326,11 +327,11 @@ SectionGroup "!UQM" SECGRP01
     CreateDirectory "$INSTDIR\content\addons"
     SetOutPath "$INSTDIR\content"
     SetOverwrite ifnewer
-    AddSize 59973
+    AddSize 45749
     StrCpy $MANDATORY 1
-    StrCpy $MD5SUM "688416b2d71dee1aecc0eb81e3e18df1"
+    StrCpy $MD5SUM "424b27650a021432b5507db4ae6fc4fd"
     File "content\version"
-    Push "P6014-0.2.0-prv-content.uqm"
+    Push "P6014-0.2.1-prv-content.uqm"
     Push "$INSTDIR\content\packages"
     Call HandlePackage
 
@@ -348,10 +349,10 @@ SectionGroupEnd
 SectionGroup /e "High-resolution content" SECGRP02
   Section "Hires640x480" SEC03
     SectionIn 1 4 6
-    AddSize 134540
+    AddSize 96457
     StrCpy $MANDATORY 0
-    StrCpy $MD5SUM "a0cd61f28f65ce9a454ae3d1dc260970"
-    Push "P6014-0.2.0-prv-hires2x.uqm"
+    StrCpy $MD5SUM "b24b8e63ef476abf8b311004e023ac1d"
+    Push "P6014-0.2.1-prv-hires2x.uqm"
     Push "$INSTDIR\content\addons"
     Call HandlePackage
   ; Shortcuts
@@ -361,10 +362,10 @@ SectionGroup /e "High-resolution content" SECGRP02
 
   Section "Hires1280x960" SEC04
     SectionIn 1 4 6
-    AddSize 294596
+    AddSize 263713
     StrCpy $MANDATORY 0
-    StrCpy $MD5SUM "254c4d75818a07ce41c48496d597ecd1"
-    Push "P6014-0.2.0-prv-hires4x.uqm"
+    StrCpy $MD5SUM "069e4a64bd90eaebbada2837e174834f"
+    Push "P6014-0.2.1-prv-hires4x.uqm"
     Push "$INSTDIR\content\addons"
     Call HandlePackage
   ; Shortcuts
@@ -376,10 +377,10 @@ SectionGroupEnd
 SectionGroup /e "3DO Content" SECGRP03
   Section "Music" SEC05
     SectionIn 1 4 6
-    AddSize 55380
+    AddSize 55379
     StrCpy $MANDATORY 0
     StrCpy $MD5SUM "ab632238d84b4df569fbf7a862a01f66"
-    Push "P6014-0.2.0-prv-3domusic.uqm"
+    Push "P6014-0.2.1-prv-3domusic.uqm"
     Push "$INSTDIR\content\addons"
     Call HandlePackage
   ; Shortcuts
@@ -389,10 +390,10 @@ SectionGroup /e "3DO Content" SECGRP03
 
   Section "Voiceovers" SEC06
     SectionIn 1 4 6
-    AddSize 15642
+    AddSize 41722
     StrCpy $MANDATORY 0
-    StrCpy $MD5SUM "c5a0a80e4a7ab3d5828fc78f6bb91c5b"
-    Push "P6014-0.2.0-prv-voice.uqm"
+    StrCpy $MD5SUM "cc3b6077b41ef21c206089b8233df0ce"
+    Push "P6014-0.2.1-prv-voice.uqm"
     Push "$INSTDIR\content\addons"
     Call HandlePackage
   ; Shortcuts
@@ -517,7 +518,7 @@ SectionEnd
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} "Graphics, sound, and the PC-edition music for The Ur-Quan Masters Project6014.  Required for play.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
   !insertmacro MUI_DESCRIPTION_TEXT ${SECICON} "Adds a desktop icon linking directly to The Ur-Quan Masters Project6014."
   !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP02} "Optional content packages containing high-resolution art used to run the game at higher resolutions. Not required but strongly recommended !"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Optional package containing the art required for running the game at a resolution of 640x480.  This is still only a rough, glitchy draft.  But, if your screen can support 1280x960, you're much better off downloading the 1280x960 Graphics package instead of this one!  If this package is selected and not present in the packages directory, the installer will attempt to download it."
+  !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} "Optional package containing the art required for running the game at a resolution of 640x480.  If your screen can support 1280x960, you're much better off downloading the 1280x960 Graphics package instead of this one!  If this package is selected and not present in the packages directory, the installer will attempt to download it."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} "Optional package containing the art required for running the game at a resolution of 1280x960.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
   !insertmacro MUI_DESCRIPTION_TEXT ${SECGRP03} "Optional content packages containing music and sound unique to the 1993 3DO release."
   !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} "Optional package which includes high quality remixed songs for The Ur-Quan Masters Project6014.  If this package is selected and not present in the packages directory, the installer will attempt to download it."
@@ -547,15 +548,16 @@ Section Uninstall
 ;  Delete "$INSTDIR\content\packages\addons\remix\p6014-remix-pack3.zip"
 ;  Delete "$INSTDIR\content\packages\addons\remix\p6014-remix-pack2.zip"
 ;  Delete "$INSTDIR\content\packages\addons\remix\p6014-remix-pack1.zip"
-  Delete "$INSTDIR\content\addons\P6014-0.2.0-prv-voice.uqm"
-  Delete "$INSTDIR\content\addons\P6014-0.2.0-prv-3domusic.uqm"
-  Delete "$INSTDIR\content\packages\P6014-0.2.0-prv-content.uqm"
-  Delete "$INSTDIR\content\addons\P6014-0.2.0-prv-hires2x.uqm"
-  Delete "$INSTDIR\content\addons\P6014-0.2.0-prv-hires4x.uqm"
+  Delete "$INSTDIR\content\addons\P6014-0.2.1-prv-voice.uqm"
+  Delete "$INSTDIR\content\addons\P6014-0.2.1-prv-3domusic.uqm"
+  Delete "$INSTDIR\content\packages\P6014-0.2.1-prv-content.uqm"
+  Delete "$INSTDIR\content\addons\P6014-0.2.1-prv-hires2x.uqm"
+  Delete "$INSTDIR\content\addons\P6014-0.2.1-prv-hires4x.uqm"
   Delete "$INSTDIR\content\version"
 ;  Delete "$INSTDIR\zlib.dll"
   Delete "$INSTDIR\zlib1.dll"
 ;  Delete "$INSTDIR\WhatsNew.txt"
+  Delete "$INSTDIR\jpeg.dll"
   Delete "$INSTDIR\libvorbisfile-3.dll"
   Delete "$INSTDIR\libvorbis-0.dll"
   Delete "$INSTDIR\p6014.exe"
