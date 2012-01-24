@@ -345,9 +345,3 @@ It didn't work.
 Again.
 .
 </pre>
-
-Here's another example where you have a different statment for each level of friendliness.
-
-<pr>option
-How about you light them on fire?
-[light_fire_[Rep]]
