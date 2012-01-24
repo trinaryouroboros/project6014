@@ -166,7 +166,7 @@ If it's a *consequence* other than '-', then the left hand side of the statement
 
 If it's the unset consequence '-', then you may (and probably should) leave off the comparator and right hand side.
 
-Math within an evaluation is double-precision floating point. Any number coming out of this evaluation is converted to an integer so you don't need to worry about your numeric flags being off by a tiny amount from the target value, or that some 12 digit decimal is going to be displayed (how do you do that? We'll get to that later).
+All math is integer (this is a change from earlier specification).
 
 Some flags and numeric flags will manipulated by non-dialog elements of the game, and some of those cannot be set directly, like FREE_CARGO_CAPACITY.
 
