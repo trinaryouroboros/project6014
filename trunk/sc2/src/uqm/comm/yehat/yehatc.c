@@ -72,7 +72,7 @@ static LOCDATA yehat_desc_1x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 20, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 4) | (1 << 14),
+			(1 << 5) | (1 << 14),
 		},
 		{
 			13, /* StartIndex */
@@ -88,7 +88,7 @@ static LOCDATA yehat_desc_1x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 6, ONE_SECOND * 3,/* RestartRate */
-			(1 << 2) | (1 << 14),
+			0,
 		},
 		{
 			21, /* StartIndex */
@@ -96,7 +96,7 @@ static LOCDATA yehat_desc_1x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 6, ONE_SECOND * 3,/* RestartRate */
-			(1 << 3),
+			(1 << 2) | (1 << 3) | (1 << 14),
 		},
 		{ /* right arm-wing rising; front guy */
 			26, /* StartIndex */
@@ -168,7 +168,7 @@ static LOCDATA yehat_desc_1x =
 			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 30, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 2) | (1 << 4),
+			(1 << 2) | (1 << 5),
 		},
 	},
 	{ /* AlienTransitionDesc - empty */
@@ -244,7 +244,7 @@ static LOCDATA yehat_desc_2x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 20, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 4) | (1 << 12),
+			(1 << 5) | (1 << 12),
 		},
 		{
 			13, /* StartIndex */
@@ -260,7 +260,7 @@ static LOCDATA yehat_desc_2x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 6, ONE_SECOND * 3,/* RestartRate */
-			(1 << 2) | (1 << 12),
+			0,
 		},
 		{
 			21, /* StartIndex */
@@ -268,7 +268,7 @@ static LOCDATA yehat_desc_2x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 6, ONE_SECOND * 3,/* RestartRate */
-			(1 << 3),
+			(1 << 2) | (1 << 3) | (1 << 12),
 		},
 		{
 			26, /* StartIndex */
@@ -324,7 +324,7 @@ static LOCDATA yehat_desc_2x =
 			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 30, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 2) | (1 << 4),
+			(1 << 2) | (1 << 5),
 		},
 	},
 	{ /* AlienTransitionDesc - empty */
@@ -400,7 +400,7 @@ static LOCDATA yehat_desc_4x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 20, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 4) | (1 << 12),
+			(1 << 5) | (1 << 12),
 		},
 		{
 			13, /* StartIndex */
@@ -416,7 +416,7 @@ static LOCDATA yehat_desc_4x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 6, ONE_SECOND * 3,/* RestartRate */
-			(1 << 2) | (1 << 12),
+			0,
 		},
 		{
 			21, /* StartIndex */
@@ -424,7 +424,7 @@ static LOCDATA yehat_desc_4x =
 			YOYO_ANIM, /* AnimFlags */
 			ONE_SECOND / 15, ONE_SECOND / 15, /* FrameRate */
 			ONE_SECOND * 6, ONE_SECOND * 3,/* RestartRate */
-			(1 << 3),
+			(1 << 2) | (1 << 3) | (1 << 12),
 		},
 		{
 			26, /* StartIndex */
@@ -480,7 +480,7 @@ static LOCDATA yehat_desc_4x =
 			YOYO_ANIM | WAIT_TALKING, /* AnimFlags */
 			ONE_SECOND / 30, 0, /* FrameRate */
 			ONE_SECOND, ONE_SECOND * 3, /* RestartRate */
-			(1 << 2) | (1 << 4),
+			(1 << 2) | (1 << 5),
 		},
 	},
 	{ /* AlienTransitionDesc - empty */
