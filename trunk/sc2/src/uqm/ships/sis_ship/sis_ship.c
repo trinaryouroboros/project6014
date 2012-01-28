@@ -207,6 +207,29 @@ LeaveAutoPilot:
 			dx = -dx;
 		if ((dy = (SIZE)udy) < 0)
 			dy = -dy;
+
+        if (ENABLE_NON_EUCLIDEAN_ORZ_SPACE && GET_GAME_STATE (ORZ_SPACE_SIDE) > 1)
+        {
+            /* If it's just a short distance, use the normal autopilot's straight path.
+               Otherwise, follow the circle path. */
+#define EUCLIDEAN_SHORT_DISTANCE 100
+            if (dx > (EUCLIDEAN_SHORT_DISTANCE << RESOLUTION_FACTOR))
+            {
+                if (udx > 0)
+                {
+                    udy = universe.x - GLOBAL(autopilotOrzSpaceCenter).x;
+                    udx = universe.y - GLOBAL(autopilotOrzSpaceCenter).y;
+                    StarShipPtr->cur_status_flags &= ~SHIP_AT_MAX_SPEED;
+                }
+                else
+                {
+                    udy = -(universe.x - GLOBAL(autopilotOrzSpaceCenter).x);
+                    udx = -(universe.y - GLOBAL(autopilotOrzSpaceCenter).y);
+                    StarShipPtr->cur_status_flags &= ~SHIP_AT_MAX_SPEED;
+                }
+            }
+        }
+        
 		if (dx <= (1 << RESOLUTION_FACTOR) && dy <= (1 << RESOLUTION_FACTOR))
 			goto LeaveAutoPilot;
 
