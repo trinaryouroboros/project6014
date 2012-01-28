@@ -141,6 +141,7 @@ As mentioned, the keys referred to in conditions and consequences can be just fl
   * All-lower-case flags will automatically be unset at the end of the conversation - they have 'temporary' scope.
   * All-upper-case flags are global, shared by all dialogs and the game as a whole.
   * Mixed-case flags are preserved but namespaced to this dialog file so you don't collide with the flags other people are using for their races.
+  * The flag with the empty string as its name is always TRUE.
 
 Examples:
 <pre>
@@ -153,26 +154,46 @@ Examples:
 =SHIP_IS_MK_II // If the player upgraded, this will be set
 </pre>
 
+=== numeric flags ===
+
 Some other keys refer to numeric flags. These begin with the number sign # and are then followed by an algebraic statement (equality, inequality). For instance,
 <pre>
 =#BioData>99
 </pre>
 
-If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100. Unset numeric flags are treated as 0.
+If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100. Unset numeric flags are treated as 0. All math is integer (this is a change from earlier specification).
 
-You can do more complicated things. Use square brackets for grouping, like {{ =#`[MAP_X-500`]`^`2+`[MAP_Y-500`]`^`2<10`^`2 }} which is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' )
+If a numeric *consequence* other than '-' is applied, then the left hand side of the statement must be a numeric flag, which will be set to the value of the other side if it's =, or to the nearest satisfying value if it's an inequality.
 
-If it's a *consequence* other than '-', then the left hand side of the statement must be a numeric flag, which will be set to the value of the other side if it's =, or to the nearest satisfying value if it's an inequality.
+If the unset consequence '-' is applied, then you may (and probably should) leave off the comparator and right hand side.
 
-If it's the unset consequence '-', then you may (and probably should) leave off the comparator and right hand side.
+Some flags and numeric flags will manipulated by non-dialog elements of the game, and some of those cannot be set directly, like FREE_CARGO_CAPACITY, if there is such a thing. A list of these will eventually be placed here.
 
-All math is integer (this is a change from earlier specification).
+=== Arithmetic ===
 
-Some flags and numeric flags will manipulated by non-dialog elements of the game, and some of those cannot be set directly, like FREE_CARGO_CAPACITY.
+Numbers need not be literal - you can evaluate numeric flags and evaluate expressions
+
+The arithmetic operators available are, in order by increasing precedence:
+
+  # +, - 
+  # /
+  # `*`
+  # ^, √ (√ is always a binary operator. '2' is not assumed)
+
+The order of operations is RIGHT to LEFT.
+
+ {{{a*b/c*d}}} is just what it looks like - d is in the denominator, not the numerator, because `*` binds more tightly than /. This choice was made so the trimming-to-integer is minimally invasive - numbers are made as large as possible before they get divided.
+
+The radical and exponent operators are arranged as you'd expect, looking at them - and they put the base on opposite sides. So,  {{{ a√b^c }}} is what we'd normally call {{{ b^[c/a] }}}, except that c/a would be trimmed to an integer if you did it that way. Note that doing things right-to-left helps here so the exponentiation acts before the radical, without having to use grouping.
+
+Speaking of which, use square brackets for grouping, like {{{ =#2√[[MAP_X-500]^2+[MAP_Y-500]^2]<10 }}}. This condition is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' ). Parentheses are ignored so you can treat them as regular text without having to worry about it being script-language syntax.
+
+You may be tempted to put spaces in your expressions. Don't. It'll mess up the parser. Sorry.
+
 
 === random flag ===
 
-There's a special random numeric flag which when you evaluate it, is a number from 0 to 99. It is not rerolled when you evaluate it, but only at the beginning of the conversation and if you try to set it or unset it. The name of this flag is, simply, %.
+There's a special random numeric flag which is a randomly determined number from 0 to 99. It is not rerolled when you evaluate it, but only at the beginning of the conversation and if you try to set it or unset it. The name of this flag is, simply, %.
 
 <pre>
  text blah <#%<25 // this meets the condition 1/4 of the time
@@ -188,21 +209,21 @@ text blah -#% // this meets the implicit condition half the time
 buh
 .
 </pre>
-Note that instead of using the = condition, the < condition was used to require it... and then try to set it, so the random number would be changed. And the unconditional last option also rerolled the random number.
+Note that instead of using the = condition, the < condition was used to require it... and then try to unset it, so the random number would be changed. Also note, the unconditional last option also rerolls the random number.
 
 == Evaluations and Calling Text Items ==
 
-If you want to have the text be dynamic, use square brackets {{{ [foo] }}}. This will evaluate the contained expression (in this case, 'foo') and put the result in its place, removing the square brackets. These square bracket statements are evaluated left to right by where they close. They may be nested. Within each replacement, it goes down the list, looking for things to do.
+If you want to have the text be dynamic, use square brackets {{{ [foo] }}}. These evaluations can be put in dialog, conditions, or consequences (but not replacing the leading character of a condition or consequence - that has to be literal). Within each replacement, it goes down the list, looking for things to do.
 
- # arithmetic operations (ordered by normal precedence) to perform, then evaluating numeric parameters on either side and performing the arithmetic
- # if not in a condition or consequence, substitute text items with the named key. If the key is found but conditions are not met, remove the key call and start over, don't flow through to numeric flags.
- # numeric flag with that key.
+ # find any arithmetic operations, then evaluate numeric parameters on either side and performing the arithmetic. NOTE:  see above in numeric flags about arithmetic and order of operations.
+ # substitute text items with the named key. If the key is found but conditions are not met, that's treated as a match yielding the empty string, not a failure to match.
+ # substitute the value of any numeric flag with that key, or 0 if none.
 
-If the text item is called from the Captain's line (the first line after an option), only the first line of the text item will be used.
+If the text item is called from one of the Captain's lines (the first text line of each option), only the first line of the text item will be used.
 
 Parentheses are ignored by this language, as they are too frequently used in dialogue for anyone to want to have to think about whether they're going to cause trouble.
 
-For example:
+Example:
 
 <pre>
 greeting
@@ -230,7 +251,7 @@ text credits
 .
 </pre>
 
-If you call a text and the key is found but none of them have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank). If no text items are found with that key at all, it tries to evaluate it as a numeric flag.
+If you call a text and the key is found but none of them have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank). Only if no text items are found with that key at all, does it try to evaluate it as a numeric flag.
 
 This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
  
@@ -251,6 +272,13 @@ An init example fragment
 
 
 The second time you meet them, if they still don't know you well yet, the Need_X flags aren't set again even though the dialog they're a consequence of was taken.
+
+Outside of this case where the text item is used specifically for its consequences, or to prevent a text item from being repeated, you should avoid putting consequences on text items. It gets messy really fast. I'll spend two paragraphs on how messy it gets, just to warn you off it:
+
+In particular, it will be very rare to want to put consequences on text items that get substituted into the text of a condition, or that get substituted into the Captain's lines, as these will be executed whether or not the conditions are satisfied (the text item resolves when the condition is evaluated) or whether or not the player chooses that line (the text item resolves when the option to say that is displayed to the player). Still could possibly be useful if you're counting up how long the captain has been holding off on saying something. Handle that stuff with rubber gloves.
+
+If you must put consequences in text items... In contrast to the right-to-left arithmetic, evaluations are performed left to right by order of their closing brackets (as a consequence, no evaluation is ever performed with another evaluation still unresolved inside it). However, each condition or consequence is evaluated separately, so square brackets on a later one will not make them be evaluated before an earlier one.
+
 
 == Display Directives ==
 
