@@ -178,9 +178,7 @@ The arithmetic operators available are, in order by increasing precedence:
   # +, - 
   # /
   # `*`
-  # ^, √ (√ is always a binary operator. '2' is not assumed)
-
-The order of operations is RIGHT to LEFT.
+  # ^, √ (√ is always a binary operator. '2' is not assumed). These operators resolve RIGHT to LEFT
 
  {{{a*b/c*d}}} is just what it looks like - d is in the denominator, not the numerator, because `*` binds more tightly than /. This choice was made so the trimming-to-integer is minimally invasive - numbers are made as large as possible before they get divided.
 
@@ -277,7 +275,7 @@ Outside of this case where the text item is used specifically for its consequenc
 
 In particular, it will be very rare to want to put consequences on text items that get substituted into the text of a condition, or that get substituted into the Captain's lines, as these will be executed whether or not the conditions are satisfied (the text item resolves when the condition is evaluated) or whether or not the player chooses that line (the text item resolves when the option to say that is displayed to the player). Still could possibly be useful if you're counting up how long the captain has been holding off on saying something. Handle that stuff with rubber gloves.
 
-If you must put consequences in text items... In contrast to the right-to-left arithmetic, evaluations are performed left to right by order of their closing brackets (as a consequence, no evaluation is ever performed with another evaluation still unresolved inside it). However, each condition or consequence is evaluated separately, so square brackets on a later one will not make them be evaluated before an earlier one.
+If you must put consequences in text items... evaluations are performed left to right by order of their closing brackets (as a consequence, no evaluation is ever performed with another evaluation still unresolved inside it). However, each condition or consequence is evaluated separately, so square brackets on a later one will not make them be evaluated before an earlier one.
 
 
 == Display Directives ==
