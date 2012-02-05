@@ -74,7 +74,7 @@ option
 
 == Conditions and Consequences ==
 
-Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by a _key_. The simplest keys are just names of _flags_, which can be _set_ (interpreted as 'true') or _unset_ (interpreted as 'false').
+Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by a _key_. The simplest keys are just names of _flags_, which can be _set_ (interpreted as 'true', and if read numerically, not equal to 0 and by default equal to 1) or _unset_ (interpreted as 'false', and if read numerically, equal to 0).
 
 If all of an item's conditions are met, it can be used. If an item is being sought _by name_ and does not meet the conditions, the search goes on for another item of the same name. For greetings, the first greeting with all of its conditions met is used. All unnamed options with their criteria met are shown. If an option is given a name, only the first option with that name with its conditions met will be shown, just as with nodes and texts (useful for presenting variations on the same option - different responses to the same statement, say).
 
@@ -156,12 +156,12 @@ Examples:
 
 === numeric flags ===
 
-Some other keys refer to numeric flags. These begin with the number sign # and are then followed by an algebraic statement (equality, inequality). For instance,
+Flags do not need to be just 1 or 0. They can be arbitrary numbers, too. These keys contain algebraic statements (equality, inequality). For instance,
 <pre>
-=#BioData>99
+=BioData>99
 </pre>
 
-If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100. Unset numeric flags are treated as 0. All math is integer (this is a change from earlier specification).
+If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100. Unset flags are treated as 0. All math is integer (this is a change from earlier specification).
 
 If a numeric *consequence* other than '-' is applied, then the left hand side of the statement must be a numeric flag, which will be set to the value of the other side if it's =, or to the nearest satisfying value if it's an inequality.
 
@@ -188,22 +188,24 @@ Speaking of which, use square brackets for grouping, like {{{ =#2√[[MAP_X-500]
 
 You may be tempted to put spaces in your expressions. Don't. It'll mess up the parser. Sorry.
 
+Numeric flags can be tested with the = and ! operators used by binary flags. In these cases, it's TRUE if it's anything other than 0, and it's FALSE if it's 0.
+
 
 === random flag ===
 
 There's a special random numeric flag which is a randomly determined number from 0 to 99. It is not rerolled when you evaluate it, but only at the beginning of the conversation and if you try to set it or unset it. The name of this flag is, simply, %.
 
 <pre>
- text blah <#%<25 // this meets the condition 1/4 of the time
+ text blah <%<25 // this meets the condition 1/4 of the time
 BLAH!!!
 .
 
-text blah <#%<50 // this also meets the condition 1/4 of the time
+text blah <%<50 // this also meets the condition 1/4 of the time
 //because it won't be taken if the first one was because it's named blah like the first one
 blah
 .
 
-text blah -#% // this meets the implicit condition half the time
+text blah -% // this meets the implicit condition half the time
 buh
 .
 </pre>
@@ -236,11 +238,11 @@ greeting
 Greetings, captain! You have [credits].
 .main
 
-text credits =#Credits=0
+text credits =Credits=0
 no credits
 .
 
-text credits =#Credits=1
+text credits =Credits=1
 one credit
 .
 
@@ -299,7 +301,7 @@ Other special directives are possible for 'dimming the lights'/vfx, or even chan
 Here's the moderately complicated dialog I presented in the email where I first mentioned it, slightly modified to take full advantage of the language features.
 
 <pre>
-greeting !#Rep<0
+greeting !Rep<0
 Hello, captain!
 .main
 
@@ -338,7 +340,7 @@ Oh, here, have our slug repellent!
 Thank you for your generosity, captain!
 .main
 
-option =HAVE_SLUG_REPELLENT +#Rep=-1
+option =HAVE_SLUG_REPELLENT +Rep=-1
 Even though we have slug repellent, you can't have any!
 You fiend!
 .fight
