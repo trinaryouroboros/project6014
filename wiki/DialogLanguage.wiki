@@ -174,7 +174,7 @@ Some flags and numeric flags will manipulated by non-dialog elements of the game
 Numbers need not be literal - you can evaluate numeric flags and evaluate expressions
 
 The arithmetic operators available are, in order by increasing precedence:
-
+  # =, <, > (check for this condition being satisfied, return 1 or 0 appropriately)
   # +, - 
   # /
   # `*`
