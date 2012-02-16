@@ -28,8 +28,8 @@
 #define ENERGY_REGENERATION 1
 #define ENERGY_WAIT 6
 #define MAX_THRUST 20
-#define THRUST_INCREMENT 6
-#define THRUST_WAIT 1
+#define THRUST_INCREMENT 5
+#define THRUST_WAIT 2
 #define TURN_WAIT 1
 #define SHIP_MASS 6
 
@@ -50,7 +50,7 @@
 #define OIL_SPEED DISPLAY_TO_WORLD (2 << RESOLUTION_FACTOR) // JMS_GFX
 #define OIL_INIT_SPEED DISPLAY_TO_WORLD (6 << RESOLUTION_FACTOR) // JMS_GFX
 #define OIL_HITS 3
-#define OIL_DAMAGE 1 // Oil inflicts damage only in specific circumstances.
+#define OIL_DAMAGE 1 // Oil inflicts damage against projectiles, not ships.
 #define OIL_SPREAD_MINIMUM 6
 #define OIL_SPREAD_VARIATION 4
 #define OIL_LIFE 300
@@ -62,7 +62,7 @@
 #define LURG_OFFSET_2 (16 << RESOLUTION_FACTOR) // JMS_GFX
 
 // Bonus ability
-#define REPAIR_WAIT 192 // Was 216.
+#define REPAIR_WAIT 192
 
 static RACE_DESC lurg_desc =
 {
