@@ -15,7 +15,7 @@ Ho, captain! Our hero finally returns!
 Anything you need?
 
 #(SPACE_HELLO_3)
-The hero from Unzervault! 
+Well, if it isn't the hero from Unzervault! 
 How can we help Captain?
 
 #(ask_news)
