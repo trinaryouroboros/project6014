@@ -14,7 +14,7 @@ Hello, captain. Welcome back to home turf.
 Anything we can assist you with?
 
 #(SPACE_HELLO_3)
-Yes, captain, how can we help you?
+Well, look who's back? Good to see you, Captain!
 
 #(ask_news)
 Got any hot news from this side of the galaxy?

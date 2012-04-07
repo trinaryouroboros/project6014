@@ -14,7 +14,8 @@ Hey, captain. You lost or something?
 Anything we can assist you with?
 
 #(SPACE_HELLO_3)
-Damn it. I'm busy here. What do you want?
+Damn it, it's just you. 
+Well, I'm busy, what do you want?
 
 #(ask_news)
 Got any hot news from this side of the galaxy?
