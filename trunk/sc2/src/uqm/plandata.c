@@ -207,7 +207,7 @@ STAR_DESC starmap_array[] =
 {{6317,3646}, MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 1, 66},
 {{2406,3650}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 4, 37},
 {{4447,3709}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), 0, 6, 8},
-{{7610,3744}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), 0, 1, 2},
+{{7610,3744}, MAKE_STAR (DWARF_STAR, GREEN_BODY, -1), RAINBOW_DEFINED, 1, 2}, //Capt. Trivates added Rainbow World because it was on "the line" to Zeta Sextantis
 {{6416,3758}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 2, 66},
 {{2521,3787}, MAKE_STAR (DWARF_STAR, ORANGE_BODY, -1), 0, 2, 37},
 {{7045,3789}, MAKE_STAR (DWARF_STAR, BLUE_BODY, -1), HINT_DEFINED, 2, 61},  // JMS: Someone was here, but left in a hurry... possibility #1
