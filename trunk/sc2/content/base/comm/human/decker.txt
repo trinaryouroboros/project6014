@@ -64,7 +64,7 @@ waiting for an assignment to Procyon.
 
 #(NEWS_5)
 Not much Captain.
-Frankly, I think it's a waste of my skill baby sitting
+Frankly, I think it's a waste of my skill, babysitting
 cargo ships.
 
 #(FUEL_1)
