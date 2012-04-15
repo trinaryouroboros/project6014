@@ -732,7 +732,17 @@ planetRecurse (STAR_DESC *star, SOLARSYS_STATE *system, PLANET_DESC *planet,
 	if (universeRecurseArg->moonFunc != NULL)
 	{
 		DWORD oldSeed = TFB_SeedRandom (planet->rand_seed);
-		
+		COUNT i;
+		PLANET_DESC *pMoonDesc;
+
+		for (i = 0, pMoonDesc = &system->MoonDesc[0];
+			i < MAX_MOONS; ++i, ++pMoonDesc)
+		{
+		  pMoonDesc->pPrevDesc = planet;
+		  if (i >= planet->NumPlanets)
+		    continue;
+		}
+
 		(*system->genFuncs->generateMoons) (system, planet);
 
 		forAllMoons (star, system, planet, moonRecurse,
