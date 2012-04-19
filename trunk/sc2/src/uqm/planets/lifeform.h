@@ -55,7 +55,7 @@
 #define NUM_CREATURE_TYPES 23
 #define NUM_SPECIAL_CREATURE_TYPES 3
 #define NUM_B_CREATURE_TYPES 13 // BW: creatures appearing in the southern region
-#define NUM_C_CREATURE_TYPES 12 // BW: creatures appearing in the western region
+#define NUM_C_CREATURE_TYPES 13 // BW: creatures appearing in the western region
 #define MAX_LIFE_VARIATION 3
 
 #define CREATURE_AWARE (BYTE)(1 << 7)

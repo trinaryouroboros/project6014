@@ -144,6 +144,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Zex's Beauty
 
 	// ---- New Critters from here on ----
+	/* AREA B CRITTERS: creatures appearing in the southern region */
 	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (1, 3), 5, NONE},
 			// Echinosol
 	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (3, 1), 2, NONE},
@@ -171,6 +172,7 @@ const LIFEFORM_DESC CreatureData[] =
 			// Tuberus Humungus
 	{SPEED_MOTIONLESS | DANGER_NORMAL, MAKE_BYTE (5, 3), 2, NONE},
 			// Venus Frytrap
+	/* AREA C CRITTERS: creatures appearing in the western region */
 	{SPEED_MOTIONLESS | DANGER_HARMLESS, MAKE_BYTE (2, 10), 5, NONE},
 			// Watchful Willow
 	{SPEED_MOTIONLESS | DANGER_WEAK, MAKE_BYTE (8, 5), 1, NONE},
@@ -195,6 +197,8 @@ const LIFEFORM_DESC CreatureData[] =
 			// Blinking Beholder
 	{BEHAVIOR_FLEE | AWARENESS_MEDIUM | SPEED_MEDIUM | DANGER_WEAK, MAKE_BYTE (4, 5), 3, NONE},
 			// Creeping head
+	{SPEED_MOTIONLESS | DANGER_MONSTROUS, MAKE_BYTE (3, 5), 4, NONE},
+			// Mineral Monster
 };
 
 

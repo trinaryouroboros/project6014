@@ -968,7 +968,24 @@ DrawScannedStuff (COUNT y, COUNT scan)
 
 		dy = y - ElementPtr->current.location.y;
 		if (LOBYTE (ElementPtr->scan_node) != scan || dy < 0)
-		{	// node of wrong type, or not time for it yet
+		{
+			if (scan == MINERAL_SCAN && LOBYTE (ElementPtr->scan_node) == BIOLOGICAL_SCAN
+				&& ElementPtr->mass_points == 51 && dy >= 0)
+			{
+				// JMS: Show Mineral Monster (critter index 51 during the mineral scan).
+			}
+			// node of wrong type, or not time for it yet
+			else
+			{
+				UnlockElement (hElement);
+				continue;
+			}
+		}
+		
+		// JMS: Don't show Mineral Monster in biological scan.
+		else if (scan == BIOLOGICAL_SCAN && LOBYTE (ElementPtr->scan_node) == BIOLOGICAL_SCAN
+				 && ElementPtr->mass_points == 51 )
+		{
 			UnlockElement (hElement);
 			continue;
 		}
@@ -1490,8 +1507,22 @@ GeneratePlanetSide (void)
 			}
 			else  /* (scan == BIOLOGICAL_SCAN || scan == ENERGY_SCAN) */
 			{
-				NodeElementPtr->current.image.frame = f;
-				NodeElementPtr->next.image.frame = SetRelFrameIndex (f, NUM_SCANDOT_TRANSITIONS - 1);
+				// JMS: The Mineral Monster critter (at index 51) looks like a radioactive element in scan.
+				if (scan == BIOLOGICAL_SCAN && pSolarSysState->SysInfo.PlanetInfo.CurType == 51)
+				{
+					NodeElementPtr->current.image.frame = SetAbsFrameIndex (
+						MiscDataFrame, (NUM_SCANDOT_TRANSITIONS * 2) + 6 * 5);
+				
+					NodeElementPtr->next.image.frame = SetRelFrameIndex (
+						NodeElementPtr->current.image.frame, LOBYTE (
+						pSolarSysState->SysInfo.PlanetInfo.CurDensity) + 1);
+				}
+				else
+				{
+					NodeElementPtr->current.image.frame = f;
+					NodeElementPtr->next.image.frame = SetRelFrameIndex (f, NUM_SCANDOT_TRANSITIONS - 1);
+				}
+				
 				NodeElementPtr->turn_wait = MAKE_BYTE (4, 4);
 				NodeElementPtr->preprocess_func = object_animation;
 				
