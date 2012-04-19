@@ -859,10 +859,13 @@ pickupMineralNode (PLANETSIDE_DESC *pPSD, COUNT NumRetrieved,
 	BYTE EType;
 	UNICODE ch;
 	UNICODE *pStr;
+	
+	// JMS: The rest of partially scavenged minerals stay on the surface.
+	bool partialPickup = false;
 
 	if (pPSD->ElementLevel >= pPSD->MaxElementLevel)
 	{
-		// Lander full
+		// Lander full.
 		PlaySound (SetAbsSoundIndex (LanderSounds, LANDER_FULL),
 				NotPositional (), NULL, GAME_SOUND_PRIORITY);
 		return false;
@@ -870,8 +873,21 @@ pickupMineralNode (PLANETSIDE_DESC *pPSD, COUNT NumRetrieved,
 
 	if (pPSD->ElementLevel + NumRetrieved > pPSD->MaxElementLevel)
 	{
+		SIZE which_node;
+		
 		// Deposit could only be picked up partially.
 		NumRetrieved = (COUNT)(pPSD->MaxElementLevel - pPSD->ElementLevel);
+		
+		// JMS: Subtract the scavenged kilotons from the mineral deposit.
+		// The rest will stay on the surface.
+		ElementPtr->mass_points -= NumRetrieved;
+		
+		// JMS: This makes the mineral deposit subtraction keep  
+		// in effect even after leaving & re-entering the planet.
+		which_node = HIBYTE (ElementPtr->scan_node) - 1;
+		pSolarSysState->SysInfo.PlanetInfo.PartiallyScavengedList[MINERAL_SCAN][which_node] = NumRetrieved;
+		
+		partialPickup = true;
 	}
 
 	FillLanderHold (pPSD, MINERAL_SCAN, NumRetrieved);
@@ -907,7 +923,10 @@ pickupMineralNode (PLANETSIDE_DESC *pPSD, COUNT NumRetrieved,
 		pPSD->MineralText[2].CharCount = (COUNT)~0;
 	}
 
-	return true;
+	if (partialPickup)
+		return false;
+	else
+		return true;
 }
 
 static bool
@@ -1211,7 +1230,7 @@ CheckObjectCollision (COUNT index)
 					if (crew_left == 0 || pPSD->InTransit)
 						break;
 					
-					// JMS: Collision of lander with biocritter explosion and critters' lasers.
+					// JMS: Lander collides with biocritter explosion or critters' lasers.
 					if (ElementPtr->mass_points == BIOCRITTER_PROJECTILE
 						&& ElementPtr->state_flags & FINITE_LIFE)
 					{	
@@ -1223,7 +1242,7 @@ CheckObjectCollision (COUNT index)
 						continue;
 					}
 					
-					// JMS: Collision of lander with limpets.
+					// JMS: Lander collides with limpets.
 					else if (ElementPtr->mass_points == BIOCRITTER_LIMPET
 						&& ElementPtr->state_flags & FINITE_LIFE)
 					{	

@@ -1475,7 +1475,11 @@ GeneratePlanetSide (void)
 
 				EType = pSolarSysState->SysInfo.PlanetInfo.CurType;
 				NodeElementPtr->turn_wait = (BYTE)EType;
-				NodeElementPtr->mass_points = HIBYTE (pSolarSysState->SysInfo.PlanetInfo.CurDensity);
+				
+				// JMS: Partially scavenged energy blips won't return anymore to original size after leaving planet.
+				NodeElementPtr->mass_points = HIBYTE (pSolarSysState->SysInfo.PlanetInfo.CurDensity)
+						- pSolarSysState->SysInfo.PlanetInfo.PartiallyScavengedList[scan][num_nodes];
+				
 				NodeElementPtr->current.image.frame = SetAbsFrameIndex (
 						MiscDataFrame, (NUM_SCANDOT_TRANSITIONS * 2)
 						+ ElementCategory (EType) * 5);
