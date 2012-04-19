@@ -275,6 +275,16 @@ typedef struct
 
 	DWORD ScanSeed[NUM_SCAN_TYPES];
 	DWORD ScanRetrieveMask[NUM_SCAN_TYPES];
+	
+	// JMS: This stores the amount of partially scavenged minerals.
+	//
+	// How it works: When the mineral deposits are generated in scan.c, first the deposit
+	// is given its normal kiloton-size (decided by pseudo-random number). Then, the value
+	// stored in this list is subtracted from the initial value.
+	// There can be max DWORD = 32 mineral deposits on the planet, thus the 32.
+	//
+	// This can be later made to support also partially scavenged biodata.
+	BYTE  PartiallyScavengedList[NUM_SCAN_TYPES][32];
 
 	// The CurPt, CurDensity and CurType fields are filled in
 	// when a GENERATE_MINERAL, GENERATE_ENERGY, or GENERATE_LIFE
