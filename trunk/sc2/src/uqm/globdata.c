@@ -356,10 +356,12 @@ InitGameStructures (void)
 			(1 << BIOLOGICAL_DISASTER) |
 			(1 << LIGHTNING_DISASTER) |
 			(1 << LAVASPOT_DISASTER));
+	
 	// JMS: Lander currently has "stronger" shot from the beginning. 
 	// Currently it does nothing else than enables killing the critters marked with INVULNERABLE_TO_BASIC_WEAPON.
 	SET_GAME_STATE (STRONGER_LANDER_SHOT, 1);
 	
+	SET_GAME_STATE (IMPROVED_LANDER_SHOT, 1);
 	SET_GAME_STATE (IMPROVED_LANDER_SPEED, 1);
 	
 	GLOBAL (CurrentActivity) = IN_INTERPLANETARY | START_INTERPLANETARY;
