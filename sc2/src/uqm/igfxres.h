@@ -91,6 +91,7 @@
 #define LIFE48_MASK_PMAP_ANIM "graphics.life.48"
 #define LIFE49_MASK_PMAP_ANIM "graphics.life.49"
 #define LIFE50_MASK_PMAP_ANIM "graphics.life.50"
+#define LIFE51_MASK_PMAP_ANIM "graphics.life.51"
 #define LIGHTNING_MASK_ANIM "graphics.lightning"
 #define MAIDENS_MASK_PMAP_ANIM "graphics.maidens"
 #define MARS_MASK_ANIM "graphics.marsmask"
