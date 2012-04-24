@@ -487,6 +487,11 @@ UninitGameStructures (void)
 	initedGameStructs = FALSE;
 }
 
+
+// Name-based game state accessibility
+
+//ENHANCE: use a hash table for looking up game states, not a simple list as currently implemented.
+
 struct map_entry
 {
     char *stateName;
@@ -528,5 +533,30 @@ InitGlobData (void)
 #include "gamestate.inc"
 }
 
+BYTE GetGameStateByName(const char *name)
+{
+    int i;
+    for (i = 0; i < NUM_GAME_STATE_BITS; i++)
+    {
+        if (gameStateMap[i].stateName && strcmp(gameStateMap[i].stateName, name) == 0)
+        {
+            BYTE val = getGameState(i, i+gameStateMap[i].stateLen);
+            return val;
+        }
+    }
+    
+    return 0;
+}
 
-
+void SetGameStateByName(const char *name, BYTE val)
+{
+    int i;
+    for (i = 0; i < NUM_GAME_STATE_BITS; i++)
+    {
+        if (gameStateMap[i].stateName && strcmp(gameStateMap[i].stateName, name) == 0)
+        {
+            setGameState(i, i+gameStateMap[i].stateLen, val);
+            break;
+        }
+    }
+}
