@@ -209,7 +209,7 @@ AskMenu (RESPONSE_REF R)
 	{
 		NPCPhrase (LAME_LANDING_ANSWER_3);
 		DISABLE_PHRASE(lame_landing_question_1);
-		SET_GAME_STATE(TZZRAK_TZON_PICS, 1);
+                SetGameStateByName("TZZRAK_TZON_PICS", 1);
 		chmmrLandInfoState = 0;
 	}
 	

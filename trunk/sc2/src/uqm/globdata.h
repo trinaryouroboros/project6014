@@ -410,7 +410,12 @@ extern void setGameState32 (int startBit, DWORD val
 			setGameState32 ((SName), (val))
 #endif
 
-	
+
+/* Name-based game state accessors. */
+extern BYTE GetGameStateByName(const char *name);
+extern void SetGameStateByName(const char *name, BYTE val);
+
+
 extern CONTEXT RadarContext;
 
 extern void FreeSC2Data (void);
