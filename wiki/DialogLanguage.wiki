@@ -301,22 +301,27 @@ Other special directives are possible for 'dimming the lights'/vfx, or even chan
 Here's the moderately complicated dialog I presented in the email where I first mentioned it, slightly modified to take full advantage of the language features.
 
 <pre>
-greeting !Rep<0
+greeting !Rep<0  // If this race's reputation is not worse than starting, use this greeting.
 Hello, captain!
-.main
+.main // go to 'main' node
 
-greeting
+greeting // if you get here, you must have negative reputation
 Captain, you denied us slug repellent when we needed it.
 DIE!
-.fight
+.fight // You don't even get to talk to them :(
 
 
 node main
+
+// So we have two 'hi' options. The first is if you haven't yet helped them with their slug problem...
+// note that these are named so only one will be used.
+// also note the >said_hi so you don't say 'hi' more than once per conversation.
+
 option hi >said_hi !SLUGS_DEFEATED
 Why hello yourself!
 I'm so glad you came, captain!
 We've come under attack by vicious slugs!
-.slugs
+.slugs // go to the 'slugs' node if this option is taken
 
 option hi >said_hi // implicitly =SLUGS_DEFEATED due to also being a 'hi' option.
 Why hello yourself!
@@ -324,6 +329,8 @@ It's so nice to see you again, captain
 especially since you helped us with our slug infestation!
 .main
 
+// we also have two more named options here in the main node, this time 'bye'
+// The exact 'bye' option depends on whether you said 'hi' in this conversation yet
 option bye =said_hi
 goodbye
 Return soon, captain
@@ -334,20 +341,30 @@ Actually, I just dropped by for a moment...
 Oh, how disappointing!
 .done
 
-node slugs
-option <HAVE_SLUG_REPELLENT +SLUGS_DEFEATED +#Rep=1
+// new node! It is the 'slugs' node mentioned above.
+node slugs 
+option <HAVE_SLUG_REPELLENT +SLUGS_DEFEATED +Rep=3
+// Okay, what's all that about?
+// <HAVE_SLUG_REPELLENT means that you need to have slug repellent to take this option, and if you take this option, you lose it.
+// It's all upper case because it's a global property
+// +SLUGS_DEFEATED means it's recorded that the slugs have been defeated
+// +Rep=3 indicates that your reputation with these folks is now 3, whatever that means.
+// Note, 'these folks' means anyone whose dialog is based off of this dialog file
+// Okay, now on to the lines. First the captain, then theirs...
 Oh, here, have our slug repellent!
 Thank you for your generosity, captain!
 .main
 
-option =HAVE_SLUG_REPELLENT +Rep=-1
+option =HAVE_SLUG_REPELLENT +Rep=-7
 Even though we have slug repellent, you can't have any!
 You fiend!
 .fight
+// In contrast with the above, this one requires that you have slug repellent but doesn't use it up.
+// also, they get mad at you, setting rep to -7.
 
 option <try_shoot
 Did you try shooting them?
-[no_work] // call a text item.
+[no_work] // This calls a text item named no_work.
 .slugs
 
 option ~BLUE_SWITCH_SET
@@ -355,17 +372,24 @@ Try hitting the big blue switch over there.
 Umm, okay?
 [no_work] // reuse same text item.
 .slugs
+// This one toggles the blue switch (whatever that is - if it does anything, this doesn't do that) 
+// It can be selected over and over and over since we didn't put a condition on it.
 
 option
 I'm sorry, I'm out of ideas.
 That's unfortunate, but we understand.
 .main
+// Out last text option, and the least interesting. It returns you to the main node.
+// Note it hasn't got any conditions, which makes it safe -
+// you won't accidentally terminate the conversation prematurely
 
 
+// remember that text item call? This is what it looks like the first time...
 text no_work >already_took_advice
 We tried that.
 It didn't work.
 .
+
 
 text no_work // second and later times this is called in one conversation, get this.
 We tried that.
