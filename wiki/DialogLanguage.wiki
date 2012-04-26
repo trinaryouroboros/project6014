@@ -362,7 +362,7 @@ You fiend!
 // In contrast with the above, this one requires that you have slug repellent but doesn't use it up.
 // also, they get mad at you, setting rep to -7.
 
-option <try_shoot
+option >tried_shoot
 Did you try shooting them?
 [no_work] // This calls a text item named no_work.
 .slugs
