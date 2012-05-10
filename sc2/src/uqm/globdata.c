@@ -54,6 +54,9 @@
 
 #include "libs/mathlib.h"
 
+#include <glib.h>
+
+
 static void CreateRadar (void);
 
 CONTEXT RadarContext;
@@ -490,15 +493,18 @@ UninitGameStructures (void)
 
 // Name-based game state accessibility
 
-//ENHANCE: use a hash table for looking up game states, not a simple list as currently implemented.
+//ENHANCE: allocate map_entries more efficiently, not one for every single bit position
 
 struct map_entry
 {
     char *stateName;
+    int statePos;
     int stateLen;
 };
 
 static struct map_entry gameStateMap[NUM_GAME_STATE_BITS];
+
+static GHashTable *gameStateNameMap = NULL;
 
 void DumpAllGameStates(void)
 {
@@ -525,38 +531,49 @@ InitGlobData (void)
 
 	GLOBAL (DisplayArray) = DisplayArray;
     
-    i = 0;
+        /* This data is static, so really only needs to be initalised once. */
+    if (gameStateNameMap == NULL)
+    {
+        gameStateNameMap = g_hash_table_new(g_str_hash, g_str_equal);
+        
+        memset (&gameStateMap, 0, sizeof (gameStateMap));
+        
+        i = 0;
 #define ADD_GAME_STATE(name, len) \
         gameStateMap[i].stateName = #name; \
+        gameStateMap[i].statePos = i; \
         gameStateMap[i].stateLen = len; \
+        g_hash_table_insert(gameStateNameMap, gameStateMap[i].stateName, &gameStateMap[i]); \
         i += len;
 #include "gamestate.inc"
+    
+    }
 }
 
 BYTE GetGameStateByName(const char *name)
 {
-    int i;
-    for (i = 0; i < NUM_GAME_STATE_BITS; i++)
+    struct map_entry *e = g_hash_table_lookup(gameStateNameMap, name);
+    BYTE val;
+    
+    if (!e)
     {
-        if (gameStateMap[i].stateName && strcmp(gameStateMap[i].stateName, name) == 0)
-        {
-            BYTE val = getGameState(i, i+gameStateMap[i].stateLen);
-            return val;
-        }
+        log_add (log_Warning, "Cannot retrieve unknown game state '%s'; assuming 0!", name);
+        return 0;
     }
     
-    return 0;
+    val = getGameState(e->statePos, e->statePos + e->stateLen);
+    return val;
 }
 
 void SetGameStateByName(const char *name, BYTE val)
 {
-    int i;
-    for (i = 0; i < NUM_GAME_STATE_BITS; i++)
+    struct map_entry *e = g_hash_table_lookup(gameStateNameMap, name);
+
+    if (!e)
     {
-        if (gameStateMap[i].stateName && strcmp(gameStateMap[i].stateName, name) == 0)
-        {
-            setGameState(i, i+gameStateMap[i].stateLen, val);
-            break;
-        }
+        log_add (log_Warning, "Cannot set unknown game state '%s' !", name);
+        return;
     }
+    
+    setGameState(e->statePos, e->statePos + e->stateLen, val);
 }

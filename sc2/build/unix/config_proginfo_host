@@ -325,6 +325,14 @@ case "$HOST_SYSTEM" in
 esac
 
 
+### GLIB ###
+LIB_GLIB_NAME="GLIB"
+LIB_GLIB_CFLAGS=`pkg-config glib-2.0 --cflags`
+LIB_GLIB_LDFLAGS=`pkg-config glib-2.0 --libs`
+LIB_GLIB_DETECT="true"
+LIB_GLIB_VERSION=""
+
+
 ##############################################################################
 # Describe the symbols (possibly) used:                                      #
 ##############################################################################
