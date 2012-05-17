@@ -306,7 +306,7 @@ Here's a moderately complicated dialog using most language features.
   
   node main
    
-  option checkcomputer >computer_checked
+  option >computer_checked
   (With microphone turned off) Computer, what is my reputation with these aliens?
   YOUR REPUTATION WITH THESE ALIENS IS [Rep], CAPTAIN.
   [advice]
@@ -375,7 +375,7 @@ Here's a moderately complicated dialog using most language features.
    // also, they get mad at you, setting rep to -7.
    
   
-  option <try_shoot
+  option >try_shoot
    Did you try shooting them?
    [no_work] // This calls a text item named no_work.
    .slugs
@@ -428,7 +428,7 @@ Here's a moderately complicated dialog using most language features.
   (THANK GOD)
   .
  
-  text checkrepellentinventory !HAVE_SLUG_REPELLENT
+  text checkrepellentinventory // implicitly !HAVE_SLUG_REPELLENT
   WELL, IT LOOKS LIKE WE DON'T HAVE ANY SLUG REPELLENT ABOARD OUR SHIP.
   DID YOU HONESTLY THINK THAT WE WOULD? COME ON NOW.
   INTERESTINGLY ENOUGH, MY INVESTIGATIONS SHOW THAT WE HAVE SOME NICE HOLOVIDS.
