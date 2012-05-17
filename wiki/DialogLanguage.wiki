@@ -348,10 +348,11 @@ Here's a moderately complicated dialog using most language features.
   // new node! It is the 'slugs' node mentioned above.
    node slugs 
  
-  option checkrepellent >repellent_checked
+  option >repellent_checked
   (With microphone turned off) Uhh, Computer, do you know if we have some slug repellent somewhere aboard this ship?
    LET ME CHECK OUR INVENTORY, CAPTAIN...
-   [checkrepellentinventory]
+   [checkrepellentinventory] // can be one of two possibilities, depending on whether you have it.
+// could have alternately made two named options
    .slugs
  
    option <HAVE_SLUG_REPELLENT +SLUGS_DEFEATED +Rep=3
