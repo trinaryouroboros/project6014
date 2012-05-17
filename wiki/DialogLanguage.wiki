@@ -276,16 +276,16 @@ So I could remove options that didn't make sense for the first apology of the me
 
 == Display Directives ==
 
-Certain commands can be given to display in a certain way. For instance, display location, or linebreaks you want on a single page.
+Certain commands can be given to display in a certain way. For instance, display location, or linebreaks you want on a single page. These are enclosed in curly braces, except for one that isn't really a part of this language - the percent character, used in dialog, marks the beginning and end of 'computer text'. (NOTE: I will be replacing this symbol)
 
 Some display directives you may want to use will be:
 <pre>
 {left} I'm Zoq {center} (Fot goes here) {right} I'm Pik
 {top left} My lovely captain! {bottom right} Oh, ZEX!
-This is the first line of text{br}And this is the second line
 {color=FF0000}I'm suddenly talking in red{color}back to default
 {(} if you need to use square brackets or curly braces for some reason, this is something like how you will show them. I'll fill it in if asked. {)}
 {}... and that empty pair of braces kept the '...' at the beginning of this line from being interpreted as the end of this text.
+I'm an alien. %I'm the computer% I'm that alien again.
 </pre>
 
 Other special directives are possible for 'dimming the lights'/vfx, or even changing who you're talking to altogether, but they haven't been specified yet. (NOTE: No actual display directives exist yet. The only one I guarantee implementing soon is to strip out {} so you can start lines with periods. Don't feel constrained by what exists. This language is in development. If you need it, ask for it! )
