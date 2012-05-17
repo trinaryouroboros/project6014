@@ -1,21 +1,19 @@
-#summary Proposals for a language for describing dialogs
+#summary A language for describing dialogs
 #labels Implementation
 
 = Introduction =
 
-Multiple people have proposed that a language be found or devised that is suited to writing conversations. C is not well suited to this.
+To ease rapid prototyping of dialog, we use a purpose-built interpreted language much simpler than C.
 
-Simpler is better.
+The goals are simplicity, flexibility, compatibility with existing codebase.
 
-Proposals may go below.
+There is little syntax so the author can focus on the text.
 
-= Death 999's language =
-
-The syntax is very terse so the author can focus on the text.
+Several features we do not expect to use are left unimplemented. These are noted in this document.
 
 == basic structure ==
 
-There are four basic large-scale entities, each declared on a line beginning with its (lowercase, singular) name.
+There are five basic large-scale entities, each declared on a line beginning with its (lowercase, singular) name.
 
   * Greetings show what they say to you at the beginning of a conversation, then direct you to a node of possible responses.
 
@@ -25,8 +23,11 @@ There are four basic large-scale entities, each declared on a line beginning wit
 
   * Text is used for repeated or conditional phrases. You can put it anywhere, but it's best to put it either at the end or near where it'll be used.
 
+  * Inits are used to do things before selecting greetings. You can put it anywhere, but at the beginning makes by far the most sense.
 
-Every node and text has a name. Node names can be nearly anything not containing spaces. Text names should start with a letter, and contain no upper-case letters, arithmetic operators, square brackets. Example: 
+Every node and text has a name. Options may have names. Names should only include letters, numbers, underscores, and parentheses (NOTE: we can clear additional characters if requested, but that's all we guarantee right now)
+
+Example: 
 
 <pre>
 node main
@@ -74,18 +75,18 @@ option
 
 == Conditions and Consequences ==
 
-Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by a _key_. The simplest keys are just names of _flags_, which can be _set_ (interpreted as 'true', and if read numerically, not equal to 0 and by default equal to 1) or _unset_ (interpreted as 'false', and if read numerically, equal to 0).
+Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by a _key_. Each key has a _value_. The default value for all keys is 0, and corresponds to 'false'. Any other value is considered 'true'. Basic flags will be either 1 or 0, and specifying a number is not needed for these.
 
-If all of an item's conditions are met, it can be used. If an item is being sought _by name_ and does not meet the conditions, the search goes on for another item of the same name. For greetings, the first greeting with all of its conditions met is used. All unnamed options with their criteria met are shown. If an option is given a name, only the first option with that name with its conditions met will be shown, just as with nodes and texts (useful for presenting variations on the same option - different responses to the same statement, say).
+If all of an item's conditions (e.g. a text item, an option item) are met, it can be used. If an item is being sought _by name_ and does not meet the conditions, the search goes on for another item of the same name (this can happen with nodes and texts). If an option is given a name, only the first option that satisfies the conditions will be shown (useful for presenting variations on the same option - different responses to the same statement, say).
 
-If an item is actually used (its conditions are met, and for options, the player also selects it), then the consequences are applied. Any consequences on a node itself are applied before the option list is generated.
+If an item is actually used (its conditions are met, and for options, the player also selects it), then the consequences are applied. (NOTE: We have not yet implemented consequences for entering a node, but can if desired)
 
-This example represents the basic conditions and consequences.
+This example represents the basic conditions and consequences. These are 'flags', which can be 'set' (value = 1) or 'unset' (value = 0). There is no syntactic distinction between flags and other key-value pairs, but this keeps it easier to think about them.
 
 <pre>
 option =requiredToBeTrue !requiredToBeFalse +setThis -unsetThis
 </pre>
-To be explicit, if the 'requiredToBeTrue' flag is not set, this option will not appear. If the 'requiredToBeFalse' flag is set, this option will not appear. Otherwise, it will appear. If this option is chosen by the player, the flag 'setThis' is set, and the flag 'unsetThis' is unset.
+To be explicit, if the 'requiredToBeTrue' flag is unset (key has a value of 0), this option will not appear. If the 'requiredToBeFalse' is set (key has a nonzero value), this option will not appear. Otherwise, it will appear. If this option is chosen by the player, the flag 'setThis' is set (set to 1 if 0), and the flag 'unsetThis' is unset (set to 0).
 
 Here is a longer example illustrating the use of named conditions.
 
@@ -101,9 +102,9 @@ I don't know anything about juggling. Can you help me?
 Not really, sorry.
 .main
 </pre>
-The named option with no condition guarantees that it is complementary to the first. You will be able to say something about juggling. Also, again, it helps avoid errors - less typing out of explicit conditions, and a validator can check for option names that are used only once (you probably didn't mean that).
+The named option with no condition guarantees that it is complementary to the first. You will be able to say something about juggling. Also, again, it helps avoid errors - less typing out of explicit conditions, and a validator can check for option names that are used only once (you probably didn't mean to use only any option name only one time).
 
-Using a catch-all is important! If no greeting, node, or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_, it will result in conversation termination and an entry in the error log.
+Using a catch-all is important! If no greeting, node, or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_. It will result in unprepared conversation termination and an error message.
  
 
 As shortcuts and again to minimize the opportunity for errors, there are three compound operations. Each pair of lines is equivalent:
@@ -136,42 +137,45 @@ Okay, I hit the switch. Now what?
 
 === keys ===
 
-As mentioned, the keys referred to in conditions and consequences can be just flags. They are interpreted that way if they begin with letters, numbers, or any non-reserved punctuation like <pre>_</pre>, quotes, periods and commas, @, etc..
+The names of keys may contain the same characters as names of items - letters, numbers, underscores, parentheses (NOTE: and nearly anything else authors ask for, but DO ask).
+There are three kinds of key:
 
   * All-lower-case flags will automatically be unset at the end of the conversation - they have 'temporary' scope.
-  * All-upper-case flags are global, shared by all dialogs and the game as a whole.
-  * Mixed-case flags are preserved but namespaced to this dialog file so you don't collide with the flags other people are using for their races.
-  * The flag with the empty string as its name is always TRUE.
+  * All-upper-case flags are global, shared by all dialogs and the game as a whole. (NOTE: For the time being, these will be cast to a BYTE, so don't try to go over 255 or less than 0)
+  * Mixed-case flags are preserved but namespaced to this dialog file so you don't collide with the flags other people are using for their races. (NOTE: the same restriction applies as for global flags)
+  * There is a flag named '%', which has special behavior. See below.
 
 Examples:
 <pre>
 >said_hi // use this to avoid letting the player say hi more than once per conversation
 // (it starts unset, thus satisfying the condition, but once taken, sets it, so it won't appear anymore).
+// This is a super-common idiom.
 
->Mentioned_Kohr-Ah // These folks will remember that the player mentioned the Kohr-Ah,
+>Mentioned_KohrAh // These folks will remember that the player mentioned the Kohr-Ah,
 // but other folks in other conversation documents won't
+// note the removal of the - sign, which would be seen as arithmetic.
 
 =SHIP_IS_MK_II // If the player upgraded, this will be set
 </pre>
 
-=== numeric flags ===
+=== numeric flags and arithmetic ===
 
-Flags do not need to be just 1 or 0. They can be arbitrary numbers, too. These keys contain algebraic statements (equality, inequality). For instance,
+Keys do not need to have values of just 1 or 0. They can have integer values, too. You can perform arithmetic on them and test the results. For instance,
 <pre>
 =BioData>99
 </pre>
 
-If it's being used as a *condition*, it evaluates the two sides of the statement and sees whether it's true or not. For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100. Unset flags are treated as 0. All math is integer (this is a change from earlier specification).
+If arithmetic is being used as a *condition*, it evaluates the statement and sees whether it's 0 or not (0 is false). For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100, so that the '>' operator returns '1' instead of '0'.
 
-If a numeric *consequence* other than '-' is applied, then the left hand side of the statement must be a numeric flag, which will be set to the value of the other side if it's =, or to the nearest satisfying value if it's an inequality.
+Arithmetic can be used in *consequences* as well. If the consequence is a 'set' consequence (+ or > or sometimes ~) involving arithmetic, then the left hand side of the statement must be a key, followed directly by a comparator (= or > or <). The right hand side will be evaluated, and the value for the key on hand side will be set to the nearest consistent value. The simplest and most common case is '=', which simply sets it to the value of the other side.
 
-If the unset consequence '-' is applied, then you may (and probably should) leave off the comparator and right hand side.
+If the 'unset' consequence (- or < or sometimes ~) is applied, then the left-hand side is simply set to 0 without evaluating the right hand side. If the '-' consequence is used, you may (and probably should) leave off the comparator and right hand side.
 
-Some flags and numeric flags will manipulated by non-dialog elements of the game, and some of those cannot be set directly, like FREE_CARGO_CAPACITY, if there is such a thing. A list of these will eventually be placed here.
+Some keys are manipulated by non-dialog elements of the game, and some of those cannot be set directly, like, say, FREE_CARGO_CAPACITY, if there is such a thing. A list of these will eventually be placed here.
 
 === Arithmetic ===
 
-Numbers need not be literal - you can evaluate numeric flags and evaluate expressions
+Numbers need not be literal - you can evaluate keys and expressions
 
 The arithmetic operators available are, in order by increasing precedence:
   # =, <, > (check for this condition being satisfied, return 1 or 0 appropriately)
@@ -180,15 +184,13 @@ The arithmetic operators available are, in order by increasing precedence:
   # `*`
   # ^, √ (√ is always a binary operator. '2' is not assumed). These operators resolve RIGHT to LEFT
 
- {{{a*b/c*d}}} is just what it looks like - d is in the denominator, not the numerator, because `*` binds more tightly than /. This choice was made so the trimming-to-integer is minimally invasive - numbers are made as large as possible before they get divided.
+ {{{a*b/c*d}}} is just what it looks like - d is in the denominator, not the numerator, because `*` binds more tightly than /. This choice was made so the trimming-to-integer is minimally invasive - numbers are made as large as possible before they get divided. (NOTE: I am relying on the idea that numbers will be small compared to the maximum size of an int. Be warned that this could end up messy if this assumption is violated)
 
 The radical and exponent operators are arranged as you'd expect, looking at them - and they put the base on opposite sides. So,  {{{ a√b^c }}} is what we'd normally call {{{ b^[c/a] }}}, except that c/a would be trimmed to an integer if you did it that way. Note that doing things right-to-left helps here so the exponentiation acts before the radical, without having to use grouping.
 
-Speaking of which, use square brackets for grouping, like {{{ =#2√[[MAP_X-500]^2+[MAP_Y-500]^2]<10 }}}. This condition is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' ). Parentheses are ignored so you can treat them as regular text without having to worry about it being script-language syntax.
+Speaking of which, use square brackets for grouping, like {{{ =2√[[MAP_X-500]^2+[MAP_Y-500]^2]<10 }}}. This condition is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' ). Parentheses are ignored so you can treat them as regular text without having to worry about it being script-language syntax.
 
 You may be tempted to put spaces in your expressions. Don't. It'll mess up the parser. Sorry.
-
-Numeric flags can be tested with the = and ! operators used by binary flags. In these cases, it's TRUE if it's anything other than 0, and it's FALSE if it's 0.
 
 
 === random flag ===
@@ -213,15 +215,21 @@ Note that instead of using the = condition, the < condition was used to require 
 
 == Evaluations and Calling Text Items ==
 
-If you want to have the text be dynamic, use square brackets {{{ [foo] }}}. These evaluations can be put in dialog, conditions, or consequences (but not replacing the leading character of a condition or consequence - that has to be literal). Within each replacement, it goes down the list, looking for things to do.
+If you want to have the text be dynamic, use square brackets {{{ [foo] }}}.
 
- # find any arithmetic operations, then evaluate numeric parameters on either side and performing the arithmetic. NOTE:  see above in numeric flags about arithmetic and order of operations.
- # substitute text items with the named key. If the key is found but conditions are not met, that's treated as a match yielding the empty string, not a failure to match.
+ # IF this substitution is in alien dialog text, substitute text items with the given name.
+ # find any arithmetic operations, then evaluate numeric parameters on either side and performing the arithmetic.
  # substitute the value of any numeric flag with that key, or 0 if none.
 
-If the text item is called from one of the Captain's lines (the first text line of each option), only the first line of the text item will be used.
+There are a few points concerning text item substitutions.
+
+Brackets do not nest for text item lookups. You cannot evaluate a text item or arithmetic to determine which text item name to search for - that's silly. Just use conditions on the text items! If that doesn't cut it, call a text item that itself calls a text item, and recurse as necessary. This process is Turing-complete, so whatever you need done, it's possible.
+
+If there is at least one text item with that name but no text item with that name has its conditions fulfilled, that's treated as a match yielding the empty string, not a failure to match, and the search does not continue.
 
 Parentheses are ignored by this language, as they are too frequently used in dialogue for anyone to want to have to think about whether they're going to cause trouble.
+
+Alien number speech (i.e. their saying numbers determined during the conversation, not written into the script) cannot represent numbers less than 1 or more than 998 996 (i.e. nearly one million). (NOTE: If you need to cover these numbers, we can stitch it together, but ask yourself whether that's really necessary). Attempting to use larger numbers naively may crash the game, and if not, may result in bizarre behavior.
 
 Example:
 
@@ -238,7 +246,7 @@ greeting
 Greetings, captain! You have [credits].
 .main
 
-text credits =Credits=0
+text credits !Credits
 no credits
 .
 
@@ -251,33 +259,19 @@ text credits
 .
 </pre>
 
-If you call a text and the key is found but none of them have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank). Only if no text items are found with that key at all, does it try to evaluate it as a numeric flag.
+If you call a text and the key is found but none of them have the conditions met, then it just uses the empty string (and if it was alone on its line, it moves immediately to the next line as if the line were always blank, not leaving an empty statement floating around). Only if no text items are found with that key at all, does it try to evaluate it as a numeric flag.
 
-This can be especially handy for doing conditional processing without changing what's going on - initializing flags, say, so their sense is more convenient throughout.
- 
-An init example fragment
-<pre>// The wiki's acting wonky here. Need to use extra-wide spacing, sorry.
+Text items are searched-through in order. When a text item is used, its consequences are applied immediately.
 
- greeting !Know_You_Well 
+== Init items ==
 
- [init] 
+Init items are conditional lists of consequences applied before searching for a greeting. They are useful for debugging dialogs, or for setting up the environment.
 
- Greetings, unknown starship.
-
- .main
-
- text init >First_Contact +Need_Food +Need_Shelter +Need_Water
-
-.</pre>
-
-
-The second time you meet them, if they still don't know you well yet, the Need_X flags aren't set again even though the dialog they're a consequence of was taken.
-
-Outside of this case where the text item is used specifically for its consequences, or to prevent a text item from being repeated, you should avoid putting consequences on text items. It gets messy really fast. I'll spend two paragraphs on how messy it gets, just to warn you off it:
-
-In particular, it will be very rare to want to put consequences on text items that get substituted into the text of a condition, or that get substituted into the Captain's lines, as these will be executed whether or not the conditions are satisfied (the text item resolves when the condition is evaluated) or whether or not the player chooses that line (the text item resolves when the option to say that is displayed to the player). Still could possibly be useful if you're counting up how long the captain has been holding off on saying something. Handle that stuff with rubber gloves.
-
-If you must put consequences in text items... evaluations are performed left to right by order of their closing brackets (as a consequence, no evaluation is ever performed with another evaluation still unresolved inside it). However, each condition or consequence is evaluated separately, so square brackets on a later one will not make them be evaluated before an earlier one.
+For example, I used this construction in an improved version of the VUX dialog.
+<pre>
+init =preexisting_apologies=Apologies
+</pre>
+So I could remove options that didn't make sense for the first apology of the meeting.
 
 
 == Display Directives ==
@@ -294,106 +288,152 @@ This is the first line of text{br}And this is the second line
 {}... and that empty pair of braces kept the '...' at the beginning of this line from being interpreted as the end of this text.
 </pre>
 
-Other special directives are possible for 'dimming the lights'/vfx, or even changing who you're talking to altogether, but they haven't been specified yet. Don't feel constrained by what exists. This language is in development. If you need it, ask for it.
+Other special directives are possible for 'dimming the lights'/vfx, or even changing who you're talking to altogether, but they haven't been specified yet. (NOTE: No actual display directives exist yet. The only one I guarantee implementing soon is to strip out {} so you can start lines with periods. Don't feel constrained by what exists. This language is in development. If you need it, ask for it! )
 
 == Example dialog ==
 
-Here's the moderately complicated dialog I presented in the email where I first mentioned it, slightly modified to take full advantage of the language features.
+Here's a moderately complicated dialog using most language features.
 
 <pre>
-greeting !Rep<0  // If this race's reputation is not worse than starting, use this greeting.
-Hello, captain!
-.main // go to 'main' node
-
-greeting // if you get here, you must have negative reputation
-Captain, you denied us slug repellent when we needed it.
-DIE!
-.fight // You don't even get to talk to them :(
-
-
-node main
-
-// So we have two 'hi' options. The first is if you haven't yet helped them with their slug problem...
-// note that these are named so only one will be used.
-// also note the >said_hi so you don't say 'hi' more than once per conversation.
-
-option hi >said_hi !SLUGS_DEFEATED
-Why hello yourself!
-I'm so glad you came, captain!
-We've come under attack by vicious slugs!
-.slugs // go to the 'slugs' node if this option is taken
-
-option hi >said_hi // implicitly =SLUGS_DEFEATED due to also being a 'hi' option.
-Why hello yourself!
-It's so nice to see you again, captain
-especially since you helped us with our slug infestation!
-.main
-
-// we also have two more named options here in the main node, this time 'bye'
-// The exact 'bye' option depends on whether you said 'hi' in this conversation yet
-option bye =said_hi
-goodbye
-Return soon, captain
-.done
-
-option bye // implicitly !said_hi, by virtue of also being a 'bye' option
-Actually, I just dropped by for a moment...
-Oh, how disappointing!
-.done
-
-// new node! It is the 'slugs' node mentioned above.
-node slugs 
-option <HAVE_SLUG_REPELLENT +SLUGS_DEFEATED +Rep=3
-// Okay, what's all that about?
-// <HAVE_SLUG_REPELLENT means that you need to have slug repellent to take this option, and if you take this option, you lose it.
-// It's all upper case because it's a global property
-// +SLUGS_DEFEATED means it's recorded that the slugs have been defeated
-// +Rep=3 indicates that your reputation with these folks is now 3, whatever that means.
-// Note, 'these folks' means anyone whose dialog is based off of this dialog file
-// Okay, now on to the lines. First the captain, then theirs...
-Oh, here, have our slug repellent!
-Thank you for your generosity, captain!
-.main
-
-option =HAVE_SLUG_REPELLENT +Rep=-7
-Even though we have slug repellent, you can't have any!
-You fiend!
-.fight
-// In contrast with the above, this one requires that you have slug repellent but doesn't use it up.
-// also, they get mad at you, setting rep to -7.
-
-option >tried_shoot
-Did you try shooting them?
-[no_work] // This calls a text item named no_work.
-.slugs
-
-option ~BLUE_SWITCH_SET
-Try hitting the big blue switch over there.
-Umm, okay?
-[no_work] // reuse same text item.
-.slugs
-// This one toggles the blue switch (whatever that is - if it does anything, this doesn't do that) 
-// It can be selected over and over and over since we didn't put a condition on it.
-
-option
-I'm sorry, I'm out of ideas.
-That's unfortunate, but we understand.
-.main
-// Out last text option, and the least interesting. It returns you to the main node.
-// Note it hasn't got any conditions, which makes it safe -
-// you won't accidentally terminate the conversation prematurely
-
-
-// remember that text item call? This is what it looks like the first time...
-text no_work >already_took_advice
-We tried that.
-It didn't work.
-.
-
-
-text no_work // second and later times this is called in one conversation, get this.
-We tried that.
-It didn't work.
-Again.
-.
+ greeting !Rep<0  // If this race's reputation is not worse than starting, use this greeting.
+   Hello, captain!
+   .main // go to 'main' node
+   
+  greeting // if you get here, you must have negative reputation
+   Captain, you denied us slug repellent when we needed it.
+   DIE!
+   .fight // You don't even get to talk to them :(
+   
+  
+  node main
+   
+  option checkcomputer >computer_checked
+  (With microphone turned off) Computer, what is my reputation with these aliens?
+  YOUR REPUTATION WITH THESE ALIENS IS [Rep], CAPTAIN.
+  [advice]
+  .main
+ 
+  // So we have two 'hi' options. The first is if you haven't yet helped them with their slug problem...
+   // note that these are named so only one will be used.
+   // also note the >said_hi so you don't say 'hi' more than once per conversation.
+   
+  
+  option hi >said_hi !SLUGS_DEFEATED
+   Why hello yourself!
+   I'm so glad you came, captain!
+   We've come under attack by vicious slugs!
+   .slugs // go to the 'slugs' node if this option is taken
+   
+  
+  option hi >said_hi // implicitly =SLUGS_DEFEATED due to also being a 'hi' option.
+   Why hello yourself!
+   It's so nice to see you again, captain
+   especially since you helped us with our slug infestation!
+   .main
+   
+  
+  // we also have two more named options here in the main node, this time 'bye'
+   // The exact 'bye' option depends on whether you said 'hi' in this conversation yet
+   option bye =said_hi
+   goodbye
+   Return soon, captain
+   .done
+   
+  
+  option bye // implicitly !said_hi, by virtue of also being a 'bye' option
+   Actually, I just dropped by for a moment...
+   Oh, how disappointing!
+   .done
+   
+  
+  // new node! It is the 'slugs' node mentioned above.
+   node slugs 
+ 
+  option checkrepellent >repellent_checked
+  (With microphone turned off) Uhh, Computer, do you know if we have some slug repellent somewhere aboard this ship?
+   LET ME CHECK OUR INVENTORY, CAPTAIN...
+   [checkrepellentinventory]
+   .slugs
+ 
+   option <HAVE_SLUG_REPELLENT +SLUGS_DEFEATED +Rep=3
+   // Okay, what's all that about?
+   // <HAVE_SLUG_REPELLENT means that you need to have slug repellent to take this option, and if you take this option, you lose it.
+   // It's all upper case because it's a global property
+   // +SLUGS_DEFEATED means it's recorded that the slugs have been defeated
+   // +Rep=3 indicates that your reputation with these folks is now 3, whatever that means.
+   // Note, 'these folks' means anyone whose dialog is based off of this dialog file
+   // Okay, now on to the lines. First the captain, then theirs...
+   Oh, here, have our slug repellent!
+   Thank you for your generosity, captain!
+   .main
+   
+  
+  option =HAVE_SLUG_REPELLENT +Rep=-7
+   Even though we have slug repellent, you can't have any!
+   You fiend!
+   .fight
+   // In contrast with the above, this one requires that you have slug repellent but doesn't use it up.
+   // also, they get mad at you, setting rep to -7.
+   
+  
+  option <try_shoot
+   Did you try shooting them?
+   [no_work] // This calls a text item named no_work.
+   .slugs
+   
+  
+  option ~BLUE_SWITCH_SET
+   Try hitting the big blue switch over there.
+   Umm, okay?
+   [no_work] // reuse same text item.
+   .slugs
+   // This one toggles the blue switch (whatever that is - if it does anything, this doesn't do that) 
+   // It can be selected over and over and over since we didn't put a condition on it.
+   
+  
+  option
+   I'm sorry, I'm out of ideas.
+   That's unfortunate, but we understand.
+   .main
+   // Out last text option, and the least interesting. It returns you to the main node.
+   // Note it hasn't got any conditions, which makes it safe -
+   // you won't accidentally terminate the conversation prematurely
+   
+  
+  // remember that text item call? This is what it looks like the first time...
+   text no_work >already_took_advice
+   We tried that.
+   It didn't work.
+   .
+   
+  
+  text no_work // second and later times this is called in one conversation, get this.
+   We tried that.
+   It didn't work.
+   Again.
+   .
+   
+  text advice !Rep<0
+  WE HAVEN'T MADE THESE ALIENS ANGRY YET. LET'S KEEP IT THAT WAY.
+  .
+ 
+ 
+  text advice // Meaning Rep >= 0. Won't ever get shown, though, since if you've made them angry they won't ever talk to you again.
+  EXERCISE CAUTION, CAPTAIN. SOMEHOW WE'VE MADE THESE GUYS ANGRY. BETTER WARM UP THEM WEAPONS!
+  .
+ 
+  text checkrepellentinventory =HAVE_SLUG_REPELLENT
+  HMM.. IT LOOKS LIKE WE DO ACTUALLY HAVE SOME OF IT.
+  TOO BAD YOU'LL HAVE TO EXTRACT IT FROM OUR IN-SHIP SEWER SYSTEM, THOUGH.
+  HAVE FUN WITH THAT. I WON'T BE CAPABLE OF HELPING YOU WITH IT.
+  (THANK GOD)
+  .
+ 
+  text checkrepellentinventory !HAVE_SLUG_REPELLENT
+  WELL, IT LOOKS LIKE WE DON'T HAVE ANY SLUG REPELLENT ABOARD OUR SHIP.
+  DID YOU HONESTLY THINK THAT WE WOULD? COME ON NOW.
+  INTERESTINGLY ENOUGH, MY INVESTIGATIONS SHOW THAT WE HAVE SOME NICE HOLOVIDS.
+  ANALYSIS SHOWS THAT THEY HAVE A 100% CHANCE OF OFFENDING YOU.
+  I THINK YOU SHOULD WATCH THEM.
+  .
 </pre>
