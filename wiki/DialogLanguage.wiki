@@ -309,7 +309,7 @@ Here's a moderately complicated dialog using most language features.
   option >computer_checked
   (With microphone turned off) Computer, what is my reputation with these aliens?
   YOUR REPUTATION WITH THESE ALIENS IS [Rep], CAPTAIN.
-  [advice]
+  [advice] // remember text items?
   .main
  
   // So we have two 'hi' options. The first is if you haven't yet helped them with their slug problem...
