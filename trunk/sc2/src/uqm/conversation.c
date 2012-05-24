@@ -781,7 +781,7 @@ void prep_conversation_module (char* who, LOCDATA *fill ) {
 static int myRandom() {
 	int out = rand();
 	while (out > MAX_FAIR_RAND) out = rand();
-	return out/100;
+	return out % 100;
 }
 
 static gboolean
