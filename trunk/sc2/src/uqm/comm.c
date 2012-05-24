@@ -104,9 +104,9 @@ static TimeCount fadeTime;
 
 typedef struct response_entry
 {
-	RESPONSE_REF response_ref;
-	TEXT response_text;
-	RESPONSE_FUNC response_func;
+	RESPONSE_REF response_ref; // RESPONSE_REF is a uint16 by way of COUNT and UWORD
+	TEXT response_text; // TEXT defined in libs/gfxlib.h, a typedef for struct text
+	RESPONSE_FUNC response_func; // any pointer-to-void function taking a RESPONSE_REF argument
 } RESPONSE_ENTRY;
 
 typedef struct encounter_state
@@ -1103,7 +1103,15 @@ DoConvSummary (SUMMARY_STATE *pSS)
 	return TRUE; // keep going
 }
 
-// Called when the player presses the select button on a response.
+/**
+ * Called when the player presses the select button on a response.
+ * Edits ENCOUNTER_STATE's response list to add the response indicated by
+ * its cur_response value to its phrase_buf...
+ * calls FeedbackPlayerPhrase on its phrase_buf...
+ * sets the music and some graphics appropriately...
+ * calls that item's response_func with the response_ref it started with
+ * That is, it primes the next set of selections.
+ */
 static void
 SelectResponse (ENCOUNTER_STATE *pES)
 {
@@ -1329,6 +1337,14 @@ DoCommunication (ENCOUNTER_STATE *pES)
 	return FALSE;
 }
 
+/**
+ * Prepares a response to be displayed for possible selection by the player
+ * Usually called via the Response macro, from within a race's response_func.
+ * 
+ * @param ConstructStr If set, use this string. Otherwise, use the text of
+ * the (R-1)st element of ConversationPhrases. Note, this string will lose the
+ * reference it gains here - you are responsible for deallocating it.
+ */
 void
 DoResponsePhrase (RESPONSE_REF R, RESPONSE_FUNC response_func,
 		UNICODE *ConstructStr)
