@@ -491,8 +491,7 @@ static ConversationOption*
 parseOption (char* line, uio_Stream *hook, StringTableBuilder *stb)
 {
 	DeclarationGoodies dg; // not DeclarationGoodies*
-	ConversationOption *out;
-	out = g_new (ConversationOption, 1);
+	ConversationOption *out = g_new (ConversationOption, 1);
 	StringTableBuilder lines;
 	
 	lines.list = NULL;
@@ -846,6 +845,7 @@ ConversationManager (RESPONSE_REF R)
 	GSList *walk;
 	char *nextNode;
 	RESPONSE_REF i = 1;
+    ConversationNode *currentNode;
 	
 	if (R > 0)
 	{ 
@@ -876,7 +876,7 @@ ConversationManager (RESPONSE_REF R)
 		return;
 	}
 		
-	ConversationNode *currentNode = getNode (nextNode, currentModel);
+	currentNode = getNode (nextNode, currentModel);
 	
 	currentOptions = getOptionList (currentNode, currentModel);
 	
@@ -916,8 +916,8 @@ displaySubstituted(GSList *walk) {
 static GSList*
 getOptionList(ConversationNode* cn, ConversationModel *cm)
 {
-	GSList *out, *walk, *acceptedNames;
-	out = acceptedNames = NULL;
+	GSList *walk, *acceptedNames;
+	GSList *out = acceptedNames = NULL;
 	ConversationOption *step;
 	
 	for (walk = cn->options; walk; walk = g_slist_next (walk))
@@ -1047,7 +1047,7 @@ static void
 setVal (char *name, int newval, ConversationModel *cm)
 {
 	if (*name == '%') {
-		percent = random();
+		percent = myRandom();
 		return;
 	}
 	switch (checkForCase (name))
