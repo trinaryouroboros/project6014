@@ -32,6 +32,20 @@
 
 int NPCNumberPhrase (int number, UNICODE **ptrack);
 
+/**
+ * Gets the content for index and loads it into the current conversation,
+ * using the voice track cb if provided, or making one itself if not.
+ * 
+ * The indices are:
+ * - 1 000 000 : captain's name
+ *   - 999 999 : ship's name
+ *   - 999 998 : ship's location
+ * numbers from -999 997 to 998 997 : display the name of your alliance
+ * (not sure why this one option needs 1001 indices)
+ * numbers from -998 996 to -1 : alien number speech (sign is flipped)
+ *           0 : say and do nothing
+ * positive numbers : entries from the current alien conversation's string table 
+ */
 void
 NPCPhrase_cb (int index,  TFB_TrackCB cb)
 {
