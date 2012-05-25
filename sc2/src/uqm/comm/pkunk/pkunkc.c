@@ -24,6 +24,9 @@
 #include "uqm/build.h"
 #include "uqm/gameev.h"
 
+#include "uqm/conversation.h"
+
+
 
 static LOCDATA pkunk_desc =
 {
@@ -401,7 +404,7 @@ uninit_pkunk (void)
 static void
 post_pkunk_enc (void)
 {
-	SET_GAME_STATE (PKUNK_MANNER, 3);
+
 }
 
 LOCDATA*
@@ -409,7 +412,7 @@ init_pkunk_comm (void)
 {
 	LOCDATA *retval;
 
-	pkunk_desc.init_encounter_func = Intro;
+	pkunk_desc.init_encounter_func = cm_intro; // entry point for conversation manager
 	pkunk_desc.post_encounter_func = post_pkunk_enc;
 	pkunk_desc.uninit_encounter_func = uninit_pkunk;
 
@@ -420,6 +423,7 @@ init_pkunk_comm (void)
 	SET_GAME_STATE (BATTLE_SEGUE, 0);
 
 	retval = &pkunk_desc;
+  prep_conversation_module("pkunk", retval); // set up conversation manager
 
 	return (retval);
 }
