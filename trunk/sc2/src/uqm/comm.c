@@ -1521,7 +1521,8 @@ HailAlien (void)
 	SetContextFont (OldFont);
 	UnlockMutex (GraphicsLock);
 
-	DestroyStringTable (ReleaseStringTable (CommData.ConversationPhrases));
+  if (CommData.ConversationPhrases != NULL)
+  	DestroyStringTable (ReleaseStringTable (CommData.ConversationPhrases));
 	DestroyMusic (CommData.AlienSong);
 	DestroyColorMap (ReleaseColorMap (CommData.AlienColorMap));
 	DestroyFont (CommData.AlienFont);
