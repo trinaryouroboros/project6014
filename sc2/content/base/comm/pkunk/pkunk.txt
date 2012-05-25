@@ -231,7 +231,7 @@ Hmm... or was it Spinoza, instead of the rope?
 node humor
 option
 What is this I don't even
-... think it's a joke!
+{}... think it's a joke!
 You're right, maybe I drowsed off and mixed up your philosophical tracts with your science fiction novels.
 Sometimes it's hard to tell the difference.
 .main
