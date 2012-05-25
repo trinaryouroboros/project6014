@@ -1418,8 +1418,9 @@ HailAlien (void)
 	else
 		CommData.AlienSong = LoadMusic (CommData.AlienSongRes);
 
-	CommData.ConversationPhrases = CaptureStringTable (
-			LoadStringTable (CommData.ConversationPhrasesRes));
+  if (CommData.ConversationPhrases == NULL) // could be initialized by conversation manager
+	  CommData.ConversationPhrases = CaptureStringTable (
+	  		LoadStringTable (CommData.ConversationPhrasesRes));
 
 	// BW: choose the features for the captain
 	// When available, EncounterGroup is used as a seed
