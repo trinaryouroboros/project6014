@@ -60,6 +60,13 @@ struct ConditionsConsequences_s { /* all these lists are type char* */
 };
 typedef struct ConditionsConsequences_s ConditionsConsequences;
 
+static void freeCC(ConditionsConsequences *cc) {
+	g_slist_free_full(cc->needed, g_free);
+	g_slist_free_full(cc->blocking, g_free);
+	g_slist_free_full(cc->consequences, g_free);
+	g_free(cc);
+}
+
 struct DeclarationGoodies_s {
 	char *name;
 	ConditionsConsequences *cc;
@@ -73,6 +80,25 @@ struct ConversationGreeting_s {
 };
 typedef struct ConversationGreeting_s ConversationGreeting;
 
+static void freeLines(GSList *lines) {
+	GSList *walk = lines;
+	while (walk) {
+		// odd entries are integers. don't free.
+		walk = g_slist_next(walk);
+		if (!walk) break;
+		g_free(walk->data);
+		walk = g_slist_next(walk);
+	}
+	g_slist_free(lines);
+} // end freeLines(GSList *lines)
+
+static void freeGreeting(ConversationGreeting *cg) {
+	freeLines(cg->lines);
+	g_free(cg->proceed);
+	freeCC(cg->cc);
+	g_free(cg);
+}
+
 struct ConversationOption_s {
 	char *name;
 	char *say;  // a string that needs to be substituted-into.
@@ -82,6 +108,15 @@ struct ConversationOption_s {
 };
 typedef struct ConversationOption_s ConversationOption;
 
+static void freeOption(ConversationOption *co) {
+	g_free(co->name);
+	g_free(co->say);
+	freeLines(co->lines);
+	g_free(co->proceed);
+	freeCC(co->cc)
+	g_free(co);
+}
+
 struct ConversationNode_s {
 	char *name;
 	GSList *options; /* the data type is ConversationOption*, with that a pointer, not array */
@@ -89,12 +124,26 @@ struct ConversationNode_s {
 };
 typedef struct ConversationNode_s ConversationNode;
 
+static void freeNode(ConversationNode *cn) {
+	g_free(cn->name);
+	g_slist_free_full(cn->options, freeOption);
+	freeCC(cn->cc);
+	g_free(cn);
+}
+
 struct ConversationText_s {
 	char *name;
 	GSList* lines; // see note above
 	ConditionsConsequences *cc;
 };
 typedef struct ConversationText_s ConversationText;
+
+static void freeText(ConversationText *ct) {
+	g_free(ct->name);
+	freeLines(ct->lines);
+	freeCC(ct->cc);
+	g_free(ct);
+}
 
 struct ConversationModel_s {
 	GSList *initializers;
@@ -106,6 +155,16 @@ struct ConversationModel_s {
 };
 typedef struct ConversationModel_s ConversationModel;
 
+static freeModel(ConversationModel *cm) {
+	g_free_full(cm->initializers, freeCC);
+	g_free_full(cm->greetings, freeGreeting);
+	g_free_full(cm->nodes, freeNode);
+	g_free_full(cm->texts, freeText);
+	g_free(name);
+// 	DestroyStringTable (cm->table);
+	// ^ no need to do this for now, since it's done in comm: HailAlien
+	g_free(cm);
+}
 
 struct StringTableBuilder_s {
 	GSList *list; // in 'mommy', of type STRING_TABLE_ENTRY_DESC. In 'baby', of type char
@@ -164,6 +223,7 @@ static ConversationModel *currentModel;
 static GHashTable *transientState;
 static char *source;
 static int percent;
+static ConversationModel *allModels;
 // END GLOBALS
 
 
@@ -491,7 +551,8 @@ static ConversationOption*
 parseOption (char* line, uio_Stream *hook, StringTableBuilder *stb)
 {
 	DeclarationGoodies dg; // not DeclarationGoodies*
-	ConversationOption *out = g_new (ConversationOption, 1);
+	ConversationOption *out;
+	out = g_new (ConversationOption, 1);
 	StringTableBuilder lines;
 	
 	lines.list = NULL;
@@ -748,6 +809,19 @@ static int import_string (StringTableBuilder *baby, StringTableBuilder *mommy) {
 
 // ~~~~~~~~ CONVERSATION LOGIC ~~~~~~~~~
 
+
+
+static COUNT
+uninit () {
+	freeModel(currentModel);
+	return 0;
+}
+
+static void
+post() {
+	return;
+}
+
 /**
  * If a race will be using this comm system, put this function in a
  * race's init_foo_comm function,
@@ -764,12 +838,9 @@ void prep_conversation_module (char* who, LOCDATA *fill ) {
 	
 	currentModel = parseConversationModel (who);
 	fill->init_encounter_func = cm_intro;
-   if (fill->conversationPhrases == NULL)
-     fill->conversationPhrases = currentModel->table->strings;
-   // The other members of currentModel->table are superfluous, I guess?
-   // The size value is mainly used to set indices, but the indices are already set.
-   // I still feel nervous about this.
-   
+	fill->uninit_encounter_func = uninit;
+	fill->post_encounter_func = post;
+	fill->conversationPhrases = currentModel->table->strings;
 	
 	percent = myRandom();
 	
@@ -787,7 +858,7 @@ void prep_conversation_module (char* who, LOCDATA *fill ) {
 static int myRandom() {
 	int out = rand();
 	while (out > MAX_FAIR_RAND) out = rand();
-	return out % 100;
+	return out/100;
 }
 
 static gboolean
@@ -843,7 +914,6 @@ cm_intro ()
  *
  * Missing:
  * display directives
- * text substitutions
  */
 void
 ConversationManager (RESPONSE_REF R)
@@ -922,9 +992,9 @@ displaySubstituted(GSList *walk) {
 static GSList*
 getOptionList(ConversationNode* cn, ConversationModel *cm)
 {
-	GSList *walk, *acceptedNames;
-	GSList *out = acceptedNames = NULL;
+	GSList *out, *walk, *acceptedNames;
 	ConversationOption *step;
+	out = acceptedNames = NULL;
 	
 	for (walk = cn->options; walk; walk = g_slist_next (walk))
 	{
