@@ -1,89 +1,102 @@
-#(WONDERFUL)	WONDERFUL.ogg
+greeting >HaveMet
+Ah, captain!
 I trust you don't mind my bypassing regular channels to talk to you directly.
 It is wonderful to see you again.
+.ORLY
 
-#(MMMM)		MMMM.ogg
+greeting %<34
 Mmmmmmmmm... mMMMMMmmm
 mrrrrr... m...
 mmmmmmmm
+.mmm
 
-#(WELCOME_BACK)	WELCOME_BACK.ogg
+greeting %<67
 Welcome back to Ruttipeep, the home of all Yehat and Pkunk.
 Well, most of them, usually.
 Some of them, often?
 These days it seems like it's a few, on occasion.
+.court
 
-#(HOWDY)	HOWDY.ogg
+greeting -%
 Howdy-lowdy-to-you!
 I like these visits of yours because I can really let loose.
 When I say darn near anything that's just happy around here,
 everyone becomes quite confused and a bit worried.
 It's quite off-putting.
-I have a very private room that used to be used for dark conspiracies
+I have a very private room that used to be used for dark conspiracies,
 and I just shout for joy in it!
 A much better use for the room, for sure.
+.main
 
-#(did_we_speak)
-Did we speak back at Gamma Krueger?
 
-#(ONE_AS_ALL)	ONE_AS_ALL.ogg
+
+node ORLY
+option
+Did we speak back at Gamma Kreuger?
 In a way, yes.
-We spoke from the heart there, all as one, one speaking as all. I spoke to you then, from my heart, though I wasn't really aware of it at the time, and I'm not sure what we said.
+We spoke from the heart there,
+all as one, one speaking as all.
+I spoke to you then, from my heart,
+though I wasn't really aware of it at the time,
+and I'm not sure what we said.
 But yes, we did.
+.main
 
-#(astral)
+option
 I presume you mean astral vision or such, right? Because we've never met.
-
-#(PHOTOGRAPHS)	PHOTOGRAPHS.ogg
 Photographs, actually. It's much nicer in person, though, isn't it?
 And don't say it - I know you're around eight million wingspans from here.
 You're such a joker.
+[joke]
+.humor
 
-#(nicee)
+option >heardadapt
 It is nice to meet you at last, your majesty.
+Majesty.
+Yes, it's quite a change of situation, isn't it?
+[adapt]
+.court
 
-#(ADAPT)	ADAPT.ogg
-Majesty. Yes, it's quite a change of situation, isn't it?
+text adapt
 I'm adapting, though. That's what life does, does it not?
 A little change - adapt!
 Another little change - adapt adapt!
 A biiig change?
 Go extinct, mostly...
 but some adapt!
+.
 
-#(thanks)
+
+node main
+option >samatra
 Thank you for coming to our aid in the battle against the Sa-Matra.
-
-#(GUIDANCE)	GUIDANCE.ogg
 Yes, yes.
 That was quite important.
 And thank you for your guidance on the timing of our return.
+.guidance
 
-#(how_queen)
+option >howendupqueen
 How did you end up queen?
-
-#(REBEL_RANT)	REBEL_RANT.ogg
 The rebel clans' main victories were moral and with words.
-The people yearned for change, but rebellion was unacceptable
-and asking nicely didn't look like it would get very far
-which put them in a bit of a tight spot, right?
-It got to the point that the loyalists weren't so much loyal to the queen
+The people yearned for change, but rebellion was unacceptable,
+And asking nicely didn't look like it would get very far.
+Which put them in a bit of a tight spot, right?
+It got to the point that the loyalists weren't so much loyal to the queen...
 as against the idea that rebellion was a good way of changing government.
 But the queen was absolute... so no one could say that.
 In the end, they just agreed to make someone queen, while skipping the rebellion step.
-I'm not sure how that part works
+I'm not sure how that part works,
 and neither are they.
 And who better than someone truly neutral in that fight?
-Someone reasonably coherent, conciliatory, very photogenic
+Someone reasonably coherent, conciliatory, very photogenic,
 and who maintains all of those while having the tar beaten out of her.
 So, in the span of a day I went from little old Braky Girdy, inmate number something-or-other
 to Braky Girdy the First,
 and that's quite a difference, let me tell you!
+.main
 
-#(how_is_it)
+option >howsqueen
 How's queenship treating you?
-
-#(SYMBOL)	SYMBOL.ogg
 It's not really about me, is it?
 The clans need a symbol to unite them.
 A symbol that happens to wield absolute executive power.
@@ -94,222 +107,206 @@ no matter how far I have my head in the clouds,
 I'm hard to fool.
 I didn't get where I was among the Pkunk by tolerating phoniness!
 There is quite a lot of that around these days.
+.court
 
-#(court)
+option =treating >alldonewithcourt
 Let's talk about the goings-on at court again.
-
-#(CANT)		CANT.ogg
 It always comes back to that, doesn't it?
 I can hardly express an opinion without thinking about someone's going to interpret it.
+.court
 
-#(nafs)
+
+option >nafsopinion
 What do you think of the way the New Alliance of Free Stars is working out?
-
-#(WAY_BETTER)	WAY_BETTER.ogg
 What do I think?
 It's waaay better than utter annihilation.
 Not even close!
 The way we're being sidelined by the Chmmr is just a snip of bitter root in the stew of life.
-I would very much have loved to engage with the VUX and treat them with the love they need
-to be free of their negativity...
+I would very much have loved to engage with the VUX and
+treat them with the love they need to be free of their negativity...
 but not to be.
 And the Mycon, well, as long as the planets they're... rearranging...
 aren't inhabited, well, they can do their thing too!
-Sure, they're a bit rough around the edges, could use a touch more loving kindness
+Sure, they're a bit rough around the edges, could use a touch more lovingkindness
 and consideration of the needs of others,
 but nobody's perfect.
 Some in this court welcomed these decisions.
 But you may know, captain, that whatever happens, whoever you offend, and no matter the rules,
 as long as you look out for those on the bottom, as long as your compromises have heart,
 you're our friend.
-You're welcome here even if you don't do those things
+You're welcome here even if you don't do those things,
 though we'll be somewhat less enthusiastic.
+.main
 
-#(need_help)
+option >breakfourthwall
 I could use some help. And I don't mean love.
-
-
-#(COSMOLOGY)	COSMOLOGY.ogg
 Certainly!
-The first thing to understand is that there is more than one universe.
+The first thing to understand is that there is more than universe.
 Not an infinite number, but quite a few.
 And many of them are in little groups, each related to the others in a sequence.
 Our world is in one of these.
-And in a later *version*, I will be able to give you more concrete advice.
+And in a *later version*, I will be able to give you more concrete advice.
 But with the wind as it is, this meta-cosmology lesson is all I have to offer.
+.main
 
-#(spanish)
+option >Adios
 Hasta la vista!
-
-#(ADIOS1)	ADIOS1.ogg
 Adios, humaños.
-...
+{}...
 Is that right? I'm not even sure that's the same lan-
+.done
 
-#(ADIOS2)	ADIOS2.ogg
+option
+Hasta la vista!
 Adios, humanos!
+.done
 
-#(queen_different)
+
+
+node court
+option >heardadapt +started
 So, being queen is a bit different from... whatever it was you were before?
-
-#(ADAPT2)	ADAPT2.ogg
 Hoody-my-bee, yes it is!
-I'm adapting, though. That's what life does, does it not?
-A little change - adapt!
-Another little change - adapt adapt!
-A biiig change?
-Go extinct, mostly...
-but some adapt!
+[adapt]
+.court
 
-#(court_troubles)
+option >troubles +started
 So, there are some courtly troubles?
-
-#(COURT_SHIT)	COURT_SHIT.ogg
 This and that. Factionalism, xenophobia,
 turning a blind eye to the needy,
 refusal to consider alternatives,
 and, most troubling to the peers, perversion of honor.
 Nothing we haven't all lived with for as long as our respective species have been sapient.
 Court is a bit like wading through mud.
-You can do it with flat wide feet, or long thin legs
+You can do it with flat wide feet, or long thin legs.
 I go with the long thin legs, myself.
 You could also wear a wetsuit.
 Maybe that's more of what I'm doing.
-Sometimes you just wish you could exorcise the whole lot of it
+Sometimes you just wish you could exorcise the whole lot of it,
 but these demons belong here. They're ours. The outer darkness can't have 'em!
+.court
 
-#(me_help)
+option >canihelp
 Is there anything I can do to help?
-
-#(SAVE_WORLD)	SAVE_WORLD.ogg
 Hmm.
 On this?
 Not that I know of.
 Please, though, do prevent the destruction of all life in the galaxy.
 That would be dreadfully inconvenient.
+.court
 
-#(you_busy)
+option =started
 You sound terribly busy.
-
-#(ME_BUSY)	ME_BUSY.ogg
-Somewhat busy. The most important part is finding good people
+Somewhat busy. The most important part is finding good people,
 and the second most important part is trusting them.
 That's hard.
 But you have to do it!
-We're all children before the cosmos
+We're all children before the cosmos,
 and nothing's worse than some brat who thinks she can run everyone else's lives.
 A perspective like that helps, as a queen.
+.court
 
-#(interesting)
+option
 That was interesting.
-
-#(MELTINGPOT)	MELTINGPOT.ogg
-It's not half as interesting to hear the description
-as it is to actually sniff the stew of mixing cultures.
-To guide and learn and find things out
-to squinnet out the liars and expose them to the light of day
-- for their own good of course -
-and ride the updraft of civilization as far as we can.
+It's not half as interesting to hear the description,
+as it is to actually sniff the stew of mixing cultures,
+to guide and learn and find things out,
+to squinnet out the liars and expose them to the light of day,
+- for their own good of course - 
+and ride the updraft of civilization,
+as far as we can.
 As awful as things can get, you always need to look up.
+.main
 
-#(sorry)
-Sorry, that was all.
 
-#(WORDS)	WORDS.ogg
-Ah, so wonderful to speak with someone who isn't
-so extremely careful with words.
-
-#(JOKE)		JOKE.ogg
-Say, I heard one of your human jokes. Would you like to hear it?
-So, it goes
-A rabbi, a Nietzchean transhumanist, and a length of rope walk into a bar
-on a damaged spaceship that's about to crash
-No, wait.
+text joke >heardjoke
+Say, I heard one of your human jokes. Would you like to hear it? It goes,
+A rabbi, a Nietzchean transhumanist, and a length of rope walk into a bar...
+on a damaged spaceship that's about to crash...
+No, wait...
 The rabbi is dyslexic.
 Hmm... or was it Spinoza, instead of the rope?
+.humor
 
-#(wtf_joke)
-What is this... I don't even...
-
-#(PHILO_JOKE)	PHILO_JOKE.ogg
-... think it's a joke! You're right, maybe I drowsed off
-and mixed up your philosophical tracts with your science fiction novels.
+node humor
+option
+What is this I don't even
+... think it's a joke!
+You're right, maybe I drowsed off and mixed up your philosophical tracts with your science fiction novels.
 Sometimes it's hard to tell the difference.
+.main
 
-#(brick)
-That one only works as a brick joke after the one where Saint Anselm brings Richard Dawkins a teapot.
-
-#(YOU_KNOW_ALL)		YOU_KNOW_ALL.ogg
+option
+That one only works as a brick joke after the one where Saint Anselm brings Robert Dawkins a teapot.
 Oh, right! Well, it seems you know it already.
+.main
 
-#(delivery)
+option
 Your delivery could use some work.
-
-#(THINGS_NOT_RIGHT)	THINGS_NOT_RIGHT.ogg
 It's not the only thing.
 Sometimes I get the feeling things are not quite right around here.
+.court
 
-#(important)
+option
 So, I had some more important matters to speak of.
-
-#(BUSINESS)		BUSINESS.ogg
 Ah, yes. Business.
 I get a lot of that, these days.
+.main
 
-#(coming_out)
+
+
+
+node guidance
+option
 Umm, I hate to break it to you, but I was making it all up.
-
-#(YOU_WERE_RIGHT)	YOU_WERE_RIGHT.ogg
 Of course you were. Yet your heart was in the right place,
 and, of course, you were right. The Yehat were not ready then.
 Our visions grew cloudy and we knew the time was soonish, and did not want to be late.
 When it came closer... it took your warning to get us off the wrong path.
+.main
 
-#(ouija)
+option
 You're welcome to the use of my Ouija Board any time, your majesty.
-
-#(EXCUSE)		EXCUSE.ogg
 Ah - hee! A joker!
-Next you'll be telling me the month of the bloody moon is coming up.
+Net you'll be telling me the month of the bloody moon is coming up.
 I didn't hatch yesterday, you know.
 I was looking for an excuse to turn that fleet around just then.
+[joke]
+.main
 
-#(glad)
+option
 I'm glad it was helpful.
-
-#(WELL_MEANT)		WELL_MEANT.ogg
 It was well meant, captain, and it did help.
+.main
 
-#(uh_hi)
+
+
+node mmm
+option +asked
 Uh, hi. You know you're broadcasting, right?
-
-#(MMM)		MMM.ogg
 mmm
 mmmmmmmmm
+.mmm
 
-#(yes_mmm)
+option =asked
 Was that a 'yes' mmm, or a 'no' mmm?
-
-#(MMMUUU)	MMMUUU.ogg
 mmmmuuuu
 ptch! *cough* Ahmmmmmmm
+.mmm
 
-#(see_me)
+option >cansee
 I know you can see me.
-
-#(MMMMMM)	MMMMMM.ogg
 Mmmmmmmm
+.mmm
 
-#(mm)
+option
 Mmmmmmmmmm
-
-#(MREORM)	MREORM.ogg
 mmmmmrrrrrreeeeee
 oooooooooooooo
 rrrrrmmmmmmm
+.mmm
 
-#(later)
+option
 I guess I'll come back later, or something.
-
-#(MMM_EXIT)	MMM_EXIT.ogg
 mmmmmmmmmmmm
+.done
