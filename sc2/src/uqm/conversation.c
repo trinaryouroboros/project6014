@@ -764,6 +764,11 @@ void prep_conversation_module (char* who, LOCDATA *fill ) {
 	
 	currentModel = parseConversationModel (who);
 	fill->init_encounter_func = cm_intro;
+   fill->conversationPhrases = currentModel->table->strings;
+   // The other members of currentModel->table are superfluous, I guess?
+   // The size value is mainly used to set indices, but the indices are already set.
+   // I still feel nervous about this.
+   
 	
 	percent = myRandom();
 	
