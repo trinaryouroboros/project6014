@@ -113,7 +113,7 @@ static void freeOption(ConversationOption *co) {
 	g_free(co->say);
 	freeLines(co->lines);
 	g_free(co->proceed);
-	freeCC(co->cc)
+	freeCC(co->cc);
 	g_free(co);
 }
 
@@ -155,12 +155,12 @@ struct ConversationModel_s {
 };
 typedef struct ConversationModel_s ConversationModel;
 
-static freeModel(ConversationModel *cm) {
-	g_free_full(cm->initializers, freeCC);
-	g_free_full(cm->greetings, freeGreeting);
-	g_free_full(cm->nodes, freeNode);
-	g_free_full(cm->texts, freeText);
-	g_free(name);
+static void freeModel(ConversationModel *cm) {
+	g_slist_free_full(cm->initializers, freeCC);
+	g_slist_free_full(cm->greetings, freeGreeting);
+	g_slist_free_full(cm->nodes, freeNode);
+	g_slist_free_full(cm->texts, freeText);
+	g_free(cm->name);
 // 	DestroyStringTable (cm->table);
 	// ^ no need to do this for now, since it's done in comm: HailAlien
 	g_free(cm);
@@ -551,8 +551,7 @@ static ConversationOption*
 parseOption (char* line, uio_Stream *hook, StringTableBuilder *stb)
 {
 	DeclarationGoodies dg; // not DeclarationGoodies*
-	ConversationOption *out;
-	out = g_new (ConversationOption, 1);
+	ConversationOption *out = g_new (ConversationOption, 1);
 	StringTableBuilder lines;
 	
 	lines.list = NULL;
@@ -840,7 +839,7 @@ void prep_conversation_module (char* who, LOCDATA *fill ) {
 	fill->init_encounter_func = cm_intro;
 	fill->uninit_encounter_func = uninit;
 	fill->post_encounter_func = post;
-	fill->conversationPhrases = currentModel->table->strings;
+	fill->ConversationPhrases = currentModel->table->strings;
 	
 	percent = myRandom();
 	
