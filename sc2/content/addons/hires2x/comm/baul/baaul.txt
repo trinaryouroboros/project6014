@@ -1,9 +1,0 @@
-#(HELLO)	baul-000.ogg
-BELCH!
-Human! It is so good to see you!
-This is just placeholder text.
-
-#(bye)
-Party on!
-
-  
