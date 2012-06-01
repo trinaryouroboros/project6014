@@ -1,0 +1,500 @@
+// Gameplay Plot Doc
+//==========
+// Very Basic Plot to help guide people through the non-linear plot.
+// Can also be used to help the writers.
+// All global variables should be stored here for reference!
+//==========
+// Variables to be Used:
+// 		--Artifacts --
+// BLACK_ORB: Artifact: Black Orb acquired.
+// CHMMR_MECH_FIX: The Mechanical fix for the broken CHMMR (given by the Mmrnmhrm)
+// CHMMR_SILICON_FIX: The silicon fix for the broken CHMMR (given by the Taalo)
+// EXOTICS_COMM: Exotics communication tool
+// EXOTICS_BOMB: Exotics gravity bombs
+// LANDER_CLOAK: Cloaking Device for Lander
+// MELNORME_CALLER: Melnorme Calling Device
+// SUN_DEVICE: Sun Device from SC2
+// PRECURSOR_SHIP: You got the new Precursor Ship 
+// ORZ_ESCAPE: OrzSpace escape device
+// REACTOR_CORE: Reactor Core Power Unit
+// LURG_NEURALIZER: Tool given by the Lurg to give the Mycon a lobotomy. To turn them into a biological weapon.
+// SHIELD_BUSTER: Tool to Bust break a slave shield
+// TEMPORAL_WRAPPER: Temporal Wrapper, You need this to enter the Orzspace portals and not die.
+// ILWRATH_CLOAK: Cloaking device for melee. From an Ilwrath Ship
+// ARILOU_TELEPORTER: Teleporter for Melee. 
+
+// 		--Melnorme Purchased Tech/Ship Upgrade Technologies --
+// ATS_TRACKING: Tracking Device Melee.
+// Earthling-like Point Defence Laser
+// UPGRADED_POWER: Powercells to upgrade fire damage
+// UPGRADED_RANGE: Device to Increase Range of Fire.
+// UPGRADED_FIRE: Weapon to Increase Firepower.
+// ULTRA_SHIVA: Ultra Shiva Furnace.
+// YEHAT_SHIELD: Yehat-like Shield for Melee.
+// UPGRADED_CARGO: Upgraded Cargo Holder
+// UPGRADED_LANDER_WEAPON: More powerful laser for lander
+// ACID_SHIELD: Protection from Acid Rain
+
+
+// 		--Mycon/Syreen/Lurg Sub-Plot --
+// 
+// MYCON_DEFEATED : The Mycon & Syreen went to war. The Syreen won. (Perhaps 100 days after Mycon are Freed.)
+// MYCON_DEAD : The Mycon have died under the slave shield. NOT the same as MYCON_DEFEATED (perhaps 1 year under the shield)
+// MYCON_LOBOTOMIZED : With the aid of the Lurg, You've removed the sentience from the Mycon. They can exist as living organic Bombs.
+// PENETRATOR_SHIP: The Penetrator Ship given to you by the Syreen
+// FREE_SHIP_SLOTS: How many free spaces for ships (I think 6 total for the Explorer, 8 for the new Precursor ship)
+// MET_MYCON: Whether or not you've contacted the Mycon.
+// MYCON_ATTACK_SYREEN: Countdown: Days until the Freed Mycon attacked the Syreen.
+// SYREEN_ATTACK: Syreen Begin their attack on the Mycon
+// MYCON_WAR: length of the Mycon War battle.
+// SYREEN_HOSTILE: You REALLY pissed the Syreen off. (Like, Freeing the Mycon without warning the Syreen.)
+// FREED_MYCON : You freed the Mycon
+
+//		--Baul/Foon-Foon Sub-Plot
+// BAUL_DEAD: Baul are dead...or effectively useless.
+// BAUL_LURG_ALLIANCE: Whether or not the Baul/Lurg Alliance is found out (needed? It's not really stated. Consequences?)
+// BAUL_HOSTILE: Baul is no longer your friend.
+// FOONFOON_DEAD: Foon-Foon has been wiped out.
+// FREED_FOONFOON: You freed the Foon-Foon.
+// ALLIED_GENERAL: Allied with the General.
+// BAUL_HOMEWORLD: Whether or not you've found the Baul Homeworld.
+// FOONFOON_CREW: Whether you purchased Foon-Foon Crew
+// FOONFOON_REBELLION: Whether the Foon-Foon Rebellion has started
+// GENERAL_LOCATION: Whether or not you know the location of the General.
+// MOON_CANNON: Whether or not you've found out about the moon cannon.
+
+//		--Exotics Sub-Plot
+
+// MET_EXOTICS: Contacted Exotics
+
+// SHIP_FUEL: How much Ship fuel you have.
+// DAYS_FF_REBEL: Number of Days until the FF Rebellion (Probably FOONFOON_REBELLION & DAYS_FF_REBEL can be combined)
+// DESTROYED_FF_BASE: You destroyed the Foon-Foon rebel base.
+// DESTROYED_MOON_CANNON: Destroyed the Moon Cannon.
+// ASSINATED_GENERAL: Whether you assassinated General
+// ALLIED_PREMIERE: Allied with the Premiere
+// CHMMR_COMATOSE: The CHMMR have gone Comatose
+// MELNORME_HOMEWORLD: Found Melnorme Homeworld.
+
+//		--Faz Sub-Plot
+
+// MET_FAZ: Met the Faz.
+// ALLIED_FAZ: Allied with the Faz.
+// CAP_REPUTATION: Captain's reputation with the NAFS (needed? consequences?)
+
+//		--Faz Sub-Plot
+// CHMMR_BREAKDOWN: Days until CHMMR Breakdown
+//===========================================
+
+// Start with the Aliens to visit
+
+greeting +DAYS_TO_DEATH=365 +CHMMR_BREAKDOWN=100
+choose the race to visit
+.aliens
+
+
+node aliens
+option 
+Baul Homeworld
+.baulhomeworld
+
+option 
+Baul Ship
+.baulship
+
+option
+CHMMR homeworld
+.chmmr
+
+option 
+Foon-Foon Homeworld
+.ffhomeworld
+
+option
+Human Starbase (Hayes)
+.earthstarbase
+
+option
+Human Ship
+Greetings.
+.earthship
+
+option
+Kohr-Ah Ship
+.kohrah
+
+option =PRECURSOR_SHIP
+Lurg
+You meet the Lurg again.
+.lurg
+
+option 
+Visit Melnorme
+.melnorme
+
+option
+Mycon
+.mycon
+
+option
+Visit Melnorme Homeworld
+.melnorme
+
+option 
+Orz Ship
+.orzship
+
+option 
+Orz Homeworld
+.orzhomeworld
+
+option
+Visit Pkunk Queen/Yehat Homeworld
+.pkunk
+
+option 
+Syreen Homeworld
+.syreenhomeworld
+
+option 
+Syreen Starbase
+.syreenstarbase
+
+option 
+Syreen Syreen Ship
+.syreenship
+
+option
+Pkunk Ship
+.yehat
+
+option
+Pkunk Starbase
+.pkunkstarbase
+
+option
+Explore
+.explore
+
+.
+
+node chmmr
+
+option =CHMMR_BREAKDOWN>0 +CHMMR_BREAKDOWN=0 
+DEBUG (Set CHMMR_BREAKDOWN to 0)
+Number of Days until CHMMR breakdown is set to 0.
+.chmmr
+
+option !SHIELD_BUSTER =CHMMR_BREAKDOWN<1 +SHIELD_BUSTER 
+Land on Planet
+landed on planet. Picked up Shield Buster.
+.chmmr
+
+option =PRECURSOR_SHIP
+CHMMR accuse you of hording Precursor Technology.
+No idea what happens next. Fight?
+.chmmr
+
+option !PRECURSOR_SHIP =CHMMR_BREAKDOWN>0
+Talk to CHMMR
+CHMMR tell you to find Shofixti
+.chmmr
+
+option
+Leave.
+Choose place to visit
+.aliens
+.
+
+node lurg
+
+option =CHMMR_BREAKDOWN>0
+Talk to Lurg about CHMMR.
+Lurg say: CHMMR are crazy. You're a fool to stick with them. Dooming yourself. blah.blah.
+.lurg
+
+option !MYCON_FREED
+Talk to Lurg about Mycon.
+They tell you they're broken. You can fix them.
+.lurg
+
+option
+Leave.
+Choose place to visit
+.aliens
+.
+
+
+node earthstarbase
+
+option
+Ask about Alien History
+Alien History given
+.earthstarbase
+
+
+option
+Leave.
+Choose place to visit
+.aliens
+.
+
+node earthship
+
+option
+Ask for Fuel
+No Fuel given
+.eartship
+
+option
+Leave.
+Choose place to visit
+.aliens
+.
+
+node kohrah
+option
+Talk
+Fight is inevitable. Resistance is futile.
+.fight
+.
+
+node mycon
+
+option !MYCON_FREED =DAYS_TO_DEATH>0 +DAYS_TO_DEATH=0  
+DEBUG: (Let Mycon DIE. Set DAYS_TO_DEATH to 0)
+Mycon are now DEAD.
+.mycon
+
+option =DAYS_TO_DEATH<1 !MYCON_FREED
+Talk to Dead Mycon.
+No Response. (They're DEAD)
+.mycon
+
+option !MYCON_FREED =DAYS_TO_DEATH>0
+Greet Mycon.
+Mycon beg for their freedom.
+.mycon
+
+option !MYCON_FREED =SHIELD_BUSTER +MYCON_ATTACK_SYREEN=30 =DAYS_TO_DEATH>0 +MYCON_FREED
+Free Mycon using Shield Buster
+Mycon are FREE and happy
+[MYCON_ATTACK_SYREEN] Days until Mycon attack Syreen.
+.mycon
+
+option
+Leave.
+Choose place to visit
+.aliens
+.
+
+node pkunkstarbase
+option
+Leave.
+Choose place to visit
+.aliens
+.
+
+node ffhomeworld
+option
+Leave.
+Choose place to visit
+.aliens
+.
+
+node baulhomeworld
+option
+Leave.
+Choose place to visit
+.aliens
+.
+
+node baulship
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+node pkunk
+
+option 
+Talk
+She blabs. Nothing else.
+.pkunk
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+node yehat
+
+option
+Ask about CHMMR.
+They Let you know, something is wrong with the Pkunk.
+.yehat
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+node syreenhomeworld
+
+option !MYCON_DEAD =MYCON_WAR +MYCON_WAR=100 +MYCON_DEAD 
+(DEBUG: Set MYCON_WAR to 100)
+Mycon lose War.
+Thousands of Syreen Die.
+Mycon Die.
+Captain's Reputation goes down.
+.syreenhomeworld
+
+option !SYREEN_SHIP +SYREEN_SHIP 
+Ask help with Shofixti
+Ship given.
+.syreenhomeworld
+
+option !MYCON_WAR =MYCON_FREED =MYCON_ATTACK_SYREEN>1 +MYCON_WAR=1
+Warn Syreen of impending Mycon Attack
+Syreen have been warned. Syreen/Mycon War starts.
+MYCON_WAR war counter starts.
+.syreenhomeworld
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+node syreenship
+
+option
+Greet Syreen
+Syreen Flirts.
+.syreenship
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+node syreenstarbase
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+node orzship
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+
+node orzhomeworld
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+node melnorme
+
+option
+Buy Tech
+What do you want?
+.buy_melnorme_tech
+
+option
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+node buy_melnorme_tech
+
+option !PRECURSOR_SHIP
+Buy Ship upgrades.
+You can't upgrade the Explorer
+.buy_melnorme_tech
+
+option =PRECURSOR_SHIP=1 +UPGRADED_RANGE
+Upgraded Ship's Fire range
+Increased Fire Range Technology upgrade purchased.
+.buy_melnorme_tech
+
+option
+Done Buying
+OK
+.melnorme
+
+.
+
+node explore
+
+option 
+Visit Androsynth homeworld
+Find Burning Remains
+.explore
+
+option
+Visit Beta Naos
+Lurg Confrontation
+.act1
+
+option
+Stop Exploring.
+Choose place to visit
+.aliens
+
+.
+
+
+node act1
+
+option >talktoLurg >visitbetanaos +MET_LURG
+Talk to Lurg
+Battle Ensues.
+You killed the Lurg
+.act1
+
+option =visitbetanaos
+Explore Beta Naos
+Lurg Attacks...
+To Be continued in Act 2
+.act2
+
+option 
+Leave.
+Choose place to visit
+.aliens
+
+.
+
+
+node act2
+
+option +PRECURSOR_SHIP
+What happens next?
+Saved by the Foon-Foon.
+New Precursor Ship given
+.aliens
+
+.
