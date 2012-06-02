@@ -3,8 +3,12 @@
 // Very Basic Plot to help guide people through the non-linear plot.
 // Can also be used to help the writers.
 // All global variables should be stored here for reference!
+//
+// Directions: Use with Joris' UQM-DIALOG tool 
 //==========
 // Variables to be Used:
+//		--Game Related--
+// SHIP_FREE_SLOTS: How many slots are free to add more ships.
 // 		--Artifacts --
 // BLACK_ORB: Artifact: Black Orb acquired.
 // CHMMR_MECH_FIX: The Mechanical fix for the broken CHMMR (given by the Mmrnmhrm)
@@ -22,7 +26,7 @@
 // TEMPORAL_WRAPPER: Temporal Wrapper, You need this to enter the Orzspace portals and not die.
 // ILWRATH_CLOAK: Cloaking device for melee. From an Ilwrath Ship
 // ARILOU_TELEPORTER: Teleporter for Melee. 
-
+// TERRAFORMING_PLANTS: Plants to help Terra-Form the Shofoxti World
 
 // 		--Melnorme Purchased Tech/Ship Upgrade Technologies --
 // ATS_TRACKING: Tracking Device Melee.
@@ -82,16 +86,23 @@
 // MET_FAZ: Met the Faz.
 // ALLIED_FAZ: Allied with the Faz.
 // CAP_REPUTATION: Captain's reputation with the NAFS (needed? consequences?)
-
+//
 //		--CHMMR Sub-Plot--
 // CHMMR_BREAKDOWN: Days until CHMMR Breakdown
-
+//
 //		--Vux Sub-Plot
 // FOUGHT_VUX: You beat Vux at Procyon
+//
+// 		-- Shofixti/Xen-Weyi Sub-Plot --
+//
+//	
+// 		-- Androsynth/Orz Sub-Plot --
+// ANDROSYNTH_SHIP: You Rescued the Androsynth
+// ANDROSYNTH_ALLIED: You allied with the Androsynth
+// ORZ_SHIP: You have an Orz Nemesis on your fleet.
+// ANDROSYNTH_BATTLE: You Fight the Androsynth Enclave.
+
 //===========================================
-
-
-
 // Start with the Aliens to visit
 
 
@@ -104,8 +115,19 @@ node aliens
 
 option 
 Androsynth Ship
-Haven't done this part yet.
+The Androsynth must stop at nothing to protect their
+Enclave. A battle ensues! (Is this right?)
+.fight
+
+option
+Androsynth Enclave
+Work in Progress here.
 .androsynth
+
+option !ANDROSYNTH_SHIP
+Lone Androsynth Ship
+You encounter a non-hostile Androsynth ship
+.loneandrosynth
 
 option
 Arilou
@@ -161,10 +183,6 @@ option
 Mycon
 .mycon
 
-option
-Visit Melnorme Homeworld
-.melnorme
-
 option 
 Orz Ship
 .orzship
@@ -207,9 +225,67 @@ Explore
 
 .
 
-node androsynth
+node loneandrosynth
+
+option +ANDROSYNTH_SHIP
+Rescue the Androsynth
+You rescue the Androsynth Guardian.
+Ship added to your crew
+.aliens
 
 option
+Leave Androsynth alone.
+You Leave.
+.aliens
+
+.
+
+node androsynth
+
+option +ORZ_SHIP !ANDROSYNTH_ALLIED
+(DEBUG: ADD AN ORZ SHIP ON YOUR FLEET)
+You now have an Orz ship on your fleet.
+.androsynth
+
+option !ANDROSYNTH_BATTLE
+Ask about Shofixti Patrols.
+The Androsynth were responsible for the disappearance of the second Shofixti patrol.
+They had to blast them out of the skies, otherwise they would've been exposed.
+.androsynth
+
+option =ANDROSYNTH_SHIP +ORZ_ESCAPE +ANDROSYNTH_ALLIED !ORZ_SHIP !ANDROSYNTH_BATTLE
+Ally with Androsynth
+You are now Allies with the Androsynth.
+They give you OrzSpace Escape Device,
+in hopes of freeing the OrzSpace Androsynth.
+.androsynth
+
+option =ANDROSYNTH_SHIP =ORZ_SHIP !ANDROSYNTH_BATTLE
+Ally with Androsynth
+No way!
+Not with an Orz ship in your fleet!
+They challenge you to battle.
+.androsynth
+
+option +ANDROSYNTH_BATTLE
+Fight Androsynth
+You battle!
+You win.
+.aliens
+
+option !ANDROSYNTH_SHIP
+Attempt to Ally with Androsynth.
+No. They don't trust humans.
+.androsynth
+
+option =ANDROSYNTH_BATTLE
+Attempt to Leave.
+No. You started a war with them. 
+They battle you.
+You win again.
+.aliens
+
+option !ANDROSYNTH_BATTLE
 Leave.
 Choose place to visit
 .aliens
@@ -524,6 +600,45 @@ Taalo homeworld
 We welcome you precious one! 
 .taalo
 
+option
+Melnorme Homeworld
+.melnorme
+
+option
+Taalo "Ghosts" (in OrzSpace)
+They touch you.
+Boom. Dead. Ending Cutscene.
+.done
+
+option
+Androsynth "Ghosts" (in OrzSpace)
+They touch you.
+Boom. Dead. Ending Cutscene.
+.done
+
+option 
+Leave Orzspace
+Using the OrzSpace Escape Device,
+You emerge into realspace.
+.explore
+.
+
+node melnorme_home
+
+option 
+Talk to Melnorme
+Clever Captain.
+.melnorme_home
+
+option
+Trade
+What would you like?
+.melnorme
+
+option
+Leave
+Goodbye Captain.
+.orzspace
 .
 
 node taalo
@@ -531,6 +646,12 @@ node taalo
 option
 Ask about Androsynth.
 Taalo give you clues how to free them from their limbo.
+.taalo
+
+option 
+Ask about anything unusual.
+There was is a mysterious planet fairly close to a Black hole 
+Some sort of pointer to Omicron Hygea.
 .taalo
 
 option !CHMMR_SILICON_FIX +CHMMR_SILICON_FIX
@@ -543,16 +664,23 @@ You get the CHMMR Silicon fix from the Taalo.
 
 option
 Leave
-You leave. Now back in Orzspace.
+You leave. Now back in Orzspace. 
+Do we need the Orz Escape Device? here?
 .orzspace
 .
 
 node melnorme
 
+
 option
 Buy Tech
-What do you want?
+Here's what we've got:
 .buy_melnorme_tech
+
+option
+Buy information.
+Here's some info:
+.buy_melnorme_info
 
 option
 Leave.
@@ -561,7 +689,32 @@ Choose place to visit
 
 .
 
+node buy_melnorme_info
+
+option >fazinfo
+Buy info
+Info given about the Faz
+.buy_melnorme_info
+
+option
+Buy More info
+The Androsynth exist. There's a Patrol near some star system.
+Be careful. Androsynth don't trust humans.
+.buy_melnorme_info
+
+option
+Enough info.
+What else do you want?
+.melnorme
+
+.
+
 node buy_melnorme_tech
+
+option =FOUND_MELNORME_WORLD
+Buy Trader Vessel.
+Trader Vessel Purchased.
+.
 
 option !PRECURSOR_SHIP
 Buy Ship upgrades.
@@ -620,6 +773,12 @@ Explored planet. Found Neuralizer artifact.
 Picked up (non working) Neuralizer
 .explore
 
+option +ILWRATH_CLOAK
+Visit Ilwrath Homeworld
+Landed on Planet.
+Picked up Ilwrath Cloaking Device
+.explore
+
 option !TEMPORAL_WRAPPER
 Go into Orzspace
 Boom. Dead. (You need a temporal Wrapper)
@@ -629,6 +788,7 @@ option =TEMPORAL_WRAPPER
 Go into Orzspace
 You are now in Orzspace.
 .orzspace
+
 
 option
 Stop Exploring.
