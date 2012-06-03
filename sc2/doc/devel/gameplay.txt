@@ -4,7 +4,7 @@
 // Can also be used to help the writers.
 // All global variables should be stored here for reference!
 //
-// Directions: Use with Joris' UQM-DIALOG tool 
+// Directions: Use with Joris' UQM-DIALOG tool. Just Copy & Paste this doc into it.
 //==========
 // Variables to be Used:
 //		--Game Related--
@@ -89,6 +89,7 @@
 //
 //		--CHMMR Sub-Plot--
 // CHMMR_BREAKDOWN: Days until CHMMR Breakdown
+// YEHAT_CHMMR: Yehat warn Captain about the CHMMR being a little unstable lately.
 //
 //		--Vux Sub-Plot
 // FOUGHT_VUX: You beat Vux at Procyon
@@ -101,7 +102,15 @@
 // ANDROSYNTH_ALLIED: You allied with the Androsynth
 // ORZ_SHIP: You have an Orz Nemesis on your fleet.
 // ANDROSYNTH_BATTLE: You Fight the Androsynth Enclave.
-
+// MET_ORZ_ANDROS: You've met the OrzSpace Androsynth
+// ANDRO_CHALLENGE: Androsynth challenge you to battle.
+// ANDROS_SLAVED: The CHMMR have slave shielded the Androsynth.
+// MET_ANDROSYNTH: Met the TrueSpace Androsynth.
+// STOP_CHMMR_ANDRO_BATTLE: Warn the Androsynth about the CHMMR attacking.
+// TRIED_FREEING_ORZ_ANDROS: You attempt to free the OrzSpace Androsynth
+// WHY_ANDROS_TRAPPED: You are explained by the Taalo why the OrzSpace AndroSynth are trapped.
+// KILL_ORZ_ANDROS: Assigned mission to kill OrzSpace Androsynth 
+// KILLED_ORZ_ANDROS: OrzSpace Androsynth are dead.
 //===========================================
 // Start with the Aliens to visit
 
@@ -119,10 +128,35 @@ The Androsynth must stop at nothing to protect their
 Enclave. A battle ensues! (Is this right?)
 .fight
 
-option
+option !ANDROSYNTH_ALLIED !ANDROS_SLAVED +MET_ANDROSYNTH
 Androsynth Enclave
-Work in Progress here.
+You meet the Androsynth.
+The Androsynth are wary of you.
 .androsynth
+
+option =ANDROS_SLAVED 
+Androsynth Enclave
+You visit the Androsynth Enclave,
+only to find they've been put under a slave shield.
+.androsynth
+
+option =ANDROSYNTH_ALLIED !ANDROS_SLAVED 
+Androsynth Enclave
+The Androsynth greet allied friend.
+.androsynth
+
+option =ANDRO_CHALLENGE !ANDROS_SLAVED
+Androsynth Enclave
+Once again, the Androsynth challenge you to battle!
+.androsynth
+
+option =ORZ_SHIP +ANDRO_CHALLENGE  +MET_ANDROSYNTH
+Androsynth Enclave
+You are the old human enemy, and
+friend of the Orz. 
+They challenge you to battle!
+.androsynth
+
 
 option !ANDROSYNTH_SHIP
 Lone Androsynth Ship
@@ -185,10 +219,12 @@ Mycon
 
 option 
 Orz Ship
+*FRUMPLE* Haven't done this part yet.
 .orzship
 
 option 
 Orz Homeworld
+Fucking *BUBBLES*! Haven't done this part yet.
 .orzhomeworld
 
 option
@@ -201,19 +237,24 @@ Syreen Homeworld
 
 option 
 Syreen Starbase
+Nothing of value to the story here.
 .syreenstarbase
 
 option 
 Syreen Syreen Ship
+Syreen Greets you.
+(Haven't really done this part yet)
 .syreenship
 
 option
-Pkunk Ship
-.yehat
+Pkunk Starbase
+The Yehat and Pkunk can't get along.
+There's really nothing of value here.
+.pkunkstarbase
 
 option
-Pkunk Starbase
-.pkunkstarbase
+Yehat Ship
+.yehat
 
 option
 Vux Starbase
@@ -247,35 +288,109 @@ option +ORZ_SHIP !ANDROSYNTH_ALLIED
 You now have an Orz ship on your fleet.
 .androsynth
 
+option =TRIED_FREEING_ORZ_ANDROS !WHY_ANDROS_TRAPPED !KILLED_ORZ_ANDROS
+Tell them about the Orz Androsynth.
+Explain you still can't save them.
+Androsynth want to know why.
+You have no idea.
+.androsynth
+
+option =TRIED_FREEING_ORZ_ANDROS =WHY_ANDROS_TRAPPED =ANDROSYNTH_SHIP +KILL_ORZ_ANDROS !KILLED_ORZ_ANDROS
+You explain why the Orz are trapped.
+Tell them about the Orz Androsynth.
+Explain you still can't save them.
+You use the explanation given to you by the Taalo.
+They will ask you to visit again.  
+No Androsynth would want this. They ask you to kill the Orz Androsynth
+and put them out of their misery. 
+Take the Androsynth ship on your fleet to verify.
+.androsynth
+
+option !KILLED_ORZ_ANDROS =TRIED_FREEING_ORZ_ANDROS =WHY_ANDROS_TRAPPED !ANDROSYNTH_SHIP +KILL_ORZ_ANDROS 
+You explain why the Orz are trapped.
+Tell them about the Orz Androsynth.
+Explain you still can't save them.
+You use the explanation given to you by the Taalo.
+No Androsynth would want this. They ask you to kill the Orz Androsynth,
+and put them out of their misery. 
+They give you an Androsynth ship to verify.
+.androsynth
+
+option =KILLED_ORZ_ANDROS
+Tell Androsynth you killed the Orz Androsynth.
+They are sad. The job is finished.
+.androsynth
+
+option =CHMMR_ATTACK_ANDROS>0 +STOP_CHMMR_ANDRO_BATTLE -CHMMR_ATTACK_ANDROS
+Warn Androsynth about CHMMR attack.
+The Androsynth thank you.
+They move the Enclave to another area.
+.androsynth
+
+option !KILLED_ORZ_ANDROS !ANDROSYNTH_ALLIED =MET_ORZ_ANDROS TEMPORAL_WRAPPER<2
+Tell them about the OrzSpace Androsynth.
+They want to believe.
+But, they don't trust you.
+.androsynth
+
+option =ANDROSYNTH_ALLIED =MET_ORZ_ANDROS =TEMPORAL_WRAPPER<2 +TEMPORAL_WRAPPER=2
+Tell the Androsynth about the Orz Space Androsynth
+They are very curious about the Orz.
+They want to free them.
+They upgrade your Temporal Wrapper.
+.androsynth
+
+option =ANDROSYNTH_ALLIED =ILWRATH_CLOAK  =ILWRATH_CLOAK<2 +ILWRATH_CLOAK=2
+Can you fix this Ilwrath Cloak?
+Sure. Anything for an Ally.
+It's fixed.
+.androsynth
+
 option !ANDROSYNTH_BATTLE
 Ask about Shofixti Patrols.
 The Androsynth were responsible for the disappearance of the second Shofixti patrol.
 They had to blast them out of the skies, otherwise they would've been exposed.
+Question: Why wouldn't the Captain just go home at this point?
 .androsynth
 
-option =ANDROSYNTH_SHIP +ORZ_ESCAPE +ANDROSYNTH_ALLIED !ORZ_SHIP !ANDROSYNTH_BATTLE
+option =ANDROSYNTH_SHIP +ORZ_ESCAPE +ANDROSYNTH_ALLIED !ORZ_SHIP !ANDROSYNTH_BATTLE !ANDROSYNTH_ALLIED
 Ally with Androsynth
 You are now Allies with the Androsynth.
 They give you OrzSpace Escape Device,
 in hopes of freeing the OrzSpace Androsynth.
 .androsynth
 
-option =ANDROSYNTH_SHIP =ORZ_SHIP !ANDROSYNTH_BATTLE
+option =ANDROSYNTH_SHIP =ORZ_SHIP !ANDROSYNTH_BATTLE +ANDRO_CHALLENGE !ANDROSYNTH_ALLIED
 Ally with Androsynth
 No way!
 Not with an Orz ship in your fleet!
 They challenge you to battle.
 .androsynth
 
-option +ANDROSYNTH_BATTLE
-Fight Androsynth
+option =ORZ_SHIP -ORZ_SHIP
+Offer them your Orz Ship.
+You offer to let them blow up the Orz ship
+on your fleet.
+Is this a melee game where you lose on purpose?
+Can we do this?
+.androsynth
+
+option =ANDROSYNTH_BATTLE
+Agree to battle the androsynth.
 You battle!
 You win.
 .aliens
 
+option =ORZ_SHIP !ANDROSYNTH_SHIP =ANDRO_CHALLENGE
+Attempt to ally with the Androsynth.
+No. You have an Orz ship on your fleet!
+They challenge you again to a battle
+.androsynth
+
 option !ANDROSYNTH_SHIP
 Attempt to Ally with Androsynth.
 No. They don't trust humans.
+You haven't earned their trust yet.
 .androsynth
 
 option =ANDROSYNTH_BATTLE
@@ -314,6 +429,12 @@ DEBUG (Set CHMMR_BREAKDOWN to 0)
 Number of Days until CHMMR breakdown is set to 0.
 .chmmr
 
+option =CHMMR_BREAKDOWN>0 =CHMMR_ATTACK_ANDROS>0 +CHMMR_ATTACK_ANDROS=0 +ANDROS_SLAVED =MET_ANDROSYNTH !STOP_CHMMR_ANDRO_BATTLE
+DEBUG (Set CHMMR_ATTACK_ANDROS to 0)
+Number of Days until CHMMR attack Androsynth is set to [CHMMR_ATTACK_ANDROS].
+The TrueSpace Androsynth have been wiped out by the CHMMR.
+.chmmr
+
 option =CHMMR_BREAKDOWN=0 +FOUGHT_VUX !FOUGHT_VUX
 Encounter Vux starships
 WTF?
@@ -329,8 +450,58 @@ landed on planet. Picked up Shield Buster.
 option =PRECURSOR_SHIP =CHMMR_BREAKDOWN>0 
 The CHMMR look different. Talk to them.
 CHMMR accuse you of hording Precursor Technology.
-No idea what happens next. Fight?
+The Precursor ship is proof you're moving behind their backs.
+You explain you're not.
+They warn you they'll destroy you if you are.
 .chmmr
+
+option =STOP_CHMMR_ANDRO_BATTLE -STOP_CHMMR_ANDRO_BATTLE -CHMMR_ATTACK_ANDROS
+The CHMMR want to talk to you about something.
+The CHMMR say the Androsynth have moved.
+They accuse you of warning them.
+(This should make the CHMMR hostile at this point, right?)
+.chmmr
+
+option !ANDROSYNTH_ALLIED !ANDROSYNTH_SHIP !ANDROS_SLAVED =CHMMR_BREAKDOWN>0 =MET_ANDROSYNTH +CHMMR_ATTACK_ANDROS=30 !STOP_CHMMR_ANDRO_BATTLE
+Tell CHMMR about the existence of the Androsynth 
+You tell them where the Androsynth are.
+They promise to deal with this. 
+In [CHMMR_ATTACK_ANDROS] days they'll attack and slave shield the Androsynth.
+.chmmr
+
+option =YEHAT_CHMMR =CHMMR_BREAKDOWN>0
+You tell the CHMMR the Yehat are worried about them.
+CHMMR will deal with the Yehat.
+(Should something happen here. Sounds like something should happen)
+.chmmr
+
+option !MET_ANDROSYNTH =ANDROSYNTH_SHIP 
+Talk to CHMMR
+CHMMR find an Androsynth on your fleet.
+Are you siding with the enemy?
+You assure them you are not.
+.chmmr
+
+option !ANDROSYNTH_ALLIED =ANDROSYNTH_SHIP !ANDROS_SLAVED =CHMMR_BREAKDOWN>0 +CHMMR_ATTACK_ANDROS=30 =MET_ANDROSYNTH
+Talk to the CHMMR about the Androsynth
+The CHMMR accuse you of secretely being allies with
+the Androsynth. They accuse you of being a trader.
+Having dealings with the enemy behind the CHMMR's back.
+They ramble to the point of not making sense.
+You tell them, you're not a traitor.
+They don't believe you.
+The CHMMR dispatch ships to destroy the Androsynth.
+[CHMMR_ATTACK_ANDROS] Days until the CHMMR attack the Androsynth Enclave.
+.chmmr
+
+option =CHMMR_BREAKDOWN>0 =MET_ANDROSYNTH =ANDROSYNTH_ALLIED
+Talk to the CHMMR about the Androsynth
+You are allies with the Androsynth?
+They are the enemy!
+Do we ever have the CHMMR go hostile?
+This would be a great time.
+.chmmr
+
 
 option !PRECURSOR_SHIP =CHMMR_BREAKDOWN>0
 Talk to CHMMR
@@ -513,9 +684,9 @@ Choose place to visit
 
 node yehat
 
-option
+option +YEHAT_CHMMR
 Ask about CHMMR.
-They Let you know, something is wrong with the Pkunk.
+They Let you know, there's something odd with the CHMMR.
 .yehat
 
 option
@@ -593,7 +764,37 @@ Choose place to visit
 
 .
 
+node orz_andros
+
+option !KILLED_ORZ_ANDROS =KILL_ORZ_ANDROS +KILLED_ORZ_ANDROS 
+Destroy the Orz Andros
+You kill the OrzSpace Andros.
+.orz_andros
+
+option !KILLED_ORZ_ANDROS =TEMPORAL_WRAPPER=2 +TRIED_FREEING_ORZ_ANDROS 
+Rescue the OrzSpace Androsynth using Temporal Wrapper.
+Sorry. You can't. 
+.orz_andros
+
+option !KILLED_ORZ_ANDROS
+talk
+Reply!
+They are not much help.
+.orz_andros
+
+option
+Leave.
+Choose place to visit
+.orzspace
+.
+
 node orzspace
+
+option +MET_ORZ_ANDROS
+OrzSpace AndroSynth
+You meet the Androsynth in OrzSpace.
+They look different.
+.orz_andros
 
 option
 Taalo homeworld
@@ -643,7 +844,12 @@ Goodbye Captain.
 
 node taalo
 
-option
+option =TRIED_FREEING_ORZ_ANDROS  +WHY_ANDROS_TRAPPED
+Ask why you can't save the Androsynth.
+Taalo explain that they're part of the Orz now.
+.taalo
+
+option !TRIED_FREEING_ORZ_ANDROS  
 Ask about Androsynth.
 Taalo give you clues how to free them from their limbo.
 .taalo
@@ -671,6 +877,12 @@ Do we need the Orz Escape Device? here?
 
 node melnorme
 
+option =ILWRATH_CLOAK  =ILWRATH_CLOAK<2 +ILWRATH_CLOAK=2
+Can you fix this Ilwrath Cloak?
+Sure. 
+They charge you XXX credits.
+It's fixed.
+.melnorme
 
 option
 Buy Tech
@@ -776,7 +988,7 @@ Picked up (non working) Neuralizer
 option +ILWRATH_CLOAK
 Visit Ilwrath Homeworld
 Landed on Planet.
-Picked up Ilwrath Cloaking Device
+Picked up a broken Ilwrath Cloaking Device. 
 .explore
 
 option !TEMPORAL_WRAPPER
@@ -784,7 +996,7 @@ Go into Orzspace
 Boom. Dead. (You need a temporal Wrapper)
 .done
 
-option =TEMPORAL_WRAPPER
+option =TEMPORAL_WRAPPER>0
 Go into Orzspace
 You are now in Orzspace.
 .orzspace
