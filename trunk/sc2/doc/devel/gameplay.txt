@@ -67,6 +67,7 @@
 // FOONFOON_REBELLION: Whether the Foon-Foon Rebellion has started
 // GENERAL_LOCATION: Whether or not you know the location of the General.
 // MOON_CANNON: Whether or not you've found out about the moon cannon.
+// TIME_TO_FF_REBELLION: Time until the Foon-Foon Rebellion
 
 //		--Exotics Sub-Plot
 
@@ -91,6 +92,12 @@
 // CHMMR_BREAKDOWN: Days until CHMMR Breakdown
 // YEHAT_CHMMR: Yehat warn Captain about the CHMMR being a little unstable lately.
 //
+// 		-- Taalo Sub-Plot --
+// MET_TAALO: You've met the taalo.
+// RESCUED_TAALO: You've Rescued the Taalo from Orzspace.
+//
+// 		-- Melnorme Sub-Plot --
+//	FOUND_MEL_HOME: Found Melnorme Homeworld.
 //		--Vux Sub-Plot
 // FOUGHT_VUX: You beat Vux at Procyon
 //
@@ -111,901 +118,939 @@
 // WHY_ANDROS_TRAPPED: You are explained by the Taalo why the OrzSpace AndroSynth are trapped.
 // KILL_ORZ_ANDROS: Assigned mission to kill OrzSpace Androsynth 
 // KILLED_ORZ_ANDROS: OrzSpace Androsynth are dead.
+// ORZ_HOSTILE: Orz are not your friend anymmore.
+
 //===========================================
 // Start with the Aliens to visit
 
 
+// Start up INIT.
+//init +DAYS_TO_DEATH=365
+
 greeting +DAYS_TO_DEATH=365 +CHMMR_BREAKDOWN=100
-choose the race to visit
+	choose the race to visit
 .aliens
 
 
 node aliens
 
-option 
-Androsynth Ship
-The Androsynth must stop at nothing to protect their
-Enclave. A battle ensues! (Is this right?)
-.fight
+	option 
+		Androsynth Ship
+		The Androsynth must stop at nothing to protect their
+		Enclave. A battle ensues! (Is this right?)
+	.fight
 
-option !ANDROSYNTH_ALLIED !ANDROS_SLAVED +MET_ANDROSYNTH
-Androsynth Enclave
-You meet the Androsynth.
-The Androsynth are wary of you.
-.androsynth
+	option !ANDROSYNTH_ALLIED !ANDROS_SLAVED +MET_ANDROSYNTH
+		Androsynth Enclave
+		You meet the Androsynth.
+		The Androsynth are wary of you.
+	.androsynth
 
-option =ANDROS_SLAVED 
-Androsynth Enclave
-You visit the Androsynth Enclave,
-only to find they've been put under a slave shield.
-.androsynth
+	option =ANDROS_SLAVED 
+		Androsynth Enclave
+		You visit the Androsynth Enclave,
+		only to find they've been put under a slave shield.
+	.androsynth
 
-option =ANDROSYNTH_ALLIED !ANDROS_SLAVED 
-Androsynth Enclave
-The Androsynth greet allied friend.
-.androsynth
+	option =ANDROSYNTH_ALLIED !ANDROS_SLAVED 
+		Androsynth Enclave
+		The Androsynth greet allied friend.
+	.androsynth
 
-option =ANDRO_CHALLENGE !ANDROS_SLAVED
-Androsynth Enclave
-Once again, the Androsynth challenge you to battle!
-.androsynth
+	option =ANDRO_CHALLENGE !ANDROS_SLAVED
+		Androsynth Enclave
+		Once again, the Androsynth challenge you to battle!
+	.androsynth
 
-option =ORZ_SHIP +ANDRO_CHALLENGE  +MET_ANDROSYNTH
-Androsynth Enclave
-You are the old human enemy, and
-friend of the Orz. 
-They challenge you to battle!
-.androsynth
+	option =ORZ_SHIP +ANDRO_CHALLENGE  +MET_ANDROSYNTH
+		Androsynth Enclave
+		You are the old human enemy, and
+		friend of the Orz. 
+		They challenge you to battle!
+	.androsynth
 
 
-option !ANDROSYNTH_SHIP
-Lone Androsynth Ship
-You encounter a non-hostile Androsynth ship
-.loneandrosynth
+	option !ANDROSYNTH_SHIP
+		Lone Androsynth Ship
+		You encounter a non-hostile Androsynth ship
+	.loneandrosynth
 
-option
-Arilou
-You travel into Quasi-Space to meet the arilou
-.arilou
+	option
+		Arilou
+		You travel into Quasi-Space to meet the arilou
+	.arilou
 
-option 
-Baul Homeworld
-Haven't done this part yet.
-.baulhomeworld
+	option 
+		Baul Homeworld
+		Haven't done this part yet.
+	.baulhomeworld
 
-option 
-Baul Ship
-Haven't done this part yet.
-.baulship
+	option 
+		Baul Ship 
+		You encounter a Baul ship. .
+	.baulship
 
-option
-CHMMR homeworld
-.chmmr
+	option
+		CHMMR homeworld
+	.chmmr
 
-option
-Foon-Foon Ship
-.ffship
+	option
+		Foon-Foon Ship
+	.ffship
 
-option 
-Foon-Foon Homeworld
-Haven't done this part yet.
-.ffhomeworld
+	option 
+		Foon-Foon Homeworld
+		Haven't done this part yet.
+	.ffhomeworld
 
-option
-Human Starbase (Hayes)
-.earthstarbase
+	option
+		Human Starbase (Hayes)
+	.earthstarbase
 
-option
-Human Ship
-Greetings.
-.earthship
+	option
+		Human Ship
+		Greetings.
+	.earthship
 
-option
-Kohr-Ah Ship
-.kohrah
+	option
+		Kohr-Ah Ship
+	.kohrah
 
-option =PRECURSOR_SHIP
-Lurg
-You meet the Lurg again.
-.lurg
+	option =PRECURSOR_SHIP
+		Lurg
+		You meet the Lurg again.
+	.lurg
 
-option 
-Visit Melnorme
-.melnorme
+	option 
+		Visit Melnorme
+	.melnorme
 
-option
-Mycon
-.mycon
+	option
+		Mycon
+	.mycon
 
-option 
-Orz Ship
-*FRUMPLE* Haven't done this part yet.
-.orzship
+	option 
+		Orz Ship
+		*FRUMPLE* Haven't done this part yet.
+	.orzship
 
-option 
-Orz Homeworld
-Fucking *BUBBLES*! Haven't done this part yet.
-.orzhomeworld
+	option 
+		Orz Homeworld
+		Fucking *BUBBLES*!
+	.orzhomeworld
 
-option
-Visit Pkunk Queen/Yehat Homeworld
-.pkunk
+	option
+		Visit Pkunk Queen/Yehat Homeworld
+	.pkunk
 
-option 
-Syreen Homeworld
-.syreenhomeworld
+	option 
+		Syreen Homeworld
+	.syreenhomeworld
 
-option 
-Syreen Starbase
-Nothing of value to the story here.
-.syreenstarbase
+	option 
+		Syreen Starbase
+		Nothing of value to the story here.
+	.syreenstarbase
 
-option 
-Syreen Syreen Ship
-Syreen Greets you.
-(Haven't really done this part yet)
-.syreenship
+	option 
+		Syreen Syreen Ship
+		Syreen Greets you.
+		(Haven't really done this part yet)
+	.syreenship
 
-option
-Pkunk Starbase
-The Yehat and Pkunk can't get along.
-There's really nothing of value here.
-.pkunkstarbase
+	option
+		Pkunk Starbase
+		The Yehat and Pkunk can't get along.
+		There's really nothing of value here.
+	.pkunkstarbase
 
-option
-Yehat Ship
-.yehat
+	option
+		Yehat Ship
+	.yehat
 
-option
-Vux Starbase
-.vux
+	option
+		Vux Starbase
+	.vux
 
-option
-Explore
-.explore
+	option
+		Explore
+	.explore
 
 .
 
 node loneandrosynth
 
-option +ANDROSYNTH_SHIP
-Rescue the Androsynth
-You rescue the Androsynth Guardian.
-Ship added to your crew
-.aliens
+	option +ANDROSYNTH_SHIP
+		Rescue the Androsynth
+		You rescue the Androsynth Guardian.
+		Ship added to your crew
+	.aliens
 
-option
-Leave Androsynth alone.
-You Leave.
-.aliens
+	option
+		Leave Androsynth alone.
+		You Leave.
+	.aliens
 
-.
+	.
 
 node androsynth
 
-option +ORZ_SHIP !ANDROSYNTH_ALLIED
-(DEBUG: ADD AN ORZ SHIP ON YOUR FLEET)
-You now have an Orz ship on your fleet.
-.androsynth
+	option +ORZ_SHIP !ANDROSYNTH_ALLIED
+		(DEBUG: ADD AN ORZ SHIP ON YOUR FLEET)
+		You now have an Orz ship on your fleet.
+	.androsynth
 
-option =TRIED_FREEING_ORZ_ANDROS !WHY_ANDROS_TRAPPED !KILLED_ORZ_ANDROS
-Tell them about the Orz Androsynth.
-Explain you still can't save them.
-Androsynth want to know why.
-You have no idea.
-.androsynth
+	option =TRIED_FREEING_ORZ_ANDROS !WHY_ANDROS_TRAPPED !KILLED_ORZ_ANDROS
+		Tell them about the Orz Androsynth.
+		Explain you still can't save them.
+		Androsynth want to know why.
+		You have no idea.
+	.androsynth
 
-option =TRIED_FREEING_ORZ_ANDROS =WHY_ANDROS_TRAPPED =ANDROSYNTH_SHIP +KILL_ORZ_ANDROS !KILLED_ORZ_ANDROS
-You explain why the Orz are trapped.
-Tell them about the Orz Androsynth.
-Explain you still can't save them.
-You use the explanation given to you by the Taalo.
-They will ask you to visit again.  
-No Androsynth would want this. They ask you to kill the Orz Androsynth
-and put them out of their misery. 
-Take the Androsynth ship on your fleet to verify.
-.androsynth
+	option =TRIED_FREEING_ORZ_ANDROS =WHY_ANDROS_TRAPPED =ANDROSYNTH_SHIP +KILL_ORZ_ANDROS !KILLED_ORZ_ANDROS
+		You explain why the Orz are trapped.
+		Tell them about the Orz Androsynth.
+		Explain you still can't save them.
+		You use the explanation given to you by the Taalo.
+		They will ask you to visit again.  
+		No Androsynth would want this. They ask you to kill the Orz Androsynth
+		and put them out of their misery. 
+		Take the Androsynth ship on your fleet to verify.
+	.androsynth
 
-option !KILLED_ORZ_ANDROS =TRIED_FREEING_ORZ_ANDROS =WHY_ANDROS_TRAPPED !ANDROSYNTH_SHIP +KILL_ORZ_ANDROS 
-You explain why the Orz are trapped.
-Tell them about the Orz Androsynth.
-Explain you still can't save them.
-You use the explanation given to you by the Taalo.
-No Androsynth would want this. They ask you to kill the Orz Androsynth,
-and put them out of their misery. 
-They give you an Androsynth ship to verify.
-.androsynth
+	option !KILLED_ORZ_ANDROS =TRIED_FREEING_ORZ_ANDROS =WHY_ANDROS_TRAPPED !ANDROSYNTH_SHIP +KILL_ORZ_ANDROS 
+		You explain why the Orz are trapped.
+		Tell them about the Orz Androsynth.
+		Explain you still can't save them.
+		You use the explanation given to you by the Taalo.
+		No Androsynth would want this. They ask you to kill the Orz Androsynth,
+		and put them out of their misery. 
+		They give you an Androsynth ship to verify.
+	.androsynth
 
-option =KILLED_ORZ_ANDROS
-Tell Androsynth you killed the Orz Androsynth.
-They are sad. The job is finished.
-.androsynth
+	option =KILLED_ORZ_ANDROS
+		Tell Androsynth you killed the Orz Androsynth.
+		They are sad. The job is finished.
+	.androsynth
 
-option =CHMMR_ATTACK_ANDROS>0 +STOP_CHMMR_ANDRO_BATTLE -CHMMR_ATTACK_ANDROS
-Warn Androsynth about CHMMR attack.
-The Androsynth thank you.
-They move the Enclave to another area.
-.androsynth
+	option =CHMMR_ATTACK_ANDROS>0 +STOP_CHMMR_ANDRO_BATTLE -CHMMR_ATTACK_ANDROS
+		Warn Androsynth about CHMMR attack.
+		The Androsynth thank you.
+		They move the Enclave to another area.
+	.androsynth
 
-option !KILLED_ORZ_ANDROS !ANDROSYNTH_ALLIED =MET_ORZ_ANDROS TEMPORAL_WRAPPER<2
-Tell them about the OrzSpace Androsynth.
-They want to believe.
-But, they don't trust you.
-.androsynth
+	option !KILLED_ORZ_ANDROS !ANDROSYNTH_ALLIED =MET_ORZ_ANDROS TEMPORAL_WRAPPER<2
+		Tell them about the OrzSpace Androsynth.
+		They want to believe.
+		But, they don't trust you.
+	.androsynth
 
-option =ANDROSYNTH_ALLIED =MET_ORZ_ANDROS =TEMPORAL_WRAPPER<2 +TEMPORAL_WRAPPER=2
-Tell the Androsynth about the Orz Space Androsynth
-They are very curious about the Orz.
-They want to free them.
-They upgrade your Temporal Wrapper.
-.androsynth
+	option =ANDROSYNTH_ALLIED =MET_ORZ_ANDROS =TEMPORAL_WRAPPER<2 +TEMPORAL_WRAPPER=2
+		Tell the Androsynth about the Orz Space Androsynth
+		They are very curious about the Orz.
+		They want to free them.
+		They upgrade your Temporal Wrapper.
+	.androsynth
 
-option =ANDROSYNTH_ALLIED =ILWRATH_CLOAK  =ILWRATH_CLOAK<2 +ILWRATH_CLOAK=2
-Can you fix this Ilwrath Cloak?
-Sure. Anything for an Ally.
-It's fixed.
-.androsynth
+	option =ANDROSYNTH_ALLIED =ILWRATH_CLOAK  =ILWRATH_CLOAK<2 +ILWRATH_CLOAK=2
+		Can you fix this Ilwrath Cloak?
+		Sure. Anything for an Ally.
+		It's fixed.
+	.androsynth
 
-option !ANDROSYNTH_BATTLE
-Ask about Shofixti Patrols.
-The Androsynth were responsible for the disappearance of the second Shofixti patrol.
-They had to blast them out of the skies, otherwise they would've been exposed.
-Question: Why wouldn't the Captain just go home at this point?
-.androsynth
+	option !ANDROSYNTH_BATTLE
+		Ask about Shofixti Patrols.
+		The Androsynth were responsible for the disappearance of the second Shofixti patrol.
+		They had to blast them out of the skies, otherwise they would've been exposed.
+		Question: Why wouldn't the Captain just go home at this point?
+	.androsynth
 
-option =ANDROSYNTH_SHIP +ORZ_ESCAPE +ANDROSYNTH_ALLIED !ORZ_SHIP !ANDROSYNTH_BATTLE !ANDROSYNTH_ALLIED
-Ally with Androsynth
-You are now Allies with the Androsynth.
-They give you OrzSpace Escape Device,
-in hopes of freeing the OrzSpace Androsynth.
-.androsynth
+	option =ANDROSYNTH_SHIP +ORZ_ESCAPE +ANDROSYNTH_ALLIED !ORZ_SHIP !ANDROSYNTH_BATTLE !ANDROSYNTH_ALLIED
+		Ally with Androsynth
+		You are now Allies with the Androsynth.
+		They give you OrzSpace Escape Device,
+		in hopes of freeing the OrzSpace Androsynth.
+	.androsynth
 
-option =ANDROSYNTH_SHIP =ORZ_SHIP !ANDROSYNTH_BATTLE +ANDRO_CHALLENGE !ANDROSYNTH_ALLIED
-Ally with Androsynth
-No way!
-Not with an Orz ship in your fleet!
-They challenge you to battle.
-.androsynth
+	option =ANDROSYNTH_SHIP =ORZ_SHIP !ANDROSYNTH_BATTLE +ANDRO_CHALLENGE !ANDROSYNTH_ALLIED
+		Ally with Androsynth
+		No way!
+		Not with an Orz ship in your fleet!
+		They challenge you to battle.
+	.androsynth
 
-option =ORZ_SHIP -ORZ_SHIP
-Offer them your Orz Ship.
-You offer to let them blow up the Orz ship
-on your fleet.
-Is this a melee game where you lose on purpose?
-Can we do this?
-.androsynth
+	option =ORZ_SHIP -ORZ_SHIP
+		Offer them your Orz Ship.
+		You offer to let them blow up the Orz ship
+		on your fleet.
+		Is this a melee game where you lose on purpose?
+		Can we do this?
+	.androsynth
 
-option =ANDROSYNTH_BATTLE
-Agree to battle the androsynth.
-You battle!
-You win.
-.aliens
+	option =ANDROSYNTH_BATTLE
+		Agree to battle the androsynth.
+		You battle!
+		You win.
+	.aliens
 
-option =ORZ_SHIP !ANDROSYNTH_SHIP =ANDRO_CHALLENGE
-Attempt to ally with the Androsynth.
-No. You have an Orz ship on your fleet!
-They challenge you again to a battle
-.androsynth
+	option =ORZ_SHIP !ANDROSYNTH_SHIP =ANDRO_CHALLENGE
+		Attempt to ally with the Androsynth.
+		No. You have an Orz ship on your fleet!
+		They challenge you again to a battle
+	.androsynth
 
-option !ANDROSYNTH_SHIP
-Attempt to Ally with Androsynth.
-No. They don't trust humans.
-You haven't earned their trust yet.
-.androsynth
+	option !ANDROSYNTH_SHIP
+		Attempt to Ally with Androsynth.
+		No. They don't trust humans.
+		You haven't earned their trust yet.
+	.androsynth
 
-option =ANDROSYNTH_BATTLE
-Attempt to Leave.
-No. You started a war with them. 
-They battle you.
-You win again.
-.aliens
+	option =ANDROSYNTH_BATTLE
+		Attempt to Leave.
+		No. You started a war with them. 
+		They battle you.
+		You win again.
+	.aliens
 
-option !ANDROSYNTH_BATTLE
-Leave.
-Choose place to visit
-.aliens
+	option !ANDROSYNTH_BATTLE
+		Leave.
+		Choose place to visit
+	.aliens
 .
 
 node arilou
 
-option !TEMPORAL_WRAPPER +TEMPORAL_WRAPPER
-Talk to the Arilou
-They want to protect you from the Orz.
-So they give you a temporal wrapper to
-travel into Orz space.
-How does this make sense?
-.arilou
+	option !TEMPORAL_WRAPPER +TEMPORAL_WRAPPER
+		Talk to the Arilou
+		They want to protect you from the Orz.
+		So they give you a temporal wrapper to
+		travel into Orz space.
+		How does this make sense?
+	.arilou
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
+
 
 node chmmr
 
-option =CHMMR_BREAKDOWN>0 +CHMMR_BREAKDOWN=0 
-DEBUG (Set CHMMR_BREAKDOWN to 0)
-Number of Days until CHMMR breakdown is set to 0.
-.chmmr
+	option =CHMMR_BREAKDOWN>0 +CHMMR_BREAKDOWN=0 
+		DEBUG (Set CHMMR_BREAKDOWN to 0)
+		Number of Days until CHMMR breakdown is set to 0.
+	.chmmr
 
-option =CHMMR_BREAKDOWN>0 =CHMMR_ATTACK_ANDROS>0 +CHMMR_ATTACK_ANDROS=0 +ANDROS_SLAVED =MET_ANDROSYNTH !STOP_CHMMR_ANDRO_BATTLE
-DEBUG (Set CHMMR_ATTACK_ANDROS to 0)
-Number of Days until CHMMR attack Androsynth is set to [CHMMR_ATTACK_ANDROS].
-The TrueSpace Androsynth have been wiped out by the CHMMR.
-.chmmr
+	option =CHMMR_BREAKDOWN>0 =CHMMR_ATTACK_ANDROS>0 +CHMMR_ATTACK_ANDROS=0 +ANDROS_SLAVED =MET_ANDROSYNTH !STOP_CHMMR_ANDRO_BATTLE
+		DEBUG (Set CHMMR_ATTACK_ANDROS to 0)
+		Number of Days until CHMMR attack Androsynth is set to [CHMMR_ATTACK_ANDROS].
+		The TrueSpace Androsynth have been wiped out by the CHMMR.
+	.chmmr
 
-option =CHMMR_BREAKDOWN=0 +FOUGHT_VUX !FOUGHT_VUX
-Encounter Vux starships
-WTF?
-Battle Ensues.
-You win.
-.chmmr
+	option =CHMMR_BREAKDOWN=0 +FOUGHT_VUX !FOUGHT_VUX
+		Encounter Vux starships
+		WTF?
+		Battle Ensues.
+		You win.
+	.chmmr
 
-option !SHIELD_BUSTER =CHMMR_BREAKDOWN<1 +SHIELD_BUSTER 
-Land on Planet
-landed on planet. Picked up Shield Buster.
-.chmmr
+	option !SHIELD_BUSTER =CHMMR_BREAKDOWN<1 +SHIELD_BUSTER 
+		Land on Planet
+		landed on planet. Picked up Shield Buster.
+	.chmmr
 
-option =PRECURSOR_SHIP =CHMMR_BREAKDOWN>0 
-The CHMMR look different. Talk to them.
-CHMMR accuse you of hording Precursor Technology.
-The Precursor ship is proof you're moving behind their backs.
-You explain you're not.
-They warn you they'll destroy you if you are.
-.chmmr
+	option =PRECURSOR_SHIP =CHMMR_BREAKDOWN>0 
+		The CHMMR look different. Talk to them.
+		CHMMR accuse you of hording Precursor Technology.
+		The Precursor ship is proof you're moving behind their backs.
+		You explain you're not.
+		They warn you they'll destroy you if you are.
+	.chmmr
 
-option =STOP_CHMMR_ANDRO_BATTLE -STOP_CHMMR_ANDRO_BATTLE -CHMMR_ATTACK_ANDROS
-The CHMMR want to talk to you about something.
-The CHMMR say the Androsynth have moved.
-They accuse you of warning them.
-(This should make the CHMMR hostile at this point, right?)
-.chmmr
+	option =STOP_CHMMR_ANDRO_BATTLE -STOP_CHMMR_ANDRO_BATTLE -CHMMR_ATTACK_ANDROS
+		The CHMMR want to talk to you about something.
+		The CHMMR say the Androsynth have moved.
+		They accuse you of warning them.
+		(This should make the CHMMR hostile at this point, right?)
+	.chmmr
 
-option !ANDROSYNTH_ALLIED !ANDROSYNTH_SHIP !ANDROS_SLAVED =CHMMR_BREAKDOWN>0 =MET_ANDROSYNTH +CHMMR_ATTACK_ANDROS=30 !STOP_CHMMR_ANDRO_BATTLE
-Tell CHMMR about the existence of the Androsynth 
-You tell them where the Androsynth are.
-They promise to deal with this. 
-In [CHMMR_ATTACK_ANDROS] days they'll attack and slave shield the Androsynth.
-.chmmr
+	option !ANDROSYNTH_ALLIED !ANDROSYNTH_SHIP !ANDROS_SLAVED =CHMMR_BREAKDOWN>0 =MET_ANDROSYNTH +CHMMR_ATTACK_ANDROS=30 !STOP_CHMMR_ANDRO_BATTLE
+		Tell CHMMR about the existence of the Androsynth 
+		You tell them where the Androsynth are.
+		They promise to deal with this. 
+		In [CHMMR_ATTACK_ANDROS] days they'll attack and slave shield the Androsynth.
+	.chmmr
 
-option =YEHAT_CHMMR =CHMMR_BREAKDOWN>0
-You tell the CHMMR the Yehat are worried about them.
-CHMMR will deal with the Yehat.
-(Should something happen here. Sounds like something should happen)
-.chmmr
+	option =YEHAT_CHMMR =CHMMR_BREAKDOWN>0
+		You tell the CHMMR the Yehat are worried about them.
+		CHMMR will deal with the Yehat.
+		(Should something happen here. Sounds like something should happen)
+	.chmmr
 
-option !MET_ANDROSYNTH =ANDROSYNTH_SHIP 
-Talk to CHMMR
-CHMMR find an Androsynth on your fleet.
-Are you siding with the enemy?
-You assure them you are not.
-.chmmr
+	option !MET_ANDROSYNTH =ANDROSYNTH_SHIP 
+		Talk to CHMMR
+		CHMMR find an Androsynth on your fleet.
+		Are you siding with the enemy?
+		You assure them you are not.
+	.chmmr
 
-option !ANDROSYNTH_ALLIED =ANDROSYNTH_SHIP !ANDROS_SLAVED =CHMMR_BREAKDOWN>0 +CHMMR_ATTACK_ANDROS=30 =MET_ANDROSYNTH
-Talk to the CHMMR about the Androsynth
-The CHMMR accuse you of secretely being allies with
-the Androsynth. They accuse you of being a trader.
-Having dealings with the enemy behind the CHMMR's back.
-They ramble to the point of not making sense.
-You tell them, you're not a traitor.
-They don't believe you.
-The CHMMR dispatch ships to destroy the Androsynth.
-[CHMMR_ATTACK_ANDROS] Days until the CHMMR attack the Androsynth Enclave.
-.chmmr
+	option !ANDROSYNTH_ALLIED =ANDROSYNTH_SHIP !ANDROS_SLAVED =CHMMR_BREAKDOWN>0 +CHMMR_ATTACK_ANDROS=30 =MET_ANDROSYNTH
+		Talk to the CHMMR about the Androsynth
+		The CHMMR accuse you of secretely being allies with
+		the Androsynth. They accuse you of being a trader.
+		Having dealings with the enemy behind the CHMMR's back.
+		They ramble to the point of not making sense.
+		You tell them, you're not a traitor.
+		They don't believe you.
+		The CHMMR dispatch ships to destroy the Androsynth.
+		[CHMMR_ATTACK_ANDROS] Days until the CHMMR attack the Androsynth Enclave.
+	.chmmr
 
-option =CHMMR_BREAKDOWN>0 =MET_ANDROSYNTH =ANDROSYNTH_ALLIED
-Talk to the CHMMR about the Androsynth
-You are allies with the Androsynth?
-They are the enemy!
-Do we ever have the CHMMR go hostile?
-This would be a great time.
-.chmmr
+	option =CHMMR_BREAKDOWN>0 =MET_ANDROSYNTH =ANDROSYNTH_ALLIED
+		Talk to the CHMMR about the Androsynth
+		You are allies with the Androsynth?
+		They are the enemy!
+		Do we ever have the CHMMR go hostile?
+		This would be a great time.
+	.chmmr
 
 
-option !PRECURSOR_SHIP =CHMMR_BREAKDOWN>0
-Talk to CHMMR
-CHMMR tell you to find Shofixti
-.chmmr
+	option !PRECURSOR_SHIP =CHMMR_BREAKDOWN>0
+		Talk to CHMMR
+		CHMMR tell you to find Shofixti
+	.chmmr
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
 
 node lurg
 
-option =CHMMR_BREAKDOWN>0
-Talk to Lurg about CHMMR.
-Lurg say: CHMMR are crazy. You're a fool to stick with them. Dooming yourself. blah.blah.
-.lurg
+	option =CHMMR_BREAKDOWN>0
+		Talk to Lurg about CHMMR.
+		Lurg say: CHMMR are crazy. You're a fool to stick with them. Dooming yourself. blah.blah.
+	.lurg
 
-option !MYCON_FREED !LURG_NEURALIZER
-Talk to Lurg about Mycon.
-They tell you they're broken. You can fix them.
-Go and find a Neuralizer artifact & give it to them.
-.lurg
+	option !MYCON_FREED !LURG_NEURALIZER
+		Talk to Lurg about Mycon.
+		They tell you they're broken. You can fix them.
+		Go and find a Neuralizer artifact & give it to them.
+	.lurg
 
-option =LURG_NEURALIZER +LURG_NEURALIZER=2
-Give the Lurg the Neuralizer
-Lurg fix Neuralizer
-.lurg
+	option =LURG_NEURALIZER +LURG_NEURALIZER=2
+		Give the Lurg the Neuralizer
+		Lurg fix Neuralizer
+	.lurg
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
 
 
 node earthstarbase
 
-option
-Ask about Alien History
-Alien History given
-.earthstarbase
+	option
+		Ask about Alien History
+		Alien History given
+	.earthstarbase
 
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
 
 node earthship
 
-option
-Ask for Fuel
-No Fuel given
-.earthship
+	option
+		Ask for Fuel
+		No Fuel given
+		.earthship
 
-option
-Ask for Nukes.
-HA! No nukes for you.
-.earthship
+	option
+		Ask for Nukes.
+		HA! No nukes for you.
+	.earthship
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
 
 node kohrah
-option
-Talk
-Fight is inevitable. Resistance is futile.
-.fight
+	option
+		Talk
+		Fight is inevitable. Resistance is futile.
+	.fight
 .
 
 node mycon
 
-option !MYCON_FREED =DAYS_TO_DEATH>0 +DAYS_TO_DEATH=0  
-DEBUG: (Let Mycon DIE. Set DAYS_TO_DEATH to 0)
-Mycon are now DEAD.
-.mycon
+	option !MYCON_FREED =DAYS_TO_DEATH>0 +DAYS_TO_DEATH=0  
+		DEBUG: (Let Mycon DIE. Set DAYS_TO_DEATH to 0)
+		Mycon are now DEAD.
+	.mycon
 
-option =DAYS_TO_DEATH<1 !MYCON_FREED
-Talk to Dead Mycon.
-No Response. (They're DEAD)
-.mycon
+	option =DAYS_TO_DEATH<1 !MYCON_FREED
+		Talk to Dead Mycon.
+		No Response. (They're DEAD)
+	.mycon
 
-option =MYCON_LOBOTOMIZED
-Talk to Lobotomized Mycon
-No response.
-.mycon
+	option =MYCON_LOBOTOMIZED
+		Talk to Lobotomized Mycon
+		No response.
+	.mycon
 
-option !MYCON_FREED =LURG_NEURALIZER>0 !MYCON_LOBOTOMIZED
-(Use Lurg Neuralizer)
-They are still under a slave shield. 
-Nothing happened.
-.mycon
+	option !MYCON_FREED =LURG_NEURALIZER>0 !MYCON_LOBOTOMIZED
+		(Use Lurg Neuralizer)
+		They are still under a slave shield. 
+		Nothing happened.
+	.mycon
 
 
-option !MYCON_LOBOTOMIZED =LURG_NEURALIZER=2 =MYCON_FREED !MYCON_WAR +MYCON_LOBOTOMIZED 
-(Use Lurg Neuralizer)
-They are lobotomized. All Mycon sentience is gone.
-.mycon
+	option !MYCON_LOBOTOMIZED =LURG_NEURALIZER=2 =MYCON_FREED !MYCON_WAR +MYCON_LOBOTOMIZED 
+		(Use Lurg Neuralizer)
+		They are lobotomized. All Mycon sentience is gone.
+	.mycon
 
-option !MYCON_FREED =DAYS_TO_DEATH>0
-Greet Mycon.
-Mycon beg for their freedom.
-.mycon
+	option !MYCON_FREED =DAYS_TO_DEATH>0
+		Greet Mycon.
+		Mycon beg for their freedom.
+	.mycon
 
-option !MYCON_FREED =SHIELD_BUSTER +MYCON_ATTACK_SYREEN=30 =DAYS_TO_DEATH>0 +MYCON_FREED
-Free Mycon using Shield Buster
-Mycon are FREE and happy
-[MYCON_ATTACK_SYREEN] Days until Mycon attack Syreen.
-.mycon
+	option !MYCON_FREED =SHIELD_BUSTER +MYCON_ATTACK_SYREEN=30 =DAYS_TO_DEATH>0 +MYCON_FREED
+		Free Mycon using Shield Buster
+		Mycon are FREE and happy
+		[MYCON_ATTACK_SYREEN] Days until Mycon attack Syreen.
+	.mycon
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
 
 node pkunkstarbase
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
+
 
 node ffhomeworld
-option
-Leave.
-Choose place to visit
-.aliens
+	option +TIME_TO_FF_REBELLION=0
+		(DEBUG: Start Foon-Foon Rebellion)
+		Foon-Foon Rebellion started.
+		.ffhomeworld
+		
+	option
+		Leave.
+		Choose place to visit
+		.aliens
 .
+
 
 node ffship
+	option
+		Talk to foon-foon ship
+		They talk to you, get interrupted by intercomm to shut up.
+		Transmission ends.
+	.aliens
 
-option
-Talk to foon-foon ship
-They talk to you, get interrupted by intercomm to shut up.
-Transmission ends.
-.aliens
-
-option
-Leave
-Choose place to visit
-.aliens
+	option
+		Leave
+		Choose place to visit
+	.aliens
 .
 
+
 node baulhomeworld
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
 
 node baulship
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 
 .
 
+
 node pkunk
+	option 
+		Talk
+		She blabs. Nothing else.
+	.pkunk
 
-option 
-Talk
-She blabs. Nothing else.
-.pkunk
-
-option
-Leave.
-Choose place to visit
-.aliens
-
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 .
 
 node yehat
 
-option +YEHAT_CHMMR
-Ask about CHMMR.
-They Let you know, there's something odd with the CHMMR.
-.yehat
+	option +YEHAT_CHMMR
+		Ask about CHMMR.
+		They Let you know, there's something odd with the CHMMR.
+	.yehat
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 
 .
 
 node syreenhomeworld
 
-option !MYCON_DEAD =MYCON_WAR +MYCON_WAR=100 +MYCON_DEAD 
-(DEBUG: Set MYCON_WAR to 100)
-Mycon lose War.
-Thousands of Syreen Die.
-Mycon Die.
-Captain's Reputation goes down.
-.syreenhomeworld
+	option !MYCON_DEAD =MYCON_WAR +MYCON_WAR=100 +MYCON_DEAD 
+		(DEBUG: Set MYCON_WAR to 100)
+		Mycon lose War.
+		Thousands of Syreen Die.
+		Mycon Die.
+		Captain's Reputation goes down.
+	.syreenhomeworld
 
-option !SYREEN_SHIP +SYREEN_SHIP 
-Ask help with Shofixti
-Ship given.
-.syreenhomeworld
+	option !SYREEN_SHIP +SYREEN_SHIP 
+		Ask help with Shofixti
+		Ship given.
+	.syreenhomeworld
 
-option !MYCON_WAR =MYCON_FREED =MYCON_ATTACK_SYREEN>1 +MYCON_WAR=1 !MYCON_LOBOTOMIZED
-Warn Syreen of impending Mycon Attack
-Syreen have been warned. Syreen/Mycon War starts.
-MYCON_WAR war counter starts.
-.syreenhomeworld
+	option !MYCON_WAR =MYCON_FREED =MYCON_ATTACK_SYREEN>1 +MYCON_WAR=1 !MYCON_LOBOTOMIZED
+		Warn Syreen of impending Mycon Attack
+		Syreen have been warned. Syreen/Mycon War starts.
+		MYCON_WAR war counter starts.
+	.syreenhomeworld
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
+.
 
 node syreenship
 
-option
-Greet Syreen
-Syreen Flirts.
-.syreenship
+	option
+		Greet Syreen
+		Syreen Flirts.
+	.syreenship
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 
 .
 
 node syreenstarbase
 
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 
 .
 
 node orzship
-
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 
 .
 
 
 node orzhomeworld
-
-option
-Leave.
-Choose place to visit
-.aliens
+	option =MET_TAALO
+		Ask why the Orz are chasing the Taalo.
+		Because it is too *funny*. It makes us *laugh*.
+		They get so *frumple*. We only joke!
+	.orzhomeworld
+	
+	option =MET_ANDROSYNTH >orz_annoyed
+		Ask about Androsynth.
+		They get annoyed. Don't ask them again.
+	.orzhomeworld
+	
+	option =orz_annoyed >orz_mad
+		Tell them about the Arilou, & Androsynth.
+		You say the Arilou have said this, and
+		the Androsynth have said that.
+		Orz say they lie.
+		The Orz warn you to never ask about the 
+		Androsynth again.
+	.orzhomeworld
+	
+	option =orz_mad +ORZ_HOSTILE
+		Ask one more time. What could be the harm?
+		Orz attack you. *frumple*
+		Orz are no longer part of the NAFS.
+	.orzhomeworld
+	
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 
 .
 
 node orz_andros
+	option !KILLED_ORZ_ANDROS =KILL_ORZ_ANDROS +KILLED_ORZ_ANDROS 
+		Destroy the Orz Andros
+		You kill the OrzSpace Andros.
+	.orz_andros
 
-option !KILLED_ORZ_ANDROS =KILL_ORZ_ANDROS +KILLED_ORZ_ANDROS 
-Destroy the Orz Andros
-You kill the OrzSpace Andros.
-.orz_andros
+	option !KILLED_ORZ_ANDROS =TEMPORAL_WRAPPER=2 +TRIED_FREEING_ORZ_ANDROS 
+		Rescue the OrzSpace Androsynth using Temporal Wrapper.
+		Sorry. You can't. 
+	.orz_andros
 
-option !KILLED_ORZ_ANDROS =TEMPORAL_WRAPPER=2 +TRIED_FREEING_ORZ_ANDROS 
-Rescue the OrzSpace Androsynth using Temporal Wrapper.
-Sorry. You can't. 
-.orz_andros
+	option !KILLED_ORZ_ANDROS
+		talk
+		Reply!
+		They are not much help.
+	.orz_andros
 
-option !KILLED_ORZ_ANDROS
-talk
-Reply!
-They are not much help.
-.orz_andros
-
-option
-Leave.
-Choose place to visit
-.orzspace
+	option
+		Leave.
+		Choose place to visit
+	.orzspace
 .
 
 node orzspace
 
-option +MET_ORZ_ANDROS
-OrzSpace AndroSynth
-You meet the Androsynth in OrzSpace.
-They look different.
-.orz_andros
+	option +MET_ORZ_ANDROS
+		OrzSpace AndroSynth
+		You meet the Androsynth in OrzSpace.
+		They look different.
+	.orz_andros
 
-option
-Taalo homeworld
-We welcome you precious one! 
-.taalo
+	option +MET_TAALO
+		Taalo homeworld
+		We welcome you precious one! 
+	.taalo
 
-option
-Melnorme Homeworld
-.melnorme
+	option +FOUND_MEL_HOME
+		Melnorme Homeworld
+	.melnorme
 
-option
-Taalo "Ghosts" (in OrzSpace)
-They touch you.
-Boom. Dead. Ending Cutscene.
-.done
+	option
+		Taalo "Ghosts" (in OrzSpace)
+		They touch you.
+		Boom. Dead. Ending Cutscene.
+	.done
 
-option
-Androsynth "Ghosts" (in OrzSpace)
-They touch you.
-Boom. Dead. Ending Cutscene.
-.done
+	option
+		Androsynth "Ghosts" (in OrzSpace)
+		They touch you.
+		Boom. Dead. Ending Cutscene.
+	.done
 
-option 
-Leave Orzspace
-Using the OrzSpace Escape Device,
-You emerge into realspace.
-.explore
+	option 
+		Leave Orzspace
+		Using the OrzSpace Escape Device,
+		You emerge into realspace.
+	.explore
 .
 
 node melnorme_home
 
-option 
-Talk to Melnorme
-Clever Captain.
-.melnorme_home
+	option 
+		Talk to Melnorme
+		Clever Captain.
+	.melnorme_home
 
-option
-Trade
-What would you like?
-.melnorme
+	option
+		Trade
+		What would you like?
+	.melnorme
 
-option
-Leave
-Goodbye Captain.
-.orzspace
+	option
+		Leave
+		Goodbye Captain.
+	.orzspace
 .
 
 node taalo
 
-option =TRIED_FREEING_ORZ_ANDROS  +WHY_ANDROS_TRAPPED
-Ask why you can't save the Androsynth.
-Taalo explain that they're part of the Orz now.
-.taalo
+	option =TRIED_FREEING_ORZ_ANDROS  +WHY_ANDROS_TRAPPED
+		Ask why you can't save the Androsynth.
+		Taalo explain that they're part of the Orz now.
+	.taalo
 
-option !TRIED_FREEING_ORZ_ANDROS  
-Ask about Androsynth.
-Taalo give you clues how to free them from their limbo.
-.taalo
+	option !TRIED_FREEING_ORZ_ANDROS  
+		Ask about Androsynth.
+		Taalo give you clues how to free them from their limbo.
+	.taalo
 
-option 
-Ask about anything unusual.
-There was is a mysterious planet fairly close to a Black hole 
-Some sort of pointer to Omicron Hygea.
-.taalo
+	option
+		Ask about the Orz.
+		Taalo explain the Orz chase them around Orzspace.
+	.taalo
 
-option !CHMMR_SILICON_FIX +CHMMR_SILICON_FIX
-Get CHMMR fix from Taalo.
-Tell about the CHMMR problem.
-They can't help with the mechanical problems.
-Taalo know about Silicon.
-You get the CHMMR Silicon fix from the Taalo.
-.taalo
+	option 
+		Ask about anything unusual.
+		There was is a mysterious planet fairly close to a Black hole 
+		Some sort of pointer to Omicron Hygea.
+	.taalo
 
-option
-Leave
-You leave. Now back in Orzspace. 
-Do we need the Orz Escape Device? here?
-.orzspace
+	option !CHMMR_SILICON_FIX +CHMMR_SILICON_FIX
+		Get CHMMR fix from Taalo.
+		Tell about the CHMMR problem.
+		They can't help with the mechanical problems.
+		Taalo know about Silicon.
+		You get the CHMMR Silicon fix from the Taalo.
+	.taalo
+
+	option
+		Leave
+		You leave. Now back in Orzspace. 
+		Do we need the Orz Escape Device? here?
+	.orzspace
 .
 
 node melnorme
+	option =ILWRATH_CLOAK  =ILWRATH_CLOAK<2 +ILWRATH_CLOAK=2
+		Can you fix this Ilwrath Cloak?
+		Sure. 
+		They charge you XXX credits.
+		It's fixed.
+	.melnorme
 
-option =ILWRATH_CLOAK  =ILWRATH_CLOAK<2 +ILWRATH_CLOAK=2
-Can you fix this Ilwrath Cloak?
-Sure. 
-They charge you XXX credits.
-It's fixed.
-.melnorme
+	option
+		Buy Tech
+		Here's what we've got:
+	.buy_melnorme_tech
 
-option
-Buy Tech
-Here's what we've got:
-.buy_melnorme_tech
+	option
+		Buy information.
+		Here's some info:
+	.buy_melnorme_info
 
-option
-Buy information.
-Here's some info:
-.buy_melnorme_info
-
-option
-Leave.
-Choose place to visit
-.aliens
+	option
+		Leave.
+		Choose place to visit
+	.aliens
 
 .
 
 node buy_melnorme_info
+	option >fazinfo 
+		Buy info
+		Info given about the Faz
+	.buy_melnorme_info
 
-option >fazinfo
-Buy info
-Info given about the Faz
-.buy_melnorme_info
+	option
+		Buy More info
+		The Androsynth exist. There's a Patrol near some star system.
+		Be careful. Androsynth don't trust humans.
+	.buy_melnorme_info
 
-option
-Buy More info
-The Androsynth exist. There's a Patrol near some star system.
-Be careful. Androsynth don't trust humans.
-.buy_melnorme_info
-
-option
-Enough info.
-What else do you want?
-.melnorme
+	option
+		Enough info.
+		What else do you want?
+	.melnorme
 
 .
 
 node buy_melnorme_tech
 
-option =FOUND_MELNORME_WORLD
-Buy Trader Vessel.
-Trader Vessel Purchased.
-.
+	option =FOUND_MELNORME_WORLD
+		Buy Trader Vessel.
+		Trader Vessel Purchased.
+	.
 
-option !PRECURSOR_SHIP
-Buy Ship upgrades.
-You can't upgrade the Explorer
-.buy_melnorme_tech
+	option !PRECURSOR_SHIP
+		Buy Ship upgrades.
+		You can't upgrade the Explorer
+	.buy_melnorme_tech
 
-option =PRECURSOR_SHIP=1 +UPGRADED_RANGE
-Upgraded Ship's Fire range
-Increased Fire Range Technology upgrade purchased.
-.buy_melnorme_tech
+	option =PRECURSOR_SHIP=1 +UPGRADED_RANGE
+		Upgraded Ship's Fire range
+		Increased Fire Range Technology upgrade purchased.
+	.buy_melnorme_tech
 
-option
-Done Buying
-OK
-.melnorme
+	option
+		Done Buying
+		OK
+	.melnorme
 
 .
 
 node vux
+	option !SHIELD_PHASER +SHIELD_PHASER =FOUGHT_VUX=1
+		Threaten to blow up Dax if they don't reveal how they got through the shield.
+		It weakens a slave shield, creates a temporary hole to let a single ship escape.
+		Dax reveals that they stole a shield phaser from the Androsynth.
+		It was broken though.
+		It took them years to reverse engineer the technology.
+	.vux
 
-option !SHIELD_PHASER +SHIELD_PHASER =FOUGHT_VUX=1
-Threaten to blow up Dax if they don't reveal how they got through the shield.
-It weakens a slave shield, creates a temporary hole to let a single ship escape.
-Dax reveals that they stole a shield phaser from the Androsynth.
-It was broken though.
-It took them years to reverse engineer the technology.
-.vux
+	option 
+		Talk to Vux named Dax.
+		He doesn't like you.
+	.vux
 
-option 
-Talk to Vux named Dax.
-He doesn't like you.
-.vux
-
-option
-Leave Vux Starbase
-Dax is glad you're leaving.
-.aliens
+	option
+		Leave Vux Starbase
+		Dax is glad you're leaving.
+	.aliens
 
 .
 
 node explore
 
-option 
-Visit Androsynth homeworld
-Find Burning Remains
-.explore
+	option 
+	Visit Androsynth homeworld
+	Find Burning Remains
+	.explore
 
-option
-Visit Beta Naos
-Lurg Confrontation
-.act1
+	option
+	Visit Beta Naos
+	Lurg Confrontation
+	.act1
 
-option +LURG_NEURALIZER !LURG_NEURALIZER
-Explore neuralizer planet.
-Explored planet. Found Neuralizer artifact.
-Picked up (non working) Neuralizer
-.explore
+	option +LURG_NEURALIZER !LURG_NEURALIZER
+	Explore neuralizer planet.
+	Explored planet. Found Neuralizer artifact.
+	Picked up (non working) Neuralizer
+	.explore
 
-option +ILWRATH_CLOAK
-Visit Ilwrath Homeworld
-Landed on Planet.
-Picked up a broken Ilwrath Cloaking Device. 
-.explore
+	option +ILWRATH_CLOAK
+	Visit Ilwrath Homeworld
+	Landed on Planet.
+	Picked up a broken Ilwrath Cloaking Device. 
+	.explore
 
-option !TEMPORAL_WRAPPER
-Go into Orzspace
-Boom. Dead. (You need a temporal Wrapper)
-.done
+	option !TEMPORAL_WRAPPER
+	Go into Orzspace
+	Boom. Dead. (You need a temporal Wrapper)
+	.done
 
-option =TEMPORAL_WRAPPER>0
-Go into Orzspace
-You are now in Orzspace.
-.orzspace
+	option =TEMPORAL_WRAPPER>0
+	Go into Orzspace
+	You are now in Orzspace.
+	.orzspace
 
 
-option
-Stop Exploring.
-Choose place to visit
-.aliens
+	option
+	Stop Exploring.
+	Choose place to visit
+	.aliens
 
 .
 
@@ -1040,4 +1085,12 @@ Saved by the Foon-Foon.
 New Precursor Ship given
 .aliens
 
+.
+
+text type_of_ship <%<50
+This is the general's ship
+.
+
+text type_of_ship -%
+This Baul is from the Premiere's faction
 .
