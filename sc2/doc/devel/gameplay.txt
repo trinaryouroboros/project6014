@@ -54,6 +54,8 @@
 // MYCON_WAR: length of the Mycon War battle.
 // SYREEN_HOSTILE: You REALLY pissed the Syreen off. (Like, Freeing the Mycon without warning the Syreen.)
 // FREED_MYCON : You freed the Mycon
+// HAS_MYCON: Player has Mycon
+
 
 //		--Baul/Foon-Foon Sub-Plot
 // BAUL_DEAD: Baul are dead...or effectively useless.
@@ -88,9 +90,10 @@
 // ALLIED_FAZ: Allied with the Faz.
 // CAP_REPUTATION: Captain's reputation with the NAFS (needed? consequences?)
 //
-//		--CHMMR Sub-Plot--
+//		--CHMMR/Mrrnmhrm/Vux Sub-Plot--
 // CHMMR_BREAKDOWN: Days until CHMMR Breakdown
 // YEHAT_CHMMR: Yehat warn Captain about the CHMMR being a little unstable lately.
+// 
 //
 // 		-- Taalo Sub-Plot --
 // MET_TAALO: You've met the taalo.
@@ -102,7 +105,10 @@
 // FOUGHT_VUX: You beat Vux at Procyon
 //
 // 		-- Shofixti/Xen-Weyi Sub-Plot --
-//
+//	SHOFIXTI_ALLIED: Are you friends/Allies with the Shofixti?
+//	SHO_NEED_WATER: Shofixti need water.
+//  SHO_NEED_HEAT: Shofixti Need some of the water to turn into steam & form an atmoshphere.
+//	SHO_NEED_WEED: Shofixti need some fast growing plants.
 //	
 // 		-- Androsynth/Orz Sub-Plot --
 // ANDROSYNTH_SHIP: You Rescued the Androsynth
@@ -119,26 +125,52 @@
 // KILL_ORZ_ANDROS: Assigned mission to kill OrzSpace Androsynth 
 // KILLED_ORZ_ANDROS: OrzSpace Androsynth are dead.
 // ORZ_HOSTILE: Orz are not your friend anymmore.
+// ARILOU_GUARD: Arilou Guarding the Space Portal.
+// ARILOU_ALLIED: Are you still Allied with the Arilou?
 
+//		-- Spathi --
+//	SPATHI_FREED: You busted the Spathi out of their shield.
+//
+//		-- Mrrnmhrm --
+//	MET_ARK: Whether or not you encountered the Mrrnmhrm Ark.
+//  REVIVED_MRRNMHRM: Did you Fix the Ark and turn on the Mrrnmhrm?
+//  ARK_POWER: Power Unit for the Ark.
+//
+//		-- Slylandro --
+//	MET_SLYLANDRO: You met the Slylandro
+//	SLYLANDRO_HELP: Slylandro Ask for Help
+//	SLYLANDRO_SHIELD: Device to let landers survive the upper atmoshphere of 
+//  WARN_HUMANS: Warn Humans of the Slylandro
+//	WARN_YEHAT: Warn Yehat of the Slylandro
+//	WARN_CHMMR: Warn CHMMR of the Slylandro
+//	SLYLANDRO_SHIP: You have a Slylandro Masquerador
+//  SLAVE_SLYLANDRO: The CHMMR are going to Slave Shield the Slylandro
+//  MET_NEWGASBAGS: Encounter new gas aliens.
+//  GASBAGS_MET: Slylandro and new gas aliens have met.
+//  TOLD_ABOUT_GASBAGS: You've told the Slylandro about the NewGasbags.
 //===========================================
 // Start with the Aliens to visit
-
 
 // Start up INIT.
 //init +DAYS_TO_DEATH=365
 
-greeting +DAYS_TO_DEATH=365 +CHMMR_BREAKDOWN=100
+greeting +DAYS_TO_DEATH=365 +CHMMR_BREAKDOWN=365 +ARILOU_GUARD +ARILOU_ALLIED +SHOFIXTI_ALLIED +SHO_NEED_WATER +SHO_NEED_HEAT +SHO_NEED_HEAT
 	choose the race to visit
 .aliens
 
 
 node aliens
 
-	option 
+	option !ANDROSYNTH_ALLIED !MET_ANDROSYNTH !ANDROS_SLAVED
 		Androsynth Ship
 		The Androsynth must stop at nothing to protect their
 		Enclave. A battle ensues! (Is this right?)
 	.fight
+
+	option !ANDROS_SLAVED =MET_ANDROSYNTH
+		Androsynth Ship	
+		Homo-Sapien. Deal with the Enclave. We're busy.
+	.aliens
 
 	option !ANDROSYNTH_ALLIED !ANDROS_SLAVED +MET_ANDROSYNTH
 		Androsynth Enclave
@@ -175,10 +207,18 @@ node aliens
 		You encounter a non-hostile Androsynth ship
 	.loneandrosynth
 
-	option
+	option =ARILOU_ALLIED
 		Arilou
 		You travel into Quasi-Space to meet the arilou
+		They Welcome you.
 	.arilou
+
+	option !ARILOU_ALLIED
+		Arilou
+		You travel into Quasi-Space to meet the arilou
+		You blew up their ship.
+		They shun you. SHUN.
+	.aliens
 
 	option 
 		Baul Homeworld
@@ -222,7 +262,7 @@ node aliens
 	.lurg
 
 	option 
-		Visit Melnorme
+		Melnorme Ship
 	.melnorme
 
 	option
@@ -240,8 +280,37 @@ node aliens
 	.orzhomeworld
 
 	option
-		Visit Pkunk Queen/Yehat Homeworld
+		Pkunk Queen/Yehat Homeworld
 	.pkunk
+
+	option
+		Shofixti Ship
+	.shofixti
+
+	option
+		Shofixti Homeworld (Hiraku)
+	.shofixtihome
+
+	option
+		Slylandro Ship
+	.slylandro
+
+	option !SPATHI_FREED
+		Spathi Homeworld
+		The Spathi are beneath a Slave shield.
+	.spathi
+
+	option =SPATHI_FREED
+		The Spathi Homeworld
+		The Spathi greet you hunam.
+		The one who gave them terrible, terrible freedom.
+	.spathihomeworld
+
+	option
+		Spathi Starbase
+		The lights are black.
+		You can barely make out an alien.
+	.spathistarbase
 
 	option 
 		Syreen Homeworld
@@ -434,6 +503,31 @@ node arilou
 	.aliens
 .
 
+node arilouguard
+	
+	option =ARILOU_ALLIED
+		Talk him into letting you pass.
+		No. For your own safety,
+		You shall not pass.
+	.arilouguard
+	
+	option =ARILOU_ALLIED +TEMPORAL_WRAPPER -ARILOU_ALLIED 
+		Kill him.
+		Okay. You kill him.
+		You take his teleporter.
+		The Arilou aren't going to like this.
+	.arilouguard
+
+	option =TEMPORAL_WRAPPER !ARILOU_ALLIED
+		Go into Orzspace
+		You are now in Orzspace.
+	.orzspace
+
+	option
+		Leave.
+		Choose place to visit
+	.aliens
+.
 
 node chmmr
 
@@ -446,6 +540,24 @@ node chmmr
 		DEBUG (Set CHMMR_ATTACK_ANDROS to 0)
 		Number of Days until CHMMR attack Androsynth is set to [CHMMR_ATTACK_ANDROS].
 		The TrueSpace Androsynth have been wiped out by the CHMMR.
+	.chmmr
+
+	option =SLYLANDRO_HELP !WARN_CHMMR +WARN_CHMMR +SLAVE_SLYLANDRO
+		Warn CHMMR about Slylandro.
+		Ignorant Slylandro. We will not attack them.
+		For their safety, we will dispatch a group 
+		of CHMMR to slave shield their planet
+		until the Ur-Quan threat is gone,
+		to prevent their destruction. 
+	.chmmr
+
+	option =SLAVE_SLYLANDRO
+		You can't slave shield the Slylandro!
+		Yes we can.
+		It is for their own good.
+		They are too ignorant about the dangers of
+		space. Why are you angry? We're helping.
+		We hope to free them in the next 15 years.
 	.chmmr
 
 	option =CHMMR_BREAKDOWN=0 +FOUGHT_VUX !FOUGHT_VUX
@@ -554,11 +666,17 @@ node lurg
 
 node earthstarbase
 
+	option =SLYLANDRO_HELP !WARN_HUMANS +WARN_HUMANS
+		Warn about Slylandro.
+		Well, I'll be darn!
+		We thought an invasion was happening!
+		Okay. We'll double check next time.
+	.earthstarbase
+
 	option
 		Ask about Alien History
 		Alien History given
 	.earthstarbase
-
 
 	option
 		Leave.
@@ -568,10 +686,17 @@ node earthstarbase
 
 node earthship
 
+	option =SLYLANDRO_HELP !WARN_HUMANS
+		Warn about the Slylandro.
+		Hey. You should take this matter up with command
+		at Earth Starbase. We just following orders.
+		Shoot Kohr-Ah ships on sight.
+	.earthship
+
 	option
 		Ask for Fuel
 		No Fuel given
-		.earthship
+	.earthship
 
 	option
 		Ask for Nukes.
@@ -606,6 +731,12 @@ node mycon
 	option =MYCON_LOBOTOMIZED
 		Talk to Lobotomized Mycon
 		No response.
+	.mycon
+
+	option =MYCON_LOBOTOMIZED !HAS_MYCON +HAS_MYCON
+		Pick up Lobotomized Mycon.
+		You now have a Mycon on your ship.
+		You can use it as a weapon, or ...something else.
 	.mycon
 
 	option !MYCON_FREED =LURG_NEURALIZER>0 !MYCON_LOBOTOMIZED
@@ -701,12 +832,201 @@ node pkunk
 	.aliens
 .
 
+node shofixti
+	option =SHOFIXTI_ALLIED
+		Talk
+		They talk
+	.shofixti
+
+	option =SHOFIXTI_ALLIED -SHOFIXTI_ALLIED
+		Attack!
+		You Traitor!
+		KIAYEE!
+		Well you didn't die (or gameover) so,
+		You fought (& won) or fled. 
+	.shofixti
+
+	option !SHOFIXTI_ALLIED +SHOFIXTI_ALLIED
+		Apologize.
+		It was just a misunderstanding!
+		Oh. Okay.
+	.shofixti
+
+	option
+		Leave.
+		Choose place to visit
+	.aliens
+.
+
+node shofixtihome
+
+	option =HAS_MYCON -HAS_MYCON -SHO_NEED_WATER
+		Launch Mycon Deep Child at Planet.
+		You tell Hiraku about your plan.
+		She agrees to try your idea.
+		The planet is temporarily deserted.
+		You launch the Mycon Deep Child.
+		The Mycon punches through the crust,
+		releasing an ocean of water.
+	.shofixtihome
+
+	option
+		Talk
+		You talk with Hiraku
+	.shofixtihome
+
+	option  >whatdoyouneed
+		Ask about the planet.
+		She talks about the problems of the planet.
+		This place is not ideally suited for colonization.
+	.shofixtihome
+
+	option =whatdoyouneed =SHO_NEED_WATER
+		What do you need to colonize this planet?
+		They need water trapped underneath to grow plants.
+		The water needs to be super-heated to produce steam.
+		That should cool down to produce an atmosphere.
+		They don't have the equipment for this.
+	.shofixtihome
+
+	option !SHO_NEED_WATER =SHO_NEED_HEAT
+		What else do you need?
+		Water is taken care of, but it's freezing without an
+		atmosphere. We need something to heat some of the
+		water to steam. That will form some of the necessary
+		greenhouse gasses and create a viable atmosphere.
+	.shofixtihome
+
+	option !SHO_NEED_WATER !SHO_NEED_HEAT =SHO_NEED_WEED
+		We need some plants to grow quickly to produce Oxygen.
+	.shofixtihome
+
+
+	option
+		Leave.
+		Choose place to visit
+	.aliens
+.
+
 node yehat
+
+	option !WARN_YEHAT =SLYLANDRO_HELP +WARN_YEHAT
+		Warn Yehat about the Slylandro
+		Ack! Brrraak!
+		They're aff their heid! Daff Buggers!
+		Well, onest mistake Ah guess.
+		We're a Jock Tamson's bairns.
+		We'll keep ire heid and Nay one of us gone fire onem!
+	.yehat
 
 	option +YEHAT_CHMMR
 		Ask about CHMMR.
 		They Let you know, there's something odd with the CHMMR.
 	.yehat
+
+	option
+		Leave.
+		Ack! Lang may yer lum reek! Brack! 
+		Choose place to visit
+	.aliens
+
+.
+
+node slylandro
+
+	option =TOLD_ABOUT_GASBAGS +GASBAGS_MET
+		DEBUG (Slylandro travel and meet New Gas bags)
+		Slylandro and NewGasbags have now met.
+	.slylandro
+
+	option !MET_NEWGASBAGS
+		ATTACK! THEY'RE REALLY KOHR-AH!
+		No, they're Slylandro.
+		The Slylandro flee.
+	.aliens
+
+	option =SLYLANDRO_HELP !WARN_HUMANS !WARN_CHMMR !WARN_YEHAT +SLYLANDRO_SHIP
+		Who is attacking you?
+		Oh. Just Humans, Yehat, and the CHMMR.
+		Take one of our ships to prove to them we're friendly!
+	.slylandro
+
+	option =SLYLANDRO_HELP =WARN_HUMANS !WARN_CHMMR !WARN_YEHAT
+		Who is attacking you?
+		Oh. Just the Yehat, and the CHMMR.
+		The humans have stopped.
+	.slylandro
+
+	option =SLYLANDRO_HELP =WARN_HUMANS =WARN_CHMMR !WARN_YEHAT
+		Who is attacking you?
+		Oh. Just the Yehat now.
+		The humans & CHMMR have stopped.
+	.slylandro
+
+	option =SLYLANDRO_HELP !WARN_HUMANS =WARN_CHMMR =WARN_YEHAT
+		Who is attacking you?
+		Oh. Just the Humans now!
+		The CHMMR and Yehat have stopped.
+	.slylandro
+
+	option =SLYLANDRO_HELP !WARN_HUMANS =WARN_CHMMR =WARN_YEHAT
+		Who is attacking you?
+		Oh. Just the Humans now!
+		The CHMMR and Yehat have stopped.
+	.slylandro
+
+	option =SLYLANDRO_HELP =WARN_HUMANS !WARN_CHMMR =WARN_YEHAT
+		Who is attacking you?
+		Oh. Just the CHMMR now!
+		The Yehat and Humans have stopped!
+	.slylandro
+
+	option =SLYLANDRO_HELP !WARN_HUMANS =WARN_CHMMR !WARN_YEHAT
+		Who is attacking you?
+		Oh. Just the Yehat and Humans now!
+		The CHMMR have stopped!
+	.slylandro
+
+	option =SLYLANDRO_HELP !WARN_HUMANS !WARN_CHMMR =WARN_YEHAT
+		Who is attacking you??
+		The CHMMR and humans!
+		The Yehat have stopped.
+	.slylandro
+
+	option =SLAVE_SLYLANDRO +SLYLANDRO_SHIELD
+		Warn the CHMMR are going to slaveshield the Slylandro Homeworld.
+		This is terrible! We agree space is terribly dangerous.
+		Everything moves so fast here. It's hard to keep track.
+		We wanted to find another species like us. Take this lander
+		ship upgrade. Maybe you can help us find another alien like
+		us. Take this lander ship upgrade. It allows you to navigate
+		the surface of a gas giant.				
+	.slylandro
+
+	option =SLYLANDRO_HELP =WARN_HUMANS =WARN_CHMMR =WARN_YEHAT
+		We've told everybody to stop attacking you!
+		Thanks. Oh. Perhaps you'd be interested that there's
+		a large ship on the gas giant XXX. It's not working,
+		but maybe you can fix it.
+	.slylandro
+
+	option =MET_NEWGASBAGS +TOLD_ABOUT_GASBAGS
+		Tell Slylandro about new species discovered.
+		The Slylandro are excited! They set to travel to the gas giant.
+	.slylandro
+
+	option =GASBAGS_MET
+		How are things going between you and the new aliens?
+		Going great. It's going to a Drahn for them to evolve the skills
+		to communicate with us. Until then we're going to study them.
+		The slylandro continue to stay on the planet.
+	.slylandro
+
+	option +SLYLANDRO_HELP
+		Talk to Slylandro.
+		They say people keep killing them.
+		They ask for help.
+	.slylandro
 
 	option
 		Leave.
@@ -1036,16 +1356,26 @@ node explore
 	Picked up a broken Ilwrath Cloaking Device. 
 	.explore
 
-	option !TEMPORAL_WRAPPER
+	option !TEMPORAL_WRAPPER !ARILOU_GUARD
 	Go into Orzspace
 	Boom. Dead. (You need a temporal Wrapper)
 	.done
 
-	option =TEMPORAL_WRAPPER>0
+	option =ARILOU_GUARD
+		Go into Orzspace.
+		There's an Arilou Guard blocking your path.
+		He refuses to let you past.
+	.arilouguard
+
+	option !ARILOU_GUARD =TEMPORAL_WRAPPER>0 
 	Go into Orzspace
 	You are now in Orzspace.
 	.orzspace
 
+	option =SLYLANDRO_SHIELD +MET_NEWGASBAGS
+		Land on surface of unusual gas giant.
+		You encounter New aliens.
+	.explore
 
 	option
 	Stop Exploring.
@@ -1054,6 +1384,53 @@ node explore
 
 .
 
+node spathi
+	option =SPATHI_FREED
+		Talk to Spathi
+		What do you want?
+		Nothing. to do here.
+	.spathi
+
+	option =SHIELD_BUSTER !SPATHI_FREED +SPATHI_FREED
+		(Use Shield Buster)
+		You freed us! Horrible freedom!
+	.spathi
+
+	option !SHIELD_BUSTER
+		Give password.
+		Huffi-Muffi-Guffi? No. The password has changed.
+	.spathi
+
+	option
+		Leave.
+		Choose place to visit
+	.aliens
+
+.
+
+node spathistarbase
+	option
+		Hello? Anybody home?
+		No hunam. 
+		The spathi are hiding
+	.spathistarbase
+
+	option
+		TURN ON THE LIGHTS!!!
+		Uhhh.... No.
+	.spathistarbase
+
+	option !SHIELD_BUSTER
+		Give password.
+		Huffi-Muffi-Guffi? No. The password has changed.
+	.spathistarbase
+
+	option
+		Leave.
+		Choose place to visit
+	.aliens
+
+.
 
 node act1
 
