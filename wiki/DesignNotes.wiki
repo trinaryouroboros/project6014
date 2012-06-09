@@ -35,14 +35,15 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
       * Zoq-Fot-Pik -- Core member of NAFS, but are too busy rebuilding their homeworld and colonies after the Kohr-Ah devastation that they won�t be of any use. In fact they are off the starmap and will play no part in this mod. Their Stinger vessels will be available for construction though.
     * New races
       * [Androsynth]
+      * [Baul]
       * [Faz]
+      * [FoonFoon]
       * [FleeingRace]
       * [Lurg]
-      * [MasterRace]
       * [Mmrnmhrm]
       * [Exotics]
-      * [SlaveRace]
       * [Taalo]
+      * [XenWeyi]
   * Devices
     * [BlackOrb]
     * [MmrnmhrmFix]
