@@ -17,26 +17,16 @@
         * SC2 races
           * [Ariloulaleelay]
           * [Chmmr]
-          * Druuge
-          * Earthlings
-          * Ilwrath
+          * [Earthlings]
           * [KohrAh]
           * [Melnorme]
-          * Mycon
-          * Pkunk
           * [Orz]
           * [Shofixti]
           * [Slylandro]
           * [Spathi]
-          * Supox
           * [Syreen]
-          * Thraddash
-          * Umgah
-          * Utwig
-          * Ur-Quan
           * [VUX]
           * [Yehat]
-          * Zoq-Fot-Pik
         * New races
           * [Androsynth]
           * [Baul]
@@ -47,6 +37,7 @@
           * [Mmrnmhrm]
           * [Exotics]
           * [Taalo]
+        * OtherRaces
       * Devices
         * [BlackOrb]
         * [MmrnmhrmFix]
