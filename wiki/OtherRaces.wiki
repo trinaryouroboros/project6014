@@ -1,0 +1,23 @@
+#summary Short info on non-game races
+#labels Races
+
+= Other Races =
+
+These races won't be featured in the Project 6014 plot:
+
+  * Druuge
+  * Ilwrath - dead
+  * Mycon - slave-shielded
+  * Pkunk - merged into [Yehat]
+  * Supox
+  * Thraddash - dead
+  * Umgah
+  * Utwig
+  * Ur-Quan - have fled this region
+  * Zoq-Fot-Pik
+
+Conversation with other races may allude to them so they still need consistent backstories.  For example, the Umgah have provided ships to the [Slylandro].
+
+It's possible that some of the Allies' ships will be available at starbases.
+
+And all these ships will still be playable in Super Melee.
