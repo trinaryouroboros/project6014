@@ -1,5 +1,5 @@
-#labels Team
 #summary Audio Engineer Extraordinaire
+#labels Team
 
 = Introduction =
 
@@ -10,5 +10,12 @@ I am here for all your voice talent needs, and can also provide audio engineerin
 = Details =
 
 - Current content
+- Kohr-Ah-Rath Voice
+- Pkunk Voice
+- Yehat Voice
+- Orz Voice
+- Slylandro Voice
 - Lurg Voice/Music/Ditty
 - Chmmr Explorer Ditty
+- Foonfoon Ditty/Ship SFX
+- Baul Ditty/Ship SFX
