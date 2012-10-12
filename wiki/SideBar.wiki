@@ -63,15 +63,19 @@
       * [ShipCreation]
       * [AddingNewRaces]
       * [DialogLanguage]
+      * Tools
+        * [http://mooses.nl/uqm/wip/js-dialogue/# Online Dialog Tool]
     * Older material
       * [ChmmrExplorer]
       * [http://code.google.com/p/project6014/source/browse/trunk/sc2/doc/mod/melnorme.png Melnorme dialogue tree]
   * Administration
     * Project [Rules]
-    * [Contributing]
+    * Want to help? [HelpingOutIntroduction]
+    * SVN [Contributing]
     * [ReleaseProcess]
     * [PortingChanges]
     * [Statistics]
+    * [https://groups.google.com/forum/?fromgroups#!forum/project6014-dev Developer Forum]
     * Team
       * [TheMisterCat]
       * add others here!
