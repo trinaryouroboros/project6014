@@ -67,26 +67,28 @@ option
 option
   goodbye
   goodbye
-
-// you CAN but probably shouldn't have blank lines in the middle of your statements.
-// If I write a validation utility, that will definitely give a warning.
   .done
 </pre>
 
+You CAN but probably shouldn't have blank lines in the middle of your statements.
+If I write a validation utility, that will definitely give a warning.
+
 == Conditions and Consequences ==
 
-Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by a _key_. Each key has a _value_. The default value for all keys is 0, and corresponds to 'false'. Any other value is considered 'true'. Basic flags will be either 1 or 0, and specifying a number is not needed for these.
+Any of these items -- greeting, node, option, or text -- may have _conditions_ and _consequences_, which are listed on the same line, delimited by spaces. The conditions and consequences are indicated by single-character symbol followed by an expression. The simplest expressions are simply a single name - the key to an integer value. The default value for all keys is 0, and corresponds to 'false'. Any other value is considered 'true'. If a key will only have a value of 1 or 0 - 'true' or 'false' - we call it a flag. The language is heavily optimized for dealing with this simplest case.
 
-If all of an item's conditions (e.g. a text item, an option item) are met, it can be used. If an item is being sought _by name_ and does not meet the conditions, the search goes on for another item of the same name (this can happen with nodes and texts). If an option is given a name, only the first option that satisfies the conditions will be shown (useful for presenting variations on the same option - different responses to the same statement, say).
+If all of the conditions on an item are met, it can be used. If an item is actually used (if the search reaches it and its conditions are met - and, for options, the player also selects it), then the consequences are applied. (NOTE: We have not yet implemented consequences for entering a node, but can if desired)
 
-If an item is actually used (its conditions are met, and for options, the player also selects it), then the consequences are applied. (NOTE: We have not yet implemented consequences for entering a node, but can if desired)
-
-This example represents the basic conditions and consequences. These are 'flags', which can be 'set' (value = 1) or 'unset' (value = 0). There is no syntactic distinction between flags and other key-value pairs, but this keeps it easier to think about them.
+This example represents the basic conditions and consequences. These are flags which can be 'set' (value = 1) or 'unset' (value = 0). There is no syntactic distinction between flags and other key-value pairs, but this keeps it easier to think about them.
 
 <pre>
 option =requiredToBeTrue !requiredToBeFalse +setThis -unsetThis
 </pre>
 To be explicit, if the 'requiredToBeTrue' flag is unset (key has a value of 0), this option will not appear. If the 'requiredToBeFalse' is set (key has a nonzero value), this option will not appear. Otherwise, it will appear. If this option is chosen by the player, the flag 'setThis' is set (set to 1 if 0), and the flag 'unsetThis' is unset (set to 0).
+
+Some items have names. For instance, after alien dialog, there's a '.nodename' line that tells the game to look for a node named 'nodename'. If an item is being sought _by name_ and does not meet the conditions, the search goes on for another item of the same name. This happens with nodes and texts.
+
+The effect of giving an _option_ a name is a bit different - after an option with a given name has been accepted, any more options with the same name are automatically rejected. This is useful for presenting variations on the same option - different responses to the same player-character statement, say.
 
 Here is a longer example illustrating the use of named conditions.
 
@@ -95,19 +97,19 @@ node main
 option juggling =EXPERT_JUGGLER
 Can I show off my juggling talents?
 Certainly!
-.juggling
+.juggling // after this, go to node 'juggling'
 
 option juggling
 I don't know anything about juggling. Can you help me?
 Not really, sorry.
 .main
 </pre>
-The named option with no condition guarantees that it is complementary to the first. You will be able to say something about juggling. Also, again, it helps avoid errors - less typing out of explicit conditions, and a validator can check for option names that are used only once (you probably didn't mean to use only any option name only one time).
+
+The second option has no condition. This makes it complementary to the first - it will appear if and only if the first one does not. The player _will_ be able to say something about juggling, and only one thing. Arranging it this way helps avoid errors - less typing out of explicit conditions, and a validator can check for option names that are used only once. Speaking of which, there is no reason to use any option name only one time - if you would, just put it in a comment!
 
 Using a catch-all is important! If no greeting, node, or option can be found for which the conditions are met, so that literally nothing happens next, this is an _improper condition_. It will result in unprepared conversation termination and an error message.
  
-
-As shortcuts and again to minimize the opportunity for errors, there are three compound operations. Each pair of lines is equivalent:
+As shortcuts and to minimize the opportunity for errors, there are three compound operations. Each pair of lines is equivalent:
 
 <pre>
 option >foo // think 'arrow of time leads to this'. Only applies if not already true, then it becomes so.
@@ -117,7 +119,7 @@ option <foo // think 'eat this'. Only applies if already true, then it isn't any
 option =foo -foo
 </pre>
 
-This is commonly used to close off an option so you can't take it over and over again in the same conversation. To reuse a line from above (and get rid of the things that made it complex before):
+This is commonly used to close off an option so you can't take it over and over again in the same conversation. For example,
 
 <pre>
 option >ta_juggling // 'ta_' is an abbreviation I use for 'talked about'
@@ -126,8 +128,7 @@ Not really, sorry.
 .main
 </pre>
 
-
-The last symbol is the toggle, ~. It is just a consequence, not also a condition. If the consequence is fulfilled, it first checks the key. If the key evaluates as true, it unsets the key. If the key evaluates as false, it sets it. I wouldn't normally be so pedantic (yes, even I have limits), but this means that the toggle actually has a meaning for numeric flags.
+The last special symbol is the toggle, ~. It is just a consequence, not also a condition. If this consequence is applied, it first checks the key. If the key evaluates as true, it unsets the key. If the key evaluates as false, it sets it. For flags, this is what you expect from a toggle (if the keys are algebraic, it still has meaning).
 
 <pre>
 text ~Switch_on
@@ -138,12 +139,12 @@ Okay, I hit the switch. Now what?
 === keys ===
 
 The names of keys may contain the same characters as names of items - letters, numbers, underscores, parentheses (NOTE: and nearly anything else authors ask for, but DO ask).
-There are three kinds of key:
+There are three basic kinds of key, and one special one:
 
-  * All-lower-case flags will automatically be unset at the end of the conversation - they have 'temporary' scope.
-  * All-upper-case flags are global, shared by all dialogs and the game as a whole. (NOTE: For the time being, these will be cast to a BYTE, so don't try to go over 255 or less than 0)
-  * Mixed-case flags are preserved but namespaced to this dialog file so you don't collide with the flags other people are using for their races. (NOTE: the same restriction applies as for global flags)
-  * There is a flag named '%', which has special behavior. See below.
+  * All-lower-case keys will automatically be unset at the end of the conversation - they have 'temporary' scope.
+  * All-upper-case keys are global, shared by all dialogs and the game as a whole. (NOTE: For the time being, these will be cast to a BYTE, so don't try to go over 255 or less than 0)
+  * Mixed-case keys are preserved but namespaced to this dialog file so you don't collide with the flags other people are using for their races. (NOTE: these are also cast to BYTE)
+  * There is a key named '%', which has special behavior. See below.
 
 Examples:
 <pre>
@@ -155,7 +156,7 @@ Examples:
 // but other folks in other conversation documents won't
 // note the removal of the - sign, which would be seen as arithmetic.
 
-=SHIP_IS_MK_II // If the player upgraded, this will be set
+=SHIP_IS_MK_II // When the player got the MK 2 vessel, this was set
 </pre>
 
 === numeric flags and arithmetic ===
@@ -167,7 +168,7 @@ Keys do not need to have values of just 1 or 0. They can have integer values, to
 
 If arithmetic is being used as a *condition*, it evaluates the statement and sees whether it's 0 or not (0 is false). For example, the condition above will be met if the `BioData` numeric flag has been set to at least 100, so that the '>' operator returns '1' instead of '0'.
 
-Arithmetic can be used in *consequences* as well. If the consequence is a 'set' consequence (+ or > or sometimes ~) involving arithmetic, then the left hand side of the statement must be a key, followed directly by a comparator (= or > or <). The right hand side will be evaluated, and the value for the key on hand side will be set to the nearest consistent value. The simplest and most common case is '=', which simply sets it to the value of the other side.
+Arithmetic can be used in *consequences* as well. If the consequence is a 'set' consequence (+ or > or sometimes ~) involving arithmetic, then the left hand side of the statement must be a key, followed directly by a comparator (= or > or <). The right hand side will be evaluated, and the value for the key on the left hand side will be set to the nearest consistent value. The simplest and most common case is '=', which simply sets it to the value of the other side.
 
 If the 'unset' consequence (- or < or sometimes ~) is applied, then the left-hand side is simply set to 0 without evaluating the right hand side. If the '-' consequence is used, you may (and probably should) leave off the comparator and right hand side.
 
@@ -175,20 +176,22 @@ Some keys are manipulated by non-dialog elements of the game, and some of those 
 
 === Arithmetic ===
 
-Numbers need not be literal - you can evaluate keys and expressions
+Numbers need not be literal - you can evaluate expressions.
 
 The arithmetic operators available are, in order by increasing precedence:
   # =, <, > (check for this condition being satisfied, return 1 or 0 appropriately)
   # +, - 
   # /
   # `*`
-  # ^, √ (√ is always a binary operator. '2' is not assumed). These operators resolve RIGHT to LEFT
+  # ^, √ (√ is always a binary operator. '2' is not assumed). These two operators resolve RIGHT to LEFT
 
  {{{a*b/c*d}}} is just what it looks like - d is in the denominator, not the numerator, because `*` binds more tightly than /. This choice was made so the trimming-to-integer is minimally invasive - numbers are made as large as possible before they get divided. (NOTE: I am relying on the idea that numbers will be small compared to the maximum size of an int. Be warned that this could end up messy if this assumption is violated)
 
 The radical and exponent operators are arranged as you'd expect, looking at them - and they put the base on opposite sides. So,  {{{ a√b^c }}} is what we'd normally call {{{ b^[c/a] }}}, except that c/a would be trimmed to an integer if you did it that way. Note that doing things right-to-left helps here so the exponentiation acts before the radical, without having to use grouping.
 
-Speaking of which, use square brackets for grouping, like {{{ =2√[[MAP_X-500]^2+[MAP_Y-500]^2]<10 }}}. This condition is satisfied if you're within 10 units of the center of the map, not inclusive. (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' ). Parentheses are ignored so you can treat them as regular text without having to worry about it being script-language syntax.
+Speaking of which, use square brackets for grouping, like {{{ =2√[[MAP_X-500]^2+[MAP_Y-500]^2]<10 }}}. This condition is satisfied if you're within 10 units of the center of the map, not inclusive (if you want to make it inclusive, use '!' and '>' instead of '=' and '<' ).
+
+Parentheses are ignored so you can treat them as regular text without having to worry about it being script-language syntax.
 
 You may be tempted to put spaces in your expressions. Don't. It'll mess up the parser. Sorry.
 
@@ -211,11 +214,13 @@ text blah -% // this meets the implicit condition half the time
 buh
 .
 </pre>
-Note that instead of using the = condition, the < condition was used to require it... and then try to unset it, so the random number would be changed. Also note, the unconditional last option also rerolls the random number.
+Note that instead of using the = condition, the < condition was used to require it... and then try to unset it, so the random number would be changed. Also note, the unconditional (well, only implicitly conditional) last option also rerolls the random number.
 
 == Evaluations and Calling Text Items ==
 
 If you want to have the text be dynamic, use square brackets {{{ [foo] }}}.
+
+The following are attempted, in this order:
 
  # IF this substitution is in alien dialog text, substitute text items with the given name.
  # find any arithmetic operations, then evaluate numeric parameters on either side and performing the arithmetic.
