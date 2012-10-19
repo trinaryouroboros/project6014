@@ -159,7 +159,7 @@ Examples:
 =SHIP_IS_MK_II // When the player got the MK 2 vessel, this was set
 </pre>
 
-=== numeric flags and arithmetic ===
+=== Numbers ===
 
 Keys do not need to have values of just 1 or 0. They can have integer values, too. You can perform arithmetic on them and test the results. For instance,
 <pre>
@@ -178,7 +178,7 @@ Some keys are manipulated by non-dialog elements of the game, and some of those 
 
 Numbers need not be literal - you can evaluate expressions.
 
-The arithmetic operators available are, in order by increasing precedence:
+The available arithmetic operators are, in order by increasing precedence:
   # =, <, > (check for this condition being satisfied, return 1 or 0 appropriately)
   # +, - 
   # /
@@ -196,9 +196,9 @@ Parentheses are ignored so you can treat them as regular text without having to 
 You may be tempted to put spaces in your expressions. Don't. It'll mess up the parser. Sorry.
 
 
-=== random flag ===
+=== randomness ===
 
-There's a special random numeric flag which is a randomly determined number from 0 to 99. It is not rerolled when you evaluate it, but only at the beginning of the conversation and if you try to set it or unset it. The name of this flag is, simply, %.
+There's a special key with a randomly determined value from 0 to 99. It is not rerolled when you evaluate it, but only at the beginning of the conversation and if you try to set it or unset it. This key is, simply, %.
 
 <pre>
  text blah <%<25 // this meets the condition 1/4 of the time
@@ -220,21 +220,21 @@ Note that instead of using the = condition, the < condition was used to require 
 
 If you want to have the text be dynamic, use square brackets {{{ [foo] }}}.
 
-The following are attempted, in this order:
+If you do this, the following are attempted, in this order:
 
  # IF this substitution is in alien dialog text, substitute text items with the given name.
- # find any arithmetic operations, then evaluate numeric parameters on either side and performing the arithmetic.
+ # find any arithmetic operations and perform the arithmetic.
  # substitute the value of any numeric flag with that key, or 0 if none.
 
 There are a few points concerning text item substitutions.
 
 Brackets do not nest for text item lookups. You cannot evaluate a text item or arithmetic to determine which text item name to search for - that's silly. Just use conditions on the text items! If that doesn't cut it, call a text item that itself calls a text item, and recurse as necessary. This process is Turing-complete, so whatever you need done, it's possible.
 
-If there is at least one text item with that name but no text item with that name has its conditions fulfilled, that's treated as a match yielding the empty string, not a failure to match, and the search does not continue.
+If there is at least one text item with that name but no text item with that name has its conditions fulfilled, that's treated as a match yielding the empty string, not a failure to match, and the search does not continue on into arithmetic or keys.
 
 Parentheses are ignored by this language, as they are too frequently used in dialogue for anyone to want to have to think about whether they're going to cause trouble.
 
-Alien number speech (i.e. their saying numbers determined during the conversation, not written into the script) cannot represent numbers less than 1 or more than 998 996 (i.e. nearly one million). (NOTE: If you need to cover these numbers, we can stitch it together, but ask yourself whether that's really necessary). Attempting to use larger numbers naively may crash the game, and if not, may result in bizarre behavior.
+Alien number speech (i.e. their saying numbers determined during the conversation, not written into the script) cannot represent numbers less than 1 or more than 998 996 (i.e. nearly one million). (NOTE: If you need to cover these numbers, we can stitch it together, but ask yourself whether that's really necessary). Attempting to use larger numbers naively will usually crash the game, and when it doesn't, will result in bizarre behavior.
 
 Example:
 
@@ -274,7 +274,7 @@ Init items are conditional lists of consequences applied before searching for a 
 
 For example, I used this construction in an improved version of the VUX dialog.
 <pre>
-init =preexisting_apologies=Apologies
+init +preexisting_apologies=Apologies
 </pre>
 So I could remove options that didn't make sense for the first apology of the meeting.
 
@@ -292,7 +292,7 @@ Some possible display directives:
 {}... and that empty pair of braces kept the '...' at the beginning of this line from being interpreted as the end of this text.
 </pre>
 
-Other special directives are possible for 'dimming the lights'/vfx, changing the size of the battlegroup you're facing, or even changing who you're talking to altogether, but they haven't been specified yet. (NOTE: No actual display directives exist yet, only the '%' one. The only one I guarantee implementing soon is to strip out {} so you can start lines with periods. Don't feel constrained by what exists. This language is in development. If you need it, ask for it! )
+Other special directives are possible for 'dimming the lights'/vfx, or even changing who you're talking to altogether, but they haven't been specified yet. (NOTE: No actual display directives exist yet, only the '%' one. The only one I guarantee implementing soon is to strip out {} so you can start lines with periods. Don't feel constrained by what exists. This language is in development. If you need it, ask for it! )
 
 == Example dialog ==
 
@@ -340,7 +340,7 @@ Here's a moderately complicated dialog using most language features.
    // The exact 'bye' option depends on whether you said 'hi' in this conversation yet
    option bye =said_hi
    goodbye
-   Return soon, captain
+   Return soon, captain!
    .done
    
   
@@ -423,7 +423,7 @@ Here's a moderately complicated dialog using most language features.
   .
  
  
-  text advice // Meaning Rep >= 0. Won't ever get shown, though, since if you've made them angry they won't ever talk to you again.
+  text advice // Meaning Rep < 0. Won't ever get shown, though, since if you've made them angry they won't ever talk to you again.
   EXERCISE CAUTION, CAPTAIN. SOMEHOW WE'VE MADE THESE GUYS ANGRY. BETTER WARM UP THEM WEAPONS!
   .
  
