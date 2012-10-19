@@ -49,23 +49,23 @@ with foo the name of the node to go to. Text items just end with a line that is 
 
 There are two predefined nodenames 'done' and 'fight' with the obvious meanings.
 
-Very simple example, where they say hello and you can say hello or goodbye, then they say goodbye, then you go back to navigation.
+Very simple example, where they say hello? and you can say hello! or goodbye!, then they say goodbye, then you go back to navigation.
 
 <pre>
 greeting
-hello // I didn't mention this, but '//' can be used for comments
+hello? // I didn't mention this, but '//' can be used for comments
   .main     // leading and trailing whitespace are ignored.
 // You can use an indenting convention if you like, as shown below.
 // I don't. I just use blank lines to keep things organized.
 
 node main
 option
-  hello
+  hello!
   goodbye
   .done
 
 option
-  goodbye
+  goodbye!
   goodbye
   .done
 </pre>
