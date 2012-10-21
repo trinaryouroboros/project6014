@@ -1,15 +1,13 @@
 #labels Races
 = Faz =
 
-  * *Connected races:* [Melnorme], [Mmrnmhrm]
+  * *Connected races:* [Melnorme], [Spathi]
   * *Connected devices:* [SlaveShieldBuster]
 
 == Summary info ==
 
-A race from the old Sentient Melieu. They were slave-shielded 20,000 years ago by the [UrQuan] and have been so ever since. With the Slave shield buster you can free them. The Faz can reveal secrets about the sentient milieu, including the origins of the [Melnorme]. For some reason the Melnorme will be desperate to keep these secrets hidden. Perhaps the Melnorme played some role in assisting the Dnyarri to over-power the Milieu�s other members. Or caused the Milieu's downfall by escaping instead of fighting. The Melnorme feel a bit bad about this. The Faz will be good guys.
+A race from the old Sentient Melieu. They were slave-shielded by the Ur-Quan and have been so ever since. With the Slave shield buster you can free them.
 
-== Detailed info ==
+The Faz dwell in a global virtual reality by the time the Captain encounter them. They are being kept, grown and nourished in stasis pods, waiting for somebody to crack their slave-shield and wake them up. For 20000 years nobody attempted to free them, and the consciousness of new generations blended with the VR. Artificial experiences became real to them. They don't even know who they were.
 
-== Ship ==
-
-We need a ship for them!
+The Captain must wake them up and convince them of their true identity.
