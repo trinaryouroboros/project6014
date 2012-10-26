@@ -15,7 +15,7 @@ They're divided to two factions:
 The Captain can gain Baul alliance in two ways:
 
 *1. Help the General*: The easiest solution -- find and destroy the Foon-Foon rebels.
-*2. Help the President*: The hardest solution, especially because it incorporates the Foon-Foon alliance mission of destroying the Moon Cannon (and therefore grants FF alliance too). If you find the Baul homeworld, the Captain can make a deal with the President about assassinating the General, which requires. If the deal was made the Captain can rightfully engage the General in combat and let a puppet general take his place who will steer the Baul SOI back to their homeworld. Once they're there, the alliance can be signed, or they simply send their captains and ship schematics to NAFS bases.
+*2. Help the President*: The hardest solution, especially because it incorporates the Foon-Foon alliance mission of destroying the Moon Cannon (and therefore grants FF alliance too). If you find the Baul homeworld, the Captain can make a deal with the President about assassinating the General. If the deal was made the Captain can rightfully engage the General in combat and let a puppet general take his place who will steer the Baul SOI back to their homeworld. Once they're there, the alliance can be signed, or they simply send their captains and ship schematics to NAFS bases.
 
 The Captain can cut himself away from gaining the Baul alliance in the following ways:
 
@@ -27,6 +27,15 @@ The Captain can cut himself away from gaining the Baul alliance in the following
 
 == Detailed info ==
 The Baul can share some historical info about themselves at their homeworld, even though it's mostly about their excellence and the evolution of their booze. If the Captain wants some more useful info, only the General's army can give it to him, for a price. Selling confidential information has a long tradition in Baul military history. As treason, it is punished by death, in the end though it's not directly because of the treason itself, but the inability to keep it secret.
+
+== Dialogue ==
+They use a threatening tone by default. It just comes with bully territory.
+
+Common Baul:
+Since they're in military hierarchy dominated by strength, there's not much hope for common Bauls getting particularly friendly with the Captain (a stranger), but a positive relationship with the General can change our status in their eyes from mere "aliens" into "buddies". Attacking their ships can turn them into our enemies of course.
+
+The General: -- coming soon --
+The President: -- coming soon --
 
 == Ship ==
 
