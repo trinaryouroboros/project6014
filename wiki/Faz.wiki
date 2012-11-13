@@ -10,6 +10,14 @@ A race from the old Sentient Melieu. They were slave-shielded by the Ur-Quan and
 
 The Faz dwell in a global virtual reality by the time the Captain encounter them. They are being kept, grown and nourished in stasis pods, waiting for somebody to crack their slave-shield and wake them up. For 20000 years nobody attempted to free them, and the consciousness of new generations blended with the VR. Artificial experiences became real to them. They don't even know who they were.
 
-The Captain must wake them up and convince them of their true identity. The VR system emits a constant signal to the outside, which is not strong enough to penetrate the slave-shield -- however that was designed that way intentionally. (Not that anyone except the Chmmr could create such signal.) The system assumes that whoever receives the signal must have cracked the shield in advance. The system chooses an individual for the role of manual confirmation.
+The VR system emits a constant signal to the outside, which is not strong enough to penetrate the slave-shield -- however that was designed that way intentionally. (Not that anyone except the Chmmr could create such signal.) The system assumes that whoever receives the signal must have cracked the shield in advance. The system chooses an individual for the role of manual confirmation.
 
 This is the Faz we'll speak with (need a name for him), however this is where the 20000 years take their toll. Though he is the only one capable of waking up the rest of the population and start the rehabilitation protocols, he is not aware of his intended role. What he's aware of is that he's in a strange place, he cannot move, and there's a strange alien asking questions from him. Not exactly a comfortable situation.
+
+The Captain must convince this Faz of the true identity of him and his race. To do this, the Captain needs to obtain a _Spathi FunROM_, a video game of Melnorme origin, with a history originated from ancient Mael-Num times. Even after 20000 years, the game operates on the same fundamental code, which contains a flaw in random number generation. This flaw makes the game somewhat predictable, as it is pointed out by Fwiffo and the Melnorme (when asked specifically). To convince the Faz about his world being an artificial construct, the Captain needs to demonstrate this flaw by predicting some events in it.
+
+*NOTE FOR WRITERS*
+
+Whatever Project 6014 may reveal about the original mindset of the Faz, it will be revealed through conversations with other former Milieu members like the Taalo and the Melnorme. This Faz will be too much different.
+
+In hopeful future episodes in the P6014 timeline, the Faz could undergo a step-by-step rehabilitation procedure, changing their screen art in every episode. Their actual role in those episodes is unclear yet.
