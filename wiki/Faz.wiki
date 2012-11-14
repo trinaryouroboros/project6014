@@ -2,7 +2,7 @@
 = Faz =
 
   * *Connected races:* [Melnorme], [Spathi]
-  * *Connected devices:* [SlaveShieldBuster]
+  * *Connected devices:* [SlaveShieldBuster] [SpathiFunROM]
 
 == Summary info ==
 
@@ -16,8 +16,18 @@ This is the Faz we'll speak with (need a name for him), however this is where th
 
 The Captain must convince this Faz of the true identity of him and his race. To do this, the Captain needs to obtain a _Spathi FunROM_, a video game of Melnorme origin, with a history originated from ancient Mael-Num times. Even after 20000 years, the game operates on the same fundamental code, which contains a flaw in random number generation. This flaw makes the game somewhat predictable, as it is pointed out by Fwiffo and the Melnorme (when asked specifically). To convince the Faz about his world being an artificial construct, the Captain needs to demonstrate this flaw by predicting some events in it.
 
-*NOTE FOR WRITERS*
+*NOTES FOR WRITING*
 
-Whatever Project 6014 may reveal about the original mindset of the Faz, it will be revealed through conversations with other former Milieu members like the Taalo and the Melnorme. This Faz will be too much different.
+We might need a name for the Faz specimen ... if we can't find a convincing way not to respond to the Captain introducing himself.
+
+In his awakened state, the Faz is frightened and distrustful. He probably believes he's been abducted and wants to get back -- however only the Captain can let him back. From the second encounter on, the Faz might express his displeasure about talking with the Captain, as it means he has to leave his everyday life comfortable to him.
+
+As a racial quirk or because of his current situation, the Faz may stutter, which may show in the dialogue text too.
+
+Whatever Project 6014 may reveal about the original mindset of the Faz, it will be revealed through conversations with other former Milieu members like the Taalo and the Melnorme. There is one thing worth to mention: a core element in their nature -- an "obsession" with the empirical Truth. This is to prevent the possibility for them to reject our reality in favor of their VR when proof is shown.
 
 In hopeful future episodes in the P6014 timeline, the Faz could undergo a step-by-step rehabilitation procedure, changing their screen art in every episode. Their actual role in those episodes is unclear yet.
+
+*NOTES FOR VOICE ACTING*
+
+The Faz is encased in a Capsule and wears breathing apparatus, which suggests a Vader-ish tube voice, aside from possibly stuttering.
