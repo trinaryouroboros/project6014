@@ -1,40 +1,51 @@
 #labels Races
 = Baul =
 
-  * *Connected races:* Foon-foon
+  * *Connected races:* [FoonFoon Foon-Foon]
   * *Connected devices:*
 
-== Summary info ==
-The Baul respect strength, and they’re absolutely convinced about them having it. They’re natural in bullying each other, and to no wonder they could bring this habit to interstellar levels. They have practically taken the entire Foon-Foon race hostage.
+==HISTORICAL INFO==
+
+The Baul is one of the younger cultures in the space-faring business, nearly as young as Earthlings are. Their apparent flaws in attitude might make the Player wonder how they were able to come this far, so to no wonder they've been uplifted by someone else, namely the Ur-Quan.
+
+20000 years ago the Ur-Quan subjugated the Rimward region of HyperSpace, along with it's current inhabitants. Usually Ur-Quan subjugation routine dictates to use Battle Thrall races to maintain the StarBases built in orbit of Fallow Slave worlds. The original circumstances are still unknown, but at some point of history, Battle Thralls in the Rimward region vanished completely, and the Ur-Quans themselves took over the supervision of the region.
+
+The status quo changed years after the Great War between the Hierarchy and the Alliance ended, as Kohr-Ah fleets entered the scene, triggering the Second Doctrinal Conflict. Every Ur-Quan Kzer-Za was eager to participate in this important battle, but they couldn't leave the region without ensuring the maintenance of the StarBases. They decided to uplift the first pre-spaceflight culture they can find to be Hierarchy Battle Thralls so they can rush blowing up Kohr-Ah Marauders.
+
+To the misfortune of the universe they found the Bauls first, though it could have been a carefully reasoned choice: Ur-Quans don't restrict themselves from uplifting other species if that fits their purposes, BUT it somewhat contradicts their goals -- they make a potential threat stronger. Seeing the other example of Ur-Quan uplifting -- the Ilwrath -- it is possible that the Kzer-Za deliberately chose a culture they found ultimately harmless. The Ilwrath were fierce combatants but submissive to authority and unable to progress. Similarly the Bauls _respect_ their authority and strength, and not even interested in progress as long as they can practice their own authority over others. Perfect choice.
+
+As quickly as they could, the Ur-Quan Lords charged the Bauls with the supervision of the last remaining StarBases in the region. They gave the Bauls HyperSpace technology and told them not to disobey in a way meaningful to them. At the time, the Baul homeworld faced rebellion as a few settlements joined an armed rebellion, advocating for social progress, education and other good stuff uncharacteristical to the rest of their world. These settlements were wiped out by the Ur-Quan as a demonstration of what could happen to the whole species if they don't behave. The Bauls not only understood the message, they were also thankful for it.
+
+==IN-GAME INFO==
 
 They're divided to two factions:
 
-1. the _General_'s space navy which separated itself from the government and gone subjugating and leeching off the Foon-Foon. They own and guard a giant cannon placed on the Foon-Foon homeworld's moon (called the "Moon Cannon" ... don't expect much imagination from Baul naming habits), pointing at the planet's surface. Their SOI is inside the Foon-Foon SOI.
+1. the _Boss_' space navy which separated itself from the government and gone subjugating and leeching off the Foon-Foon. They own and guard a giant cannon placed on the Foon-Foon homeworld's moon (called the "Moon Cannon" ... don't expect much imagination from Baul naming habits), pointing at the planet's surface. Their SOI is inside the Foon-Foon SOI.
 2. the government and the _President_ who would rather see the space navy at leash length. They reside on the Baul homeworld, which need to be found first.
 
 The Captain can gain Baul alliance in two ways:
 
-*1. Help the General*: The easiest solution -- find and destroy the Foon-Foon rebels.
-*2. Help the President*: The hardest solution, especially because it incorporates the Foon-Foon alliance mission of destroying the Moon Cannon (and therefore grants FF alliance too). If you find the Baul homeworld, the Captain can make a deal with the President about assassinating the General. If the deal was made the Captain can rightfully engage the General in combat and let a puppet general take his place who will steer the Baul SOI back to their homeworld. Once they're there, the alliance can be signed, or they simply send their captains and ship schematics to NAFS bases.
+*1. Help the Boss*: The easiest solution -- find and destroy the Foon-Foon rebels.
+*2. Help the President*: The hardest solution, especially because it incorporates the Foon-Foon alliance mission of destroying the Moon Cannon (and therefore grants FF alliance too). If you find the Baul homeworld, the Captain can make a deal with the President about assassinating the Boss. If the deal was made the Captain can rightfully engage the Boss in combat and let a puppet general take his place who will steer the Baul SOI back to their homeworld. Once they're there, the alliance can be signed, or they simply send their captains and ship schematics to NAFS bases.
 
 The Captain can cut himself away from gaining the Baul alliance in the following ways:
 
-1. by attacking the Baul homeworld
-2. by attacking the General's Punisher ships
+1. by attacking the Baul homeworld after helping the President
+2. by attacking the Boss' Punisher ships
 3. by attacking Foon-Foon ships while they're supervised by Baul officers
 4. by helping the Foon-Foon rebels without making the deal
 5. by doing nothing (see Foon-Foon description)
 
-== Detailed info ==
-The Baul can share some historical info about themselves at their homeworld, even though it's mostly about their excellence and the evolution of their booze. If the Captain wants some more useful info, only the General's army can give it to him, for a price. Selling confidential information has a long tradition in Baul military history. As treason, it is punished by death, in the end though it's not directly because of the treason itself, but the inability to keep it secret.
+==NOTES FOR WRITING==
 
-== Dialogue ==
-They use a threatening tone by default. It just comes with bully territory.
+The Baul respect strength, and each of them are at some level convinced about themselves having it. They’re natural in bullying, and to no wonder they did bring this habit from domestic to interstellar levels.
+
+They respect authority derived from the social position of an individual, achieved through displays of strength, and an overall threatening attitude -- which affects the tone of their speech. They are generally unconcerned about interracial relations: diplomacy is for pussies, therefore they won't even care about remembering others names. They prefer to use nicknames, however they won't use nicknames for ones who they acknowledge as authority figures -- like the Ur-Quan.
 
 Common Baul:
-Since they're in military hierarchy dominated by strength, there's not much hope for common Bauls getting particularly friendly with the Captain (a stranger), but a positive relationship with the General can change our status in their eyes from mere "aliens" into "buddies". Attacking their ships can turn them into our enemies of course.
+Since they're in military hierarchy dominated by strength, there's not much hope for common Bauls getting particularly friendly with the Captain (a stranger), but a positive relationship with the Boss can change our status in their eyes from mere "aliens" into "buddies". Attacking their ships can turn them into our enemies of course.
 
-The General: -- coming soon --
+The Boss: -- coming soon --
 The President: -- coming soon --
 
 == Ship ==
