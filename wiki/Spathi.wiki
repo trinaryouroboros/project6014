@@ -14,11 +14,19 @@ As the NAFS emerged victorious and estabilished itself as an official entity, th
 
 To tell the truth, the Spathi never expected making contact with aliens for a period of indefinitely -- though preferably VERY, VERY, VERY -- long time, and didn't plan to take any part in an inter-species community ever again. The Safe Ones saw that it's safer to keep good relations with people who can just pass their planet's defenses, but they didn't want to lower the Slave-Shield as a requisite for members to keep relations with others open. They refused membership, but they proposed to provide services through the facilities left on the abandoned moon of Spathiwa for the protectorship of the Chmmr.
 
+_Note that only the Chmmr are important to them. If other races want to protect them they're welcome, nevertheless other races couldn't actually harm them under a Slave-Shield._
+
 == Fwiffo ==
 
-When you turn up to the starbase to say "hi", the lights are turned off and he keeps pressing the Captain for a password. You can try out different alternatives, but all of them are wrong - there is no real password. You need to exhaust the password dialogue tree to get a new alternative _"Turn on the lights NOW, maggots!"_ or something like that.
+When you turn up to Spathiwa's moon to say "hi", the lights are turned off and someone keeps pressing the Captain for a password. You can try out different alternatives, but all of them are wrong - there is no real password. You need to exhaust the password dialogue tree to get a new alternative _"Turn on the lights NOW, maggots!"_ or something like that.
 
-Coming soon.
+With the lights turning on, things become familiar. The rocky formations in the background and the small structures carved in them, the table in the front are almost identical to the scene we saw years ago. The only significant difference is that instead of the Safe Ones, there's one solitary Spathi at the table playing with oddly shaped ... thingies (that part is not drawn yet). The Spathi recognizes the Captain immediately and reveals his identity to those who didn't guess already: he's *Fwiffo*, our companion we picked up at Pluto. 
+
+*NOTE FOR WRITING*
+
+Because Fwiffo's fate in UQM depends on the Captain's action, we have an opportunity to write a section of Fwiffo's dialogue for clarifications. This section would not affect the rest of the game, it's only purpose is to create an interconnection between P6014's story and the actual decisions of a player who played UQM beforehand. (For example such an element was also used in the beginning of Mass Effect 2 and 3.) As he performs his colored story about how he ended up in the present, the Captain may at some places need to correct him.
+
+More coming soon.
 
 == Spathiwa ==
 
