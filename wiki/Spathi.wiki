@@ -1,23 +1,25 @@
 #labels Races
 = Spathi =
 
-  * *Connected races:* [Chmmr]
+  * *Connected races:* [Chmmr], [Melnorme], [XenWeyi Xen-Weyi]
   * *Connected devices:* [SlaveShieldBuster]
 
-== Summary info ==
+== Historical info ==
 
-Associate member of NAFS. The Spathi were permitted by the Chmmr to remain slave-shielded. However the Chmmr insisted that they erect and maintain a starbase to keep communications open. However, lately, the Spathi haven't been pulling their weight so Hayes or Chmmr send you to check out what the Spathi are up to.
+During the Second Doctrinal Conflict, the Spathi joined the New Alliance of Free Stars as a token of gratitude for the annihilation of Evil Ones on Spathiwa. Their participation in the NAFS didn't last long, as they used their membership to gain safe access to Earth's Slave-Shield, creating their own version with which they sealed themselves away from the rest of the universe.
 
-When you turn up to the starbase to say "hi", the lights are turned off and the Spathi keep pressing you for a password. You can try out different alternatives, but all of them are wrong - there is no real password. You need to exhaust the password dialogue tree to get a new alternative "TURN ON THE LIGHTS NOW, YOU MAGGOTS" or something like that.
+This is something they couldn't have done before. Of course they never knew that one day someone would just get rid of the Evil Ones for them, that's one thing, but analysing the Slave-Shield technology would have not eluded the attention of the Hierarchy with the supervision of the scary Ilwrath over Earth and Procyon, and the close proximity of their unforgiving Ur-Quan Masters to the Syreens' adopted world Gaia.
 
-ALTERNATIVE1: When the lights turn on you discover that they have not done very much and have turned the interior of the starbase into a giant fun-time area. 
+As the NAFS emerged victorious and estabilished itself as an official entity, the validity of Spathi membership became a controversial topic among allied races. After all, they ceased contributing as soon as they reached their own goal. Also they didn't make any effort to confirm their intent to stay in the NAFS. To clarify their status, the Chmmr had to make the first move. It was terrifying for the Spathi to see unknown alien ships easily passing through their "impenetrable" planetary shield, though the moment of fear shortly changed into relief when they realized that their visitors came with peaceful intent, even if they were two of their former opponents merged together.
 
-ALTERNATIVE2: The Spathi on the starbase were really trying to fool the Spathi on the homeworld to switch places with them, they would do everything possible to make it SEEM like a party. This would account for why they won't turn on the lights (even for their own people).
+To tell the truth, the Spathi never expected making contact with aliens for a period of indefinitely -- though preferably VERY, VERY, VERY -- long time, and didn't plan to take any part in an inter-species community ever again. The Safe Ones saw that it's safer to keep good relations with people who can just pass their planet's defenses, but they didn't want to lower the Slave-Shield as a requisite for members to keep relations with others open. They refused membership, but they proposed to provide services through the facilities left on the abandoned moon of Spathiwa for the protectorship of the Chmmr.
 
-Anyway, you set the things straight at the starbase with some selected threats.
+== Fwiffo ==
 
-What happens when you bust the Spathi slaveshield??
+When you turn up to the starbase to say "hi", the lights are turned off and he keeps pressing the Captain for a password. You can try out different alternatives, but all of them are wrong - there is no real password. You need to exhaust the password dialogue tree to get a new alternative _"Turn on the lights NOW, maggots!"_ or something like that.
 
-== Detailed info ==
+Coming soon.
 
-Issue 22 is for getting the basic Spathi conversation in place.
+== Spathiwa ==
+
+Coming soon.
