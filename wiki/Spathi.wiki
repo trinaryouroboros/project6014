@@ -28,19 +28,31 @@ The Chmmr executed their mission as cautiously as they could when they entered E
 
 Finally Fwiffo and the others stepped on the soil of their homeworld, but Fwiffo himself didn't remain on Spathiwa for long. After the Slave-Shield was erected, all Spathi thought that they actually reached a state of utopian safety. In the beginning at least. A few months later however, many Spathi begun to focus their inherent paranoia on other Spathi, ones who seemed more ... unsafe than other citizens (2). The Safe Ones were aware of this problem, but didn't find any long term solution for it. They were lucky the Chmmr came in the meantime so they could make an agreement, which incorporated the idea of transporting all "unsafe" citizens to operate the facilities on the moonbase. Two birds with one stone. To make things go smoothly and to avoid unrest, these marked citizens were told that they were "chosen" for an "important assignment" as the "most capable candidates", then they were -- figuratively saying -- pushed out through the doorstep.
 
-Fwiffo was one of these Spathi. In fact the Safe Ones had a particular displeasure in seeing the Chmmr bringing him back alive. After all, he's exceptionally unlucky and dangerously fearful, not someone an appropriate safety-loving Spathi citizen would want to keep near. Knowing that Fwiffo has a very skeptical attitude (by Spathi standards), the Safe Ones needed to give him some extra incentive, they themselves "promoted" him to be the chief administrator on the moonbase.
+Fwiffo was one of these Spathi. In fact the Safe Ones had a particular displeasure in seeing the Chmmr bringing him back alive. After all, he's exceptionally unlucky and dangerously fearful, not someone an appropriate safety-loving Spathi citizen would want to keep near. Knowing that Fwiffo has a very skeptical attitude (by Spathi standards), the Safe Ones needed to give him some extra incentive, they themselves "promoted" him to be the chief administrator (or something) on the moonbase.
 
-The incentive both worked and didn't work. Fwiffo knows that his promotion is bogus, still he uses it to distance himself from reality. The Captain is unable to make progress in their conversation unless he confronts Fwiffo with the truth (3). Having a chat with the Spathiwa Defence Force can provide an extra way to do this, but they are not necessary.
+The incentive both worked and didn't work. Fwiffo knows that his promotion is bogus, still he uses it to distance himself from reality. The Captain is unable to make progress in their conversation unless he confronts Fwiffo with the truth (3). Having a chat with the Spathiwa Defence Force can provide an extra way to do this, but their assistance is not necessary.
 
-_... More coming soon ..._
+*THE SPATHI FUNROM*
 
-*NOTE FOR WRITING*
+As Fwiffo reaches to the admission of his exile, he apparently makes his peace with his new situation. After all, it's not really that bad. He's stationed at a high security facility with dozens of planetary defense batteries ensuring his safety and longevity. And if he wants entertainment, there's a few -- five -- FunROMs in his possession Spathi captains traded from the Melnorme (4). This "information" may not seem to be useful at the time, but if the Captain encountered the Faz puzzle already, then he knows about the importance of one particular FunROM, which is actually the basis for the global virtual reality the Faz dwell in.
+
+The Captain may ask Fwiffo to lend him one of his FunROMs, but he only gives one at a time (5). Of course only one is useful in the Faz puzzle, and one of the Captain's tasks is to find out which one is it. To do this he needs to talk with the Faz and make him describe his virtual world. Then he needs to ask Fwiffo to describe his FunROMs and choose the one that's similar to the Faz's description (6)(7).
+
+*NOTES FOR WRITING*
 
 (1) Because Fwiffo's fate in UQM depends on the Captain's action, we have an opportunity to write a section of Fwiffo's dialogue for clarifications. This section would not affect the rest of the game, it's only purpose is to create an interconnection between P6014's story and the actual decisions of a player who played UQM beforehand. (For example such an element was also used in the beginning of Mass Effect 2 and 3.) As he performs his colored story about how he ended up in the present, the Captain may at some places need to correct him.
 
 (2) The reasons for persecution might be -- by human standards -- amusingly light deviations.
 
 (3) The process is somewhat similar to our first encounter with him in UQM. At that instance, Fwiffo needed to confront his uncertainty and solitude to join the Captain, even though he tried to show himself confident. Again, we need to listen to a long story of his, then give him the final push. This time he won't join us, for he's now at a place of satisfactory safety -- better than with the Captain who's "probably up to something dangerous again".
+
+(4) Might be enriching to mention how Spathi captains gathered biodata only to get some FunROMs for themselves.
+
+(5) The Captain may ask Fwiffo to copy all of the FunROMs to his ship's computer, the answer is a lecture involving "Melnorme Copyright Policies". Fwiffo, being a responsible Spathi, takes copyright very seriously ... and so should you! :D
+
+(6) Fwiffo's descriptions are very enthusiastic, almost like video game advertisings. Even though most of these FunROMs are useless to us, it is certain that all of them are very good games. One useful info Fwiffo remarks is that all of these games become somewhat predictable if one plays for a long time.
+
+(7) Even if the Captain doesn't know the connection between the Faz VR and the right FunROM, he may notice the similarity and a open dialogue option: "Hey, that FunROM sounds kind of familiar". There's a section in Fwiffo's dialogue needed where the Captain can choose the FunROM he'd borrow. To make the choice more abstract and graphical (item icons), Fwiffo may have color coded his FunROMs.
 
 == Spathiwa Defence Force ==
 
