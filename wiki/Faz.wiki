@@ -2,32 +2,42 @@
 = Faz =
 
   * *Connected races:* [Melnorme], [Spathi]
-  * *Connected devices:* [SlaveShieldBuster] [SpathiFunROM]
+  * *Connected devices:* [SlaveShieldBuster Slave-Shield Buster] [MelnormeFunROM Melnorme FunROM]
 
-== Summary info ==
+== Historical Info ==
 
-A race from the old Sentient Melieu. They were slave-shielded by the Ur-Quan and have been so ever since. With the Slave shield buster you can free them.
+A race from the old Sentient Milieu. They evolved on a world where most predators developed methods to deceive their prey. In their prime they were highly fond of empirical truth, and made other Milieu members think they have a genetically inherent need for proof before they believe anything. Some may say even their religions were not faith based. They also liked to travel in space: it was part of their life for thousands of years!
 
-The Faz dwell in a global virtual reality by the time the Captain encounter them. They are being kept, grown and nourished in stasis pods, waiting for somebody to crack their slave-shield and wake them up. For 20000 years nobody attempted to free them, and the consciousness of new generations blended with the VR. Artificial experiences became real to them. They don't even know who they were.
+After the fall of the Dnyarri Empire, the Faz were the first to fall to the Ur-Quan Kzer-Za Path of Now and Forever. As part of their subjugation, they were slave-shielded by the Ur-Quan and a starbase was erected in orbit of their homeworld. They didn't want to lose space travel completely, so they bought a space adventure FunROM from the Mael-Num, even though virtual entertainment -- digital illusions deceptive by design -- or mere fantasizing were not their thing. Being loyal friends to their Milieu allies for centuries, a little self-delusion was still better than taking part in their fall as Battle Thralls.
 
-The VR system emits a constant signal to the outside, which is not strong enough to penetrate the slave-shield -- however that was designed that way intentionally. (Not that anyone except the Chmmr could create such signal.) The system assumes that whoever receives the signal must have cracked the shield in advance. The system chooses an individual for the role of manual confirmation.
+As time passed, they expanded the Mael-Num FunROM to a global network, which eventually turned into global virtual reality.
 
-This is the Faz we'll speak with (need a name for him), however this is where the 20000 years take their toll. Though he is the only one capable of waking up the rest of the population and start the rehabilitation protocols, he is not aware of his intended role. What he's aware of is that he's in a strange place, he cannot move, and there's a strange alien asking questions from him. Not exactly a comfortable situation.
+As of now, the whole Faz race is being kept, grown and nourished in stasis pods, waiting for somebody to crack their slave-shield and wake them up. For 20000 years nobody attempted to free them, and the consciousness of new generations blended with the VR. Artificial experiences became real to them. They don't even know who they were.
 
-The Captain must convince this Faz of the true identity of him and his race. To do this, the Captain needs to obtain a _Spathi FunROM_, a video game of Melnorme origin, with a history originated from ancient Mael-Num times. Even after 20000 years, the game operates on the same fundamental code, which contains a flaw in random number generation. This flaw makes the game somewhat predictable, as it is pointed out by Fwiffo and the Melnorme (when asked specifically). To convince the Faz about his world being an artificial construct, the Captain needs to demonstrate this flaw by predicting some events in it.
+_... More coming soon ..._
+
+== The VR ==
+
+The VR system emits a constant signal to the outside, which is not strong enough to penetrate the slave-shield -- however that was designed that way intentionally. (Not that anyone except the Chmmr could create such signal.) To estabilish first contact, we're required to begin a lander mission and find the signal array ourselves ... among strange buidings or underground hatches or both, and some thriving wildlife. When contacted, the system chooses an individual for the role of manual confirmation (1). This is the Faz we'll speak with (2), however this is where the 20000 years take their toll. Though he is the only one capable of waking up the rest of the population and start the rehabilitation protocols, he is not aware of his intended role. What he's aware of is that he's in a strange place, he cannot move, and there's a strange alien asking questions from him. Not exactly a comfortable situation (3).
+
+*THE MELNORME FUNROM*
+
+The Captain must convince this Faz of the true identity of him and his race. To do this, the Captain needs to obtain one of Fwiffo's _Melnorme FunROMs_, a video game with a history originated from ancient Mael-Num times. Even after 20000 years, the game operates on the same fundamental code, which contains a flaw that makes the game somewhat predictable, as it is pointed out by Fwiffo and the Melnorme. To convince the Faz about his world being an artificial construct, the Captain needs to find out which of Fwiffo's five FunROMs resemble the VR world, then demonstrate this flaw by predicting some events in it.
+
+----
 
 *NOTES FOR WRITING*
 
-We might need a name for the Faz specimen ... if we can't find a convincing way not to respond to the Captain introducing himself.
+(1) Our ship computer could guide us to understand the situation by having a conversation with it first. 
 
-In his awakened state, the Faz is frightened and distrustful. He probably believes he's been abducted and wants to get back -- however only the Captain can let him back. From the second encounter on, the Faz might express his displeasure about talking with the Captain, as it means he has to leave his everyday life comfortable to him.
+(2) We might need a name for the Faz specimen ... if we can't find a convincing way not to respond to the Captain introducing himself.
 
-As a racial quirk or because of his current situation, the Faz may stutter, which may show in the dialogue text too.
-
-Whatever Project 6014 may reveal about the original mindset of the Faz, it will be revealed through conversations with other former Milieu members like the Taalo and the Melnorme. There is one thing worth to mention: a core element in their nature -- an "obsession" with the empirical Truth. This is to prevent the possibility for them to reject our reality in favor of their VR when proof is shown.
-
-In hopeful future episodes in the P6014 timeline, the Faz could undergo a step-by-step rehabilitation procedure, changing their screen art in every episode. Their actual role in those episodes is unclear yet.
+(3) In his awakened state, the Faz is frightened and distrustful. He probably believes he's been abducted and wants to get back -- however only the Captain can let him back. From the second encounter on, the Faz might express his displeasure about talking with the Captain, as it means he has to leave his everyday life comfortable to him. As a racial quirk or because of his current situation, the Faz may stutter, which may show in the dialogue text too.
 
 *NOTES FOR VOICE ACTING*
 
-The Faz is encased in a Capsule and wears breathing apparatus, which suggests a Vader-ish tube voice, aside from possibly stuttering.
+The Faz is encased in a Capsule and wears breathing apparatus, which suggests a Vader-ish tube voice, aside from possibly stuttering as mentioned above.
+
+* IN THE FUTURE *
+
+In hopeful future episodes in the P6014 timeline, the Faz could undergo a step-by-step rehabilitation procedure, changing their screen art in every episode. Their actual role in those episodes is unclear yet.
