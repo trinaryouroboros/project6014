@@ -4,18 +4,41 @@
   * *Connected races:* [Faz], [Slylandro]
   * *Connected devices:*
 
-== Summary info ==
+== Historical info ==
 
-Continue to purvey information and fuel. The Melnorme will still sell some tech, for instance new shields against new possible planet surface hazards (shooting/exploding critters, vuxlimpet-critters, acid rain / snowstorms).
+In ancient times, the Mael-Num race was known for it's culture based on balanced exchange, which -- as they believed -- was a fundamental truth about the workings of the universe (1). They practiced equal exchange in their everyday life, and extended it to nearly anything. For instance, they couldn't participate in meaningful conversations with an empty purse. Nothing that could possibly have any value -- goods, information or services -- was given away without a price, because that would put someone in the awkward position of feeling indebted to the other. Without the mutual intent to be part of an exchange, the act of giving was generally viewed vulgar and rude (2). (To make a comparison, it was resented in the same way humans resent sexual violence.)
 
-The Melnorme will play a bigger role in the plot. Their homeworld, Omicron Hygea, will be hidden by a larger star / black hole on the starmap. You can discover the location of Omicron Hygea by talking with the [Taalo] or Faz.
+The Mael-Num was one of the four founding races of the Sentient Milieu, and a major influence in spreading the sense of mutuality among members. For other members they felt like rigid and insensitive, but also consistent and trustworthy (3). Their prices were always reasonable and their wares were never defective (4).
 
- (Wow, they actually know the homeworld of the Melnorme? The Melnorme were always so secret (unless paid :P) about this! If the Taalo or Faz are giving away this information to you, perhaps have the Melnorme impose some kind of ridiculous penalty on the Taalo or Faz. Could be some sub-plot to have the player fix up the Melnorme-Taalo/Faz relation. -- jorisvddonk)
+Eventually the Mael-Num became mentally enslaved by the Dnyarri, and forced to assist in the destruction of the Taalo, then later the Drall and Yuli. They were one of the former Milieu races who survived the 3000 years of Dnyarri reign, ended by the two Ur-Quan subspecies. The fall of the Dnyarri Empire brought a short-living joy. The Kzer-Za and the Kohr-Ah began exercising their respective doctrines, which gave other Milieu races slavery or death.
+While the Kzer-Za finished subjugating the Faz, the Kohr-Ah was about to destroy the Yuptar. The Yuptar, instead of holding their ground, planned to escape destruction through Mael-Num territory with the Kohr-Ah on their tails. The Mael-Num also planned to escape but they needed more time, so they sold false information to the Yuptar, directing them right into the arms of the Kohr-Ah. The Yuptar were destroyed without a trace, and the Kohr-Ah were slowed down, unfortunately not enough for the Mael-Num to escape safely. Were the Mael-Num not say "The Words" in the last moment -- putting the Kohr-Ah into hesitation -- the Kzer-Za wouldn't have arrived in time to create an opportunity for the Mael-Num to slip away, never to be found again.
 
+_... More coming soon ..._
 
-You will discover more of the Melnorme�s old history as the Mael-Num by talking to the Faz: a role in the destruction of the sentient milieu. Perhaps they could've turned the tide of the war if they had stood and fought. But instead, they sold out one of their comrades: They dealt false information to one of the Sentient Milieu races (Yuptar) about the [UrQuan] movements, which allowed the Melnorme to escape, but threw the Yuptar under the bus.
+== The Melnorme ==
 
- (What exactly? This has to be juicy/important, as nearly everyone expects them to have been the Mael-Num already. -- jorisvddonk)
+The role of the Melnorme in the Second Doctrinal Conflict was supporting the Captain in their own way to increase the chance of his success against the Ur-Quan. Now they continue to purvey fuel, information and technologies.
+
+_... More coming soon ..._
+
+----
+
+*NOTES FOR WRITING*
+
+(1;3) the Taalo could speak about these aspects
+(2) This is some info we may have encountered in UQM already, but it's worth mentioning as part of another round in debating about altruism -- if the player chooses to engage in that.
+(4) something the Melnorme will tell us after we reveal their past identity.
+
+----
+
+*OTHER NOTES*
+
+It was written before that the Melnorme homeworld is in Omicron Hygea, and that the Taalo or Faz may know about it. There are two problems with this:
+
+1. Canonically the Mael-Num left their homeworld when the Kzer-Za and the Kohr-Ah clashed over it. They don't want to encounter the Ur-Quan again, so they won't return to a location where their pursuers would expect them to return. Still it's possible to have a _new_ homeworld, but neither the Faz or Taalo is in the position to know about this.
+2. Knowing the location of the Melnorme home degrades the mystery around them, and doesn't seem to have any particular benefit to the puzzle they're involved in. That's because there's nothing we could obtain specifically at that location.
+
+You will discover more of the Melnorme's old history as the Mael-Num by talking to the Faz: a role in the destruction of the sentient milieu. Perhaps they could've turned the tide of the war if they had stood and fought. But instead, they sold out one of their comrades: They dealt false information to one of the Sentient Milieu races (Yuptar) about the [UrQuan] movements, which allowed the Melnorme to escape, but threw the Yuptar under the bus.
 
 The Melnorme will be desperate to keep this knowledge hidden and will go to great lengths to disrupt your communications with the Faz.
 
@@ -28,5 +51,3 @@ We could have Melnorme's guilt be about something we'd find absurd, as opposed t
 Upon discovery of the Melnorme homeworld you will be able to purchase their Trader vessels. But once you piss them off by continuing communications / allying with the Faz, this privilege will cease. Melnorme trading vessels around super giant stars will still cooperate though. (After all, gotta make a buck.)
 
  (How about, instead, increase the price of Trader vessels the more allied the player is with the Faz? After all, Melnorme really want your money! :) -- jorisvddonk)
-
-== Detailed info ==
