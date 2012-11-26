@@ -72,7 +72,7 @@
 // XXX: was 32 picked experimentally?
 #define OSCILLOSCOPE_RATE   (ONE_SECOND / 32)
 
-// JMS
+// JMS_GFX
 #define RESPONSE_EXTRA_Y (RES_CASE(0,12,22))
 
 // Maximum comm animation frame rate (actual execution rate)
@@ -223,13 +223,13 @@ add_text (int status, TEXT *pTextIn)
 	}
 	else if (GetContextFontLeading (&leading), status <= -4)
 	{
-		text_width = (SIZE) (SIS_SCREEN_WIDTH - (8 << RESOLUTION_FACTOR) - (TEXT_X_OFFS << 2));
+		text_width = (SIZE) (SIS_SCREEN_WIDTH - (8 << RESOLUTION_FACTOR) - (TEXT_X_OFFS << 2)); // JMS_GFX
 
 		pText = pTextIn;
 	}
 	else
 	{
-		text_width = (SIZE) (SIS_SCREEN_WIDTH - (8 << RESOLUTION_FACTOR) - (TEXT_X_OFFS << 2));
+		text_width = (SIZE) (SIS_SCREEN_WIDTH - (8 << RESOLUTION_FACTOR) - (TEXT_X_OFFS << 2)); // JMS_GFX
 
 		switch (status)
 		{
