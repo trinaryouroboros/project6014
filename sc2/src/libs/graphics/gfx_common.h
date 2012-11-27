@@ -84,9 +84,9 @@ typedef enum {
 } SCALE;
 
 void LoadIntoExtraScreen (RECT *r);
-void LoadIntoExtraScreen_Fs (RECT *r);
+void LoadIntoExtraScreen_Fs (RECT *r); // JMS_GFX
 void DrawFromExtraScreen (RECT *r);
-void DrawFromExtraScreen_Fs (RECT *r);
+void DrawFromExtraScreen_Fs (RECT *r); // JMS_GFX
 int SetGraphicScale (int scale);
 int GetGraphicScale (void);
 int SetGraphicScaleMode (int mode /* enum SCALE */);

@@ -674,7 +674,7 @@ object_animation (ELEMENT *ElementPtr)
 						speed = WORLD_TO_VELOCITY (2 * 1) * 9 / 10;
 						break;
 				}
-				speed = speed << RESOLUTION_FACTOR;
+				speed = speed << RESOLUTION_FACTOR; // JMS_GFX
 
 				SetVelocityComponents (&ElementPtr->velocity, COSINE (angle, speed), SINE (angle, speed));
 
@@ -927,6 +927,7 @@ pickupMineralNode (PLANETSIDE_DESC *pPSD, COUNT NumRetrieved,
 		pPSD->MineralText[2].CharCount = (COUNT)~0;
 	}
 
+	// JMS
 	if (partialPickup)
 		return false;
 	else
@@ -1504,6 +1505,7 @@ AddLightning (void)
 		rand_val = TFB_Random ();
 		LightningElementPtr->life_span = 10 + (HIWORD (rand_val) % 10) + 1;
 		
+		// JMS_GFX
 		if (RESOLUTION_FACTOR == 0)
 		{
 			LightningElementPtr->next.location.x = (curLanderLoc.x
@@ -2100,7 +2102,7 @@ LanderFire (SIZE facing)
 	SetVelocityComponents (
 			&WeaponElementPtr->velocity,
 			COSINE (angle, WORLD_TO_VELOCITY ((2 * 3) << RESOLUTION_FACTOR)) + wdx,
-			SINE (angle, WORLD_TO_VELOCITY ((2 * 3) << RESOLUTION_FACTOR)) + wdy);
+			SINE (angle, WORLD_TO_VELOCITY ((2 * 3) << RESOLUTION_FACTOR)) + wdy); // JMS_GFX
 
 	UnlockElement (hWeaponElement);
 
@@ -2170,10 +2172,10 @@ DoPlanetSide (LanderInputState *pMS)
 		angle = FACING_TO_ANGLE (GetFrameIndex (LanderFrame[0]));
 		landerSpeedNumer = GET_GAME_STATE (IMPROVED_LANDER_SPEED) ?
 				WORLD_TO_VELOCITY (2 * (14 << RESOLUTION_FACTOR)) :
-				WORLD_TO_VELOCITY (2 * (8 << RESOLUTION_FACTOR));
+				WORLD_TO_VELOCITY (2 * (8 << RESOLUTION_FACTOR)); // JMS_GFX
 
 #ifdef FAST_FAST
-landerSpeedNumer = WORLD_TO_VELOCITY (48 << RESOLUTION_FACTOR); // JMS
+landerSpeedNumer = WORLD_TO_VELOCITY (48 << RESOLUTION_FACTOR); // JMS_GFX
 #endif
 
 		SetVelocityComponents (&GLOBAL (velocity),
@@ -2240,7 +2242,7 @@ landerSpeedNumer = WORLD_TO_VELOCITY (48 << RESOLUTION_FACTOR); // JMS
 				angle = FACING_TO_ANGLE (index);
 				landerSpeedNumer = GET_GAME_STATE (IMPROVED_LANDER_SPEED) ?
 						WORLD_TO_VELOCITY (((2 * 14) - pPSD->LimpetLevel) << RESOLUTION_FACTOR) :
-						WORLD_TO_VELOCITY (((2 * 8) - pPSD->LimpetLevel) << RESOLUTION_FACTOR);
+						WORLD_TO_VELOCITY (((2 * 8) - pPSD->LimpetLevel) << RESOLUTION_FACTOR); // JMS_GFX
 
 #ifdef FAST_FAST
 landerSpeedNumer = WORLD_TO_VELOCITY (48 - pPSD->LimpetLevel);
@@ -2689,7 +2691,7 @@ InitLander (BYTE LanderFlags)
 		if ((int)free_space < (int)(MAX_SCROUNGED << capacity_shift))
 		{
 			r.corner.x = 1;
-			r.extent.width = RES_STAT_SCALE(4) + RESOLUTION_FACTOR;
+			r.extent.width = RES_STAT_SCALE(4) + RESOLUTION_FACTOR; // JMS_GFX
 			r.extent.height = RES_STAT_SCALE(MAX_SCROUNGED - (free_space >> capacity_shift) + 1);
 			SetContextForeGroundColor (BLACK_COLOR);
 			DrawFilledRectangle (&r);

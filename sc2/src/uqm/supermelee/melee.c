@@ -899,7 +899,8 @@ DrawMeleeShipStrings (MELEE_STATE *pMS, MeleeShip NewStarShip)
 
 		ClearShipStatus (0, STATUS_WIDTH - 3 * RESOLUTION_FACTOR, TRUE);
 		
-		if(RESOLUTION_FACTOR > 0)
+		// JMS_GFX
+		if (RESOLUTION_FACTOR > 0)
 			OutlineShipStatus (0, STATUS_WIDTH - 3 * RESOLUTION_FACTOR, TRUE);
 		
 		SetContextFont (StarConFont);
@@ -1652,8 +1653,8 @@ DoConnectingDialog (MELEE_STATE *pMS)
 		oldfont = SetContextFont (StarConFont);
 		oldcolor = SetContextForeGroundColor (BLACK_COLOR);
 		BatchGraphics ();
-		r.extent.width = 200 << RESOLUTION_FACTOR;
-		r.extent.height = 30 << RESOLUTION_FACTOR;
+		r.extent.width = 200 << RESOLUTION_FACTOR; // JMS_GFX
+		r.extent.height = 30 << RESOLUTION_FACTOR; // JMS_GFX
 		r.corner.x = (SCREEN_WIDTH - r.extent.width) >> 1;
 		r.corner.y = (SCREEN_HEIGHT - r.extent.height) >> 1;
 		DrawShadowedBox (&r, SHADOWBOX_BACKGROUND_COLOR, 

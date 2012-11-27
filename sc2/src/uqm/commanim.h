@@ -75,7 +75,7 @@ typedef struct
 	COUNT AnimFlags;
 			// One of RANDOM_ANIM, CIRCULAR_ANIM, or YOYO_ANIM
 			// plus flags (WAIT_TALKING, ANIM_DISABLED)
-	                // JMS: Changed from BYTE to COUNT to house more possible flags
+			// JMS: Changed from BYTE to COUNT to house more possible flags
 
 	COUNT BaseFrameRate;
 			// Minimum interframe delay

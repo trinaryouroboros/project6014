@@ -74,8 +74,8 @@ FRAME FontGradFrame;
 Mutex GraphicsLock;
 STRING GameStrings;
 QUEUE disp_q;
-BOOLEAN hires2xPackPresent; // JMS
-BOOLEAN hires4xPackPresent; // JMS
+BOOLEAN hires2xPackPresent; // JMS_GFX
+BOOLEAN hires4xPackPresent; // JMS_GFX
 
 uio_Repository *repository;
 uio_DirHandle *rootDir;
@@ -230,12 +230,14 @@ InitKernel (void)
 	if (StatusFrame == NULL)
 		return FALSE;
 
+	// JMS: Animated hyperspace suns.
 	hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
 	if (hyperspacesuns == NULL)
 		return FALSE;
 
+	// JMS: Background nebulae in IP.
 	nebulaeFrame = CaptureDrawable (LoadGraphic (NEBULAE_PMAP_ANIM));
-	if (hyperspacesuns == NULL)
+	if (nebulaeFrame == NULL)
 		return FALSE;
 	
 	GameStrings = CaptureStringTable (LoadStringTable (STARCON_GAME_STRINGS));

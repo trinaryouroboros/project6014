@@ -75,7 +75,7 @@ static void DrawSystem (SIZE radius, BOOLEAN IsInnerSystem);
 static FRAME CreateStarBackGround (void);
 static void DrawInnerSystem (void);
 static void DrawOuterSystem (void);
-static void SetPlanetColorMap (PLANET_DESC *planet);
+static void SetPlanetColorMap (PLANET_DESC *planet); // JMS, BW
 static void ValidateInnerOrbits (void);
 static void ValidateOrbits (void);
 
@@ -2325,6 +2325,7 @@ CreateStarBackGround (void)
 
 	old_seed = seedRandomForSolarSys ();
 
+	// JMS, BW: The beautiful nebula background.
 	nebula.origin.x = nebula.origin.y = 0;
 #define NUM_NEBULAE 16
  	nebula.frame = SetAbsFrameIndex (nebulaeFrame, CurStarDescPtr->star_pt.x % NUM_NEBULAE);

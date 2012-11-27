@@ -444,7 +444,7 @@ static void
 LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 {
 	BYTE dummy8;
-	BYTE res_scale;
+	BYTE res_scale; // JMS
 
 	cread_8   (fh, &dummy8); /* obsolete */
 	cread_16   (fh, &GSPtr->glob_flags);
@@ -455,6 +455,7 @@ LoadGameState (GAME_STATE *GSPtr, DECODE_REF fh)
 	cread_ptr (fh); /* not loading ptr; PRIMITIVE *DisplayArray */
 	cread_16  (fh, &GSPtr->CurrentActivity);
 	
+	// JMS
 	if (LOBYTE (GSPtr->CurrentActivity) != IN_INTERPLANETARY)
 		res_scale = RESOLUTION_FACTOR;
 	else

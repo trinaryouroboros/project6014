@@ -48,6 +48,7 @@ DrawFromExtraScreen (RECT *r)
 	TFB_DrawScreen_Copy(r, TFB_SCREEN_EXTRA, TFB_SCREEN_MAIN);
 }
 
+// JMS_GFX
 void
 DrawFromExtraScreen_Fs (RECT *r)
 {
@@ -60,6 +61,7 @@ LoadIntoExtraScreen (RECT *r)
 	TFB_DrawScreen_Copy(r, TFB_SCREEN_MAIN, TFB_SCREEN_EXTRA);
 }
 
+// JMS_GFX
 void
 LoadIntoExtraScreen_Fs (RECT *r)
 {

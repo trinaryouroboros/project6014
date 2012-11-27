@@ -126,7 +126,7 @@ CalculateGravity (ELEMENT *ElementPtr)
 						angle = ARCTAN (dx, dy);
 						DeltaVelocityComponents (&TestElementPtr->velocity,
 								COSINE (angle, WORLD_TO_VELOCITY (1 << RESOLUTION_FACTOR)),
-								SINE (angle, WORLD_TO_VELOCITY (1 << RESOLUTION_FACTOR)));
+								SINE (angle, WORLD_TO_VELOCITY (1 << RESOLUTION_FACTOR))); // JMS_GFX
 						if (TestElementPtr->state_flags & PLAYER_SHIP)
 						{
 							STARSHIP *StarShipPtr;
