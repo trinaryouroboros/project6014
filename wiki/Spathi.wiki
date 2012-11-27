@@ -2,7 +2,7 @@
 = Spathi =
 
   * *Connected races:* [Chmmr], [Melnorme], [XenWeyi Xen-Weyi]
-  * *Connected devices:* [SlaveShieldBuster]
+  * *Connected devices:* [SlaveShieldBuster Slave-Shield Buster], [SlaveShieldGenerator Slave-Shield Generator]
 
 == Historical info ==
 
@@ -32,11 +32,23 @@ Fwiffo was one of these Spathi. In fact the Safe Ones had a particular displeasu
 
 The incentive both worked and didn't work. Fwiffo knows that his promotion is bogus, still he uses it to distance himself from reality. The Captain is unable to make progress in their conversation unless he confronts Fwiffo with the truth (3). Having a chat with the Spathiwa Defence Force can provide an extra way to do this, but their assistance is not necessary.
 
-*THE SPATHI FUNROM*
+*(FAZ) THE FUNROMS*
 
-As Fwiffo reaches to the admission of his exile, he apparently makes his peace with his new situation. After all, it's not really that bad. He's stationed at a high security facility with dozens of planetary defense batteries ensuring his safety and longevity. And if he wants entertainment, there's a few -- five -- FunROMs in his possession Spathi captains traded from the Melnorme (4). This "information" may not seem to be useful at the time, but if the Captain encountered the Faz puzzle already, then he knows about the importance of one particular FunROM, which is actually the basis for the global virtual reality the Faz dwell in.
+As Fwiffo reaches to the admission of his exile, he apparently makes his peace with his new situation. After all, it's not really that bad. He's stationed at a high security facility with dozens of planetary defense batteries ensuring his safety and longevity. And if he wants entertainment, there's a few -- five -- [MelnormeFunROMs FunROMs] in his possession Spathi captains traded from the Melnorme (4). This "information" may not seem to be useful at the time, but if the Captain encountered the Faz puzzle already, then he knows about the importance of one particular FunROM, which is actually the basis for the global virtual reality the Faz dwell in.
 
 The Captain may ask Fwiffo to lend him one of his FunROMs, but he only gives one at a time (5). Of course only one is useful in the Faz puzzle, and one of the Captain's tasks is to find out which one is it. To do this he needs to talk with the Faz and make him describe his virtual world. Then he needs to ask Fwiffo to describe his FunROMs and choose the one that's similar to the Faz's description (6)(7).
+
+== Spathiwa Defence Force ==
+
+From the example with the Chmmr, the Safe Ones learned that even a Slave-Shield might be insufficient protection for them. Using a [SlaveShieldBuster Slave-Shield Buster], the Captain can lift the shield from Spathiwa, but that only provokes an encounter with the Spathiwa Defence Force, who are an "elite military outfit" (a.k.a. poor suckers like Fwiffo but a different kind) of a few ... million appointed personnel defending the homeworld. The Captain can either fight an endless battle with them or not, but ultimately he has to leave Spathiwans to their devices. A short time after the Captain left orbit, the planet erects a new shield -- which means of course they got [SlaveShieldGenerator Slave-Shield Generators] (8).
+
+*(XEN-WEYI) THE SLAVE-SHIELD GENERATOR*
+
+In order to save the Shofixti, the Captain has to crack the [XenWeyi Xen-Weyi] shield, but that puts the Xen-Weyi in grave danger. If the Captain wants to end the story with a clear conscience and one less enemy, he has to restore the Xen-Weyi shield. The Spathi are the only ones who have a Slave-Shield device and are willing to give us one ... IF we promise never to harass them again.
+
+If we crack their shield too much, or attack them, or break our promise, they'll turn completely hostile and attack us without negotiation. In these cases we got an immoral ending Spathi-wise, and if we don't have the Slave-Shield Generator already, we lose every chance to save the Xen-Weyi.
+
+----
 
 *NOTES FOR WRITING*
 
@@ -54,6 +66,4 @@ The Captain may ask Fwiffo to lend him one of his FunROMs, but he only gives one
 
 (7) Even if the Captain doesn't know the connection between the Faz VR and the right FunROM, he may notice the similarity and a open dialogue option: "Hey, that FunROM sounds kind of familiar". There's a section in Fwiffo's dialogue needed where the Captain can choose the FunROM he'd borrow. To make the choice more abstract and graphical (item icons), Fwiffo may have color coded his FunROMs.
 
-== Spathiwa Defence Force ==
-
-_... Coming soon ..._
+(8) This information can be vaguely expressed by Hayes, the Chmmr, and a bit more specifically by Fwiffo and the Spathiwans. The latter may also refer to the Slave-Shield Buster as an evil/wicked/immoral piece of technology.
