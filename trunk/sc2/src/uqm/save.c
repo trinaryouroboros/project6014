@@ -369,10 +369,11 @@ SaveClockState (const CLOCK_STATE *ClockPtr, DECODE_REF fh)
 static void
 SaveGameState (const GAME_STATE *GSPtr, DECODE_REF fh)
 {
-	BYTE res_scale;
+	BYTE res_scale; // JMS
 	
+	// JMS
 	if (LOBYTE (GSPtr->CurrentActivity) != IN_INTERPLANETARY)
-		res_scale = RESOLUTION_FACTOR;
+		res_scale = RESOLUTION_FACTOR; 
 	else
 		res_scale = 0;
 	

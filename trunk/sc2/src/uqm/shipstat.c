@@ -48,10 +48,12 @@ DrawCrewFuelString (COORD y, SIZE state)
 	}
 
 	Stamp.origin.x = ENERGY_XOFFS + (STAT_WIDTH >> 1) - RES_STAT_SCALE(5) + RES_CASE(0,10,10);// + (RESOLUTION_FACTOR == 2 ? 10 : 0);  // JMS_GFX
+	
 	if (optWhichMenu == OPT_PC)
 		Stamp.frame = SetAbsFrameIndex (StatusFrame, 5);
 	else
 		Stamp.frame = SetAbsFrameIndex (StatusFrame, 1);
+	
 	if (state >= 0)
 		DrawStamp (&Stamp);
 	else
@@ -95,7 +97,7 @@ ClearShipStatus (COORD y, COORD w, BOOLEAN inMeleeMenu)
 	r.corner.x = 2;
 	r.corner.y = 3 + y;
 	r.extent.width = w - 4;
-	r.extent.height = SHIP_INFO_HEIGHT - (inMeleeMenu ? RES_CASE(3,5,6) : 3);
+	r.extent.height = SHIP_INFO_HEIGHT - (inMeleeMenu ? RES_CASE(3,5,6) : 3); // JMS_GFX
 	DrawFilledRectangle (&r);
 }
 

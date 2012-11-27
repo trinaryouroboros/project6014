@@ -584,7 +584,7 @@ DrawMenuStateStrings (BYTE beg_index, SWORD NewState)
 			r.extent.height = RADAR_HEIGHT + (11 << RESOLUTION_FACTOR); // STATUS_HEIGHT - r.corner.y - 2; // JMS_GFX
 		}
 		else
-			r.extent.height = 11 << RESOLUTION_FACTOR;
+			r.extent.height = 11 << RESOLUTION_FACTOR; // JMS_GFX
 		
 		DrawFilledRectangle (&r);
 	}

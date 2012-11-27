@@ -393,7 +393,7 @@ LoadHyperData (void)
 			// hyperstars[3] = CaptureDrawable (
 			// 		LoadGraphic (ORZHOLES_MASK_PMAP_ANIM));
 		}
-		//		hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
+		//	hyperspacesuns = CaptureDrawable (LoadGraphic (HYPERSUNS_MASK_PMAP_ANIM));
 		npcbubble = CaptureDrawable (LoadGraphic (NPCBUBBLE_MASK_PMAP_ANIM));
 	}
 
@@ -1466,7 +1466,7 @@ ProcessEncounter (ENCOUNTER *EncounterPtr, POINT *puniverse,
 		EncounterPtr->SD.star_pt.x = LOGX_TO_UNIVERSE (EncounterPtr->log_x);
 		EncounterPtr->SD.star_pt.y = LOGY_TO_UNIVERSE (EncounterPtr->log_y);
 		
-		// Animate the NPC bubble in hi-res modes.
+		// BW: Animate the NPC bubble in hi-res modes.
 		if (RESOLUTION_FACTOR > 0)
 			ElementPtr->next.image.frame = IncFrameIndex (ElementPtr->current.image.frame);
 
@@ -1607,8 +1607,8 @@ ProcessEncounters (POINT *puniverse, COORD ox, COORD oy)
 	}
 }
 
-#define NUM_HOLES_FRAMES 32
-#define NUM_SUNS_FRAMES 32
+#define NUM_HOLES_FRAMES 32 // BW
+#define NUM_SUNS_FRAMES 32 // BW
 
 void
 SeedUniverse (void)
@@ -1622,9 +1622,9 @@ SeedUniverse (void)
 	STAR_DESC *SDPtr;
 	HELEMENT hHyperSpaceElement;
 	ELEMENT *HyperSpaceElementPtr;
-	static COUNT frameCounter;
+	static COUNT frameCounter; // BW
 
-	frameCounter++;
+	frameCounter++; // BW
 	universe.x = LOGX_TO_UNIVERSE (GLOBAL_SIS (log_x));
 	universe.y = LOGY_TO_UNIVERSE (GLOBAL_SIS (log_y));
 

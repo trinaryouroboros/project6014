@@ -44,7 +44,7 @@ PlotIntercept (ELEMENT *ElementPtr0, ELEMENT *ElementPtr1,
 	DPOINT dst[2];
 	RECT r0 = {{0, 0}, {0, 0}};
 	RECT r1 = {{0, 0}, {0, 0}};
-	SDWORD dx_0, dy_0, dx_1, dy_1;
+	SDWORD dx_0, dy_0, dx_1, dy_1; // JMS:These were SIZE. No overflows now.
 	
 	if ((ElementPtr0->state_flags | ElementPtr1->state_flags) & FINITE_LIFE)
 	{
