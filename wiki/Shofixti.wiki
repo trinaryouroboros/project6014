@@ -2,9 +2,21 @@
 = Shofixti =
 
   * *Connected races:* [XenWeyi]
-  * *Connected devices:* [TerraformingPlants], [SunDevice]
+  * *Connected devices:* [GenesisDevice Genesis Device]
 
-== Summary info ==
+== Historical info ==
+
+Decades before the Great War, the Shofixti race was uplifted and adopted by the Yehat, a warrior culture who admired their courage and sense of honor.
+
+The Shofixti is a race of meta-marsupials with an exceptionally short gestation period, and the ability of fast reproduction. They are also unaffected by inbreeding, and never cease to be fertile.
+
+One could rightfully ask: how did they survive without operpopulating their homeworld and depleting it's resources before they were uplifted by the Yehat? The answer lies both in their physiology and their history. The drawback of their fast maturation rate is that they live very short, yet unproportionately long: a perfectly healthy Shofixti can live about 30-35 years, though the medieval circumstances, warfare and the lack of advanced medicine by that time never allowed them to live such methuselah age. The other biological trait they have is the radically unbalanced birthrate of males and females. Out of 20 Shofixti newborns only 1 is female. Still, females can give birth to hundreds of Shofixti in their lifetime, which turned out to be a defining aspect in their history.
+
+For centuries, the Shofixti homeworld Kyabetsu -- Delta Gorno I -- was separated into small fiefs ruled by warlords, who aspired for expanding their influence when they were not already occupied with starvation, plagues and occasional peasant revolts. For these warlords the most effective way to manage their domain was to take control of breeding by secluding females and turning procreation into a privilege given to males. In times of war, new babies were needed as warriors while peasants starved to death. In times of peace, new babies were needed as farmers to harvest the food necessary in times of war.
+
+... More coming soon ...
+
+----
 
 Core member of NAFS. At the start of the game you are chosen to investigate a Shofixti distress signal originating from unknown space. The signal makes reference to a Precursor artifact and some kind of eminent danger.
 
