@@ -1,9 +1,0 @@
-#labels Devices
-= Terraforming plants =
-
-  * *Connected races:* [Shofixti], [XenWeyi]
-  * *Connected Devices:*
-
-Allows you to seed an appropriate planet with atmosphere to make a new homeworld for the Shofixti. You can get this from the Xen-Weyi. This "device" is a race of genetically engineered, subsentient soil-generating plant-like creatures. In order to make a planet habitable, the terraforming plant not only modifies the soil, but also produces and maintains sufficient greenhouse gases in order to heat up the planet.
-
- (See my comment at [XenWeyi]. -- jorisvddonk)
