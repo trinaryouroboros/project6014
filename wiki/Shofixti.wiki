@@ -12,9 +12,25 @@ The Shofixti is a race of meta-marsupials with an exceptionally short gestation 
 
 One could rightfully ask: how did they survive without operpopulating their homeworld and depleting it's resources before they were uplifted by the Yehat? The answer lies both in their physiology and their history. The drawback of their fast maturation rate is that they live very short, yet unproportionately long: a perfectly healthy Shofixti can live about 30-35 years, though the medieval circumstances, warfare and the lack of advanced medicine by that time never allowed them to live such methuselah age. The other biological trait they have is the radically unbalanced birthrate of males and females. Out of 20 Shofixti newborns only 1 is female. Still, females can give birth to hundreds of Shofixti in their lifetime, which turned out to be a defining aspect in their history.
 
-For centuries, the Shofixti homeworld Kyabetsu -- Delta Gorno I -- was separated into small fiefs ruled by warlords, who aspired for expanding their influence when they were not already occupied with starvation, plagues and occasional peasant revolts. For these warlords the most effective way to manage their domain was to take control of breeding by secluding females and turning procreation into a privilege given to males. In times of war, new babies were needed as warriors while peasants starved to death. In times of peace, new babies were needed as farmers to harvest the food necessary in times of war.
+For centuries, the Shofixti homeworld Kyabetsu -- Delta Gorno I -- was separated into small fiefs ruled by warlords, who aspired for expanding their influence when they were not already occupied with starvation, plagues and occasional peasant revolts. For these warlords the most effective way to manage their domain was to take control of breeding by secluding females and turning procreation into a privilege given to males. In times of war, new babies were needed as warriors while peasants starved to death. In times of peace, new babies were needed as farmers to harvest the food necessary in times of war. Shofixti history rolled on by this generic cycle, and as culture advanced with the passage of centuries, the techniques of new generations of warlords became more and more refined. By controlling mating, they buildt up a social system where only the most worthy of warriors/officials/farmers were rewarded to have children of their own -- believing that the essence of exceptional subjects is inherited by their descendants, keeping the dynasty strong. Females were considered valuable items, with no freedom to choose their fate.
 
-... More coming soon ...
+The Yehat gave technology and cultural definition to the Shofixti, and started a chain of events to unite all warlords under one flag, but until the arrival of the Ur-Quan the initiative lacked incentive strong enough to make the warlords forget centuries of feudal conflict. However when the Yehat joined the Alliance, the Shofixti did the same, with the leadership of the first _Grand Shogun_. The war against the Hierarchy was fought in proportions unknown to the Shofixti. Thousands of warriors met their honorable fate on the battlefield, increasing the need to produce replacements in larger numbers than ever -- inevitably turning females into breeding machines. Males became increasingly preoccupied with the glory of war, and -- with the new and effective farming techniques the Yehat brought -- left the burden of anything else on females.
+
+_... More coming soon ..._
+
+==Tanaka==
+
+Dead. He died in heart attack years ago while still repopulating his race, with a smile on his face (1).
+
+==Hiruko==
+
+_... More coming soon..._
+
+----
+
+*NOTES FOR WRITING*
+
+(1) Hiruko mentions this. The Captain may correct her that the saviour of the Shofixti race was actually Katana. Hiruko's response is effectively _"Well, Tanaka or Katana, it doesn't matter. Males are all the same anyway."_
 
 ----
 
@@ -24,7 +40,7 @@ The Shofixti are trying to resettle but with little luck. The [Chmmr] are too bu
     
 Take too long and a desperate religious sect will arise, promoting mass suicide. The number of Shofixti will be reduced back to hundreds, and that will result in withdrawal of the Shofixti from the alliance.
 
-The Chmmr prevent Shofixti from taking a new home at Vela, which would be biologically suitable for them: Chmmr don�t want anyone else snooping around Precursor tech.
+The Chmmr prevent Shofixti from taking a new home at Vela, which would be biologically suitable for them: Chmmr don?t want anyone else snooping around Precursor tech.
 
 == Detailed info ==
 
@@ -34,11 +50,11 @@ Shofixti civilization was based on war constantly dwindling their numbers and th
 
 There is a positive side to the situation in females taking a more important role in society. With the historical task of children rearing made irrelevant until a homeworld becomes available, females share in the burden of administration and maintenance.
 
-The NAFS search parties have discovered few planets that would be even remotely suitable for the new Shofixti homeworld. This is mostly due to lack of Chmmr willingness � they are diverting most of their resources to the war against Kohr-Ah and maintaining control over all other NAFS members. Thus, the Shofixti are trying to find one on their own. Still, their best bet so far is the nearby star system of Beta Gorno, in which they have erected a poorly faring colony.
+The NAFS search parties have discovered few planets that would be even remotely suitable for the new Shofixti homeworld. This is mostly due to lack of Chmmr willingness ? they are diverting most of their resources to the war against Kohr-Ah and maintaining control over all other NAFS members. Thus, the Shofixti are trying to find one on their own. Still, their best bet so far is the nearby star system of Beta Gorno, in which they have erected a poorly faring colony.
 
 Other Gorno systems might offer about as good homeworld alternatives, but there is a reason for choosing this specific system: Beta Gorno holds special spiritual significance to the Shofixti. All Gorno suns were clearly visible in the night sky of the previous homeworld and Beta Gorno was the star Shofixti culture signifying Grandmother Kishi-Bojin, from which all Shofixti were born according to legend. Kishi-Bojin had XXX daughters, coinciding with the XXX planets of Beta Gorno (at the ancient times of the myth, the Shofixti had of course no way of telling how many planets Beta Gorno had. Consequently, the myth seems even more convincing now when the star-faring Shofixti found out the number of planets actually was the very number of Kishi-Bojin's daughters). 
 
-Kishi-Bojin�s third daughter Hiruko is the goddess of the morning, signifying new hope and renewal and custodianship. One of the maidens rescued by Grandfather was named Kishi-Bojin and she used her position as grandmother to gain religious and spiritual influence. She has convinced the Shofixti to establish a colony on Beta Gorno III naming it the �New Morning�, and has placed her first litter daughter Hiruko as its administrator.
+Kishi-Bojin?s third daughter Hiruko is the goddess of the morning, signifying new hope and renewal and custodianship. One of the maidens rescued by Grandfather was named Kishi-Bojin and she used her position as grandmother to gain religious and spiritual influence. She has convinced the Shofixti to establish a colony on Beta Gorno III naming it the ?New Morning?, and has placed her first litter daughter Hiruko as its administrator.
 
 Hiruko, with whom you will have most of the interaction in this plot arc, is in quite of a bind. Having been educated on the Chmmr starbase, she is a rational and logical creature with little tolerance for religion and symbolism. She is quite aware that her people are in desperate need of a leader, and they consider her a living demigod. She wishes to create a better and more gender equal Shofixti society but she understand that reaching millions is critical to save the Shofixti race.
 
@@ -53,6 +69,6 @@ Failure to act within a reasonable timeframe will result in another religious se
 During this quest, you will aid the terraforming process of the New Morning.
 
   # An efficient soil generator "device" may be obtained from the Xen-Weyi: this is a race of subsentient nitrogen-fixing plant-like creatures that will generate soil and greenhouse gases, genetically engineered for the task. This is the "secular" way.
-  # Alternatively, you will set a Sun Device in a stable orbit around �new morning�. this will act as a moon, generate more light and heat, and herald Beta Gorno III as the true new home of Shofixti. The Sun Device can be acquired from DAX's starbase hideout after defeating him. This is the myth-compatible way. (The myth of the New Morning will need to contain a segment about a "new moon, brighter than the sun" or something like that.)
+  # Alternatively, you will set a Sun Device in a stable orbit around ?new morning?. this will act as a moon, generate more light and heat, and herald Beta Gorno III as the true new home of Shofixti. The Sun Device can be acquired from DAX's starbase hideout after defeating him. This is the myth-compatible way. (The myth of the New Morning will need to contain a segment about a "new moon, brighter than the sun" or something like that.)
 
  (Although it is an interesting idea, it might be devastating for the Shofixti. Imagine a day-night cycle that shifts, with extreme variations in day-brightness, and lengths of nights. -- jorisvddonk)
