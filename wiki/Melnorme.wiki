@@ -1,7 +1,7 @@
 #labels Races
 = Melnorme =
 
-  * *Connected races:* [Faz], [Slylandro]
+  * *Connected races:* [Faz], [Spathi]
   * *Connected devices:*
 
 == Historical info ==
@@ -11,43 +11,31 @@ In ancient times, the Mael-Num race was known for it's culture based on balanced
 The Mael-Num was one of the four founding races of the Sentient Milieu, and a major influence in spreading the sense of mutuality among members. For other members they felt like rigid and insensitive, but also consistent and trustworthy (3). Their prices were always reasonable and their wares were never defective (4).
 
 Eventually the Mael-Num became mentally enslaved by the Dnyarri, and forced to assist in the destruction of the Taalo, then later the Drall and Yuli. They were one of the former Milieu races who survived the 3000 years of Dnyarri reign, ended by the two Ur-Quan subspecies. The fall of the Dnyarri Empire brought a short-living joy. The Kzer-Za and the Kohr-Ah began exercising their respective doctrines, which gave other Milieu races slavery or death.
-While the Kzer-Za finished subjugating the Faz, the Kohr-Ah was about to destroy the Yuptar. The Yuptar, instead of holding their ground, planned to escape destruction through Mael-Num territory with the Kohr-Ah on their tails. The Mael-Num also planned to escape but they needed more time, so they sold false telemetry to the Yuptar, directing them right into the arms of the Kohr-Ah. The Yuptar were destroyed without a trace, and the Kohr-Ah were slowed down, unfortunately not enough for the Mael-Num to escape safely. Were the Mael-Num not say "The Words" in the last moment -- putting the Kohr-Ah into hesitation -- the Kzer-Za wouldn't have arrived in time to create an opportunity for the Mael-Num to slip away, never to be found again.
 
-The fall of the Yuptar opened up a chasm of guilt and embarassment in the Mael-Num. It wasn't the death of their comrades that touched them so deeply, but the thought that they survived by selling defective information _for full price_. The Trade Masters also figured that this incident should be kept secret, as it would jeopardise their reputation in front of their clients -- though at the time the number of their clients were rapidly declining. However in the following thousands of years they were able to rebuild their trade network underground, more influential than ever -- and even though their culture didn't change substantially, they assumed a new name.
+A few days after the Ur-Quan Kzer-Za moved in to conquer the Faz homeworld, a Faz delegation made a visit to one of the Mael-Num market stations. Surprisingly they didn't purchase anything to strengthen their defenses, but -- uncharacteristical to the unimaginative Faz -- they bought copies a single FunROM and left. Days later the Faz suddenly ceased to resist and surrendered to the Kzer-Za, and were put under a Slave-Shield. No one knows what happened to them ever since.
+
+While the Kzer-Za finished subjugating the Faz, the Kohr-Ah was about to destroy the Yuptar. The Yuptar, instead of holding their ground, planned to escape destruction through Mael-Num territory with the Kohr-Ah on their tails. The Mael-Num also planned to escape but they needed more time, so they sold false telemetry to the Yuptar, directing them right into the arms of the Kohr-Ah. The Yuptar were destroyed without a trace, and the Kohr-Ah were slowed down, unfortunately not enough for the Mael-Num to escape safely. Were the Mael-Num not say "The Words" in the last moment -- putting the Kohr-Ah into hesitation -- the Kzer-Za wouldn't have arrived in time to create an opportunity for the Mael-Num to slip away, never to be found again.
 
 == The Melnorme ==
 
+The fall of the Yuptar opened up a chasm of guilt and embarassment in the Mael-Num. It wasn't the death of their comrades that touched them so deeply, but the thought that they survived by selling defective information _for full price_. The Trade Masters also figured that this incident should be kept secret, as it would jeopardise their reputation in front of their clients -- though at the time the number of their clients were rapidly declining. However in the following thousands of years they were able to rebuild their trade network underground, more influential than ever -- and even though their culture didn't change in large, their name morphed into "Melnorme".
+
 The role of the Melnorme in the Second Doctrinal Conflict was supporting the Captain in their own way to increase the chance of his success against the Ur-Quan. Now they continue to purvey fuel, information and technologies.
 
-_... More coming soon ..._
+*THE FUNROM BUSINESS*
+
+The Mael-Num traded many sorts of goods in the Sentient Milieu. Among these goods, they had FunROMs in their storages for people who at the time wanted to relax instead of changing the course of history. Some of these FunROMs have a huge re-sell value, which made them remain in the market persistently ever since the formation of the Sentient Milieu.
+
+The Melnorme continued to sell these products in small numbers, though in the Rimward region their only buyers lately were Spathi captains. Now that most of the Spathi are under their Slave-Shield, they don't keep FunROMs in stock anymore (5).
 
 ----
 
 *NOTES FOR WRITING*
 
 (1;3) the Taalo could speak about these aspects
+
 (2) This is some info we may have encountered in UQM already, but it's worth mentioning as part of another round in debating about altruism -- if the player chooses to engage in that.
+
 (4) something the Melnorme will tell us after we reveal their past identity.
 
-----
-
-*OTHER NOTES*
-
-It was written before that the Melnorme homeworld is in Omicron Hygea, and that the Taalo or Faz may know about it. There are two problems with this:
-
-1. Canonically the Mael-Num left their homeworld when the Kzer-Za and the Kohr-Ah clashed over it. They don't want to encounter the Ur-Quan again, so they won't return to a location where their pursuers would expect them to return. Still it's possible to have a _new_ homeworld, but neither the Faz or Taalo is in the position to know about this.
-2. Knowing the location of the Melnorme home degrades the mystery around them, and doesn't seem to have any particular benefit to the puzzle they're involved in. That's because there's nothing we could obtain specifically at that location.
-
-You will discover more of the Melnorme's old history as the Mael-Num by talking to the Faz: a role in the destruction of the sentient milieu. Perhaps they could've turned the tide of the war if they had stood and fought. But instead, they sold out one of their comrades: They dealt false information to one of the Sentient Milieu races (Yuptar) about the [UrQuan] movements, which allowed the Melnorme to escape, but threw the Yuptar under the bus.
-
-The Melnorme will be desperate to keep this knowledge hidden and will go to great lengths to disrupt your communications with the Faz.
-
-We could have Melnorme's guilt be about something we'd find absurd, as opposed to being guilty about the other Yuptar being destroyed. e.g. the Melnorme feel ashamed about the nature of the bargain, not the outcome of the race being destroyed. (Would this be wacky/fun?)
-
- (Yes, this would be really good. I was already wondering why the Melnorme would lie to the Yuptar in exchange for money. Perhaps make it so that they feel guilty about providing false information in exchange for money. Later on in the same conversation, reveal that they actually feel guilty about the money aspect of the deal: they won't feel guilty when the information was exhanged without any money involved. The Melnorme believe that giving without receiving is bad form, but the deal with the Yuptar was actually the exchange of information on the Melnorme side, with the continued survival of the Melnorme (plus a few credits) on the Yuptar side.
-
- Having the Melnorme feel guilty about the credits rather than the extinction of the Yuptar would make them seem really alien, which would be a Good Thing (TM). -- jorisvddonk)
-
-Upon discovery of the Melnorme homeworld you will be able to purchase their Trader vessels. But once you piss them off by continuing communications / allying with the Faz, this privilege will cease. Melnorme trading vessels around super giant stars will still cooperate though. (After all, gotta make a buck.)
-
- (How about, instead, increase the price of Trader vessels the more allied the player is with the Faz? After all, Melnorme really want your money! :) -- jorisvddonk)
+(5) The Captain can try to pre-order FunROMs, only to lose a few credits and be informed that he can acquire his copy in 5 years ...
