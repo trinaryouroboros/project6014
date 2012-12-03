@@ -16,6 +16,9 @@
  *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
  */
 
+// JMS 2011: Changed a shitload of POINTs to DPOINTs and SIZEs to SDWORDs to
+// avoid overflows in hi-res.
+
 #include "process.h"
 
 #include "races.h"
@@ -39,7 +42,7 @@
 
 COUNT DisplayFreeList;
 PRIMITIVE DisplayArray[MAX_DISPLAY_PRIMS];
-extern DPOINT SpaceOrg;
+extern DPOINT SpaceOrg; // JMS: Changed to DPOINT from POINT
 
 SIZE zoom_out = 1 << ZOOM_SHIFT;
 static SIZE opt_max_zoom_out;
@@ -203,6 +206,8 @@ PostProcess (ELEMENT *ElementPtr)
 			| POST_PROCESS;
 }
 
+// JMS: Changed a shitload of POINTs to DPOINTs and SIZEs to SDWORDs to
+// avoid overflows in hi-res.
 static COUNT
 CalcReduction (SDWORD dx, SDWORD dy)
 {
@@ -279,6 +284,8 @@ CalcReduction (SDWORD dx, SDWORD dy)
 	return (next_reduction);
 }
 
+// JMS: Changed a shitload of POINTs to DPOINTs and SIZEs to SDWORDs to
+// avoid overflows in hi-res.
 static VIEW_STATE
 CalcView (DPOINT *pNewScrollPt, SIZE next_reduction,
 		SDWORD *pdx, SDWORD *pdy, COUNT ships_alive)
@@ -588,6 +595,8 @@ ProcessCollisions (HELEMENT hSuccElement, ELEMENT *ElementPtr, TIME_VALUE min_ti
 	return (ElementPtr->state_flags & COLLISION);
 }
 
+// JMS: Changed a shitload of POINTs to DPOINTs and SIZEs to SDWORDs to
+// avoid overflows in hi-res.
 static VIEW_STATE
 PreProcessQueue (SDWORD *pscroll_x, SDWORD *pscroll_y)
 {
@@ -741,6 +750,8 @@ InsertPrim (PRIM_LINKS *pLinks, COUNT primIndex, COUNT iPI)
 
 PRIM_LINKS DisplayLinks;
 
+// JMS: Changed a shitload of POINTs to DPOINTs and SIZEs to SDWORDs to
+// avoid overflows in hi-res.
 static inline SDWORD
 CalcDisplayCoord (SDWORD c, SDWORD orgc, SIZE reduction)
 {
@@ -754,6 +765,8 @@ CalcDisplayCoord (SDWORD c, SDWORD orgc, SIZE reduction)
 	}
 }
 
+// JMS: Changed a shitload of POINTs to DPOINTs and SIZEs to SDWORDs to
+// avoid overflows in hi-res.
 static void
 PostProcessQueue (VIEW_STATE view_state, SDWORD scroll_x, SDWORD scroll_y)
 {
@@ -960,6 +973,8 @@ InitDisplayList (void)
 
 UWORD nth_frame = 0;
 
+// JMS: Changed a shitload of POINTs to DPOINTs and SIZEs to SDWORDs to
+// avoid overflows in hi-res.
 void
 RedrawQueue (BOOLEAN clear)
 {

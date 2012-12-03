@@ -20,6 +20,8 @@
 
 // JMS 2009: Added some blue color thingy for ORZ space, but not sure what it actually does...
 
+// JMS 2011: Changed a lot of SIZEs and COORDs to SDWORDs and POINTs to DPOINTs to avoid overflows in hi-res.
+
 #include "element.h"
 #include "globdata.h"
 #include "init.h"
@@ -43,6 +45,7 @@ extern PRIM_LINKS DisplayLinks;
 			+ MED_STAR_COUNT \
 			+ SML_STAR_COUNT)
 
+// JMS: Changed from POINT to DPOINT
 DPOINT SpaceOrg;
 static DPOINT log_star_array[NUM_STARS];
 
@@ -52,9 +55,9 @@ typedef struct
 {
 	COUNT min_star_index;
 	COUNT num_stars;
-	DPOINT *star_array;
-	DPOINT *pmin_star;
-	DPOINT *plast_star;
+	DPOINT *star_array; // JMS: Changed from POINT to DPOINT
+	DPOINT *pmin_star;  // JMS: Changed from POINT to DPOINT
+	DPOINT *plast_star; // JMS: Changed from POINT to DPOINT
 } STAR_BLOCK;
 
 STAR_BLOCK StarBlock[NUM_STAR_PLANES] =
@@ -89,7 +92,7 @@ SortStarBlock (STAR_BLOCK *pStarBlock)
 		{
 			if (pStarBlock->star_array[i].y > pStarBlock->star_array[j].y)
 			{
-				DPOINT temp;
+				DPOINT temp; // JMS: Changed from POINT to DPOINT
 
 				temp = pStarBlock->star_array[i];
 				pStarBlock->star_array[i] = pStarBlock->star_array[j];
@@ -103,12 +106,13 @@ SortStarBlock (STAR_BLOCK *pStarBlock)
 	pStarBlock->plast_star = &pStarBlock->star_array[pStarBlock->num_stars - 1];
 }
 
+// JMS: Changed dx, dy from SIZE to SDWORD
 static void
 WrapStarBlock (SIZE plane, SDWORD dx, SDWORD dy)
 {
 	COUNT i;
-	DPOINT *ppt;
-	SDWORD offs_y;
+	DPOINT *ppt; // JMS: Changed from POINT to DPOINT
+	SDWORD offs_y; // JMS: Changed from SIZE to SDWORD
 	COUNT num_stars;
 	STAR_BLOCK *pStarBlock;
 
@@ -238,7 +242,7 @@ void
 InitGalaxy (void)
 {
 	COUNT i, factor;
-	DPOINT *ppt;
+	DPOINT *ppt; // JMS: Changed POINT to DPOINT
 	PRIM_LINKS Links;
 
 	Links = MakeLinks (END_OF_LIST, END_OF_LIST);
@@ -252,6 +256,7 @@ InitGalaxy (void)
 		if (i == BIG_STAR_COUNT || i == BIG_STAR_COUNT + MED_STAR_COUNT)
 			++factor;
 
+		// JMS Changed COORDS to SDWORDS
 		ppt->x = (SDWORD)((UWORD)TFB_Random () % SPACE_WIDTH) << factor;
 		ppt->y = (SDWORD)((UWORD)TFB_Random () % SPACE_HEIGHT) << factor;
 
@@ -282,6 +287,7 @@ InitGalaxy (void)
 	SortStarBlock (&StarBlock[2]);
 }
 
+// JMS: Changed POINT *pt2 to DPOINT *pt2 and dx, dy from SIZE to SDWORD
 static BOOLEAN
 CmpMovePoints (const POINT *pt1, const DPOINT *pt2, SDWORD dx, SDWORD dy, SIZE reduction)
 {
@@ -297,6 +303,7 @@ CmpMovePoints (const POINT *pt1, const DPOINT *pt2, SDWORD dx, SDWORD dy, SIZE r
 	}
 }
 
+// JMS: Changed dx, dy from SIZE to SDWORD
 void
 MoveGalaxy (VIEW_STATE view_state, SDWORD dx, SDWORD dy)
 {
@@ -411,6 +418,7 @@ MoveGalaxy (VIEW_STATE view_state, SDWORD dx, SDWORD dy)
 		}
 		else
 		{
+			// JMS: Changed COORDs to SDWORDs
 			dx = (SDWORD)(LOG_SPACE_WIDTH >> 1)
 					- (LOG_SPACE_WIDTH >> ((MAX_REDUCTION + 1)
 					- MAX_VIS_REDUCTION));

@@ -309,6 +309,7 @@ ip_group_preprocess (ELEMENT *ElementPtr)
 		
 		Transition = FALSE;
 		isOrbiting = FALSE;
+		
 		if (task == FLEE)
 		{
 			dest_pt.x = GroupPtr->loc.x << 1;
