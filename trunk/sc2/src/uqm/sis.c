@@ -319,7 +319,7 @@ DrawSISMessageEx (const UNICODE *pStr, SIZE CurPos, SIZE ExPos, COUNT flags)
 		BYTE char_deltas[128];
 		BYTE *pchar_deltas;
 
-		t.baseline.x = RES_STAT_SCALE(3);
+		t.baseline.x = RES_STAT_SCALE(3); // JMS_GFX
 		t.align = ALIGN_LEFT;
 
 		TextRect (&t, &text_r, char_deltas);
@@ -419,8 +419,8 @@ DateToString (char *buf, size_t bufLen,
 void
 GetStatusMessageRect (RECT *r)
 {
-	r->corner.x = RES_STAT_SCALE(2) + RESOLUTION_FACTOR;
-	r->corner.y = RES_STAT_SCALE(130) + RES_CASE(0,0,4);
+	r->corner.x = RES_STAT_SCALE(2) + RESOLUTION_FACTOR; // JMS_GFX
+	r->corner.y = RES_STAT_SCALE(130) + RES_CASE(0,0,4); // JMS_GFX
 	r->extent.width = STATUS_MESSAGE_WIDTH;
 	r->extent.height = STATUS_MESSAGE_HEIGHT;
 }
@@ -570,10 +570,10 @@ DrawFlagshipName (BOOLEAN InStatusArea)
 		OldContext = SetContext (SpaceContext);
 		OldFont = SetContextFont (MicroFont);
 
-		r.corner.x = RES_CASE(0,24,0);
+		r.corner.x = RES_CASE(0,24,0); // JMS_GFX
 		r.corner.y = 1;
-		r.extent.width = SIS_SCREEN_WIDTH- RES_CASE(0,24,0);
-		r.extent.height = SHIP_NAME_HEIGHT + RES_CASE(0,1,0);
+		r.extent.width = SIS_SCREEN_WIDTH- RES_CASE(0,24,0); // JMS_GFX
+		r.extent.height = SHIP_NAME_HEIGHT + RES_CASE(0,1,0); // JMS_GFX
 
 		t.pStr = buf;
 		snprintf (buf, sizeof buf, "%s %s",
@@ -1125,7 +1125,7 @@ DeltaSISGauges_crewDelta (SIZE crew_delta)
 		GetGaugeRect (&r, TRUE);
 		
 		t.baseline.x = STATUS_WIDTH >> 1;
-		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR == 1 ? 2 : 0);
+		t.baseline.y = r.corner.y + r.extent.height - (RESOLUTION_FACTOR == 1 ? 2 : 0); // JMS_GFX
 		t.align = ALIGN_CENTER;
 		t.pStr = buf;
 		t.CharCount = (COUNT)~0;
