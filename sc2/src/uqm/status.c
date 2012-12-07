@@ -193,7 +193,7 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 	// Grey area under and around captain's window.
 	assert (StarShipPtr->playerNr >= 0);
 	y_offs = status_y_offsets[StarShipPtr->playerNr];
-	r.corner.x = CAPTAIN_XOFFS - RES_STAT_SCALE(4);
+	r.corner.x = CAPTAIN_XOFFS - RES_STAT_SCALE(4); // JMS_GFX
 	r.corner.y = y_offs + SHIP_INFO_HEIGHT;
 	r.extent.width = STATUS_WIDTH - 2;
 	r.extent.height = SHIP_STATUS_HEIGHT - CAPTAIN_YOFFS + (4 << RESOLUTION_FACTOR); // JMS_GFX
@@ -269,7 +269,7 @@ DrawCaptainsWindow (STARSHIP *StarShipPtr)
 		TEXT t;
 
 		t.baseline.x = STATUS_WIDTH >> 1;
-		t.baseline.y = y + RES_CASE(6,-22,-44);
+		t.baseline.y = y + RES_CASE(6,-22,-44); // JMS_GFX
 		t.align = ALIGN_CENTER;
 		t.pStr = GLOBAL_SIS (CommanderName);
 		t.CharCount = (COUNT)~0;
@@ -469,6 +469,8 @@ PostProcessStatus (ELEMENT *ShipPtr)
 						};
 
 						c = flash_tab1[i];
+						
+						// JMS_GFX
 						r.corner.x = CAPTAIN_XOFFS + RES_STAT_SCALE(i);
 						r.corner.y = y + CAPTAIN_YOFFS + RES_STAT_SCALE(i);
 						r.extent.width = CAPTAIN_WIDTH - RES_STAT_SCALE((i << 1));
@@ -476,6 +478,7 @@ PostProcessStatus (ELEMENT *ShipPtr)
 						if (r.extent.height == 2)
 							++r.extent.height;
 						
+						// JMS_GFX
 						for (j=0 ; j < RES_STAT_SCALE(1); j++)
 						{
 							DrawRectangle (&r);
@@ -487,9 +490,11 @@ PostProcessStatus (ELEMENT *ShipPtr)
 					}
 					else if ((i -= 15) <= 4)
 					{
-						r.corner.y = y + (CAPTAIN_YOFFS + RES_STAT_SCALE(15));
-						r.extent.width = RES_STAT_SCALE(i + 1);
+						r.corner.y = y + (CAPTAIN_YOFFS + RES_STAT_SCALE(15)); // JMS_GFX
+						r.extent.width = RES_STAT_SCALE(i + 1); // JMS_GFX
 						r.extent.height = 1;
+						
+						// JMS_GFX
 						switch (i)
 						{
 							case 0:

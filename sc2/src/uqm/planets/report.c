@@ -45,11 +45,12 @@ static void
 ClearReportArea (void)
 {
 	COUNT x, y;
-	BYTE emptycols, emptyrows;
+	BYTE emptycols, emptyrows;  // JMS_GFX
 	RECT r;
 	STAMP s;
 	COORD startx;
 
+	// JMS_GFX
 	if (RESOLUTION_FACTOR > 0)
 	{
 		emptycols = NUM_CELL_COLS + 1;
@@ -73,7 +74,7 @@ ClearReportArea (void)
 	ClearDrawable ();
 	SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x00, 0x07, 0x00), 0x57));
 	
-	startx = 1 + (r.extent.width >> 1) - 1 - 4 * RESOLUTION_FACTOR;
+	startx = 1 + (r.extent.width >> 1) - 1 - 4 * RESOLUTION_FACTOR;  // JMS_GFX
 	s.origin.y = 1;
 	for (y = 0; y < emptyrows; ++y)
 	{
