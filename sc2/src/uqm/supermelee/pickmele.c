@@ -425,8 +425,8 @@ CrossOutShip (FRAME frame, COUNT shipNr)
 	
 	SetContextFGFrame (frame);
 
-	s.origin.x = (3 << RESOLUTION_FACTOR) + ((ICON_WIDTH + (2 << RESOLUTION_FACTOR)) * col);
-	s.origin.y = (9 << RESOLUTION_FACTOR) + ((ICON_HEIGHT + (2 << RESOLUTION_FACTOR)) * row);
+	s.origin.x = (3 << RESOLUTION_FACTOR) + ((ICON_WIDTH + (2 << RESOLUTION_FACTOR)) * col);  // JMS_GFX
+	s.origin.y = (9 << RESOLUTION_FACTOR) + ((ICON_HEIGHT + (2 << RESOLUTION_FACTOR)) * row); // JMS_GFX
 	s.frame = SetAbsFrameIndex (StatusFrame, 3);
 			// Cross for through the ship image.
 	DrawStamp (&s);
@@ -591,8 +591,8 @@ FillPickMeleeFrame (MeleeSetup *setup)
 				// Draw the icon.
 				row = PickMelee_GetShipRow (index);
 				col = PickMelee_GetShipColumn (index);
-				s.origin.x = (4 << RESOLUTION_FACTOR) + ((ICON_WIDTH + (2 << RESOLUTION_FACTOR)) * col);
-				s.origin.y = (10 << RESOLUTION_FACTOR) + ((ICON_HEIGHT + (2 << RESOLUTION_FACTOR)) * row);
+				s.origin.x = (4 << RESOLUTION_FACTOR) + ((ICON_WIDTH + (2 << RESOLUTION_FACTOR)) * col); // JMS_GFX
+				s.origin.y = (10 << RESOLUTION_FACTOR) + ((ICON_HEIGHT + (2 << RESOLUTION_FACTOR)) * row); // JMS_GFX
 				s.frame = MasterPtr->ShipInfo.icons;
 				DrawStamp (&s);
 

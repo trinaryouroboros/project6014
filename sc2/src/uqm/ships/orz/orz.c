@@ -819,6 +819,7 @@ marine_preprocess (ELEMENT *ElementPtr)
 				ShipVelocity = ObjectPtr->velocity;
 				GetNextVelocityComponentsSdword (&ShipVelocity, &delta_x, &delta_y, num_frames);
 
+				// JMS_GFX: Made the calculations use SDWORD to avoid overflows.
 				delta_x = ((SDWORD)ObjectPtr->current.location.x + delta_x) - (SDWORD)ElementPtr->current.location.x;
 				delta_y = ((SDWORD)ObjectPtr->current.location.y + delta_y) - (SDWORD)ElementPtr->current.location.y;
 
@@ -1141,10 +1142,10 @@ turret_postprocess (ELEMENT *ElementPtr)
 				facing = FACING_TO_ANGLE (StarShipPtr->ShipFacing);
 				SpaceMarinePtr->current.location.x =
 						ShipPtr->current.location.x
-					- COSINE (facing, DISPLAY_TO_WORLD (TURRET_OFFSET << ((RESOLUTION_FACTOR + 1)/2)));
+					- COSINE (facing, DISPLAY_TO_WORLD (TURRET_OFFSET << ((RESOLUTION_FACTOR + 1)/2))); // JMS_GFX
 				SpaceMarinePtr->current.location.y =
 						ShipPtr->current.location.y
-						- SINE (facing, DISPLAY_TO_WORLD (TURRET_OFFSET << ((RESOLUTION_FACTOR + 1)/2)));
+						- SINE (facing, DISPLAY_TO_WORLD (TURRET_OFFSET << ((RESOLUTION_FACTOR + 1)/2))); // JMS_GFX
 				SpaceMarinePtr->current.image.farray =
 						StarShipPtr->RaceDescPtr->ship_data.special;
 				SpaceMarinePtr->current.image.frame = SetAbsFrameIndex (
