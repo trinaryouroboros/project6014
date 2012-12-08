@@ -818,30 +818,36 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 		}
 		
 		creature_data_index = -1;	 
-		start_count = RES_STAT_SCALE(pPSD->BiologicalLevel); // JMS_GFX
+		start_count = pPSD->BiologicalLevel;
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 41);
 
 		pPSD->BiologicalLevel += NumRetrieved;
 	}
 	else
 	{
-		start_count = RES_STAT_SCALE(pPSD->ElementLevel); // JMS_GFX
+		start_count = pPSD->ElementLevel
 		pPSD->ElementLevel += NumRetrieved;
 		if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
-		{
-			start_count >>= 1;
-			NumRetrieved = (pPSD->ElementLevel >> 1) - start_count;
-		}
+			NumRetrieved = (pPSD->ElementLevel >> 1) - (start_count >> 1);
 
 		s.frame = SetAbsFrameIndex (LanderFrame[0], 43);
 	}
-
-	s.origin.x = 0; // JMS_GFX
-	s.origin.y = - (int)start_count;
+	
+	start_count *= RES_STAT_SCALE(1); // JMS_GFX
+	if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
+		start_count >>= 1;
+	
+	s.origin.x = 0;
+	s.origin.y =  -(int)start_count;
 	if (!(start_count & 1))
 		s.frame = IncFrameIndex (s.frame);
-
+	
 	OldContext = SetContext (RadarContext);
+	
+	NumRetrieved *= RES_STAT_SCALE(1); // JMS_GFX
+	if (GET_GAME_STATE (IMPROVED_LANDER_CARGO) && RESOLUTION_FACTOR > 0)
+		NumRetrieved >>= 1;
+	
 	while (NumRetrieved--)
 	{
 		if (start_count++ & 1)
