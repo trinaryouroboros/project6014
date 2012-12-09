@@ -389,7 +389,7 @@ initialize_lightning (ELEMENT *ElementPtr, HELEMENT LaserArray[])
 			angle += LOWORD (rand_val) & (QUADRANT - 1);
 		else
 			angle -= LOWORD (rand_val) & (QUADRANT - 1);
-#define LASER_RANGE (32 << RESOLUTION_FACTOR) // JMS_GF
+#define LASER_RANGE (32 << RESOLUTION_FACTOR) // JMS_GFX
 		delta = WORLD_TO_VELOCITY (DISPLAY_TO_WORLD ((HIWORD (rand_val) & (LASER_RANGE - 1)) + 4));
 		SetVelocityComponents (&LaserPtr->velocity,
 				COSINE (angle, delta), SINE (angle, delta));

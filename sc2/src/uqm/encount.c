@@ -395,21 +395,27 @@ InitEncounter (void)
 				hNextShip = hStarShip;
 
 			s.origin = display_pt[i % NUM_DISPLAY_PTS];
-			s.origin.x = s.origin.x << RESOLUTION_FACTOR; // JMS_GFX
-			s.origin.y = s.origin.y << RESOLUTION_FACTOR; // JMS_GFX
 			
 			if (i >= NUM_DISPLAY_PTS)
 			{
 				COUNT angle, radius;
-
+				
 				radius = square_root ((long)s.origin.x * s.origin.x
-						+ (long)s.origin.y * s.origin.y)
-						+ ((i / NUM_DISPLAY_PTS) * 18);
-
+									  + (long)s.origin.y * s.origin.y)
+				+ ((i / NUM_DISPLAY_PTS) * 18);
+				
+				radius <<= RESOLUTION_FACTOR; // JMS_GFX
+				
 				angle = ARCTAN (s.origin.x, s.origin.y);
-				s.origin.x = COSINE (angle, radius);
-				s.origin.y = SINE (angle, radius);
+				s.origin.x = (COSINE (angle, radius));
+				s.origin.y = (SINE (angle, radius));
 			}
+			else
+			{
+				s.origin.x <<= RESOLUTION_FACTOR; // JMS_GFX
+				s.origin.y <<= RESOLUTION_FACTOR; // JMS_GFX
+			}
+			
 			s.frame = SetAbsFrameIndex (FragPtr->icons, 0);
 			GetFrameRect (s.frame, &r);
 			s.origin.x += (SIS_SCREEN_WIDTH >> 1) - (r.extent.width >> 1);

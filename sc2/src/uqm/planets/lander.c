@@ -825,7 +825,7 @@ FillLanderHold (PLANETSIDE_DESC *pPSD, COUNT scan, COUNT NumRetrieved)
 	}
 	else
 	{
-		start_count = pPSD->ElementLevel
+		start_count = pPSD->ElementLevel;
 		pPSD->ElementLevel += NumRetrieved;
 		if (GET_GAME_STATE (IMPROVED_LANDER_CARGO))
 			NumRetrieved = (pPSD->ElementLevel >> 1) - (start_count >> 1);

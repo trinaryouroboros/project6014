@@ -694,7 +694,7 @@ calc_map_light (UBYTE val, DWORD dif, int lvf)
 
 static inline Color
 get_map_pixel (Color *pixels, int x, int y, COUNT width, COUNT spherespanx)
-{
+{ 
 	return pixels[y * (width + spherespanx) + x];
 }
 
