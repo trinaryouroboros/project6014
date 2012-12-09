@@ -408,6 +408,7 @@ androsynth_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		if (lpEvalDesc->ObjectPtr)
 		{
 			GetElementStarShip (lpEvalDesc->ObjectPtr, &pEnemyStarShip);
+			// JMS_GFX
 			if (lpEvalDesc->which_turn <= 16
 					&& (StarShipPtr->special_counter > 0
 					|| StarShipPtr->RaceDescPtr->ship_info.energy_level < MAX_ENERGY / 3
@@ -423,6 +424,7 @@ androsynth_intelligence (ELEMENT *ShipPtr, EVALUATE_DESC *ObjectsOfConcern,
 		if (StarShipPtr->special_counter == 0)
 		{
 			StarShipPtr->ship_input_state &= ~SPECIAL;
+			// JMS_GFX
 			if ((ObjectsOfConcern[ENEMY_WEAPON_INDEX].ObjectPtr
 					&& ObjectsOfConcern[ENEMY_WEAPON_INDEX].which_turn <= 4)
 					|| (lpEvalDesc->ObjectPtr
