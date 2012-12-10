@@ -28,7 +28,16 @@ Dead. He died in heart attack years ago while still repopulating his race, with 
 
 ==Hiruko==
 
-_... More coming soon..._
+Hiruko is a Shofixti female who is charged with managing the settlement and the rebuilding efforts on Kyabetsu. Her work requires her not to belong to any of the dynasties, otherwise other dynasties could accuse her of representing her family instead of the entire race. Because of her position as an independent female, she don't have any value as a mother, and therefore forbidden to carry babies. Nevertheless she is respected by males, and only responds to the Shoguns.
+
+Because of the various ways Shofixti society restricts female freedom, Hiruko -- being versed in various alien cultures -- tends to despise males generally and views history through such a lens.
+
+Hiruko's task is seemingly impossible to accomplish. She has to build up Shofixti civilization again, but that requires none less than the revival of Kyabetsu's ecosystem, while in the meantime her race is dying. She sent out several Scout patrols -- three of which didn't return -- to search for new lifeforms in this scientific endeavour, and to seek out civilizations that might have the terraforming knowledge the Alliance doesn't possess.
+
+To prove that he's not just a worthless male, the Captain has to deliver the [GenesisDevice Genesis Device] to her. There are two possible results:
+
+  * In case she gets the device in time, the Shofixti race can flourish again and Hiruko can grant the aid of the Shoguns -- which means cheaper crew again, and Scout vessels buildable at the Yehat-Pkunk Starbase.
+  * In case the Captain can't solve the Shofixti case, the settlement will decline completely and the rest of the Shofixti patrols will be coerced by the Lurg to aid them in the last battle. The Yehat will fall into mourning and even if the Captain succeeded in helping them, the benefits of the Yehat alliance won't be accessible in the end.
 
 ----
 
@@ -37,44 +46,3 @@ _... More coming soon..._
 (1) Shofixti pilots share the beliefs of the Shoguns, and they are the ones who can explain their decisions in detail. For Hiruko it's all just useless male mumbo-jumbo.
 
 (2) Hiruko mentions this. The Captain may correct her that the saviour of the Shofixti race was actually Katana. Hiruko's response to this is effectively _"Well, Tanaka or Katana, it doesn't matter. Males are all the same anyway."_
-
-----
-
-Core member of NAFS. At the start of the game you are chosen to investigate a Shofixti distress signal originating from unknown space. The signal makes reference to a Precursor artifact and some kind of eminent danger.
-
-The Shofixti are trying to resettle but with little luck. The [Chmmr] are too busy with other stuff to help them out. You must help the Shofixti find a new homeworld. There will be one at Beta Gorno which requires some engineering to make it suitable for habitation. 1. You can get terraforming plants from the Xen-Weyi to do this. 2. Alternatively you can donate the Sun Device for this purpose. The Sun Device can be found at DAX's starbase.
-    
-Take too long and a desperate religious sect will arise, promoting mass suicide. The number of Shofixti will be reduced back to hundreds, and that will result in withdrawal of the Shofixti from the alliance.
-
-The Chmmr prevent Shofixti from taking a new home at Vela, which would be biologically suitable for them: Chmmr don?t want anyone else snooping around Precursor tech.
-
-== Detailed info ==
-
-At the end of UQM, the Shofixti were brought back from the brink of extinction due to your efforts, but their situation remains precarious. Their current number is in the tens of thousands, but their genetic diversity is dangerously low as they all share one grandfather and herald for one of a dozen grandmothers.
-
-Shofixti civilization was based on war constantly dwindling their numbers and thus balancing the high number of children in an average shofixti litter. During the last few years since UQM, their population is severely limited as they have no permanent colony, and they are forced to rely on resources delivered by alliance (mainly the [Yehat] due to historical closeness between the species); the Shofixti considered their situation shameful as they cannot fend for themselves, cannot reproduce, and have no enemy. The general state of the shofixti populace is depression and gloom.
-
-There is a positive side to the situation in females taking a more important role in society. With the historical task of children rearing made irrelevant until a homeworld becomes available, females share in the burden of administration and maintenance.
-
-The NAFS search parties have discovered few planets that would be even remotely suitable for the new Shofixti homeworld. This is mostly due to lack of Chmmr willingness ? they are diverting most of their resources to the war against Kohr-Ah and maintaining control over all other NAFS members. Thus, the Shofixti are trying to find one on their own. Still, their best bet so far is the nearby star system of Beta Gorno, in which they have erected a poorly faring colony.
-
-Other Gorno systems might offer about as good homeworld alternatives, but there is a reason for choosing this specific system: Beta Gorno holds special spiritual significance to the Shofixti. All Gorno suns were clearly visible in the night sky of the previous homeworld and Beta Gorno was the star Shofixti culture signifying Grandmother Kishi-Bojin, from which all Shofixti were born according to legend. Kishi-Bojin had XXX daughters, coinciding with the XXX planets of Beta Gorno (at the ancient times of the myth, the Shofixti had of course no way of telling how many planets Beta Gorno had. Consequently, the myth seems even more convincing now when the star-faring Shofixti found out the number of planets actually was the very number of Kishi-Bojin's daughters). 
-
-Kishi-Bojin?s third daughter Hiruko is the goddess of the morning, signifying new hope and renewal and custodianship. One of the maidens rescued by Grandfather was named Kishi-Bojin and she used her position as grandmother to gain religious and spiritual influence. She has convinced the Shofixti to establish a colony on Beta Gorno III naming it the ?New Morning?, and has placed her first litter daughter Hiruko as its administrator.
-
-Hiruko, with whom you will have most of the interaction in this plot arc, is in quite of a bind. Having been educated on the Chmmr starbase, she is a rational and logical creature with little tolerance for religion and symbolism. She is quite aware that her people are in desperate need of a leader, and they consider her a living demigod. She wishes to create a better and more gender equal Shofixti society but she understand that reaching millions is critical to save the Shofixti race.
-
-Greatly complicating the whole picture is the state of Beta Gorno III. although mass and chemical composition are compatible with organic life, it is simply too arid and too cold to allow speedy terraforming. The New Morning also lacks a moon.
-
-You may choose to aid the terraforming effort in one of two ways: a way that is compatible with Shofixti mythology, or a way that is not.
-
-Should you make all your choices according to mythology, this will cause the Shofixti to become a religious matriarchy lead by Kishi-Bojin. If on the other hand, you choose to use non-mythological alternatives, Hiruko will lead Shofixti society to an secular society highly influenced by the Chmmr.
-
-Failure to act within a reasonable timeframe will result in another religious sect promoting ritual suicide to gain more momentum, with a tragic mass suicide reducing them back to hundreds, and withdrawal of the rest of the Shofixti from the alliance.
-
-During this quest, you will aid the terraforming process of the New Morning.
-
-  # An efficient soil generator "device" may be obtained from the Xen-Weyi: this is a race of subsentient nitrogen-fixing plant-like creatures that will generate soil and greenhouse gases, genetically engineered for the task. This is the "secular" way.
-  # Alternatively, you will set a Sun Device in a stable orbit around ?new morning?. this will act as a moon, generate more light and heat, and herald Beta Gorno III as the true new home of Shofixti. The Sun Device can be acquired from DAX's starbase hideout after defeating him. This is the myth-compatible way. (The myth of the New Morning will need to contain a segment about a "new moon, brighter than the sun" or something like that.)
-
- (Although it is an interesting idea, it might be devastating for the Shofixti. Imagine a day-night cycle that shifts, with extreme variations in day-brightness, and lengths of nights. -- jorisvddonk)
