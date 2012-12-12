@@ -897,6 +897,30 @@ pickupMineralNode (PLANETSIDE_DESC *pPSD, COUNT NumRetrieved,
 		which_node = HIBYTE (ElementPtr->scan_node) - 1;
 		pSolarSysState->SysInfo.PlanetInfo.PartiallyScavengedList[MINERAL_SCAN][which_node] = NumRetrieved;
 		
+		// JMS: If the deposit was large and its amount now equates to a smaller
+		// deposit, change its graphics.
+		if ((oldsize > 22 && ElementPtr->mass_points < 22)
+			|| (oldsize > 15 && ElementPtr->mass_points < 15))
+		{
+			PRIMITIVE *pPrim = &DisplayArray[ElementPtr->PrimIndex];
+			BYTE gfx_index_change = 0;
+			
+			if (oldsize > 22 && ElementPtr->mass_points < 15)
+				gfx_index_change = 2;
+			else
+				gfx_index_change = 1;
+			
+			// Change the scan screen gfx.
+			ElementPtr->next.image.frame = SetRelFrameIndex (
+				ElementPtr->current.image.frame, (3 - gfx_index_change));
+			
+			// Notify the engine that the scan screen gfx should be updated.
+			ElementPtr->state_flags |= CHANGING;
+			
+			// Change the surface screen gfx.
+			pPrim->Object.Stamp.frame = SetRelFrameIndex (pPrim->Object.Stamp.frame, -gfx_index_change);
+		}
+		
 		partialPickup = true;
 	}
 

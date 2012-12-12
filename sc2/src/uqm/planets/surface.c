@@ -54,7 +54,10 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 			UWORD loword, hiword;
 			COUNT deposit_quality_fine,
 						deposit_quality_gross;
-
+			
+			// JMS: For making the mineral blip smaller in case it is partially scavenged.
+			SDWORD temp_deposit_quality;
+			
 			deposit_quality_fine = ((COUNT)TFB_Random () % 100)
 			  + (
 			     DEPOSIT_QUALITY (eptr->Density)
@@ -66,6 +69,11 @@ CalcMineralDeposits (SYSTEM_INFO *SysInfoPtr, COUNT which_deposit)
 			  {
 			    deposit_quality_fine = (COUNT)(deposit_quality_fine * DEPLETION_RATE);
 			  }
+			
+			// JMS: This makes the mineral blip smaller in case it is partially scavenged.
+			temp_deposit_quality = deposit_quality_fine - (SysInfoPtr->PlanetInfo.PartiallyScavengedList[MINERAL_SCAN][which_deposit] * 10);
+			if (temp_deposit_quality < 0)
+				temp_deposit_quality = 0;
 			
 			if (deposit_quality_fine < MEDIUM_DEPOSIT_THRESHOLD)
 			  deposit_quality_gross = 0;
