@@ -884,6 +884,7 @@ pickupMineralNode (PLANETSIDE_DESC *pPSD, COUNT NumRetrieved,
 	if (pPSD->ElementLevel + NumRetrieved > pPSD->MaxElementLevel)
 	{
 		SIZE which_node;
+		COUNT oldsize = ElementPtr->mass_points;
 		
 		// Deposit could only be picked up partially.
 		NumRetrieved = (COUNT)(pPSD->MaxElementLevel - pPSD->ElementLevel);
