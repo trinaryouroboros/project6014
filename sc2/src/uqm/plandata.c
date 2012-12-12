@@ -25,6 +25,7 @@
 
 // XXX: for XXX_DEFINED constants
 #include "encount.h"
+#include "hyper.h" // JMS: For ARILOU_HOME_X and Y
 #include "resinst.h"
 #include "planets/planets.h"
 #include "planets/elemdata.h"
@@ -579,7 +580,7 @@ STAR_DESC starmap_array[] =
 			MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 0, 132},
 	{{(10 * VORTEX_SCALE) + 5000, (20 * VORTEX_SCALE) + 5000},
 			MAKE_STAR (DWARF_STAR, WHITE_BODY, -1), 0, 0, 132},
-	{{6134, 5900}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 0, 132},
+	{{ARILOU_HOME_X, ARILOU_HOME_Y}, MAKE_STAR (DWARF_STAR, YELLOW_BODY, -1), 0, 0, 132},
 	{{MAX_X_UNIVERSE << 1, MAX_Y_UNIVERSE << 1}, 0, 0, 0, 0},
 	
 	// JMS: ORZ space locations

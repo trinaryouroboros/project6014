@@ -41,8 +41,8 @@
 #define QUASI_SPACE_Y  5000
 
 // QuasiSpace coordinates of the Arilou home world
-#define ARILOU_HOME_X  (QUASI_SPACE_X + ((RADAR_SCAN_WIDTH >> 1) * 3))
-#define ARILOU_HOME_Y  (QUASI_SPACE_Y + ((RADAR_SCAN_HEIGHT >> 1) * 3))
+#define ARILOU_HOME_X  6134
+#define ARILOU_HOME_Y  5900
 
 // HyperSpace coordinates of the locations where the QuasiSpace portals
 // take you.

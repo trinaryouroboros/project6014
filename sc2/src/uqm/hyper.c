@@ -611,7 +611,7 @@ InterplanetaryTransition (ELEMENT *ElementPtr)
 		GLOBAL (autopilot.y) = ~0;
 
 		ElementToUniverse (ElementPtr, &pt);
-		CurStarDescPtr = FindStar (NULL, &pt, 5, 5);
+		CurStarDescPtr = FindStar (NULL, &pt, 5,5); // JMS_GFX
 		if (CurStarDescPtr->star_pt.x == ARILOU_HOME_X
 				&& CurStarDescPtr->star_pt.y == ARILOU_HOME_Y)
 		{
