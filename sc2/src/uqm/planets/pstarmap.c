@@ -935,7 +935,18 @@ UpdateCursorInfo (UNICODE *prevbuf)
 	if (strcmp (buf, prevbuf) != 0)
 	{
 		strcpy (prevbuf, buf);
-		DrawSISMessage (buf);
+		
+		if (BestSDPtr)
+			DrawSISMessage (buf);
+		else
+		{
+			CONTEXT OldContext;
+			
+			OldContext = SetContext (OffScreenContext);
+			SetContextForeGroundColor (BUILD_COLOR (MAKE_RGB15 (0x0E, 0xA7, 0xD9), 0x00));
+			DrawSISMessageEx (buf, -1, -1, DSME_MYCOLOR);
+			SetContext (OldContext);
+		}
 	}
 	UnlockMutex (GraphicsLock);
 }
