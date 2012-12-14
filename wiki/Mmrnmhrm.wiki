@@ -1,45 +1,31 @@
 #labels Races
 = Mmrnmhrm =
 
-  * *Connected races:* [Chmmr], [Slylandro]
-  * *Connected devices:* [MmrnmhrmFix] for Chmmr, [ReactorCorePowerUnit]
+  * *Connected races:* [Chmmr], [Faz], [Slylandro]
+  * *Connected devices:* [MmrnmhrmFix] for Chmmr, [ReactorCorePowerUnit Power Core]
 
-== Summary info ==
+==Historical info==
 
-Yes, the Mmrnmhrm still exist! The Mmrnmhrm�s help will be instrumental in fixing the Chmmr. The [MmrnmhrmMotherArk] can be discovered at the rim-ward edge of the map. Information about the Ark's location can be learned from the Slylandro. The Mother Ark is derelict and out of power. You must re-power the Ark and possibly make another fix for it to get it to produce more Mmrnmhrm.
+The original Mmrnmhrm were produced by a Mother Ark which travelled into the Virginis constellation about a millennium ago. They were thought to be "wilderness tamers"/pre-colonizers for some other race, and thought to only have merged with the Chenjesu to stave off extinction since the Mother Ark broke down and couldn't produce any more Mmrnmhrm since before the start of the Great War.
 
-The only power source big enough to juice up the Mother Ark is of starbase scale... and those things take years and bazillions of RU to manufacture. The NAFS have several starbases, but understandably you can�t take power cores from them. The solution presents itself once you locate the [VUX] rebel DAX and his secret starbase hideout. When you�ve defeated DAX and his cronies you can ransack the starbase and take its power core.
+The source of the Mother Ark's breakdown was that her power core was damaged. The only power source big enough to power up the Mother Ark is of starbase scale, and those things take years and bazillions of RU to manufacture. To solve this problem, the Mmrnmhrm tried to set up a colony in the Beta Herculis system for exploiting the resources of the constellation before the war, but due to the Spathi protest their effort broke down before it could have started.
 
-You can learn some of the Mmrnmhrm�s ancient history and what their original purpose is from the Mother Ark's databases when you've re-powered the Ark. However, years have deteriorated the databases so they're only partially functional. (A clever way to control how much we want to tell the players and how much we want to leave unsaid!)
+During the war, the Mmrnmhrm moved the Mother Ark out of harms way from Virginis and rimward, avoiding the advancing Hierarchy fleets. With the number of Mmrnmhrm drones dwindled due to war casualties, and the segregation of the majority of Mmrnmhrm by the Slave-Shield on Procyon, constructing a power core became a hopeless endeavour. It was clear the war was lost, and so the remaining free Mmrnmhrm decided to move the Mother Ark further out to some remote star system, in the hope that someday the Mmrnmhrm will be freed and she can awaken again.
 
-  (See http://www.star-control.com/community/viewtopic.php?f=8&t=473 for talk vaguely related to this.. -- jorisvddonk)
+_... More coming soon ..._
 
-== Detailed info ==
+==The Mother Ark==
 
-The original Mmrnmhrm were produced by a Mother Ark which travelled into the Virginis constellation about a millennium ago. They were thought to be "wilderness tamers"/pre-colonizers for some other race, and thought to only have merged with the Chenjesu to stave off extinction since their Mother Ark broke down and they couldn't produce any more Mmrnmhrm.
+Information about the Ark's location can be learned from the [Slylandro].
 
-The Mother Ark stopped producing more Mmrnmhrm individuals sometime shortly before the start of the first war. During the war, the Mmrnmhrm moved the Mother Ark out of Virginis and rimward, moving it out of the path of the advancing Ilwrath and the Hierarchy fleets.
+The lander party discover that the [PowerCore Power Core] of the Mother Ark needs to be replaced. The NAFS have several starbases, but understandably the Captain can't just tear out their Cores. The solution presents itself once you locate the VUX rebel DAX and his secret starbase hideout. When you've defeated DAX and his cronies you can ransack the starbase and take its power core. The other option to obtain a Core is to ally yourself with the [Baul] Boss and eliminate the [FoonFoon Foon-Foon] Rebels, and take _theirs_ instead.
 
-When the Mmrnmhrm who were escorting the Mother Ark lost contact with the Alliance of Free Stars, it became clear the war was lost, and so they decided to move it further out to some remote star system, in the hope that someday the Mmrnmhrm will be freed and it can be used again.
+Once the Ark powers up, she and her children awake and she raises to orbit the planet and starts churning out more new X-Forms. Their SOI begins to grow. From now on you can talk to them. They're generally friendly and sympathetic, interested in the outcome of the war.
 
-You can discover the Mother Ark either by entering the star system itself, or with information from the Slylandro.
+_... More coming soon ..._
 
-Your landing party finds out that the Ark and its Mmrnmhrm guards have lost power after sitting derelict so long. The technicians are able to access the onboard (non-sentient) computers and copy their data for further analysis by the eggheads back at Sol starbase.
+----
 
-The scientists at Sol discover from the logs that the Mmrnmhrm broadcast wireless power from their ships to power their individuals, and so when the Ark and ships ran out of power, the Mmrnmhrm just went into hibernation. You need to find a power source to restart the Ark.
+*NOTES FOR VOICE ACTING*
 
-The only power source big enough to juice up the Mother Ark is of starbase scale... and those things take years and bazillions to manufacture. The NAFS have several starbases, but understandably you can�t take power cores from them. The solution presents itself once you locate the VUX rebel DAX and his secret starbase hideout. When you�ve defeated DAX and his cronies you can ransack the starbase and take its power core.
-
-Once the Ark powers up, its escorts power up, and you can talk to them. They're generally friendly and sympathetic, interested in the outcome of the war(s), but can't manufacture any more Mmrnmhrm, or weaken the guard on their Mother Ark.
-
- (why not? -- jorisvddonk)
-
-The scientists also learn (perhaps after a few more weeks of game time, in a subsequent visit to base) that the reason the Mother Ark stopped producing Mmrnmhrm individuals is because it lacks a key ingredient: quantum brain matter. The Mmrnmhrm's brains run in quantum computers ("which Earth scientists thought was a dead end in computing, and gave up trying to get working in the mid 21th century"), which require an unfamiliar exotic matter to construct. The exotic matter does not exists in nature, it must be manufactured, but the Mother Ark's exotic matter factory is broken, and irreparable according to the Mmrnmhrm's logs. You then need to find a way to replace the Ark's exotic matter factory.
-
-Once you destroy an Exotics' ship, your/starbase's tech team could report that traces of the Mmrnmhrm compatible gray-matter was found in the wreckage. You can locate a crashed Exotic's ship, which contains a device which manufactures the exotic matter. (We could also insinuate that the Mmrnmhrm are actually creations of the Exotics. But not state it explicitly.)
-
- (Why would the Exotics create the Mmrnmhrm? They're already fairly powerful themselves, and don't really seem to need the Mmrnmhrm... -- jorisvddonk)
-
-If that plot line of acquiring an exotic matter producing device that's a bit convoluted, we can cut it back to just say that the exotic-matter producing device is also the power source for the Mother Ark. Perhaps Shofixti scouts could find the crashed Exotic's ship. Or it could be a raid on an Exotics base, or you could just discover a precursor artifact which produces the exotic matter (implying the Precursor's created the Mmrnmhrm).
-
-Once the Mother Ark is back in business producing more Mmrnmhrm individuals, it can help produce a fix for the Chmmr, and manufacture X-Form ships & crew.
+The best voice effect I can think of for the Mmrnmhrm is the auto-tune voice one can hear in Saints Row 3 and Portal. Our robots _sing_ their dialogue, making them sound adorable and sympathetic. The Mother Ark has -- of course -- a female voice, while X-Form drones have high pitched male voice.
