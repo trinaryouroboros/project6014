@@ -12,8 +12,6 @@ The source of the Mother Ark's breakdown was that her power core was damaged. Th
 
 During the war, the Mmrnmhrm moved the Mother Ark out of harms way from Virginis and rimward, avoiding the advancing Hierarchy fleets. With the number of Mmrnmhrm drones dwindled due to war casualties, and the segregation of the majority of Mmrnmhrm by the Slave-Shield on Procyon, constructing a power core became a hopeless endeavour. It was clear the war was lost, and so the remaining free Mmrnmhrm decided to move the Mother Ark further out to some remote star system, in the hope that someday the Mmrnmhrm will be freed and she can awaken again.
 
-_... More coming soon ..._
-
 ==The Mother Ark==
 
 Information about the Ark's location can be learned from the [Slylandro].
@@ -22,10 +20,18 @@ The lander party discover that the [PowerCore Power Core] of the Mother Ark need
 
 Once the Ark powers up, she and her children awake and she raises to orbit the planet and starts churning out more new X-Forms. Their SOI begins to grow. From now on you can talk to them. They're generally friendly and sympathetic, interested in the outcome of the war.
 
-_... More coming soon ..._
+Soon after the Mother Ark downloads the memories of her children, she realises that a war was fought while she was asleep. She'll link up to the Explorer, and will notice a Mmrnmhrm component fused with an alien lifeform. Talking to the Explorer she'll become to know about the Chenjesu and "The Process", and that the Explorer is infected. Fortunately the Mother Ark is capable of fixing the Mmrnmhrm part by creating a [MmrnmhrmFix software vaccine], however applying it to the Chmmr is only effective when the cure to the crystalline part is also present.
+
+To solve the Exotics puzzle we need the assistance of an AI with a complexity superior to every known artificial intelligence. The Mother Ark herself therefore is a key ingredient. The Captain can ask for her assistance, and she's willing to help, but there's a problem: she needs to migrate into the Explorer's computers, but the Explorer doesn't have the capacity required to contain her. The solution comes when the Explorer absorbs the [Central Nexus] -- a data storage device that contains the Faz VR -- the [Faz] gives to the Captain.
+
+If the Central Nexus is in place, the Mother Ark AI moves into the Explorer and blends with it's original AI. This means that from now on her voice replaces that of the original AI, and she'll make a few extra remarks -- advices, observations -- when the Captain talks with other races. The Mother Ark's body becomes a hollow Starbase, capable of constructing X-Forms for the Captain.
 
 ----
 
 *NOTES FOR VOICE ACTING*
 
 The best voice effect I can think of for the Mmrnmhrm is the auto-tune voice one can hear in Saints Row 3 and Portal. Our robots _sing_ their dialogue, making them sound adorable and sympathetic. The Mother Ark has -- of course -- a female voice, while X-Form drones have high pitched male voice.
+
+*NOTES FOR MUSIC*
+
+Could we emulate the SID sound of Commodore 64? That would be great!
