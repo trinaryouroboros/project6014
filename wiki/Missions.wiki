@@ -1,57 +1,83 @@
+#summary A list of all the missions and side missions available here for the full game.
 #labels Gameplay
-#summary A list of all the missions and side missions available here for the full game. (spoilers)
 
 = Tasks to Complete =
 
 This is a list of tasks, missions, and side-quests for the player to complete. These are reasons for the player to visit these races or pick up these objects to finish the game.
 
-
-= Alien Tasks =
-
-Alien race will have a set of tasks, missions, and side-quests for the player to accomplish:
-
-==Syreen==
-
-  Visit the Syreen homeworld and tell them of your mission. They will give you a new ship.
-
-==Orz==
-
-  No missions are currently given by the Orz.
-
-==Androsynth==
-
-  No missions are curently given by the Androsynth.
-
-==Foon Foon==
-
-  They will ask you to help them against the MasterRace.
-
-==Baul==
-
-  No missions are currently given by the Baul.
-
-==Humans==
-
-No missions are currently given by the humans.
+==MAIN QUEST==
+  * Complete the [Mmrnmhrm] Quest.
+  * Go to the Mother Ark, now orbiting (Mmrnmhrm hideout).
+  * Learn that the Mother Ark can help in the main quest.
+  * Complete [Faz] Quest.
+  * Come back to the Mother Ark with a Central Nexus absorbed, and let the Mother Ark AI migrate into the Explorer.
 
 
-==Yehat==
+==[Baul]==
 
-  No missions are currently given by the Yehat.
+*"HELP THE BOSS"*
 
-==Exotics==
+  * Visit the Boss at (Foon-Foon homeworld) and learn about the Boss' problem with the rebels.
+  * Make a deal with the Boss and take a Baul observer escort.
+  * Go to (Rebel Base) and destroy the [FoonFoon Foon-Foon] Typhoons there.
+  * Bring the Baul observer escort back to the Boss at (Foon-Foon homeworld)
 
-  No missions are currently given by the Extoics.
+*"HELP THE OVERBOSS"*
+  
+  * Learn the location of (Baul homeworld) from [Melnorme] or [Baul]
+  * Visit the Overboss at (Baul homeworld) and make a deal with him.
+  * Complete the Foon-Foon quest.
+  * Defeat the Boss' Punisher.
 
+==[Faz]==
 
-==Faz==
+  * Go to (Faz Homeworld)
+  * Use [SlaveShieldBuster Slave-Shield Buster]
+  * Search surface buildings for the source of the carrier wave.
+  * Wake up the Faz Philosopher, and learn more about his VR world.
+  * Visit Fwiffo at (Epsilon Gruis IA), and learn about his [MelnormeFunROMs Melnorme FunROMs].
+  * Borrow a FunROM from Fwiffo, the one that best resemble the Faz Philosopher's description.
+  * Wake up the Faz Philosopher on (Faz Homeworld), and answer a series of questions correctly to make him wake the rest of the Faz.
+  * Take the [CentralNexus Central Nexus].
 
-  No missions are currently given by the Faz.
+==[FoonFoon Foon-Foon]==
 
-==Lurg==
+  * Go to Androsynth sanctuary (Armstrong const.) OR visit a Melnorme Trader for information on the location of the rebel base.
+  * Ask Foon-Foon rebels at (Rebel Base) for information on the Cloaking technology and the plan to overthrow the Baul.
+  * Search for Ilwrath Cloaking Device at Ilwrath homeworld (Alpha Tauri I).
+  * Bring a Lander and an Ilwrath Cloaking Device to (Rebel Base), and let the Foon-Foon engineers rig the device to the lander.
+  * Enter the orbit of (Foon-Foon Moon) and use Stealth Lander.
+  * Destroy Moon Cannon within time limit.
 
-  # *Find the Precursor Ship*:
-    If you visit the planet with the Precursor Ship holding the Black Orb you'll encounter the Lurg. After battling the Lurg you can explore the planet. After exploring the planet you'll encounter a Precursor ship and pick up the Black Orb. A cutscene (cutscene1) will start where you are hopelessly outnumbered by the Lurg. (This is where the demo ends).
+==[Mmrnmhrm]==
 
+  * Go to (Mmrnmhrm hideout)
+  * Find the Mother Ark on the surface, and learn that a [PowerCore Power Core] is needed.
+  * Acquire Power Core by defeating DAX OR by defeating the [FoonFoon Foon-Foon] Rebels.
+  * Bring Power Core to (Mmrnmhrm hideout) and contact the Mother Ark with a lander. Use the Power Core in a new conversation option.
 
- 
+==[Shofixti]==
+
+  * Learn of the Shofixti problem from Hiruko at Kyabetsu (Delta Gorno I)
+  * Complete the [XenWeyi Xen-Weyi] quest "FREE THE XEN-WEYI!"
+  * Get the [GenesisDevice Genesis Device] from the Xen-Weyi.
+  * Bring the Genesis Device to Kyabetsu and give it to Hiruko.
+
+==[Syreen]==
+
+  * Visit the Syreen homeworld and tell them of your mission.
+  * They will give you a new ship.
+
+==[XenWeyi Xen-Weyi]==
+
+*"FREE THE XEN-WEYI!"*
+  * Learn the location of (Xen-Weyi homeworld) from the [Melnorme] OR [Baul]
+  * Go to (Xen-Weyi homeworld)
+  * Use [SlaveShieldBuster Slave-Shield Buster]
+
+*"SAVE THE XEN-WEYI!"*
+  * Complete the "FREE THE XEN-WEYI!" quest.
+  * Go to Spathiwa (Epsilon Gruis I).
+  * Use [SlaveShieldBuster Slave-Shield Buster] on Spathiwa.
+  * Get [SlaveShieldGenerator Slave-Shield Generator] from the Spathiwans.
+  * Go back to (Xen-Weyi homeworld) in time and give the Slave-Shield Generator to the Xen-Weyi.
