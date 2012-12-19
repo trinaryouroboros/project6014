@@ -1,21 +1,23 @@
 #labels Races
-Taalo
+=Taalo=
 
   * *Connected races:* [Arilou], [Orz]
   * *Connected devices:* [TaaloFix] for Chmmr, [OrzSpaceEscapeDevice]
 
-== Summary info ==
+== Historical info ==
 
-*The Taalo live!* A bit presumptuous for me to bring them back but might as well. The Taalo were experimenting with IDF when the [UrQuan] started finishing off Milieu members, and that's how some of them escaped into *below*, evading destruction.
+Founding members of the Sentient Milieu. Being the only race that had a natural immunity to Dnyarri mind control, the Dnyarri viewed them as a threat and ordered their Ur-Quan slaves to exterminate them. They were believed to be extinct ever since.
 
-Taalo will be accessed from Orzspace. Perhaps Orz are still *chasing* Taalo in this dimension. Don�t know. Taalo will be instrumental in fixing the silicon part of the Chmmr. They�ll give you this if you deliver a comatose [Chmmr] to them as a sign of good will and because they're so nice. 
+When the Ur-Quan started finishing off Milieu members the Taalo were experimenting with Inter-Dimensional Fatigue technology. They slipped to a different dimension the [Orz] refer to as _"Pretty Space"_. The presence of the Taalo in _"Pretty Space"_ creates a phenomena -- a thorn in the paw of the Orz sentience -- in Orzspace similar to what Truespace gravity wells cause in Hyperspace. Through this phenomena the Taalo can be accessed.
 
-The Taalo want you to free them from Orzspace. They aren't in a mortal danger in Orzspace, but they're not home there either. They want to return. You may or may not help them, but if you do, you get them to ally you. You need the Temporal Wrapper device from the Arilou for this, but it alone isn't enough! The truespace [Androsynth] will make a larger version of the Temporal Wrapper in order to help the Androsynth "trapped" in Orzspace. You can use this device to free the Taalo.
+_... More Coming Soon ..._
 
-When you spring the Taalo free, they'll co-exist with the Orz at Vulpeculae *Taalo playground* and the neighborhood: Since the Orz seemed to react pretty favorably to Taalo in SC2, it could be that they don't actually mind whether the Taalo are in Orzspace or in truespace... They're just kinda happy to have *friends*.
+The Taalo will provide the cure to the silicon part of the Chmmr. For this they need to be set free from their current residence, back to truespace where various silicates can be found.
 
-The Taalo will provide information on the real state of the Androsynth in OrzSpace.
+Once they're done, they'll return to Delta Vulpeculae II-C and co-exist with the Orz. Apparently as long as they don't cause phenomenae in Orz's _body_, the _fingers_ don't mind having them around.
 
-Will want you to be merciful with the Ur-Quan and [KohrAh], and demand promise of this upon allying them. This will result in shocked/reproaching attitudes from your allies, particularly the Shofixiti and the militarily minded [Yehat]. However, it might not result in anything concrete (in this sequel anyway ;).
+*TAALO MONOLITH*
 
-== Detailed info ==
+Once the Taalo returned to their home space, the Captain can visit them to receive Monolith vessels. Monoliths are large versions of Taalo, what appears as their crew are rather like integral parts of the whole ship. A Monolith is one entity, therefore there's no need for a captain and it cannot be operated by a mixed crew.
+
+Consequentially -- like the Slylandro Drone -- the Monolith doesn't have crew as indicator for it's health. The Captain can't assign crew to his Monoliths, he has to replenish their health at the Taalo homeworld.
