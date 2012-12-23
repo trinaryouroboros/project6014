@@ -4,15 +4,25 @@
   * *Connected races:* [Ariloulaleelay], [Taalo], [Androsynth]
   * *Connected devices:* [StarPortals] to OrzSpace 
 
-== Summary info ==
+==Historical info==
 
-Associate member of NAFS. Have/has come from *below* to our dimension for some unknown purpose. Orz seem to like it here and want to stay.
+For those living in our dimension, the Orz is apparently race of aquatic aliens, in reality they are merely the "fingers" of what the Orz truly is.
 
-After you�ve met and talked with the truespace Androsynth enclave, you will be able to quiz the Orz more on their disappearance. They won�t like this. If you keep pressing them they�ll get angry and become your enemy. You�ll have a decision to make: keep the faith with the Orz at the expense of an Androsynth alliance, or believe the Androsynth (and Arilou) and ditch the Orz.
+The Orz is an entity that exists as a multi dimensional-organism. When the Taalo slipped in "Pretty space" with their IDF technology, their presence there created a nook in the "body" of the Orz. The Orz, irritated by the Taalo spread it's fingers into "Pretty space" but were ever since unable to catch the Taalo.
 
-Orz have been *chasing* Taalo in Orzspace. You get hints about the existence of Taalo from the Orz. I do not think that the Orz have necessarily been doing anything bad to the Taalo. Maybe just having a bit of fun at their expense.
+A couple of ten thousand years later -- by our definition of time -- the Orz sensed the Androsynth meddling with IDF technology, and as a reaction it spread it's "fingers" into our dimension. The Androsynth living in the Vulpeculae constellation disappeared, though a small population of them still live in the Armstrong constellation. The Orz might have taken an interest in our dimension, since it didn't pull it's fingers back, but left them where they are and through them it helped the Captain succeed in defeating the Ur-Quan, however whatever motivation stays behind such actions is still a mystery.
 
-== Detailed info ==
+==Orzspace==
+
+By the time the game starts, strange dimensional portals have already opened up at hyperspace coordinates identical to certain stars. They are huge dark holes replacing all objects of these star systems, whose fate remains unknown -- yet strangely enough, these star systems still create gravity wells in hyperspace. As much as the manifestations in truespace can be considered the "fingers" of the Orz entity, these portals can be considered it's "maws", leading to the inside of it's "body". Similarly to quasispace in UQM, the Captain can shorten his journey by using these portals to bypass long hyperspace distances.
+
+Traveling inside orzspace, the Captain may encounter pursuers that can be described as "antibodies". Any contact with an antibody results in the Captain's destruction and therefore the end of the game.
+
+*TAALO*
+
+_... More coming soon ..._
+
+----
 
 From conversations with Androsynth trapped in *Orzspace*:
 
