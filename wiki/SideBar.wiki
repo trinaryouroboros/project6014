@@ -12,6 +12,7 @@
       * [http://star-control.com/community/viewforum.php?f=9 The Pages of Now and Forever]
   * Development
     * DesignNotes
+      * [HistoricalOverview Historical Overview]
       * [HowItStarts How it Starts]
       * Races
         * [Androsynth]
