@@ -56,7 +56,7 @@
         * [GettingTechnology Getting Technology]
         * [ResourceGathering Resource Gathering]
         * [InterstellarTravel Interstellar Travel]
-        * [StarPortals Star Portals to OrzSpace]
+        * [StarPortals Portals to OrzSpace]
       * [Missions]
       * [Map]
     * Implementation details
