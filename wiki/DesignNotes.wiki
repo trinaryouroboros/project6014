@@ -7,7 +7,7 @@ Ported from the Game Development Document.  Contains comments from various team 
 
 Disclaimer of sorts: This document is hacked and slashed together from several e-mails, forum posts, word docs etc. written by various people. Thus, the "I" in this text is not a single person, but may refer to Cedric Horner, Edmund Horner, Chris Pearce, Jaakko Markus Seppälä, Anthony smith or some other Ur-Quan Masters afficionado who has contributed to this plot with his/her ideas. Thank you all!
 
-  * [HowItStarts]
+  * [HowItStarts How it starts...]
   * [HistoricalOverview Historical Overview]
   * Race information -- Backgrounds, motivations and technical details behind each race. Cool stuff!
     * SC2 races
@@ -36,22 +36,22 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
       * [XenWeyi]
     * OtherRaces - not directly in the game.
   * Devices
-    * [BlackOrb]
-    * [MmrnmhrmFix]
-    * [TaaloFix]
-    * [ExoticsCommunicationTool]
-    * [ExoticsGravityBombs]
-    * [MelnormeCallDevice]
-    * [OrzSpaceEscapeDevice]
-    * [ReactorCorePowerUnit]
-    * [SlaveShieldBuster]
-    * [SunDevice]
-    * [TemporalWrapper]
-    * [TerraformingPlants]
-    * [StarPortals] to OrzSpace
-  * [GamePlay]
-    * [GettingTechnology]
-    * [ResourceGathering]
-    * [InterstellarTravel]
+    * [BlackOrb Black Orb]
+    * [MmrnmhrmFix Mmrnmhrm Fix]
+    * [TaaloFix Taalo Fix]
+    * [ExoticsCommunicationTool Exotics Communication Tool]
+    * [ExoticsGravityBombs Exotics Gravity Bombs]
+    * [MelnormeCallDevice Melnorme Call Device]
+    * [OrzSpaceEscapeDevice Orz Space Escape Device]
+    * [ReactorCorePowerUnit Reactor Core Power Unit]
+    * [SlaveShieldBuster Slave Shield Buster]
+    * [SunDevice Sun Device]
+    * [TemporalWrapper Temporal Wrapper]
+    * [TerraformingPlants Terraforming Plants]
+    * [StarPortals Star Portals] to OrzSpace
+  * [GamePlay Game Play]
+    * [GettingTechnology Getting Technology]
+    * [ResourceGathering Resource Gathering]
+    * [InterstellarTravel Interstellar Travel]
   * [Missions] -- A list of all the missions and side missions available here for the full game.
   * [Map]
