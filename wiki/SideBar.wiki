@@ -16,7 +16,11 @@
         * [EndOfSC2 The Galaxy after SC2]
         * [StoryGap The gap between the two stories]
         * [SC2Mysteries Hints & Mysteries]
-      * [HowItStarts How it Starts]
+      * [Story]
+        * [MainEvents Main events]
+        * [HowItStarts How it Starts]
+        * [Missions]
+        * [Map]
       * Races
         * [Androsynth]
         * [Ariloulaleelay]
@@ -62,8 +66,6 @@
         * [ResourceGathering Resource Gathering]
         * [InterstellarTravel Interstellar Travel]
         * [StarPortals Portals to OrzSpace]
-      * [Missions]
-      * [Map]
     * Implementation details
       * [ShipSizes Ship Sizes]
       * [ShipCreation Ship Creation]
