@@ -5,6 +5,8 @@ You'll start off in a non-moddable [ChmmrExplorer]. Its only real capabilities w
 
  (See my comment in [HowItStarts]. -- jorisvddonk)
 
-  * [GettingTechnology]
-  * [ResourceGathering]
-  * [InterstellarTravel]
+  * [GamePlayChanges Gameplay changes between UQM and Project 6014]
+  * [GettingTechnology Getting Technology]
+  * [ResourceGathering Resource Gathering]
+  * [InterstellarTravel Interstellar Travel]
+  * [StarPortals Portals to OrzSpace]
