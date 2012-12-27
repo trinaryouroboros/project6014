@@ -5,14 +5,9 @@
 
 This page covers the background story and the state of the galaxy before the new story begins. It will help story creators remember the details of the original Star Control 2 game, and help define the background story that happened to the galaxy in the four years between episode 1 and the sequel.
 
-== The Galaxy after SC2 ==
-
-
-== The gap between the two stories ==
-
-
-== Hints and unresolved mysteries in the Star Control 2 universe ==
-
+  * [EndOfSC2 The Galaxy after SC2]
+  * [StoryGap The gap between the two stories]
+  * [SC2Mysteries Hints and unresolved mysteries in the Star Control 2 universe]
 
 
 
