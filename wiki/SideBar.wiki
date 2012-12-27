@@ -53,6 +53,7 @@
         * [TemporalWrapper Temporal Wrapper]
         * [TerraformingPlants Terraforming Plants]
       * [GamePlay Gameplay]
+        * [GamePlayChanges Gameplay changes]
         * [GettingTechnology Getting Technology]
         * [ResourceGathering Resource Gathering]
         * [InterstellarTravel Interstellar Travel]
