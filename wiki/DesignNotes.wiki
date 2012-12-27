@@ -50,6 +50,7 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
     * [TerraformingPlants Terraforming Plants]
     * [StarPortals Star Portals] to OrzSpace
   * [GamePlay Game Play]
+    * [GamePlayChanges Gameplay changes between UQM and Project 6014]
     * [GettingTechnology Getting Technology]
     * [ResourceGathering Resource Gathering]
     * [InterstellarTravel Interstellar Travel]
