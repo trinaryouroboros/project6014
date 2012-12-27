@@ -54,5 +54,6 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
     * [GettingTechnology Getting Technology]
     * [ResourceGathering Resource Gathering]
     * [InterstellarTravel Interstellar Travel]
+    * [StarPortals Portals to OrzSpace]
   * [Missions] -- A list of all the missions and side missions available here for the full game.
   * [Map]
