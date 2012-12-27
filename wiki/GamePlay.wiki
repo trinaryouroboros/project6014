@@ -1,7 +1,7 @@
 #labels Gameplay
 = Game play =
 
-You�ll start off in a non-moddable [ChmmrExplorer]. Its only real capabilities will be interstellar travel, a bit of fighting, and landing on planets. Early on your Explorer will be destroyed and you�ll get a moddable [PrecursorShip] in its place � much like the Vindicator.
+You'll start off in a non-moddable [ChmmrExplorer]. Its only real capabilities will be interstellar travel, a bit of fighting, and landing on planets. Early on your Explorer will be destroyed and you'll get a moddable [PrecursorShip] in its place - much like the Vindicator.
 
  (See my comment in [HowItStarts]. -- jorisvddonk)
 
