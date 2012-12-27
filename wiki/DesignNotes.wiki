@@ -8,7 +8,7 @@ Ported from the Game Development Document.  Contains comments from various team 
 Disclaimer of sorts: This document is hacked and slashed together from several e-mails, forum posts, word docs etc. written by various people. Thus, the "I" in this text is not a single person, but may refer to Cedric Horner, Edmund Horner, Chris Pearce, Jaakko Markus Seppälä, Anthony smith or some other Ur-Quan Masters afficionado who has contributed to this plot with his/her ideas. Thank you all!
 
   * [HowItStarts]
-  * [HistoricalOverview]
+  * [HistoricalOverview Historical Overview]
   * Race information -- Backgrounds, motivations and technical details behind each race. Cool stuff!
     * SC2 races
       * [Ariloulaleelay]
