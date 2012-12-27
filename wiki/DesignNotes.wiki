@@ -7,11 +7,14 @@ Ported from the Game Development Document.  Contains comments from various team 
 
 Disclaimer of sorts: This document is hacked and slashed together from several e-mails, forum posts, word docs etc. written by various people. Thus, the "I" in this text is not a single person, but may refer to Cedric Horner, Edmund Horner, Chris Pearce, Jaakko Markus Seppälä, Anthony smith or some other Ur-Quan Masters afficionado who has contributed to this plot with his/her ideas. Thank you all!
 
-  * [HowItStarts How it starts...]
   * [HistoricalOverview Historical Overview]
     * [EndOfSC2 The Galaxy after SC2]
     * [StoryGap The gap between the two stories]
     * [SC2Mysteries Hints and unresolved mysteries in the Star Control 2 universe]
+  * [Story]
+    * [MainEvents Main background events in the galaxy]
+    * [HowItStarts How it starts...]
+    * [Missions] -- A list of all the missions and side missions available here for the full game.
   * Race information -- Backgrounds, motivations and technical details behind each race. Cool stuff!
     * SC2 races
       * [Ariloulaleelay]
@@ -58,5 +61,4 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
     * [ResourceGathering Resource Gathering]
     * [InterstellarTravel Interstellar Travel]
     * [StarPortals Portals to OrzSpace]
-  * [Missions] -- A list of all the missions and side missions available here for the full game.
   * [Map]
