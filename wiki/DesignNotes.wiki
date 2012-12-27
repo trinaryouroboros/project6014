@@ -15,6 +15,7 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
     * [MainEvents Main background events in the galaxy]
     * [HowItStarts How it starts...]
     * [Missions] -- A list of all the missions and side missions available here for the full game.
+    * [Map Starmap of truespace]
   * Race information -- Backgrounds, motivations and technical details behind each race. Cool stuff!
     * SC2 races
       * [Ariloulaleelay]
@@ -61,4 +62,3 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
     * [ResourceGathering Resource Gathering]
     * [InterstellarTravel Interstellar Travel]
     * [StarPortals Portals to OrzSpace]
-  * [Map]
