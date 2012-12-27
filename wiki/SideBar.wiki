@@ -15,7 +15,7 @@
       * [HistoricalOverview Historical Overview]
         * [EndOfSC2 The Galaxy after SC2]
         * [StoryGap The gap between the two stories]
-        * [SC2Mysteries Hints and Mysteries from SC2]
+        * [SC2Mysteries Hints & Mysteries]
       * [HowItStarts How it Starts]
       * Races
         * [Androsynth]
