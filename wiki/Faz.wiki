@@ -1,6 +1,6 @@
 #labels Races
 = Faz =
-
+http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/faz/faz-000.png
   * *Connected races:* [Melnorme], [Spathi]
   * *Connected devices:* [SlaveShieldBuster Slave-Shield Buster] [MelnormeFunROM Melnorme FunROM]
 
