@@ -1,6 +1,6 @@
 #labels Races
 = Orz =
-
+http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/orz/orz-000.png
   * *Connected races:* [Ariloulaleelay], [Taalo], [Androsynth]
   * *Connected devices:* [StarPortals] to OrzSpace 
 
