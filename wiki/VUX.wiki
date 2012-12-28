@@ -1,6 +1,6 @@
 #labels Races
 = VUX =
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/vux/vux-000.png
+
   * *Connected races:* [Chmmr]
   * *Connected devices:* [SlaveShieldBuster], [ReactorCorePowerUnit], [SunDevice]
 
