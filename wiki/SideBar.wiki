@@ -15,6 +15,7 @@
       * [HistoricalOverview Historical Overview]
         * [EndOfSC2 The Galaxy after SC2]
         * [StoryGap The gap between the two stories]
+        * [Timeline]
         * [SC2Mysteries Hints & Mysteries]
       * [Story]
         * [MainEvents Main events]
