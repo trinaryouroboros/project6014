@@ -10,6 +10,7 @@ Disclaimer of sorts: This document is hacked and slashed together from several e
   * [HistoricalOverview Historical Overview]
     * [EndOfSC2 The Galaxy after SC2]
     * [StoryGap The gap between the two stories]
+    * [Timeline]
     * [SC2Mysteries Hints and unresolved mysteries in the Star Control 2 universe]
   * [Story]
     * [MainEvents Main background events in the galaxy]
