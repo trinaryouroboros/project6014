@@ -1,7 +1,6 @@
 #labels Races
-#decription of the Foon-Foon race and plot
-
 =Foon-Foon=
+http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/slaverace/slaverace-000.png
 =="Big Mother"==
 The Foon-Foon are anthropods who live in a semi-hive society. They are sentient and partly individualistic, with their attitudes unconsciously influenced by the "personality" of an overmind-like being, depending on which one's psychic range the Foon-Foon is in. To put it in other words, an overmind is the moral compass of a Foon-Foon. Without or outside the range of overminds, they would fall into semi-sentience and become savages. The Foon-Foon know of this drawback and are dreadful about the possible consequence of getting non-influenced.
 
