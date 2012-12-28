@@ -1,6 +1,6 @@
 #labels Races
 = Slylandro =
-
+http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/slylandro/slylandro-000.png
   * *Connected races:* [Mmrnmhrm]
   * *Connected devices:*
 
