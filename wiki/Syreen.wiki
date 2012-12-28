@@ -8,7 +8,7 @@ http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/syre
 
 Core member of NAFS. They will offer the services of their starbase to you, even when things go sour with the [Chmmr]. Maybe Chmmr will take punitive action. At some point in the game the Syreen officer on the starbase will attempt to seduce you. You will have a choice to make. You are still in relationship with Talana who is back on Vela.
 
-At some point General ZEX�s old subordinate DAX (yes, he�s alive!) starts attacking Syreen patrols, and later even outposts. DAX is working with the [Lurg] to destabilise the NAFS, and sow discontent. The Syreen notify you about an abnormal number of ships going missing near the former VUX SOI; more than they normally lose to the [KohrAh].
+At some point General ZEX's old subordinate DAX (yes, he's alive!) starts attacking Syreen patrols, and later even outposts. DAX is working with the [Lurg] to destabilise the NAFS, and sow discontent. The Syreen notify you about an abnormal number of ships going missing near the former VUX SOI; more than they normally lose to the [KohrAh].
 
 If not checked in time, the DAX/Lurg raids will weaken the Syreen and make their SOI smaller. Eventually this will result in them being unable to participate in the fight against the [Exotics].
 
