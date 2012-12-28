@@ -1,16 +1,7 @@
 #labels Races
 =Foon-Foon=
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/slaverace/slaverace-000.png
-=="Big Mother"==
-The Foon-Foon are anthropods who live in a semi-hive society. They are sentient and partly individualistic, with their attitudes unconsciously influenced by the "personality" of an overmind-like being, depending on which one's psychic range the Foon-Foon is in. To put it in other words, an overmind is the moral compass of a Foon-Foon. Without or outside the range of overminds, they would fall into semi-sentience and become savages. The Foon-Foon know of this drawback and are dreadful about the possible consequence of getting non-influenced.
 
-An overmind is almost immortal, immobile, and it's psychic range gradually grow with its age and size. Normally, there are more overminds "competing for territory", but there were at least two occasions when one overmind had grown so powerful that there was no competition, and it's psychic waves reached other stars through HyperSpace, opening a pathway to interstellar expansion.
-
-==Past==
-Thousands of years ago, the Ur-Quan Kzer-Za conquered them. At that time -- just like in the present -- a single overmind took care of Foon-Foon sapience. Due to the personality of their overmind, they had a different, non-peaceful attitude, with which they assumed the role of Battle Thralls, and assisted the Kzer-Za in conquering the other free inhabitants of the sector. (Who annihilated themselves in a few centuries afterwards.)
-Not sure if they ever encountered the ancestors of the Baul, but if they did it's not very relevant. In a mysterious accident, their overmind was destroyed, and the whole race collapsed back into the Stone Age.
-
-==Present==
+==Historical info==
 The Foon-foon are physically rather weak, and were quickly subjugated by the Baul. Like the last time, they got only one overmind who gives the mild psychic influence that tells them to be peaceful, which had the side-effect that they had virtually no weapons to use against the Baul.
 
 The Foon-foon and Baul Spheres of Influence are centered around the same solar system, yet the Foon-foon Sphere is larger (they tend to be used for exploration and as a kind of expansion of the Baul Sphere of Influence). The Baul are pointing the giant Moon Cannon on the Foon-foon home planet, more specifically on "Big Mother", whose death all Foon-Foon fear. With this the Foon-Foon are practically taken hostage, and the Baul army is free to leech off the riches of the Foon-foon culture.
@@ -19,14 +10,16 @@ All the Foon-foon ships patrolling in their SoI have a Baul overseer who supervi
 
 (the sacred nesting ground thing will most definitely change with time)
 
-==The Resistance==
+*THE RESISTANCE*
+
 A Foon-foon resistance movement is planning a rebellion against the Baul. The resistance is located far away from the Foon-foon homeworld.  Their HQ is an old, abandoned hierarchy starbase. You can choose to help the rebellion drive away the Baul or help Baul crush the rebellion. If you do neither, the Foon-foon try the rebellion themselves resulting in a catastrophic chain of events where both SoIs disappear.
 
 (A sidenote: The planet that gives gravitational pull to the FF resistance base is also an old slave world: it's still covered by a Slave Shield which can be busted, though the civilization on the surface destroyed itself long ago. Some information about them is stored on the StarBase, and in fact they are the inventors of the cloaking technology taken by the Ur-Quan who gave it to the Ilwrath relatively a short time ago.)
 
 (It could be that the Foon-foon manufacture a lot of the Bauls' industrial goods, and so if you free them, they could lower the prices of all stuff / provide constant source of RU.)
 
-===Foon-foon Moon Cannon boss fight===
+*MOON CANNON BOSS FIGHT*
+
 Let's see. The Baul have installed a gigantic cannon on Foon-foon moon, pointing at the Foon-foon home planet. They don't want to fire it - they would lose their trump card in subjugating the Foon-foon then - but will, if someone threatens to conquer the place. So, if the player just tries to force his way in, things go badly.
 The player can find a broken small-scale cloaking device from Ilwrath home planet, that could render a planet lander sized thing invisible. This is the means to reach the Foon-foon moon undetected. If it only worked...
 The truespace Androsynth and the Melnorme are both capable of helping fix the cloaking device. The Androsynth can fix it themselves (if you're friendly with them). Whereas the Melnorme sell you a pricey gizmo which the tech-apt Foon-foon rebels then use to fix the cloaking device.
