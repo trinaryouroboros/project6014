@@ -1,8 +1,6 @@
 #labels Races
 = Ariloulaleelay =
 
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/arilou/arilou-000.png
-
   * *Connected races:* [Orz], [Taalo]
   * *Connected devices:* [TemporalWrapper]
 
