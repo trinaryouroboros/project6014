@@ -1,4 +1,0 @@
-#labels Races
-= Earthling =
-
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/human/ender-000.png
