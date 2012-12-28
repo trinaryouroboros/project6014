@@ -1,6 +1,6 @@
 #labels Races
 = Syreen =
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/syreen/syreen-captain-000.png
+
   * *Connected races:* [VUX]
   * *Connected devices:*
 
