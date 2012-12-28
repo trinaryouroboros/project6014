@@ -1,6 +1,6 @@
 #labels Races
 = Melnorme =
-
+http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/melnorme/melnorme-000.png
   * *Connected races:* [Faz], [Spathi]
   * *Connected devices:*
 
