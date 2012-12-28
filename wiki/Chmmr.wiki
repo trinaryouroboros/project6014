@@ -1,6 +1,6 @@
 #labels Races
 = Chmmr =
-
+http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/chmmr/chmmr-000.png
   * *Connected races:* [Mmrnmhrm], [Taalo], [VUX], [Spathi]
   * *Connected devices:* [TaaloFix], [MmrnmhrmFix], [SlaveShieldBuster]
 
@@ -8,11 +8,11 @@
 
 Core member and leader of the New Alliance of Free Stars (NAFS).
 
-The hybridisation of the two races was not complete due to premature interference by Zelnick�s (your) [SunDevice] in Star Control II. They kind of work properly, they�re doing a great job of hunting down [KohrAh]. However they seem to not quite have developed the knack for race-relations. They have slave shielded VUX and [Mycon] due to them being categorised as bad guys.
+The hybridisation of the two races was not complete due to premature interference by Zelnick's (your) [SunDevice] in Star Control II. They kind of work properly, they're doing a great job of hunting down [KohrAh]. However they seem to not quite have developed the knack for race-relations. They have slave shielded VUX and [Mycon] due to them being categorised as bad guys.
 
 The Chmmr are efficient, but at the cost of their "humanity": they're domineering and paranoid in their need to control all the NAFS races. In effect they've almost become the new [UrQuan].
 
-As you pilot around the galaxy speaking to various races the Chmmr become suspicious that you�re undermining them (which you are) and stop giving you resources. As the game develops the Chmmr actively try and disrupt your activities, and may try to incarcerate you at some point.
+As you pilot around the galaxy speaking to various races the Chmmr become suspicious that you're undermining them (which you are) and stop giving you resources. As the game develops the Chmmr actively try and disrupt your activities, and may try to incarcerate you at some point.
 
  (How is the player actively undermining the Chmmr? Is this referring to the gossip and such? If so, make sure there's some missions/tasks where the player *IS* actively undermining the Chmmr. -- jorisvddonk)
 
@@ -26,7 +26,7 @@ The Chmmr have slave shield busting technology. It can be retrieved from a secre
  
  (If the slave shield busting tech is required, make sure that the player *has to* grab it. -- jorisvddonk)
 
-Also, the good old Sun Device is in another secret Chmmr device stash. Or it SHOULD be; it�s actually located at DAX�s starbase.
+Also, the good old Sun Device is in another secret Chmmr device stash. Or it SHOULD be; it's actually located at DAX's starbase.
 
 == Detailed info ==
 
