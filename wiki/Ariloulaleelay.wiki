@@ -1,4 +1,5 @@
 #labels Races
+http://code.google.com/p/project6014/source/browse/trunk/sc2/content/addons/hires4x/comm/arilou/arilou-000.png
 = Ariloulaleelay =
 
   * *Connected races:* [Orz], [Taalo]
