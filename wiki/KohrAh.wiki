@@ -1,6 +1,6 @@
 #labels Races
 = Kohr-Ah =
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/kohrah/kohrah-000.png
+
   * *Connected races:* [Slylandro]
   * *Connected devices:*
 
