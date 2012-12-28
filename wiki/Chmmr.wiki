@@ -1,6 +1,6 @@
 #labels Races
 = Chmmr =
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/chmmr/chmmr-000.png
+
   * *Connected races:* [Mmrnmhrm], [Taalo], [VUX], [Spathi]
   * *Connected devices:* [TaaloFix], [MmrnmhrmFix], [SlaveShieldBuster]
 
