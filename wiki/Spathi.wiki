@@ -1,6 +1,6 @@
 #labels Races
 = Spathi =
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/spathi/spathi-000.png
+
   * *Connected races:* [Chmmr], [Melnorme], [XenWeyi Xen-Weyi]
   * *Connected devices:* [SlaveShieldBuster Slave-Shield Buster], [SlaveShieldGenerator Slave-Shield Generator]
 
