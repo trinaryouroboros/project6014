@@ -1,6 +1,6 @@
 #labels Races
 = Baul =
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/baul/baul-000.png
+
   * *Connected races:* [FoonFoon Foon-Foon], [Lurg]
   * *Connected devices:*
 
