@@ -14,7 +14,7 @@
     * DesignNotes
       * [HistoricalOverview Historical Overview]
         * [EndOfSC2 The Galaxy after SC2]
-        * [StoryGap Between Episode 1 and 2]
+        * [StoryGap Before P6014]
         * [Timeline]
         * [SC2Mysteries Hints & Mysteries]
       * [Story]
