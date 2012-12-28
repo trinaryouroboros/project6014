@@ -1,6 +1,6 @@
 #labels Races
 = Xen-Weyi =
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/xenweyi/xenweyi-000.png
+
   * *Connected races:* [Baul], [Shofixti]
   * *Connected devices:* [GenesisDevice], [SlaveShieldBuster]
 
