@@ -1,0 +1,6 @@
+
+= Earthling =
+
+http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/commander/commander-000.png
+
+
