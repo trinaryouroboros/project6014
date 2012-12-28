@@ -1,6 +1,6 @@
 #labels Races
 = VUX =
-
+http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/vux/vux-000.png
   * *Connected races:* [Chmmr]
   * *Connected devices:* [SlaveShieldBuster], [ReactorCorePowerUnit], [SunDevice]
 
@@ -8,7 +8,7 @@
 
 Have been slave shielded by the Chmmr and are not very happy about it. On acquiring the Slave shield buster, you will have the capability and option of lowering the VUX slave shield. You might do this because you consider that the Chmmr were wrong to imprison them. Lowering the shield will net you some kind of reward. At least they can be persuaded to join your front against the [Exotics]. Maybe you also get to use VUX ships as escorts?
 
-ZEX�s subordinate DAX escaped Alpha Cerenkov with a fleet of Intruders whilst ZEX was getting eaten by the xenomorph. At some point DAX starts attacking Syreen patrols, and perhaps even outposts. DAX is working with the [Lurg] to destabilise the NAFS, and sow discontent. DAX is operating from a hidden Starbase (somewhere in the old Vux SOI?), and he isn't happy about the VUX being slave shielded. 
+ZEX's subordinate DAX escaped Alpha Cerenkov with a fleet of Intruders whilst ZEX was getting eaten by the xenomorph. At some point DAX starts attacking Syreen patrols, and perhaps even outposts. DAX is working with the [Lurg] to destabilise the NAFS, and sow discontent. DAX is operating from a hidden Starbase (somewhere in the old Vux SOI?), and he isn't happy about the VUX being slave shielded. 
 
 He's working with the Lurg to try to free the VUX and destroy the NAFS. He engages in guerrilla style raids on the [Syreen] (who notify you about an abnormal number of ships going missing along the former VUX SOI; more than they normally lose to the [KohrAh]). Possibly DAX can attack the [Yehat] as well. At first you could be led to believe the Exotics / [Orz] are to blame, but that's not the case. 
 
