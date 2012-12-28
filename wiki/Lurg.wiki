@@ -1,6 +1,6 @@
 #labels Races
 = Lurg =
-http://project6014.googlecode.com/svn/trunk/sc2/content/addons/hires4x/comm/lurg/lurg-000.png
+
   * *Connected races:* [VUX], [MasterRace]
   * *Connected devices:* [PrecursorOrb]
 
