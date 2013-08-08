@@ -37,7 +37,7 @@
         * [Melnorme]
         * [Mmrnmhrm]
         * [Orz]
-        * [Precursors Modified]
+        * [PrecursorsMod]
         * [Shofixti]
         * [Slylandro]
         * [Spathi]
