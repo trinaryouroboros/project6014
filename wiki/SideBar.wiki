@@ -22,6 +22,7 @@
         * [HowItStarts How it Starts]
         * [Missions]
         * [Map]
+        * [https://code.google.com/p/story-creation/ Work in Progress storyline (spoilers)]
       * Races
         * [Androsynth]
         * [Ariloulaleelay]
