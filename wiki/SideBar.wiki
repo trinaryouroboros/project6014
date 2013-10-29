@@ -12,6 +12,7 @@
       * [http://star-control.com/community/viewforum.php?f=9 The Pages of Now and Forever]
   * Development
     * DesignNotes
+    * [http://code.google.com/p/story-creation/wiki/Welcome?tm=6 Story Wiki]
     * Implementation details
       * [ShipSizes Ship Sizes]
       * [ShipCreation Ship Creation]
