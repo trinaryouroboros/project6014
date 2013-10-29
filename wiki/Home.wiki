@@ -19,7 +19,8 @@ This is the Wiki Home.  Ideally, all other Wiki pages should be accessible from 
 
 == Development ==
 
-  * [DesignNotes] - current game design (plot, etc.)
+  * [DesignNotes] - Who to contact to help us with the design of the game
+  * [http://code.google.com/p/story-creation/wiki/Welcome?tm=6 Story Wiki] - Contains all the races, story arc, ideas, writing tools
 
   * Implementation details - useful notes for the team
     * [ShipSizes]
