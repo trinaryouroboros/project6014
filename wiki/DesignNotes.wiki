@@ -23,4 +23,4 @@ To help us with programming, contact:
 
 
 
-_*NOTE*: To consult the [OldDesignNotes Old Story Wiki] you can click [OldDesignNotes this link]._
+_*NOTE*: To consult the [OldDesignNotes Old Story Wiki] you can click [OldDesignNotes this link]. Please note that this section will no longer be maintained up to date. Consult the story creation wiki for the up-to-date version._ 
