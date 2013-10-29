@@ -1,0 +1,70 @@
+= Project 6014 Old Design Notes =
+
+== DISCLAIMER: This is the OLD page where various pieces of the story were put together before a new clean wiki was created to contain the NEW STORY. Please DO NOT ADD COMMENTS to these notes as they are no longer maintained. This is for REFERENCE only. ==
+
+=== To consult the [http://code.google.com/p/story-creation/wiki/Welcome?tm=6 new story wiki] and participate in the story creation you can click [http://code.google.com/p/story-creation/wiki/Welcome?tm=6 this link].===
+
+
+
+
+
+Ported from the Game Development Document.  Contains comments from various team members.
+
+Disclaimer of sorts: This document is hacked and slashed together from several e-mails, forum posts, word docs etc. written by various people. Thus, the "I" in this text is not a single person, but may refer to Cedric Horner, Edmund Horner, Chris Pearce, Jaakko Markus Seppälä, Anthony smith, Nicolas Abesdris or some other Ur-Quan Masters afficionado who has contributed to this plot with his/her ideas. Thank you all!
+
+  * [HistoricalOverview Historical Overview]
+    * [EndOfSC2 The Galaxy after SC2]
+    * [StoryGap The gap between the two stories]
+    * [Timeline]
+    * [SC2Mysteries Hints and unresolved mysteries in the Star Control 2 universe]
+  * [Story]
+    * [MainEvents Main background events in the galaxy]
+    * [HowItStarts How it starts...]
+    * [Missions] -- A list of all the missions and side missions available here for the full game.
+    * [Map Starmap of truespace]
+  * Race information -- Backgrounds, motivations and technical details behind each race. Cool stuff!
+    * SC2 races
+      * [Ariloulaleelay]
+      * [Chmmr]
+      * [Earthlings]
+      * [KohrAh]
+      * [Melnorme]
+      * [Orz]
+      * [Shofixti]
+      * [Slylandro]
+      * [Spathi]
+      * [Syreen]
+      * [VUX]
+      * [Yehat]
+    * New races
+      * [Androsynth]
+      * [Baul]
+      * [Faz]
+      * [FoonFoon]
+      * [FleeingRace] - to be renamed?
+      * [Lurg]
+      * [Mmrnmhrm]
+      * [Exotics]
+      * [Taalo]
+      * [XenWeyi]
+    * OtherRaces - not directly in the game.
+  * Devices
+    * [BlackOrb Black Orb]
+    * [MmrnmhrmFix Mmrnmhrm Fix]
+    * [TaaloFix Taalo Fix]
+    * [ExoticsCommunicationTool Exotics Communication Tool]
+    * [ExoticsGravityBombs Exotics Gravity Bombs]
+    * [MelnormeCallDevice Melnorme Call Device]
+    * [OrzSpaceEscapeDevice Orz Space Escape Device]
+    * [ReactorCorePowerUnit Reactor Core Power Unit]
+    * [SlaveShieldBuster Slave Shield Buster]
+    * [SunDevice Sun Device]
+    * [TemporalWrapper Temporal Wrapper]
+    * [TerraformingPlants Terraforming Plants]
+    * [StarPortals Star Portals] to OrzSpace
+  * [GamePlay Game Play]
+    * [GamePlayChanges Gameplay changes between UQM and Project 6014]
+    * [GettingTechnology Getting Technology]
+    * [ResourceGathering Resource Gathering]
+    * [InterstellarTravel Interstellar Travel]
+    * [StarPortals Portals to OrzSpace]
