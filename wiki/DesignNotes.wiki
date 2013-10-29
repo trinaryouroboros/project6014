@@ -3,6 +3,9 @@
 
 == Design notes ==
 
+To consult the [OldDesignNotes Old Story Wiki] you can click [OldDesignNotes this link].
+
+
 Ported from the Game Development Document.  Contains comments from various team members.
 
 Disclaimer of sorts: This document is hacked and slashed together from several e-mails, forum posts, word docs etc. written by various people. Thus, the "I" in this text is not a single person, but may refer to Cedric Horner, Edmund Horner, Chris Pearce, Jaakko Markus Seppälä, Anthony smith or some other Ur-Quan Masters afficionado who has contributed to this plot with his/her ideas. Thank you all!
